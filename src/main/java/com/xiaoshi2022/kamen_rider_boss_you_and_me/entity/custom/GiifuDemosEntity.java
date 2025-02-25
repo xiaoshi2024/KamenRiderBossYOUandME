@@ -59,6 +59,7 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
         // 设置默认名称为“基夫德莫斯”
         this.setCustomName(Component.literal("基夫德莫斯"));
         this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1)); // 设置村民数据
+        this.setHealth(100.0F);
     }
 
     // 使用 VillagerEntityMCA 的功能
