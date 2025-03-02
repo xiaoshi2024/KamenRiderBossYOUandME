@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.StoriousMonsterBook;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.giifusteamp;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.world.item.Item;
@@ -12,5 +13,7 @@ public class ModItems {
 
     public static final RegistryObject<giifusteamp> GIIFUSTEAMP = ITEMS.register("giifusteamp",
             () -> new giifusteamp(new Item.Properties()));
+    public static final RegistryObject<StoriousMonsterBook> STORIOUSMONSTERBOOK = ITEMS.register("storiousmonsterbook",
+            () -> new StoriousMonsterBook(new Item.Properties()));
 
 }

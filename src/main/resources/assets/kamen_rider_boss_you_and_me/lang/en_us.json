@@ -1,13 +1,20 @@
 {
   "entity.kamen_rider_boss_you_and_me.giifudemos": "GiifuDemos",
+  "entity.kamen_rider_boss_you_and_me.storious": "Storious",
+  "entity.kamen_rider_boss_you_and_me.gifftarian": "Giifu WasADisciple",
+
   "item.kamen_rider_boss_you_and_me.giifusteamp": "Giifu Steamp",
   "item group.kamen_rider_boss_you_and_me_tab": "Kamen Rider Boss You And Me",
+  "item.kamen_rider_boss_you_and_me.storiousmonsterbook": "Storious Monster Book",
 
   "advancement.kamen_rider_boss_you_and_me.root.title": "Kamen Rider Boss You and Me",
   "advancement.kamen_rider_boss_you_and_me.root.desc": "Welcome to the Kamen Rider Boss You and Me mod!",
   "advancement.kamen_rider_boss_you_and_me.human_to_monster.title": "Human to Monster",
   "advancement.kamen_rider_boss_you_and_me.human_to_monster.desc": "Transform a Villager into a Giifu Demos using an giifusteamp.",
   "advancement.kamen_rider_boss_you_and_me.monster_to_human.title": "Monster to Human",
-  "advancement.kamen_rider_boss_you_and_me.monster_to_human.desc": "Transform a Giifu Demos back into a Villager using a giifusteamp."
+  "advancement.kamen_rider_boss_you_and_me.monster_to_human.desc": "Transform a Giifu Demos back into a Villager using a giifusteamp.",
+
+  "KEY.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me": "Kamen Rider Boss You and Me",
+  "KEY.kamen_rider_weapon_craft.change_body": "Henshin"
 
 }

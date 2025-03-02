@@ -1,6 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -14,6 +16,10 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<GiifuDemosEntity>> GIIFUDEMOS_ENTITY = registerMob("giifudemos", GiifuDemosEntity::new,
             0.6f, 1.8f, 0x1F1F1F, 0x0D0D0D);
+    public static final RegistryObject<EntityType<StoriousEntity>> STORIOUS = registerMob("storious", StoriousEntity::new,
+                0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
+    public static final RegistryObject<EntityType<Gifftarian>> GIFFTARIAN = registerMob("gifftarian", Gifftarian::new,
+                0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
 
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {

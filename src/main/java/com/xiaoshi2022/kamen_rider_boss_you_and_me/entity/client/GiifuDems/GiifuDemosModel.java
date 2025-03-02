@@ -1,4 +1,4 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;

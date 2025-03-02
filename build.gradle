@@ -154,6 +154,11 @@ mixin {
 repositories {
 
     maven {
+        name "zigythebirdMods"
+        url "https://maven.zigythebird.com/mods"
+    }
+
+    maven {
         name "KosmX's maven"
         url 'https://maven.kosmx.dev/'
     }
@@ -178,6 +183,15 @@ repositories {
 }
 
 dependencies {
+
+    implementation fg.deobf("com.zigythebird.playeranimatorapi:playeranimatorapi-forge-$project.minecraft_version:$project.playeranimatorapi_version", {
+        exclude group: "com.github.Virtuoel"
+        exclude group: "mod.azure.azurelib"
+        exclude group: "com.eliotlash.mclib"
+        exclude group: "maven.modrinth"
+    })
+
+    implementation fg.deobf("curse.maven:jade-324717:6106101")
 
     compileOnly "mekanism:Mekanism:${mekanism_version}:api"
 

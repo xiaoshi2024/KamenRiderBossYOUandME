@@ -18,7 +18,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.npc.*;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,10 +31,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -43,13 +40,17 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     protected static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     protected static final RawAnimation SWEEP = RawAnimation.begin().thenLoop("sweep");
+    protected static final RawAnimation MUTATION = RawAnimation.begin().thenPlayAndHold("mutation");
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     //mca
     private final VillagerEntityMCA villagerComponent;
     private final VillagerBrain<VillagerEntityMCA> mcaBrain;
     private final VillagerCommandHandler interactions;
 
+
     // 德莫斯相关
+    private boolean hasPlayedMutation = false; // 标志字段
+
 
     public GiifuDemosEntity(EntityType<? extends Villager> entityType, Level level) {
         super(entityType, level);
@@ -59,7 +60,6 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
         // 设置默认名称为“基夫德莫斯”
         this.setCustomName(Component.literal("基夫德莫斯"));
         this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1)); // 设置村民数据
-        this.setHealth(100.0F);
     }
 
     // 使用 VillagerEntityMCA 的功能
@@ -75,14 +75,12 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0F)); // 看向玩家
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false)); // 近战攻击目标
         this.goalSelector.addGoal(3, new PanicGoal(this, 1.2)); // 当受到火焰伤害时逃跑
-        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.0D)); // 随机漫步
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.45D)); // 随机漫步
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this)); // 随机环顾四周
         this.goalSelector.addGoal(7, new FloatGoal(this)); // 如果在水里，尝试浮在水面上
-
-        // 添加目标检测逻辑
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true)); // 检测附近的玩家
     }
 
     @Override
@@ -123,7 +121,12 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
 
     @Override
     public final boolean hurt(DamageSource source, float damageAmount) {
-        this.villagerComponent.hurt(source, damageAmount);
+        if (source.getDirectEntity() instanceof LivingEntity) {
+            LivingEntity attacker = (LivingEntity) source.getDirectEntity();
+            // 设置攻击目标
+            this.setTarget(attacker);
+        }
+        // 调用父类的 hurt 方法
         return super.hurt(source, damageAmount);
     }
 
@@ -157,6 +160,16 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "walk", 5, this::idleAnimController));
         controllers.add(new AnimationController<>(this, "sweep", 5, this::attackAnimController));
+        controllers.add(new AnimationController<>(this, "mutation", 5, this::mutationAnimController));
+    }
+
+    protected <E extends GiifuDemosEntity> PlayState mutationAnimController(AnimationState<E> event) {
+        if (!this.hasPlayedMutation) {
+            event.getController().setAnimation(MUTATION);
+            MUTATION.thenPlay("mutation");
+            this.hasPlayedMutation = true; // 设置标志为 true
+        }
+        return PlayState.CONTINUE;
     }
 
     protected <E extends GiifuDemosEntity> PlayState idleAnimController(final AnimationState<E> event) {

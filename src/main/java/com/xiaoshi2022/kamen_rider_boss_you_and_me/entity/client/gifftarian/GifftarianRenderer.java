@@ -1,8 +1,8 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,18 +11,18 @@ import org.joml.Vector3d;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-public class GiifuDemosRenderer extends GeoEntityRenderer<GiifuDemosEntity> {
+public class GifftarianRenderer extends GeoEntityRenderer<Gifftarian> {
     private int currentTick;
 
-    public GiifuDemosRenderer(EntityRendererProvider.Context context) {
-        super(context, new GiifuDemosModel());
+    public GifftarianRenderer(EntityRendererProvider.Context context) {
+        super(context, new GifftarianModel());
         //  可以添加发光纹理
 //        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 
     // 渲染时在耳朵周围添加一些粒子
     @Override
-    public void renderFinal(PoseStack poseStack, GiifuDemosEntity animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+    public void renderFinal(PoseStack poseStack, Gifftarian animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         if (this.currentTick < 0 || this.currentTick != animatable.tickCount) {
             this.currentTick = animatable.tickCount;
 
