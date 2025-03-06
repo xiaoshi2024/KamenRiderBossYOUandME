@@ -191,6 +191,9 @@ dependencies {
         exclude group: "maven.modrinth"
     })
 
+    implementation fg.deobf("curse.maven:kamenriderweaponcraft-1208615:6269798")
+    implementation fg.deobf("curse.maven:terrablender-563928:4647094")
+
     implementation fg.deobf("curse.maven:jade-324717:6106101")
 
     compileOnly "mekanism:Mekanism:${mekanism_version}:api"

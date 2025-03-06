@@ -2,16 +2,13 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationPacket;
-import com.zigythebird.playeranimatorapi.API.PlayerAnimAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -47,10 +44,12 @@ public class modEventBusEvents {
             event.put(ModEntityTypes.GIIFUDEMOS_ENTITY.get(), GiifuDemosEntity.createAttributes().add(Attributes.MAX_HEALTH, 100.0D).build());
             event.put(ModEntityTypes.STORIOUS.get(), GiifuDemosEntity.createAttributes().add(Attributes.MAX_HEALTH, 122.0D).build());
             event.put(ModEntityTypes.GIFFTARIAN.get(), GiifuDemosEntity.createAttributes().add(Attributes.MAX_HEALTH,80.0D).add(Attributes.ATTACK_DAMAGE,8.0D).build());
+            event.put(ModEntityTypes.INVES_HEILEHIM.get(), ElementaryInvesHelheim.createMonsterAttributes().add(Attributes.MAX_HEALTH,50.0D).add(Attributes.ATTACK_DAMAGE,6.0D).build());
         }
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event){
             event.register(CHANGE_KEY);
         }
     }
+
 }

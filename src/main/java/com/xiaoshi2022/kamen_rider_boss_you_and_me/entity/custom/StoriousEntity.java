@@ -72,7 +72,7 @@ public class StoriousEntity extends Villager implements GeoEntity, VillagerLike<
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0F)); // 看向玩家
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false)); // 近战攻击目标
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.36D, false)); // 近战攻击目标
         this.goalSelector.addGoal(3, new PanicGoal(this, 1.2)); // 当受到火焰伤害时逃跑
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.5D)); // 随机漫步
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this)); // 随机环顾四周

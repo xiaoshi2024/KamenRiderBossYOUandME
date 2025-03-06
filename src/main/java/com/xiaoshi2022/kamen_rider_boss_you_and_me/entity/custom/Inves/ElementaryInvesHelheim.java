@@ -1,8 +1,9 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.VillagerEvents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,20 +24,45 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class Gifftarian extends Monster implements GeoEntity {
-    protected static final RawAnimation ROUT = RawAnimation.begin().thenPlay("rout");
+import java.util.Arrays;
+
+public class ElementaryInvesHelheim extends Monster implements GeoEntity {
+    protected static final RawAnimation GOMAD = RawAnimation.begin().thenPlay("gomad");
     protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     protected static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("Attack");
     protected static final RawAnimation RUN = RawAnimation.begin().thenLoop("run");
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    public static boolean shouldPlayRoutAnimation = false; // 全局布尔字段
+    private static final String[] VARIANTS = {"red", "blue", "green"};
+    private String variant = "blue"; // 默认变种
 
-
-    public Gifftarian(EntityType<? extends Monster> entityType, Level level) {
+    public ElementaryInvesHelheim(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 
+    public void setVariant(String variant) {
+        if (Arrays.asList(VARIANTS).contains(variant)) {
+            this.variant = variant;
+        }
+    }
+
+    public String getVariant() {
+        return variant;
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Variant", Tag.TAG_STRING)) {
+            this.variant = compound.getString("Variant");
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Variant", this.variant);
+    }
 
     @Override
     public final boolean hurt(DamageSource source, float damageAmount) { // 重写 hurt 方法
@@ -47,7 +73,7 @@ public class Gifftarian extends Monster implements GeoEntity {
     @Override
     protected void registerGoals() {
         // 添加 AI 目标
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 0.37D, true)); // 近战攻击
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 0.34D, true)); // 近战攻击
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.45D)); // 随机漫步
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F)); // 看向玩家
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this)); // 随机环顾四周
@@ -56,10 +82,10 @@ public class Gifftarian extends Monster implements GeoEntity {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this)); // 被攻击时反击
 
         // 攻击玩家
-        this.targetSelector.addGoal(2, new CustomAttackGoal<>(this, Player.class, 20, true, false, CustomAttackGoal::isValidTarget));
+        this.targetSelector.addGoal(2, new ElementaryInvesHelheim.CustomAttackGoal<>(this, Player.class, 20, true, false, ElementaryInvesHelheim.CustomAttackGoal::isValidTarget));
 
         // 攻击普通村民
-        this.targetSelector.addGoal(3, new CustomAttackGoal<>(this, Villager.class, 20, true, false, CustomAttackGoal::isValidTarget));
+        this.targetSelector.addGoal(3, new ElementaryInvesHelheim.CustomAttackGoal<>(this, Villager.class, 20, true, false, ElementaryInvesHelheim.CustomAttackGoal::isValidTarget));
     }
 
     // 自定义攻击目标逻辑
@@ -86,29 +112,23 @@ public class Gifftarian extends Monster implements GeoEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "run", 5, this::idleAnimController));
         controllers.add(new AnimationController<>(this, "Attack", 5, this::attackAnimController));
-        controllers.add(new AnimationController<>(this, "rout", 5, this::routAnimController));
-    }
-
-    public PlayState routAnimController(AnimationState<Gifftarian> gifftarianAnimationState) {
-        // 直接调用 shouldTransformToGifftarian 方法
-        if (VillagerEvents.shouldTransformToGifftarian())
-            gifftarianAnimationState.getController().setAnimation(ROUT);
-        VillagerEvents.shouldPlayRoutAnimation = false; // 重置全局状态
-        return PlayState.CONTINUE;
     }
 
 
-
-    protected <E extends Gifftarian> PlayState idleAnimController(final AnimationState<E> event) {
+    protected <E extends ElementaryInvesHelheim> PlayState idleAnimController(final AnimationState<E> event) {
         if (event.isMoving())
             return event.setAndContinue(RUN);
         else
             return event.setAndContinue(IDLE); // 当不移动时播放 idle 动画
     }
 
-    protected <E extends Gifftarian> PlayState attackAnimController(final AnimationState<E> event) {
+    protected <E extends ElementaryInvesHelheim> PlayState attackAnimController(final AnimationState<E> event) {
         if (this.swinging) {
+            if (getRandom().nextInt(100) < 40) { // 40% 概率触发凶暴
+            return event.setAndContinue(GOMAD);
+        }else if (getRandom().nextInt(100) < 70){ // 70% 概率触发普通攻击
             return event.setAndContinue(ATTACK);
+            }
         }
         return PlayState.STOP;
     }
