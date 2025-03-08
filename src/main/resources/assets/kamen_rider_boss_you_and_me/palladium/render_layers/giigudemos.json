@@ -1,0 +1,21 @@
+{
+  "type": "geckolib:default",
+  "model": "kamen_rider_boss_you_and_me:geo/entity/giifudemos.geo.json",
+  "texture": "kamen_rider_boss_you_and_me:textures/entity/giifudemos.png",
+  "animation_file": "kamen_rider_boss_you_and_me:animations/entity/giifudemos.animation.json",
+  "animation_controller": [
+    {
+      "name": "idle",
+      "transition_tick_time": 10,
+      "animation": "animation.model.loop"
+    }
+  ],
+  "bones": {
+    "head": "Head",
+    "body": "Body",
+    "right_arm": "RightArm",
+    "left_arm": "LeftArm",
+    "right_leg": "RightLeg",
+    "left_leg": "LeftLeg"
+  }
+}

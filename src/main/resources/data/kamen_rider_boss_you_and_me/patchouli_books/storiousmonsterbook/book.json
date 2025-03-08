@@ -1,0 +1,9 @@
+{
+  "name": "storiousmonsterbook",
+  "landing_text": "kamen_rider_boss_you_and_me.landing",
+  "version": "0.0.1",
+  "editor": ["xiaoshi2022"],
+  "use_resource_pack": true,
+  "dont_generate_book": true,
+  "custom_book_item": "kamen_rider_boss_you_and_me:storiousmonsterbook"
+}

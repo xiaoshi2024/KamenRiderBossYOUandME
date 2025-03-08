@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "kamen_rider_boss_you_and_me:giifusteamp"
+    },
+    "title": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.monster_to_human.title"
+    },
+    "description": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.monster_to_human.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "kamen_rider_boss_you_and_me:kamen_rider_boss_you_and_me",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:player_interacted_with_entity",
+      "conditions": {
+        "entity": {
+          "type": "kamen_rider_boss_you_and_me:giifudemos"
+        },
+        "player": {
+          "type": "minecraft:player"
+        },
+        "item": {
+          "items": ["kamen_rider_boss_you_and_me:giifusteamp"]
+        },
+        "hand": "main_hand",
+        "action": "right_click"
+      }
+    }
+  }
+}

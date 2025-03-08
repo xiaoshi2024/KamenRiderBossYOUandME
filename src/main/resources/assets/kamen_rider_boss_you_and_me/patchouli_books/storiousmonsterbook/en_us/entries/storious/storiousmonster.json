@@ -1,0 +1,11 @@
+{
+  "name": "Storious",
+  "icon": "kamen_rider_boss_you_and_me:storiousmonsterbook",
+  "category": "kamen_rider_boss_you_and_me:storious",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Wake up, Master the legend of the story Megiddo!"
+    }
+  ]
+}
