@@ -1,0 +1,21 @@
+{
+  "display": {
+    "icon": {
+      "item": "kamen_rider_boss_you_and_me:giifusteamp"
+    },
+    "title": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.root.title"
+    },
+    "description": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.root.desc"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "start": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

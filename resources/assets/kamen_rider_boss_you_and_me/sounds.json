@@ -1,0 +1,11 @@
+{
+  "seal": {
+    "subtitle": "subtitles.seal",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:seal",
+        "stream": false
+      }
+    ]
+  }
+}

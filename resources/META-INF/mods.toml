@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="x.x.x"
+license="MIT"
+
+[[mods]]
+modId="kamen_rider_boss_you_and_me"
+logoFile="kamen_rider_boss_you_and_me.png"
+version="0.0.2beta"
+displayName="KamenRiderBossYOUandME"
+displayURL="https://space.bilibili.com/1410016591"
+authors="xiaoshi2022,xiaohaoxiaohao(Partial models),qileixi02(Art designer)"
+description='''
+This is a mod based on the Kamen Rider series, bringing various Boss and monster into your game mc...
+'''
+
+[[dependencies.kamen_rider_boss_you_and_me]]
+modId="forge"
+mandatory=true
+versionRange="x.x.x"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.kamen_rider_boss_you_and_me]]
+modId="geckolib"
+mandatory=true
+versionRange="[0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.kamen_rider_boss_you_and_me]]
+modId="minecraft"
+mandatory=true
+versionRange="1.20.1"
+ordering="NONE"
+side="BOTH"
