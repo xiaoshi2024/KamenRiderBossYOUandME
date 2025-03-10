@@ -38,6 +38,8 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
 
     public ElementaryInvesHelheim(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        // 随机选择一个变种
+        this.setVariant(VARIANTS[random.nextInt(VARIANTS.length)]);
     }
 
     public void setVariant(String variant) {
