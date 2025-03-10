@@ -11,7 +11,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,8 +18,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixins;
@@ -58,7 +55,7 @@ public class kamen_rider_boss_you_and_me
         PacketHandler.registerPackets();
 
         // 注册 Mixin
-        Mixins.addConfiguration("xiaoshi2022.mixins.json");
+        Mixins.addConfiguration("kamen_rider_boss_you_and_me.mixins.json");
     }
 
 

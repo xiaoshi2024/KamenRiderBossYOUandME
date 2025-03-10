@@ -32,6 +32,24 @@
       "options": {
         "cwd": "${workspaceFolder}"
       }
+    },
+    {
+      "type": "gradle",
+      "id": "d:\\KamenRiderBossYOUandMEgenVSCodeRunsKamenRiderBossYOUandME",
+      "script": "genVSCodeRuns",
+      "description": "",
+      "group": "forgegradle runs",
+      "project": "KamenRiderBossYOUandME",
+      "buildFile": "D:\\KamenRiderBossYOUandME\\build.gradle",
+      "rootProject": "KamenRiderBossYOUandME",
+      "projectFolder": "d:\\KamenRiderBossYOUandME",
+      "workspaceFolder": "d:\\KamenRiderBossYOUandME",
+      "args": "",
+      "javaDebug": false,
+      "problemMatcher": [
+        "$gradle"
+      ],
+      "label": "gradle: genVSCodeRuns"
     }
   ]
 }

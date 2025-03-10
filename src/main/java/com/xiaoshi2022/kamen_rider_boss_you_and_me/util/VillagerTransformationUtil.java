@@ -66,42 +66,42 @@ public class VillagerTransformationUtil {
 
     // 人类 -> 怪人
     public static void transformToStorious(ServerLevel level, VillagerEntityMCA mcaVillager, CompoundTag tag) {
-            // 获取目标实体的位置
-            BlockPos spawnPos = BlockPos.containing(mcaVillager.position());
+        // 获取目标实体的位置
+        BlockPos spawnPos = BlockPos.containing(mcaVillager.position());
 
-            // 尝试生成新的自定义实体
-            StoriousEntity spawnedEntity = (StoriousEntity) ModEntityTypes.STORIOUS.get().spawn(level, spawnPos, MobSpawnType.MOB_SUMMONED);
+        // 尝试生成新的自定义实体
+        StoriousEntity spawnedEntity = (StoriousEntity) ModEntityTypes.STORIOUS.get().spawn(level, spawnPos, MobSpawnType.MOB_SUMMONED);
 
-            if (spawnedEntity != null) {
-                // 加载NBT数据
-                if (tag != null) {
-                    spawnedEntity.load(tag);
-                }
-
-                // 设置UUID
-                spawnedEntity.setUUID(UUID.randomUUID());
-
-                // 继承交易系统
-                spawnedEntity.setVillagerData(mcaVillager.getVillagerData());
-                spawnedEntity.setVillagerXp(mcaVillager.getVillagerXp());
-                spawnedEntity.setTradeOffers(mcaVillager.getOffers());
-
-                // 设置生成位置为人类的当前位置
-                spawnedEntity.setPos(mcaVillager.getX(), mcaVillager.getY(), mcaVillager.getZ());
-
-                // 记录人类的NBT数据和UUID
-                CompoundTag villagerNBT = new CompoundTag();
-                mcaVillager.save(villagerNBT);
-                villagerRecord.put(spawnedEntity.getUUID(), villagerNBT);
-
-                // 移除原始的 VillagerEntityMCA
-                mcaVillager.remove(Entity.RemovalReason.DISCARDED);
-
-                System.out.println("VillagerEntityMCA has been successfully transformed into StoriousEntity.");
-            } else {
-                System.out.println("Failed to spawn StoriousEntity.");
+        if (spawnedEntity != null) {
+            // 加载NBT数据
+            if (tag != null) {
+                spawnedEntity.load(tag);
             }
+
+            // 设置UUID
+            spawnedEntity.setUUID(UUID.randomUUID());
+
+            // 继承交易系统
+            spawnedEntity.setVillagerData(mcaVillager.getVillagerData());
+            spawnedEntity.setVillagerXp(mcaVillager.getVillagerXp());
+            spawnedEntity.setTradeOffers(mcaVillager.getOffers());
+
+            // 设置生成位置为人类的当前位置
+            spawnedEntity.setPos(mcaVillager.getX(), mcaVillager.getY(), mcaVillager.getZ());
+
+            // 记录人类的NBT数据和UUID
+            CompoundTag villagerNBT = new CompoundTag();
+            mcaVillager.save(villagerNBT);
+            villagerRecord.put(spawnedEntity.getUUID(), villagerNBT);
+
+            // 移除原始的 VillagerEntityMCA
+            mcaVillager.remove(Entity.RemovalReason.DISCARDED);
+
+            System.out.println("VillagerEntityMCA has been successfully transformed into StoriousEntity.");
+        } else {
+            System.out.println("Failed to spawn StoriousEntity.");
         }
+    }
 
 
     // 怪人 -> 人类（从恶魔

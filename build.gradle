@@ -95,7 +95,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             //客户端中指定你资源包中的mixin文件
-            arg '-mixin.config=xiaoshi2022.mixins.json'
+            arg '-mixin.config=kamen_rider_boss_you_and_me.mixins.json'
 
             mods {
                 kamen_rider_weapon_craft {
@@ -110,7 +110,7 @@ minecraft {
             args '--nogui'
 
             //服务端中指定你资源包中的mixin文件
-            arg '-mixin.config=xiaoshi2022.mixins.json'
+            arg '-mixin.config=kamen_rider_boss_you_and_me.mixins.json'
             mods {
                 kamen_rider_weapon_craft {
                     source sourceSets.main
@@ -133,7 +133,7 @@ minecraft {
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             //数据包中指定你资源包中的mixin文件
-            arg '-mixin.config=xiaoshi2022.mixins.json'
+            arg '-mixin.config=kamen_rider_boss_you_and_me.mixins.json'
             mods {
                 kamen_rider_weapon_craft {
                     source sourceSets.main
@@ -147,7 +147,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 //设置你的mixin源文件名称
 mixin {
-    add sourceSets.main, "xiaoshi2022.refmap.json"
+    add sourceSets.main, "kamen_rider_boss_you_and_me.refmap.json"
 }
 
 
@@ -191,6 +191,11 @@ dependencies {
         exclude group: "maven.modrinth"
     })
 
+    implementation fg.deobf("curse.maven:remorphed-950721:5755676")
+    implementation fg.deobf("curse.maven:crafted-core-923377:6187026")
+    implementation fg.deobf("curse.maven:woodwalkers-868922:6278864")
+
+
     implementation fg.deobf("curse.maven:kamenriderweaponcraft-1208615:6269798")
     implementation fg.deobf("curse.maven:terrablender-563928:4647094")
 
@@ -219,8 +224,6 @@ dependencies {
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
-    implementation 'org.spongepowered:mixin:0.8.5'
 
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
@@ -276,7 +279,7 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Vendor'   : mod_authors,
                 'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 //你资源包中的mixin配置文件
-                "MixinConfigs": "xiaoshi2022.mixins.json"
+                "MixinConfigs": "kamen_rider_boss_you_and_me.mixins.json"
         ])
     }
 
@@ -285,8 +288,8 @@ tasks.named('jar', Jar).configure {
 }
 
 mixin {
-    add sourceSets.main, "xiaoshi2022.refmap.json"
-    config "xiaoshi2022.mixins.json"
+    add sourceSets.main, "kamen_rider_boss_you_and_me.refmap.json"
+    config "kamen_rider_boss_you_and_me.mixins.json"
     debug.export = true
 }
 

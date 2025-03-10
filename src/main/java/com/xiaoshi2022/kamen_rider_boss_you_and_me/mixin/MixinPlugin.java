@@ -13,7 +13,7 @@ public class MixinPlugin implements IMixinConfigPlugin{
     public void onLoad(String mixinPackage) {
         try {
             //这个字符串对应你的项目主类
-            Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.Main", false, this.getClass().getClassLoader());
+            Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me", false, this.getClass().getClassLoader());
             isFrameworkInstalled = true;
         } catch (Exception e) {
             isFrameworkInstalled = false;
@@ -22,7 +22,7 @@ public class MixinPlugin implements IMixinConfigPlugin{
 
     @Override
     public String getRefMapperConfig() {
-        return null;
+        return "kamen_rider_boss_you_and_me.refmap.json";
     }
 
     @Override
