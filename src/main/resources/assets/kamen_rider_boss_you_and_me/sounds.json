@@ -7,5 +7,68 @@
         "stream": false
       }
     ]
+  },
+  "stand_by_necrom": {
+    "subtitle": "subtitles.stand_by_necrom",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:stand_by_necrom",
+        "stream": false
+      }
+    ]
+  },
+  "loading_eye": {
+    "subtitle": "subtitles.loading_eye",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:loading_eye",
+        "stream": false
+      }
+    ]
+  },
+  "destroy_eye": {
+    "subtitle": "subtitles.destroy_eye",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:destroy_eye",
+        "stream": false
+      }
+    ]
+  },
+  "login_by": {
+    "subtitle": "subtitles.login_by",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:login_by",
+        "stream": false
+      }
+    ]
+  },
+  "yes_sir": {
+    "subtitle": "subtitles.yes_sir",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:yes_sir",
+        "stream": false
+      }
+    ]
+  },
+  "split": {
+    "subtitle": "subtitles.split",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:split",
+        "stream": false
+      }
+    ]
+  },
+  "eye_drop": {
+    "subtitle": "subtitles.eye_drop",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:eye_drop",
+        "stream": false
+      }
+    ]
   }
 }

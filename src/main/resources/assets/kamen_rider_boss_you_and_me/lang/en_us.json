@@ -3,10 +3,17 @@
   "entity.kamen_rider_boss_you_and_me.storious": "Storious",
   "entity.kamen_rider_boss_you_and_me.gifftarian": "Giifu WasADisciple",
   "entity.kamen_rider_boss_you_and_me.inves_heilehim": "Elementary Inves Helheim",
+  "entity.kamen_rider_boss_you_and_me.knecromghost": "Necrom_Ghost",
 
   "item.kamen_rider_boss_you_and_me.giifusteamp": "Giifu Steamp",
   "item group.kamen_rider_boss_you_and_me_tab": "Kamen Rider Boss You And Me",
+  "item group.kamen_rider_boss_you_and_me_heixin_tab": "villain Rider system",
   "item.kamen_rider_boss_you_and_me.storiousmonsterbook": "Storious Monster Book",
+  "item.kamen_rider_boss_you_and_me.necrom_eye": "Necrom Eyecon",
+  "item.kamen_rider_boss_you_and_me.mega_uiorder_item": "Necrom Mega UIorder",
+
+  "curios.identifier.bracelet": "wristband Slot",
+
 
   "advancement.kamen_rider_boss_you_and_me.root.title": "Kamen Rider Boss You and Me",
   "advancement.kamen_rider_boss_you_and_me.root.desc": "Welcome to the Kamen Rider Boss You and Me mod!",
@@ -17,7 +24,17 @@
 
   "KEY.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me": "Kamen Rider Boss You and Me",
   "KEY.kamen_rider_weapon_craft.change_body": "Henshin",
-  "KEY.kamen_rider_weapon_craft.change_player": "变异"
+  "KEY.kamen_rider_weapon_craft.change_player": "mutation",
+  "KEY.kamen_rider_weapon_craft.relieve_player": "disarmTheTransformation",
 
+
+  "subtitles.stand_by_necrom": "Stand By~",
+  "subtitles.seal": "die-o~",
+  "subtitles.loading_eye": "Loadin~g~",
+  "subtitles.destroy_eye": "destroy~!",
+  "subtitles.login_by": "Login By~",
+  "subtitles.yes_sir": "Yes Sir~",
+  "subtitles.split": "Split~",
+  "subtitles.eye_drop": "Eye Drop~! Necrom "
 
 }

@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.giifusteamp.giifusteampRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -64,7 +64,7 @@ public class giifusteamp extends Item implements GeoItem {
                 triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "extruding", "extruding");
 
                 // 播放音效
-                serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.SEAL.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModBossSounds.SEAL.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 // 更新玩家最后一次播放音效的时间
                 player.getPersistentData().putLong("lastPlayedSound", currentTime);

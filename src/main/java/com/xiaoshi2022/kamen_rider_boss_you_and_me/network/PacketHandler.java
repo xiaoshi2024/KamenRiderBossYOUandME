@@ -16,6 +16,8 @@ public class PacketHandler {
     public static void registerPackets() {
         int index = 0;
         INSTANCE.registerMessage(index++, PlayerAnimationPacket.class, PlayerAnimationPacket::toBytes, PlayerAnimationPacket::new, PlayerAnimationPacket::handle);
+        INSTANCE.registerMessage(index++, SoundStopPacket.class, SoundStopPacket::encode, SoundStopPacket::decode, SoundStopPacket.Handler::handle);
+        INSTANCE.registerMessage(index++, InvisibilityPacket.class, InvisibilityPacket::encode, InvisibilityPacket::decode, InvisibilityPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

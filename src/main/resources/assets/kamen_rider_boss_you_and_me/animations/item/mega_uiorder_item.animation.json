@@ -1,0 +1,22 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"animation_length": 0.0417
+		},
+		"ghost": {
+			"animation_length": 0.125,
+			"override_previous_animation": true,
+			"bones": {
+				"MegaUlorder": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.0833": [0, 0, 3]
+					},
+					"position": [0, 0, 0],
+					"scale": 1
+				}
+			}
+		}
+	}
+}

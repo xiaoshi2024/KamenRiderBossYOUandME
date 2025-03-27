@@ -15,6 +15,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PlayerAnimationSetup {
     public static final ResourceLocation STORIOUS_VFX_HEIXIN = new ResourceLocation("kamen_rider_boss_you_and_me", "storiousvfxheixin");
+    public static final ResourceLocation NECROM_HENSHIN = new ResourceLocation("kamen_rider_boss_you_and_me", "necrom_henshin");
+    public static final ResourceLocation NECROM_HENSHINX = new ResourceLocation("kamen_rider_boss_you_and_me", "necrom_henshinx");
 
     @OnlyIn(Dist.CLIENT)
     public static void clientInit() {

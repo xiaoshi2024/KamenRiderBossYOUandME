@@ -6,7 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.VillagerTransformationUtil;
 import forge.net.mca.entity.VillagerEntityMCA;
 import net.minecraft.server.level.ServerLevel;
@@ -68,7 +68,7 @@ public class VillagerEvents {
                     // 播放音效
                     if (player.level() instanceof ServerLevel serverLevel) {
                         serverLevel.playSound(null, villager.getX(), villager.getY(), villager.getZ(),
-                                ModSounds.SEAL.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                                ModBossSounds.SEAL.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
                     }
                     // 播放吞噬动画并移除村民
                     villager.remove(Entity.RemovalReason.KILLED);

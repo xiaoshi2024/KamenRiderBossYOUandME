@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.ghost_by_necrom.KnecromghostEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
@@ -24,7 +25,8 @@ public class ModEntityTypes {
                 0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
     public static final RegistryObject<EntityType<ElementaryInvesHelheim>> INVES_HEILEHIM = registerMob("inves_heilehim", ElementaryInvesHelheim::new,
                 0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
-
+    public static final RegistryObject<EntityType<KnecromghostEntity>> KNECROMGHOST = registerMob("knecromghost", KnecromghostEntity::new,
+            0.6f, 1.6f, 0x1F1F1F, 0x0D0D0D);
 
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {

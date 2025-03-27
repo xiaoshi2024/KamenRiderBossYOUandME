@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = 'https://maven.minecraftforge.net/' }
     }
 }
 
@@ -154,6 +155,11 @@ mixin {
 repositories {
 
     maven {
+        name = "Illusive Soulworks maven"
+        url = "https://maven.theillusivec4.top/"
+    }
+
+    maven {
         name "zigythebirdMods"
         url "https://maven.zigythebird.com/mods"
     }
@@ -191,12 +197,18 @@ dependencies {
         exclude group: "maven.modrinth"
     })
 
+    // Compile against only the API artifact
+    compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
+    // Use the full Curios API jar at runtime
+    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
+
+
     implementation fg.deobf("curse.maven:remorphed-950721:5755676")
     implementation fg.deobf("curse.maven:crafted-core-923377:6187026")
     implementation fg.deobf("curse.maven:woodwalkers-868922:6278864")
 
 
-    implementation fg.deobf("curse.maven:kamenriderweaponcraft-1208615:6269798")
+    implementation fg.deobf("curse.maven:kamenriderweaponcraft-1208615:6314566")
     implementation fg.deobf("curse.maven:terrablender-563928:4647094")
 
     implementation fg.deobf("curse.maven:jade-324717:6106101")
