@@ -5,6 +5,7 @@
   "entity.kamen_rider_boss_you_and_me.inves_heilehim": "Elementary Inves Helheim",
   "entity.kamen_rider_boss_you_and_me.knecromghost": "Necrom_Ghost",
 
+  "item.kamen_rider_boss_you_and_me.aiziowc": "another zi-o Watch",
   "item.kamen_rider_boss_you_and_me.giifusteamp": "Giifu Steamp",
   "item group.kamen_rider_boss_you_and_me_tab": "Kamen Rider Boss You And Me",
   "item group.kamen_rider_boss_you_and_me_heixin_tab": "villain Rider system",
@@ -35,6 +36,9 @@
   "subtitles.login_by": "Login By~",
   "subtitles.yes_sir": "Yes Sir~",
   "subtitles.split": "Split~",
-  "subtitles.eye_drop": "Eye Drop~! Necrom "
+  "subtitles.eye_drop": "Eye Drop~! Necrom ",
+  "subtitles.another_zi_o_click": "ZI-o!",
+
+  "planet.megahex.name": "Megahexis Planet"
 
 }

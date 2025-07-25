@@ -6,7 +6,7 @@
   "entity.kamen_rider_boss_you_and_me.knecromghost": "幽冥之魂",
 
 
-
+  "item.kamen_rider_boss_you_and_me.aiziowc": "异类时王表盘",
   "item.kamen_rider_boss_you_and_me.giifusteamp": "基夫始祖印章",
   "item group.kamen_rider_boss_you_and_me_tab": "假面骑士中你与我的反派编年史",
   "item.kamen_rider_boss_you_and_me.storiousmonsterbook": "斯特利乌斯（传奇米吉多之 书）",
@@ -35,8 +35,11 @@
   "subtitles.yes_sir": "Yes Sir~",
   "subtitles.split": "Split~",
   "subtitles.eye_drop": "Eye Drop~! Necrom ",
+  "subtitles.another_zi_o_click": "时王!",
 
-  "item group.kamen_rider_boss_you_and_me_heixin_tab": "反派骑士系统"
 
+  "item group.kamen_rider_boss_you_and_me_heixin_tab": "反派骑士系统",
+
+  "planet.megahex.name": "梅嘉赫克斯行星"
 
 }

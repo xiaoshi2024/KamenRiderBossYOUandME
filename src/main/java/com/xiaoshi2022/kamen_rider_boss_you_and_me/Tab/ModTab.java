@@ -17,6 +17,7 @@ public class ModTab {
             .title(Component.translatable("item group.kamen_rider_boss_you_and_me_tab"))
             .displayItems(((parameters, output) -> {
                 output.accept(GIIFUSTEAMP.get());
+                output.accept(AIZIOWC.get());
                 output.accept(STORIOUSMONSTERBOOK.get());
 
             })).build());

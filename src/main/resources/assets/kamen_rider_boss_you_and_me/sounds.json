@@ -70,5 +70,14 @@
         "stream": false
       }
     ]
+  },
+  "another_zi_o_click": {
+    "subtitle": "subtitles.another_zi_o_click",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:another_zi_o_click",
+        "stream": false
+      }
+    ]
   }
 }

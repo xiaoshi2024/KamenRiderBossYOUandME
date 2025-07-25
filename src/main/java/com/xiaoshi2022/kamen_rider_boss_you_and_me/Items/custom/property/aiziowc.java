@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.Necrom_eye.Necrom_eyeRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.Another_zi_o_click.aiziowcRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
@@ -23,34 +23,28 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.ClientUtils;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.Random;
 import java.util.function.Consumer;
 
-
-public class Necrom_eye extends Item implements GeoItem {
-
-    public static final int SOUND_COOLDOWN = 5 * 20; // 5秒冷却
-
-    private static final RawAnimation START = RawAnimation.begin().thenPlay("start");
+public class aiziowc extends Item implements GeoItem {
+    private static final RawAnimation CLICK = RawAnimation.begin().thenPlay("click");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public Necrom_eye(Properties properties) {
-        super(properties);
 
-        // Register our item as server-side handled.
-        // This enables both animation data syncing and server-side animation triggering
+    public aiziowc(Properties p_41383_) {
+        super(p_41383_);
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
+
 
     // Utilise the existing forge hook to define our custom renderer (which we created in createRenderer)
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private Necrom_eyeRenderer renderer;
+            private aiziowcRenderer renderer;
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 if (this.renderer == null)
-                    this.renderer = new Necrom_eyeRenderer();
+                    this.renderer = new aiziowcRenderer();
 
                 return this.renderer;
             }
@@ -59,29 +53,17 @@ public class Necrom_eye extends Item implements GeoItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        final int INTERVAL = 5 * 20; // 5秒间隔，1秒 = 20 tick
+        final int INTERVAL = 12 * 20; // 12秒间隔，1秒 = 20 tick
         long lastPlayed = player.getPersistentData().getLong("lastPlayedSound");
         long currentTime = level.getGameTime();
 
         if (currentTime - lastPlayed >= INTERVAL) {
             if (level instanceof ServerLevel serverLevel) {
                 // 触发动画
-                triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "start", "start");
+                triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "click", "click");
 
-                // 随机播放音效
-                Random random = new Random();
-                int randomIndex = random.nextInt(3); // 生成0到2的随机数
-                switch (randomIndex) {
-                    case 0:
-                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModBossSounds.STAND_BY_NECROM.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-                        break;
-                    case 1:
-                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModBossSounds.LOADING_EYE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-                        break;
-                    case 2:
-                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModBossSounds.DESTROY_EYE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-                        break;
-                }
+                // 播放音效
+                serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModBossSounds.ANOTHER_ZI_O_CLICK.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 // 更新玩家最后一次播放音效的时间
                 player.getPersistentData().putLong("lastPlayedSound", currentTime);
@@ -94,17 +76,19 @@ public class Necrom_eye extends Item implements GeoItem {
         return super.use(level, player, hand);
     }
 
+
+    // Let's add our animation controller
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "start", 20, state -> PlayState.STOP)
-                .triggerableAnim("start", START)
+        controllers.add(new AnimationController<>(this, "click", 20, state -> PlayState.STOP)
+                .triggerableAnim("click", CLICK)
                 // We've marked the "box_open" animation as being triggerable from the server
                 .setSoundKeyframeHandler(state -> {
                     // Use helper method to avoid client-code in common class
                     Player player = ClientUtils.getClientPlayer();
 
                     if (player != null)
-                        player.playSound(ModBossSounds.STAND_BY_NECROM.get(), 1, 1);
+                        player.playSound(ModBossSounds.ANOTHER_ZI_O_CLICK.get(), 1, 1);
                 }));
     }
 
@@ -114,5 +98,4 @@ public class Necrom_eye extends Item implements GeoItem {
         return this.cache;
     }
 }
-
 

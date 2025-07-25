@@ -2,7 +2,6 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.ghost_by_necrom.necrom_ghost.KnecromghostRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.ElementaryInvesHelheimRenderer;
@@ -10,10 +9,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.Storio
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.CheckTransformAndBraceletProcedure;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
-import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -66,7 +63,6 @@ public class kamen_rider_boss_you_and_me
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        MinecraftForge.EVENT_BUS.register(CheckTransformAndBraceletProcedure.class);
         // 注册我们感兴趣的服务器和其他游戏活动
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -130,7 +126,7 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.STORIOUS.get(), StoriousRender::new);
             EntityRenderers.register(ModEntityTypes.GIFFTARIAN.get(), GifftarianRenderer::new);
             EntityRenderers.register(ModEntityTypes.INVES_HEILEHIM.get(), ElementaryInvesHelheimRenderer::new);
-            EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
+//            EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
             // 注册动画工厂
             PlayerAnimationSetup.clientInit();
             // 注册饰品渲染器

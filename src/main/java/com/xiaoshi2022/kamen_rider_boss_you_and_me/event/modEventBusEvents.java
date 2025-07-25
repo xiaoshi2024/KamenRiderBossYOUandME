@@ -52,7 +52,7 @@ public class modEventBusEvents {
             event.put(ModEntityTypes.STORIOUS.get(), GiifuDemosEntity.createAttributes().add(Attributes.MAX_HEALTH, 122.0D).build());
             event.put(ModEntityTypes.GIFFTARIAN.get(), GiifuDemosEntity.createAttributes().add(Attributes.MAX_HEALTH,80.0D).add(Attributes.ATTACK_DAMAGE,8.0D).build());
             event.put(ModEntityTypes.INVES_HEILEHIM.get(), ElementaryInvesHelheim.createMonsterAttributes().add(Attributes.MAX_HEALTH,50.0D).add(Attributes.ATTACK_DAMAGE,6.0D).build());
-            event.put(ModEntityTypes.KNECROMGHOST.get(), ElementaryInvesHelheim.createMonsterAttributes().add(Attributes.MAX_HEALTH,30.0D).add(Attributes.ATTACK_DAMAGE,6.0D).build());
+//            event.put(ModEntityTypes.KNECROMGHOST.get(), ElementaryInvesHelheim.createMonsterAttributes().add(Attributes.MAX_HEALTH,30.0D).add(Attributes.ATTACK_DAMAGE,6.0D).build());
         }
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event){
