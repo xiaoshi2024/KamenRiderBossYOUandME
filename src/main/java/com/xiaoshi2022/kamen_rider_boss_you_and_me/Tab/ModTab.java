@@ -27,5 +27,13 @@ public class ModTab {
             .displayItems(((parameters, output) -> {
                 output.accept(NECROM_EYE.get());
                 output.accept(MEGA_UIORDER_ITEM.get());
+                output.accept(SENGOKUDRIVERS_EPMTY.get());
+                output.accept(BANANAFRUIT.get());
+            })).build());
+    public static final RegistryObject<CreativeModeTab> KINDS_TAB = TABS.register("kamen_rider_boss_you_and_me_kinds_tab", () -> CreativeModeTab.builder()
+            .icon(() -> INVES_MEAT.get().getDefaultInstance())
+            .title(Component.translatable("item group.kamen_rider_boss_you_and_me_kinds_tab"))
+            .displayItems(((parameters, output) -> {
+                output.accept(INVES_MEAT.get());
             })).build());
 }

@@ -1,9 +1,15 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.AttractGoal;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.FlyAndAttackGoal;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +20,8 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -31,9 +39,23 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     protected static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("Attack");
     protected static final RawAnimation RUN = RawAnimation.begin().thenLoop("run");
+    protected static final RawAnimation FLY = RawAnimation.begin().thenLoop("fly"); // 添加飞行动画
+    private static final TagKey<Item> HELHEIM_FOOD_TAG =
+            ItemTags.create(new ResourceLocation("kamen_rider_weapon_craft", "kamen_rider_helheim_food"));
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     private static final String[] VARIANTS = {"red", "blue", "green"};
+    private boolean isFlying = false; // 添加飞行状态
+    public int flyingCooldown = 0; // 飞行冷却
+    // 添加飞行状态getter/setter
+    public boolean isFlying() {
+        return isFlying;
+    }
+
+    public void setFlying(boolean flying) {
+        this.isFlying = flying;
+    }
+
     private String variant = "blue"; // 默认变种
 
     public ElementaryInvesHelheim(EntityType<? extends Monster> entityType, Level level) {
@@ -73,9 +95,51 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+
+        // 飞行冷却处理
+        if (flyingCooldown > 0) {
+            flyingCooldown--;
+        }
+
+        // 失去目标时降落
+        if (isFlying && this.getTarget() == null) {
+            this.setFlying(false);
+            flyingCooldown = 100; // 设置冷却时间
+        }
+    }
+
+
+    @Override
+    protected void dropFromLootTable(DamageSource damageSource, boolean recentlyHit) {
+        super.dropFromLootTable(damageSource, recentlyHit);
+
+        // 添加掉落逻辑
+        if (!this.level().isClientSide) {
+            // 获取掉落位置
+            double x = this.getX();
+            double y = this.getY();
+            double z = this.getZ();
+
+            // 创建掉落物品
+            ItemStack invesMeat = new ItemStack(ModItems.INVES_MEAT.get());
+            this.spawnAtLocation(invesMeat, 0.0F);
+        }
+    }
+
+    @Override
     protected void registerGoals() {
         // 添加 AI 目标
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 0.34D, true)); // 近战攻击
+        this.goalSelector.addGoal(2, new FlyAndAttackGoal(this));//可以起飞
+        // 直接使用本类定义的常量
+        this.goalSelector.addGoal(3, new AttractGoal(
+                this,
+                HELHEIM_FOOD_TAG.location(), // 转换为ResourceLocation
+                0.45D
+        ));
+
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.45D)); // 随机漫步
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F)); // 看向玩家
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this)); // 随机环顾四周
@@ -87,7 +151,11 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
         this.targetSelector.addGoal(2, new ElementaryInvesHelheim.CustomAttackGoal<>(this, Player.class, 20, true, false, ElementaryInvesHelheim.CustomAttackGoal::isValidTarget));
 
         // 攻击普通村民
-        this.targetSelector.addGoal(3, new ElementaryInvesHelheim.CustomAttackGoal<>(this, Villager.class, 20, true, false, ElementaryInvesHelheim.CustomAttackGoal::isValidTarget));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
+                this, Villager.class, 30, true, false,
+                e -> !(e instanceof GiifuDemosEntity || e instanceof StoriousEntity)
+        ));
+
     }
 
     // 自定义攻击目标逻辑
@@ -112,24 +180,34 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        // 保持原有的两个控制器
         controllers.add(new AnimationController<>(this, "run", 5, this::idleAnimController));
         controllers.add(new AnimationController<>(this, "Attack", 5, this::attackAnimController));
+        controllers.add(new AnimationController<>(this, "fly", 5, this::flyAnimController)); // 新增飞行控制器
     }
 
+    protected <E extends ElementaryInvesHelheim> PlayState flyAnimController(final AnimationState<E> event) {
+        if (this.isFlying()) {
+            return event.setAndContinue(FLY); // 飞行时播放 fly 动画
+        }
+        return PlayState.STOP; // 不飞行时停止
+    }
 
     protected <E extends ElementaryInvesHelheim> PlayState idleAnimController(final AnimationState<E> event) {
-        if (event.isMoving())
-            return event.setAndContinue(RUN);
-        else
-            return event.setAndContinue(IDLE); // 当不移动时播放 idle 动画
+        if (event.isMoving()) {
+            return event.setAndContinue(FLY);
+        } else {
+            return event.setAndContinue(IDLE);
+        }
     }
 
     protected <E extends ElementaryInvesHelheim> PlayState attackAnimController(final AnimationState<E> event) {
+        // 攻击动画逻辑保持不变
         if (this.swinging) {
             if (getRandom().nextInt(100) < 40) { // 40% 概率触发凶暴
-            return event.setAndContinue(GOMAD);
-        }else if (getRandom().nextInt(100) < 70){ // 70% 概率触发普通攻击
-            return event.setAndContinue(ATTACK);
+                return event.setAndContinue(GOMAD);
+            } else if (getRandom().nextInt(100) < 70) { // 70% 概率触发普通攻击
+                return event.setAndContinue(ATTACK);
             }
         }
         return PlayState.STOP;

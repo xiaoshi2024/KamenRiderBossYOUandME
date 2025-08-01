@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.joml.Matrix2dc;
 
 public class ModBossSounds {
     public static final DeferredRegister<SoundEvent> REGISTRY = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, kamen_rider_boss_you_and_me.MODID);
@@ -29,4 +30,6 @@ public class ModBossSounds {
 
  public static final RegistryObject<SoundEvent> ANOTHER_ZI_O_CLICK = REGISTRY.register("another_zi_o_click",
          () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me","another_zi_o_click")));
+ public static final RegistryObject<SoundEvent> BANANAFRUITENERGY = REGISTRY.register("bananafruit_energy",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me","bananafruit_energy")));
 }

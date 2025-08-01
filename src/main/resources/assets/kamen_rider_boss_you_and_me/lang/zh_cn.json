@@ -12,6 +12,11 @@
   "item.kamen_rider_boss_you_and_me.storiousmonsterbook": "斯特利乌斯（传奇米吉多之 书）",
   "item.kamen_rider_boss_you_and_me.necrom_eye": "幽冥眼魂",
   "item.kamen_rider_boss_you_and_me.mega_uiorder_item": "幽冥眼魂装载润眼器",
+  "item.kamen_rider_boss_you_and_me.sengokudrivers": "战极驱动器--香蕉",
+  "item.kamen_rider_boss_you_and_me.sengokudrivers_epmty": "战极驱动器",
+  "item.kamen_rider_boss_you_and_me.bananafruit": "香蕉锁种",
+
+
 
   "curios.identifier.bracelet": "腕带 插槽",
 
@@ -27,6 +32,10 @@
   "KEY.kamen_rider_weapon_craft.change_player": "变异",
   "KEY.kamen_rider_weapon_craft.relieve_player": "解除变身",
 
+  "item.kamen_rider_boss_you_and_me.inves_meat": "异域者的肉",
+  "item.kamen_rider_boss_you_and_me.inves_meat.tooltip": "腐肉？...",
+
+
   "subtitles.stand_by_necrom": "待命中~",
   "subtitles.seal": "缔结~",
   "subtitles.loading_eye": "加载中！",
@@ -36,7 +45,9 @@
   "subtitles.split": "Split~",
   "subtitles.eye_drop": "Eye Drop~! Necrom ",
   "subtitles.another_zi_o_click": "时王!",
+  "subtitles.bananafruit_energy": "香蕉 !",
 
+  "item group.kamen_rider_boss_you_and_me_heixin_tab": "反派骑士系统",
+  "item group.kamen_rider_boss_you_and_me_kinds_tab": "假面骑士你与我的反派编年史的杂货"
 
-  "item group.kamen_rider_boss_you_and_me_heixin_tab": "反派骑士系统"
 }

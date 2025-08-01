@@ -3022,6 +3022,11 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "rightItem",
+					"parent": "RightArm",
+					"pivot": [-5.4, 9.3, 0]
 				}
 			]
 		}

@@ -1,25 +1,21 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.ElementaryInvesHelheimRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.StoriousRender;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.NetworkHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -36,10 +32,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixins;
 import software.bernie.geckolib.GeckoLib;
-import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.Mega_uiorder_item.Mega_uiorderRenderer;
-import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -69,6 +62,9 @@ public class kamen_rider_boss_you_and_me
         //注册实体
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
 
+        // 注册 KeybindHandler
+        MinecraftForge.EVENT_BUS.register(KeybindHandler.class);
+
         //geckolib
         GeckoLib.initialize();
 
@@ -79,6 +75,7 @@ public class kamen_rider_boss_you_and_me
         ModBossSounds.REGISTRY.register(modEventBus);
 
         PacketHandler.registerPackets();
+        NetworkHandler.register();
 
         // 注册 Mixin
         Mixins.addConfiguration("kamen_rider_boss_you_and_me.mixins.json");
@@ -130,16 +127,9 @@ public class kamen_rider_boss_you_and_me
             // 注册动画工厂
             PlayerAnimationSetup.clientInit();
             // 注册饰品渲染器
-            CuriosRendererRegistry.register(ModItems.MEGA_UIORDER_ITEM.get(), () -> new ICurioRenderer() {
-                private final Mega_uiorderRenderer renderer = new Mega_uiorderRenderer();
-
-                @Override
-                public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource renderTypeBuffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-                    if (renderLayerParent.getModel() instanceof HumanoidModel<?> humanoidModel) {
-                        renderer.render(stack, slotContext, matrixStack, renderLayerParent, renderTypeBuffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
-                    }
-                }
-            });
+            // 注册 Curios 饰品渲染器
+            CuriosRendererRegistry.register(ModItems.MEGA_UIORDER_ITEM.get(), () -> new GenericCurioRenderer());
+            CuriosRendererRegistry.register(ModItems.SENGOKUDRIVERS_EPMTY.get(), () -> new GenericCurioRenderer());
         }
     }
 

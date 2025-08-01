@@ -79,5 +79,14 @@
         "stream": false
       }
     ]
+  },
+  "bananafruit_energy": {
+    "subtitle": "subtitles.bananafruit_energy",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:bananafruit_energy",
+        "stream": false
+      }
+    ]
   }
 }

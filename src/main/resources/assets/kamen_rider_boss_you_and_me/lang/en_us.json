@@ -12,6 +12,9 @@
   "item.kamen_rider_boss_you_and_me.storiousmonsterbook": "Storious Monster Book",
   "item.kamen_rider_boss_you_and_me.necrom_eye": "Necrom Eyecon",
   "item.kamen_rider_boss_you_and_me.mega_uiorder_item": "Necrom Mega UIorder",
+  "item.kamen_rider_boss_you_and_me.sengokudrivers": "Sengoku Drivers--banana",
+  "item.kamen_rider_boss_you_and_me.sengokudrivers_epmty": "Sengoku Drivers",
+  "item.kamen_rider_boss_you_and_me.bananafruit": "banana fruit Lock Seed",
 
   "curios.identifier.bracelet": "wristband Slot",
 
@@ -28,6 +31,8 @@
   "KEY.kamen_rider_weapon_craft.change_player": "mutation",
   "KEY.kamen_rider_weapon_craft.relieve_player": "disarmTheTransformation",
 
+  "item.kamen_rider_boss_you_and_me.inves_meat": "Inves Meat",
+  "item.kamen_rider_boss_you_and_me.inves_meat.tooltip": "Rotten flesh?...",
 
   "subtitles.stand_by_necrom": "Stand By~",
   "subtitles.seal": "die-o~",
@@ -37,5 +42,8 @@
   "subtitles.yes_sir": "Yes Sir~",
   "subtitles.split": "Split~",
   "subtitles.eye_drop": "Eye Drop~! Necrom ",
-  "subtitles.another_zi_o_click": "ZI-o!"
+  "subtitles.another_zi_o_click": "ZI-o!",
+  "subtitles.bananafruit_energy": "Banana !",
+
+  "item group.kamen_rider_boss_you_and_me_kinds_tab": "KamenRiderBossYouAndMe Kinds of"
 }

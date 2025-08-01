@@ -3881,6 +3881,11 @@
 					]
 				},
 				{
+					"name": "rightItem",
+					"parent": "RightArm",
+					"pivot": [-5.3, 9.9, 0]
+				},
+				{
 					"name": "LeftArm",
 					"pivot": [4, 22, 0]
 				},

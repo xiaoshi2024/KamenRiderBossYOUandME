@@ -1,0 +1,177 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"show": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"l": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [-0.6, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0.12, 1, 0.19]
+						},
+						"1.0": {
+							"vector": [1, 1, 1],
+							"easing": "easeInElastic"
+						}
+					}
+				},
+				"r": {
+					"scale": {
+						"0.0": {
+							"vector": [0.19, 1, 0.3]
+						},
+						"1.0": {
+							"vector": [1, 1, 1],
+							"easing": "easeInElastic"
+						}
+					}
+				},
+				"kaimmb": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0.15, 1, 1]
+						},
+						"1.0": {
+							"vector": [1, 1, 1],
+							"easing": "easeInElastic"
+						}
+					}
+				}
+			}
+		},
+		"idles": {
+			"animation_length": 1,
+			"bones": {
+				"sengokudriver": {
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"l": {
+					"scale": {
+						"vector": [0.83, 1, 0.12]
+					}
+				},
+				"r": {
+					"scale": {
+						"vector": [0.17, 1, 0.04]
+					}
+				},
+				"kaimmb": {
+					"scale": {
+						"vector": [0.12, 1, 0.92]
+					}
+				}
+			}
+		},
+		"release": {
+			"animation_length": 0.1667,
+			"bones": {
+				"sengokudriver": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"banana_idle": {
+			"animation_length": 0.25,
+			"bones": {
+				"sengokudriver": {
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"cut": {
+			"animation_length": 2,
+			"bones": {
+				"knife": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 0, 47.5]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"leaf": {
+					"rotation": {
+						"1.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.0": {
+							"vector": [177.5, 0, 0]
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				}
+			}
+		},
+		"cuts": {
+			"animation_length": 1,
+			"bones": {
+				"knife": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 0, 52.5]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"leaf": {
+					"rotation": {
+						"vector": [170, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

@@ -8,6 +8,8 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class PacketHandler {
+    private static int currentId = 0;
+
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
             new ResourceLocation("kamen_rider_boss_you_and_me", "main"),
@@ -39,5 +41,9 @@ public class PacketHandler {
         if (entity.level() instanceof ServerLevel) {
             INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
         }
+    }
+
+    public static int getNextId() {
+        return currentId++;
     }
 }
