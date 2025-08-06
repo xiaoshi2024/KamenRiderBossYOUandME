@@ -11,6 +11,16 @@ import org.joml.Matrix2dc;
 public class ModBossSounds {
     public static final DeferredRegister<SoundEvent> REGISTRY = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, kamen_rider_boss_you_and_me.MODID);
 
+    //锁种音效变身
+    public static final RegistryObject<SoundEvent> LOCKOFF = REGISTRY.register("lockoff",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "lockoff")));
+    public static final RegistryObject<SoundEvent> LOCKONS = REGISTRY.register("lockons",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "lockons")));
+    public static final RegistryObject<SoundEvent> BANANABY = REGISTRY.register("bananaby",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "bananaby")));
+    public static final RegistryObject<SoundEvent> BANANAARMS = REGISTRY.register("bananaarms",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "bananaarms")));
+
     public static final RegistryObject<SoundEvent> SEAL = REGISTRY.register("seal",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "seal")));
     public static final RegistryObject<SoundEvent> STAND_BY_NECROM = REGISTRY.register("stand_by_necrom",

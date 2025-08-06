@@ -47,7 +47,35 @@
   "subtitles.another_zi_o_click": "时王!",
   "subtitles.bananafruit_energy": "香蕉 !",
 
+  "entity.kamen_rider_boss_you_and_me.lord_baron": "星爵巴隆",
+  "entity.kamen_rider.baron.name": "星爵巴隆",
+  "msg.kamen_rider.baron.greet1": "我是星爵巴隆！",
+  "msg.kamen_rider.baron.greet2": "香蕉！要战斗吗？",
+  "msg.kamen_rider.baron.greet3": "骑士对决现在开始！",
+  "msg.kamen_rider.baron.power1": "我的力量来自香蕉锁种！",
+  "msg.kamen_rider.baron.power2": "锁种赐予我力量！",
+  "msg.kamen_rider.baron.power3": "战极驱动 - 香蕉铠甲！",
+  "msg.kamen_rider.baron.challenge1": "接受挑战！",
+  "msg.kamen_rider.baron.challenge2": "来决斗吧！",
+  "msg.kamen_rider.baron.challenge3": "让我看看你的实力！",
+  "msg.kamen_rider.baron.victory": "你已经击败我%d次了！",
+  "msg.kamen_rider.unknown": "我不明白...",
+
+
+  "block.kamen_rider_boss_you_and_me.bananas_block": "裂缝-香蕉",
+
+  "msg.kamen_rider.inves_controlled": "异域者已控制！",
+  "msg.kamen_rider.inves_protect": "保护领主巴隆！",
+  "msg.kamen_rider.belt_activation_failed": "腰带激活检查失败",
+  "msg.kamen_rider.no_belt": "你未佩戴战极驱动器！",
+  "msg.kamen_rider.invalid_belt": "无效的驱动器类型",
+  "msg.kamen_rider.belt_not_activated": "驱动器未激活",
+  "msg.kamen_rider.star_lord_transformation": "变身！星爵巴隆！",
+  "msg.kamen_rider.inves_transformation": "赫尔果实侵蚀！你变成了异域者！",
+  "msg.kamen_rider.transformation_failed": "变身失败！",
+  "entity.kamen_rider.star_lord_baron": "星爵巴隆",
+
+
   "item group.kamen_rider_boss_you_and_me_heixin_tab": "反派骑士系统",
   "item group.kamen_rider_boss_you_and_me_kinds_tab": "假面骑士你与我的反派编年史的杂货"
-
 }

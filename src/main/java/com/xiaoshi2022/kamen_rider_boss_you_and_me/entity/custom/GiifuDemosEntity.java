@@ -1,5 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
+import com.mojang.logging.LogUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import forge.net.mca.entity.VillagerEntityMCA;
 import forge.net.mca.entity.VillagerLike;
 import forge.net.mca.entity.ai.BreedableRelationship;
@@ -14,9 +16,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.npc.*;
@@ -62,6 +67,13 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
         this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1)); // 设置村民数据
     }
 
+    // 在类中添加属性构建方法
+    public static AttributeSupplier.Builder createAttributes() {
+        return Villager.createAttributes()
+                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 5.0D)
+                .add(Attributes.MAX_HEALTH, 100.0D);
+    }
+
     // 使用 VillagerEntityMCA 的功能
     public VillagerCommandHandler getInteractions() {
         return villagerComponent.getInteractions();
@@ -75,13 +87,33 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0F)); // 看向玩家
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.34D, false)); // 近战攻击目标
+        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0F));
+
+        // 只在非和平模式下添加攻击目标
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL) {
+            this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.34D, false) {
+                @Override
+                public boolean canUse() {
+                    return super.canUse() && !isTargetCreativePlayer();
+                }
+
+                @Override
+                public boolean canContinueToUse() {
+                    return super.canContinueToUse() && !isTargetCreativePlayer();
+                }
+            });
+        }
         this.goalSelector.addGoal(3, new PanicGoal(this, 1.2)); // 当受到火焰伤害时逃跑
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.45D)); // 随机漫步
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this)); // 随机环顾四周
         this.goalSelector.addGoal(7, new FloatGoal(this)); // 如果在水里，尝试浮在水面上
     }
+
+    private boolean isTargetCreativePlayer() {
+        LivingEntity target = this.getTarget();
+        return target instanceof Player && ((Player)target).isCreative();
+    }
+
 
     @Override
     public boolean canAttackType(EntityType<?> type) {
@@ -91,10 +123,14 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     @Override
     public void aiStep() {
         super.aiStep();
-        LivingEntity target = this.getTarget();
-        if (target != null && this.distanceTo(target) < 2.0D) {
-            // 执行攻击逻辑
-            target.hurt(asEntity().damageSources().generic(), 5.0F); // 示例：对目标造成 5 点伤害
+        // 只在非和平模式下执行攻击逻辑
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL &&
+                !(this.getTarget() instanceof Player && ((Player)this.getTarget()).isCreative())) {
+            LivingEntity target = this.getTarget();
+            if (target != null && this.distanceTo(target) < 2.0D) {
+                float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+                target.hurt(this.damageSources().mobAttack(this), damage);
+            }
         }
     }
 
@@ -120,15 +156,18 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     }
 
     @Override
-    public final boolean hurt(DamageSource source, float damageAmount) {
-        if (source.getDirectEntity() instanceof LivingEntity) {
+    public boolean hurt(DamageSource source, float damageAmount) {
+        // 在和平模式下不设置攻击目标
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL && source.getDirectEntity() instanceof LivingEntity) {
             LivingEntity attacker = (LivingEntity) source.getDirectEntity();
-            // 设置攻击目标
-            this.setTarget(attacker);
+            // 不把创造模式玩家设为目标
+            if (!(attacker instanceof Player && ((Player)attacker).isCreative())) {
+                this.setTarget(attacker);
+            }
         }
-        // 调用父类的 hurt 方法
         return super.hurt(source, damageAmount);
     }
+
 
     @Override
     public Component getDisplayName() {
@@ -152,8 +191,9 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     }
 
     @Override
-    public boolean doHurtTarget(Entity p_21372_) {
-        return this.villagerComponent.doHurtTarget(p_21372_); // 使用 VillagerEntityMCA 的伤害目标
+    public boolean doHurtTarget(Entity target) {
+        float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+        return target.hurt(this.damageSources().mobAttack(this), damage);
     }
 
     @Override
@@ -179,11 +219,27 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
             return event.setAndContinue(IDLE); // 当不移动时播放 idle 动画
     }
 
-    protected <E extends GiifuDemosEntity> PlayState attackAnimController(final AnimationState<E> event) {
-        if (this.swinging) {
-            return event.setAndContinue(SWEEP);
+    protected <E extends GiifuDemosEntity> PlayState attackAnimController(AnimationState<E> event) {
+        if (this.swinging && !this.level().isClientSide()) { // 仅服务端执行
+            this.hurtNearbyEntities(); // 自定义方法处理伤害
         }
-        return PlayState.STOP;
+        return this.swinging ? event.setAndContinue(SWEEP) : PlayState.STOP;
+    }
+
+    public void hurtNearbyEntities() {
+        if (this.level().isClientSide()) return;
+
+        // 获取攻击伤害属性，如果不存在则使用默认值
+        double damage = this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+
+        // 扫描周围实体
+        for (LivingEntity entity : this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(2.0D),
+                e -> e != this && !(e instanceof Player && ((Player)e).isCreative()))
+        ) {
+            entity.hurt(this.damageSources().mobAttack(this), (float)damage);
+        }
     }
 
     @Override

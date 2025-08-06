@@ -7,6 +7,8 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
+import static dev.kosmx.playerAnim.forge.ForgeModInterface.LOGGER;
+
 public class PacketHandler {
     private static int currentId = 0;
 
@@ -26,6 +28,10 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++, RemoveEntityPacket.class, RemoveEntityPacket::toBytes, RemoveEntityPacket::new, RemoveEntityPacket::handle);
         INSTANCE.registerMessage(index++, PlayerArmorPacket.class, PlayerArmorPacket::toBytes, PlayerArmorPacket::new, PlayerArmorPacket::handle);
         INSTANCE.registerMessage(index++, PlayerEquipmentPacket.class, PlayerEquipmentPacket::toBytes, PlayerEquipmentPacket::new, PlayerEquipmentPacket::handle);
+        INSTANCE.registerMessage(index++, BeltAnimationPacket.class, BeltAnimationPacket::encode, BeltAnimationPacket::decode, BeltAnimationPacket::handle);
+        INSTANCE.registerMessage(index++,  SyncOwnerPacket.class,SyncOwnerPacket::encode, SyncOwnerPacket::decode,SyncOwnerPacket::handle);
+        INSTANCE.registerMessage(index++, ReleaseBeltPacket.class, ReleaseBeltPacket::encode, ReleaseBeltPacket::decode, ReleaseBeltPacket::handle);
+//        PacketHandler.logChannelStatus();
     }
 
     public static void sendToServer(Object packet) {
@@ -38,10 +44,15 @@ public class PacketHandler {
     }
 
     public static void sendToAllTracking(Object packet, Entity entity) {
-        if (entity.level() instanceof ServerLevel) {
+        if (!entity.level().isClientSide) {  // 更安全的检查
             INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
         }
     }
+
+//    // 添加调试方法
+//    public static void logChannelStatus() {
+//        LOGGER.info("Network channel initialized with {} packets", currentId);
+//    }
 
     public static int getNextId() {
         return currentId++;

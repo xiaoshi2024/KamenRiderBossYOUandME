@@ -1,8 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
@@ -46,14 +50,46 @@ public class modEventBusEvents {
 
     @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public final class CommonListener {
+
         @SubscribeEvent
         public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
-            event.put(ModEntityTypes.GIIFUDEMOS_ENTITY.get(), GiifuDemosEntity.createAttributes().add(Attributes.MAX_HEALTH, 100.0D).build());
-            event.put(ModEntityTypes.STORIOUS.get(), GiifuDemosEntity.createAttributes().add(Attributes.MAX_HEALTH, 122.0D).build());
-            event.put(ModEntityTypes.GIFFTARIAN.get(), GiifuDemosEntity.createAttributes().add(Attributes.MAX_HEALTH,80.0D).add(Attributes.ATTACK_DAMAGE,8.0D).build());
-            event.put(ModEntityTypes.INVES_HEILEHIM.get(), ElementaryInvesHelheim.createMonsterAttributes().add(Attributes.MAX_HEALTH,50.0D).add(Attributes.ATTACK_DAMAGE,6.0D).build());
-//            event.put(ModEntityTypes.KNECROMGHOST.get(), ElementaryInvesHelheim.createMonsterAttributes().add(Attributes.MAX_HEALTH,30.0D).add(Attributes.ATTACK_DAMAGE,6.0D).build());
+            // 统一使用自定义属性系统
+
+            event.put(ModEntityTypes.LORD_BARON.get(), LordBaronEntity.createAttributes()
+                    .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 5.0D)
+                    .add(Attributes.MAX_HEALTH, 100.0D)
+                    .build()
+            );
+
+            event.put(ModEntityTypes.GIIFUDEMOS_ENTITY.get(),
+                    GiifuDemosEntity.createAttributes()
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 5.0D)
+                            .add(Attributes.MAX_HEALTH, 100.0D)
+                            .build()
+            );
+
+            event.put(ModEntityTypes.STORIOUS.get(),
+                    StoriousEntity.createAttributes()
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 5.0D)
+                            .add(Attributes.MAX_HEALTH, 122.0D)
+                            .build()
+            );
+
+            event.put(ModEntityTypes.GIFFTARIAN.get(),
+                    Gifftarian.createMonsterAttributes()
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 8.0D)
+                            .add(Attributes.MAX_HEALTH, 80.0D)
+                            .build()
+            );
+
+            event.put(ModEntityTypes.INVES_HEILEHIM.get(),
+                    ElementaryInvesHelheim.createMonsterAttributes()
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 6.0D)
+                            .add(Attributes.MAX_HEALTH, 50.0D)
+                            .build()
+            );
         }
+
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event){
             event.register(CHANGE_KEY);

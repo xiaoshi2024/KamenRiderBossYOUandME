@@ -88,5 +88,41 @@
         "stream": false
       }
     ]
+  },
+  "lockoff": {
+    "subtitle": "lockoff",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:lockoff",
+        "stream": false
+      }
+    ]
+  },
+  "bananaby": {
+    "subtitle": "bananaby",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:bananaby",
+        "stream": false
+      }
+    ]
+  },
+  "bananaarms": {
+    "subtitle": "bananaarms",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:bananaarms",
+        "stream": false
+      }
+    ]
+  },
+  "lockons": {
+    "subtitle": "lockons",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:lockons",
+        "stream": false
+      }
+    ]
   }
 }

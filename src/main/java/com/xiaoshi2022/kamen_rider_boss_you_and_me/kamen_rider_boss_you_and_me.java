@@ -1,22 +1,28 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.ElementaryInvesHelheimRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.StoriousRender;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.LordBaronRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.NetworkHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlockEntities;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -59,11 +65,19 @@ public class kamen_rider_boss_you_and_me
         // 注册我们感兴趣的服务器和其他游戏活动
         MinecraftForge.EVENT_BUS.register(this);
 
+        ModBlocks.BLOCKS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+
+        // 注册HelheimVineHandler
+        MinecraftForge.EVENT_BUS.register(new HelheimVineHandler());
         //注册实体
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
 
         // 注册 KeybindHandler
         MinecraftForge.EVENT_BUS.register(KeybindHandler.class);
+
+        //初始化自定义ModAttributes
+        ModAttributes.ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         //geckolib
         GeckoLib.initialize();
@@ -75,7 +89,6 @@ public class kamen_rider_boss_you_and_me
         ModBossSounds.REGISTRY.register(modEventBus);
 
         PacketHandler.registerPackets();
-        NetworkHandler.register();
 
         // 注册 Mixin
         Mixins.addConfiguration("kamen_rider_boss_you_and_me.mixins.json");
@@ -116,9 +129,16 @@ public class kamen_rider_boss_you_and_me
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
+
+        @SubscribeEvent
+        public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(ModBlockEntities.BANANAS_ENTITY.get(), BananasRenderer::new);
+        }
+
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            EntityRenderers.register(ModEntityTypes.LORD_BARON.get(), LordBaronRenderer::new);
             EntityRenderers.register(ModEntityTypes.GIIFUDEMOS_ENTITY.get(), GiifuDemosRenderer::new);
             EntityRenderers.register(ModEntityTypes.STORIOUS.get(), StoriousRender::new);
             EntityRenderers.register(ModEntityTypes.GIFFTARIAN.get(), GifftarianRenderer::new);

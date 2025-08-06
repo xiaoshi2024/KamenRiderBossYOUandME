@@ -61,7 +61,7 @@ public class sengokudrivers_epmtysRenderer extends GeoItemRenderer<sengokudriver
 
             // 调整位置和旋转，使其看起来像胸甲
             poseStack.scale(0.4F, 0.5F, 0.4F); // 可以根据需要调整缩放
-            poseStack.translate(0.0F, 1.1, -0.4); // 微调位置使其居中
+            poseStack.translate(0.0F, 1.2, -0.4); // 微调位置使其居中
 
             // 如果需要，可以添加旋转
             poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F)); // 如果需要旋转物品

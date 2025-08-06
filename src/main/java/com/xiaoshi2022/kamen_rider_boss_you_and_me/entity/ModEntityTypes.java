@@ -2,8 +2,11 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
+import forge.net.mca.entity.VillagerEntityMCA;
+import forge.net.mca.entity.ai.relationship.Gender;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -24,6 +27,9 @@ public class ModEntityTypes {
                 0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
     public static final RegistryObject<EntityType<ElementaryInvesHelheim>> INVES_HEILEHIM = registerMob("inves_heilehim", ElementaryInvesHelheim::new,
                 0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
+    // 确保注册名是 "lord_baron"
+    public static final RegistryObject<EntityType<LordBaronEntity>> LORD_BARON = registerMob("lord_baron", LordBaronEntity::new,
+            0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
 //    public static final RegistryObject<EntityType<KnecromghostEntity>> KNECROMGHOST = registerMob("knecromghost", KnecromghostEntity::new,
 //            0.6f, 1.6f, 0x1F1F1F, 0x0D0D0D);
 

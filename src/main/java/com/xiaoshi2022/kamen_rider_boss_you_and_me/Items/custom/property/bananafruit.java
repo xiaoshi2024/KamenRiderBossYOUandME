@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.bananafruit.bana
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -28,26 +30,22 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.ClientUtils;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class bananafruit extends Item implements GeoItem {
     private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("open");
     private static final RawAnimation CUT_OPEN = RawAnimation.begin().thenPlay("cut_open");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
     public bananafruit(net.minecraft.world.item.Item.Properties properties) {
         super(properties);
-
-        // Register our item as server-side handled.
-        // This enables both animation data syncing and server-side animation triggering
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
-    // Utilise the existing forge hook to define our custom renderer (which we created in createRenderer)
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
@@ -57,7 +55,6 @@ public class bananafruit extends Item implements GeoItem {
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 if (this.renderer == null)
                     this.renderer = new bananafruitRenderer();
-
                 return this.renderer;
             }
         });
@@ -67,45 +64,63 @@ public class bananafruit extends Item implements GeoItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        // 获取玩家的 Curios 库存
-        AtomicReference<ItemStack> beltStack = new AtomicReference<>(ItemStack.EMPTY); // 初始化为空物品堆
-        CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
-            // 获取特定槽类型的库存（例如 "belt"）
-            Optional<ICurioStacksHandler> beltInventory = curiosInventory.getStacksHandler("belt");
-            beltInventory.ifPresent(slotInventory -> {
-                // 遍历槽类型中的物品
-                for (int i = 0; i < slotInventory.getSlots(); i++) {
-                    ItemStack curioStack = slotInventory.getStacks().getStackInSlot(i);
-                    if (curioStack.getItem() instanceof sengokudrivers_epmty) {
-                        // 如果找到符合条件的物品，赋值给 beltStack
-                        beltStack.set(curioStack);
-                        break; // 找到后退出循环
-                    }
+        // 检查玩家是否装备了腰带
+        Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(player).resolve().flatMap(
+                curios -> curios.findFirstCurio(item -> item.getItem() instanceof sengokudrivers_epmty)
+        );
+
+        if (beltOptional.isPresent()) {
+            // 如果玩家装备了腰带
+            if (!stack.getOrCreateTag().contains("first_click")) {
+                // 第一次右键点击
+                stack.getOrCreateTag().putBoolean("first_click", true);
+
+                // 在玩家头顶生成特效方块
+                BlockPos aboveHead = player.blockPosition().above(2);
+                if (level.isEmptyBlock(aboveHead)) {
+                    level.setBlock(aboveHead,
+                            com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks.BANANAS_BLOCK.get().defaultBlockState(),
+                            Block.UPDATE_ALL);
+
+                    // 播放音效
+                    level.playSound(null, aboveHead,
+                            ModSounds.OPENDLOCK.get(),
+                            SoundSource.PLAYERS,
+                            1.0F, 1.0F);
+                    level.playSound(null, aboveHead,
+                            ModBossSounds.BANANAFRUITENERGY.get(),
+                            SoundSource.PLAYERS,
+                            1.0F, 1.0F);
                 }
-            });
-        });
 
-        if (!beltStack.get().isEmpty()) {
-            // 腰带模式切换逻辑
-            CompoundTag tag = stack.getOrCreateTag();
-            int clickCount = tag.getInt("clickCount");
-
-            if (clickCount == 0) {
-                // 第一次点击
-                tag.putInt("clickCount", 1);
-                player.displayClientMessage(Component.literal("再次点击以装备香蕉锁种！"), true);
-                return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+                player.displayClientMessage(Component.literal("再次点击装备锁种"), true);
+                return InteractionResultHolder.success(stack);
             } else {
-                // 第二次点击 - 切换腰带模式
-                sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.get().getItem();
-                belt.setMode(beltStack.get(), sengokudrivers_epmty.BeltMode.BANANA);
+                // 第二次右键点击 - 将锁种插入腰带
+                if (!level.isClientSide) {
+                    // 播放LOCK ON音效
+                    level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                            ModBossSounds.LOCKONS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                // 消耗一个香蕉锁种
-                stack.shrink(1);
-                return InteractionResultHolder.sidedSuccess(ItemStack.EMPTY, level.isClientSide());
+                    // 播放待机音效
+                    level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                            ModBossSounds.BANANABY.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+
+                    // 消耗锁种
+                    stack.shrink(1);
+
+                    //更新腰带为banana形态
+                    ItemStack beltStack = beltOptional.get().stack();
+                    sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
+                    belt.setMode(beltStack, sengokudrivers_epmty.BeltMode.BANANA);
+
+                    // 设置玩家准备状态
+                    player.getPersistentData().putBoolean("banana_ready", true);
+                }
+                return InteractionResultHolder.success(ItemStack.EMPTY);
             }
         } else {
-            // 没有装备腰带时执行原有功能
+            // 如果玩家没有装备腰带，则调用 useAsHelheimGenerator 方法
             return useAsHelheimGenerator(level, player, stack);
         }
     }
@@ -196,16 +211,12 @@ public class bananafruit extends Item implements GeoItem {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "open", 20, state -> PlayState.STOP)
                 .triggerableAnim("open", OPEN)
-                // We've marked the "box_open" animation as being triggerable from the server
                 .setSoundKeyframeHandler(state -> {
-                    // Use helper method to avoid client-code in common class
                     Player player = ClientUtils.getClientPlayer();
-
                     if (player != null)
                         player.playSound(ModBossSounds.BANANAFRUITENERGY.get(), 1, 1);
                 }));
     }
-
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

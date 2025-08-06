@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.init;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
 import software.bernie.geckolib.animatable.GeoItem;
 
@@ -22,6 +23,9 @@ public class ArmorAnimationFactory {
 					event.player.getItemBySlot(EquipmentSlot.HEAD).getOrCreateTag().putString("geckoAnim", "");
 					if (event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof RidernecromItem animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof rider_baronsItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+
 				}
 			}
 			if (event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() != (ItemStack.EMPTY).getItem() && event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof GeoItem) {
@@ -30,6 +34,9 @@ public class ArmorAnimationFactory {
 					event.player.getItemBySlot(EquipmentSlot.CHEST).getOrCreateTag().putString("geckoAnim", "");
 					if (event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof RidernecromItem animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof rider_baronsItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+
 				}
 			}
 			if (event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() != (ItemStack.EMPTY).getItem() && event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof GeoItem) {
@@ -38,6 +45,9 @@ public class ArmorAnimationFactory {
 					event.player.getItemBySlot(EquipmentSlot.LEGS).getOrCreateTag().putString("geckoAnim", "");
 					if (event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof RidernecromItem animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof rider_baronsItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+
 				}
 			}
 			if (event.player.getItemBySlot(EquipmentSlot.FEET).getItem() != (ItemStack.EMPTY).getItem() && event.player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof GeoItem) {
@@ -46,6 +56,9 @@ public class ArmorAnimationFactory {
 					event.player.getItemBySlot(EquipmentSlot.FEET).getOrCreateTag().putString("geckoAnim", "");
 					if (event.player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof RidernecromItem animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof rider_baronsItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+
 				}
 			}
 		}

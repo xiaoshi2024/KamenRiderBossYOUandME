@@ -45,5 +45,34 @@
   "subtitles.another_zi_o_click": "ZI-o!",
   "subtitles.bananafruit_energy": "Banana !",
 
+  "entity.kamen_rider_boss_you_and_me.lord_baron": "Lord Baron",
+
+  "entity.kamen_rider.baron.name": "Lord Baron",
+  "msg.kamen_rider.baron.greet1": "I am Lord Baron!",
+  "msg.kamen_rider.baron.greet2": "Banana! Ready to fight?",
+  "msg.kamen_rider.baron.greet3": "The rider's duel begins now!",
+  "msg.kamen_rider.baron.power1": "My power comes from the Banana Lockseed!",
+  "msg.kamen_rider.baron.power2": "The Lockseed grants me strength!",
+  "msg.kamen_rider.baron.power3": "Sengoku Driver - Banana Arms!",
+  "msg.kamen_rider.baron.challenge1": "Challenge accepted!",
+  "msg.kamen_rider.baron.challenge2": "Let's duel!",
+  "msg.kamen_rider.baron.challenge3": "Show me your power!",
+  "msg.kamen_rider.baron.victory": "You've defeated me %d times!",
+  "msg.kamen_rider.unknown": "I don't understand...",
+
+  "msg.kamen_rider.inves_controlled": "Inves under control!",
+  "msg.kamen_rider.inves_protect": "Protect the Lord Baron!",
+
+  "block.kamen_rider_boss_you_and_me.bananas_block": "Bananas Block",
+  "msg.kamen_rider.belt_activation_failed": "Belt activation check failed",
+
+  "msg.kamen_rider.no_belt": "You are not wearing a Sengoku Driver!",
+  "msg.kamen_rider.invalid_belt": "Invalid driver type",
+  "msg.kamen_rider.belt_not_activated": "Driver not activated",
+  "msg.kamen_rider.star_lord_transformation": "Transform! Star Lord Baron!",
+  "msg.kamen_rider.inves_transformation": "Helheim Fruit corruption! You became an Inves!",
+  "msg.kamen_rider.transformation_failed": "Transformation failed!",
+  "entity.kamen_rider.star_lord_baron": "Star Lord Baron",
+
   "item group.kamen_rider_boss_you_and_me_kinds_tab": "KamenRiderBossYouAndMe Kinds of"
 }

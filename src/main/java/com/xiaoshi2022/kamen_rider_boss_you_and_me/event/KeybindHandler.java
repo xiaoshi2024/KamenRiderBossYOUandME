@@ -3,12 +3,14 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ReleaseBeltPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,7 +34,6 @@ public class KeybindHandler {
             Player player = Minecraft.getInstance().player;
             if (player == null) return;
 
-            // 按键检测
             if (KeyBinding.RELIEVE_KEY.isDown() && !keyCooldown) {
                 keyCooldown = true;
                 handleKeyPress(player);
@@ -40,12 +41,11 @@ public class KeybindHandler {
                 keyCooldown = false;
             }
 
-            // 延迟处理 - 只在客户端处理动画
             if (delayTicks > 0) {
                 delayTicks--;
                 if (delayTicks == 0 && !delayedBeltStack.isEmpty()) {
-                    // 发送网络包到服务端执行实际逻辑
-                    PacketHandler.sendToServer(new ReleaseBeltPacket());
+                    // 发送包含动画信息的网络包
+                    PacketHandler.sendToServer(new ReleaseBeltPacket(true));
                     delayedBeltStack = ItemStack.EMPTY;
                 }
             }
@@ -53,20 +53,22 @@ public class KeybindHandler {
     }
 
     private static void handleKeyPress(Player player) {
-        Optional<SlotResult> curio = CurioUtils.findFirstCurio(player,
-                stack -> stack.getItem() instanceof sengokudrivers_epmty);
+        CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof sengokudrivers_epmty)
+                .ifPresent(curio -> {
+                    ItemStack beltStack = curio.stack();
+                    sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
 
-        if (curio.isPresent()) {
-            ItemStack beltStack = curio.get().stack();
-            sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
+                    if (belt.getMode(beltStack) == sengokudrivers_epmty.BeltMode.BANANA) {
+                        // 立即发送动画触发包给服务器
+                        PacketHandler.sendToServer(new ReleaseBeltPacket(false));
 
-            if (belt.getMode(beltStack) == sengokudrivers_epmty.BeltMode.BANANA) {
-                // 只在客户端播放动画
-                belt.triggerAnim(player, "controller", "release");
-                delayTicks = 40; // 2秒延迟 (20 ticks = 1秒)
-                delayedBeltStack = beltStack.copy();
-            }
-        }
+                        // 本地播放动画
+                        belt.startReleaseAnimation(player);
+                        delayTicks = 40;
+                        delayedBeltStack = beltStack.copy();
+                    }
+                });
+
     }
 
     // 这个方法应该在服务端调用
@@ -88,6 +90,10 @@ public class KeybindHandler {
                 // 更新槽位
                 CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
                         slotResult.slotContext().index(), newStack);
+
+                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                        ModBossSounds.LOCKOFF.get(),
+                        SoundSource.PLAYERS, 1.0F, 1.0F);
 
                 // 给予香蕉锁种
                 ItemStack bananaLockSeed = new ItemStack(ModItems.BANANAFRUIT.get());

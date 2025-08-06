@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import forge.net.mca.entity.VillagerEntityMCA;
 import forge.net.mca.entity.VillagerLike;
@@ -15,9 +16,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.npc.*;
@@ -72,12 +76,31 @@ public class StoriousEntity extends Villager implements GeoEntity, VillagerLike<
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0F)); // 看向玩家
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.36D, false)); // 近战攻击目标
-        this.goalSelector.addGoal(3, new PanicGoal(this, 1.2)); // 当受到火焰伤害时逃跑
-        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.5D)); // 随机漫步
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this)); // 随机环顾四周
-        this.goalSelector.addGoal(7, new FloatGoal(this)); // 如果在水里，尝试浮在水面上
+        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class, 8.0F));
+
+        // 只在非和平模式下添加攻击目标
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL) {
+            this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.36D, false) {
+                @Override
+                public boolean canUse() {
+                    return super.canUse() && !isTargetCreativePlayer();
+                }
+
+                @Override
+                public boolean canContinueToUse() {
+                    return super.canContinueToUse() && !isTargetCreativePlayer();
+                }
+            });
+        }
+        this.goalSelector.addGoal(3, new PanicGoal(this, 1.2));
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.5D));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(7, new FloatGoal(this));
+    }
+
+    private boolean isTargetCreativePlayer() {
+        LivingEntity target = this.getTarget();
+        return target instanceof Player && ((Player)target).isCreative();
     }
 
     @Override
@@ -88,12 +111,28 @@ public class StoriousEntity extends Villager implements GeoEntity, VillagerLike<
     @Override
     public void aiStep() {
         super.aiStep();
-        LivingEntity target = this.getTarget();
-        if (target != null && this.distanceTo(target) < 2.0D) {
-            // 执行攻击逻辑
-            target.hurt(asEntity().damageSources().generic(), 5.0F); // 示例：对目标造成 5 点伤害
+        if (isTargetCreativePlayer()) {
+            this.setTarget(null);
+            return;
+        }
+
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL && this.getTarget() != null) {
+            LivingEntity target = this.getTarget();
+            if (this.distanceTo(target) < 2.0D) {
+                float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+                target.hurt(this.damageSources().mobAttack(this), damage);
+            }
         }
     }
+
+
+    // 添加属性创建方法
+    public static AttributeSupplier.Builder createAttributes() {
+        return Villager.createAttributes()
+                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 6.0D)
+                .add(Attributes.MAX_HEALTH, 120.0D);
+    }
+
 
     // 替换环境音效
     @Override
@@ -118,12 +157,14 @@ public class StoriousEntity extends Villager implements GeoEntity, VillagerLike<
 
     @Override
     public final boolean hurt(DamageSource source, float damageAmount) {
-        if (source.getDirectEntity() instanceof LivingEntity) {
+        // 在和平模式下不设置攻击目标
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL && source.getDirectEntity() instanceof LivingEntity) {
             LivingEntity attacker = (LivingEntity) source.getDirectEntity();
-            // 设置攻击目标
-            this.setTarget(attacker);
+            // 不把创造模式玩家设为目标
+            if (!(attacker instanceof Player && ((Player)attacker).isCreative())) {
+                this.setTarget(attacker);
+            }
         }
-        // 调用父类的 hurt 方法
         return super.hurt(source, damageAmount);
     }
 
@@ -148,8 +189,12 @@ public class StoriousEntity extends Villager implements GeoEntity, VillagerLike<
     }
 
     @Override
-    public boolean doHurtTarget(Entity p_21372_) {
-        return this.villagerComponent.doHurtTarget(p_21372_); // 使用 VillagerEntityMCA 的伤害目标
+    public boolean doHurtTarget(Entity target) {
+        if (!(target instanceof Player && ((Player)target).isCreative())) {
+            float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+            return target.hurt(this.damageSources().mobAttack(this), damage);
+        }
+        return false;
     }
 
     @Override
