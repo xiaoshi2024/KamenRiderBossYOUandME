@@ -38,16 +38,32 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
     private static final RawAnimation IDLES = RawAnimation.begin().thenPlayAndHold("idles");
     private static final RawAnimation BANANA_IDLE = RawAnimation.begin().thenPlayAndHold("banana_idle");
     private static final RawAnimation RELEASE = RawAnimation.begin().thenPlayAndHold("release");
-    private static final RawAnimation CUT = RawAnimation.begin().thenPlayAndHold("cut");
+    private static final RawAnimation CUT = RawAnimation.begin().thenPlayAndHold("cut").thenLoop("cut_hold");;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private boolean isEquipped = false;
-    private BeltMode currentMode = BeltMode.DEFAULT;
+    public boolean isEquipped = false;
+    public BeltMode currentMode = BeltMode.DEFAULT;
     private boolean shouldPlayRelease = false;
 
+    // 处理网络数据包
     public void handleAnimationPacket(LivingEntity livingEntity, String animationName, BeltMode beltMode) {
-        if (animationName.equals("cut")) {
-            triggerAnim(livingEntity, "controller", "cut");
+        if (livingEntity.level().isClientSide()) {
             this.currentMode = beltMode;
+
+            // 特殊处理变身完成状态
+            if ("cut_complete".equals(animationName)) {
+                this.isEquipped = true;
+                triggerAnim(livingEntity, "controller", "cut");
+            }
+            // 普通动画触发
+            else {
+                triggerAnim(livingEntity, "controller", animationName);
+            }
+
+            // 播放音效
+            if ("cut".equals(animationName)) {
+                livingEntity.level().playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),
+                        ModBossSounds.BANANAARMS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            }
         }
     }
 
@@ -79,30 +95,53 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
         triggerAnim(holder, "controller", "release");
     }
 
+    // 在sengokudrivers_epmty类中添加
+    @Override
+    public CompoundTag getShareTag(ItemStack stack) {
+        CompoundTag tag = super.getShareTag(stack) != null ? super.getShareTag(stack) : new CompoundTag();
+        tag.putString("BeltMode", this.currentMode.name());
+        tag.putBoolean("IsEquipped", this.isEquipped);
+        return tag;
+    }
+
+    @Override
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
+        super.readShareTag(stack, nbt);
+        if (nbt != null) {
+            if (nbt.contains("BeltMode")) {
+                this.currentMode = BeltMode.valueOf(nbt.getString("BeltMode"));
+            }
+            if (nbt.contains("IsEquipped")) {
+                this.isEquipped = nbt.getBoolean("IsEquipped");
+            }
+        }
+    }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, this::animationController));
     }
 
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {
-        if (state.getController().getAnimationState() == AnimationController.State.TRANSITIONING
-                && "cut".equals(state.getController().getCurrentAnimation().animation().name())) {
-            return PlayState.CONTINUE;
-        }
+        // 优先处理释放动画
         if (shouldPlayRelease) {
             shouldPlayRelease = false;
             return state.setAndContinue(RELEASE);
         }
-        if (state.getController().getCurrentAnimation() != null &&
-                state.getController().getCurrentAnimation().animation().name().equals("release")) {
-            return PlayState.CONTINUE;
+
+        // 如果处于变身状态，保持CUT动画
+        if (isEquipped && currentMode == BeltMode.BANANA) {
+            return state.setAndContinue(CUT);
         }
-        if (currentMode == BeltMode.BANANA) {
-            return state.setAndContinue(BANANA_IDLE);
+
+        // 默认状态处理
+        if (!isEquipped) {
+            return state.setAndContinue(IDLES);
         } else {
-            return state.setAndContinue(isEquipped ? SHOW : IDLES);
+            return state.setAndContinue(currentMode == BeltMode.BANANA ? BANANA_IDLE : SHOW);
         }
     }
+
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
@@ -128,20 +167,6 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
         return super.use(level, player, hand);
     }
 
-    @Override
-    public CompoundTag getShareTag(ItemStack stack) {
-        CompoundTag tag = super.getShareTag(stack) != null ? super.getShareTag(stack) : new CompoundTag();
-        tag.putString("BeltMode", this.currentMode.name());
-        return tag;
-    }
-
-    @Override
-    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
-        super.readShareTag(stack, nbt);
-        if (nbt != null && nbt.contains("BeltMode")) {
-            this.currentMode = BeltMode.valueOf(nbt.getString("BeltMode"));
-        }
-    }
 
     public void triggerAnim(LivingEntity entity, String controllerName, String animName) {
         if (entity.level().isClientSide()) {
@@ -149,45 +174,51 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
             if (manager != null) {
                 AnimationController<?> controller = manager.getAnimationControllers().get(controllerName);
                 if (controller != null) {
-                    if (controller.getCurrentAnimation() != null &&
-                            controller.getCurrentAnimation().animation().name().equals(animName)) {
-                        return;
-                    }
                     RawAnimation animation = switch (animName) {
                         case "show" -> SHOW;
                         case "idles" -> IDLES;
                         case "banana_idle" -> BANANA_IDLE;
                         case "release" -> RELEASE;
+                        case "cut" -> CUT;
                         default -> IDLES;
                     };
-                    controller.stop();
-                    controller.setAnimation(animation);
-                    controller.forceAnimationReset();
+
+                    // 如果当前不是相同的动画才触发
+                    if (controller.getCurrentAnimation() == null ||
+                            !controller.getCurrentAnimation().animation().name().equals(animName)) {
+                        controller.stop();
+                        controller.setAnimation(animation);
+                    }
                 }
             }
         } else {
+            // 服务器端同步给所有客户端
             PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(
-                            entity.getId(),
-                            animName,
-                            this.currentMode
-                    ),
+                    new BeltAnimationPacket(entity.getId(), animName, this.currentMode),
                     entity
             );
         }
     }
+
 
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
         isEquipped = true;
         this.currentMode = getMode(stack);
 
+        // 根据当前形态播放相应的动画
+        String animationName = this.currentMode == BeltMode.BANANA ? "banana_idle" : "show";
+
         if (!slotContext.entity().level().isClientSide()) {
+            // 发送数据包到客户端，触发动画
             PacketHandler.sendToAll(new BeltAnimationPacket(
                     slotContext.entity().getId(),
-                    this.currentMode == BeltMode.BANANA ? "banana_idle" : "show",
+                    animationName, // 根据形态选择动画
                     this.currentMode
             ));
+        } else {
+            // 如果已经在客户端，直接触发动画
+            triggerAnim(slotContext.entity(), "controller", animationName);
         }
     }
 
@@ -195,19 +226,48 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         isEquipped = false;
 
+        // 当玩家卸下腰带时，播放 IDLES 动画
         if (!slotContext.entity().level().isClientSide()) {
             PacketHandler.sendToAll(new BeltAnimationPacket(
                     slotContext.entity().getId(),
-                    this.currentMode == BeltMode.BANANA ? "banana_idle" : "idles",
+                    "idles",
                     this.currentMode
             ));
+        } else {
+            // 如果已经在客户端，直接触发动画
+            triggerAnim(slotContext.entity(), "controller", "idles");
         }
     }
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
-        // No additional logic needed for tick
+        // 确保服务端定期同步状态到客户端
+        if (!slotContext.entity().level().isClientSide() &&
+                slotContext.entity() instanceof ServerPlayer player) {
+
+            // 更新NBT数据
+            CompoundTag tag = stack.getOrCreateTag();
+            tag.putString("BeltMode", currentMode.name());
+            tag.putBoolean("IsEquipped", isEquipped);
+            stack.setTag(tag);
+
+            // 每20 ticks同步一次(1秒)
+            if (player.tickCount % 20 == 0) {
+                PacketHandler.sendToClient(
+                        new BeltAnimationPacket(
+                                player.getId(),
+                                "sync_state", // 使用特定动作标识同步
+                                this.currentMode
+                        ),
+                        player
+                );
+
+                // 强制同步物品堆栈
+                player.getInventory().setChanged();
+            }
+        }
     }
+
 
     public BeltMode getMode(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();

@@ -127,6 +127,21 @@
 					}
 				}
 			}
+		},
+		"cut_hold": {
+			"animation_length": 0.0833,
+			"bones": {
+				"suoj": {
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"leaf": {
+					"rotation": {
+						"vector": [177.5, 0, 0]
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

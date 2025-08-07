@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ReleaseBeltPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
@@ -68,14 +69,12 @@ public class KeybindHandler {
                         delayedBeltStack = beltStack.copy();
                     }
                 });
-
     }
 
     // 这个方法应该在服务端调用
     public static void completeBeltRelease(ServerPlayer player) {
         Optional<SlotResult> curio = CuriosApi.getCuriosInventory(player)
-                .resolve().flatMap(inv -> inv.findFirstCurio(stack ->
-                        stack.getItem() instanceof sengokudrivers_epmty));
+                .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof sengokudrivers_epmty));
 
         if (curio.isPresent()) {
             SlotResult slotResult = curio.get();
@@ -91,9 +90,16 @@ public class KeybindHandler {
                 CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
                         slotResult.slotContext().index(), newStack);
 
+                // 播放解除变身音效
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                         ModBossSounds.LOCKOFF.get(),
                         SoundSource.PLAYERS, 1.0F, 1.0F);
+
+                // 停止变身音效
+                PacketHandler.sendToServer(new SoundStopPacket());
+
+                // 清空玩家身上的变身装甲
+                clearTransformationArmor(player);
 
                 // 给予香蕉锁种
                 ItemStack bananaLockSeed = new ItemStack(ModItems.BANANAFRUIT.get());
@@ -101,9 +107,18 @@ public class KeybindHandler {
                     player.spawnAtLocation(bananaLockSeed);
                 }
 
+                belt.isEquipped = false;
+
                 // 同步给客户端
                 player.inventoryMenu.broadcastChanges();
             }
+        }
+    }
+//解除卸甲
+    private static void clearTransformationArmor(ServerPlayer player) {
+        // 清空玩家身上的变身装甲
+        for (int i = 1; i < 4; i++) {
+            player.getInventory().armor.set(i, ItemStack.EMPTY);
         }
     }
 }

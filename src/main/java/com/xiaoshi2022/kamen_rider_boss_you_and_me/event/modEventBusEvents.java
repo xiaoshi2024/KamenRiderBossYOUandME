@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
@@ -8,16 +9,21 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronE
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.curios.api.CuriosCapability;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.*;
 
@@ -44,6 +50,28 @@ public class modEventBusEvents {
             if (Minecraft.getInstance().level != null) {
                 PacketHandler.INSTANCE.sendToServer(new SoundStopPacket());
                 }
+            }
+        }
+        // 在事件处理器类中添加
+        @SubscribeEvent
+        public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player) {
+                player.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
+                    curios.findCurio("belt", 0).ifPresent(slotResult -> {
+                        ItemStack stack = slotResult.stack();
+                        if (stack.getItem() instanceof sengokudrivers_epmty belt) {
+                            // 立即同步状态
+                            PacketHandler.sendToClient(
+                                    new BeltAnimationPacket(
+                                            player.getId(),
+                                            "login_sync",
+                                            belt.currentMode
+                                    ),
+                                    player
+                            );
+                        }
+                    });
+                });
             }
         }
     }

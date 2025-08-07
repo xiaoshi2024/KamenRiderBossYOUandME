@@ -1,7 +1,9 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
@@ -31,6 +33,13 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++, BeltAnimationPacket.class, BeltAnimationPacket::encode, BeltAnimationPacket::decode, BeltAnimationPacket::handle);
         INSTANCE.registerMessage(index++,  SyncOwnerPacket.class,SyncOwnerPacket::encode, SyncOwnerPacket::decode,SyncOwnerPacket::handle);
         INSTANCE.registerMessage(index++, ReleaseBeltPacket.class, ReleaseBeltPacket::encode, ReleaseBeltPacket::decode, ReleaseBeltPacket::handle);
+        INSTANCE.registerMessage(
+                index++,
+                TransformationRequestPacket.class,
+                TransformationRequestPacket::encode,
+                TransformationRequestPacket::decode,
+                TransformationRequestPacket::handle
+        );
 //        PacketHandler.logChannelStatus();
     }
 
@@ -56,5 +65,9 @@ public class PacketHandler {
 
     public static int getNextId() {
         return currentId++;
+    }
+
+    public static void sendToClient(Object packet, ServerPlayer player) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 }

@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,16 +41,54 @@ public class BeltAnimationPacket {
     public static void handle(BeltAnimationPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             if (ctx.get().getDirection().getReceptionSide().isClient()) {
-                if (Minecraft.getInstance().level == null) return;
-
-                Entity entity = Minecraft.getInstance().level.getEntity(msg.entityId);
-                if (!(entity instanceof LivingEntity livingEntity)) return;
-
-                processBeltAnimation(livingEntity, msg);
+                processPacket(msg);
             }
         });
         ctx.get().setPacketHandled(true);
     }
+
+    private static void processPacket(BeltAnimationPacket msg) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) return;
+
+        Entity entity = mc.level.getEntity(msg.entityId);
+        if (entity instanceof LivingEntity livingEntity) {
+            livingEntity.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
+                curios.findCurio("belt", 0).ifPresent(slotResult -> {
+                    ItemStack stack = slotResult.stack();
+                    if (stack.getItem() instanceof sengokudrivers_epmty belt) {
+                        updateBeltState(belt, stack, livingEntity, msg.beltMode);
+                    }
+                });
+            });
+        }
+    }
+
+    private static void updateBeltState(sengokudrivers_epmty belt, ItemStack stack,
+                                        LivingEntity entity, sengokudrivers_epmty.BeltMode mode) {
+        // 更新本地状态
+        belt.currentMode = mode;
+
+        // 从NBT读取完整状态
+        CompoundTag tag = stack.getOrCreateTag();
+        if (tag.contains("BeltMode")) {
+            belt.currentMode = sengokudrivers_epmty.BeltMode.valueOf(tag.getString("BeltMode"));
+        }
+        if (tag.contains("IsEquipped")) {
+            belt.isEquipped = tag.getBoolean("IsEquipped");
+        }
+
+        // 触发正确动画
+        String animation = belt.isEquipped ?
+                (belt.currentMode == sengokudrivers_epmty.BeltMode.BANANA ? "banana_idle" : "show") : "idle";
+        belt.triggerAnim(entity, "controller", animation);
+
+        // 刷新槽位
+        entity.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
+            curios.getCurios().get("belt").update();
+        });
+    }
+
 
     private static void processBeltAnimation(LivingEntity livingEntity, BeltAnimationPacket msg) {
         livingEntity.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
