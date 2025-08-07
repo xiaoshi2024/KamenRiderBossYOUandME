@@ -1,15 +1,19 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.BananasEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin.HeartCoreEvent;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
@@ -57,6 +61,8 @@ public class TransformationRequestPacket {
                     return;
                 }
 
+                clearBananasEntities(player);
+
                 // 先停止待机音效
                 PacketHandler.sendToAllTracking(
                         new SoundStopPacket(),
@@ -93,6 +99,26 @@ public class TransformationRequestPacket {
 
                 // 设置玩家为已变身状态
                 belt.isEquipped = true;
+            }
+        }
+    }
+    // 清除玩家周围一定范围内的BananasEntity
+    private static void clearBananasEntities(ServerPlayer player) {
+        Level level = player.level();
+        int radius = 10; // 清除半径，可以根据需要调整
+
+        // 遍历玩家周围区域
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    BlockPos pos = player.blockPosition().offset(x, y, z);
+                    BlockEntity blockEntity = level.getBlockEntity(pos);
+
+                    if (blockEntity instanceof BananasEntity) {
+                        // 移除BananasEntity方块
+                        level.removeBlock(pos, false);
+                    }
+                }
             }
         }
     }

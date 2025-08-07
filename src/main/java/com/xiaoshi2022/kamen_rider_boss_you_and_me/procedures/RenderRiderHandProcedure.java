@@ -20,11 +20,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderArmEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -37,6 +39,36 @@ import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class RenderRiderHandProcedure {
+
+    @SubscribeEvent
+    public static void renderPlayerEvent(RenderPlayerEvent.Pre event) {
+        if(event.getEntity() == null) return;
+        Player player = event.getEntity();
+        PlayerRenderer entityrenderer = event.getRenderer();
+        PlayerModel<AbstractClientPlayer> playermodel = entityrenderer.getModel();
+
+        ItemStack head = player.getItemBySlot(EquipmentSlot.HEAD);
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        ItemStack legs = player.getItemBySlot(EquipmentSlot.LEGS);
+        ItemStack feet = player.getItemBySlot(EquipmentSlot.FEET);
+
+        // 分别控制每个部位的可见性
+        playermodel.head.visible = !(head.getItem() instanceof GeoItem);
+        playermodel.hat.visible = !(head.getItem() instanceof GeoItem);
+
+        playermodel.body.visible = !(chest.getItem() instanceof GeoItem);
+        playermodel.rightArm.visible = !(chest.getItem() instanceof GeoItem);
+        playermodel.leftArm.visible = !(chest.getItem() instanceof GeoItem);
+        playermodel.leftSleeve.visible = !(chest.getItem() instanceof GeoItem);
+        playermodel.rightSleeve.visible = !(chest.getItem() instanceof GeoItem);
+        playermodel.jacket.visible = !(chest.getItem() instanceof GeoItem);
+
+        // 腿部模型控制
+        playermodel.rightLeg.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
+        playermodel.leftLeg.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
+        playermodel.leftPants.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
+        playermodel.rightPants.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
+    }
 
     @SubscribeEvent
     public static void renderHandEvent(RenderArmEvent event) {

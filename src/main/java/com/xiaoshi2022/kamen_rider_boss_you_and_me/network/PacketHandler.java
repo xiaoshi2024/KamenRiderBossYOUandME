@@ -33,13 +33,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++, BeltAnimationPacket.class, BeltAnimationPacket::encode, BeltAnimationPacket::decode, BeltAnimationPacket::handle);
         INSTANCE.registerMessage(index++,  SyncOwnerPacket.class,SyncOwnerPacket::encode, SyncOwnerPacket::decode,SyncOwnerPacket::handle);
         INSTANCE.registerMessage(index++, ReleaseBeltPacket.class, ReleaseBeltPacket::encode, ReleaseBeltPacket::decode, ReleaseBeltPacket::handle);
-        INSTANCE.registerMessage(
-                index++,
-                TransformationRequestPacket.class,
-                TransformationRequestPacket::encode,
-                TransformationRequestPacket::decode,
-                TransformationRequestPacket::handle
-        );
+        INSTANCE.registerMessage(index++, TransformationRequestPacket.class, TransformationRequestPacket::encode, TransformationRequestPacket::decode, TransformationRequestPacket::handle);
 //        PacketHandler.logChannelStatus();
     }
 

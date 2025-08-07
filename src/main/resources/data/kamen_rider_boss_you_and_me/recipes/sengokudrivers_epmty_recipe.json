@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "rider_boss_smelt",
+  "category": "equipment",
+  "pattern": [
+    "ab ",
+    "b#c",
+    " db"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:golden_sword"
+    },
+    "b": {
+      "item": "kamen_rider_weapon_craft:rider_forging_alloy_ore"
+    },
+    "c": {
+      "item": "kamen_rider_weapon_craft:rider_circuit_board"
+    },
+    "d": {
+      "item": "minecraft:oak_pressure_plate"
+    },
+    "#": {
+      "item": "kamen_rider_weapon_craft:helheimfruit"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_boss_you_and_me:sengokudrivers_epmty",
+    "count": 1
+  }
+}
