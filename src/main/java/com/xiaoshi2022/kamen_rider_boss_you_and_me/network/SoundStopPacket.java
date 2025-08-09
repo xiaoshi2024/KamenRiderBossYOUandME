@@ -54,6 +54,20 @@ public class SoundStopPacket {
                             player
                     ).withSuppressedOutput(), "/stopsound @s player kamen_rider_boss_you_and_me:bananaby");
                 }
+                if (player != null) {
+                    // 执行服务器端的命令
+                    player.getServer().getCommands().performPrefixedCommand(new CommandSourceStack(
+                            CommandSource.NULL,
+                            player.position(),
+                            Vec2.ZERO,
+                            (ServerLevel) player.level(),
+                            4,
+                            "",
+                            Component.literal(""),
+                            player.getServer(),
+                            player
+                    ).withSuppressedOutput(), "/stopsound @s player kamen_rider_boss_you_and_me:lemon_lockonby");
+                }
             });
             ctx.get().setPacketHandled(true);
         }

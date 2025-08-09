@@ -1,0 +1,104 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    128,
+    128
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        -15.75,
+        3
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        -15.5,
+        3.25
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        66,
+        0
+      ],
+      "translation": [
+        0,
+        -8.5,
+        5.75
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        68,
+        0
+      ],
+      "translation": [
+        0.25,
+        -6.25,
+        7
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        -14,
+        0
+      ],
+      "scale": [
+        1.31055,
+        1.31055,
+        1.31055
+      ]
+    },
+    "gui": {
+      "rotation": [
+        -180,
+        -6.5,
+        -180
+      ],
+      "translation": [
+        0,
+        -31.25,
+        0
+      ],
+      "scale": [
+        2.2832,
+        2.2832,
+        2.2832
+      ]
+    },
+    "head": {
+      "translation": [
+        -1,
+        -31.75,
+        0.25
+      ],
+      "scale": [
+        2.55,
+        2.55,
+        2.55
+      ]
+    },
+    "fixed": {
+      "translation": [
+        0,
+        -33,
+        6
+      ],
+      "scale": [
+        2.52539,
+        2.52539,
+        2.52539
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/genesis_driver_lemo"
+  }
+}

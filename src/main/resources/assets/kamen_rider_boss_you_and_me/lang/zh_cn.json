@@ -15,6 +15,8 @@
   "item.kamen_rider_boss_you_and_me.sengokudrivers": "战极驱动器--香蕉",
   "item.kamen_rider_boss_you_and_me.sengokudrivers_epmty": "战极驱动器",
   "item.kamen_rider_boss_you_and_me.bananafruit": "香蕉锁种",
+  "item.kamen_rider_boss_you_and_me.genesis_driver": "创世纪驱动器",
+  "item.kamen_rider_boss_you_and_me.lemon_energy": "柠檬能量锁种",
 
 
 
@@ -63,6 +65,7 @@
 
 
   "block.kamen_rider_boss_you_and_me.bananas_block": "裂缝-香蕉",
+  "block.kamen_rider_boss_you_and_me.lemonx": "裂缝-柠檬",
 
   "msg.kamen_rider.inves_controlled": "异域者已控制！",
   "msg.kamen_rider.inves_protect": "保护领主巴隆！",

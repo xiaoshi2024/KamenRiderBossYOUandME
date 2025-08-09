@@ -72,12 +72,12 @@ public class rider_baronsItem extends ArmorItem implements GeoItem {
 
             @Override
             public float getToughness() {
-                return 0f;
+                return 2f;
             }
 
             @Override
             public float getKnockbackResistance() {
-                return 0f;
+                return 1f;
             }
         }, type, properties);
     }

@@ -1,8 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -22,14 +24,30 @@ public class KeyInputListener {
         if (KeyBinding.CHANGE_KEY.isDown()) {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(player).resolve()
-                        .flatMap(curios -> curios.findFirstCurio(item -> item.getItem() instanceof sengokudrivers_epmty));
+                // 检查是否佩戴创世纪驱动器
+                Optional<SlotResult> genesisDriver = CurioUtils.findFirstCurio(player,
+                        stack -> stack.getItem() instanceof Genesis_driver);
 
-                if (beltOptional.isPresent()) {
-                    // 只发送请求到服务端，不处理任何逻辑
+                if (genesisDriver.isPresent()) {
+                    // 获取当前模式
+                    Genesis_driver belt = (Genesis_driver) genesisDriver.get().stack().getItem();
+                    String riderType = (belt.getMode(genesisDriver.get().stack()) == Genesis_driver.BeltMode.LEMON)
+                            ? "LEMON_ENERGY" : "BARONS";
+
+                    // 发送变身请求
                     PacketHandler.INSTANCE.sendToServer(
-                            new TransformationRequestPacket(player.getId())
+                            new TransformationRequestPacket(player.getId(), riderType)
                     );
+                } else {
+                    // 原有变身逻辑
+                    Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(player).resolve()
+                            .flatMap(curios -> curios.findFirstCurio(item -> item.getItem() instanceof sengokudrivers_epmty));
+
+                    if (beltOptional.isPresent()) {
+                        PacketHandler.INSTANCE.sendToServer(
+                                new TransformationRequestPacket(player.getId(), "BARONS")
+                        );
+                    }
                 }
             }
         }

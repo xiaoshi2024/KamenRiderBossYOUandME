@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ReleaseBeltPacket;
@@ -8,7 +9,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
-import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -45,25 +45,44 @@ public class KeybindHandler {
             if (delayTicks > 0) {
                 delayTicks--;
                 if (delayTicks == 0 && !delayedBeltStack.isEmpty()) {
-                    // 发送包含动画信息的网络包
-                    PacketHandler.sendToServer(new ReleaseBeltPacket(true));
+                    PacketHandler.sendToServer(new ReleaseBeltPacket(true, getBeltType(delayedBeltStack)));
                     delayedBeltStack = ItemStack.EMPTY;
                 }
             }
         }
     }
 
+    private static String getBeltType(ItemStack beltStack) {
+        if (beltStack.getItem() instanceof Genesis_driver) {
+            return "GENESIS";
+        }
+        return "BARONS";
+    }
+
     private static void handleKeyPress(Player player) {
+        // 优先检查创世纪驱动器
+        CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
+                .ifPresent(curio -> {
+                    ItemStack beltStack = curio.stack();
+                    Genesis_driver belt = (Genesis_driver) beltStack.getItem();
+
+                    // 只有在柠檬形态下才能解除
+                    if (belt.getMode(beltStack) == Genesis_driver.BeltMode.LEMON && belt.isEquipped) {
+                        PacketHandler.sendToServer(new ReleaseBeltPacket(false, "GENESIS"));
+                        belt.startReleaseAnimation(player);
+                        delayTicks = 40;
+                        delayedBeltStack = beltStack.copy();
+                    }
+                });
+
+        // 原有腰带处理逻辑
         CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof sengokudrivers_epmty)
                 .ifPresent(curio -> {
                     ItemStack beltStack = curio.stack();
                     sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
 
                     if (belt.getMode(beltStack) == sengokudrivers_epmty.BeltMode.BANANA) {
-                        // 立即发送动画触发包给服务器
-                        PacketHandler.sendToServer(new ReleaseBeltPacket(false));
-
-                        // 本地播放动画
+                        PacketHandler.sendToServer(new ReleaseBeltPacket(false, "BARONS"));
                         belt.startReleaseAnimation(player);
                         delayTicks = 40;
                         delayedBeltStack = beltStack.copy();
@@ -71,8 +90,56 @@ public class KeybindHandler {
                 });
     }
 
-    // 这个方法应该在服务端调用
-    public static void completeBeltRelease(ServerPlayer player) {
+    public static void completeBeltRelease(ServerPlayer player, String beltType) {
+        if ("GENESIS".equals(beltType)) {
+            handleGenesisBeltRelease(player);
+        } else {
+            handleBaronsBeltRelease(player);
+        }
+    }
+
+    private static void handleGenesisBeltRelease(ServerPlayer player) {
+        Optional<SlotResult> curio = CuriosApi.getCuriosInventory(player)
+                .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof Genesis_driver));
+
+        if (curio.isPresent()) {
+            SlotResult slotResult = curio.get();
+            ItemStack beltStack = slotResult.stack();
+            Genesis_driver belt = (Genesis_driver) beltStack.getItem();
+
+            // 再次验证是否处于柠檬形态（防止客户端作弊）
+            if (belt.getMode(beltStack) != Genesis_driver.BeltMode.LEMON || !belt.isEquipped) {
+                return; // 如果不是柠檬形态或未变身，直接返回
+            }
+
+            // 1. 播放解除音效
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                    ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            // 2. 停止变身音效
+            PacketHandler.sendToServer(new SoundStopPacket());
+
+            belt.startReleaseAnimation(player);
+
+            // 3. 清空装甲
+            clearTransformationArmor(player);
+
+            // 4. 返还柠檬锁种
+            ItemStack lemonLockSeed = new ItemStack(ModItems.LEMON_ENERGY.get());
+            if (!player.getInventory().add(lemonLockSeed)) {
+                player.spawnAtLocation(lemonLockSeed);
+            }
+
+            // 5. 重置腰带状态
+            belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+            belt.isEquipped = false;
+
+            // 6. 同步状态
+            player.inventoryMenu.broadcastChanges();
+        }
+    }
+
+    private static void handleBaronsBeltRelease(ServerPlayer player) {
         Optional<SlotResult> curio = CuriosApi.getCuriosInventory(player)
                 .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof sengokudrivers_epmty));
 
@@ -82,41 +149,31 @@ public class KeybindHandler {
             sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
 
             if (belt.getMode(beltStack) == sengokudrivers_epmty.BeltMode.BANANA) {
-                // 创建新的物品堆栈
                 ItemStack newStack = beltStack.copy();
                 belt.setMode(newStack, sengokudrivers_epmty.BeltMode.DEFAULT);
 
-                // 更新槽位
                 CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
                         slotResult.slotContext().index(), newStack);
 
-                // 播放解除变身音效
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                         ModBossSounds.LOCKOFF.get(),
                         SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                // 停止变身音效
                 PacketHandler.sendToServer(new SoundStopPacket());
-
-                // 清空玩家身上的变身装甲
                 clearTransformationArmor(player);
 
-                // 给予香蕉锁种
                 ItemStack bananaLockSeed = new ItemStack(ModItems.BANANAFRUIT.get());
                 if (!player.getInventory().add(bananaLockSeed)) {
                     player.spawnAtLocation(bananaLockSeed);
                 }
 
                 belt.isEquipped = false;
-
-                // 同步给客户端
                 player.inventoryMenu.broadcastChanges();
             }
         }
     }
-//解除卸甲
+
     private static void clearTransformationArmor(ServerPlayer player) {
-        // 清空玩家身上的变身装甲
         for (int i = 1; i < 4; i++) {
             player.getInventory().armor.set(i, ItemStack.EMPTY);
         }

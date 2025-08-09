@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Lemonx.LemoxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
@@ -133,6 +134,7 @@ public class kamen_rider_boss_you_and_me
         @SubscribeEvent
         public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
             event.registerBlockEntityRenderer(ModBlockEntities.BANANAS_ENTITY.get(), BananasRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.LEMONX_ENTITY.get(), LemoxRenderer::new);
         }
 
         @SubscribeEvent
@@ -150,6 +152,7 @@ public class kamen_rider_boss_you_and_me
             // 注册 Curios 饰品渲染器
             CuriosRendererRegistry.register(ModItems.MEGA_UIORDER_ITEM.get(), () -> new GenericCurioRenderer());
             CuriosRendererRegistry.register(ModItems.SENGOKUDRIVERS_EPMTY.get(), () -> new GenericCurioRenderer());
+            CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new GenericCurioRenderer());
         }
     }
 

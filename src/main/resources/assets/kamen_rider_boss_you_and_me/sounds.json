@@ -124,5 +124,41 @@
         "stream": false
       }
     ]
+  },
+  "lemon_lockonby": {
+    "subtitle": "lemon_lockon__by",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:lemon_lockonby",
+        "stream": false
+      }
+    ]
+  },
+  "lemon_energy": {
+    "subtitle": "lemon_energy",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:lemon_energy",
+        "stream": false
+      }
+    ]
+  },
+  "lemon_baron": {
+    "subtitle": "soda! fight",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:lemon_baron",
+        "stream": false
+      }
+    ]
+  },
+  "xiujc": {
+    "subtitle": "xiu ~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:xiujc",
+        "stream": false
+      }
+    ]
   }
 }

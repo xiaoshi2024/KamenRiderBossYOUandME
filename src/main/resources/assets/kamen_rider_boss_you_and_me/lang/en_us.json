@@ -13,8 +13,12 @@
   "item.kamen_rider_boss_you_and_me.necrom_eye": "Necrom Eyecon",
   "item.kamen_rider_boss_you_and_me.mega_uiorder_item": "Necrom Mega UIorder",
   "item.kamen_rider_boss_you_and_me.sengokudrivers": "Sengoku Drivers--banana",
-  "item.kamen_rider_boss_you_and_me.sengokudrivers_epmty": "Sengoku Drivers",
+  "item.kamen_rider_boss_you_and_me.sengokudrivers_epmty": "Sengoku Driver",
   "item.kamen_rider_boss_you_and_me.bananafruit": "banana fruit Lock Seed",
+  "item.kamen_rider_boss_you_and_me.genesis_driver": "genesis Drive",
+  "item.kamen_rider_boss_you_and_me.lemon_energy": "lemon Energy Lock seed",
+
+
 
   "curios.identifier.bracelet": "wristband Slot",
 
@@ -64,6 +68,9 @@
   "msg.kamen_rider.inves_protect": "Protect the Lord Baron!",
 
   "block.kamen_rider_boss_you_and_me.bananas_block": "Bananas Block",
+  "block.kamen_rider_boss_you_and_me.lemonx": "Lemons Block",
+
+
   "msg.kamen_rider.belt_activation_failed": "Belt activation check failed",
 
   "msg.kamen_rider.no_belt": "You are not wearing a Sengoku Driver!",
