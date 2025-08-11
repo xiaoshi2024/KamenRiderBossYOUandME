@@ -3,11 +3,9 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.sengokudriver.sengokudrivers_epmtysRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,29 +41,8 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
     public boolean isEquipped = false;
     public BeltMode currentMode = BeltMode.DEFAULT;
     private boolean shouldPlayRelease = false;
+    public boolean isHenshining = false;
 
-    // 处理网络数据包
-    public void handleAnimationPacket(LivingEntity livingEntity, String animationName, BeltMode beltMode) {
-        if (livingEntity.level().isClientSide()) {
-            this.currentMode = beltMode;
-
-            // 特殊处理变身完成状态
-            if ("cut_complete".equals(animationName)) {
-                this.isEquipped = true;
-                triggerAnim(livingEntity, "controller", "cut");
-            }
-            // 普通动画触发
-            else {
-                triggerAnim(livingEntity, "controller", animationName);
-            }
-
-            // 播放音效
-            if ("cut".equals(animationName)) {
-                livingEntity.level().playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),
-                        ModBossSounds.BANANAARMS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-            }
-        }
-    }
 
     public enum BeltMode {
         DEFAULT,
@@ -278,8 +255,7 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
     }
 
     public void setMode(ItemStack stack, BeltMode mode) {
-        if (stack.getEntityRepresentation() != null &&
-                stack.getEntityRepresentation().level().isClientSide) {
+        if (stack.getEntityRepresentation() != null && stack.getEntityRepresentation().level().isClientSide) {
             return;
         }
 

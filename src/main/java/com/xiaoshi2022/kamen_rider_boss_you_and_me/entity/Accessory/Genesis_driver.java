@@ -132,24 +132,24 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
 
     // 变身方法
     public void startHenshinAnimation(LivingEntity entity) {
-            this.isHenshining = true;
-            this.isActive = false;
-            this.isShowing = false;
-            this.isReleasing = false;
+        this.isHenshining = true;
+        this.isActive = false;
+        this.isShowing = false;
+        this.isReleasing = false;
 
-            // 只在服务端发送数据包
-            if (!entity.level().isClientSide()) {
-                PacketHandler.sendToAllTracking(
-                        new BeltAnimationPacket(
-                                entity.getId(),
-                                "move",
-                                this.currentMode
-                        ),
-                        entity
-                );
-            }
-            // 无论客户端还是服务端都触发动画
-            triggerAnim(entity, "controller", "move");
+        // 只在服务端发送数据包
+        if (!entity.level().isClientSide()) {
+            PacketHandler.sendToAllTracking(
+                    new BeltAnimationPacket(
+                            entity.getId(), // 使用实体 ID
+                            "move",
+                            this.currentMode
+                    ),
+                    entity
+            );
+        }
+        // 无论客户端还是服务端都触发动画
+        triggerAnim(entity, "controller", "move");
     }
 
     // 解除变身方法
@@ -164,7 +164,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
         } else {
             PacketHandler.sendToAllTracking(
                     new BeltAnimationPacket(
-                            entity.getId(),
+                            entity.getId(), // 使用 UUID
                             "start",
                             this.currentMode
                     ),
@@ -195,7 +195,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
     public void startShowAnimation(LivingEntity holder) {
         if (!holder.level().isClientSide()) {
             PacketHandler.sendToAll(new BeltAnimationPacket(
-                    holder.getId(),
+                    holder.getId(), // 使用 UUID
                     "show",
                     this.currentMode
             ));
@@ -208,7 +208,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
 
         if (!holder.level().isClientSide()) {
             PacketHandler.sendToAll(new BeltAnimationPacket(
-                    holder.getId(),
+                    holder.getId(), // 使用 UUID
                     animationName,
                     this.currentMode
             ));
@@ -378,8 +378,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
     }
 
     public void setMode(ItemStack stack, BeltMode mode) {
-        if (stack.getEntityRepresentation() != null &&
-                stack.getEntityRepresentation().level().isClientSide) {
+        if (stack.getEntityRepresentation() != null && stack.getEntityRepresentation().level().isClientSide) {
             return;
         }
 
@@ -392,5 +391,4 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             player.getInventory().setChanged();
         }
     }
-
 }

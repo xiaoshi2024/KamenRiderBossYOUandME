@@ -15,11 +15,6 @@ public class ReleaseBeltPacket {
     private final boolean triggerAnimation;
     private final String beltType; // 新增：腰带类型字段
 
-    // 原有构造函数，保持向后兼容
-    public ReleaseBeltPacket(boolean shouldComplete) {
-        this(shouldComplete, !shouldComplete, "BARONS"); // 默认为BARONS类型
-    }
-
     // 新增构造函数，支持指定腰带类型
     public ReleaseBeltPacket(boolean shouldComplete, String beltType) {
         this(shouldComplete, !shouldComplete, beltType);
@@ -30,6 +25,14 @@ public class ReleaseBeltPacket {
         this.shouldComplete = shouldComplete;
         this.triggerAnimation = triggerAnimation;
         this.beltType = beltType;
+    }
+
+    public static void handleRelease(ServerPlayer player, String riderType) {
+        if ("GENESIS".equals(riderType)) {
+            KeybindHandler.completeBeltRelease(player, "GENESIS");
+        } else if ("BARONS".equals(riderType)) {
+            KeybindHandler.completeBeltRelease(player, "BARONS");
+        }
     }
 
     public void encode(FriendlyByteBuf buffer) {
@@ -81,7 +84,7 @@ public class ReleaseBeltPacket {
                 });
     }
 
-    // 处理原有腰带动画
+    // 处理战极腰带动画
     private void handleBaronsAnimation(ServerPlayer player) {
         CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof sengokudrivers_epmty)
                 .ifPresent(curio -> {

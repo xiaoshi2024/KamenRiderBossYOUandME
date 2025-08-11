@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "rider_boss_smelt",
+  "category": "equipment",
+  "pattern": [
+    "aca",
+    "b#d",
+    " xd"
+  ],
+  "key": {
+    "a": {
+      "item": "kamen_rider_weapon_craft:rider_forging_alloy_ore"
+    },
+    "b": {
+      "item": "minecraft:stonecutter"
+    },
+    "c": {
+      "item": "minecraft:redstone_block"
+    },
+    "d": {
+      "item": "kamen_rider_weapon_craft:rider_circuit_board"
+    },
+    "#": {
+      "item": "kamen_rider_weapon_craft:helheimfruit"
+    },
+    "x": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_boss_you_and_me:genesis_driver",
+    "count": 1
+  }
+}

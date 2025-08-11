@@ -2,17 +2,14 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemon
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.BronLemons.baronLemonArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -34,46 +31,64 @@ public class baron_lemonItem extends ArmorItem implements GeoItem {
 
     public baron_lemonItem(ArmorItem.Type type, Item.Properties properties) {
         super(new ArmorMaterial() {
+            // 耐久度 (参考下界合金套，但略低)
             @Override
             public int getDurabilityForType(ArmorItem.Type type) {
-                return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 25;
+                return new int[]{481, 555, 592, 407}[type.getSlot().getIndex()]; // 约等于钻石套的1.2倍
             }
 
+            // 防御值 (平衡为轻甲类型)
             @Override
             public int getDefenseForType(ArmorItem.Type type) {
-                return new int[]{4, 5, 6, 2}[type.getSlot().getIndex()];
+                return new int[]{3, 6, 5, 3}[type.getSlot().getIndex()]; // 总防御点数：17（钻石套20）
             }
 
+            // 附魔能力（高于钻石）
             @Override
             public int getEnchantmentValue() {
-                return 9;
+                return 25; // 类似金质装备的高附魔能力
             }
 
+            // 装备音效（使用鞘翅音效模拟变身音）
             @Override
             public SoundEvent getEquipSound() {
-                return SoundEvents.EMPTY;
+                return SoundEvents.ARMOR_EQUIP_ELYTRA;
             }
 
+            // 修复材料（柠檬）
             @Override
             public Ingredient getRepairIngredient() {
-                return Ingredient.of();
+                return Ingredient.of(Items.GOLDEN_APPLE); // 用金苹果象征柠檬能量
             }
 
+            // 材质名称
             @Override
             public String getName() {
                 return "baron_lemon";
             }
 
+            // 韧性（中等，低于下界合金）
             @Override
             public float getToughness() {
-                return 3f;
+                return 2.5f; // 钻石2.0，下界合金3.0
             }
 
+            // 击退抗性（部分抗性）
             @Override
             public float getKnockbackResistance() {
-                return 1f;
+                return 0.1f; // 10%击退抗性
             }
         }, type, properties);
+    }
+
+    public static boolean isArmorEquipped(ServerPlayer player, Item armorItem) {
+        for (int i = 0; i < player.getInventory().armor.size(); i++) {
+            ItemStack armorStack = player.getInventory().armor.get(i);
+            if (armorStack.getItem() == armorItem) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

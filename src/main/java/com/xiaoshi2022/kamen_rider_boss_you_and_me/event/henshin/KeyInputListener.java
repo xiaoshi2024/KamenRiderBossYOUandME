@@ -24,6 +24,12 @@ public class KeyInputListener {
         if (KeyBinding.CHANGE_KEY.isDown()) {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
+                // 检查玩家是否已经变身或正在解除变身
+                if (isPlayerTransformed(player)) {
+                    // 如果已经变身或正在解除变身，忽略此次按键事件
+                    return;
+                }
+
                 // 检查是否佩戴创世纪驱动器
                 Optional<SlotResult> genesisDriver = CurioUtils.findFirstCurio(player,
                         stack -> stack.getItem() instanceof Genesis_driver);
@@ -36,20 +42,51 @@ public class KeyInputListener {
 
                     // 发送变身请求
                     PacketHandler.INSTANCE.sendToServer(
-                            new TransformationRequestPacket(player.getId(), riderType)
+                            new TransformationRequestPacket(player.getUUID(), riderType, false)
                     );
                 } else {
-                    // 原有变身逻辑
-                    Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(player).resolve()
-                            .flatMap(curios -> curios.findFirstCurio(item -> item.getItem() instanceof sengokudrivers_epmty));
+                    // 原有战极逻辑
+                    Optional<SlotResult> sengku = CurioUtils.findFirstCurio(player,
+                            stack -> stack.getItem() instanceof sengokudrivers_epmty);
 
-                    if (beltOptional.isPresent()) {
-                        PacketHandler.INSTANCE.sendToServer(
-                                new TransformationRequestPacket(player.getId(), "BARONS")
-                        );
+                    if (sengku.isPresent()) {
+                        sengokudrivers_epmty belt = (sengokudrivers_epmty) sengku.get().stack().getItem();
+                        if (belt.getMode(sengku.get().stack()) == sengokudrivers_epmty.BeltMode.BANANA) {
+                            String riderType = "BANANA";
+                            PacketHandler.INSTANCE.sendToServer(
+                                    new TransformationRequestPacket(player.getUUID(), riderType, false)
+                            );
+                        } else {
+                            // 如果腰带模式不是 BANANA，可以在这里添加日志或提示
+                            System.out.println("玩家佩戴的腰带模式不是 BANANA");
+                        }
+                    } else {
+                        // 如果玩家没有佩戴 sengokudrivers_epmty 腰带，可以在这里添加日志或提示
+                        System.out.println("玩家没有佩戴 sengokudrivers_epmty 腰带");
                     }
                 }
             }
         }
+    }
+
+    // 新增方法：检查玩家是否已经变身或正在解除变身
+    private static boolean isPlayerTransformed(LocalPlayer player) {
+        // 检查玩家是否佩戴了创世纪驱动器或战极腰带
+        Optional<SlotResult> genesisDriver = CurioUtils.findFirstCurio(player,
+                stack -> stack.getItem() instanceof Genesis_driver);
+        Optional<SlotResult> baronsDriver = CurioUtils.findFirstCurio(player,
+                stack -> stack.getItem() instanceof sengokudrivers_epmty);
+
+        // 检查腰带的状态
+        if (genesisDriver.isPresent()) {
+            Genesis_driver belt = (Genesis_driver) genesisDriver.get().stack().getItem();
+            return belt.isHenshining;
+        } else if (baronsDriver.isPresent()) {
+            sengokudrivers_epmty belt = (sengokudrivers_epmty) baronsDriver.get().stack().getItem();
+            return belt.isHenshining;
+        }
+
+        // 如果没有佩戴任何腰带，返回 false
+        return false;
     }
 }

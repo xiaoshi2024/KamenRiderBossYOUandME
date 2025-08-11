@@ -38,20 +38,21 @@ public class modEventBusEvents {
 //                    LocalPlayer player = Minecraft.getInstance().player;
 //                    if (player != null) {
 //                        // 发送网络消息到服务器
-//                        PacketHandler.sendToServer(new PlayerAnimationPacket(player.getUUID(), STORIOUS_VFX_HEIXIN));
+//                        PacketHandler.sendToServer(new PlayerAnimationPacket(player.getId(), STORIOUS_VFX_HEIXIN));
 //                    }
 //                }
 //            }
 //        }
-    @SubscribeEvent
-    public static void onKeyInput(InputEvent.Key event) {
-        if (CHANGE_KEY.consumeClick()) {
-            // 按键被按下，发送网络包到服务器
-            if (Minecraft.getInstance().level != null) {
-                PacketHandler.INSTANCE.sendToServer(new SoundStopPacket());
-                }
-            }
-        }
+//    @SubscribeEvent
+//    public static void onKeyInput(InputEvent.Key event) {
+//        if (CHANGE_KEY.consumeClick()) {
+//            // 按键被按下，发送网络包到服务器
+//            if (Minecraft.getInstance().level != null) {
+//                PacketHandler.INSTANCE.sendToServer(new SoundStopPacket(
+//                        Minecraft.getInstance().player.getId(), "kamen_rider_boss_you_and_me:banana_lockonby"));
+//                }
+//            }
+//        }
         // 在事件处理器类中添加
         @SubscribeEvent
         public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {

@@ -1,5 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BananaTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.LemonTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -34,7 +36,11 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++,  SyncOwnerPacket.class,SyncOwnerPacket::encode, SyncOwnerPacket::decode,SyncOwnerPacket::handle);
         INSTANCE.registerMessage(index++, ReleaseBeltPacket.class, ReleaseBeltPacket::encode, ReleaseBeltPacket::decode, ReleaseBeltPacket::handle);
         INSTANCE.registerMessage(index++, TransformationRequestPacket.class, TransformationRequestPacket::encode, TransformationRequestPacket::decode, TransformationRequestPacket::handle);
-//        PacketHandler.logChannelStatus();
+        // 注册 LemonTransformationRequestPacket
+        INSTANCE.registerMessage(index++, LemonTransformationRequestPacket.class, LemonTransformationRequestPacket::encode, LemonTransformationRequestPacket::decode, LemonTransformationRequestPacket::handle);
+
+        // 注册 BananaTransformationRequestPacket
+        INSTANCE.registerMessage(index++, BananaTransformationRequestPacket.class, BananaTransformationRequestPacket::encode, BananaTransformationRequestPacket::decode, BananaTransformationRequestPacket::handle);
     }
 
     public static void sendToServer(Object packet) {
@@ -46,22 +52,24 @@ public class PacketHandler {
         INSTANCE.send(PacketDistributor.ALL.noArg(), packet);
     }
 
+    public static void sendToClient(Object packet, ServerPlayer player) {
+        if (player != null && !player.hasDisconnected()) {
+            INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), packet);
+        }
+    }
+
     public static void sendToAllTracking(Object packet, Entity entity) {
-        if (!entity.level().isClientSide) {  // 更安全的检查
+        if (entity != null && !entity.level().isClientSide()) {
             INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
         }
     }
 
-//    // 添加调试方法
-//    public static void logChannelStatus() {
-//        LOGGER.info("Network channel initialized with {} packets", currentId);
-//    }
-
-    public static int getNextId() {
-        return currentId++;
-    }
-
-    public static void sendToClient(Object packet, ServerPlayer player) {
-        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), packet);
+    public static void sendToAllAround(Object packet, ServerLevel level, double x, double y, double z, double radius) {
+        INSTANCE.send(
+                PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(
+                        x, y, z, radius, level.dimension()
+                )),
+                packet
+        );
     }
 }

@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -64,7 +65,8 @@ public class BeltAnimationPacket {
 
     public static void handle(BeltAnimationPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            if (ctx.get().getDirection().getReceptionSide().isClient()) {
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player != null && player.getId() == msg.entityId) {
                 processPacket(msg);
             }
         });
@@ -83,24 +85,18 @@ public class BeltAnimationPacket {
                     Item item = stack.getItem();
 
                     if (item instanceof sengokudrivers_epmty belt && "sengoku".equals(msg.beltType)) {
-                        updateSengokuBeltState(belt, stack, livingEntity,
-                                sengokudrivers_epmty.BeltMode.valueOf(msg.beltMode));
-                    }
-                    else if (item instanceof Genesis_driver belt && "genesis".equals(msg.beltType)) {
-                        updateGenesisBeltState(belt, stack, livingEntity,
-                                Genesis_driver.BeltMode.valueOf(msg.beltMode));
+                        updateSengokuBeltState(belt, stack, livingEntity, sengokudrivers_epmty.BeltMode.valueOf(msg.beltMode));
+                    } else if (item instanceof Genesis_driver belt && "genesis".equals(msg.beltType)) {
+                        updateGenesisBeltState(belt, stack, livingEntity, Genesis_driver.BeltMode.valueOf(msg.beltMode));
                     }
                 });
             });
         }
     }
 
-    private static void updateSengokuBeltState(sengokudrivers_epmty belt, ItemStack stack,
-                                               LivingEntity entity, sengokudrivers_epmty.BeltMode mode) {
-        // 更新本地状态
+    private static void updateSengokuBeltState(sengokudrivers_epmty belt, ItemStack stack, LivingEntity entity, sengokudrivers_epmty.BeltMode mode) {
         belt.currentMode = mode;
 
-        // 从NBT读取完整状态
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains("BeltMode")) {
             belt.currentMode = sengokudrivers_epmty.BeltMode.valueOf(tag.getString("BeltMode"));
@@ -109,23 +105,17 @@ public class BeltAnimationPacket {
             belt.isEquipped = tag.getBoolean("IsEquipped");
         }
 
-        // 触发正确动画
-        String animation = belt.isEquipped ?
-                (belt.currentMode == sengokudrivers_epmty.BeltMode.BANANA ? "banana_idle" : "show") : "idle";
+        String animation = belt.isEquipped ? (belt.currentMode == sengokudrivers_epmty.BeltMode.BANANA ? "banana_idle" : "show") : "idle";
         belt.triggerAnim(entity, "controller", animation);
 
-        // 刷新槽位
         entity.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
             curios.getCurios().get("belt").update();
         });
     }
 
-    private static void updateGenesisBeltState(Genesis_driver belt, ItemStack stack,
-                                               LivingEntity entity, Genesis_driver.BeltMode mode) {
-        // 更新本地状态
+    private static void updateGenesisBeltState(Genesis_driver belt, ItemStack stack, LivingEntity entity, Genesis_driver.BeltMode mode) {
         belt.currentMode = mode;
 
-        // 从NBT读取完整状态
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains("BeltMode")) {
             belt.currentMode = Genesis_driver.BeltMode.valueOf(tag.getString("BeltMode"));
@@ -137,7 +127,6 @@ public class BeltAnimationPacket {
             belt.isShowing = tag.getBoolean("IsShowing");
         }
 
-        // 触发正确动画
         String animation = "idles";
         if (belt.isActive) {
             animation = (belt.currentMode == Genesis_driver.BeltMode.LEMON) ? "start" : "show";
@@ -146,7 +135,6 @@ public class BeltAnimationPacket {
         }
         belt.triggerAnim(entity, "controller", animation);
 
-        // 刷新槽位
         entity.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
             curios.getCurios().get("belt").update();
         });
