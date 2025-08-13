@@ -37,5 +37,6 @@ public class ModTab {
             .title(Component.translatable("item group.kamen_rider_boss_you_and_me_kinds_tab"))
             .displayItems(((parameters, output) -> {
                 output.accept(INVES_MEAT.get());
+                output.accept(GLOBALISM.get());
             })).build());
 }

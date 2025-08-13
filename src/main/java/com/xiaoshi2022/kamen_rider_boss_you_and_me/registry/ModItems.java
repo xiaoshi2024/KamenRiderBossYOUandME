@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.bananafruit;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.lemon_energy;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
@@ -27,6 +28,13 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, kamen_rider_boss_you_and_me.MODID);
+
+    // 武器道具
+    // 假设你已经有 ModItems.ITEMS
+    public static final RegistryObject<Globalism> GLOBALISM = ModItems.ITEMS.register(
+            "globalism",
+            () -> new Globalism(new Item.Properties())
+    );
 
     // 方块特效
     public static final RegistryObject<Item> BANANAS_BLOCK_ITEM = ITEMS.register("bananas_block",

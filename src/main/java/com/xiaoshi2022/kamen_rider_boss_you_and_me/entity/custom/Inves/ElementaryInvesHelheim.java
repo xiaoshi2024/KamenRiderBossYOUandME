@@ -194,6 +194,12 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     public void tick() {
         super.tick();
 
+        // 如果主人已死亡，立即消失
+        if (getMaster() != null && !getMaster().isAlive()) {
+            this.discard();
+            return;
+        }
+
         // 飞行冷却处理
         if (flyingCooldown > 0) {
             flyingCooldown--;
