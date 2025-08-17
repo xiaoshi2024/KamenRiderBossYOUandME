@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
@@ -13,6 +14,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -54,24 +56,58 @@ public class modEventBusEvents {
 //            }
 //        }
         // 在事件处理器类中添加
-        @SubscribeEvent
-        public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-            if (event.getEntity() instanceof ServerPlayer player) {
-                player.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
-                    curios.findCurio("belt", 0).ifPresent(slotResult -> {
-                        ItemStack stack = slotResult.stack();
-                        if (stack.getItem() instanceof sengokudrivers_epmty belt) {
-                            // 立即同步状态
-                            PacketHandler.sendToClient(
-                                    new BeltAnimationPacket(
-                                            player.getId(),
-                                            "login_sync",
-                                            belt.currentMode
-                                    ),
-                                    player
-                            );
-                        }
-                    });
+@SubscribeEvent
+public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+    if (event.getEntity() instanceof ServerPlayer player) {
+        player.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
+            curios.findCurio("belt", 0).ifPresent(slotResult -> {
+                ItemStack stack = slotResult.stack();
+
+                // 战极驱动器处理（保持原有逻辑）
+                if (stack.getItem() instanceof sengokudrivers_epmty belt) {
+                    PacketHandler.sendToClient(
+                            new BeltAnimationPacket(
+                                    player.getId(),
+                                    "login_sync",
+                                    belt.currentMode
+                            ),
+                            player
+                    );
+                }
+
+                // Genesis驱动器处理（新增柠檬状态同步）
+                if (stack.getItem() instanceof Genesis_driver belt) {
+                    CompoundTag tag = stack.getOrCreateTag();
+
+                    // 根据NBT数据确定要同步的动画
+                    String animationToSync;
+                    if (tag.getBoolean("IsHenshining")) {
+                        animationToSync = "move"; // 变身中状态
+                    } else if (tag.getBoolean("IsEquipped") &&
+                            belt.currentMode == Genesis_driver.BeltMode.LEMON) {
+                        animationToSync = "lemon_idle"; // 柠檬形态待机
+                    } else {
+                        animationToSync = "idles"; // 默认状态
+                    }
+
+                    System.out.printf("登录同步Genesis驱动器: 模式=%s 动画=%s%n",
+                            belt.currentMode, animationToSync);
+
+                    // 发送精确的动画同步包
+                    PacketHandler.sendToClient(
+                            new BeltAnimationPacket(
+                                    player.getId(),
+                                    animationToSync,
+                                    belt.currentMode
+                            ),
+                            player
+                    );
+
+                    // 强制更新物品状态
+                    stack.setTag(tag);
+                    player.getInventory().setChanged();
+                }
+            });
                 });
             }
         }

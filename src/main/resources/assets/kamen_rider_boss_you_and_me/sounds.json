@@ -160,5 +160,14 @@
         "stream": false
       }
     ]
+  },
+  "lemon_tick": {
+    "subtitle": "lemon energy sparking ~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:lemon_tick",
+        "stream": false
+      }
+    ]
   }
 }

@@ -3,9 +3,11 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -33,7 +35,9 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
     private static final RawAnimation IDLES = RawAnimation.begin().thenPlayAndHold("idles");
     private static final RawAnimation SHOW = RawAnimation.begin().thenPlayAndHold("show");
 
+
     // 柠檬形态特有动画
+    private static final RawAnimation LEMON_TICK = RawAnimation.begin().thenPlayAndHold("lemon_tick");
     private static final RawAnimation START = RawAnimation.begin().thenPlayAndHold("start");
     private static final RawAnimation SCATTER = RawAnimation.begin().thenPlayAndHold("scatter");
     private static final RawAnimation MOVE = RawAnimation.begin().thenPlayAndHold("move");
@@ -61,7 +65,13 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<Genesis_driver>(this, "controller", 0, this::animationController));
+        controllers.add(new AnimationController<>(this, "controller", 20, this::animationController)
+                .triggerableAnim("lemon_tick", LEMON_TICK)
+                .triggerableAnim("move", MOVE)
+                .triggerableAnim("scatter", SCATTER)
+                .triggerableAnim("start", START)
+                .triggerableAnim("show", SHOW)
+                .triggerableAnim("idles", IDLES));
     }
 
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {

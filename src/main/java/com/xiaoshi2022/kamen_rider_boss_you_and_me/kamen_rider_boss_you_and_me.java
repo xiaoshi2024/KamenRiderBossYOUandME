@@ -15,15 +15,14 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlockEntities;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.LemonsliceParticle;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.*;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -83,6 +82,8 @@ public class kamen_rider_boss_you_and_me
         //geckolib
         GeckoLib.initialize();
 
+        ParticleTypesRegistry.PARTICLE_TYPES.register(modEventBus);
+
         //注册
         ModItems.ITEMS.register(modEventBus);
 
@@ -135,6 +136,11 @@ public class kamen_rider_boss_you_and_me
         public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
             event.registerBlockEntityRenderer(ModBlockEntities.BANANAS_ENTITY.get(), BananasRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.LEMONX_ENTITY.get(), LemoxRenderer::new);
+        }
+
+        @SubscribeEvent
+        public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
+            event.registerSpriteSet(ParticleTypesRegistry.LEMONSLICE.get(), LemonsliceParticle.Provider::new);
         }
 
         @SubscribeEvent

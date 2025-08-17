@@ -1,0 +1,30 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"kick": {
+			"animation_length": 5,
+			"bones": {
+				"body": {
+					"rotation": [-37.5, 0, 0]
+				},
+				"head": {
+					"rotation": [50, 0, 0]
+				},
+				"right_arm": {
+					"rotation": [-28.71307, 34.73537, 4.1702]
+				},
+				"left_arm": {
+					"rotation": [-30, 0, -45]
+				},
+				"right_leg": {
+					"rotation": [12.39638, -1.61888, 7.32417],
+					"position": [0, 3, -4]
+				},
+				"left_leg": {
+					"rotation": [-32.41877, 5.55914, -0.57544],
+					"position": [0.3, 0, 0]
+				}
+			}
+		}
+	}
+}

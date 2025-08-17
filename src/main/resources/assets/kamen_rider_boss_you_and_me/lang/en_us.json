@@ -82,5 +82,6 @@
   "msg.kamen_rider.transformation_failed": "Transformation failed!",
   "entity.kamen_rider.star_lord_baron": "Star Lord Baron",
 
-  "item group.kamen_rider_boss_you_and_me_kinds_tab": "KamenRiderBossYouAndMe Kinds of"
+  "item group.kamen_rider_boss_you_and_me_kinds_tab": "KamenRiderBossYouAndMe Kinds of",
+  "key.kamen_rider_boss_you_and_me.kick": "Rider Kick"
 }

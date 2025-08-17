@@ -173,6 +173,79 @@
 					}
 				}
 			}
+		},
+		"lemon_tick": {
+			"animation_length": 3,
+			"bones": {
+				"lemoleaf1": {
+					"rotation": {
+						"vector": [-175, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"lemoleaf2": {
+					"rotation": {
+						"vector": [177.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				},
+				"lemoEnergy": {
+					"position": {
+						"vector": [-0.1, 0, 0]
+					},
+					"scale": {
+						"vector": [0.93, 0.92, 0.98]
+					}
+				},
+				"grips": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [2.4, 0, 0],
+							"easing": "easeInCirc"
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.5": {
+							"vector": [2.4, 0, 0],
+							"easing": "easeInCirc"
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.5": {
+							"vector": [2.4, 0, 0],
+							"easing": "easeInCirc"
+						},
+						"3.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"lemon_idle": {
+			"animation_length": 0.0417,
+			"bones": {
+				"GensisDriver_lemo": {
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2
