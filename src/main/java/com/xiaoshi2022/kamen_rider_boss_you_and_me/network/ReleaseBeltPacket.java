@@ -28,10 +28,10 @@ public class ReleaseBeltPacket {
     }
 
     public static void handleRelease(ServerPlayer player, String riderType) {
-        if ("GENESIS".equals(riderType)) {
-            KeybindHandler.completeBeltRelease(player, "GENESIS");
-        } else if ("BARONS".equals(riderType)) {
-            KeybindHandler.completeBeltRelease(player, "BARONS");
+        switch (riderType) {
+            case "GENESIS"      -> KeybindHandler.completeBeltRelease(player, "GENESIS");
+            case "BARONS"       -> KeybindHandler.completeBeltRelease(player, "BARONS");
+            case "MELON_ENERGY" -> KeybindHandler.completeBeltRelease(player, "MELON_ENERGY");
         }
     }
 
@@ -73,10 +73,17 @@ public class ReleaseBeltPacket {
         CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
                 .ifPresent(curio -> {
                     Genesis_driver belt = (Genesis_driver) curio.stack().getItem();
+                    String animationName;
+                    switch (belt.getMode(curio.stack())) {
+                        case LEMON -> animationName = "start";
+                        case MELON -> animationName = "melon_start";
+                        case CHERRY -> animationName = "cherry_start";
+                        default -> animationName = "start";
+                    }
                     PacketHandler.sendToAllTracking(
                             new BeltAnimationPacket(
                                     player.getId(),
-                                    "start", // 创世纪特有解除动画
+                                    animationName,
                                     belt.getMode(curio.stack())
                             ),
                             player

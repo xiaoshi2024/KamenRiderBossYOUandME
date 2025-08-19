@@ -34,11 +34,11 @@ import java.util.List;
 @Mod.EventBusSubscriber
 public class KicktimeProcedure {
 	@SubscribeEvent
-	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		if (event.phase == TickEvent.Phase.END) {
-			execute(event, event.player.level(), event.player);
-		}
+public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+	if (event.phase == TickEvent.Phase.END) {
+		execute(event, event.player.level(), event.player);
 	}
+}
 
 	public static void execute(LevelAccessor world, Entity entity) {
 		execute(null, world, entity);
@@ -48,7 +48,60 @@ public class KicktimeProcedure {
 		if (entity == null)
 			return;
 		if ((entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true
-				&& (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.BARON_LEMON_HELMET.get()) {
+			&& (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.SIGURD_HELMET.get()) {
+		if (!entity.onGround()) {
+			// ▼▼▼▼▼ 核心修改部分 ▼▼▼▼▼
+			Vec3 look = entity.getLookAngle();
+			// ▼▼▼▼▼ 关键数值调整 ▼▼▼▼▼
+			double currentY = entity.getDeltaMovement().y;
+			double newY = Math.min(currentY, 0) - 0.35; // 确保不会弹跳，且匀速下落
+
+			entity.setDeltaMovement(new Vec3(
+					look.x * 1.8,  // 水平冲刺速度（调低更易控制）
+					newY,          // 垂直运动（强制向下）
+					look.z * 1.8
+			));
+				if (world.isClientSide()) {
+					if (entity instanceof AbstractClientPlayer player) {
+						var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
+						if (animation != null && !animation.isActive()) {
+							animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "kick"))));
+						}
+					}
+				}
+				// 服务器端处理粒子生成（放在客户端检查之外）
+				else if (world instanceof ServerLevel srvLvl) {
+					Vec3 looks = entity.getLookAngle();
+					// 发送粒子给所有客户端
+					srvLvl.sendParticles(
+							ParticleTypesRegistry.CHERRYSLICE.get(),
+							entity.getX(),
+							entity.getY() + 0.9,
+							entity.getZ(),
+							4, // 粒子数量
+							looks.x * 0.1,
+							looks.y * 0.1,
+							looks.z * 0.1,
+							0 // 额外速度
+					);
+				}
+				if (!world.isClientSide()) {
+					if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
+						List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
+						synchronized (connections) {
+							Iterator<Connection> iterator = connections.iterator();
+							while (iterator.hasNext()) {
+								Connection connection = iterator.next();
+								if (!connection.isConnecting() && connection.isConnected())
+									kamen_rider_boss_you_and_me.PACKET_HANDLER.sendTo(new SetupAnimationsProcedure.kamen_rider_boss_you_and_meModAnimationMessage(Component.literal("kick"), entity.getId(), false), connection, NetworkDirection.PLAY_TO_CLIENT);
+							}
+						}
+					}
+				}
+			}
+		}
+	if ((entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true
+			&& (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.BARON_LEMON_HELMET.get()) {
 			if (!entity.onGround()) {
 				// ▼▼▼▼▼ 核心修改部分 ▼▼▼▼▼
 				Vec3 look = entity.getLookAngle();
@@ -75,6 +128,59 @@ public class KicktimeProcedure {
 						// 发送粒子给所有客户端
 						srvLvl.sendParticles(
 								ParticleTypesRegistry.LEMONSLICE.get(),
+								entity.getX(),
+								entity.getY() + 0.9,
+								entity.getZ(),
+								4, // 粒子数量
+								looks.x * 0.1,
+								looks.y * 0.1,
+								looks.z * 0.1,
+								0 // 额外速度
+						);
+					}
+					if (!world.isClientSide()) {
+						if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
+							List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
+							synchronized (connections) {
+								Iterator<Connection> iterator = connections.iterator();
+								while (iterator.hasNext()) {
+									Connection connection = iterator.next();
+									if (!connection.isConnecting() && connection.isConnected())
+										kamen_rider_boss_you_and_me.PACKET_HANDLER.sendTo(new SetupAnimationsProcedure.kamen_rider_boss_you_and_meModAnimationMessage(Component.literal("kick"), entity.getId(), false), connection, NetworkDirection.PLAY_TO_CLIENT);
+								}
+							}
+						}
+					}
+				}
+			}
+		if ((entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true
+				&& (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
+			if (!entity.onGround()) {
+				// ▼▼▼▼▼ 核心修改部分 ▼▼▼▼▼
+				Vec3 look = entity.getLookAngle();
+				// ▼▼▼▼▼ 关键数值调整 ▼▼▼▼▼
+				double currentY = entity.getDeltaMovement().y;
+				double newY = Math.min(currentY, 0) - 0.35; // 确保不会弹跳，且匀速下落
+
+				entity.setDeltaMovement(new Vec3(
+						look.x * 1.8,  // 水平冲刺速度（调低更易控制）
+						newY,          // 垂直运动（强制向下）
+						look.z * 1.8
+				));
+					if (world.isClientSide()) {
+						if (entity instanceof AbstractClientPlayer player) {
+							var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
+							if (animation != null && !animation.isActive()) {
+								animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "kick"))));
+							}
+						}
+					}
+					// 服务器端处理粒子生成（放在客户端检查之外）
+					else if (world instanceof ServerLevel srvLvl) {
+						Vec3 looks = entity.getLookAngle();
+						// 发送粒子给所有客户端
+						srvLvl.sendParticles(
+								ParticleTypesRegistry.MLONSLICE.get(),
 								entity.getX(),
 								entity.getY() + 0.9,
 								entity.getZ(),

@@ -22,6 +22,10 @@ public class ModBossSounds {
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "bananaarms")));
   public static final RegistryObject<SoundEvent> LEMON_TICK = REGISTRY.register("lemon_tick",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_tick")));
+  public static final RegistryObject<SoundEvent> MELONX_ARMS = REGISTRY.register("melonx_arms",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "melonx_arms")));
+  public static final RegistryObject<SoundEvent> CHERRY_ARMS = REGISTRY.register("cherry_amrs",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "cherry_amrs")));
 
     public static final RegistryObject<SoundEvent> LEMON_ENERGY = REGISTRY.register("lemon_energy",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_energy")));

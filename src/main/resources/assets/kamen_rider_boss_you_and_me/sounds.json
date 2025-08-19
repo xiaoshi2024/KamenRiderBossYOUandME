@@ -169,5 +169,23 @@
         "stream": false
       }
     ]
+  },
+  "melonx_arms": {
+    "subtitle": "melon energy arms~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:melonx_arms",
+        "stream": false
+      }
+    ]
+  },
+  "cherry_amrs": {
+    "subtitle": "Cherry energy arms~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:cherry_amrs",
+        "stream": false
+      }
+    ]
   }
 }

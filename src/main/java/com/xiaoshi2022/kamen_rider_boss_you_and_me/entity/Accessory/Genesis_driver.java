@@ -3,11 +3,9 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -42,6 +40,18 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
     private static final RawAnimation SCATTER = RawAnimation.begin().thenPlayAndHold("scatter");
     private static final RawAnimation MOVE = RawAnimation.begin().thenPlayAndHold("move");
 
+    // 蜜瓜形态特有动画
+    private static final RawAnimation MELON_TICK = RawAnimation.begin().thenPlayAndHold("melon_tick");
+    private static final RawAnimation MELON_START = RawAnimation.begin().thenPlayAndHold("melon_start");
+    private static final RawAnimation MELON_SCATTER = RawAnimation.begin().thenPlayAndHold("melon_scatter");
+    private static final RawAnimation MELON_MOVE = RawAnimation.begin().thenPlayAndHold("melon_move");
+
+    // 樱桃形态特有动画
+    private static final RawAnimation CHERRY_TICK = RawAnimation.begin().thenPlayAndHold("cherry_tick");
+    private static final RawAnimation CHERRY_START = RawAnimation.begin().thenPlayAndHold("cherry_start");
+    private static final RawAnimation CHERRY_SCATTER = RawAnimation.begin().thenPlayAndHold("cherry_scatter");
+    private static final RawAnimation CHERRY_MOVE = RawAnimation.begin().thenPlayAndHold("cherry_move");
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public boolean isActive = false;
     public boolean isShowing = false;
@@ -53,7 +63,9 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
 
     public enum BeltMode {
         DEFAULT,
-        LEMON
+        LEMON,
+        MELON,
+        CHERRY
     }
 
     public BeltMode currentMode = BeltMode.DEFAULT;
@@ -71,7 +83,15 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 .triggerableAnim("scatter", SCATTER)
                 .triggerableAnim("start", START)
                 .triggerableAnim("show", SHOW)
-                .triggerableAnim("idles", IDLES));
+                .triggerableAnim("idles", IDLES)
+                .triggerableAnim("cherry_tick", CHERRY_TICK)
+                .triggerableAnim("cherry_start", CHERRY_START)
+                .triggerableAnim("cherry_scatter", CHERRY_SCATTER)
+                .triggerableAnim("cherry_move", CHERRY_MOVE)
+                .triggerableAnim("melon_tick", MELON_TICK)
+                .triggerableAnim("melon_start", MELON_START)
+                .triggerableAnim("melon_scatter", MELON_SCATTER)
+                .triggerableAnim("melon_move", MELON_MOVE));
     }
 
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {
@@ -81,8 +101,17 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
 
         // 优先处理解除状态
         if (isReleasing) {
-            if (!"start".equals(currentAnim)) {
-                return state.setAndContinue(START);
+            // 根据当前模式选择对应的解除变身动画名称
+            String releaseAnimation = switch (currentMode) {
+                case LEMON -> "start";
+                case MELON -> "start";
+                case CHERRY -> "cherry_start";
+                default -> "start";
+            };
+
+            if (!currentAnim.equals(releaseAnimation)) {
+                RawAnimation anim = getAnimationByName(releaseAnimation);
+                return state.setAndContinue(anim);
             }
             // 检查动画是否完成
             if (controller.getAnimationState() == AnimationController.State.STOPPED) {
@@ -95,17 +124,34 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
 
         // 处理变身序列
         if (isHenshining) {
-            // 第一阶段：播放move动画
-            if (!"move".equals(currentAnim) && !"scatter".equals(currentAnim)) {
-                return state.setAndContinue(MOVE);
+            // 根据当前模式选择对应的move动画名称
+            String moveAnimation = switch (currentMode) {
+                case LEMON -> "move";
+                case MELON -> "melon_move";
+                case CHERRY -> "cherry_move";
+                default -> "move";
+            };
+
+            // 根据当前模式选择对应的scatter动画
+            RawAnimation scatterAnimation = switch (currentMode) {
+                case LEMON -> SCATTER;
+                case MELON -> MELON_SCATTER;
+                case CHERRY -> CHERRY_SCATTER;
+                default -> SCATTER;
+            };
+
+            // 第一阶段：播放对应模式的move动画
+            if (!currentAnim.equals(moveAnimation) && !currentAnim.contains("scatter")) {
+                RawAnimation moveAnim = getAnimationByName(moveAnimation);
+                return state.setAndContinue(moveAnim);
             }
 
-            // 第二阶段：move完成后播放scatter（仅柠檬形态）
-            if ("move".equals(currentAnim) &&
+            // 第二阶段：move完成后播放对应模式的scatter
+            if (currentAnim.equals(moveAnimation) &&
                     controller.getAnimationState() == AnimationController.State.STOPPED) {
 
-                if (currentMode == BeltMode.LEMON) {
-                    return state.setAndContinue(SCATTER);
+                if (currentMode == BeltMode.LEMON || currentMode == BeltMode.MELON || currentMode == BeltMode.CHERRY) {
+                    return state.setAndContinue(scatterAnimation);
                 } else {
                     isHenshining = false;
                     isShowing = true;
@@ -114,12 +160,14 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             }
 
             // 第三阶段：scatter完成后保持展示状态
-            if ("scatter".equals(currentAnim) &&
-                    controller.getAnimationState() == AnimationController.State.STOPPED) {
-
-                isHenshining = false;
-                isShowing = true;
-                return state.setAndContinue(SHOW);
+            if ((currentMode == BeltMode.LEMON && "scatter".equals(currentAnim)) ||
+                    (currentMode == BeltMode.MELON && "melon_scatter".equals(currentAnim)) ||
+                    (currentMode == BeltMode.CHERRY && "cherry_scatter".equals(currentAnim))) {
+                if (controller.getAnimationState() == AnimationController.State.STOPPED) {
+                    isHenshining = false;
+                    isShowing = true;
+                    return state.setAndContinue(SHOW);
+                }
             }
 
             return PlayState.CONTINUE;
@@ -147,19 +195,27 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
         this.isShowing = false;
         this.isReleasing = false;
 
+        // 根据当前模式选择对应的move动画
+        String moveAnimation = switch (this.currentMode) {
+            case LEMON -> "move";
+            case MELON -> "move";
+            case CHERRY -> "cherry_move";
+            default -> "move";
+        };
+
         // 只在服务端发送数据包
         if (!entity.level().isClientSide()) {
             PacketHandler.sendToAllTracking(
                     new BeltAnimationPacket(
                             entity.getId(), // 使用实体 ID
-                            "move",
+                            moveAnimation,
                             this.currentMode
                     ),
                     entity
             );
         }
         // 无论客户端还是服务端都触发动画
-        triggerAnim(entity, "controller", "move");
+        triggerAnim(entity, "controller", moveAnimation);
     }
 
     // 解除变身方法
@@ -169,13 +225,21 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
         this.isShowing = false;
         this.isHenshining = false;
 
+        // 根据当前模式选择对应的解除变身动画
+        String releaseAnimation = switch (this.currentMode) {
+            case LEMON -> "start";
+            case MELON -> "start";
+            case CHERRY -> "cherry_start";
+            default -> "start";
+        };
+
         if (entity.level().isClientSide()) {
-            this.triggerAnim(entity, "controller", "start");
+            this.triggerAnim(entity, "controller", releaseAnimation);
         } else {
             PacketHandler.sendToAllTracking(
                     new BeltAnimationPacket(
                             entity.getId(), // 使用 UUID
-                            "start",
+                            releaseAnimation,
                             this.currentMode
                     ),
                     entity
@@ -290,6 +354,14 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             case "start" -> START;
             case "scatter" -> SCATTER;
             case "move" -> MOVE;
+            case "melon_tick" -> MELON_TICK;
+            case "melon_start" -> MELON_START;
+            case "melon_scatter" -> MELON_SCATTER;
+            case "melon_move" -> MELON_MOVE;
+            case "cherry_tick" -> CHERRY_TICK;
+            case "cherry_start" -> CHERRY_START;
+            case "cherry_scatter" -> CHERRY_SCATTER;
+            case "cherry_move" -> CHERRY_MOVE;
             default -> IDLES;
         };
     }
@@ -388,17 +460,34 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
     }
 
     public void setMode(ItemStack stack, BeltMode mode) {
-        if (stack.getEntityRepresentation() != null && stack.getEntityRepresentation().level().isClientSide) {
-            return;
-        }
+        // 重置相关状态
+        this.isActive = false;
+        this.isShowing = true;
+        this.isHenshining = false;
+        this.isReleasing = false;
 
         CompoundTag tag = stack.getOrCreateTag();
         tag.putString("BeltMode", mode.name());
+        tag.putBoolean("IsActive", this.isActive);
+        tag.putBoolean("IsShowing", this.isShowing);
         this.currentMode = mode;
         stack.setTag(tag);
 
         if (stack.getEntityRepresentation() instanceof Player player) {
             player.getInventory().setChanged();
+
+            // 同步到客户端
+            if (!player.level().isClientSide()) {
+                PacketHandler.sendToAllTracking(
+                        new BeltAnimationPacket(
+                                player.getId(),
+                                "show",
+                                this.currentMode
+                        ),
+                        player
+                );
+                triggerAnim(player, "controller", "show");
+            }
         }
     }
 }

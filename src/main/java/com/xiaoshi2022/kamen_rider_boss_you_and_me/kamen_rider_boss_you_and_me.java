@@ -3,6 +3,8 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Lemonx.LemoxRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.MelonSX.melonsxRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Cherryx.cherryxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
@@ -13,6 +15,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.Giff
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.LordBaronRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.CherrySigurdAbilityHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.LemonsliceParticle;
@@ -76,6 +79,9 @@ public class kamen_rider_boss_you_and_me
         // 注册 KeybindHandler
         MinecraftForge.EVENT_BUS.register(KeybindHandler.class);
 
+        // 注册 CherrySigurdAbilityHandler
+        MinecraftForge.EVENT_BUS.register(CherrySigurdAbilityHandler.class);
+
         //初始化自定义ModAttributes
         ModAttributes.ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
@@ -136,11 +142,15 @@ public class kamen_rider_boss_you_and_me
         public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
             event.registerBlockEntityRenderer(ModBlockEntities.BANANAS_ENTITY.get(), BananasRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.LEMONX_ENTITY.get(), LemoxRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.MELONSX_ENTITY.get(), melonsxRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.CHERRYX_ENTITY.get(), cherryxRenderer::new);
         }
 
         @SubscribeEvent
         public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
             event.registerSpriteSet(ParticleTypesRegistry.LEMONSLICE.get(), LemonsliceParticle.Provider::new);
+            event.registerSpriteSet(ParticleTypesRegistry.MLONSLICE.get(), LemonsliceParticle.Provider::new);
+            event.registerSpriteSet(ParticleTypesRegistry.CHERRYSLICE.get(), LemonsliceParticle.Provider::new);
         }
 
         @SubscribeEvent

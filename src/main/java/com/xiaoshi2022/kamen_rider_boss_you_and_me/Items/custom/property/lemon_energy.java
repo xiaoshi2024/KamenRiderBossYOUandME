@@ -105,8 +105,12 @@ public class lemon_energy extends Item implements GeoItem {
                     Genesis_driver belt = (Genesis_driver) beltStack.getItem();
                     belt.setMode(beltStack, Genesis_driver.BeltMode.LEMON);
 
-                    // 设置玩家准备状态
+                    // 设置玩家准备状态和时间戳
                     player.getPersistentData().putBoolean("lemon_ready", true);
+                    player.getPersistentData().putLong("lemon_ready_time", level.getGameTime());
+
+                    // 发送客户端提示消息
+                    player.sendSystemMessage(Component.literal("柠檬锁种已装载！按变身键变身"));
                 }
                 return InteractionResultHolder.success(ItemStack.EMPTY);
             }

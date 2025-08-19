@@ -14,6 +14,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -41,6 +43,10 @@ public class ModItems {
             () -> new BlockItem(ModBlocks.BANANAS_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> LEMONX_ITEM = ITEMS.register("lemonx",
             () -> new BlockItem(ModBlocks.LEMON_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> MELON_ITEM = ITEMS.register("melonx",
+            () -> new BlockItem(ModBlocks.MELON_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CHERRYXS_ITEM = ITEMS.register("cherryxs",
+            () -> new BlockItem(ModBlocks.CHERRYX_BLOCK.get(), new Item.Properties()));
 
 
     public static final RegistryObject<giifusteamp> GIIFUSTEAMP = ITEMS.register("giifusteamp",
@@ -87,5 +93,13 @@ public class ModItems {
     public static final RegistryObject<baron_lemonItem> BARON_LEMON_HELMET = ITEMS.register("baron_lemon_helmet", () -> new baron_lemonItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<baron_lemonItem> BARON_LEMON_CHESTPLATE = ITEMS.register("baron_lemon_chestplate", () -> new baron_lemonItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<baron_lemonItem> BARON_LEMON_LEGGINGS = ITEMS.register("baron_lemon_leggings", () -> new baron_lemonItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    public static final RegistryObject<ZangetsuShinItem> ZANGETSU_SHIN_HELMET = ITEMS.register("zangetsu_shin_helmet", () -> new ZangetsuShinItem(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<ZangetsuShinItem> ZANGETSU_SHIN_CHESTPLATE = ITEMS.register("zangetsu_shin_chestplate", () -> new ZangetsuShinItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<ZangetsuShinItem> ZANGETSU_SHIN_LEGGINGS = ITEMS.register("zangetsu_shin_leggings", () -> new ZangetsuShinItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    public static final RegistryObject<Sigurd> SIGURD_HELMET = ITEMS.register("sigurd_helmet", () -> new Sigurd(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Sigurd> SIGURD_CHESTPLATE = ITEMS.register("sigurd_chestplate", () -> new Sigurd(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Sigurd> SIGURD_LEGGINGS = ITEMS.register("sigurd_leggings", () -> new Sigurd(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
 }

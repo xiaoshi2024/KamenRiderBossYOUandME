@@ -36,5 +36,49 @@ public class KkcikAnXiaAnJianShiProcedure {
 				}
 			});
 		}
+		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()
+				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == false) {
+			for (int index0 = 0; index0 < 30; index0++) {
+				entity.setDeltaMovement(new Vec3(0, (entity.getDeltaMovement().y() + 0.1), 0));
+			}
+			kamen_rider_boss_you_and_me.queueServerWork(20, () -> {
+				{
+					boolean _setval = true;
+					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+						capability.kcik = _setval;
+						capability.syncPlayerVariables(entity);
+					});
+				}
+				{
+					boolean _setval = true;
+					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+						capability.wudi = _setval;
+						capability.syncPlayerVariables(entity);
+					});
+				}
+			});
+		}
+		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.SIGURD_HELMET.get()
+				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == false) {
+			for (int index0 = 0; index0 < 30; index0++) {
+				entity.setDeltaMovement(new Vec3(0, (entity.getDeltaMovement().y() + 0.1), 0));
+			}
+			kamen_rider_boss_you_and_me.queueServerWork(20, () -> {
+				{
+					boolean _setval = true;
+					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+						capability.kcik = _setval;
+						capability.syncPlayerVariables(entity);
+					});
+				}
+				{
+					boolean _setval = true;
+					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+						capability.wudi = _setval;
+						capability.syncPlayerVariables(entity);
+					});
+				}
+			});
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ReleaseBeltPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -41,10 +42,16 @@ public class TransformationRequestPacket {
                     ReleaseBeltPacket.handleRelease(player, msg.riderType);
                 } else {
                     // 根据变身类型调用对应的处理方法
-                    if ("LEMON_ENERGY".equals(msg.riderType)) {
+                    if (RiderTypes.LEMON_ENERGY.equals(msg.riderType)) {
                         LemonTransformationRequestPacket.handle(new LemonTransformationRequestPacket(player.getUUID()), ctx);
-                    } else if ("BANANA".equals(msg.riderType)) {
+                    } else if (RiderTypes.BANANA.equals(msg.riderType)) {
                         BananaTransformationRequestPacket.handle(new BananaTransformationRequestPacket(player.getUUID()), ctx);
+                    }else if (RiderTypes.MELON_ENERGY.equals(msg.riderType)) {
+                        MelonTransformationRequestPacket.handle(
+                                new MelonTransformationRequestPacket(player.getUUID()), ctx);
+                    } else if (RiderTypes.CHERRY_ENERGY.equals(msg.riderType)) {
+                        CherryTransformationRequestPacket.handle(
+                                new CherryTransformationRequestPacket(player.getUUID()), ctx);
                     }
                 }
             }

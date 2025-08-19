@@ -2,6 +2,8 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BananaTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.LemonTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MelonTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -41,6 +43,11 @@ public class PacketHandler {
 
         // 注册 BananaTransformationRequestPacket
         INSTANCE.registerMessage(index++, BananaTransformationRequestPacket.class, BananaTransformationRequestPacket::encode, BananaTransformationRequestPacket::decode, BananaTransformationRequestPacket::handle);
+
+        INSTANCE.registerMessage(index++, MelonTransformationRequestPacket.class, MelonTransformationRequestPacket::encode, MelonTransformationRequestPacket::decode, MelonTransformationRequestPacket::handle);
+        
+        // 注册 CherryTransformationRequestPacket
+        INSTANCE.registerMessage(index++, CherryTransformationRequestPacket.class, CherryTransformationRequestPacket::encode, CherryTransformationRequestPacket::decode, CherryTransformationRequestPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

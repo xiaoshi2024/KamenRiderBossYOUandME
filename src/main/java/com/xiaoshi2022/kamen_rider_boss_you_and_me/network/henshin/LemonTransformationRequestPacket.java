@@ -11,6 +11,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -71,6 +72,18 @@ public class LemonTransformationRequestPacket {
             return;
         }
 
+        // 检查柠檬锁种准备状态
+        if (!player.getPersistentData().getBoolean("lemon_ready")) {
+            player.sendSystemMessage(Component.literal("请先装备柠檬锁种！"));
+            return;
+        }
+
+        // 检查腰带模式是否为柠檬
+        if (belt.getMode(beltStack) != Genesis_driver.BeltMode.LEMON) {
+            player.sendSystemMessage(Component.literal("腰带未设置为柠檬模式！"));
+            return;
+        }
+
         clearLemonsEntities(player);
 
         // 停止待机音效
@@ -86,15 +99,7 @@ public class LemonTransformationRequestPacket {
 
         // 播放变身动画
         belt.startHenshinAnimation(player);
-
-        PacketHandler.sendToAllTracking(
-                new BeltAnimationPacket(
-                        player.getId(),
-                        "move",
-                        Genesis_driver.BeltMode.LEMON
-                ),
-                player
-        );
+        // 动画已由startHenshinAnimation方法内部处理，无需额外发送数据包
 
         // 播放变身音效
         SoundEvent sound = ModBossSounds.LEMON_BARON.get();
@@ -107,6 +112,13 @@ public class LemonTransformationRequestPacket {
         // 设置玩家为已变身状态
         belt.isEquipped = true;
         belt.isHenshining = true;
+
+        // 清除柠檬锁种准备状态
+        player.getPersistentData().remove("lemon_ready");
+        player.getPersistentData().remove("lemon_ready_time");
+
+        // 发送变身成功提示
+        player.sendSystemMessage(Component.literal("柠檬能量已激活！"));
     }
 
     private static void clearLemonsEntities(ServerPlayer player) {

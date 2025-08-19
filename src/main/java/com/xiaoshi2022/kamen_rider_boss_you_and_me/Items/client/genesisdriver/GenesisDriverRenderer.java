@@ -1,9 +1,11 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.Genesisdriver_cherryModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -14,40 +16,55 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> implements ICurioRenderer {
-    private final GeoModel<Genesis_driver> defaultModel = new GenesisDriverModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver"));
-    private final GeoModel<Genesis_driver> lemonModel = new GenesisDriver_lemonModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_lemon"));
+
+    /* ---------- 形态模型 ---------- */
+    private final GenesisDriverModel      defaultModel = new GenesisDriverModel(
+            new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver"));
+    private final GenesisDriver_lemonModel lemonModel = new GenesisDriver_lemonModel(
+            new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_lemon"));
+    private final Genesisdriver_melonModel melonModel = new Genesisdriver_melonModel(
+            new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_melon"));
+    private final Genesisdriver_cherryModel cherryModel = new Genesisdriver_cherryModel(
+            new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_cherry"));
 
     public GenesisDriverRenderer() {
         super(new GenesisDriverModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver")));
     }
 
+    /* ---------- 根据腰带模式返回对应模型 ---------- */
     @Override
     public GeoModel<Genesis_driver> getGeoModel() {
         ItemStack stack = getCurrentItemStack();
-        if (stack.getItem() instanceof Genesis_driver) {
-            Genesis_driver belt = (Genesis_driver) stack.getItem();
-            Genesis_driver.BeltMode mode = belt.getMode(stack);
-
-            return switch (mode) {
-                case LEMON -> lemonModel; // 返回柠檬形态模型
-                default -> defaultModel; // 返回默认形态模型
+        if (stack.getItem() instanceof Genesis_driver belt) {
+            return switch (belt.getMode(stack)) {
+                case LEMON -> lemonModel;
+                case MELON -> melonModel;
+                case CHERRY -> cherryModel;
+                default     -> defaultModel;
             };
         }
-        return super.getGeoModel(); // 默认返回父类的模型
+        return super.getGeoModel();
     }
 
+    /* ---------- 物品渲染（手持 / 展示框 / 地面掉落） ---------- */
     @Override
-    public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        // 调用父类的渲染逻辑
+    public void renderByItem(ItemStack stack,
+                             ItemDisplayContext transformType,
+                             PoseStack poseStack,
+                             MultiBufferSource buffer,
+                             int packedLight,
+                             int packedOverlay) {
         super.renderByItem(stack, transformType, poseStack, buffer, packedLight, packedOverlay);
     }
 
+    /* ---------- Curio 渲染（佩戴在身体上） ---------- */
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack itemStack, SlotContext slotContext, PoseStack poseStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource multiBufferSource, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         poseStack.pushPose();

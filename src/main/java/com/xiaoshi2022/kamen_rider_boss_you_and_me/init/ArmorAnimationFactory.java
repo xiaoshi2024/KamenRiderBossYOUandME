@@ -3,6 +3,8 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.init;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
 import software.bernie.geckolib.animatable.GeoItem;
 
 import net.minecraftforge.fml.common.Mod;
@@ -28,6 +30,10 @@ public class ArmorAnimationFactory {
 						animatable.animationprocedure = animation;
 					if (event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof baron_lemonItem animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ZangetsuShinItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof Sigurd animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
 
 				}
 			}
@@ -40,6 +46,10 @@ public class ArmorAnimationFactory {
 					if (event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof rider_baronsItem animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
 					if (event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof baron_lemonItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof ZangetsuShinItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof Sigurd animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
 
 				}
@@ -54,6 +64,10 @@ public class ArmorAnimationFactory {
 						animatable.animationprocedure = animation;
 					if (event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof baron_lemonItem animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof ZangetsuShinItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof Sigurd animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
 
 				}
 			}
@@ -66,6 +80,10 @@ public class ArmorAnimationFactory {
 					if (event.player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof rider_baronsItem animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
 					if (event.player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof baron_lemonItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof ZangetsuShinItem animatable && event.player.level().isClientSide())
+						animatable.animationprocedure = animation;
+					if (event.player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof Sigurd animatable && event.player.level().isClientSide())
 						animatable.animationprocedure = animation;
 
 				}

@@ -8,12 +8,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import java.util.function.Supplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosCapability;
-
-import java.util.function.Supplier;
 
 public class BeltAnimationPacket {
     private final int entityId;
@@ -87,7 +86,7 @@ public class BeltAnimationPacket {
                     if (item instanceof sengokudrivers_epmty belt && "sengoku".equals(msg.beltType)) {
                         updateSengokuBeltState(belt, stack, livingEntity, sengokudrivers_epmty.BeltMode.valueOf(msg.beltMode));
                     } else if (item instanceof Genesis_driver belt && "genesis".equals(msg.beltType)) {
-                        updateGenesisBeltState(belt, stack, livingEntity, Genesis_driver.BeltMode.valueOf(msg.beltMode));
+                        updateGenesisBeltState(belt, stack, livingEntity, Genesis_driver.BeltMode.valueOf(msg.beltMode), msg.animationName);
                     }
                 });
             });
@@ -106,6 +105,7 @@ public class BeltAnimationPacket {
         }
 
         String animation = belt.isEquipped ? (belt.currentMode == sengokudrivers_epmty.BeltMode.BANANA ? "banana_idle" : "show") : "idle";
+        // 确保动画名称正确映射
         belt.triggerAnim(entity, "controller", animation);
 
         entity.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
@@ -113,12 +113,13 @@ public class BeltAnimationPacket {
         });
     }
 
-    private static void updateGenesisBeltState(Genesis_driver belt, ItemStack stack, LivingEntity entity, Genesis_driver.BeltMode mode) {
-        belt.currentMode = mode;
-
+    private static void updateGenesisBeltState(Genesis_driver belt, ItemStack stack, LivingEntity entity, Genesis_driver.BeltMode mode, String animationName) {
         CompoundTag tag = stack.getOrCreateTag();
+        // 首先从NBT读取模式，如果没有则使用传入的模式
         if (tag.contains("BeltMode")) {
             belt.currentMode = Genesis_driver.BeltMode.valueOf(tag.getString("BeltMode"));
+        } else {
+            belt.currentMode = mode;
         }
         if (tag.contains("IsActive")) {
             belt.isActive = tag.getBoolean("IsActive");
@@ -126,12 +127,53 @@ public class BeltAnimationPacket {
         if (tag.contains("IsShowing")) {
             belt.isShowing = tag.getBoolean("IsShowing");
         }
+        if (tag.contains("IsHenshining")) {
+            belt.isHenshining = tag.getBoolean("IsHenshining");
+        }
 
-        String animation = "idles";
-        if (belt.isActive) {
-            animation = (belt.currentMode == Genesis_driver.BeltMode.LEMON) ? "start" : "show";
-        } else if (belt.isShowing) {
-            animation = "show";
+        String animation;
+        // 如果指定了动画名称且不是同步状态命令，则直接使用
+        if (animationName != null && !animationName.equals("sync_state")) {
+            animation = animationName;
+        } else {
+            // 处理变身状态动画
+            if (belt.isHenshining) {
+                switch (belt.currentMode) {
+                    case LEMON:
+                        animation = "move";
+                        break;
+                    case MELON:
+                        animation = "melon_move";
+                        break;
+                    case CHERRY:
+                        animation = "cherry_move";
+                        break;
+                    default:
+                        animation = "move";
+                }
+            }
+            // 处理活动状态动画
+            else if (belt.isActive) {
+                switch (belt.currentMode) {
+                    case LEMON:
+                        animation = "start";
+                        break;
+                    case MELON:
+                        animation = "melon_start";
+                        break;
+                    case CHERRY:
+                        animation = "cherry_start";
+                        break;
+                    default:
+                        animation = "show";
+                }
+            } 
+            // 处理展示状态动画
+            else if (belt.isShowing) {
+                animation = "show";
+            } else {
+                animation = "idles";
+            }
         }
         belt.triggerAnim(entity, "controller", animation);
 

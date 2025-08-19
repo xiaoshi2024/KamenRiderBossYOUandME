@@ -70,6 +70,10 @@
 
   "block.kamen_rider_boss_you_and_me.bananas_block": "Bananas Block",
   "block.kamen_rider_boss_you_and_me.lemonx": "Lemons Block",
+  "block.kamen_rider_boss_you_and_me.melonx": "Melons Block",
+  "block.kamen_rider_boss_you_and_me.cherryx": "Cherrys Block",
+
+
 
 
   "msg.kamen_rider.belt_activation_failed": "Belt activation check failed",

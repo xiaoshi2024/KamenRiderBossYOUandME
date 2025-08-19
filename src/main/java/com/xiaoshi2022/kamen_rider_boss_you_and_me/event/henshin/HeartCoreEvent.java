@@ -6,7 +6,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.entity.EquipmentSlot;
 
 public class HeartCoreEvent {

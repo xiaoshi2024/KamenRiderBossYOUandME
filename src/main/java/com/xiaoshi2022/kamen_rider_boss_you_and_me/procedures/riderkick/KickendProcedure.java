@@ -98,5 +98,105 @@ public class KickendProcedure {
 				});
 			}
 		}
+		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()
+				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true && entity.onGround()) {
+			{
+				boolean _setval = false;
+				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+					capability.kcik = _setval;
+					capability.syncPlayerVariables(entity);
+				});
+			}
+			if (world instanceof Level _level && !_level.isClientSide())
+				_level.explode(null, x, y, z, 4, Level.ExplosionInteraction.NONE);
+			if (world.isClientSide()) {
+				if (entity instanceof AbstractClientPlayer player) {
+					var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
+					if (animation != null) {
+						animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "steadily"))));
+					}
+				}
+			}
+			if (!world.isClientSide()) {
+				if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
+					List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
+					synchronized (connections) {
+						Iterator<Connection> iterator = connections.iterator();
+						while (iterator.hasNext()) {
+							Connection connection = iterator.next();
+							if (!connection.isConnecting() && connection.isConnected())
+								kamen_rider_boss_you_and_me.PACKET_HANDLER.sendTo(new SetupAnimationsProcedure.kamen_rider_boss_you_and_meModAnimationMessage(Component.literal("steadily"), entity.getId(), true), connection, NetworkDirection.PLAY_TO_CLIENT);
+						}
+					}
+				}
+			}
+			entity.makeStuckInBlock(Blocks.AIR.defaultBlockState(), new Vec3(0.25, 0.05, 0.25));
+			// 仅在服务端执行
+			if (!world.isClientSide() && entity instanceof Player player) {
+				// 获取当前饱食度
+				int newFoodLevel = player.getFoodData().getFoodLevel() - 3;
+				// 保证不小于 0
+				newFoodLevel = Math.max(newFoodLevel, 0);
+				// 直接设置
+				player.getFoodData().setFoodLevel(newFoodLevel);
+			}
+			{
+				boolean _setval = false;
+				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+					capability.wudi = _setval;
+					capability.syncPlayerVariables(entity);
+				});
+			}
+		}
+		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.SIGURD_HELMET.get()
+				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true && entity.onGround()) {
+			{
+				boolean _setval = false;
+				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+					capability.kcik = _setval;
+					capability.syncPlayerVariables(entity);
+				});
+			}
+			if (world instanceof Level _level && !_level.isClientSide())
+				_level.explode(null, x, y, z, 4, Level.ExplosionInteraction.NONE);
+			if (world.isClientSide()) {
+				if (entity instanceof AbstractClientPlayer player) {
+					var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
+					if (animation != null) {
+						animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "steadily"))));
+					}
+				}
+			}
+			if (!world.isClientSide()) {
+				if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
+					List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
+					synchronized (connections) {
+						Iterator<Connection> iterator = connections.iterator();
+						while (iterator.hasNext()) {
+							Connection connection = iterator.next();
+							if (!connection.isConnecting() && connection.isConnected())
+								kamen_rider_boss_you_and_me.PACKET_HANDLER.sendTo(new SetupAnimationsProcedure.kamen_rider_boss_you_and_meModAnimationMessage(Component.literal("steadily"), entity.getId(), true), connection, NetworkDirection.PLAY_TO_CLIENT);
+						}
+					}
+				}
+			}
+			entity.makeStuckInBlock(Blocks.AIR.defaultBlockState(), new Vec3(0.25, 0.05, 0.25));
+			// 仅在服务端执行
+			if (!world.isClientSide() && entity instanceof Player player) {
+				// 获取当前饱食度
+				int newFoodLevel = player.getFoodData().getFoodLevel() - 3;
+				// 保证不小于 0
+				newFoodLevel = Math.max(newFoodLevel, 0);
+				// 直接设置
+				player.getFoodData().setFoodLevel(newFoodLevel);
+			}
+			{
+				boolean _setval = false;
+				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+					capability.wudi = _setval;
+					capability.syncPlayerVariables(entity);
+				});
+			}
+		}
 	}
 }
