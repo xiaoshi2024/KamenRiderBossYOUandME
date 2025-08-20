@@ -21,4 +21,8 @@ public class ParticleTypesRegistry {
     public static final RegistryObject<SimpleParticleType> CHERRYSLICE =
             PARTICLE_TYPES.register("cherryslice",
                     () -> new SimpleParticleType(false));   // false = 不需要额外数据
+
+    public static final RegistryObject<SimpleParticleType> PEACHSLICE =
+            PARTICLE_TYPES.register("peachslice",
+                    () -> new SimpleParticleType(false));   // false = 不需要额外数据
 }

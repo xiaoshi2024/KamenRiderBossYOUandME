@@ -19,7 +19,7 @@ public class BananasEntity extends BlockEntity implements GeoBlockEntity {
 
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private int lifespan = 3600; // 40 tick lifespan (2 seconds)
+    private int lifespan = 600; //40 滴答寿命（2 秒）
 
     public BananasEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BANANAS_ENTITY.get(), pos, state);

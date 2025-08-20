@@ -32,6 +32,7 @@ public class ReleaseBeltPacket {
             case "GENESIS"      -> KeybindHandler.completeBeltRelease(player, "GENESIS");
             case "BARONS"       -> KeybindHandler.completeBeltRelease(player, "BARONS");
             case "MELON_ENERGY" -> KeybindHandler.completeBeltRelease(player, "MELON_ENERGY");
+            case "DUKE"         -> KeybindHandler.completeBeltRelease(player, "DUKE");
         }
     }
 

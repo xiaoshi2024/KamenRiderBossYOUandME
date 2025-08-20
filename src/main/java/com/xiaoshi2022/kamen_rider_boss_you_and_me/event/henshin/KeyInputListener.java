@@ -4,6 +4,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driv
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MarikaTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.RiderTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
@@ -43,13 +45,22 @@ public final class KeyInputListener {
                 case LEMON -> RiderTypes.LEMON_ENERGY;
                 case MELON  -> RiderTypes.MELON_ENERGY;
                 case CHERRY -> RiderTypes.CHERRY_ENERGY;
+                case PEACH -> RiderTypes.PEACH_ENERGY;
                 default -> null;
             };
 
             if (riderType != null) {
                 if (isWearingArmor(player, riderType)) return;   // 已变身
-                PacketHandler.INSTANCE.sendToServer(
-                        new TransformationRequestPacket(player.getUUID(), riderType, false));
+                if (riderType.equals(RiderTypes.CHERRY_ENERGY)) {
+                    PacketHandler.INSTANCE.sendToServer(
+                            new CherryTransformationRequestPacket(player.getUUID()));
+                } else if (riderType.equals(RiderTypes.PEACH_ENERGY)) {
+                    PacketHandler.INSTANCE.sendToServer(
+                            new MarikaTransformationRequestPacket(player.getUUID()));
+                } else {
+                    PacketHandler.INSTANCE.sendToServer(
+                            new TransformationRequestPacket(player.getUUID(), riderType, false));
+                }
             }
             return;
         }
@@ -72,13 +83,38 @@ public final class KeyInputListener {
 
     /* ========= 判断是否已穿对应骑士装甲 ========= */
     private static boolean isWearingArmor(LocalPlayer player, String riderType) {
+        // 检查LEMON_ENERGY类型是否装备全套盔甲
+        if (RiderTypes.LEMON_ENERGY.equals(riderType)) {
+            // 检查是否装备Baron Lemon全套盔甲
+            boolean isBaronLemon = player.getInventory().armor.get(3).is(ModItems.BARON_LEMON_HELMET.get()) &&
+                                   player.getInventory().armor.get(2).is(ModItems.BARON_LEMON_CHESTPLATE.get()) &&
+                                   player.getInventory().armor.get(1).is(ModItems.BARON_LEMON_LEGGINGS.get());
+            
+            // 检查是否装备Duke全套盔甲
+            boolean isDuke = player.getInventory().armor.get(3).is(ModItems.DUKE_HELMET.get()) &&
+                             player.getInventory().armor.get(2).is(ModItems.DUKE_CHESTPLATE.get()) &&
+                             player.getInventory().armor.get(1).is(ModItems.DUKE_LEGGINGS.get());
+            
+            return isBaronLemon || isDuke;
+        }
+        
         return switch (riderType) {
-            case RiderTypes.LEMON_ENERGY ->
-                    player.getInventory().armor.get(3).is(ModItems.BARON_LEMON_HELMET.get());
             case RiderTypes.MELON_ENERGY ->
-                    player.getInventory().armor.get(3).is(ModItems.ZANGETSU_SHIN_HELMET.get());
+                    player.getInventory().armor.get(3).is(ModItems.ZANGETSU_SHIN_HELMET.get()) &&
+                    player.getInventory().armor.get(2).is(ModItems.ZANGETSU_SHIN_CHESTPLATE.get()) &&
+                    player.getInventory().armor.get(1).is(ModItems.ZANGETSU_SHIN_LEGGINGS.get());
             case RiderTypes.BANANA ->
-                    player.getInventory().armor.get(3).is(ModItems.RIDER_BARONS_HELMET.get());
+                    player.getInventory().armor.get(3).is(ModItems.RIDER_BARONS_HELMET.get()) &&
+                    player.getInventory().armor.get(2).is(ModItems.RIDER_BARONS_CHESTPLATE.get()) &&
+                    player.getInventory().armor.get(1).is(ModItems.RIDER_BARONS_LEGGINGS.get());
+            case RiderTypes.PEACH_ENERGY ->
+                    player.getInventory().armor.get(3).is(ModItems.MARIKA_HELMET.get()) &&
+                    player.getInventory().armor.get(2).is(ModItems.MARIKA_CHESTPLATE.get()) &&
+                    player.getInventory().armor.get(1).is(ModItems.MARIKA_LEGGINGS.get());
+            case RiderTypes.CHERRY_ENERGY ->
+                    player.getInventory().armor.get(3).is(ModItems.SIGURD_HELMET.get()) &&
+                    player.getInventory().armor.get(2).is(ModItems.SIGURD_CHESTPLATE.get()) &&
+                    player.getInventory().armor.get(1).is(ModItems.SIGURD_LEGGINGS.get());
             default -> false;
         };
     }

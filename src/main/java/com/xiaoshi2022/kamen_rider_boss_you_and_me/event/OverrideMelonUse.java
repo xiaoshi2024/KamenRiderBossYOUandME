@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
@@ -67,6 +68,11 @@ public class OverrideMelonUse {
             } else {
                 // 第二次右键
                 if (!level.isClientSide) {
+                    // 检查玩家是否已经装备了其他锁种
+                    if (com.xiaoshi2022.kamen_rider_boss_you_and_me.util.BeltUtils.hasActiveLockseed(player)) {
+                        player.sendSystemMessage(Component.literal("您已经装备了其他锁种，请先解除变身！"));
+                        return;
+                    }
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
                             ModBossSounds.LEMON_LOCKONBY.get(),
                             SoundSource.PLAYERS, 1, 1);
@@ -76,9 +82,11 @@ public class OverrideMelonUse {
                     Genesis_driver genesisBelt = (Genesis_driver) beltStack.getItem();
                     genesisBelt.setMode(beltStack, Genesis_driver.BeltMode.MELON);
 
-                    // 设置玩家准备状态和时间戳
-                    player.getPersistentData().putBoolean("melon_ready", true);
-                    player.getPersistentData().putLong("melon_ready_time", level.getGameTime());
+                    // 获取PlayerVariables实例并设置状态
+                    KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                    variables.melon_ready = true;
+                    variables.melon_ready_time = level.getGameTime();
+                    variables.syncPlayerVariables(player); // 同步变量到客户端
 
                     // 发送客户端提示消息
                     player.sendSystemMessage(Component.literal("蜜瓜锁种已装载！按变身键变身"));

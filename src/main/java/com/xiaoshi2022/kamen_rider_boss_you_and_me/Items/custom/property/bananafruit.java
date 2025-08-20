@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.bananafruit.bananafruitRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
@@ -98,6 +99,11 @@ public class bananafruit extends Item implements GeoItem {
             } else {
                 // 第二次右键点击 - 将锁种插入腰带
                 if (!level.isClientSide) {
+                    // 检查玩家是否已经装备了其他锁种
+                    if (com.xiaoshi2022.kamen_rider_boss_you_and_me.util.BeltUtils.hasActiveLockseed(player)) {
+                        player.sendSystemMessage(Component.literal("您已经装备了其他锁种，请先解除变身！"));
+                        return InteractionResultHolder.success(stack);
+                    }
                     // 播放LOCK ON音效
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
                             ModBossSounds.LOCKONS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -114,8 +120,10 @@ public class bananafruit extends Item implements GeoItem {
                     sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
                     belt.setMode(beltStack, sengokudrivers_epmty.BeltMode.BANANA);
 
-                    // 设置玩家准备状态
-                    player.getPersistentData().putBoolean("banana_ready", true);
+                    // 获取PlayerVariables实例并设置状态
+                    KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                    variables.banana_ready = true;
+                    variables.syncPlayerVariables(player); // 同步变量到客户端
                 }
                 return InteractionResultHolder.success(ItemStack.EMPTY);
             }

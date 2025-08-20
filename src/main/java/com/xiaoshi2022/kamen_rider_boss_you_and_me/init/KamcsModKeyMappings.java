@@ -6,6 +6,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.init;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KkcikMessage;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick.KicktimeProcedure;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,8 +25,11 @@ public class KamcsModKeyMappings {
 		public void setDown(boolean isDown) {
 			super.setDown(isDown);
 			if (isDownOld != isDown && isDown) {
-				kamen_rider_boss_you_and_me.PACKET_HANDLER.sendToServer(new KkcikMessage(0, 0));
-				KkcikMessage.pressAction(Minecraft.getInstance().player, 0, 0);
+				// 新增：检查是否可以踢击
+				if (KicktimeProcedure.canPerformKick(Minecraft.getInstance().player)) {
+					kamen_rider_boss_you_and_me.PACKET_HANDLER.sendToServer(new KkcikMessage(0, 0));
+					KkcikMessage.pressAction(Minecraft.getInstance().player, 0, 0);
+				}
 			}
 			isDownOld = isDown;
 		}

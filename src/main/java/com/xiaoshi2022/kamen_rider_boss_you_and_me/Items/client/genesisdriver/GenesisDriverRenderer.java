@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.Genesisdriver_cherryModel;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriver_peachModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
@@ -33,6 +34,9 @@ public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> imple
             new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_melon"));
     private final Genesisdriver_cherryModel cherryModel = new Genesisdriver_cherryModel(
             new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_cherry"));
+    private final GenesisDriver_peachModel peachModel = new GenesisDriver_peachModel(
+            new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_peach"));
+
 
     public GenesisDriverRenderer() {
         super(new GenesisDriverModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver")));
@@ -47,6 +51,7 @@ public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> imple
                 case LEMON -> lemonModel;
                 case MELON -> melonModel;
                 case CHERRY -> cherryModel;
+                case PEACH -> peachModel;
                 default     -> defaultModel;
             };
         }

@@ -30,7 +30,8 @@ public class HelheimVineHandler {
             com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.BANANAFRUIT::get,
             com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY::get,
             com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.MELON::get,
-            ModItems.LEMON_ENERGY::get
+            ModItems.LEMON_ENERGY::get,
+            ModItems.PEACH_ENERGY::get
             // 可以继续添加更多锁种...
     );
 

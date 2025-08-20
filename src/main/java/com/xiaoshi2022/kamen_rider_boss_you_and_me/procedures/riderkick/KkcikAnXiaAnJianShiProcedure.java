@@ -14,71 +14,62 @@ public class KkcikAnXiaAnJianShiProcedure {
 	public static void execute(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.BARON_LEMON_HELMET.get()
-				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == false) {
-			for (int index0 = 0; index0 < 30; index0++) {
-				entity.setDeltaMovement(new Vec3(0, (entity.getDeltaMovement().y() + 0.1), 0));
-			}
-			kamen_rider_boss_you_and_me.queueServerWork(20, () -> {
-				{
-					boolean _setval = true;
-					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-						capability.kcik = _setval;
-						capability.syncPlayerVariables(entity);
-					});
-				}
-				{
-					boolean _setval = true;
-					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-						capability.wudi = _setval;
-						capability.syncPlayerVariables(entity);
-					});
-				}
-			});
+
+		ItemStack helmet = getHelmet(entity);
+
+		// 检查所有符合条件的头盔
+		if ((helmet.getItem() == ModItems.BARON_LEMON_HELMET.get() ||
+				helmet.getItem() == ModItems.DUKE_HELMET.get() ||
+				helmet.getItem() == ModItems.MARIKA_HELMET.get() ||
+				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
+				helmet.getItem() == ModItems.SIGURD_HELMET.get()) &&
+				!isKicking(entity)) {
+
+			handleKickStart(world, entity);
 		}
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()
-				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == false) {
-			for (int index0 = 0; index0 < 30; index0++) {
-				entity.setDeltaMovement(new Vec3(0, (entity.getDeltaMovement().y() + 0.1), 0));
-			}
-			kamen_rider_boss_you_and_me.queueServerWork(20, () -> {
-				{
-					boolean _setval = true;
-					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-						capability.kcik = _setval;
-						capability.syncPlayerVariables(entity);
-					});
-				}
-				{
-					boolean _setval = true;
-					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-						capability.wudi = _setval;
-						capability.syncPlayerVariables(entity);
-					});
-				}
-			});
+	}
+
+	// 获取头盔
+	private static ItemStack getHelmet(Entity entity) {
+		if (entity instanceof LivingEntity livingEntity) {
+			return livingEntity.getItemBySlot(EquipmentSlot.HEAD);
 		}
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.SIGURD_HELMET.get()
-				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == false) {
-			for (int index0 = 0; index0 < 30; index0++) {
-				entity.setDeltaMovement(new Vec3(0, (entity.getDeltaMovement().y() + 0.1), 0));
-			}
-			kamen_rider_boss_you_and_me.queueServerWork(20, () -> {
-				{
-					boolean _setval = true;
-					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-						capability.kcik = _setval;
-						capability.syncPlayerVariables(entity);
-					});
-				}
-				{
-					boolean _setval = true;
-					entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-						capability.wudi = _setval;
-						capability.syncPlayerVariables(entity);
-					});
-				}
-			});
+		return ItemStack.EMPTY;
+	}
+
+	// 检查是否正在踢击
+	private static boolean isKicking(Entity entity) {
+		return entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+				.orElse(new KRBVariables.PlayerVariables()).kcik;
+	}
+
+	private static void handleKickStart(LevelAccessor world, Entity entity) {
+		// 给实体一个适中的向上的推力（降低高度）
+		for (int i = 0; i < 24; i++) { // 从 30 减少到 24
+			entity.setDeltaMovement(new Vec3(0, (entity.getDeltaMovement().y() + 0.07), 0)); // 从 0.1 降低到 0.05
 		}
+
+		// 延迟设置踢击状态
+		kamen_rider_boss_you_and_me.queueServerWork(20, () -> {
+			setPlayerVariable(entity, "kcik", true);
+			setPlayerVariable(entity, "wudi", true);
+
+			// 更新最后踢击时间
+			entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+				capability.lastKickTime = System.currentTimeMillis();
+				capability.syncPlayerVariables(entity);
+			});
+		});
+	}
+
+	// 设置玩家变量的通用方法
+	private static void setPlayerVariable(Entity entity, String variableName, boolean value) {
+		entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+			switch (variableName) {
+				case "kcik" -> capability.kcik = value;
+				case "wudi" -> capability.wudi = value;
+			}
+			capability.syncPlayerVariables(entity);
+		});
 	}
 }

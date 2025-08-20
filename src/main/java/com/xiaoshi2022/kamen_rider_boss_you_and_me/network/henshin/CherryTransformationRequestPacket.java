@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.cherryxEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin.CherryRiderHenshin;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
@@ -53,7 +54,8 @@ public class CherryTransformationRequestPacket {
 
     private static void handleCherryTransformation(ServerPlayer player) {
         // 1. 检查是否准备好变身
-        if (!player.getPersistentData().getBoolean("cherry_ready")) {
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        if (!variables.cherry_ready) {
             player.displayClientMessage(Component.literal("请先装备樱桃锁种！"), true);
             return;
         }
@@ -75,8 +77,12 @@ public class CherryTransformationRequestPacket {
         }
 
         /* --------------------------------- 重复变身检测 --------------------------------- */
-        // 这里用樱桃装甲的头盔做判定
-        if (player.getInventory().armor.get(3).getItem() == ModItems.SIGURD_HELMET.get()) {
+        // 检查是否装备全套樱桃装甲
+        boolean isCherryArmor = player.getInventory().armor.get(3).getItem() == ModItems.SIGURD_HELMET.get() &&
+                                player.getInventory().armor.get(2).getItem() == ModItems.SIGURD_CHESTPLATE.get() &&
+                                player.getInventory().armor.get(1).getItem() == ModItems.SIGURD_LEGGINGS.get();
+        
+        if (isCherryArmor) {
             System.out.println("玩家已身着樱桃装甲，忽略再次变身");
             return;
         }

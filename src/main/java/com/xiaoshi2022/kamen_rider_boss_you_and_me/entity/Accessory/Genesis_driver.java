@@ -52,6 +52,12 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
     private static final RawAnimation CHERRY_SCATTER = RawAnimation.begin().thenPlayAndHold("cherry_scatter");
     private static final RawAnimation CHERRY_MOVE = RawAnimation.begin().thenPlayAndHold("cherry_move");
 
+    // 桃子形态特有动画
+    private static final RawAnimation PEACH_TICK = RawAnimation.begin().thenPlayAndHold("peach_tick");
+    private static final RawAnimation PEACH_START = RawAnimation.begin().thenPlayAndHold("peach_start");
+    private static final RawAnimation PEACH_SCATTER = RawAnimation.begin().thenPlayAndHold("peach_scatter");
+    private static final RawAnimation PEACH_MOVE = RawAnimation.begin().thenPlayAndHold("peach_move");
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public boolean isActive = false;
     public boolean isShowing = false;
@@ -65,7 +71,8 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
         DEFAULT,
         LEMON,
         MELON,
-        CHERRY
+        CHERRY,
+        PEACH
     }
 
     public BeltMode currentMode = BeltMode.DEFAULT;
@@ -91,7 +98,11 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 .triggerableAnim("melon_tick", MELON_TICK)
                 .triggerableAnim("melon_start", MELON_START)
                 .triggerableAnim("melon_scatter", MELON_SCATTER)
-                .triggerableAnim("melon_move", MELON_MOVE));
+                .triggerableAnim("melon_move", MELON_MOVE)
+                .triggerableAnim("peach_tick", PEACH_TICK)
+                .triggerableAnim("peach_start", PEACH_START)
+                .triggerableAnim("peach_scatter", PEACH_SCATTER)
+                .triggerableAnim("peach_move", PEACH_MOVE));
     }
 
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {
@@ -106,6 +117,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 case LEMON -> "start";
                 case MELON -> "start";
                 case CHERRY -> "cherry_start";
+                case PEACH -> "peach_start";
                 default -> "start";
             };
 
@@ -117,6 +129,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             if (controller.getAnimationState() == AnimationController.State.STOPPED) {
                 isReleasing = false;
                 isShowing = false;
+                currentMode = BeltMode.DEFAULT;
                 return state.setAndContinue(IDLES);
             }
             return PlayState.CONTINUE;
@@ -125,10 +138,11 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
         // 处理变身序列
         if (isHenshining) {
             // 根据当前模式选择对应的move动画名称
-            String moveAnimation = switch (currentMode) {
+            String moveAnimation = switch (this.currentMode) {
                 case LEMON -> "move";
                 case MELON -> "melon_move";
                 case CHERRY -> "cherry_move";
+                case PEACH -> "peach_move";
                 default -> "move";
             };
 
@@ -137,6 +151,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 case LEMON -> SCATTER;
                 case MELON -> MELON_SCATTER;
                 case CHERRY -> CHERRY_SCATTER;
+                case PEACH -> PEACH_SCATTER;
                 default -> SCATTER;
             };
 
@@ -150,7 +165,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             if (currentAnim.equals(moveAnimation) &&
                     controller.getAnimationState() == AnimationController.State.STOPPED) {
 
-                if (currentMode == BeltMode.LEMON || currentMode == BeltMode.MELON || currentMode == BeltMode.CHERRY) {
+                if (currentMode == BeltMode.LEMON || currentMode == BeltMode.MELON || currentMode == BeltMode.CHERRY || currentMode == BeltMode.PEACH) {
                     return state.setAndContinue(scatterAnimation);
                 } else {
                     isHenshining = false;
@@ -162,7 +177,8 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             // 第三阶段：scatter完成后保持展示状态
             if ((currentMode == BeltMode.LEMON && "scatter".equals(currentAnim)) ||
                     (currentMode == BeltMode.MELON && "melon_scatter".equals(currentAnim)) ||
-                    (currentMode == BeltMode.CHERRY && "cherry_scatter".equals(currentAnim))) {
+                    (currentMode == BeltMode.CHERRY && "cherry_scatter".equals(currentAnim)) ||
+                    (currentMode == BeltMode.PEACH && "peach_scatter".equals(currentAnim))) {
                 if (controller.getAnimationState() == AnimationController.State.STOPPED) {
                     isHenshining = false;
                     isShowing = true;
@@ -200,19 +216,23 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             case LEMON -> "move";
             case MELON -> "move";
             case CHERRY -> "cherry_move";
+            case PEACH -> "peach_move";
             default -> "move";
         };
 
         // 只在服务端发送数据包
         if (!entity.level().isClientSide()) {
-            PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(
-                            entity.getId(), // 使用实体 ID
-                            moveAnimation,
-                            this.currentMode
-                    ),
-                    entity
-            );
+            // 只发送数据包给腰带的所有者
+            if (entity instanceof ServerPlayer player) {
+                PacketHandler.sendToClient(
+                        new BeltAnimationPacket(
+                                player.getId(),
+                                moveAnimation,
+                                this.currentMode
+                        ),
+                        player
+                );
+            }
         }
         // 无论客户端还是服务端都触发动画
         triggerAnim(entity, "controller", moveAnimation);
@@ -230,20 +250,24 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             case LEMON -> "start";
             case MELON -> "start";
             case CHERRY -> "cherry_start";
+            case PEACH -> "peach_start";
             default -> "start";
         };
 
         if (entity.level().isClientSide()) {
             this.triggerAnim(entity, "controller", releaseAnimation);
         } else {
-            PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(
-                            entity.getId(), // 使用 UUID
-                            releaseAnimation,
-                            this.currentMode
-                    ),
-                    entity
-            );
+            // 只发送数据包给腰带的所有者
+            if (entity instanceof ServerPlayer player) {
+                PacketHandler.sendToClient(
+                        new BeltAnimationPacket(
+                                player.getId(),
+                                releaseAnimation,
+                                this.currentMode
+                        ),
+                        player
+                );
+            }
         }
     }
 
@@ -268,11 +292,17 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
 
     public void startShowAnimation(LivingEntity holder) {
         if (!holder.level().isClientSide()) {
-            PacketHandler.sendToAll(new BeltAnimationPacket(
-                    holder.getId(), // 使用 UUID
-                    "show",
-                    this.currentMode
-            ));
+            // 只发送数据包给腰带的所有者
+            if (holder instanceof ServerPlayer player) {
+                PacketHandler.sendToClient(
+                        new BeltAnimationPacket(
+                                player.getId(),
+                                "show",
+                                this.currentMode
+                        ),
+                        player
+                );
+            }
         }
         triggerAnim(holder, "controller", "show");
     }
@@ -362,6 +392,10 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             case "cherry_start" -> CHERRY_START;
             case "cherry_scatter" -> CHERRY_SCATTER;
             case "cherry_move" -> CHERRY_MOVE;
+            case "peach_tick" -> PEACH_TICK;
+            case "peach_start" -> PEACH_START;
+            case "peach_scatter" -> PEACH_SCATTER;
+            case "peach_move" -> PEACH_MOVE;
             default -> IDLES;
         };
     }

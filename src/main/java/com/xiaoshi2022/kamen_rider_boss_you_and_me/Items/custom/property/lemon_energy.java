@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.lemonenergy.LemonEnergyRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
@@ -94,6 +95,13 @@ public class lemon_energy extends Item implements GeoItem {
             } else {
                 // 第二次右键点击 - 将锁种插入腰带
                 if (!level.isClientSide) {
+                    // 检查玩家是否已经装备了锁种（包括柠檬锁种）
+                    ItemStack beltStack = beltOptional.get().stack();
+                    Genesis_driver belt = (Genesis_driver) beltStack.getItem();
+                    if (belt.getMode(beltStack) != Genesis_driver.BeltMode.DEFAULT) {
+                        player.sendSystemMessage(Component.literal("您的腰带中已装有锁种，请先解除变身！"));
+                        return InteractionResultHolder.success(stack);
+                    }
                     // 播放LOCK ON音效
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
                             ModBossSounds.LEMON_LOCKONBY.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -101,13 +109,15 @@ public class lemon_energy extends Item implements GeoItem {
                     stack.shrink(1);
 
                     // 更新腰带为柠檬形态
-                    ItemStack beltStack = beltOptional.get().stack();
-                    Genesis_driver belt = (Genesis_driver) beltStack.getItem();
-                    belt.setMode(beltStack, Genesis_driver.BeltMode.LEMON);
+                    ItemStack beltStackx = beltOptional.get().stack();
+					Genesis_driver beltx = (Genesis_driver) beltStackx.getItem();
+                    beltx.setMode(beltStack, Genesis_driver.BeltMode.LEMON);
 
-                    // 设置玩家准备状态和时间戳
-                    player.getPersistentData().putBoolean("lemon_ready", true);
-                    player.getPersistentData().putLong("lemon_ready_time", level.getGameTime());
+                    // 获取PlayerVariables实例并设置状态
+                    KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                    variables.lemon_ready = true;
+                    variables.lemon_ready_time = level.getGameTime();
+                    variables.syncPlayerVariables(player); // 同步变量到客户端
 
                     // 发送客户端提示消息
                     player.sendSystemMessage(Component.literal("柠檬锁种已装载！按变身键变身"));

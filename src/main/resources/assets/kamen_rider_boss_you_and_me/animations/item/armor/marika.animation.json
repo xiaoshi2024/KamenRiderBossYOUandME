@@ -1,0 +1,21 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"animation_length": 0.0417,
+			"bones": {
+				"bone3": {
+					"rotation": {
+						"vector": [6.5, 0, 0]
+					}
+				},
+				"bone4": {
+					"rotation": {
+						"vector": [-6, 0, 0]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

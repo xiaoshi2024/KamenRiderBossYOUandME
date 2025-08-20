@@ -187,5 +187,23 @@
         "stream": false
       }
     ]
+  },
+  "peach_arms": {
+    "subtitle": "Peach energy arms~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:peach_arms",
+        "stream": false
+      }
+    ]
+  },
+  "peach_energy": {
+    "subtitle": "Peach energy~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:peach_energy",
+        "stream": false
+      }
+    ]
   }
 }

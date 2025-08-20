@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.BananasBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.Lemonx;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.cherryx;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.melonx;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.Peachx;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,6 +33,12 @@ public class ModBlocks {
                     .lightLevel(state -> 15)));
     public static final RegistryObject<Block> CHERRYX_BLOCK = BLOCKS.register("cherryx",
             () -> new cherryx(Block.Properties.of()
+                    .strength(2.0f)
+                    .noOcclusion()
+                    .lightLevel(state -> 15)));
+
+    public static final RegistryObject<Block> PEACHX_BLOCK = BLOCKS.register("peachx",
+            () -> new Peachx(Block.Properties.of()
                     .strength(2.0f)
                     .noOcclusion()
                     .lightLevel(state -> 15)));

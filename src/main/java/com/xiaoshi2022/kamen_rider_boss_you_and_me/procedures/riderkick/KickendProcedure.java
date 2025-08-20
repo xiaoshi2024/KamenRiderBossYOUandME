@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick.SetupAnimationsProcedure;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
@@ -48,155 +49,107 @@ public class KickendProcedure {
 	private static void execute(@Nullable Event event, LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.BARON_LEMON_HELMET.get()
-				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true && entity.onGround()) {
-			{
-				boolean _setval = false;
-				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-					capability.kcik = _setval;
-					capability.syncPlayerVariables(entity);
-				});
-			}
-			if (world instanceof Level _level && !_level.isClientSide())
-				_level.explode(null, x, y, z, 4, Level.ExplosionInteraction.NONE);
-			if (world.isClientSide()) {
-				if (entity instanceof AbstractClientPlayer player) {
-					var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
-					if (animation != null) {
-						animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "steadily"))));
-					}
+
+		// 检查所有符合条件的头盔
+		if (isValidHelmet(entity) &&
+				(entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true &&
+				entity.onGround()) {
+
+			handleKickEnd(world, x, y, z, entity);
+		}
+	}
+
+	// 提取头盔检测逻辑到单独的方法
+	private static boolean isValidHelmet(Entity entity) {
+		if (!(entity instanceof LivingEntity livingEntity)) return false;
+
+		ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
+		return helmet.getItem() == ModItems.BARON_LEMON_HELMET.get() ||
+				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
+				helmet.getItem() == ModItems.MARIKA_HELMET.get() ||
+				helmet.getItem() == ModItems.DUKE_HELMET.get() ||
+				helmet.getItem() == ModItems.SIGURD_HELMET.get();
+	}
+
+	private static void handleKickEnd(LevelAccessor world, double x, double y, double z, Entity entity) {
+		// 设置需要爆炸的标志
+		setPlayerVariable(entity, "needExplode", true);
+
+		// 重置踢击状态
+		setPlayerVariable(entity, "kcik", false);
+
+		// 创建爆炸（现在可以安全地创建，因为伤害会被拦截）
+		if (world instanceof Level _level && !_level.isClientSide()) {
+			_level.explode(null, x, y, z, 4, Level.ExplosionInteraction.NONE);
+		}
+
+		// 处理动画等其他逻辑
+		if (world.isClientSide()) {
+			if (entity instanceof AbstractClientPlayer player) {
+				var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
+				if (animation != null) {
+					animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "steadily"))));
 				}
-			}
-			if (!world.isClientSide()) {
-				if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
-					List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
-					synchronized (connections) {
-						Iterator<Connection> iterator = connections.iterator();
-						while (iterator.hasNext()) {
-							Connection connection = iterator.next();
-							if (!connection.isConnecting() && connection.isConnected())
-								kamen_rider_boss_you_and_me.PACKET_HANDLER.sendTo(new SetupAnimationsProcedure.kamen_rider_boss_you_and_meModAnimationMessage(Component.literal("steadily"), entity.getId(), true), connection, NetworkDirection.PLAY_TO_CLIENT);
-						}
-					}
-				}
-			}
-			entity.makeStuckInBlock(Blocks.AIR.defaultBlockState(), new Vec3(0.25, 0.05, 0.25));
-			// 仅在服务端执行
-			if (!world.isClientSide() && entity instanceof Player player) {
-				// 获取当前饱食度
-				int newFoodLevel = player.getFoodData().getFoodLevel() - 3;
-				// 保证不小于 0
-				newFoodLevel = Math.max(newFoodLevel, 0);
-				// 直接设置
-				player.getFoodData().setFoodLevel(newFoodLevel);
-			}
-			{
-				boolean _setval = false;
-				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-					capability.wudi = _setval;
-					capability.syncPlayerVariables(entity);
-				});
 			}
 		}
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()
-				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true && entity.onGround()) {
-			{
-				boolean _setval = false;
-				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-					capability.kcik = _setval;
-					capability.syncPlayerVariables(entity);
-				});
-			}
-			if (world instanceof Level _level && !_level.isClientSide())
-				_level.explode(null, x, y, z, 4, Level.ExplosionInteraction.NONE);
-			if (world.isClientSide()) {
-				if (entity instanceof AbstractClientPlayer player) {
-					var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
-					if (animation != null) {
-						animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "steadily"))));
-					}
+
+		// 延迟重置无敌状态和爆炸标志
+		kamen_rider_boss_you_and_me.queueServerWork(5, () -> {
+			setPlayerVariable(entity, "wudi", false);
+			setPlayerVariable(entity, "needExplode", false);
+
+			// 重置踢击时间变量
+			entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+				capability.kickStartTime = 0L;
+				capability.kickStartY = 0.0D;
+				capability.syncPlayerVariables(entity);
+			});
+		});
+	}
+
+	// 处理动画的通用方法
+	private static void handleAnimation(LevelAccessor world, Entity entity, String animationName) {
+		// 客户端动画处理
+		if (world.isClientSide()) {
+			if (entity instanceof AbstractClientPlayer player) {
+				var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(
+						new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
+				if (animation != null) {
+					animation.setAnimation(new KeyframeAnimationPlayer(
+							PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", animationName))));
 				}
-			}
-			if (!world.isClientSide()) {
-				if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
-					List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
-					synchronized (connections) {
-						Iterator<Connection> iterator = connections.iterator();
-						while (iterator.hasNext()) {
-							Connection connection = iterator.next();
-							if (!connection.isConnecting() && connection.isConnected())
-								kamen_rider_boss_you_and_me.PACKET_HANDLER.sendTo(new SetupAnimationsProcedure.kamen_rider_boss_you_and_meModAnimationMessage(Component.literal("steadily"), entity.getId(), true), connection, NetworkDirection.PLAY_TO_CLIENT);
-						}
-					}
-				}
-			}
-			entity.makeStuckInBlock(Blocks.AIR.defaultBlockState(), new Vec3(0.25, 0.05, 0.25));
-			// 仅在服务端执行
-			if (!world.isClientSide() && entity instanceof Player player) {
-				// 获取当前饱食度
-				int newFoodLevel = player.getFoodData().getFoodLevel() - 3;
-				// 保证不小于 0
-				newFoodLevel = Math.max(newFoodLevel, 0);
-				// 直接设置
-				player.getFoodData().setFoodLevel(newFoodLevel);
-			}
-			{
-				boolean _setval = false;
-				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-					capability.wudi = _setval;
-					capability.syncPlayerVariables(entity);
-				});
 			}
 		}
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.SIGURD_HELMET.get()
-				&& (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true && entity.onGround()) {
-			{
-				boolean _setval = false;
-				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-					capability.kcik = _setval;
-					capability.syncPlayerVariables(entity);
-				});
-			}
-			if (world instanceof Level _level && !_level.isClientSide())
-				_level.explode(null, x, y, z, 4, Level.ExplosionInteraction.NONE);
-			if (world.isClientSide()) {
-				if (entity instanceof AbstractClientPlayer player) {
-					var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
-					if (animation != null) {
-						animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "steadily"))));
+
+		// 服务端动画同步
+		if (!world.isClientSide()) {
+			if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
+				List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
+				synchronized (connections) {
+					Iterator<Connection> iterator = connections.iterator();
+					while (iterator.hasNext()) {
+						Connection connection = iterator.next();
+						if (!connection.isConnecting() && connection.isConnected())
+							kamen_rider_boss_you_and_me.PACKET_HANDLER.sendTo(
+									new SetupAnimationsProcedure.kamen_rider_boss_you_and_meModAnimationMessage(
+											Component.literal(animationName), entity.getId(), true),
+									connection, NetworkDirection.PLAY_TO_CLIENT);
 					}
 				}
-			}
-			if (!world.isClientSide()) {
-				if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
-					List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
-					synchronized (connections) {
-						Iterator<Connection> iterator = connections.iterator();
-						while (iterator.hasNext()) {
-							Connection connection = iterator.next();
-							if (!connection.isConnecting() && connection.isConnected())
-								kamen_rider_boss_you_and_me.PACKET_HANDLER.sendTo(new SetupAnimationsProcedure.kamen_rider_boss_you_and_meModAnimationMessage(Component.literal("steadily"), entity.getId(), true), connection, NetworkDirection.PLAY_TO_CLIENT);
-						}
-					}
-				}
-			}
-			entity.makeStuckInBlock(Blocks.AIR.defaultBlockState(), new Vec3(0.25, 0.05, 0.25));
-			// 仅在服务端执行
-			if (!world.isClientSide() && entity instanceof Player player) {
-				// 获取当前饱食度
-				int newFoodLevel = player.getFoodData().getFoodLevel() - 3;
-				// 保证不小于 0
-				newFoodLevel = Math.max(newFoodLevel, 0);
-				// 直接设置
-				player.getFoodData().setFoodLevel(newFoodLevel);
-			}
-			{
-				boolean _setval = false;
-				entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-					capability.wudi = _setval;
-					capability.syncPlayerVariables(entity);
-				});
 			}
 		}
+	}
+
+	// 设置玩家变量的通用方法
+	// 设置玩家变量的通用方法
+	private static void setPlayerVariable(Entity entity, String variableName, boolean value) {
+		entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+			switch (variableName) {
+				case "kcik" -> capability.kcik = value;
+				case "wudi" -> capability.wudi = value;
+				case "needExplode" -> capability.needExplode = value;
+			}
+			capability.syncPlayerVariables(entity);
+		});
 	}
 }

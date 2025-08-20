@@ -5,6 +5,7 @@ public final class RiderTypes {
     public static final String MELON_ENERGY = "MELON_ENERGY";
     public static final String BANANA       = "BANANA";
     public static final String CHERRY_ENERGY = "CHERRY_ENERGY";
+    public static final String PEACH_ENERGY = "PEACH_ENERGY";
 
     private RiderTypes() {}
 }

@@ -31,6 +31,7 @@ public class ModTab {
                 output.accept(GENESIS_DRIVER.get());
                 output.accept(BANANAFRUIT.get());
                 output.accept(LEMON_ENERGY.get());
+                output.accept(PEACH_ENERGY.get());
             })).build());
     public static final RegistryObject<CreativeModeTab> KINDS_TAB = TABS.register("kamen_rider_boss_you_and_me_kinds_tab", () -> CreativeModeTab.builder()
             .icon(() -> INVES_MEAT.get().getDefaultInstance())

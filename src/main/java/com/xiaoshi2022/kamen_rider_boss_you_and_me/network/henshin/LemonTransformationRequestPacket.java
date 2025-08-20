@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driv
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin.HeartCoreEvent;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
@@ -66,14 +67,39 @@ public class LemonTransformationRequestPacket {
         ItemStack beltStack = genesisDriver.stack();
         Genesis_driver belt = (Genesis_driver) beltStack.getItem();
 
-        // 检查玩家是否已经装备了柠檬变身盔甲
-        if (baron_lemonItem.isArmorEquipped(player, ModItems.BARON_LEMON_HELMET.get())) {
-            System.out.println("玩家已经装备了柠檬变身盔甲，不允许再次变身");
+        // 检查玩家是否已经装备了变身盔甲
+        boolean isBaronLemonArmor = player.getInventory().armor.get(3).is(ModItems.BARON_LEMON_HELMET.get()) &&
+                                    player.getInventory().armor.get(2).is(ModItems.BARON_LEMON_CHESTPLATE.get()) &&
+                                    player.getInventory().armor.get(1).is(ModItems.BARON_LEMON_LEGGINGS.get());
+        
+        boolean isDukeArmor = player.getInventory().armor.get(3).is(ModItems.DUKE_HELMET.get()) &&
+                             player.getInventory().armor.get(2).is(ModItems.DUKE_CHESTPLATE.get()) &&
+                             player.getInventory().armor.get(1).is(ModItems.DUKE_LEGGINGS.get());
+        
+        if (isBaronLemonArmor || isDukeArmor) {
+            System.out.println("玩家已经装备了变身盔甲，不允许再次变身");
             return;
         }
 
+        // 检测玩家副手是否持有香蕉锁种
+        boolean hasBananaLockseed = !player.getOffhandItem().isEmpty() && 
+                                    player.getOffhandItem().getItem() == ModItems.BANANAFRUIT.get();
+
+        // 根据是否持有香蕉锁种选择不同的变身音效和形态类型
+        SoundEvent sound;
+        String transformationType;
+        if (hasBananaLockseed) {
+            sound = ModBossSounds.LEMON_BARON.get();
+            transformationType = "BARON_LEMON";
+        } else {
+            // 使用公爵形态音效（假设已存在，如果没有需要添加）
+            sound = ModBossSounds.LEMON_BARON.get(); // 临时使用相同音效
+            transformationType = "DUKE";
+        }
+
         // 检查柠檬锁种准备状态
-        if (!player.getPersistentData().getBoolean("lemon_ready")) {
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        if (!variables.lemon_ready) {
             player.sendSystemMessage(Component.literal("请先装备柠檬锁种！"));
             return;
         }
@@ -102,23 +128,26 @@ public class LemonTransformationRequestPacket {
         // 动画已由startHenshinAnimation方法内部处理，无需额外发送数据包
 
         // 播放变身音效
-        SoundEvent sound = ModBossSounds.LEMON_BARON.get();
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                 sound, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-        // 触发变身效果
-        new HeartCoreEvent(player, "LEMON_ENERGY");
+        // 触发变身效果，并传入形态类型
+        new HeartCoreEvent(player, "LEMON_ENERGY" + ":" + transformationType);
 
         // 设置玩家为已变身状态
         belt.isEquipped = true;
         belt.isHenshining = true;
 
         // 清除柠檬锁种准备状态
-        player.getPersistentData().remove("lemon_ready");
-        player.getPersistentData().remove("lemon_ready_time");
+        variables.lemon_ready = false;
+        variables.syncPlayerVariables(player); // 同步变量到客户端
 
-        // 发送变身成功提示
-        player.sendSystemMessage(Component.literal("柠檬能量已激活！"));
+        // 根据形态类型发送不同的变身成功提示
+        if (hasBananaLockseed) {
+            player.sendSystemMessage(Component.literal("巴隆柠檬形态已激活！"));
+        } else {
+            player.sendSystemMessage(Component.literal("公爵形态已激活！"));
+        }
     }
 
     private static void clearLemonsEntities(ServerPlayer player) {

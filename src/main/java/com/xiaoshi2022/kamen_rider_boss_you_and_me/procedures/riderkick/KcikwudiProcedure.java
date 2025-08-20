@@ -1,6 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -12,10 +14,34 @@ import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber
 public class KcikwudiProcedure {
+
 	@SubscribeEvent
 	public static void onEntityAttacked(LivingHurtEvent event) {
-		if (event != null && event.getEntity() != null) {
+		if (event.getEntity() != null && event.getSource() != null) {
+			handleKickExplosionDamage(event);
 			execute(event, event.getEntity());
+		}
+	}
+
+	// 处理踢击爆炸伤害排除
+	private static void handleKickExplosionDamage(LivingHurtEvent event) {
+		Entity entity = event.getEntity();
+		DamageSource damageSource = event.getSource();
+
+		// 检查是否是爆炸伤害且来自玩家自己的踢击
+		if (damageSource.is(DamageTypes.EXPLOSION) && entity instanceof Player player) {
+			// 检查是否是踢击造成的爆炸（通过needExplode标志）
+			if (player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+					.orElse(new KRBVariables.PlayerVariables()).needExplode) {
+				// 取消对自己的爆炸伤害
+				event.setCanceled(true);
+
+				// 立即重置标志
+				player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+					capability.needExplode = false;
+					capability.syncPlayerVariables(player);
+				});
+			}
 		}
 	}
 
@@ -26,7 +52,12 @@ public class KcikwudiProcedure {
 	private static void execute(@Nullable Event event, Entity entity) {
 		if (entity == null)
 			return;
-		if ((entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).wudi == true && entity instanceof Player == true) {
+
+		// 原有的无敌状态处理
+		if (entity instanceof Player player &&
+				player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+						.orElse(new KRBVariables.PlayerVariables()).wudi) {
+
 			if (event != null && event.isCancelable()) {
 				event.setCanceled(true);
 			}

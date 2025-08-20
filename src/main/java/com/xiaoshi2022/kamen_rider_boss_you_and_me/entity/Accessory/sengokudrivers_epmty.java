@@ -169,11 +169,13 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
                 }
             }
         } else {
-            // 服务器端同步给所有客户端
-            PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(entity.getId(), animName, this.currentMode),
-                    entity
-            );
+            // 服务器端只发送给实体所有者
+            if (entity instanceof ServerPlayer player) {
+                PacketHandler.sendToClient(
+                        new BeltAnimationPacket(entity.getId(), animName, this.currentMode),
+                        player
+                );
+            }
         }
     }
 
@@ -187,12 +189,17 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
         String animationName = this.currentMode == BeltMode.BANANA ? "banana_idle" : "show";
 
         if (!slotContext.entity().level().isClientSide()) {
-            // 发送数据包到客户端，触发动画
-            PacketHandler.sendToAll(new BeltAnimationPacket(
-                    slotContext.entity().getId(),
-                    animationName, // 根据形态选择动画
-                    this.currentMode
-            ));
+            // 只发送数据包给腰带的所有者
+            if (slotContext.entity() instanceof ServerPlayer player) {
+                PacketHandler.sendToClient(
+                        new BeltAnimationPacket(
+                                player.getId(),
+                                animationName, // 根据形态选择动画
+                                this.currentMode
+                        ),
+                        player
+                );
+            }
         } else {
             // 如果已经在客户端，直接触发动画
             triggerAnim(slotContext.entity(), "controller", animationName);
@@ -205,11 +212,17 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
 
         // 当玩家卸下腰带时，播放 IDLES 动画
         if (!slotContext.entity().level().isClientSide()) {
-            PacketHandler.sendToAll(new BeltAnimationPacket(
-                    slotContext.entity().getId(),
-                    "idles",
-                    this.currentMode
-            ));
+            // 只发送数据包给腰带的所有者
+            if (slotContext.entity() instanceof ServerPlayer player) {
+                PacketHandler.sendToClient(
+                        new BeltAnimationPacket(
+                                player.getId(),
+                                "idles",
+                                this.currentMode
+                        ),
+                        player
+                );
+            }
         } else {
             // 如果已经在客户端，直接触发动画
             triggerAnim(slotContext.entity(), "controller", "idles");

@@ -17,6 +17,7 @@
   "item.kamen_rider_boss_you_and_me.bananafruit": "香蕉锁种",
   "item.kamen_rider_boss_you_and_me.genesis_driver": "创世纪驱动器",
   "item.kamen_rider_boss_you_and_me.lemon_energy": "柠檬能量锁种",
+  "item.kamen_rider_boss_you_and_me.peach_energy": "桃子能量锁种",
   "item.kamen_rider_boss_you_and_me.globalism":"古罗巴里萨",
 
 
@@ -69,6 +70,7 @@
   "block.kamen_rider_boss_you_and_me.lemonx": "裂缝-柠檬",
   "block.kamen_rider_boss_you_and_me.melonx": "裂缝-蜜瓜",
   "block.kamen_rider_boss_you_and_me.cherryx": "裂缝-樱桃",
+  "block.kamen_rider_boss_you_and_me.peachx": "裂缝-蜜桃",
 
   "msg.kamen_rider.inves_controlled": "异域者已控制！",
   "msg.kamen_rider.inves_protect": "保护领主巴隆！",

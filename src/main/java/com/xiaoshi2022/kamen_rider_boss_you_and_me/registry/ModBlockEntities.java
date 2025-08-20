@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.BananasEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.LemonxEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.cherryxEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.melonxEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.PeachxEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
@@ -33,5 +34,10 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("cherryx_entity",
                     () -> BlockEntityType.Builder.of(cherryxEntity::new,
                             ModBlocks.CHERRYX_BLOCK.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<PeachxEntity>> PEACHX_ENTITY =
+            BLOCK_ENTITIES.register("peachx_entity",
+                    () -> BlockEntityType.Builder.of(PeachxEntity::new,
+                            ModBlocks.PEACHX_BLOCK.get()).build(null));
 
 }

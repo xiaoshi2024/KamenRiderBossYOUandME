@@ -1,9 +1,11 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.cheryy;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -57,14 +59,19 @@ public class OverrideCherryUse {
                             ModBlocks.CHERRYX_BLOCK.get().defaultBlockState(),
                             3);
                     level.playSound(null, above,
-                            // 注意：樱桃音效尚未定义，这里临时使用柠檬音效
-                            ModBossSounds.LEMON_ENERGY.get(),
+                            // 这里放樱桃专属音效
+                            ModSounds.CHERYYENERGY.get(),
                             SoundSource.PLAYERS, 1, 1);
                 }
                 player.displayClientMessage(Component.literal("再次点击装备樱桃锁种"), true);
             } else {
                 // 第二次右键
                 if (!level.isClientSide) {
+                    // 检查玩家是否已经装备了其他锁种
+                    if (com.xiaoshi2022.kamen_rider_boss_you_and_me.util.BeltUtils.hasActiveLockseed(player)) {
+                        player.sendSystemMessage(Component.literal("您已经装备了其他锁种，请先解除变身！"));
+                        return;
+                    }
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
                             ModBossSounds.LEMON_LOCKONBY.get(),
                             SoundSource.PLAYERS, 1, 1);
@@ -74,9 +81,11 @@ public class OverrideCherryUse {
                     Genesis_driver genesisDriver = (Genesis_driver) beltStack.getItem();
                     genesisDriver.setMode(beltStack, Genesis_driver.BeltMode.CHERRY);
 
-                    // 设置樱桃就绪标记
-                    player.getPersistentData().putBoolean("cherry_ready", true);
-                    player.getPersistentData().putLong("cherry_ready_time", level.getGameTime());
+                    // 获取PlayerVariables实例并设置状态
+                    KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                    variables.cherry_ready = true;
+                    variables.cherry_ready_time = level.getGameTime();
+                    variables.syncPlayerVariables(player); // 同步变量到客户端
 
                     // 给玩家反馈
                     player.displayClientMessage(Component.literal("樱桃锁种已装载！按变身键变身"), true);

@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.melonxEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin.MelonRiderHenshin;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
@@ -63,14 +64,19 @@ public class MelonTransformationRequestPacket {
         Genesis_driver belt = (Genesis_driver) beltStack.getItem();
 
         /* --------------------------------- 重复变身检测 --------------------------------- */
-        // 这里用你蜜瓜装甲的头盔做判定，和柠檬同理
-        if (player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
+        // 检查是否装备全套蜜瓜装甲
+        boolean isMelonArmor = player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() &&
+                               player.getInventory().armor.get(2).getItem() == ModItems.ZANGETSU_SHIN_CHESTPLATE.get() &&
+                               player.getInventory().armor.get(1).getItem() == ModItems.ZANGETSU_SHIN_LEGGINGS.get();
+        
+        if (isMelonArmor) {
             System.out.println("玩家已身着蜜瓜装甲，忽略再次变身");
             return;
         }
 
         /* --------------------------------- 检查蜜瓜锁种准备状态 --------------------------------- */
-        if (!player.getPersistentData().getBoolean("melon_ready")) {
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        if (!variables.melon_ready) {
             player.sendSystemMessage(Component.literal("请先装备蜜瓜锁种！"));
             return;
         }
@@ -117,8 +123,8 @@ public class MelonTransformationRequestPacket {
         belt.isHenshining = true;
 
         /* --------------------------------- 清除蜜瓜锁种准备状态 --------------------------------- */
-        player.getPersistentData().remove("melon_ready");
-        player.getPersistentData().remove("melon_ready_time");
+        variables.melon_ready = false;
+        variables.syncPlayerVariables(player); // 同步变量到客户端
 
         /* --------------------------------- 发送变身成功提示 --------------------------------- */
         player.sendSystemMessage(Component.literal("蜜瓜能量已激活！"));

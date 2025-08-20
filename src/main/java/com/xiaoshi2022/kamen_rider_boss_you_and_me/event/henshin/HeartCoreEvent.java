@@ -41,9 +41,27 @@ public class HeartCoreEvent {
         ItemStack[] originalArmor = saveCurrentArmor(player);
 
         // 根据骑士类型装备不同装甲
-        switch(riderType) {
+        String baseType = riderType;
+        String subType = null;
+
+        // 解析带冒号的类型字符串
+        if (riderType.contains(":")) {
+            String[] parts = riderType.split(":");
+            baseType = parts[0];
+            if (parts.length > 1) {
+                subType = parts[1];
+            }
+        }
+
+        switch(baseType) {
             case "LEMON_ENERGY":
-                equipLemonEnergyArmor(player);
+                if ("BARON_LEMON".equals(subType)) {
+                    equipBaronLemonArmor(player);
+                } else if ("DUKE".equals(subType)) {
+                    equipDukeArmor(player);
+                } else {
+                    equipLemonEnergyArmor(player);
+                }
                 break;
             case "BARONS":
             default:
@@ -57,8 +75,8 @@ public class HeartCoreEvent {
         triggerGenesisHenshinAnimation(player);
     }
 
-    // 装备柠檬能量装甲
-    private void equipLemonEnergyArmor(Player player) {
+    // 装备巴隆柠檬装甲
+    private void equipBaronLemonArmor(Player player) {
         ItemStack helmet = new ItemStack(ModItems.BARON_LEMON_HELMET.get());
         ItemStack chestplate = new ItemStack(ModItems.BARON_LEMON_CHESTPLATE.get());
         ItemStack leggings = new ItemStack(ModItems.BARON_LEMON_LEGGINGS.get());
@@ -66,6 +84,23 @@ public class HeartCoreEvent {
         player.getInventory().armor.set(3, helmet);
         player.getInventory().armor.set(2, chestplate);
         player.getInventory().armor.set(1, leggings);
+    }
+
+    // 装备公爵装甲
+    private void equipDukeArmor(Player player) {
+        // 假设公爵形态的盔甲物品已存在，如果没有需要添加
+        ItemStack helmet = new ItemStack(ModItems.DUKE_HELMET.get());
+        ItemStack chestplate = new ItemStack(ModItems.DUKE_CHESTPLATE.get());
+        ItemStack leggings = new ItemStack(ModItems.DUKE_LEGGINGS.get());
+
+        player.getInventory().armor.set(3, helmet);
+        player.getInventory().armor.set(2, chestplate);
+        player.getInventory().armor.set(1, leggings);
+    }
+
+    // 装备通用柠檬能量装甲（保留原有方法，向后兼容）
+    private void equipLemonEnergyArmor(Player player) {
+        equipBaronLemonArmor(player); // 默认使用巴隆柠檬装甲
     }
 
     // 触发创世纪驱动器变身动画

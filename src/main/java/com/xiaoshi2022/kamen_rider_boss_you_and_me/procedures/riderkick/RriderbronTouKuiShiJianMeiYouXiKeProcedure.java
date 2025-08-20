@@ -12,17 +12,38 @@ public class RriderbronTouKuiShiJianMeiYouXiKeProcedure {
 	public static void execute(Entity entity) {
 		if (entity == null)
 			return;
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.BARON_LEMON_HELMET.get()) {
-			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 60, 1, false, false));
+
+		ItemStack helmet = getHelmet(entity);
+
+		// 检查所有符合条件的头盔
+		if (helmet.getItem() == ModItems.BARON_LEMON_HELMET.get() ||
+				helmet.getItem() == ModItems.DUKE_HELMET.get() ||
+				helmet.getItem() == ModItems.MARIKA_HELMET.get() ||
+				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
+				helmet.getItem() == ModItems.SIGURD_HELMET.get()) {
+
+			addInvisibilityEffect(entity);
 		}
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
-			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 60, 1, false, false));
+	}
+
+	// 获取头盔
+	private static ItemStack getHelmet(Entity entity) {
+		if (entity instanceof LivingEntity livingEntity) {
+			return livingEntity.getItemBySlot(EquipmentSlot.HEAD);
 		}
-		if ((entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).getItem() == ModItems.SIGURD_HELMET.get()) {
-			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 60, 1, false, false));
+		return ItemStack.EMPTY;
+	}
+
+	// 添加隐身效果
+	private static void addInvisibilityEffect(Entity entity) {
+		if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide()) {
+			livingEntity.addEffect(new MobEffectInstance(
+					MobEffects.INVISIBILITY,
+					60,
+					1,
+					false,
+					false
+			));
 		}
 	}
 }

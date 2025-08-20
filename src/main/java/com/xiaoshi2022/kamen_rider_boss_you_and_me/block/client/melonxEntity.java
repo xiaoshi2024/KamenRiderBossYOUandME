@@ -19,7 +19,7 @@ public class melonxEntity  extends BlockEntity implements GeoBlockEntity {
 
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private int lifespan = 3600; // 40 tick lifespan (2 seconds)
+    private int lifespan = 600; // 40 tick lifespan (2 seconds)
 
     public melonxEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MELONSX_ENTITY.get(), pos, state);

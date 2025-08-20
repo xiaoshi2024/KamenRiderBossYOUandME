@@ -65,8 +65,12 @@ public class BananaTransformationRequestPacket {
         ItemStack beltStack = beltOptional.stack();
         sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
 
-        // 检查玩家是否已经装备了香蕉变身盔甲
-        if (rider_baronsItem.isArmorEquipped(player, ModItems.RIDER_BARONS_HELMET.get())) {
+        // 检查玩家是否已经装备了全套香蕉变身盔甲
+        boolean isFullBananaArmor = rider_baronsItem.isArmorEquipped(player, ModItems.RIDER_BARONS_HELMET.get()) &&
+                                    rider_baronsItem.isArmorEquipped(player, ModItems.RIDER_BARONS_CHESTPLATE.get()) &&
+                                    rider_baronsItem.isArmorEquipped(player, ModItems.RIDER_BARONS_LEGGINGS.get());
+        
+        if (isFullBananaArmor) {
             System.out.println("玩家已经装备了香蕉变身盔甲，不允许再次变身");
             return;
         }

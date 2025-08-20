@@ -2,9 +2,11 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ReleaseBeltPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MarikaTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MelonTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
@@ -40,10 +42,11 @@ public class KeybindHandler {
             Player player = Minecraft.getInstance().player;
             if (player == null) return;
 
-            // 检查樱桃锁种超时
+            // 检查各锁种超时
             checkCherryLockSeedTimeout(player);
             checkLemonLockSeedTimeout(player);
             checkMelonLockSeedTimeout(player);
+            checkPeachLockSeedTimeout(player);
 
             if (KeyBinding.RELIEVE_KEY.isDown() && !keyCooldown) {
                 keyCooldown = true;
@@ -68,20 +71,23 @@ public class KeybindHandler {
             case LEMON -> "GENESIS";
             case MELON -> "GENESIS_MELON";
             case CHERRY -> "GENESIS_CHERRY";
+            case PEACH -> "GENESIS_PEACH";
             default -> "GENESIS";   // 或者 DEFAULT 时直接 return ""
         };
     }
 
     private static void checkCherryLockSeedTimeout(Player player) {
+        // 获取PlayerVariables实例
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+
         // 如果玩家有樱桃就绪标记且不在冷却中
-        if (player.getPersistentData().getBoolean("cherry_ready") && !keyCooldown) {
-            long readyTime = player.getPersistentData().getLong("cherry_ready_time");
+        if (variables.cherry_ready && !keyCooldown) {
             long currentTime = player.level().getGameTime();
 
             // 如果超过30秒未变身，清除标记
-            if (currentTime - readyTime > 600) { // 30秒 = 600 tick
-                player.getPersistentData().remove("cherry_ready");
-                player.getPersistentData().remove("cherry_ready_time");
+            if (currentTime - variables.cherry_ready_time > 600) { // 30秒 = 600 tick
+                variables.cherry_ready = false;
+                variables.cherry_ready_time = 0L;
                 player.displayClientMessage(Component.literal("樱桃锁种已过期，请重新装备"), true);
             }
         }
@@ -89,23 +95,41 @@ public class KeybindHandler {
 
     // 检查柠檬锁种超时
     private static void checkLemonLockSeedTimeout(Player player) {
-        if (player.getPersistentData().getBoolean("lemon_ready")) {
-            long readyTime = player.getPersistentData().getLong("lemon_ready_time");
-            if (player.level().getGameTime() - readyTime > 600) { // 30秒 = 600tick
-                player.getPersistentData().remove("lemon_ready");
-                player.getPersistentData().remove("lemon_ready_time");
+        // 获取PlayerVariables实例
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+
+        if (variables.lemon_ready) {
+            if (player.level().getGameTime() - variables.lemon_ready_time > 600) { // 30秒 = 600tick
+                variables.lemon_ready = false;
+                variables.lemon_ready_time = 0L;
                 player.displayClientMessage(Component.literal("柠檬锁种已过期！"), true);
+            }
+        }
+    }
+
+    // 检查桃子锁种超时
+    private static void checkPeachLockSeedTimeout(Player player) {
+        // 获取PlayerVariables实例
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+
+        if (variables.peach_ready) {
+            if (player.level().getGameTime() - variables.peach_ready_time > 600) { // 30秒 = 600tick
+                variables.peach_ready = false;
+                variables.peach_ready_time = 0L;
+                player.displayClientMessage(Component.literal("桃子锁种已过期！"), true);
             }
         }
     }
 
     // 检查蜜瓜锁种超时
     private static void checkMelonLockSeedTimeout(Player player) {
-        if (player.getPersistentData().getBoolean("melon_ready")) {
-            long readyTime = player.getPersistentData().getLong("melon_ready_time");
-            if (player.level().getGameTime() - readyTime > 600) { // 30秒 = 600tick
-                player.getPersistentData().remove("melon_ready");
-                player.getPersistentData().remove("melon_ready_time");
+        // 获取PlayerVariables实例
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+
+        if (variables.melon_ready) {
+            if (player.level().getGameTime() - variables.melon_ready_time > 600) { // 30秒 = 600tick
+                variables.melon_ready = false;
+                variables.melon_ready_time = 0L;
                 player.displayClientMessage(Component.literal("蜜瓜锁种已过期！"), true);
             }
         }
@@ -175,6 +199,23 @@ public class KeybindHandler {
                                         new CherryTransformationRequestPacket(player.getUUID()));
                             }
                         }
+                        case PEACH -> {
+                            // 先判断是变身还是解除
+                            boolean isTransformed = 
+                                    player.getInventory().armor.get(3).getItem() == ModItems.MARIKA_HELMET.get();
+                            if (isTransformed) {
+                                // 解除
+                                PacketHandler.sendToServer(
+                                        new TransformationRequestPacket(player.getUUID(), "GENESIS_PEACH", true));
+                                belt.startReleaseAnimation(player);
+                                delayTicks = 40;
+                                delayedBeltStack = beltStack.copy();
+                            } else {
+                                // 变身
+                                PacketHandler.sendToServer(
+                                        new MarikaTransformationRequestPacket(player.getUUID()));
+                            }
+                        }
                         default -> {}
                     }
                 });
@@ -200,7 +241,9 @@ public class KeybindHandler {
             case "GENESIS"         -> handleGenesisBeltRelease(player);   // 柠檬
             case "GENESIS_MELON"   -> handleMelonRelease(player);         // 蜜瓜
             case "GENESIS_CHERRY"  -> handleCherryRelease(player);        // 樱桃
+            case "GENESIS_PEACH"   -> handlePeachRelease(player);         // 桃子
             case "BARONS"          -> handleBaronsBeltRelease(player);    // 香蕉
+            case "DUKE"            -> handleDukeBeltRelease(player);      // 公爵
         }
     }
 
@@ -231,7 +274,8 @@ public class KeybindHandler {
                         "kamen_rider_boss_you_and_me",
                         "lemon_lockonby"
                 );
-                PacketHandler.sendToAllTracking(
+                // 只发送给当前玩家
+                PacketHandler.sendToClient(
                         new SoundStopPacket(player.getId(), soundLoc),
                         player
                 );
@@ -285,7 +329,8 @@ public class KeybindHandler {
 
         // 3. 停止待机音效
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
-        PacketHandler.sendToAllTracking(new SoundStopPacket(player.getId(), soundLoc), player);
+        // 只发送给当前玩家
+        PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
         PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
 
@@ -329,7 +374,8 @@ public class KeybindHandler {
 
         // 3. 停止待机音效
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
-        PacketHandler.sendToAllTracking(new SoundStopPacket(player.getId(), soundLoc), player);
+        // 只发送给当前玩家
+        PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
         PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         // 4. 卸掉樱桃装甲
@@ -338,6 +384,50 @@ public class KeybindHandler {
         // 5. 返还樱桃锁种
         ItemStack cherryLockSeed = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY.get());
         if (!player.getInventory().add(cherryLockSeed)) player.spawnAtLocation(cherryLockSeed);
+
+        // 6. 重置腰带状态
+        belt.isEquipped = false;
+        belt.isHenshining = false;
+        player.inventoryMenu.broadcastChanges();
+    }
+
+    private static void handlePeachRelease(ServerPlayer player) {
+        Optional<SlotResult> curio = CuriosApi.getCuriosInventory(player)
+                .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof Genesis_driver));
+
+        if (curio.isEmpty()) return;
+
+        ItemStack beltStack = curio.get().stack();
+        Genesis_driver belt = (Genesis_driver) beltStack.getItem();
+
+        if (belt.getMode(beltStack) != Genesis_driver.BeltMode.PEACH) return;
+
+        // 1. 重置腰带模式
+        belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+        SlotResult slotResult = curio.get();
+        CurioUtils.updateCurioSlot(
+                player,
+                slotResult.slotContext().identifier(),
+                slotResult.slotContext().index(),
+                beltStack
+        );
+
+        // 2. 播放解除音效
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+
+        // 3. 停止待机音效
+        ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
+        // 只发送给当前玩家
+        PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
+        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
+
+        // 4. 卸掉Marika装甲
+        clearTransformationArmor(player);
+
+        // 5. 返还桃子锁种
+        ItemStack peachLockSeed = new ItemStack(ModItems.PEACH_ENERGY.get());
+        if (!player.getInventory().add(peachLockSeed)) player.spawnAtLocation(peachLockSeed);
 
         // 6. 重置腰带状态
         belt.isEquipped = false;
@@ -389,6 +479,21 @@ public class KeybindHandler {
                 player.inventoryMenu.broadcastChanges();
             }
         }
+    }
+
+    private static void handleDukeBeltRelease(ServerPlayer player) {
+        // 公爵解除变身逻辑
+        player.getInventory().armor.set(3, ItemStack.EMPTY); // 头盔
+        player.getInventory().armor.set(2, ItemStack.EMPTY); // 胸甲
+        player.getInventory().armor.set(1, ItemStack.EMPTY); // 护腿
+        player.getInventory().armor.set(0, ItemStack.EMPTY); // 靴子
+
+        // 清除公爵相关状态
+        player.getPersistentData().remove("duke_energy_sword_active");
+        player.getPersistentData().remove("duke_energy_shield_active");
+        player.getPersistentData().remove("duke_energy_sword_cooldown");
+        player.getPersistentData().remove("duke_tech_buff_time");
+
     }
 
     private static void clearTransformationArmor(ServerPlayer player) {

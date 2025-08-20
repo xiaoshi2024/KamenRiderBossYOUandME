@@ -62,7 +62,22 @@ public class  KRBVariables {
 			PlayerVariables clone = ((PlayerVariables) event.getEntity().getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
 			if (!event.isWasDeath()) {
 				clone.kcik = original.kcik;
-				clone.wudi = original.wudi;
+			clone.wudi = original.wudi;
+			clone.lastKickTime = original.lastKickTime;
+			clone.kickStartTime = original.kickStartTime;
+			clone.kickStartY = original.kickStartY;
+			clone.needExplode = original.needExplode;
+			// 复制锁种相关变量
+			clone.cherry_ready = original.cherry_ready;
+			clone.cherry_ready_time = original.cherry_ready_time;
+			clone.lemon_ready = original.lemon_ready;
+			clone.lemon_ready_time = original.lemon_ready_time;
+			clone.peach_ready = original.peach_ready;
+			clone.peach_ready_time = original.peach_ready_time;
+			clone.melon_ready = original.melon_ready;
+			clone.melon_ready_time = original.melon_ready_time;
+			clone.banana_ready = original.banana_ready;
+			clone.banana_ready_time = original.banana_ready_time;
 			}
 		}
 	}
@@ -99,7 +114,24 @@ public class  KRBVariables {
 
 	public static class PlayerVariables {
 		public boolean kcik = false;
+		public boolean needExplode = false;
 		public boolean wudi = false;
+		public boolean hasExploded = false;   // ← 新增
+		public long lastKickTime = 0L;
+		public long kickStartTime = 0L;
+		public double kickStartY = 0.0D;
+		public double kickInitialVelocity = 0.0D;
+	// 锁种相关变量
+	public boolean cherry_ready = false;
+	public long cherry_ready_time = 0L;
+	public boolean lemon_ready = false;
+	public long lemon_ready_time = 0L;
+	public boolean peach_ready = false;
+	public long peach_ready_time = 0L;
+	public boolean melon_ready = false;
+	public long melon_ready_time = 0L;
+	public boolean banana_ready = false;
+	public long banana_ready_time = 0L;
 
 		public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
@@ -107,17 +139,49 @@ public class  KRBVariables {
 		}
 
 		public Tag writeNBT() {
-			CompoundTag nbt = new CompoundTag();
-			nbt.putBoolean("kcik", kcik);
-			nbt.putBoolean("wudi", wudi);
-			return nbt;
-		}
+		CompoundTag nbt = new CompoundTag();
+		nbt.putBoolean("kcik", kcik);
+		nbt.putBoolean("wudi", wudi);
+		nbt.putLong("lastKickTime", lastKickTime);
+		nbt.putLong("kickStartTime", kickStartTime);
+		nbt.putDouble("kickStartY", kickStartY);
+		nbt.putBoolean("hasExploded", hasExploded);
+			nbt.putBoolean("needExplode", needExplode);
+		// 序列化锁种相关变量
+		nbt.putBoolean("cherry_ready", cherry_ready);
+		nbt.putLong("cherry_ready_time", cherry_ready_time);
+		nbt.putBoolean("lemon_ready", lemon_ready);
+		nbt.putLong("lemon_ready_time", lemon_ready_time);
+		nbt.putBoolean("peach_ready", peach_ready);
+		nbt.putLong("peach_ready_time", peach_ready_time);
+		nbt.putBoolean("melon_ready", melon_ready);
+		nbt.putLong("melon_ready_time", melon_ready_time);
+		nbt.putBoolean("banana_ready", banana_ready);
+		nbt.putLong("banana_ready_time", banana_ready_time);
+		return nbt;
+	}
 
 		public void readNBT(Tag tag) {
-			CompoundTag nbt = (CompoundTag) tag;
-			kcik = nbt.getBoolean("kcik");
-			wudi = nbt.getBoolean("wudi");
-		}
+		CompoundTag nbt = (CompoundTag) tag;
+		kcik = nbt.getBoolean("kcik");
+		wudi = nbt.getBoolean("wudi");
+		lastKickTime = nbt.getLong("lastKickTime");
+		kickStartTime = nbt.getLong("kickStartTime");
+		kickStartY = nbt.getDouble("kickStartY");
+			hasExploded = nbt.getBoolean("hasExploded");
+			needExplode = nbt.getBoolean("needExplode");
+		// 反序列化锁种相关变量
+		cherry_ready = nbt.getBoolean("cherry_ready");
+		cherry_ready_time = nbt.getLong("cherry_ready_time");
+		lemon_ready = nbt.getBoolean("lemon_ready");
+		lemon_ready_time = nbt.getLong("lemon_ready_time");
+		peach_ready = nbt.getBoolean("peach_ready");
+		peach_ready_time = nbt.getLong("peach_ready_time");
+		melon_ready = nbt.getBoolean("melon_ready");
+		melon_ready_time = nbt.getLong("melon_ready_time");
+		banana_ready = nbt.getBoolean("banana_ready");
+		banana_ready_time = nbt.getLong("banana_ready_time");
+	}
 	}
 
 	public static class PlayerVariablesSyncMessage {
@@ -142,7 +206,22 @@ public class  KRBVariables {
 				if (!context.getDirection().getReceptionSide().isServer()) {
 					PlayerVariables variables = ((PlayerVariables) Minecraft.getInstance().player.getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
 					variables.kcik = message.data.kcik;
-					variables.wudi = message.data.wudi;
+				variables.wudi = message.data.wudi;
+				variables.lastKickTime = message.data.lastKickTime;
+				variables.kickStartTime = message.data.kickStartTime;
+				variables.kickStartY = message.data.kickStartY;
+				variables.needExplode = message.data.needExplode;
+				// 同步锁种相关变量
+				variables.cherry_ready = message.data.cherry_ready;
+				variables.cherry_ready_time = message.data.cherry_ready_time;
+				variables.lemon_ready = message.data.lemon_ready;
+				variables.lemon_ready_time = message.data.lemon_ready_time;
+				variables.peach_ready = message.data.peach_ready;
+				variables.peach_ready_time = message.data.peach_ready_time;
+				variables.melon_ready = message.data.melon_ready;
+				variables.melon_ready_time = message.data.melon_ready_time;
+				variables.banana_ready = message.data.banana_ready;
+				variables.banana_ready_time = message.data.banana_ready_time;
 				}
 			});
 			context.setPacketHandled(true);
