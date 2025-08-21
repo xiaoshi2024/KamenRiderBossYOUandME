@@ -12,15 +12,12 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftaria
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
-import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,7 +29,7 @@ import static com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.*;
 public class modEventBusEvents {
     @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", value = Dist.CLIENT)
     public class ClientEvents {
-//        @SubscribeEvent
+        //        @SubscribeEvent
 //        public static void onKeyInput(InputEvent.Key event) {
 //            if (Minecraft.getInstance().screen == null) {
 //                if (CHANGE_KEY.isDown()) {
@@ -56,58 +53,49 @@ public class modEventBusEvents {
 //            }
 //        }
         // 在事件处理器类中添加
-@SubscribeEvent
-public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-    if (event.getEntity() instanceof ServerPlayer player) {
-        player.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
-            curios.findCurio("belt", 0).ifPresent(slotResult -> {
-                ItemStack stack = slotResult.stack();
+        @SubscribeEvent
+        public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+            if (event.getEntity() instanceof ServerPlayer player) {
+                player.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
+                    curios.findCurio("belt", 0).ifPresent(slotResult -> {
+                        ItemStack stack = slotResult.stack();
 
-                // 战极驱动器处理（保持原有逻辑）
-                if (stack.getItem() instanceof sengokudrivers_epmty belt) {
-                    PacketHandler.sendToClient(
-                            new BeltAnimationPacket(
-                                    player.getId(),
-                                    "login_sync",
-                                    belt.currentMode
-                            ),
-                            player
-                    );
-                }
+                        // 战极驱动器处理（保持原有逻辑）
+                        if (stack.getItem() instanceof sengokudrivers_epmty belt) {
+                            PacketHandler.sendToClient(
+                                    new BeltAnimationPacket(
+                                            player.getId(),
+                                            "login_sync",
+                                            belt.currentMode
+                                    ),
+                                    player
+                            );
+                        }
 
-                // Genesis驱动器处理（新增柠檬状态同步）
-                if (stack.getItem() instanceof Genesis_driver belt) {
-                    CompoundTag tag = stack.getOrCreateTag();
+                        // Genesis驱动器处理（新增柠檬状态同步）
+                        if (stack.getItem() instanceof Genesis_driver belt) {
+                            Genesis_driver.BeltMode mode = belt.getMode(stack);
+                            boolean hen = belt.getHenshin(stack);
+                            boolean equipped = belt.getEquipped(stack);
 
-                    // 根据NBT数据确定要同步的动画
-                    String animationToSync;
-                    if (tag.getBoolean("IsHenshining")) {
-                        animationToSync = "move"; // 变身中状态
-                    } else if (tag.getBoolean("IsEquipped") &&
-                            belt.currentMode == Genesis_driver.BeltMode.LEMON) {
-                        animationToSync = "lemon_idle"; // 柠檬形态待机
-                    } else {
-                        animationToSync = "idles"; // 默认状态
-                    }
+                            String anim;
+                            if (hen) {
+                                anim = "move";
+                            } else if (equipped && mode == Genesis_driver.BeltMode.LEMON) {
+                                anim = "lemon_idle";
+                            } else {
+                                anim = "idles";
+                            }
 
-                    System.out.printf("登录同步Genesis驱动器: 模式=%s 动画=%s%n",
-                            belt.currentMode, animationToSync);
+                            System.out.printf("登录同步Genesis驱动器: 模式=%s 动画=%s%n", mode, anim);
 
-                    // 发送精确的动画同步包
-                    PacketHandler.sendToClient(
-                            new BeltAnimationPacket(
-                                    player.getId(),
-                                    animationToSync,
-                                    belt.currentMode
-                            ),
-                            player
-                    );
+                            PacketHandler.sendToClient(
+                                    new BeltAnimationPacket(player.getId(), anim, mode),
+                                    player);
 
-                    // 强制更新物品状态
-                    stack.setTag(tag);
-                    player.getInventory().setChanged();
-                }
-            });
+                            // 不需要 setTag，只是读取
+                        }
+                    });
                 });
             }
         }

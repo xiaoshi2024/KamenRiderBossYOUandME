@@ -60,7 +60,11 @@ public class ReleaseBeltPacket {
             } else if (triggerAnimation) {
                 // 根据腰带类型处理不同动画
                 if ("GENESIS".equals(beltType)) {
-                    handleGenesisAnimation(player);
+                    CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Genesis_driver)
+                            .ifPresent(curio -> {
+                                Genesis_driver belt = (Genesis_driver) curio.stack().getItem();
+                                belt.startHenshinAnimation(player, curio.stack());
+                            });
                 } else {
                     handleBaronsAnimation(player);
                 }

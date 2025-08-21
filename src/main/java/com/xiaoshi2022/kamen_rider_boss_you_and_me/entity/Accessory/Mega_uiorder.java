@@ -39,7 +39,7 @@ public class Mega_uiorder extends Item implements GeoItem, ICurioItem {
 
     public Mega_uiorder(Properties properties) {
         super(properties);
-        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+//        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     public void switchMode(ItemStack stack, Mode mode) {

@@ -105,16 +105,10 @@ public class HeartCoreEvent {
 
     // 触发创世纪驱动器变身动画
     private void triggerGenesisHenshinAnimation(Player player) {
-        CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
+        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Genesis_driver)
                 .ifPresent(curio -> {
                     Genesis_driver belt = (Genesis_driver) curio.stack().getItem();
-
-                    // 根据腰带当前模式触发不同动画
-                    if (belt.getMode(curio.stack()) == Genesis_driver.BeltMode.LEMON) {
-                        belt.startActionAnimation(player); // 柠檬能量变身动画
-                    } else {
-                        belt.startShowAnimation(player); // 默认变身动画
-                    }
+                    belt.startHenshinAnimation(player, curio.stack()); // 👈 把 stack 传进去
                 });
     }
 

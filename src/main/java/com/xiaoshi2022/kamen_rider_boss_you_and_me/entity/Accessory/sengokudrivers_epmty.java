@@ -55,7 +55,7 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
 
     public sengokudrivers_epmty(Properties properties) {
         super(properties);
-        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+//        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     public void startReleaseAnimation(LivingEntity holder) {

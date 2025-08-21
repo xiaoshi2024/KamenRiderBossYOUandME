@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
@@ -64,10 +65,24 @@ public class BeltAnimationPacket {
 
     public static void handle(BeltAnimationPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null && player.getId() == msg.entityId) {
-                processPacket(msg);
-            }
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.level == null) return;
+
+            Entity entity = mc.level.getEntity(msg.getEntityId());
+            if (!(entity instanceof LivingEntity living)) return;
+
+            living.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
+                curios.findCurio("belt", 0).ifPresent(slotResult -> {
+                    ItemStack stack = slotResult.stack();
+                    Item item = stack.getItem();
+
+                    if (item instanceof Genesis_driver g) {
+                        g.triggerAnim(living, "controller", msg.getAnimationName());
+                    } else if (item instanceof sengokudrivers_epmty s) {
+                        s.triggerAnim(living, "controller", msg.getAnimationName());
+                    }
+                });
+            });
         });
         ctx.get().setPacketHandled(true);
     }
@@ -77,20 +92,22 @@ public class BeltAnimationPacket {
         if (mc.level == null) return;
 
         Entity entity = mc.level.getEntity(msg.entityId);
-        if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
-                curios.findCurio("belt", 0).ifPresent(slotResult -> {
-                    ItemStack stack = slotResult.stack();
-                    Item item = stack.getItem();
+        if (!(entity instanceof LivingEntity living)) return;
 
-                    if (item instanceof sengokudrivers_epmty belt && "sengoku".equals(msg.beltType)) {
-                        updateSengokuBeltState(belt, stack, livingEntity, sengokudrivers_epmty.BeltMode.valueOf(msg.beltMode));
-                    } else if (item instanceof Genesis_driver belt && "genesis".equals(msg.beltType)) {
-                        updateGenesisBeltState(belt, stack, livingEntity, Genesis_driver.BeltMode.valueOf(msg.beltMode), msg.animationName);
-                    }
-                });
+        /* 1. 找到腰带 Item（不需要读 NBT） */
+        living.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
+            curios.findCurio("belt", 0).ifPresent(slotResult -> {
+                ItemStack stack = slotResult.stack();
+                Item item = stack.getItem();
+
+                /* 2. 直接播动画，不再二次计算 */
+                if (item instanceof sengokudrivers_epmty) {
+                    ((sengokudrivers_epmty) item).triggerAnim(living, "controller", msg.animationName);
+                } else if (item instanceof Genesis_driver) {
+                    ((Genesis_driver) item).triggerAnim(living, "controller", msg.animationName);
+                }
             });
-        }
+        });
     }
 
     private static void updateSengokuBeltState(sengokudrivers_epmty belt, ItemStack stack, LivingEntity entity, sengokudrivers_epmty.BeltMode mode) {
@@ -113,70 +130,16 @@ public class BeltAnimationPacket {
         });
     }
 
-    private static void updateGenesisBeltState(Genesis_driver belt, ItemStack stack, LivingEntity entity, Genesis_driver.BeltMode mode, String animationName) {
-        CompoundTag tag = stack.getOrCreateTag();
-        // 首先从NBT读取模式，如果没有则使用传入的模式
-        if (tag.contains("BeltMode")) {
-            belt.currentMode = Genesis_driver.BeltMode.valueOf(tag.getString("BeltMode"));
-        } else {
-            belt.currentMode = mode;
-        }
-        if (tag.contains("IsActive")) {
-            belt.isActive = tag.getBoolean("IsActive");
-        }
-        if (tag.contains("IsShowing")) {
-            belt.isShowing = tag.getBoolean("IsShowing");
-        }
-        if (tag.contains("IsHenshining")) {
-            belt.isHenshining = tag.getBoolean("IsHenshining");
-        }
+    private static void updateGenesisBeltState(
+            Genesis_driver belt,
+            ItemStack stack,
+            LivingEntity entity,
+            String animationName) {
 
-        String animation;
-        // 如果指定了动画名称且不是同步状态命令，则直接使用
-        if (animationName != null && !animationName.equals("sync_state")) {
-            animation = animationName;
-        } else {
-            // 处理变身状态动画
-            if (belt.isHenshining) {
-                switch (belt.currentMode) {
-                    case LEMON:
-                        animation = "move";
-                        break;
-                    case MELON:
-                        animation = "melon_move";
-                        break;
-                    case CHERRY:
-                        animation = "cherry_move";
-                        break;
-                    default:
-                        animation = "move";
-                }
-            }
-            // 处理活动状态动画
-            else if (belt.isActive) {
-                switch (belt.currentMode) {
-                    case LEMON:
-                        animation = "start";
-                        break;
-                    case MELON:
-                        animation = "melon_start";
-                        break;
-                    case CHERRY:
-                        animation = "cherry_start";
-                        break;
-                    default:
-                        animation = "show";
-                }
-            } 
-            // 处理展示状态动画
-            else if (belt.isShowing) {
-                animation = "show";
-            } else {
-                animation = "idles";
-            }
-        }
-        belt.triggerAnim(entity, "controller", animation);
+        // 1. 直接播服务端指定的动画
+        belt.triggerAnim(entity, "controller", animationName);
 
+        // 2. 通知 Curios 刷新（可选）
         entity.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
             curios.getCurios().get("belt").update();
         });

@@ -159,6 +159,9 @@ public class kamen_rider_boss_you_and_me
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            PacketHandler.registerPackets();  // <-- 加这一行
+            System.out.println("Client packets registered");
+
             EntityRenderers.register(ModEntityTypes.LORD_BARON.get(), LordBaronRenderer::new);
             EntityRenderers.register(ModEntityTypes.GIIFUDEMOS_ENTITY.get(), GiifuDemosRenderer::new);
             EntityRenderers.register(ModEntityTypes.STORIOUS.get(), StoriousRender::new);

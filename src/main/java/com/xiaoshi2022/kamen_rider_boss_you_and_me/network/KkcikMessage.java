@@ -62,7 +62,7 @@ public class KkcikMessage {
 							// 1. 发包给所有跟踪该实体的玩家（含自己）
 							PacketHandler.INSTANCE.send(
 									PacketDistributor.TRACKING_ENTITY.with(() -> entity),
-									new BeltAnimationPacket(entity.getId(), "lemon_tick", driver.currentMode)
+									new BeltAnimationPacket(entity.getId(), "lemon_tick", driver.getMode(slot.stack()))
 							);
 							// 2. 服务端本地播动画（GeckoLib 会在服务端记录，客户端随后同步）
 							driver.triggerAnim(entity, "controller", "lemon_tick");

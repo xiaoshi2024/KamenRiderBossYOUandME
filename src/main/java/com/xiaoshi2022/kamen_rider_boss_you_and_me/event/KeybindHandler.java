@@ -145,7 +145,7 @@ public class KeybindHandler {
                     if (belt.getMode(beltStack) == Genesis_driver.BeltMode.LEMON) {
                         // 发送解除变身请求
                         PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "GENESIS", true)); // true 表示是解除变身请求
-                        belt.startReleaseAnimation(player);
+                        belt.startReleaseAnimation(player, beltStack);
                         delayTicks = 40;
                         delayedBeltStack = beltStack.copy();
                     }
@@ -161,19 +161,19 @@ public class KeybindHandler {
                         case LEMON -> {
                             PacketHandler.sendToServer(
                                     new TransformationRequestPacket(player.getUUID(), "GENESIS", true));
-                            belt.startReleaseAnimation(player);
+                            belt.startReleaseAnimation(player, beltStack);
                             delayTicks = 40;
                             delayedBeltStack = beltStack.copy();
                         }
                         case MELON -> {
                             // 先判断是变身还是解除
-                            boolean isTransformed = 
+                            boolean isTransformed =
                                     player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
                             if (isTransformed) {
                                 // 解除
                                 PacketHandler.sendToServer(
                                         new TransformationRequestPacket(player.getUUID(), "GENESIS_MELON", true));
-                                belt.startReleaseAnimation(player);
+                                belt.startReleaseAnimation(player, beltStack);
                                 delayTicks = 40;
                                 delayedBeltStack = beltStack.copy();
                             } else {
@@ -184,13 +184,13 @@ public class KeybindHandler {
                         }
                         case CHERRY -> {
                             // 先判断是变身还是解除
-                            boolean isTransformed = 
+                            boolean isTransformed =
                                     player.getInventory().armor.get(3).getItem() == ModItems.SIGURD_HELMET.get();
                             if (isTransformed) {
                                 // 解除
                                 PacketHandler.sendToServer(
                                         new TransformationRequestPacket(player.getUUID(), "GENESIS_CHERRY", true));
-                                belt.startReleaseAnimation(player);
+                                belt.startReleaseAnimation(player, beltStack);
                                 delayTicks = 40;
                                 delayedBeltStack = beltStack.copy();
                             } else {
@@ -201,13 +201,13 @@ public class KeybindHandler {
                         }
                         case PEACH -> {
                             // 先判断是变身还是解除
-                            boolean isTransformed = 
+                            boolean isTransformed =
                                     player.getInventory().armor.get(3).getItem() == ModItems.MARIKA_HELMET.get();
                             if (isTransformed) {
                                 // 解除
                                 PacketHandler.sendToServer(
                                         new TransformationRequestPacket(player.getUUID(), "GENESIS_PEACH", true));
-                                belt.startReleaseAnimation(player);
+                                belt.startReleaseAnimation(player, beltStack);
                                 delayTicks = 40;
                                 delayedBeltStack = beltStack.copy();
                             } else {
@@ -293,8 +293,8 @@ public class KeybindHandler {
                 }
 
                 // 重置腰带状态
-                belt.isEquipped = false;
-                belt.isHenshining = false;
+                belt.setEquipped(beltStack, false);
+                belt.setHenshin(beltStack, false);
 
                 // 同步状态
                 player.inventoryMenu.broadcastChanges();
@@ -342,8 +342,8 @@ public class KeybindHandler {
         if (!player.getInventory().add(melonLockSeed)) player.spawnAtLocation(melonLockSeed);
 
         // 6. 重置腰带状态
-        belt.isEquipped = false;
-        belt.isHenshining = false;
+        belt.setEquipped(beltStack, false);
+        belt.setHenshin(beltStack, false);
         player.inventoryMenu.broadcastChanges();
     }
 
@@ -386,8 +386,8 @@ public class KeybindHandler {
         if (!player.getInventory().add(cherryLockSeed)) player.spawnAtLocation(cherryLockSeed);
 
         // 6. 重置腰带状态
-        belt.isEquipped = false;
-        belt.isHenshining = false;
+        belt.setEquipped(beltStack, false);
+        belt.setHenshin(beltStack, false);
         player.inventoryMenu.broadcastChanges();
     }
 
@@ -430,8 +430,8 @@ public class KeybindHandler {
         if (!player.getInventory().add(peachLockSeed)) player.spawnAtLocation(peachLockSeed);
 
         // 6. 重置腰带状态
-        belt.isEquipped = false;
-        belt.isHenshining = false;
+        belt.setEquipped(beltStack, false);
+        belt.setHenshin(beltStack, false);;
         player.inventoryMenu.broadcastChanges();
     }
 

@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -67,23 +68,24 @@ public class LemonTransformationRequestPacket {
         ItemStack beltStack = genesisDriver.stack();
         Genesis_driver belt = (Genesis_driver) beltStack.getItem();
 
+
         // 检查玩家是否已经装备了变身盔甲
         boolean isBaronLemonArmor = player.getInventory().armor.get(3).is(ModItems.BARON_LEMON_HELMET.get()) &&
-                                    player.getInventory().armor.get(2).is(ModItems.BARON_LEMON_CHESTPLATE.get()) &&
-                                    player.getInventory().armor.get(1).is(ModItems.BARON_LEMON_LEGGINGS.get());
-        
+                player.getInventory().armor.get(2).is(ModItems.BARON_LEMON_CHESTPLATE.get()) &&
+                player.getInventory().armor.get(1).is(ModItems.BARON_LEMON_LEGGINGS.get());
+
         boolean isDukeArmor = player.getInventory().armor.get(3).is(ModItems.DUKE_HELMET.get()) &&
-                             player.getInventory().armor.get(2).is(ModItems.DUKE_CHESTPLATE.get()) &&
-                             player.getInventory().armor.get(1).is(ModItems.DUKE_LEGGINGS.get());
-        
+                player.getInventory().armor.get(2).is(ModItems.DUKE_CHESTPLATE.get()) &&
+                player.getInventory().armor.get(1).is(ModItems.DUKE_LEGGINGS.get());
+
         if (isBaronLemonArmor || isDukeArmor) {
             System.out.println("玩家已经装备了变身盔甲，不允许再次变身");
             return;
         }
 
         // 检测玩家副手是否持有香蕉锁种
-        boolean hasBananaLockseed = !player.getOffhandItem().isEmpty() && 
-                                    player.getOffhandItem().getItem() == ModItems.BANANAFRUIT.get();
+        boolean hasBananaLockseed = !player.getOffhandItem().isEmpty() &&
+                player.getOffhandItem().getItem() == ModItems.BANANAFRUIT.get();
 
         // 根据是否持有香蕉锁种选择不同的变身音效和形态类型
         SoundEvent sound;
@@ -124,9 +126,11 @@ public class LemonTransformationRequestPacket {
         PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         // 播放变身动画
-        belt.startHenshinAnimation(player);
-        // 动画已由startHenshinAnimation方法内部处理，无需额外发送数据包
-
+//        belt.startHenshinAnimation(player,beltStack);   // 腰带自身动画
+        PacketHandler.sendToAllTracking(
+                new BeltAnimationPacket(player.getId(), "lemon_move", belt.getMode(beltStack)),
+                player
+        );
         // 播放变身音效
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                 sound, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -135,12 +139,25 @@ public class LemonTransformationRequestPacket {
         new HeartCoreEvent(player, "LEMON_ENERGY" + ":" + transformationType);
 
         // 设置玩家为已变身状态
-        belt.isEquipped = true;
-        belt.isHenshining = true;
+        belt.setEquipped(beltStack, false);
+        // 设置腰带模式
+        belt.setMode(beltStack, Genesis_driver.BeltMode.LEMON);
+        belt.setHenshin(beltStack, true);
+        belt.setShowing(beltStack, false);
+
+// 发送动画包
+        belt.startHenshinAnimation(player, beltStack);
 
         // 清除柠檬锁种准备状态
         variables.lemon_ready = false;
         variables.syncPlayerVariables(player); // 同步变量到客户端
+
+        // 写完 NBT 立刻同步回 Curios
+        CurioUtils.updateCurioSlot(
+                player,
+                genesisDriver.slotContext().identifier(),
+                genesisDriver.slotContext().index(),
+                beltStack);
 
         // 根据形态类型发送不同的变身成功提示
         if (hasBananaLockseed) {

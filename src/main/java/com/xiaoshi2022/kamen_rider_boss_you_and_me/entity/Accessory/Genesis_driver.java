@@ -14,11 +14,9 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.SlotContext;
@@ -27,66 +25,62 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import static com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver.BeltMode.*;
+
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class Genesis_driver extends Item implements GeoItem, ICurioItem {
-    // 基础动画
-    private static final RawAnimation IDLES = RawAnimation.begin().thenPlayAndHold("idles");
-    private static final RawAnimation SHOW = RawAnimation.begin().thenPlayAndHold("show");
 
+    /* ------------------------- 动画常量 ------------------------- */
+    private static final RawAnimation IDLES   = RawAnimation.begin().thenPlayAndHold("idles");
+    private static final RawAnimation SHOW    = RawAnimation.begin().thenPlayAndHold("show");
 
-    // 柠檬形态特有动画
-    private static final RawAnimation LEMON_TICK = RawAnimation.begin().thenPlayAndHold("lemon_tick");
-    private static final RawAnimation START = RawAnimation.begin().thenPlayAndHold("start");
-    private static final RawAnimation SCATTER = RawAnimation.begin().thenPlayAndHold("scatter");
-    private static final RawAnimation MOVE = RawAnimation.begin().thenPlayAndHold("move");
+    private static final RawAnimation LEMON_TICK    = RawAnimation.begin().thenPlayAndHold("lemon_tick");
+    private static final RawAnimation START         = RawAnimation.begin().thenPlayAndHold("start");
+    private static final RawAnimation SCATTER       = RawAnimation.begin().thenPlayAndHold("scatter");
+    private static final RawAnimation MOVE          = RawAnimation.begin().thenPlayAndHold("lemon_move");
 
-    // 蜜瓜形态特有动画
-    private static final RawAnimation MELON_TICK = RawAnimation.begin().thenPlayAndHold("melon_tick");
-    private static final RawAnimation MELON_START = RawAnimation.begin().thenPlayAndHold("melon_start");
+    private static final RawAnimation MELON_TICK    = RawAnimation.begin().thenPlayAndHold("melon_tick");
+    private static final RawAnimation MELON_START   = RawAnimation.begin().thenPlayAndHold("melon_start");
     private static final RawAnimation MELON_SCATTER = RawAnimation.begin().thenPlayAndHold("melon_scatter");
-    private static final RawAnimation MELON_MOVE = RawAnimation.begin().thenPlayAndHold("melon_move");
+    private static final RawAnimation MELON_MOVE    = RawAnimation.begin().thenPlayAndHold("melon_move");
 
-    // 樱桃形态特有动画
-    private static final RawAnimation CHERRY_TICK = RawAnimation.begin().thenPlayAndHold("cherry_tick");
-    private static final RawAnimation CHERRY_START = RawAnimation.begin().thenPlayAndHold("cherry_start");
+    private static final RawAnimation CHERRY_TICK    = RawAnimation.begin().thenPlayAndHold("cherry_tick");
+    private static final RawAnimation CHERRY_START   = RawAnimation.begin().thenPlayAndHold("cherry_start");
     private static final RawAnimation CHERRY_SCATTER = RawAnimation.begin().thenPlayAndHold("cherry_scatter");
-    private static final RawAnimation CHERRY_MOVE = RawAnimation.begin().thenPlayAndHold("cherry_move");
+    private static final RawAnimation CHERRY_MOVE    = RawAnimation.begin().thenPlayAndHold("cherry_move");
 
-    // 桃子形态特有动画
-    private static final RawAnimation PEACH_TICK = RawAnimation.begin().thenPlayAndHold("peach_tick");
-    private static final RawAnimation PEACH_START = RawAnimation.begin().thenPlayAndHold("peach_start");
+    private static final RawAnimation PEACH_TICK    = RawAnimation.begin().thenPlayAndHold("peach_tick");
+    private static final RawAnimation PEACH_START   = RawAnimation.begin().thenPlayAndHold("peach_start");
     private static final RawAnimation PEACH_SCATTER = RawAnimation.begin().thenPlayAndHold("peach_scatter");
-    private static final RawAnimation PEACH_MOVE = RawAnimation.begin().thenPlayAndHold("peach_move");
+    private static final RawAnimation PEACH_MOVE    = RawAnimation.begin().thenPlayAndHold("peach_move");
 
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public boolean isActive = false;
-    public boolean isShowing = false;
-    public boolean isEquipped  = false;
-
-    // 新增字段
-    public boolean isReleasing = false;
-    public boolean isHenshining = false;
-
-    public enum BeltMode {
-        DEFAULT,
-        LEMON,
-        MELON,
-        CHERRY,
-        PEACH
+    public boolean getEquipped(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsEquipped");
     }
 
-    public BeltMode currentMode = BeltMode.DEFAULT;
+    public void setEquipped(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsEquipped", flag);
+    }
+
+    /* ----------------------------------------------------------- */
+
+    public enum BeltMode {
+        DEFAULT, LEMON, MELON, CHERRY, PEACH
+    }
+
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public Genesis_driver(Properties properties) {
         super(properties);
-        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+//        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
+    /* ========================= GeoItem ========================= */
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 20, this::animationController)
                 .triggerableAnim("lemon_tick", LEMON_TICK)
-                .triggerableAnim("move", MOVE)
+                .triggerableAnim("lemon_move", MOVE)
                 .triggerableAnim("scatter", SCATTER)
                 .triggerableAnim("start", START)
                 .triggerableAnim("show", SHOW)
@@ -105,423 +99,295 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 .triggerableAnim("peach_move", PEACH_MOVE));
     }
 
+    /* 读取实时 NBT 状态，不再使用任何字段 */
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {
-        AnimationController<?> controller = state.getController();
-        String currentAnim = controller.getCurrentAnimation() != null ?
-                controller.getCurrentAnimation().animation().name() : "";
+        ItemStack stack = state.getData(DataTickets.ITEMSTACK);
+        if (!(state.getAnimatable() instanceof Genesis_driver))
+            return PlayState.STOP;
 
-        // 优先处理解除状态
-        if (isReleasing) {
-            // 根据当前模式选择对应的解除变身动画名称
-            String releaseAnimation = switch (currentMode) {
-                case LEMON -> "start";
-                case MELON -> "start";
+        BeltMode mode   = getMode(stack);
+        boolean showing = getShowing(stack);
+        boolean active  = getActive(stack);
+        boolean hen     = getHenshin(stack);
+        boolean rel     = getRelease(stack);
+
+        String current = state.getController().getCurrentAnimation() == null
+                ? "" : state.getController().getCurrentAnimation().animation().name();
+
+        /* -------- 解除变身 -------- */
+        if (rel) {
+            String releaseAnim = switch (mode) {
+                case LEMON, MELON, DEFAULT -> "start";
                 case CHERRY -> "cherry_start";
-                case PEACH -> "peach_start";
-                default -> "start";
+                case PEACH  -> "peach_start";
             };
+            if (!current.equals(releaseAnim))
+                return state.setAndContinue(getAnimationByName(releaseAnim));
 
-            if (!currentAnim.equals(releaseAnimation)) {
-                RawAnimation anim = getAnimationByName(releaseAnimation);
-                return state.setAndContinue(anim);
-            }
-            // 检查动画是否完成
-            if (controller.getAnimationState() == AnimationController.State.STOPPED) {
-                isReleasing = false;
-                isShowing = false;
-                currentMode = BeltMode.DEFAULT;
+            if (state.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                setRelease(stack, false);
+                setShowing(stack, false);
+                setMode(stack, DEFAULT);
                 return state.setAndContinue(IDLES);
             }
             return PlayState.CONTINUE;
         }
 
-        // 处理变身序列
-        if (isHenshining) {
-            // 根据当前模式选择对应的move动画名称
-            String moveAnimation = switch (this.currentMode) {
-                case LEMON -> "move";
-                case MELON -> "melon_move";
+        /* -------- 变身序列 -------- */
+        if (hen) {
+            String moveAnim = switch (mode) {
+                case LEMON  -> "lemon_move";
+                case MELON  -> "melon_move";
                 case CHERRY -> "cherry_move";
-                case PEACH -> "peach_move";
-                default -> "move";
+                case PEACH  -> "peach_move";
+                default     -> "move";
             };
-
-            // 根据当前模式选择对应的scatter动画
-            RawAnimation scatterAnimation = switch (currentMode) {
-                case LEMON -> SCATTER;
-                case MELON -> MELON_SCATTER;
+            RawAnimation scatterAnim = switch (mode) {
+                case LEMON  -> SCATTER;
+                case MELON  -> MELON_SCATTER;
                 case CHERRY -> CHERRY_SCATTER;
-                case PEACH -> PEACH_SCATTER;
-                default -> SCATTER;
+                case PEACH  -> PEACH_SCATTER;
+                default     -> SCATTER;
             };
 
-            // 第一阶段：播放对应模式的move动画
-            if (!currentAnim.equals(moveAnimation) && !currentAnim.contains("scatter")) {
-                RawAnimation moveAnim = getAnimationByName(moveAnimation);
-                return state.setAndContinue(moveAnim);
-            }
+            if (!current.equals(moveAnim) && !current.contains("scatter"))
+                return state.setAndContinue(getAnimationByName(moveAnim));
 
-            // 第二阶段：move完成后播放对应模式的scatter
-            if (currentAnim.equals(moveAnimation) &&
-                    controller.getAnimationState() == AnimationController.State.STOPPED) {
+            if (current.equals(moveAnim) && state.getController().getAnimationState() == AnimationController.State.STOPPED)
+                return state.setAndContinue(scatterAnim);
 
-                if (currentMode == BeltMode.LEMON || currentMode == BeltMode.MELON || currentMode == BeltMode.CHERRY || currentMode == BeltMode.PEACH) {
-                    return state.setAndContinue(scatterAnimation);
-                } else {
-                    isHenshining = false;
-                    isShowing = true;
-                    return state.setAndContinue(SHOW);
-                }
-            }
+            String scatterName = switch (mode) {
+                case LEMON  -> "scatter";
+                case MELON  -> "melon_scatter";
+                case CHERRY -> "cherry_scatter";
+                case PEACH  -> "peach_scatter";
+                default     -> "scatter";
+            };
 
-            // 第三阶段：scatter完成后保持展示状态
-            if ((currentMode == BeltMode.LEMON && "scatter".equals(currentAnim)) ||
-                    (currentMode == BeltMode.MELON && "melon_scatter".equals(currentAnim)) ||
-                    (currentMode == BeltMode.CHERRY && "cherry_scatter".equals(currentAnim)) ||
-                    (currentMode == BeltMode.PEACH && "peach_scatter".equals(currentAnim))) {
-                if (controller.getAnimationState() == AnimationController.State.STOPPED) {
-                    isHenshining = false;
-                    isShowing = true;
-                    return state.setAndContinue(SHOW);
-                }
-            }
-
-            return PlayState.CONTINUE;
-        }
-
-        // 展示状态保持
-        if (isShowing) {
-            if (!"show".equals(currentAnim)) {
+            if (current.equals(scatterName) &&
+                    state.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                setHenshin(stack, false);
+                setShowing(stack, true);
                 return state.setAndContinue(SHOW);
             }
             return PlayState.CONTINUE;
         }
 
-        // 默认空闲状态
-        if (!"idles".equals(currentAnim)) {
-            return state.setAndContinue(IDLES);
+        /* -------- 展示 -------- */
+        if (showing) {
+            if (!"show".equals(current))
+                return state.setAndContinue(SHOW);
+            return PlayState.CONTINUE;
         }
+
+        /* -------- 空闲 -------- */
+        if (!"idles".equals(current))
+            return state.setAndContinue(IDLES);
+
         return PlayState.CONTINUE;
     }
 
-    // 变身方法
-    public void startHenshinAnimation(LivingEntity entity) {
-        this.isHenshining = true;
-        this.isActive = false;
-        this.isShowing = false;
-        this.isReleasing = false;
+    /* =========================================================== */
+    /* -------------------- 数据读/写 Helper -------------------- */
+    public BeltMode getMode(ItemStack stack) {
+        String key = stack.getOrCreateTag().getString("BeltMode");
+        if (key.isEmpty()) return DEFAULT;        // ← 兜底
+        try {
+            return BeltMode.valueOf(key);
+        } catch (IllegalArgumentException ex) {
+            return DEFAULT;                       // ← 防止未来拼写错误
+        }
+    }
 
-        // 根据当前模式选择对应的move动画
-        String moveAnimation = switch (this.currentMode) {
-            case LEMON -> "move";
-            case MELON -> "move";
+    public void setMode(ItemStack stack, BeltMode mode) {
+        stack.getOrCreateTag().putString("BeltMode", mode.name());
+    }
+
+    public boolean getShowing(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsShowing");
+    }
+
+    public void setShowing(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsShowing", flag);
+    }
+
+    public boolean getActive(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsActive");
+    }
+
+    public void setActive(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsActive", flag);
+    }
+
+    public boolean getHenshin(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsHenshin");
+    }
+
+    public void setHenshin(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsHenshin", flag);
+    }
+
+    public boolean getRelease(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsRelease");
+    }
+
+    public void setRelease(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsRelease", flag);
+    }
+
+    /* ----------------------------------------------------------- */
+
+    /* ===================== 业务方法（无字段） ==================== */
+    public void startHenshinAnimation(LivingEntity entity, ItemStack stack) {
+        setHenshin(stack, true);
+        setRelease(stack, false);
+
+        BeltMode mode = getMode(stack);
+        String anim = switch (mode) {
+            case LEMON  -> "lemon_move";
+            case MELON  -> "melon_move";
             case CHERRY -> "cherry_move";
-            case PEACH -> "peach_move";
-            default -> "move";
+            case PEACH  -> "peach_move";
+            default     -> "move";
         };
 
-        // 只在服务端发送数据包
-        if (!entity.level().isClientSide()) {
-            // 只发送数据包给腰带的所有者
-            if (entity instanceof ServerPlayer player) {
-                PacketHandler.sendToClient(
-                        new BeltAnimationPacket(
-                                player.getId(),
-                                moveAnimation,
-                                this.currentMode
-                        ),
-                        player
-                );
-            }
+        System.out.println(">>> Server send packet: " + anim);
+
+        // 1. 服务端：把动画名同步给所有追踪者
+        if (!entity.level().isClientSide && entity instanceof ServerPlayer sp) {
+            PacketHandler.sendToAllTracking(
+                    new BeltAnimationPacket(sp.getId(), anim, mode), sp);
         }
-        // 无论客户端还是服务端都触发动画
-        triggerAnim(entity, "controller", moveAnimation);
+
+        // 2. 客户端：本地线程直接播，不再发包
+        if (entity.level().isClientSide) {
+            triggerAnim(entity, "controller", anim);
+        }
     }
 
-    // 解除变身方法
-    public void startReleaseAnimation(LivingEntity entity) {
-        this.isReleasing = true;
-        this.isActive = false;
-        this.isShowing = false;
-        this.isHenshining = false;
+    public void startReleaseAnimation(LivingEntity entity, ItemStack stack) {
+        setRelease(stack, true);
+        setHenshin(stack, false);
 
-        // 根据当前模式选择对应的解除变身动画
-        String releaseAnimation = switch (this.currentMode) {
-            case LEMON -> "start";
-            case MELON -> "start";
+        String anim = switch (getMode(stack)) {
+            case MELON  -> "melon_start";
+            case LEMON  -> "start";
             case CHERRY -> "cherry_start";
-            case PEACH -> "peach_start";
-            default -> "start";
+            case PEACH  -> "peach_start";
+            default     -> "start";
         };
 
-        if (entity.level().isClientSide()) {
-            this.triggerAnim(entity, "controller", releaseAnimation);
-        } else {
-            // 只发送数据包给腰带的所有者
-            if (entity instanceof ServerPlayer player) {
-                PacketHandler.sendToClient(
-                        new BeltAnimationPacket(
-                                player.getId(),
-                                releaseAnimation,
-                                this.currentMode
-                        ),
-                        player
-                );
-            }
+        if (!entity.level().isClientSide() && entity instanceof ServerPlayer sp) {
+            PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), anim, getMode(stack)), sp);
         }
+        triggerAnim(entity, "controller", anim);
     }
 
+    /* =========================================================== */
+
+    /* -------------------- 其它必要实现 -------------------- */
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
+        return cache;
     }
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             private GenesisDriverRenderer renderer;
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (this.renderer == null)
-                    this.renderer = new GenesisDriverRenderer();
-                return this.renderer;
+            @Override public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (renderer == null) renderer = new GenesisDriverRenderer();
+                return renderer;
             }
         });
     }
 
-    public void startShowAnimation(LivingEntity holder) {
-        if (!holder.level().isClientSide()) {
-            // 只发送数据包给腰带的所有者
-            if (holder instanceof ServerPlayer player) {
-                PacketHandler.sendToClient(
-                        new BeltAnimationPacket(
-                                player.getId(),
-                                "show",
-                                this.currentMode
-                        ),
-                        player
-                );
-            }
-        }
-        triggerAnim(holder, "controller", "show");
+    @Override
+    public void onEquip(SlotContext ctx, ItemStack prev, ItemStack stack) {
+        if (!(ctx.entity() instanceof LivingEntity)) return;
+        LivingEntity le = (LivingEntity) ctx.entity();
+        setShowing(stack, true);
+        setActive(stack, false);
+        if (!le.level().isClientSide() && le instanceof ServerPlayer sp)
+            PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "show", getMode(stack)), sp);
+        triggerAnim(le, "controller", "show");
     }
-
-    public void startActionAnimation(LivingEntity holder) {
-        String animationName = (currentMode == BeltMode.LEMON) ? "start" : "show";
-
-        if (!holder.level().isClientSide()) {
-            PacketHandler.sendToAll(new BeltAnimationPacket(
-                    holder.getId(), // 使用 UUID
-                    animationName,
-                    this.currentMode
-            ));
-        }
-        triggerAnim(holder, "controller", animationName);
-    }
-
-
 
     @Override
+    public void onUnequip(SlotContext ctx, ItemStack newStack, ItemStack stack) {
+        if (!(ctx.entity() instanceof LivingEntity)) return;
+        LivingEntity le = (LivingEntity) ctx.entity();
+        setShowing(stack, false);
+        setActive(stack, false);
+        if (!le.level().isClientSide() && le instanceof ServerPlayer sp)
+            PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "idles", getMode(stack)), sp);
+        triggerAnim(le, "controller", "idles");
+    }
+
+    @Override
+    public void curioTick(SlotContext ctx, ItemStack stack) {
+        if (ctx.entity().level().isClientSide()) return;
+        if (!(ctx.entity() instanceof ServerPlayer sp)) return;
+
+        // 每 5 秒同步一次，避免频繁刷新
+        if (sp.tickCount % 100 == 0) {
+            PacketHandler.sendToClient(
+                    new BeltAnimationPacket(sp.getId(), "sync_state", getMode(stack)), sp);
+        }
+    }
+
+    /* -------------------- NBT 同步 -------------------- */
+    @Override
     public CompoundTag getShareTag(ItemStack stack) {
-        CompoundTag tag = super.getShareTag(stack) != null ? super.getShareTag(stack) : new CompoundTag();
-        tag.putString("BeltMode", this.currentMode.name());
-        tag.putBoolean("IsShowing", this.isShowing);
-        tag.putBoolean("IsActive", this.isActive);
+        CompoundTag tag = super.getShareTag(stack);
+        if (tag == null) tag = new CompoundTag();
+        tag.putString("BeltMode", getMode(stack).name());
+        tag.putBoolean("IsShowing", getShowing(stack));
+        tag.putBoolean("IsActive", getActive(stack));
+        tag.putBoolean("IsHenshin", getHenshin(stack));
+        tag.putBoolean("IsRelease", getRelease(stack));
         return tag;
     }
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
         super.readShareTag(stack, nbt);
-        if (nbt != null) {
-            if (nbt.contains("BeltMode")) {
-                this.currentMode = BeltMode.valueOf(nbt.getString("BeltMode"));
-            }
-            if (nbt.contains("IsShowing")) {
-                this.isShowing = nbt.getBoolean("IsShowing");
-            }
-            if (nbt.contains("IsActive")) {
-                this.isActive = nbt.getBoolean("IsActive");
-            }
-        }
+        if (nbt == null) return;
+        if (nbt.contains("BeltMode"))   setMode(stack, BeltMode.valueOf(nbt.getString("BeltMode")));
+        if (nbt.contains("IsShowing"))  setShowing(stack, nbt.getBoolean("IsShowing"));
+        if (nbt.contains("IsActive"))   setActive(stack, nbt.getBoolean("IsActive"));
+        if (nbt.contains("IsHenshin"))  setHenshin(stack, nbt.getBoolean("IsHenshin"));
+        if (nbt.contains("IsRelease"))  setRelease(stack, nbt.getBoolean("IsRelease"));
     }
 
-    public void triggerAnim(@Nullable LivingEntity entity, String controllerName, String animName) {
-        if (entity == null || entity.level() == null) {
-            return;
-        }
-
-        // 客户端处理动画
-        if (entity.level().isClientSide()) {
-            AnimatableInstanceCache cache = this.getAnimatableInstanceCache();
-            if (cache == null) return;
-
-            AnimatableManager<?> manager = cache.getManagerForId(entity.getId());
-            if (manager == null) return;
-
-            AnimationController<?> controller = manager.getAnimationControllers().get(controllerName);
-            if (controller == null) return;
-
-            RawAnimation animation = getAnimationByName(animName);
-            controller.stop();
-            controller.setAnimation(animation);
-            controller.forceAnimationReset();
-        }
-        // 服务端同步数据
-        else {
+    /* -------------------- 动画触发工具 -------------------- */
+    public void triggerAnim(@Nullable LivingEntity entity, String ctrl, String anim) {
+        if (entity == null || entity.level() == null) return;
+        if (entity instanceof ServerPlayer sp)
             PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(entity.getId(), animName, this.currentMode),
-                    entity
-            );
-        }
+                    new BeltAnimationPacket(entity.getId(), anim, getMode(sp.getMainHandItem())), entity);
     }
 
-    private RawAnimation getAnimationByName(String animName) {
-        return switch (animName) {
-            case "idles" -> IDLES;
-            case "show" -> SHOW;
-            case "start" -> START;
-            case "scatter" -> SCATTER;
-            case "move" -> MOVE;
-            case "melon_tick" -> MELON_TICK;
-            case "melon_start" -> MELON_START;
+    private RawAnimation getAnimationByName(String name) {
+        return switch (name) {
+            case "idles"         -> IDLES;
+            case "show"          -> SHOW;
+            case "start"         -> START;
+            case "scatter"       -> SCATTER;
+            case "lemon_move"          -> MOVE;
+            case "melon_tick"    -> MELON_TICK;
+            case "melon_start"   -> MELON_START;
             case "melon_scatter" -> MELON_SCATTER;
-            case "melon_move" -> MELON_MOVE;
-            case "cherry_tick" -> CHERRY_TICK;
-            case "cherry_start" -> CHERRY_START;
-            case "cherry_scatter" -> CHERRY_SCATTER;
-            case "cherry_move" -> CHERRY_MOVE;
-            case "peach_tick" -> PEACH_TICK;
-            case "peach_start" -> PEACH_START;
+            case "melon_move"    -> MELON_MOVE;
+            case "cherry_tick"   -> CHERRY_TICK;
+            case "cherry_start"  -> CHERRY_START;
+            case "cherry_scatter"-> CHERRY_SCATTER;
+            case "cherry_move"   -> CHERRY_MOVE;
+            case "peach_tick"    -> PEACH_TICK;
+            case "peach_start"   -> PEACH_START;
             case "peach_scatter" -> PEACH_SCATTER;
-            case "peach_move" -> PEACH_MOVE;
-            default -> IDLES;
+            case "peach_move"    -> PEACH_MOVE;
+            default              -> IDLES;
         };
-    }
-
-    @Override
-    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
-        // 确保实体存在且是LivingEntity
-        if (slotContext.entity() == null || !(slotContext.entity() instanceof LivingEntity)) {
-            return;
-        }
-
-        LivingEntity living = (LivingEntity) slotContext.entity();
-        this.isShowing = true;
-        this.isActive = false;
-
-        // 更新NBT数据
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putBoolean("IsShowing", true);
-        tag.putBoolean("IsActive", false);
-        stack.setTag(tag);
-
-        // 只在服务端发送数据包，客户端会通过数据包触发动画
-        if (!living.level().isClientSide()) {
-            PacketHandler.sendToAll(new BeltAnimationPacket(
-                    living.getId(),
-                    "show",
-                    this.currentMode
-            ));
-        }
-
-        // 无论客户端还是服务端都尝试触发动画
-        triggerAnim(living, "controller", "show");
-    }
-
-    @Override
-    public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
-        // 确保实体存在且是LivingEntity
-        if (slotContext.entity() == null || !(slotContext.entity() instanceof LivingEntity)) {
-            return;
-        }
-
-        LivingEntity living = (LivingEntity) slotContext.entity();
-        this.isShowing = false;
-        this.isActive = false;
-
-        // 更新NBT数据
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putBoolean("IsShowing", false);
-        tag.putBoolean("IsActive", false);
-        stack.setTag(tag);
-
-        // 只在服务端发送数据包
-        if (!living.level().isClientSide()) {
-            PacketHandler.sendToAll(new BeltAnimationPacket(
-                    living.getId(),
-                    "idles",
-                    this.currentMode
-            ));
-        }
-
-        // 无论客户端还是服务端都尝试触发动画
-        triggerAnim(living, "controller", "idles");
-    }
-
-    @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        if (!slotContext.entity().level().isClientSide() &&
-                slotContext.entity() instanceof ServerPlayer player) {
-
-            CompoundTag tag = stack.getOrCreateTag();
-            tag.putString("BeltMode", currentMode.name());
-            tag.putBoolean("IsShowing", isShowing);
-            tag.putBoolean("IsActive", isActive);
-            stack.setTag(tag);
-
-            if (player.tickCount % 20 == 0) {
-                PacketHandler.sendToClient(
-                        new BeltAnimationPacket(
-                                player.getId(),
-                                "sync_state",
-                                this.currentMode
-                        ),
-                        player
-                );
-                player.getInventory().setChanged();
-            }
-        }
-    }
-
-    public BeltMode getMode(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if (tag.contains("BeltMode")) {
-            return BeltMode.valueOf(tag.getString("BeltMode"));
-        }
-        return BeltMode.DEFAULT;
-    }
-
-    public void setMode(ItemStack stack, BeltMode mode) {
-        // 重置相关状态
-        this.isActive = false;
-        this.isShowing = true;
-        this.isHenshining = false;
-        this.isReleasing = false;
-
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putString("BeltMode", mode.name());
-        tag.putBoolean("IsActive", this.isActive);
-        tag.putBoolean("IsShowing", this.isShowing);
-        this.currentMode = mode;
-        stack.setTag(tag);
-
-        if (stack.getEntityRepresentation() instanceof Player player) {
-            player.getInventory().setChanged();
-
-            // 同步到客户端
-            if (!player.level().isClientSide()) {
-                PacketHandler.sendToAllTracking(
-                        new BeltAnimationPacket(
-                                player.getId(),
-                                "show",
-                                this.currentMode
-                        ),
-                        player
-                );
-                triggerAnim(player, "controller", "show");
-            }
-        }
     }
 }

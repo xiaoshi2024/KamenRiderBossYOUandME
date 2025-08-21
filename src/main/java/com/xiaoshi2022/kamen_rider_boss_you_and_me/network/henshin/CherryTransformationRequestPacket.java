@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -103,9 +104,12 @@ public class CherryTransformationRequestPacket {
 
 
         /* --------------------------------- 播放腰带动画 --------------------------------- */
-        belt.startHenshinAnimation(player);   // 腰带自身动画
-        // 动画已由startHenshinAnimation方法内部处理，无需额外发送数据包
+//        belt.startHenshinAnimation(player, beltStack);   // 腰带自身动画
 
+        PacketHandler.sendToAllTracking(
+                new BeltAnimationPacket(player.getId(), "cherry_move", belt.getMode(beltStack)),
+                player
+        );
         /* --------------------------------- 播放变身音效 --------------------------------- */
         // 注意：樱桃变身音效
         player.level().playSound(
@@ -120,8 +124,22 @@ public class CherryTransformationRequestPacket {
 
         /* --------------------------------- 换装 & 标记状态 --------------------------------- */
         CherryRiderHenshin.trigger(player);   // 穿 3 件樱桃装甲
-        belt.isEquipped = true;
-        belt.isHenshining = true;
+        belt.setEquipped(beltStack, false);
+
+// 设置腰带模式
+        belt.setMode(beltStack, Genesis_driver.BeltMode.CHERRY);
+        belt.setHenshin(beltStack, true);
+        belt.setShowing(beltStack, false);
+
+// 发送动画包
+        belt.startHenshinAnimation(player, beltStack);
+
+        SlotResult slotResult = genesisDriver.get();
+        CurioUtils.updateCurioSlot(
+                player,
+                slotResult.slotContext().identifier(),
+                slotResult.slotContext().index(),
+                beltStack);
 
         // 清除樱桃就绪标记
         player.getPersistentData().remove("cherry_ready");

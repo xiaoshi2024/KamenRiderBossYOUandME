@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"move": {
+		"lemon_move": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 4.4167,
 			"bones": {
