@@ -1,0 +1,99 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    64,
+    64
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        -1,
+        -16.25,
+        3.25
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        -16,
+        3
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        16.5,
+        116,
+        0
+      ],
+      "translation": [
+        0,
+        -7.75,
+        0
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        20,
+        112,
+        0
+      ],
+      "translation": [
+        0,
+        -7.5,
+        0
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        -9.5,
+        0
+      ]
+    },
+    "gui": {
+      "rotation": [
+        -180,
+        -6.5,
+        -180
+      ],
+      "translation": [
+        0,
+        -31.25,
+        0
+      ],
+      "scale": [
+        2.2832,
+        2.2832,
+        2.2832
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        -22.5,
+        0
+      ],
+      "scale": [
+        2.02539,
+        2.02539,
+        2.02539
+      ]
+    },
+    "fixed": {
+      "translation": [
+        0,
+        -33,
+        6
+      ],
+      "scale": [
+        2.52539,
+        2.52539,
+        2.52539
+      ]
+    }
+  },
+  "textures": {
+    "particle": "sengokudriver_orangels:item/sengokudriver_orangels"
+  }
+}

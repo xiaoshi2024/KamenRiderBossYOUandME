@@ -22,6 +22,7 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 public class sengokudrivers_epmtysRenderer extends GeoItemRenderer<sengokudrivers_epmty> implements ICurioRenderer {
     private final GeoModel<sengokudrivers_epmty> defaultModel = new sengokudrivers_epmtyModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "sengokudrivers_epmty"));
     private final GeoModel<sengokudrivers_epmty> bananaModel = new SengokuDriverModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "sengokudrivers_epmty_banana"));
+    private final GeoModel<sengokudrivers_epmty> orangelsModel = new sengokudriver_orangelsModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "sengokudrivers_epmty_orangels"));
 
     public sengokudrivers_epmtysRenderer() {
         super(new sengokudrivers_epmtyModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "sengokudrivers_epmty")));
@@ -37,6 +38,8 @@ public class sengokudrivers_epmtysRenderer extends GeoItemRenderer<sengokudriver
             switch (mode) {
                 case BANANA:
                     return bananaModel; // 返回香蕉形态模型
+                case ORANGELS:
+                    return orangelsModel; // 返回橙柠檬形态模型
                 default:
                     return defaultModel; // 返回默认形态模型
             }

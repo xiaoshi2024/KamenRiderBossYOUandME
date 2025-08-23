@@ -62,12 +62,9 @@ public class modEventBusEvents {
 
                         // 战极驱动器处理（保持原有逻辑）
                         if (stack.getItem() instanceof sengokudrivers_epmty belt) {
+                            sengokudrivers_epmty.BeltMode mode = belt.getMode(stack);   // ← 读取 NBT
                             PacketHandler.sendToClient(
-                                    new BeltAnimationPacket(
-                                            player.getId(),
-                                            "login_sync",
-                                            belt.currentMode
-                                    ),
+                                    new BeltAnimationPacket(player.getId(), "login_sync", mode),
                                     player
                             );
                         }
@@ -148,6 +145,9 @@ public class modEventBusEvents {
             event.register(CHANGE_KEY);
             event.register(CHANGES_KEY);
             event.register(RELIEVE_KEY);
+            event.register(KEY_GUARD);
+            event.register(KEY_BLAST);
+            event.register(KEY_BOOST);
         }
     }
 }

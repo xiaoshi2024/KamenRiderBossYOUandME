@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -30,6 +31,13 @@ public class ModBossSounds {
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "peach_arms")));
   public static final RegistryObject<SoundEvent> PEACH_ENERGY = REGISTRY.register("peach_energy",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "peach_energy")));
+
+  public static final RegistryObject<SoundEvent> ORANGE = REGISTRY.register("orange",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "orange")));
+  public static final RegistryObject<SoundEvent> ORANGEBY = REGISTRY.register("orangeby",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "orangeby")));
+  public static final RegistryObject<SoundEvent> JIMBAR_LEMON = REGISTRY.register("jimbar_lemon",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "jimbar_lemon")));
 
     public static final RegistryObject<SoundEvent> LEMON_ENERGY = REGISTRY.register("lemon_energy",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_energy")));

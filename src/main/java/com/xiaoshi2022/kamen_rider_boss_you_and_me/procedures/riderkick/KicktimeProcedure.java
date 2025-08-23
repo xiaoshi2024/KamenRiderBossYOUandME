@@ -64,6 +64,10 @@ public class KicktimeProcedure {
 			handleKick(world, entity, ParticleTypesRegistry.PEACHSLICE.get());
 		} else if (helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
 			handleKick(world, entity, ParticleTypesRegistry.MLONSLICE.get());
+		} else if (helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()) {
+			handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
+		} else if (helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()) {
+			handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
 		}
 	}
 
@@ -210,6 +214,8 @@ public class KicktimeProcedure {
 				helmet.getItem() == ModItems.BARON_LEMON_HELMET.get() ||
 				helmet.getItem() == ModItems.DUKE_HELMET.get() ||
 				helmet.getItem() == ModItems.MARIKA_HELMET.get() ||
+				helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()||
+				helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()||
 				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
 	}
 }

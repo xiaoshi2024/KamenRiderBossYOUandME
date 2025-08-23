@@ -15,11 +15,16 @@
   "item.kamen_rider_boss_you_and_me.sengokudrivers": "战极驱动器--香蕉",
   "item.kamen_rider_boss_you_and_me.sengokudrivers_epmty": "战极驱动器",
   "item.kamen_rider_boss_you_and_me.bananafruit": "香蕉锁种",
+  "item.kamen_rider_boss_you_and_me.orangefruit": "橙子锁种",
   "item.kamen_rider_boss_you_and_me.genesis_driver": "创世纪驱动器",
   "item.kamen_rider_boss_you_and_me.lemon_energy": "柠檬能量锁种",
   "item.kamen_rider_boss_you_and_me.peach_energy": "桃子能量锁种",
   "item.kamen_rider_boss_you_and_me.globalism":"古罗巴里萨",
 
+  "key.guard": "阵羽护盾",
+  "key.blast": "黑暗爆破",
+  "key.boost": "柠檬加速",
+  "key.categories.kamen_rider": "假面骑士技能",
 
 
   "curios.identifier.bracelet": "腕带 插槽",

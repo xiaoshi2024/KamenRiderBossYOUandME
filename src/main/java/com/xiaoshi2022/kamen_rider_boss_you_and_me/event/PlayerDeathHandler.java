@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
@@ -18,6 +19,11 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.ORANGEFRUIT;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class PlayerDeathHandler {
@@ -37,12 +43,10 @@ public class PlayerDeathHandler {
                 returnBelt(player);
 
                 // 4. 返还刚才记下来的锁种
-                if (!lockseedType.isEmpty()) {
-                    ItemStack lockseed = getLockseedStackByType(lockseedType);
-                    if (!lockseed.isEmpty()) {
-                        if (!player.getInventory().add(lockseed)) {
-                            player.drop(lockseed, false);
-                        }
+                List<ItemStack> lockseeds = getLockseedStacksByType(lockseedType);
+                for (ItemStack stack : lockseeds) {
+                    if (!player.getInventory().add(stack)) {
+                        player.drop(stack, false);
                     }
                 }
             }
@@ -95,6 +99,7 @@ public class PlayerDeathHandler {
                     stack.getItem() instanceof RidernecromItem ||
                     stack.getItem() instanceof ZangetsuShinItem ||
                     stack.getItem() instanceof Sigurd ||
+                        stack.getItem() instanceof Dark_orangels ||
                     stack.getItem() instanceof Marika
                 ) {
                     return true;
@@ -114,6 +119,7 @@ public class PlayerDeathHandler {
                 armorStack.getItem() instanceof RidernecromItem ||
                 armorStack.getItem() instanceof ZangetsuShinItem ||
                 armorStack.getItem() instanceof Sigurd ||
+                    armorStack.getItem() instanceof Dark_orangels ||
                 armorStack.getItem() instanceof Marika) {
                 player.getInventory().armor.set(i, ItemStack.EMPTY);
             }
@@ -133,6 +139,8 @@ public class PlayerDeathHandler {
             return "BANANA";
         } else if (helmet.getItem() == ModItems.SIGURD_HELMET.get()) {
             return "CHERRY";
+        }else if (helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()){
+            return "ORANGE";
         } else if (helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
             return "MELON";
         }
@@ -148,6 +156,8 @@ public class PlayerDeathHandler {
             return "BANANA";
         } else if (chestplate.getItem() == ModItems.SIGURD_CHESTPLATE.get()) {
             return "CHERRY";
+        } else if (helmet.getItem() == ModItems.DARK_ORANGELS_CHESTPLATE.get()){
+            return "ORANGE";
         } else if (chestplate.getItem() == ModItems.ZANGETSU_SHIN_CHESTPLATE.get()) {
             return "MELON";
         }
@@ -156,22 +166,32 @@ public class PlayerDeathHandler {
     }
 
     // 根据类型获取锁种物品栈
-    private static ItemStack getLockseedStackByType(String type) {
+    private static List<ItemStack> getLockseedStacksByType(String type) {
+        List<ItemStack> list = new ArrayList<>();
         switch (type) {
             case "PEACH":
-                return new ItemStack(ModItems.PEACH_ENERGY.get());
+                list.add(new ItemStack(ModItems.PEACH_ENERGY.get()));
+                break;
             case "LEMON":
-                return new ItemStack(ModItems.LEMON_ENERGY.get());
+                list.add(new ItemStack(ModItems.LEMON_ENERGY.get()));
+                break;
             case "BANANA":
-                return new ItemStack(ModItems.BANANAFRUIT.get());
+                list.add(new ItemStack(ModItems.BANANAFRUIT.get()));
+                break;
             case "CHERRY":
-                // 检查是否有樱桃锁种，如果没有可以返回空或者创建一个默认的
-                return new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY.get());
+                list.add(new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY.get()));
+                break;
+            case "ORANGE":
+                // 返回两个锁种
+                list.add(new ItemStack(ModItems.LEMON_ENERGY.get()));
+                ItemStack darkOrange = new ItemStack(ORANGEFRUIT.get());
+                darkOrange.getOrCreateTag().putBoolean("isDarkVariant", true);
+                list.add(darkOrange);
+                break;
             case "MELON":
-                // 检查是否有蜜瓜锁种，如果没有可以返回空或者创建一个默认的
-                return new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.MELON.get());
-            default:
-                return ItemStack.EMPTY;
+                list.add(new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.MELON.get()));
+                break;
         }
+        return list;
     }
 }

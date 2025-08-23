@@ -1,6 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.lemonenergy.LemonEnergyRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.lemonenergy.darkLemonModel;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
@@ -38,25 +40,67 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 public class lemon_energy extends Item implements GeoItem {
+    private static final String TAG_IS_DARK_VARIANT = "isDarkVariant";
     private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("open");
     private static final RawAnimation SCATTER = RawAnimation.begin().thenPlay("scatter");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    
+    // 用于存储当前渲染的物品栈的静态ThreadLocal
+    private static final ThreadLocal<ItemStack> CURRENT_RENDER_STACK = new ThreadLocal<>();
 
     public lemon_energy(Properties properties) {
         super(properties);
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
+    
+    // 设置当前渲染的物品栈
+    public static void setCurrentRenderStack(ItemStack stack) {
+        CURRENT_RENDER_STACK.set(stack);
+    }
+    
+    // 清除当前渲染的物品栈
+    public static void clearCurrentRenderStack() {
+        CURRENT_RENDER_STACK.remove();
+    }
+
+    // 创建dark变种的静态方法
+    public static ItemStack createDarkLemonVariant() {
+        ItemStack stack = new ItemStack(ModItems.LEMON_ENERGY.get());
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putBoolean(TAG_IS_DARK_VARIANT, true);
+        return stack;
+    }
+
+    // 检查是否为dark变种
+    public static boolean isDarkVariant(ItemStack stack) {
+        return stack.hasTag() && stack.getTag().getBoolean(TAG_IS_DARK_VARIANT);
+    }
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private LemonEnergyRenderer renderer;
+            private LemonEnergyRenderer normalRenderer;
+            private LemonEnergyRenderer darkRenderer;
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (this.renderer == null)
-                    this.renderer = new LemonEnergyRenderer();
-                return this.renderer;
+                // 获取当前正在渲染的物品栈
+                ItemStack stack = CURRENT_RENDER_STACK.get();
+                
+                // 如果没有设置，则默认使用主手物品
+                if (stack == null) {
+                    stack = ClientUtils.getClientPlayer().getMainHandItem();
+                }
+                
+                if (stack != null && isDarkVariant(stack)) {
+                    if (this.darkRenderer == null)
+                        this.darkRenderer = (LemonEnergyRenderer) LemonEnergyRenderer.createDarkLemonRenderer();
+                    return this.darkRenderer;
+                } else {
+                    if (this.normalRenderer == null)
+                        this.normalRenderer = new LemonEnergyRenderer();
+                    return this.normalRenderer;
+                }
             }
         });
     }

@@ -2,8 +2,8 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick.SetupAnimationsProcedure;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KickDamageHelper;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
@@ -21,8 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -68,42 +67,48 @@ public class KickendProcedure {
 				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
 				helmet.getItem() == ModItems.MARIKA_HELMET.get() ||
 				helmet.getItem() == ModItems.DUKE_HELMET.get() ||
+				helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get() ||
+				helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get() ||
 				helmet.getItem() == ModItems.SIGURD_HELMET.get();
 	}
 
 	private static void handleKickEnd(LevelAccessor world, double x, double y, double z, Entity entity) {
-		// 设置需要爆炸的标志
 		setPlayerVariable(entity, "needExplode", true);
-
-		// 重置踢击状态
 		setPlayerVariable(entity, "kcik", false);
 
-		// 创建爆炸（现在可以安全地创建，因为伤害会被拦截）
+		// ① 纯特效爆炸（无伤害）
 		if (world instanceof Level _level && !_level.isClientSide()) {
-			_level.explode(null, x, y, z, 4, Level.ExplosionInteraction.NONE);
+			_level.explode(null, x, y, z, 0F, Level.ExplosionInteraction.NONE);
 		}
 
-		// 处理动画等其他逻辑
+		// ② 按头盔计算伤害并给周围敌人
+		if (world instanceof Level _level && !_level.isClientSide()) {
+			float damage = KickDamageHelper.getKickDamage(entity);
+			float radius = KickDamageHelper.getKickExplosionRadius(entity);
+			AABB box = new AABB(x, y, z, x, y, z).inflate(radius);
+			for (LivingEntity le : _level.getEntitiesOfClass(LivingEntity.class, box,
+					e -> e != entity && !e.isAlliedTo(entity))) {
+				le.hurt(((Player) entity).damageSources().playerAttack((Player) entity), damage);
+			}
+		}
+
+		// ③ 动画、无敌、复位等照旧
 		if (world.isClientSide()) {
 			if (entity instanceof AbstractClientPlayer player) {
-				var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
+				var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player)
+						.get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
 				if (animation != null) {
-					animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "steadily"))));
+					animation.setAnimation(new KeyframeAnimationPlayer(
+							PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "steadily"))));
 				}
 			}
 		}
 
-		// 延迟重置无敌状态和爆炸标志
 		kamen_rider_boss_you_and_me.queueServerWork(5, () -> {
 			setPlayerVariable(entity, "wudi", false);
 			setPlayerVariable(entity, "needExplode", false);
-
-			// 重置踢击时间变量
-			entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-				capability.kickStartTime = 0L;
-				capability.kickStartY = 0.0D;
-				capability.syncPlayerVariables(entity);
-			});
+			entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+					.ifPresent(cap -> { cap.kickStartTime = 0L; cap.kickStartY = 0.0; cap.syncPlayerVariables(entity); });
 		});
 	}
 

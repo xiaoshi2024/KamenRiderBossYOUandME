@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -32,6 +33,10 @@ public class ModTab {
                 output.accept(BANANAFRUIT.get());
                 output.accept(LEMON_ENERGY.get());
                 output.accept(PEACH_ENERGY.get());
+                // 把橘子锁种默认设为黑暗
+                ItemStack darkOrange = new ItemStack(ORANGEFRUIT.get());
+                darkOrange.getOrCreateTag().putBoolean("isDarkVariant", true);
+                output.accept(darkOrange);
             })).build());
     public static final RegistryObject<CreativeModeTab> KINDS_TAB = TABS.register("kamen_rider_boss_you_and_me_kinds_tab", () -> CreativeModeTab.builder()
             .icon(() -> INVES_MEAT.get().getDefaultInstance())

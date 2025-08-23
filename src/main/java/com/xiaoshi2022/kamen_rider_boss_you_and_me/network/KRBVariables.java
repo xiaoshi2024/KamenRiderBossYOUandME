@@ -132,6 +132,7 @@ public class  KRBVariables {
 	public long melon_ready_time = 0L;
 	public boolean banana_ready = false;
 	public long banana_ready_time = 0L;
+	public boolean orange_ready = false;
 
 		public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)

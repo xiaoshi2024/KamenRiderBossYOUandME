@@ -205,5 +205,32 @@
         "stream": false
       }
     ]
+  },
+  "jimbar_lemon": {
+    "subtitle": "jimbar_lemon~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:jimbar_lemon",
+        "stream": false
+      }
+    ]
+  },
+  "orange": {
+    "subtitle": "orange~ ~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:orange",
+        "stream": false
+      }
+    ]
+  },
+  "orangeby": {
+    "subtitle": "orangeby~ ~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:orangeby",
+        "stream": false
+      }
+    ]
   }
 }

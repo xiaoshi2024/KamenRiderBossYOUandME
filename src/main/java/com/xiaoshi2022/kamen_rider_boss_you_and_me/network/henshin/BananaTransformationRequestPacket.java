@@ -106,8 +106,8 @@ public class BananaTransformationRequestPacket {
         // 触发变身
         new HeartCoreEvent(player);
 
-        belt.isEquipped = true;
-        belt.isHenshining = true;
+        belt.setEquipped(beltStack, true);
+        belt.setHenshin(beltStack, true);
     }
 
     private static void clearBananasEntities(ServerPlayer player) {

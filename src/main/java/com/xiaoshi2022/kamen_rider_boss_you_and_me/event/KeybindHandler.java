@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MarikaTransfo
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MelonTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkOrangeReleaseRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
@@ -220,16 +221,23 @@ public class KeybindHandler {
                     }
                 });
 
-        // 香蕉逻辑
+        // 香蕉和DarkOrange逻辑
         CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof sengokudrivers_epmty)
                 .ifPresent(curio -> {
                     ItemStack beltStack = curio.stack();
                     sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
+                    sengokudrivers_epmty.BeltMode mode = belt.getMode(beltStack);
 
-                    if (belt.getMode(beltStack) == sengokudrivers_epmty.BeltMode.BANANA) {
-                        // 发送解除变身请求
+                    if (mode == sengokudrivers_epmty.BeltMode.BANANA) {
+                        // 发送香蕉解除变身请求
                         PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "BARONS", true)); // true 表示是解除变身请求
-                        belt.startReleaseAnimation(player);
+                        belt.startReleaseAnimation(player,beltStack);
+                        delayTicks = 40;
+                        delayedBeltStack = beltStack.copy();
+                    } else if (mode == sengokudrivers_epmty.BeltMode.ORANGELS) {
+                        // 发送DarkOrange解除变身请求
+                        PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkOrangeReleaseRequestPacket(player.getUUID()));
+                        belt.startReleaseAnimation(player,beltStack);
                         delayTicks = 40;
                         delayedBeltStack = beltStack.copy();
                     }
@@ -431,7 +439,7 @@ public class KeybindHandler {
 
         // 6. 重置腰带状态
         belt.setEquipped(beltStack, false);
-        belt.setHenshin(beltStack, false);;
+        belt.setHenshin(beltStack, false);
         player.inventoryMenu.broadcastChanges();
     }
 
@@ -473,8 +481,9 @@ public class KeybindHandler {
                     player.spawnAtLocation(bananaLockSeed);
                 }
 
-                belt.isEquipped = false;
-                belt.isHenshining = false;
+                // 6. 重置腰带状态
+                belt.setEquipped(beltStack, false);
+                belt.setHenshin(beltStack, false);
 
                 player.inventoryMenu.broadcastChanges();
             }

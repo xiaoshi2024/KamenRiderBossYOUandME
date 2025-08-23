@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Lemonx.LemoxRend
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.MelonSX.melonsxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Cherryx.cherryxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Peachx.PeachxRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.orange_lemons.OrangelsxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
@@ -17,6 +18,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.Lord
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.CherrySigurdAbilityHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DarkGaimJinbaLemonHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.LemonsliceParticle;
@@ -76,6 +78,8 @@ public class kamen_rider_boss_you_and_me
         MinecraftForge.EVENT_BUS.register(new HelheimVineHandler());
         //注册实体
         ModEntityTypes.ENTITY_TYPES.register(modEventBus);
+
+        MinecraftForge.EVENT_BUS.register(DarkGaimJinbaLemonHandler.class);
 
         // 注册 KeybindHandler
         MinecraftForge.EVENT_BUS.register(KeybindHandler.class);
@@ -146,6 +150,7 @@ public class kamen_rider_boss_you_and_me
             event.registerBlockEntityRenderer(ModBlockEntities.MELONSX_ENTITY.get(), melonsxRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.CHERRYX_ENTITY.get(), cherryxRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.PEACHX_ENTITY.get(), PeachxRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.ORANGELSX_ENTITY.get(), OrangelsxRenderer::new);
         }
 
         @SubscribeEvent

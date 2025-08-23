@@ -1,5 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkSquashPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.JinbaGuardPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.LemonBoostPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -46,6 +49,21 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++, CherryTransformationRequestPacket.class, CherryTransformationRequestPacket::encode, CherryTransformationRequestPacket::decode, CherryTransformationRequestPacket::handle);
 
         INSTANCE.registerMessage(index++, MarikaTransformationRequestPacket.class, MarikaTransformationRequestPacket::encode, MarikaTransformationRequestPacket::decode, MarikaTransformationRequestPacket::handle);
+
+        // 注册 DarkOrangeTransformationRequestPacket
+        INSTANCE.registerMessage(index++, DarkOrangeTransformationRequestPacket.class, DarkOrangeTransformationRequestPacket::encode, DarkOrangeTransformationRequestPacket::decode, DarkOrangeTransformationRequestPacket::handle);
+
+        // 注册 DarkOrangeReleaseRequestPacket
+        INSTANCE.registerMessage(index++, DarkOrangeReleaseRequestPacket.class, DarkOrangeReleaseRequestPacket::encode, DarkOrangeReleaseRequestPacket::decode, DarkOrangeReleaseRequestPacket::handle);
+        INSTANCE.registerMessage(index++, JinbaGuardPacket.class,
+                JinbaGuardPacket::encode, JinbaGuardPacket::decode,
+                JinbaGuardPacket::handle);
+        INSTANCE.registerMessage(index++, DarkSquashPacket.class,
+                DarkSquashPacket::encode, DarkSquashPacket::decode,
+                DarkSquashPacket::handle);
+        INSTANCE.registerMessage(index++, LemonBoostPacket.class,
+                LemonBoostPacket::encode, LemonBoostPacket::decode,
+                LemonBoostPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

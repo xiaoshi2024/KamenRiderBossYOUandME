@@ -30,9 +30,12 @@ public class HeartCoreEvent {
         }
     }
 
-    // 检查玩家是否佩戴创世纪驱动器
+    // 检查玩家是否佩戴驱动器（创世纪或 sengokudrivers_epmty）
     private boolean isGenesisDriverUser(Player player) {
-        return CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver).isPresent();
+        return CurioUtils.findFirstCurio(player, stack -> 
+            stack.getItem() instanceof Genesis_driver || 
+            stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty
+        ).isPresent();
     }
 
     // 处理创世纪驱动器变身
@@ -63,6 +66,9 @@ public class HeartCoreEvent {
                     equipLemonEnergyArmor(player);
                 }
                 break;
+            case "DARK_ORANGE":
+                equipDarkOrangeArmor(player);
+                break;
             case "BARONS":
             default:
                 equipBaronsArmor(player);
@@ -92,6 +98,17 @@ public class HeartCoreEvent {
         ItemStack helmet = new ItemStack(ModItems.DUKE_HELMET.get());
         ItemStack chestplate = new ItemStack(ModItems.DUKE_CHESTPLATE.get());
         ItemStack leggings = new ItemStack(ModItems.DUKE_LEGGINGS.get());
+
+        player.getInventory().armor.set(3, helmet);
+        player.getInventory().armor.set(2, chestplate);
+        player.getInventory().armor.set(1, leggings);
+    }
+
+    // 装备Dark_orangels装甲
+    private void equipDarkOrangeArmor(Player player) {
+        ItemStack helmet = new ItemStack(ModItems.DARK_ORANGELS_HELMET.get());
+        ItemStack chestplate = new ItemStack(ModItems.DARK_ORANGELS_CHESTPLATE.get());
+        ItemStack leggings = new ItemStack(ModItems.DARK_ORANGELS_LEGGINGS.get());
 
         player.getInventory().armor.set(3, helmet);
         player.getInventory().armor.set(2, chestplate);
