@@ -33,6 +33,7 @@ public class ModTab {
                 output.accept(BANANAFRUIT.get());
                 output.accept(LEMON_ENERGY.get());
                 output.accept(PEACH_ENERGY.get());
+                output.accept(DRAGONFRUIT.get());
                 // 把橘子锁种默认设为黑暗
                 ItemStack darkOrange = new ItemStack(ORANGEFRUIT.get());
                 darkOrange.getOrCreateTag().putBoolean("isDarkVariant", true);

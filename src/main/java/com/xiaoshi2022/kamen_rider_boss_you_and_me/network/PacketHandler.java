@@ -55,6 +55,9 @@ public class PacketHandler {
 
         // 注册 DarkOrangeReleaseRequestPacket
         INSTANCE.registerMessage(index++, DarkOrangeReleaseRequestPacket.class, DarkOrangeReleaseRequestPacket::encode, DarkOrangeReleaseRequestPacket::decode, DarkOrangeReleaseRequestPacket::handle);
+
+        // 注册 DragonfruitTransformationRequestPacket
+        INSTANCE.registerMessage(index++, DragonfruitTransformationRequestPacket.class, DragonfruitTransformationRequestPacket::encode, DragonfruitTransformationRequestPacket::decode, DragonfruitTransformationRequestPacket::handle);
         INSTANCE.registerMessage(index++, JinbaGuardPacket.class,
                 JinbaGuardPacket::encode, JinbaGuardPacket::decode,
                 JinbaGuardPacket::handle);
@@ -64,6 +67,10 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++, LemonBoostPacket.class,
                 LemonBoostPacket::encode, LemonBoostPacket::decode,
                 LemonBoostPacket::handle);
+        INSTANCE.registerMessage(index++, SyncTransformationPacket.class,
+                SyncTransformationPacket::encode,
+                SyncTransformationPacket::decode,
+                SyncTransformationPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

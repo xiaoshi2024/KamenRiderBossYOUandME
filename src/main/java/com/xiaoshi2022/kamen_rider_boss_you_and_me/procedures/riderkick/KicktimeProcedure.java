@@ -68,6 +68,8 @@ public class KicktimeProcedure {
 			handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
 		} else if (helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()) {
 			handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
+		} else if (helmet.getItem() == ModItems.TYRANT_HELMET.get()) {
+			handleKick(world, entity, ParticleTypesRegistry.DRAGONLICE.get());
 		}
 	}
 
@@ -216,6 +218,7 @@ public class KicktimeProcedure {
 				helmet.getItem() == ModItems.MARIKA_HELMET.get() ||
 				helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()||
 				helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()||
+				helmet.getItem() == ModItems.TYRANT_HELMET.get() ||
 				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
 	}
 }

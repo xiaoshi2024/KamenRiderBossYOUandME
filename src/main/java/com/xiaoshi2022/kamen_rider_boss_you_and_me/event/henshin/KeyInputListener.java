@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MarikaTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DragonfruitTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.RiderTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
@@ -46,6 +47,7 @@ public final class KeyInputListener {
                 case MELON  -> RiderTypes.MELON_ENERGY;
                 case CHERRY -> RiderTypes.CHERRY_ENERGY;
                 case PEACH -> RiderTypes.PEACH_ENERGY;
+                case DRAGONFRUIT -> RiderTypes.DRAGONFRUIT_ENERGY;
                 default -> null;
             };
 
@@ -57,6 +59,9 @@ public final class KeyInputListener {
                 } else if (riderType.equals(RiderTypes.PEACH_ENERGY)) {
                     PacketHandler.INSTANCE.sendToServer(
                             new MarikaTransformationRequestPacket(player.getUUID()));
+                } else if (riderType.equals(RiderTypes.DRAGONFRUIT_ENERGY)) {
+                    PacketHandler.INSTANCE.sendToServer(
+                            new DragonfruitTransformationRequestPacket(player.getUUID()));
                 } else {
                     PacketHandler.INSTANCE.sendToServer(
                             new TransformationRequestPacket(player.getUUID(), riderType, false));
@@ -66,18 +71,27 @@ public final class KeyInputListener {
         }
 
         // 2. 战极腰带
-        Optional<sengokudrivers_epmty> sengoku = CurioUtils.findFirstCurio(player,
-                        stack -> stack.getItem() instanceof sengokudrivers_epmty)
-                .map(slot -> (sengokudrivers_epmty) slot.stack().getItem());
+        Optional<sengokudrivers_epmty> sengoku =
+                CurioUtils.findFirstCurio(player,
+                                stack -> stack.getItem() instanceof sengokudrivers_epmty)
+                        .map(slot -> (sengokudrivers_epmty) slot.stack().getItem());
 
-        if (sengoku.isPresent() &&
-                sengoku.get().getMode(CurioUtils.findFirstCurio(player,
-                        stack -> stack.getItem() instanceof sengokudrivers_epmty).get().stack())
-                        == sengokudrivers_epmty.BeltMode.BANANA) {
+        if (sengoku.isPresent()) {
+            sengokudrivers_epmty.BeltMode mode =
+                    sengoku.get().getMode(CurioUtils.findFirstCurio(player,
+                            stack -> stack.getItem() instanceof sengokudrivers_epmty).get().stack());
 
-            if (isWearingArmor(player, RiderTypes.BANANA)) return;
-            PacketHandler.INSTANCE.sendToServer(
-                    new TransformationRequestPacket(player.getUUID(), RiderTypes.BANANA, false));
+            String riderType = switch (mode) {
+                case BANANA      -> RiderTypes.BANANA;
+                case ORANGELS -> RiderTypes.ORANGELS;   // 新增
+                default          -> null;
+            };
+
+            if (riderType != null) {
+                if (isWearingArmor(player, riderType)) return;
+                PacketHandler.INSTANCE.sendToServer(
+                        new TransformationRequestPacket(player.getUUID(), riderType, false));
+            }
         }
     }
 
@@ -107,6 +121,10 @@ public final class KeyInputListener {
                     player.getInventory().armor.get(3).is(ModItems.RIDER_BARONS_HELMET.get()) &&
                     player.getInventory().armor.get(2).is(ModItems.RIDER_BARONS_CHESTPLATE.get()) &&
                     player.getInventory().armor.get(1).is(ModItems.RIDER_BARONS_LEGGINGS.get());
+            case RiderTypes.ORANGELS ->
+                    player.getInventory().armor.get(3).is(ModItems.DARK_ORANGELS_HELMET.get()) &&
+                            player.getInventory().armor.get(2).is(ModItems.DARK_ORANGELS_CHESTPLATE.get()) &&
+                            player.getInventory().armor.get(1).is(ModItems.DARK_ORANGELS_LEGGINGS.get());
             case RiderTypes.PEACH_ENERGY ->
                     player.getInventory().armor.get(3).is(ModItems.MARIKA_HELMET.get()) &&
                     player.getInventory().armor.get(2).is(ModItems.MARIKA_CHESTPLATE.get()) &&
@@ -115,6 +133,10 @@ public final class KeyInputListener {
                     player.getInventory().armor.get(3).is(ModItems.SIGURD_HELMET.get()) &&
                     player.getInventory().armor.get(2).is(ModItems.SIGURD_CHESTPLATE.get()) &&
                     player.getInventory().armor.get(1).is(ModItems.SIGURD_LEGGINGS.get());
+            case RiderTypes.DRAGONFRUIT_ENERGY ->
+                    player.getInventory().armor.get(3).is(ModItems.TYRANT_HELMET.get()) &&
+                    player.getInventory().armor.get(2).is(ModItems.TYRANT_CHESTPLATE.get()) &&
+                    player.getInventory().armor.get(1).is(ModItems.TYRANT_LEGGINGS.get());
             default -> false;
         };
     }

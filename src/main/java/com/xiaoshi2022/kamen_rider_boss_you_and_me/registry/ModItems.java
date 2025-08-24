@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.StoriousMonsterB
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.food.InvesMeat;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.giifusteamp;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.dragonfruit;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder;
@@ -16,6 +17,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shi
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -97,6 +99,15 @@ public class ModItems {
             }
     );
 
+    public static final RegistryObject<dragonfruit> DRAGONFRUIT = ITEMS.register("dragonfruit",
+            () -> new dragonfruit(new Item.Properties()) {
+                @Override
+                public void onCraftedBy(ItemStack stack, Level world, Player player) {
+                    stack.getOrCreateTag().putInt("is_lockseed", 1); // 标记为锁种
+                }
+            }
+    );
+
 
     public static final RegistryObject<Mega_uiorder> MEGA_UIORDER_ITEM = ITEMS.register("mega_uiorder_item",
             () -> new Mega_uiorder(new Item.Properties()));
@@ -140,5 +151,10 @@ public class ModItems {
     public static final RegistryObject<Dark_orangels> DARK_ORANGELS_HELMET = ITEMS.register("dark_orangels_helmet", () -> new Dark_orangels(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Dark_orangels> DARK_ORANGELS_CHESTPLATE = ITEMS.register("dark_orangels_chestplate", () -> new Dark_orangels(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Dark_orangels> DARK_ORANGELS_LEGGINGS = ITEMS.register("dark_orangels_leggings", () -> new Dark_orangels(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    // Tyrant形态盔甲
+    public static final RegistryObject<TyrantItem> TYRANT_HELMET = ITEMS.register("tyrant_helmet", () -> new TyrantItem(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<TyrantItem> TYRANT_CHESTPLATE = ITEMS.register("tyrant_chestplate", () -> new TyrantItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<TyrantItem> TYRANT_LEGGINGS = ITEMS.register("tyrant_leggings", () -> new TyrantItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
 }

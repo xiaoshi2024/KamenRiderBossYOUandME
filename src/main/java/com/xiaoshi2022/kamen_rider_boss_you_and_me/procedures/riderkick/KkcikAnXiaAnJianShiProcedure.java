@@ -24,6 +24,7 @@ public class KkcikAnXiaAnJianShiProcedure {
 				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
 				helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()||
 				helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()||
+				helmet.getItem() == ModItems.TYRANT_HELMET.get()||
 				helmet.getItem() == ModItems.SIGURD_HELMET.get()) &&
 				!isKicking(entity)) {
 

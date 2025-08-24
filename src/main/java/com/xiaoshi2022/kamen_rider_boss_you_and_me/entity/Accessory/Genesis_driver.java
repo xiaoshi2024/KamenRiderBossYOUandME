@@ -54,6 +54,11 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
     private static final RawAnimation PEACH_SCATTER = RawAnimation.begin().thenPlayAndHold("peach_scatter");
     private static final RawAnimation PEACH_MOVE    = RawAnimation.begin().thenPlayAndHold("peach_move");
 
+    private static final RawAnimation DRAGONFRUIT_TICK    = RawAnimation.begin().thenPlayAndHold("dragonfruit_tick");
+    private static final RawAnimation DRAGONFRUIT_START   = RawAnimation.begin().thenPlayAndHold("dragonfruit_start");
+    private static final RawAnimation DRAGONFRUIT_SCATTER = RawAnimation.begin().thenPlayAndHold("dragonfruit_scatter");
+    private static final RawAnimation DRAGONFRUIT_MOVE    = RawAnimation.begin().thenPlayAndHold("dragonfruit_move");
+
     public boolean getEquipped(ItemStack stack) {
         return stack.getOrCreateTag().getBoolean("IsEquipped");
     }
@@ -65,7 +70,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
     /* ----------------------------------------------------------- */
 
     public enum BeltMode {
-        DEFAULT, LEMON, MELON, CHERRY, PEACH
+        DEFAULT, LEMON, MELON, CHERRY, PEACH, DRAGONFRUIT
     }
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -96,7 +101,11 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 .triggerableAnim("peach_tick", PEACH_TICK)
                 .triggerableAnim("peach_start", PEACH_START)
                 .triggerableAnim("peach_scatter", PEACH_SCATTER)
-                .triggerableAnim("peach_move", PEACH_MOVE));
+                .triggerableAnim("peach_move", PEACH_MOVE)
+                .triggerableAnim("dragonfruit_tick", DRAGONFRUIT_TICK)
+                .triggerableAnim("dragonfruit_start", DRAGONFRUIT_START)
+                .triggerableAnim("dragonfruit_scatter", DRAGONFRUIT_SCATTER)
+                .triggerableAnim("dragonfruit_move", DRAGONFRUIT_MOVE));
     }
 
     /* 读取实时 NBT 状态，不再使用任何字段 */
@@ -120,6 +129,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 case LEMON, MELON, DEFAULT -> "start";
                 case CHERRY -> "cherry_start";
                 case PEACH  -> "peach_start";
+                case DRAGONFRUIT -> "dragonfruit_start";
             };
             if (!current.equals(releaseAnim))
                 return state.setAndContinue(getAnimationByName(releaseAnim));
@@ -140,6 +150,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 case MELON  -> "melon_move";
                 case CHERRY -> "cherry_move";
                 case PEACH  -> "peach_move";
+                case DRAGONFRUIT -> "dragonfruit_move";
                 default     -> "move";
             };
             RawAnimation scatterAnim = switch (mode) {
@@ -147,6 +158,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 case MELON  -> MELON_SCATTER;
                 case CHERRY -> CHERRY_SCATTER;
                 case PEACH  -> PEACH_SCATTER;
+                case DRAGONFRUIT -> DRAGONFRUIT_SCATTER;
                 default     -> SCATTER;
             };
 
@@ -161,6 +173,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
                 case MELON  -> "melon_scatter";
                 case CHERRY -> "cherry_scatter";
                 case PEACH  -> "peach_scatter";
+                case DRAGONFRUIT -> "dragonfruit_scatter";
                 default     -> "scatter";
             };
 
@@ -248,6 +261,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             case MELON  -> "melon_move";
             case CHERRY -> "cherry_move";
             case PEACH  -> "peach_move";
+            case DRAGONFRUIT -> "dragonfruit_move";
             default     -> "move";
         };
 
@@ -274,6 +288,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             case LEMON  -> "start";
             case CHERRY -> "cherry_start";
             case PEACH  -> "peach_start";
+            case DRAGONFRUIT -> "dragonfruit_start";
             default     -> "start";
         };
 
@@ -374,7 +389,7 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             case "show"          -> SHOW;
             case "start"         -> START;
             case "scatter"       -> SCATTER;
-            case "lemon_move"          -> MOVE;
+            case "lemon_move"    -> MOVE;
             case "melon_tick"    -> MELON_TICK;
             case "melon_start"   -> MELON_START;
             case "melon_scatter" -> MELON_SCATTER;
@@ -387,6 +402,10 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
             case "peach_start"   -> PEACH_START;
             case "peach_scatter" -> PEACH_SCATTER;
             case "peach_move"    -> PEACH_MOVE;
+            case "dragonfruit_tick"    -> DRAGONFRUIT_TICK;
+            case "dragonfruit_start"   -> DRAGONFRUIT_START;
+            case "dragonfruit_scatter" -> DRAGONFRUIT_SCATTER;
+            case "dragonfruit_move"    -> DRAGONFRUIT_MOVE;
             default              -> IDLES;
         };
     }

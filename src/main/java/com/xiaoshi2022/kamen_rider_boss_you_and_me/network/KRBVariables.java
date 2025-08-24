@@ -133,8 +133,12 @@ public class  KRBVariables {
 	public boolean banana_ready = false;
 	public long banana_ready_time = 0L;
 	public boolean orange_ready = false;
+    public long orange_ready_time = 0L;
+		public boolean dragonfruit_ready = false;
+		public long dragonfruit_ready_time = 0L;
+		public long dragonfruit_time = 0L;
 
-		public void syncPlayerVariables(Entity entity) {
+        public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
 				 kamen_rider_boss_you_and_me.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
 		}
@@ -159,6 +163,11 @@ public class  KRBVariables {
 		nbt.putLong("melon_ready_time", melon_ready_time);
 		nbt.putBoolean("banana_ready", banana_ready);
 		nbt.putLong("banana_ready_time", banana_ready_time);
+		nbt.putBoolean("orange_ready", orange_ready);
+		nbt.putLong("orange_ready_time", orange_ready_time);
+		nbt.putBoolean("dragonfruit_ready", dragonfruit_ready);
+		nbt.putLong("dragonfruit_ready_time", dragonfruit_ready_time);
+		nbt.putLong("dragonfruit_time", dragonfruit_time);
 		return nbt;
 	}
 
@@ -182,6 +191,11 @@ public class  KRBVariables {
 		melon_ready_time = nbt.getLong("melon_ready_time");
 		banana_ready = nbt.getBoolean("banana_ready");
 		banana_ready_time = nbt.getLong("banana_ready_time");
+		orange_ready = nbt.getBoolean("orange_ready");
+		orange_ready_time = nbt.getLong("orange_ready_time");
+		dragonfruit_ready = nbt.getBoolean("dragonfruit_ready");
+		dragonfruit_ready_time = nbt.getLong("dragonfruit_ready_time");
+		dragonfruit_time = nbt.getLong("dragonfruit_time");
 	}
 	}
 
@@ -222,7 +236,9 @@ public class  KRBVariables {
 				variables.melon_ready = message.data.melon_ready;
 				variables.melon_ready_time = message.data.melon_ready_time;
 				variables.banana_ready = message.data.banana_ready;
-				variables.banana_ready_time = message.data.banana_ready_time;
+			variables.banana_ready_time = message.data.banana_ready_time;
+			variables.orange_ready = message.data.orange_ready;
+			variables.orange_ready_time = message.data.orange_ready_time;
 				}
 			});
 			context.setPacketHandled(true);

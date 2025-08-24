@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrive
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
@@ -98,6 +99,7 @@ public class PlayerDeathHandler {
                     stack.getItem() instanceof Duke ||
                     stack.getItem() instanceof RidernecromItem ||
                     stack.getItem() instanceof ZangetsuShinItem ||
+                        stack.getItem() instanceof TyrantItem ||
                     stack.getItem() instanceof Sigurd ||
                         stack.getItem() instanceof Dark_orangels ||
                     stack.getItem() instanceof Marika
@@ -119,6 +121,7 @@ public class PlayerDeathHandler {
                 armorStack.getItem() instanceof RidernecromItem ||
                 armorStack.getItem() instanceof ZangetsuShinItem ||
                 armorStack.getItem() instanceof Sigurd ||
+                armorStack.getItem() instanceof TyrantItem ||
                     armorStack.getItem() instanceof Dark_orangels ||
                 armorStack.getItem() instanceof Marika) {
                 player.getInventory().armor.set(i, ItemStack.EMPTY);
@@ -143,6 +146,8 @@ public class PlayerDeathHandler {
             return "ORANGE";
         } else if (helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
             return "MELON";
+        } else if (helmet.getItem() == ModItems.TYRANT_HELMET.get()) {
+            return "DRAGONFRUIT";
         }
 
         // 如果没有匹配的头盔，检查胸甲
@@ -160,6 +165,8 @@ public class PlayerDeathHandler {
             return "ORANGE";
         } else if (chestplate.getItem() == ModItems.ZANGETSU_SHIN_CHESTPLATE.get()) {
             return "MELON";
+        } else if (helmet.getItem() == ModItems.TYRANT_CHESTPLATE.get()) {
+            return "DRAGONFRUIT";
         }
 
         return ""; // 没有找到匹配的盔甲类型
@@ -181,6 +188,9 @@ public class PlayerDeathHandler {
             case "CHERRY":
                 list.add(new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY.get()));
                 break;
+
+                case "DRAGONFRUIT":
+                    list.add(new ItemStack(ModItems.DRAGONFRUIT.get()));
             case "ORANGE":
                 // 返回两个锁种
                 list.add(new ItemStack(ModItems.LEMON_ENERGY.get()));

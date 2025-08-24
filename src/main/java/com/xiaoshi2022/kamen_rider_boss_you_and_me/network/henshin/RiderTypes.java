@@ -6,6 +6,8 @@ public final class RiderTypes {
     public static final String BANANA       = "BANANA";
     public static final String CHERRY_ENERGY = "CHERRY_ENERGY";
     public static final String PEACH_ENERGY = "PEACH_ENERGY";
+    public static final String ORANGELS =  "DARK_ORANGE";
+    public static final String DRAGONFRUIT_ENERGY = "DRAGONFRUIT_ENERGY";
 
     private RiderTypes() {}
 }

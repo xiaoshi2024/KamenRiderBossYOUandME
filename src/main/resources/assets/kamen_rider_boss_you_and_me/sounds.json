@@ -232,5 +232,23 @@
         "stream": false
       }
     ]
+  },
+  "dragonfruit_energy": {
+    "subtitle": "dragonfruit Energy~ ~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:dragonfruit_energy",
+        "stream": false
+      }
+    ]
+  },
+  "dragonfruit_arms": {
+    "subtitle": "dragonfruit arms~ ~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:dragonfruit_arms",
+        "stream": false
+      }
+    ]
   }
 }

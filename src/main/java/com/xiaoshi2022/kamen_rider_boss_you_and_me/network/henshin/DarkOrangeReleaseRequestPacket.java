@@ -41,19 +41,29 @@ public class DarkOrangeReleaseRequestPacket {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
             if (player != null && player.getUUID().equals(msg.playerId)) {
-                handleDarkOrangeRelease(player);
+                boolean success = handleDarkOrangeRelease(player);
+
+                if (success) {
+                    // 广播解除变身状态
+                    // 使用sendToAll确保所有客户端（包括新加入的玩家）都能接收解除变身状态同步信息
+                    PacketHandler.sendToAll(
+                            new SyncTransformationPacket(player.getId(), "NONE", false)
+                    );
+                }
             }
         });
         ctx.get().setPacketHandled(true);
     }
 
-    private static void handleDarkOrangeRelease(ServerPlayer player) {
+    private static boolean handleDarkOrangeRelease(ServerPlayer player) {
         Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(player).resolve()
                 .flatMap(curios -> curios.findFirstCurio(item -> item.getItem() instanceof sengokudrivers_epmty));
 
         if (beltOptional.isPresent()) {
             handleDarkOrangelsRelease(player, beltOptional.get());
+            return true; // 解除变身成功
         }
+        return false; // 没有腰带，解除失败
     }
 
     private static void clearTransformationArmor(ServerPlayer player) {
@@ -79,13 +89,15 @@ public class DarkOrangeReleaseRequestPacket {
         // 停止变身状态下的音效
         ResourceLocation soundLoc = new ResourceLocation(
                 "kamen_rider_boss_you_and_me",
-                "dark_orange_loop"
+                "orangeby"
         );
+        // 使用sendToAll确保所有客户端（包括新加入的玩家）都能接收音效停止指令
         PacketHandler.sendToAllTracking(
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
         PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
+
 
         // 播放解除变身音效
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(),

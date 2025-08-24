@@ -1,11 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.BananasEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.LemonxEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.cherryxEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.melonxEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.PeachxEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.OrangelsxEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
@@ -46,4 +41,8 @@ public class ModBlockEntities {
                     () -> BlockEntityType.Builder.of(OrangelsxEntity::new,
                             ModBlocks.ORANGELSX_BLOCK.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<DragonfruitBlockEntity>> DRAGONFRUITX_ENTITY =
+            BLOCK_ENTITIES.register("dragonfruitx_entity",
+                    () -> BlockEntityType.Builder.of(DragonfruitBlockEntity::new,
+                            ModBlocks.DRAGONFRUITX_BLOCK.get()).build(null));
 }

@@ -36,6 +36,9 @@ public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> imple
             new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_cherry"));
     private final GenesisDriver_peachModel peachModel = new GenesisDriver_peachModel(
             new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_peach"));
+    private final GenesisDriver_dragonfruitModel dragonfruitModel = new GenesisDriver_dragonfruitModel(
+            new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_dragonfruit"));
+
 
 
     public GenesisDriverRenderer() {
@@ -52,6 +55,7 @@ public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> imple
                 case MELON -> melonModel;
                 case CHERRY -> cherryModel;
                 case PEACH -> peachModel;
+                case DRAGONFRUIT -> dragonfruitModel;
                 default     -> defaultModel;
             };
         }

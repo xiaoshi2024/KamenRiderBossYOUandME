@@ -19,6 +19,7 @@ public final class KickDamageHelper {
         if (helmet.is(ModItems.DARK_ORANGELS_HELMET.get()))    return 22F; // 黑暗铠武
         if (helmet.is(ModItems.RIDER_BARONS_HELMET.get()))     return 16F; // 巴隆
         if (helmet.is(ModItems.SIGURD_HELMET.get()))           return 15F; // 假面骑士西格
+        if (helmet.is(ModItems.TYRANT_HELMET.get()))           return 20F; // 假面骑士暴君
 
         return 8F; // 默认
     }
@@ -33,6 +34,7 @@ public final class KickDamageHelper {
         if (helmet.is(ModItems.DARK_ORANGELS_HELMET.get()))    return 4.0F;
         if (helmet.is(ModItems.RIDER_BARONS_HELMET.get()))     return 2.5F;
         if (helmet.is(ModItems.SIGURD_HELMET.get()))           return 2.2F;
+        if (helmet.is(ModItems.TYRANT_HELMET.get()))           return 3.5F;
 
         return 2.0F; // 默认
     }

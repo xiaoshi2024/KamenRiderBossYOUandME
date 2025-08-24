@@ -19,6 +19,7 @@
   "item.kamen_rider_boss_you_and_me.genesis_driver": "genesis Drive",
   "item.kamen_rider_boss_you_and_me.lemon_energy": "lemon Energy Lock seed",
   "item.kamen_rider_boss_you_and_me.peach_energy": "peach Energy Lock seed",
+  "item.kamen_rider_boss_you_and_me.dragonfruit": "Dragon Fruit Energy Lock seed",
   "item.kamen_rider_boss_you_and_me.globalism":"Globalism Sword",
 
   "key.guard": "Jinbar_SHIELD",
@@ -79,6 +80,8 @@
   "block.kamen_rider_boss_you_and_me.melonx": "Melons Block",
   "block.kamen_rider_boss_you_and_me.cherryx": "Cherrys Block",
   "block.kamen_rider_boss_you_and_me.peachx": "Peachs Block",
+  "block.kamen_rider_boss_you_and_me.orangelsx": "Orange-lemons dark Block",
+  "block.kamen_rider_boss_you_and_me.dragonfruitx_block": "Dragon Fruit Block",
 
 
 

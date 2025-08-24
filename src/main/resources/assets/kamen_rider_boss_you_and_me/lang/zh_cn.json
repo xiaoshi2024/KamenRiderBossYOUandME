@@ -4,8 +4,6 @@
   "entity.kamen_rider_boss_you_and_me.gifftarian": "基夫始门徒",
   "entity.kamen_rider_boss_you_and_me.inves_heilehim": "赫尔海姆 异域者 普通",
   "entity.kamen_rider_boss_you_and_me.knecromghost": "幽冥之魂",
-
-
   "item.kamen_rider_boss_you_and_me.aiziowc": "异类时王表盘",
   "item.kamen_rider_boss_you_and_me.giifusteamp": "基夫始祖印章",
   "item group.kamen_rider_boss_you_and_me_tab": "假面骑士中你与我的反派编年史",
@@ -19,6 +17,7 @@
   "item.kamen_rider_boss_you_and_me.genesis_driver": "创世纪驱动器",
   "item.kamen_rider_boss_you_and_me.lemon_energy": "柠檬能量锁种",
   "item.kamen_rider_boss_you_and_me.peach_energy": "桃子能量锁种",
+  "item.kamen_rider_boss_you_and_me.dragonfruit": "火龙果能力锁种",
   "item.kamen_rider_boss_you_and_me.globalism":"古罗巴里萨",
 
   "key.guard": "阵羽护盾",
@@ -72,6 +71,8 @@
 
 
   "block.kamen_rider_boss_you_and_me.bananas_block": "裂缝-香蕉",
+  "block.kamen_rider_boss_you_and_me.orangelsx": "裂缝-橙子",
+  "block.kamen_rider_boss_you_and_me.dragonfruitx_block": "裂缝-火龙果",
   "block.kamen_rider_boss_you_and_me.lemonx": "裂缝-柠檬",
   "block.kamen_rider_boss_you_and_me.melonx": "裂缝-蜜瓜",
   "block.kamen_rider_boss_you_and_me.cherryx": "裂缝-樱桃",

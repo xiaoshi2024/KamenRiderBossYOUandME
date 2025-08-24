@@ -3,9 +3,6 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.orangefruit.darkOrangeModel;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.orangefruit.orangefruitRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkOrangeTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.BeltUtils;
@@ -180,36 +177,32 @@ public class orangefruit extends Item implements GeoItem {
                 }
             }
             return InteractionResultHolder.success(stack);
-        } else {
-            // 第二次点击：真正消耗
-            if (level.isClientSide) {
-                return InteractionResultHolder.success(stack);
-            }
+        }  else {
+            // 已经 ready，但**不立刻变身**
+            if (level.isClientSide) return InteractionResultHolder.success(stack);
 
-            // 已有锁种检查
-            if (BeltUtils.hasActiveLockseed(player)) {
-                player.sendSystemMessage(Component.literal("请先解除当前锁种！"));
-                return InteractionResultHolder.fail(stack);
-            }
+            // 1. 消耗主手橘子 + 副手柠檬
+            stack.shrink(1);          // 橘子
+            offhand.shrink(1);        // 柠檬
 
-            // 消耗两大锁种
-            stack.shrink(1);
-            offhand.shrink(1);
+            // 2. 切腰带模式
+            beltOpt.ifPresent(slot -> {
+                ((sengokudrivers_epmty) slot.stack().getItem())
+                        .setMode(slot.stack(), sengokudrivers_epmty.BeltMode.ORANGELS);
+            });
 
-            // 发送Dark_orangels变身请求包
-            PacketHandler.sendToServer(new DarkOrangeTransformationRequestPacket(player.getUUID()));
+            // 3. 播待机音
+            level.playSound(
+                    null, player.getX(), player.getY(), player.getZ(),
+                    ModBossSounds.ORANGEBY.get(),
+                    SoundSource.PLAYERS, 1.0F, 1.0F
+            );
 
-            // 玩家变量
-            KRBVariables.PlayerVariables var = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-                    .orElse(new KRBVariables.PlayerVariables());
-            var.orange_ready = true;
-            var.syncPlayerVariables(player);
+            // 4. 标记待机
+            stack.getOrCreateTag().putBoolean("standby", true);
+            player.setItemInHand(hand, stack);
 
-            // 音效
-            level.playSound(null, player, ModBossSounds.LOCKONS.get(), SoundSource.PLAYERS, 1, 1);
-
-
-            return InteractionResultHolder.success(ItemStack.EMPTY);
+            return InteractionResultHolder.success(stack);
         }
     }
 

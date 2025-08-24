@@ -52,6 +52,12 @@ public class TransformationRequestPacket {
                     } else if (RiderTypes.CHERRY_ENERGY.equals(msg.riderType)) {
                         CherryTransformationRequestPacket.handle(
                                 new CherryTransformationRequestPacket(player.getUUID()), ctx);
+                    }else if (RiderTypes.ORANGELS.equals(msg.riderType)) {
+                        DarkOrangeTransformationRequestPacket.handle(
+                                new DarkOrangeTransformationRequestPacket(player.getUUID()), ctx);
+                    }else if (RiderTypes.DRAGONFRUIT_ENERGY.equals(msg.riderType)) {
+                        DragonfruitTransformationRequestPacket.handle(
+                                new DragonfruitTransformationRequestPacket(player.getUUID()), ctx);
                     }
                 }
             }

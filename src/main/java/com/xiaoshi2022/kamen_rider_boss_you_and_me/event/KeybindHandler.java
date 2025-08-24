@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ReleaseBeltPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MarikaTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DragonfruitTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MelonTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
@@ -48,6 +49,7 @@ public class KeybindHandler {
             checkLemonLockSeedTimeout(player);
             checkMelonLockSeedTimeout(player);
             checkPeachLockSeedTimeout(player);
+            checkDragonfruitLockSeedTimeout(player);
 
             if (KeyBinding.RELIEVE_KEY.isDown() && !keyCooldown) {
                 keyCooldown = true;
@@ -73,6 +75,7 @@ public class KeybindHandler {
             case MELON -> "GENESIS_MELON";
             case CHERRY -> "GENESIS_CHERRY";
             case PEACH -> "GENESIS_PEACH";
+            case DRAGONFRUIT -> "GENESIS_DRAGONFRUIT";
             default -> "GENESIS";   // 或者 DEFAULT 时直接 return ""
         };
     }
@@ -104,6 +107,20 @@ public class KeybindHandler {
                 variables.lemon_ready = false;
                 variables.lemon_ready_time = 0L;
                 player.displayClientMessage(Component.literal("柠檬锁种已过期！"), true);
+            }
+        }
+    }
+
+    // 检查火龙果锁种超时
+    private static void checkDragonfruitLockSeedTimeout(Player player) {
+        // 获取PlayerVariables实例
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+
+        if (variables.dragonfruit_ready) {
+            if (player.level().getGameTime() - variables.dragonfruit_ready_time > 600) { // 30秒 = 600tick
+                variables.dragonfruit_ready = false;
+                variables.dragonfruit_ready_time = 0L;
+                player.displayClientMessage(Component.literal("火龙果锁种已过期！"), true);
             }
         }
     }
@@ -202,7 +219,7 @@ public class KeybindHandler {
                         }
                         case PEACH -> {
                             // 先判断是变身还是解除
-                            boolean isTransformed =
+                            boolean isTransformed = 
                                     player.getInventory().armor.get(3).getItem() == ModItems.MARIKA_HELMET.get();
                             if (isTransformed) {
                                 // 解除
@@ -215,6 +232,23 @@ public class KeybindHandler {
                                 // 变身
                                 PacketHandler.sendToServer(
                                         new MarikaTransformationRequestPacket(player.getUUID()));
+                            }
+                        }
+                        case DRAGONFRUIT -> {
+                            // 先判断是变身还是解除
+                            boolean isTransformed = 
+                                    player.getInventory().armor.get(3).getItem() == ModItems.TYRANT_HELMET.get();
+                            if (isTransformed) {
+                                // 解除
+                                PacketHandler.sendToServer(
+                                        new TransformationRequestPacket(player.getUUID(), "GENESIS_DRAGONFRUIT", true));
+                                belt.startReleaseAnimation(player, beltStack);
+                                delayTicks = 40;
+                                delayedBeltStack = beltStack.copy();
+                            } else {
+                                // 变身
+                                PacketHandler.sendToServer(
+                                        new DragonfruitTransformationRequestPacket(player.getUUID()));
                             }
                         }
                         default -> {}
@@ -250,6 +284,7 @@ public class KeybindHandler {
             case "GENESIS_MELON"   -> handleMelonRelease(player);         // 蜜瓜
             case "GENESIS_CHERRY"  -> handleCherryRelease(player);        // 樱桃
             case "GENESIS_PEACH"   -> handlePeachRelease(player);         // 桃子
+            case "GENESIS_DRAGONFRUIT" -> handleDragonfruitRelease(player); // 火龙果
             case "BARONS"          -> handleBaronsBeltRelease(player);    // 香蕉
             case "DUKE"            -> handleDukeBeltRelease(player);      // 公爵
         }
@@ -352,6 +387,12 @@ public class KeybindHandler {
         // 6. 重置腰带状态
         belt.setEquipped(beltStack, false);
         belt.setHenshin(beltStack, false);
+
+        // 7. 重置火龙果变身时间
+        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        vars.dragonfruit_time = 0L;
+        vars.syncPlayerVariables(player);
+
         player.inventoryMenu.broadcastChanges();
     }
 
@@ -392,6 +433,50 @@ public class KeybindHandler {
         // 5. 返还樱桃锁种
         ItemStack cherryLockSeed = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY.get());
         if (!player.getInventory().add(cherryLockSeed)) player.spawnAtLocation(cherryLockSeed);
+
+        // 6. 重置腰带状态
+        belt.setEquipped(beltStack, false);
+        belt.setHenshin(beltStack, false);
+        player.inventoryMenu.broadcastChanges();
+    }
+
+    private static void handleDragonfruitRelease(ServerPlayer player) {
+        Optional<SlotResult> curio = CuriosApi.getCuriosInventory(player)
+                .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof Genesis_driver));
+
+        if (curio.isEmpty()) return;
+
+        ItemStack beltStack = curio.get().stack();
+        Genesis_driver belt = (Genesis_driver) beltStack.getItem();
+
+        if (belt.getMode(beltStack) != Genesis_driver.BeltMode.DRAGONFRUIT) return;
+
+        // 1. 重置腰带模式
+        belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+        SlotResult slotResult = curio.get();
+        CurioUtils.updateCurioSlot(
+                player,
+                slotResult.slotContext().identifier(),
+                slotResult.slotContext().index(),
+                beltStack
+        );
+
+        // 2. 播放解除音效
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+
+        // 3. 停止待机音效
+        ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
+        // 只发送给当前玩家
+        PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
+        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
+
+        // 4. 卸掉Tyrant装甲
+        clearTransformationArmor(player);
+
+        // 5. 返还火龙果锁种
+        ItemStack dragonfruitLockSeed = new ItemStack(ModItems.DRAGONFRUIT.get());
+        if (!player.getInventory().add(dragonfruitLockSeed)) player.spawnAtLocation(dragonfruitLockSeed);
 
         // 6. 重置腰带状态
         belt.setEquipped(beltStack, false);
