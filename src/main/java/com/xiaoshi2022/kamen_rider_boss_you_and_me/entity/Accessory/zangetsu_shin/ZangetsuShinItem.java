@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShin.ZangetsuShinArmorRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -19,7 +20,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
-public class ZangetsuShinItem extends ArmorItem implements GeoItem {
+public class ZangetsuShinItem extends ArmorItem implements GeoItem , KamenBossArmor {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String animationprocedure = "empty";

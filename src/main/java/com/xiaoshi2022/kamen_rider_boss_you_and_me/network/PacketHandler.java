@@ -71,6 +71,13 @@ public class PacketHandler {
                 SyncTransformationPacket::encode,
                 SyncTransformationPacket::decode,
                 SyncTransformationPacket::handle);
+        INSTANCE.registerMessage(
+                index++,
+                SyncBloodlinePacket.class,
+                SyncBloodlinePacket::encode,
+                SyncBloodlinePacket::new,
+                SyncBloodlinePacket::handle
+        );
     }
 
     public static void sendToServer(Object packet) {

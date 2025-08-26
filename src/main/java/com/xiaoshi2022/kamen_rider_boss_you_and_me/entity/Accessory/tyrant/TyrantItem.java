@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.Tyrant.TyrantArmorRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.core.object.PlayState;
@@ -32,7 +33,7 @@ import net.minecraft.client.model.HumanoidModel;
 import java.util.function.Consumer;
 import java.util.List;
 
-public class TyrantItem extends ArmorItem implements GeoItem {
+public class TyrantItem extends ArmorItem implements GeoItem , KamenBossArmor {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 

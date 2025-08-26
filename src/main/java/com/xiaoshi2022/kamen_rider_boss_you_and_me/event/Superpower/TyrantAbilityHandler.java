@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -26,20 +27,28 @@ public class TyrantAbilityHandler {
         if (player.level().isClientSide()) return;
 
         if (isWearingTyrant(player)) {
-            // 1. 增加最大生命值
-            player.addEffect(new MobEffectInstance(
-                    MobEffects.HEALTH_BOOST,
-                    40, 3, false, false));
+            int duration = 100; // 5秒
 
-            // 2. 提升防御力
-            player.addEffect(new MobEffectInstance(
-                    MobEffects.DAMAGE_RESISTANCE,
-                    40, 2, false, false));
+            // 只在不已有效果时添加
+            if (!player.hasEffect(MobEffects.HEALTH_BOOST)) {
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.HEALTH_BOOST,
+                        duration, 3, false, false));
 
-            // 3. 火焰抗性
-            player.addEffect(new MobEffectInstance(
-                    MobEffects.FIRE_RESISTANCE,
-                    40, 0, false, false));
+                // 立即恢复生命值
+                player.setHealth(player.getMaxHealth());
+            }
+
+            // 其他效果...
+            addEffectIfNotPresent(player, MobEffects.DAMAGE_RESISTANCE, duration, 2);
+            addEffectIfNotPresent(player, MobEffects.FIRE_RESISTANCE, duration, 0);
+            addEffectIfNotPresent(player, MobEffects.REGENERATION, duration, 1);
+        }
+    }
+
+    private static void addEffectIfNotPresent(Player player, MobEffect effect, int duration, int amplifier) {
+        if (!player.hasEffect(effect)) {
+            player.addEffect(new MobEffectInstance(effect, duration, amplifier, false, false));
         }
     }
 

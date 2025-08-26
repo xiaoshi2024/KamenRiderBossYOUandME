@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orange
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.armor.DarkOrangelsArmorRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -27,7 +28,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.Random;
 import java.util.function.Consumer;
 
-public class Dark_orangels extends ArmorItem implements GeoItem {
+public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String animationprocedure = "empty";
     private static final Random RANDOM = new Random();

@@ -90,6 +90,9 @@ public class HeartCoreEvent {
         player.getInventory().armor.set(3, helmet);
         player.getInventory().armor.set(2, chestplate);
         player.getInventory().armor.set(1, leggings);
+        
+        // 清空鞋子槽位
+        player.getInventory().armor.set(0, ItemStack.EMPTY);
     }
 
     // 装备公爵装甲
@@ -102,6 +105,8 @@ public class HeartCoreEvent {
         player.getInventory().armor.set(3, helmet);
         player.getInventory().armor.set(2, chestplate);
         player.getInventory().armor.set(1, leggings);
+        // 清空鞋子槽位
+        player.getInventory().armor.set(0, ItemStack.EMPTY);
     }
 
     // 装备Dark_orangels装甲
@@ -113,6 +118,8 @@ public class HeartCoreEvent {
         player.getInventory().armor.set(3, helmet);
         player.getInventory().armor.set(2, chestplate);
         player.getInventory().armor.set(1, leggings);
+        // 清空鞋子槽位
+        player.getInventory().armor.set(0, ItemStack.EMPTY);
     }
 
     // 装备通用柠檬能量装甲（保留原有方法，向后兼容）
@@ -152,10 +159,20 @@ public class HeartCoreEvent {
         player.getInventory().armor.set(3, helmet);
         player.getInventory().armor.set(2, chestplate);
         player.getInventory().armor.set(1, leggings);
+        // 清空鞋子槽位
+        player.getInventory().armor.set(0, ItemStack.EMPTY);
     }
 
     private void restoreOriginalArmorToInventory(Player player, ItemStack[] originalArmor) {
-        for (int i = 0; i < 4; i++) {
+        // 优先处理鞋子槽位（索引0）
+        if (!originalArmor[0].isEmpty()) {
+            if (!player.getInventory().add(originalArmor[0])) {
+                player.drop(originalArmor[0], false);
+            }
+        }
+        
+        // 处理其他槽位（索引1-3）
+        for (int i = 1; i < 4; i++) {
             if (!originalArmor[i].isEmpty()) {
                 if (!player.getInventory().add(originalArmor[i])) {
                     player.drop(originalArmor[i], false);

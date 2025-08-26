@@ -1,30 +1,37 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.TamedKivatTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Cherryx.cherryxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Lemonx.LemoxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.MelonSX.melonsxRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Cherryx.cherryxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Peachx.PeachxRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.dragon.dragonfruitRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.orange_lemons.OrangelsxRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os.Another_Zi_oRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.ElementaryInvesHelheimRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.StoriousRender;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.dragon.dragonfruitRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.kivat.KivatBatTwoNdRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.LordBaronRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KivatItemTossHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.CherrySigurdAbilityHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.TyrantAbilityHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DarkGaimJinbaLemonHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.TyrantAbilityHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.LemonsliceParticle;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.*;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -65,6 +72,8 @@ public class kamen_rider_boss_you_and_me
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
+    // 在 Mod 主类或 Setup 类中添加
+    public static final TamedKivatTrigger TAMED_KIVAT_TRIGGER = CriteriaTriggers.register(new TamedKivatTrigger());
 
     public kamen_rider_boss_you_and_me()
     {
@@ -72,6 +81,8 @@ public class kamen_rider_boss_you_and_me
 
         // 注册我们感兴趣的服务器和其他游戏活动
         MinecraftForge.EVENT_BUS.register(this);
+
+        MinecraftForge.EVENT_BUS.register(KivatItemTossHandler.class);
 
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
@@ -100,6 +111,9 @@ public class kamen_rider_boss_you_and_me
 
         ParticleTypesRegistry.PARTICLE_TYPES.register(modEventBus);
 
+        MinecraftForge.EVENT_BUS.register(BloodlineManager.class);
+
+        ModEffects.EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
         //注册
         ModItems.ITEMS.register(modEventBus);
 
@@ -168,6 +182,19 @@ public class kamen_rider_boss_you_and_me
             event.registerSpriteSet(ParticleTypesRegistry.DRAGONLICE.get(), LemonsliceParticle.Provider::new);
         }
 
+//        @SubscribeEvent
+//        public static void addLayers(EntityRenderersEvent.AddLayers event) {
+//            // 你的 Kaito 村民（或任何继承 Villager 的实体）
+//            LivingEntityRenderer<?, ?> kaitoRenderer = event.getRenderer(ModEntityTypes.KAITO.get());
+//            if (kaitoRenderer instanceof LivingEntityRenderer<?, ?>) {
+//                // 强制转型到正确的父类
+//                @SuppressWarnings("unchecked")
+//                LivingEntityRenderer<Villager, VillagerModel<Villager>> cast =
+//                        (LivingEntityRenderer<Villager, VillagerModel<Villager>>) kaitoRenderer;
+//                cast.addLayer(new KaitoCuriosLayer(cast));
+//            }
+//        }
+
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
@@ -178,7 +205,14 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.GIIFUDEMOS_ENTITY.get(), GiifuDemosRenderer::new);
             EntityRenderers.register(ModEntityTypes.STORIOUS.get(), StoriousRender::new);
             EntityRenderers.register(ModEntityTypes.GIFFTARIAN.get(), GifftarianRenderer::new);
+            EntityRenderers.register(ModEntityTypes.ANOTHER_ZI_O.get(), Another_Zi_oRenderer::new);
             EntityRenderers.register(ModEntityTypes.INVES_HEILEHIM.get(), ElementaryInvesHelheimRenderer::new);
+            EntityRenderers.register(ModEntityTypes.KIVAT_BAT_II.get(), KivatBatTwoNdRenderer::new);
+
+
+//            EntityRenderers.register(ModEntityTypes.KAITO.get(),
+//                    VillagerEntityMCARenderer::new);
+
 //            EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
             // 注册动画工厂
             PlayerAnimationSetup.clientInit();

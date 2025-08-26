@@ -31,6 +31,7 @@ public class ModTab {
                 output.accept(SENGOKUDRIVERS_EPMTY.get());
                 output.accept(GENESIS_DRIVER.get());
                 output.accept(BANANAFRUIT.get());
+                output.accept(KIVAT_BAT_TWO_ND_ITEM.get());
                 output.accept(LEMON_ENERGY.get());
                 output.accept(PEACH_ENERGY.get());
                 output.accept(DRAGONFRUIT.get());
@@ -45,5 +46,6 @@ public class ModTab {
             .displayItems(((parameters, output) -> {
                 output.accept(INVES_MEAT.get());
                 output.accept(GLOBALISM.get());
+                output.accept(BLOODLINE_FANG.get());
             })).build());
 }

@@ -7,13 +7,11 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
 import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
@@ -67,6 +65,13 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
         stack.getOrCreateTag().putBoolean("IsEquipped", flag);
     }
 
+
+//    public void onBossInteraction(Player player, ItemStack driver, VillagerEntityMCA boss) {
+//        player.sendSystemMessage(
+//                net.minecraft.network.chat.Component.literal("驱纹戒斗：你也想参加这场游戏吗？")
+//        );
+//        // TODO: 在这里写真正的变身、给 Buff 等逻辑
+//    }
     /* ----------------------------------------------------------- */
 
     public enum BeltMode {

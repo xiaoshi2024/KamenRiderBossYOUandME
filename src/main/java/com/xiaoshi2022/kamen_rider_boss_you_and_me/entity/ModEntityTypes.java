@@ -1,12 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Another_Zi_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
-import forge.net.mca.entity.VillagerEntityMCA;
-import forge.net.mca.entity.ai.relationship.Gender;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -30,6 +30,22 @@ public class ModEntityTypes {
     // 确保注册名是 "lord_baron"
     public static final RegistryObject<EntityType<LordBaronEntity>> LORD_BARON = registerMob("lord_baron", LordBaronEntity::new,
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
+
+    public static final RegistryObject<EntityType<Another_Zi_o>> ANOTHER_ZI_O = registerMob("another_zi_o", Another_Zi_o::new,
+            0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
+//    public static final RegistryObject<EntityType<KaitoVillager>> KAITO =
+//            ENTITY_TYPES.register("kaito",
+//                    () -> EntityType.Builder.of(KaitoVillager::new, MobCategory.CREATURE)
+//                            .sized(0.6F, 1.95F)
+//                            .build("kaito"));
+
+    public static final RegistryObject<EntityType<KivatBatTwoNd>> KIVAT_BAT_II =
+            ENTITY_TYPES.register("kivat_bat_ii",
+                    () -> EntityType.Builder.of(KivatBatTwoNd::new, MobCategory.AMBIENT)
+                            .sized(0.5F, 0.5F)
+                            .clientTrackingRange(8)
+                            .build("kivat_bat_ii"));
+
 //    public static final RegistryObject<EntityType<KnecromghostEntity>> KNECROMGHOST = registerMob("knecromghost", KnecromghostEntity::new,
 //            0.6f, 1.6f, 0x1F1F1F, 0x0D0D0D);
 

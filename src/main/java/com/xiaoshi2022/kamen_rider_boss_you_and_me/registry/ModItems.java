@@ -25,6 +25,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -56,11 +57,16 @@ public class ModItems {
     public static final RegistryObject<Item> ORANGELSX_ITEM = ITEMS.register("orangelsx",
             () -> new BlockItem(ModBlocks.ORANGELSX_BLOCK.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> BLOODLINE_FANG = ITEMS.register("bloodline_fang",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<KivatBatTwoNdItem> KIVAT_BAT_TWO_ND_ITEM = ITEMS.register(
+                        "kivat_bat_two_ndm",() -> new KivatBatTwoNdItem(new Item.Properties()));
 
     public static final RegistryObject<giifusteamp> GIIFUSTEAMP = ITEMS.register("giifusteamp",
             () -> new giifusteamp(new Item.Properties()));
     public static final RegistryObject<aiziowc> AIZIOWC = ITEMS.register("aiziowc",
-            () -> new aiziowc(new Item.Properties()));
+            () -> new aiziowc(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<StoriousMonsterBook> STORIOUSMONSTERBOOK = ITEMS.register("storiousmonsterbook",
             () -> new StoriousMonsterBook(new Item.Properties()));
     public static final RegistryObject<Necrom_eye> NECROM_EYE = ITEMS.register("necrom_eye",
@@ -156,5 +162,6 @@ public class ModItems {
     public static final RegistryObject<TyrantItem> TYRANT_HELMET = ITEMS.register("tyrant_helmet", () -> new TyrantItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<TyrantItem> TYRANT_CHESTPLATE = ITEMS.register("tyrant_chestplate", () -> new TyrantItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<TyrantItem> TYRANT_LEGGINGS = ITEMS.register("tyrant_leggings", () -> new TyrantItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
 
 }

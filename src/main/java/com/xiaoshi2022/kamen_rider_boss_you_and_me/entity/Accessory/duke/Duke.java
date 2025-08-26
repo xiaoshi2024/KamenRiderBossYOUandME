@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.dukes.DukeArmorRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,7 +37,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.Random;
 
-public class Duke extends ArmorItem implements GeoItem {
+public class Duke extends ArmorItem implements GeoItem , KamenBossArmor {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String animationprocedure = "empty"; 
     private static final Random RANDOM = new Random();

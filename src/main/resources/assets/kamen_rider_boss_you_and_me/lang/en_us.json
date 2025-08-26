@@ -4,6 +4,8 @@
   "entity.kamen_rider_boss_you_and_me.gifftarian": "Giifu WasADisciple",
   "entity.kamen_rider_boss_you_and_me.inves_heilehim": "Elementary Inves Helheim",
   "entity.kamen_rider_boss_you_and_me.knecromghost": "Necrom_Ghost",
+  "entity.kamen_rider_boss_you_and_me.kaito": "Kaito[KamenRiders]",
+
 
   "item.kamen_rider_boss_you_and_me.aiziowc": "another zi-o Watch",
   "item.kamen_rider_boss_you_and_me.giifusteamp": "Giifu Steamp",
@@ -20,15 +22,27 @@
   "item.kamen_rider_boss_you_and_me.lemon_energy": "lemon Energy Lock seed",
   "item.kamen_rider_boss_you_and_me.peach_energy": "peach Energy Lock seed",
   "item.kamen_rider_boss_you_and_me.dragonfruit": "Dragon Fruit Energy Lock seed",
+  "item.kamen_rider_boss_you_and_me.kivat_bat_two_ndm": "kivat Bat 2 Nd",
   "item.kamen_rider_boss_you_and_me.globalism":"Globalism Sword",
+
+  "item.kamen_rider_boss_you_and_me.bloodline_fang": "Bloodline Fang",
+
+  "kamen_rider_boss_you_and_me.effects.fang_bloodline": "Fang bloodline",
+
 
   "key.guard": "Jinbar_SHIELD",
   "key.blast": "DarkBlast",
   "key.boost": "LemonAccelerate",
   "key.categories.kamen_rider": "kamen-rider-skills",
 
+  "kamen.rider.gift.best": " Very good, this power belongs to me！",
 
   "curios.identifier.bracelet": "wristband Slot",
+
+  "entity.kamen_rider_boss_you_and_me.another_zi_o": "ANOTHER_ZI-O",
+  "entity.kamen_rider_boss_you_and_me.kivat_bat_ii": "kivat bat II",
+
+
 
 
   "advancement.kamen_rider_boss_you_and_me.root.title": "Kamen Rider Boss You and Me",

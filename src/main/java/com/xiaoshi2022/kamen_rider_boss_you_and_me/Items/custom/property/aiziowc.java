@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.Another_zi_o_click.aiziowcRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
@@ -29,11 +31,23 @@ public class aiziowc extends Item implements GeoItem {
     private static final RawAnimation CLICK = RawAnimation.begin().thenPlay("click");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    public aiziowc(Properties p_41383_) {
-        super(p_41383_);
+    public static final int MAX_DAMAGE = 64;   // 与原版工具耐久同概念
+
+    public aiziowc(Properties props) {
+        super(props.durability(MAX_DAMAGE));
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
+    public static int getUseCount(ItemStack stack) {
+        return stack.getOrCreateTag().getInt("DiskUse");
+    }
+    public static void incrUseCount(ItemStack stack) {
+        stack.getOrCreateTag().putInt("DiskUse", getUseCount(stack) + 1);
+    }
+
+    public static void setUseCount(ItemStack disk, int i) {
+        disk.getOrCreateTag().putInt("DiskUse", i);
+    }
 
     // Utilise the existing forge hook to define our custom renderer (which we created in createRenderer)
     @Override

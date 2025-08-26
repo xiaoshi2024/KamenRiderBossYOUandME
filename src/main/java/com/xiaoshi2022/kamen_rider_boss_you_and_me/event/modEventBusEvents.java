@@ -9,16 +9,23 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.Elementar
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -96,6 +103,24 @@ public class modEventBusEvents {
                 });
             }
         }
+        @SubscribeEvent
+        public static void onClientTick(TickEvent.ClientTickEvent event) {
+            if (event.phase != TickEvent.Phase.END) return;
+
+            Player player = Minecraft.getInstance().player;
+            if (player == null) return;
+
+            RiderInvisibilityManager.updateInvisibility(player);
+        }
+
+        /* 装备栏变化时立即刷新（防止延迟） */
+        @SubscribeEvent
+        public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
+            if (!(event.getEntity() instanceof Player player)) return;
+            if (event.getSlot().getType() != EquipmentSlot.Type.ARMOR) return;
+
+            RiderInvisibilityManager.updateInvisibility(player);
+        }
     }
 
     @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -138,6 +163,32 @@ public class modEventBusEvents {
                             .add(Attributes.MAX_HEALTH, 50.0D)
                             .build()
             );
+
+            event.put(ModEntityTypes.ANOTHER_ZI_O.get(),
+                    Monster.createMonsterAttributes()
+                            .add(Attributes.MAX_HEALTH, 80.0D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.26D)      // ← 调低移速
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 8.0D)
+                            .build()
+            );
+
+            event.put(ModEntityTypes.KIVAT_BAT_II.get(),
+                    KivatBatTwoNd.createAttributes()
+                            .add(Attributes.MAX_HEALTH, 80.0D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.26D)
+                            .add(Attributes.FLYING_SPEED, 0.6D)
+                            .add(Attributes.ATTACK_DAMAGE, 8.0D)          // 必须给标准伤害
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 8.0D)
+                            .build()
+            );
+
+//            event.put(ModEntityTypes.KAITO.get(),
+//                    KaitoVillager.createAttributes()
+//                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 3.0D)
+//                            .add(Attributes.ATTACK_DAMAGE, 3.0D) // ⚠️ 添加这行
+//                            .add(Attributes.MAX_HEALTH, 40.0D)
+//                            .build()
+//            );
         }
 
         @SubscribeEvent

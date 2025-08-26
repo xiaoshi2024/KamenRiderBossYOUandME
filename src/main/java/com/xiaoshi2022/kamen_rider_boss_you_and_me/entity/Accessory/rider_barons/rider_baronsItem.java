@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.Riderbarons.RiderbaronsArmorRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -26,7 +27,7 @@ import net.minecraft.client.model.HumanoidModel;
 
 import java.util.function.Consumer;
 
-public class rider_baronsItem extends ArmorItem implements GeoItem {
+public class rider_baronsItem extends ArmorItem implements GeoItem , KamenBossArmor {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String animationprocedure = "empty";
 

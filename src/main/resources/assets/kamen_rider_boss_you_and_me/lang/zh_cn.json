@@ -4,6 +4,7 @@
   "entity.kamen_rider_boss_you_and_me.gifftarian": "基夫始门徒",
   "entity.kamen_rider_boss_you_and_me.inves_heilehim": "赫尔海姆 异域者 普通",
   "entity.kamen_rider_boss_you_and_me.knecromghost": "幽冥之魂",
+  "entity.kamen_rider_boss_you_and_me.kaito": "驱纹戒斗【附身者】",
   "item.kamen_rider_boss_you_and_me.aiziowc": "异类时王表盘",
   "item.kamen_rider_boss_you_and_me.giifusteamp": "基夫始祖印章",
   "item group.kamen_rider_boss_you_and_me_tab": "假面骑士中你与我的反派编年史",
@@ -17,14 +18,22 @@
   "item.kamen_rider_boss_you_and_me.genesis_driver": "创世纪驱动器",
   "item.kamen_rider_boss_you_and_me.lemon_energy": "柠檬能量锁种",
   "item.kamen_rider_boss_you_and_me.peach_energy": "桃子能量锁种",
-  "item.kamen_rider_boss_you_and_me.dragonfruit": "火龙果能力锁种",
-  "item.kamen_rider_boss_you_and_me.globalism":"古罗巴里萨",
+  "item.kamen_rider_boss_you_and_me.dragonfruit": "火龙果能量锁种",
+  "item.kamen_rider_boss_you_and_me.globalism": "古罗巴里萨",
+  "item.kamen_rider_boss_you_and_me.kivat_bat_two_ndm": "月蝠2世",
+  "item.kamen_rider_boss_you_and_me.bloodline_fang": "牙血鬼之牙",
+
+  "kamen_rider_boss_you_and_me.effects.fang_bloodline": "牙邪鬼之脉",
+
+  "entity.kamen_rider_boss_you_and_me.another_zi_o": "异类时王",
+  "entity.kamen_rider_boss_you_and_me.kivat_bat_ii": "月蝠II世",
 
   "key.guard": "阵羽护盾",
   "key.blast": "黑暗爆破",
   "key.boost": "柠檬加速",
   "key.categories.kamen_rider": "假面骑士技能",
 
+  "kamen.rider.gift.best": "很好，这股力量归我了！",
 
   "curios.identifier.bracelet": "腕带 插槽",
 

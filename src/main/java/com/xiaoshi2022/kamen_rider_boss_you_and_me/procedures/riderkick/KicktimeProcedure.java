@@ -200,8 +200,8 @@ public class KicktimeProcedure {
 		long lastKickTime = entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
 				.orElse(new KRBVariables.PlayerVariables()).lastKickTime;
 
-		// 1秒冷却时间
-		if (currentTime - lastKickTime < 1000) {
+		// 40秒冷却时间【骑士踢cd】
+        if (currentTime - lastKickTime < 40000) {
 			return false;
 		}
 

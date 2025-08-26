@@ -103,9 +103,6 @@ public class dragonfruit extends Item implements GeoItem {
                         player.sendSystemMessage(Component.literal("您已经装备了其他锁种，请先解除变身！"));
                         return InteractionResultHolder.success(stack);
                     }
-                    // 播放LOCK ON音效
-                    level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                            ModBossSounds.LOCKONS.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
                     // 播放待机音效
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),

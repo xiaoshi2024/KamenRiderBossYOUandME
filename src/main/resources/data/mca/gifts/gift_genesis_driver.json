@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "profession": "mca:warrior",
+      "min_health": 0,
+      "mood": -100
+    }
+  ],
+  "thresholds": {
+    "fail": 0,
+    "good": 10,
+    "better": 20,
+    "best": 50
+  },
+  "responses": {
+    "fail": "kamen.rider.gift.fail",
+    "good": "kamen.rider.gift.good",
+    "better": "kamen.rider.gift.better",
+    "best": "kamen.rider.gift.best"
+  },
+  "items": {
+    "kamen_rider_boss_you_and_me:genesis_driver": 50
+  }
+}
