@@ -15,14 +15,17 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -30,6 +33,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosCapability;
+
+import java.util.List;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.*;
 
@@ -103,6 +108,7 @@ public class modEventBusEvents {
                 });
             }
         }
+
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
             if (event.phase != TickEvent.Phase.END) return;
@@ -121,7 +127,65 @@ public class modEventBusEvents {
 
             RiderInvisibilityManager.updateInvisibility(player);
         }
+
+        @SubscribeEvent
+        public static void onPlayerChat(ServerChatEvent event) {
+            String msg = event.getMessage().getString();
+            Player player = event.getPlayer();
+            Level level = player.level(); // 获取玩家所在的世界
+
+            // 安全检查：确保世界和玩家有效
+            if (level == null || !player.isAlive()) {
+                return;
+            }
+
+            /* ---------- 彩蛋：小丑蝙蝠 ---------- */
+            if (KivatBatTwoNd.isClownBatCall(msg)) {
+                event.setCanceled(true);
+
+                // 使用正确的世界引用
+                List<KivatBatTwoNd> clowns = level.getEntitiesOfClass(
+                        KivatBatTwoNd.class,
+                        player.getBoundingBox().inflate(16), //范围
+                        k -> k != null && k.isAlive() && !k.isTame() // 添加安全检查
+                );
+
+                if (clowns.isEmpty()) {
+                    player.sendSystemMessage(Component.translatable("dialog.kivat.noclowntarget"));
+                    return;
+                }
+
+                // 安全地召唤每个小丑蝙蝠
+                clowns.forEach(k -> {
+                    if (k != null && k.isAlive()) {
+                        k.temptToPlayer(player);
+                    }
+                });
+
+                player.sendSystemMessage(Component.translatable("dialog.kivat.clownbat"));
+                return;
+            }
+
+            /* ---------- 正常 @kivat 对话 ---------- */
+            if (!msg.startsWith("@kivat")) return;
+            event.setCanceled(true);
+
+            KivatBatTwoNd kivat = level.getEntitiesOfClass(
+                    KivatBatTwoNd.class,
+                    player.getBoundingBox().inflate(20),
+                    k -> k != null && k.isAlive() && k.isTame() && k.isOwnedBy(player) // 添加安全检查
+            ).stream().findFirst().orElse(null);
+
+            if (kivat == null) {
+                player.sendSystemMessage(Component.translatable("dialog.kivat.notfound"));
+                return;
+            }
+
+            String query = msg.substring("@kivat".length()).trim();
+            player.sendSystemMessage(KivatBatTwoNd.reply(query));
+        }
     }
+
 
     @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public final class CommonListener {

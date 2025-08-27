@@ -24,8 +24,6 @@ public class KivatBatTwoNdItem extends Item implements GeoItem {
     /* ---------- 动画定义 ---------- */
     private static final RawAnimation SAY   = RawAnimation.begin().thenPlay("say");
     private static final RawAnimation FLY   = RawAnimation.begin().thenPlay("fly");
-    private static final RawAnimation SLEEP = RawAnimation.begin().thenPlay("sleep");
-    private static final RawAnimation HOVER = RawAnimation.begin().thenPlay("hover");
     private static final RawAnimation SNAP  = RawAnimation.begin().thenPlay("snap");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -77,11 +75,9 @@ public class KivatBatTwoNdItem extends Item implements GeoItem {
 
         int mode = stack.getOrCreateTag().getInt("animationState");
         switch (mode) {
-            case 0 -> state.setAndContinue(SAY);
+            case 0 -> state.setAndContinue(SNAP);
             case 1 -> state.setAndContinue(FLY);
-            case 2 -> state.setAndContinue(SLEEP);
-            case 3 -> state.setAndContinue(HOVER);
-            case 4 -> state.setAndContinue(SNAP);
+            case 2 -> state.setAndContinue(SAY);
             default -> { return PlayState.STOP; }
         }
         return PlayState.CONTINUE;

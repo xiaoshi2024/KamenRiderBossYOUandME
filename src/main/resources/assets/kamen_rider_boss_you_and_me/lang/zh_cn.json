@@ -23,7 +23,22 @@
   "item.kamen_rider_boss_you_and_me.kivat_bat_two_ndm": "月蝠2世",
   "item.kamen_rider_boss_you_and_me.bloodline_fang": "牙血鬼之牙",
 
-  "kamen_rider_boss_you_and_me.effects.fang_bloodline": "牙邪鬼之脉",
+  "dialog.kivat.hello": "§6Kivat:§r 吾之契约者，今天也是充满斗志的一天呢！",
+  "dialog.kivat.food":  "§6Kivat:§r 给我血族的盛宴，我将为你而战！",
+  "dialog.kivat.sleep": "§6Kivat:§r 吾将倒挂休眠，勿扰……",
+  "dialog.kivat.blood": "§6Kivat:§r 血的味道……令人怀念。",
+  "dialog.kivat.unknown": "§6Kivat:§r 你的话语，如同牙血鬼的低语，难解其意。",
+
+  "dialog.kivat.clownbat": "§6Kivat:§r 那边的谁？……算了，过来就过来！",
+  "dialog.kivat.noclowntarget": "§c附近没有“小丑蝙蝠”。",
+  "dialog.kivat.clownbat.broadcast": "§7%s 成功召唤了小丑蝙蝠！",
+  "dialog.kivat.notfound": "附近没有小丑蝙蝠",
+
+  "dialog.kivat.mode_change.normal": "常态",
+  "dialog.kivat.mode_change.say": "闲逛",
+  "dialog.kivat.mode_change.sleep": "睡觉",
+
+  "kamen_rider_boss_you_and_me.effect.fang_bloodline": "牙血鬼之脉",
 
   "entity.kamen_rider_boss_you_and_me.another_zi_o": "异类时王",
   "entity.kamen_rider_boss_you_and_me.kivat_bat_ii": "月蝠II世",

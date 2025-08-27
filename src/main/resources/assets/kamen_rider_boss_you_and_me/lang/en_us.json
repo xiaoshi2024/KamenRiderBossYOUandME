@@ -25,10 +25,24 @@
   "item.kamen_rider_boss_you_and_me.kivat_bat_two_ndm": "kivat Bat 2 Nd",
   "item.kamen_rider_boss_you_and_me.globalism":"Globalism Sword",
 
+  "kamen_rider_boss_you_and_me.effect.fang_bloodline": "Fang bloodline",
+
+  "dialog.kivat.mode_change.normal": "normality",
+  "dialog.kivat.mode_change.say": "loitered",
+  "dialog.kivat.mode_change.sleep": "sleep",
+
+
+  "dialog.kivat.hello": "§6Kivat:§r My contractor, today is another day full of fighting spirit!",
+  "dialog.kivat.food":  "§6Kivat:§r Grant me a blood feast, and I shall fight for you!",
+  "dialog.kivat.sleep": "§6Kivat:§r I shall hang upside-down and rest—do not disturb...",
+  "dialog.kivat.blood": "§6Kivat:§r The scent of blood... so nostalgic.",
+  "dialog.kivat.unknown": "§6Kivat:§r Your words are like the whispers of a Fangire—unfathomable.",
+
+  "dialog.kivat.clownbat": "§6Kivat:§r Who over there? …… Forget it, just come here！",
+  "dialog.kivat.noclowntarget": "§c附近没有“Kivat II”。",
+  "dialog.kivat.clownbat.broadcast": "§7%s Successfully summoned the Kivat bat！",
+
   "item.kamen_rider_boss_you_and_me.bloodline_fang": "Bloodline Fang",
-
-  "kamen_rider_boss_you_and_me.effects.fang_bloodline": "Fang bloodline",
-
 
   "key.guard": "Jinbar_SHIELD",
   "key.blast": "DarkBlast",
@@ -112,5 +126,6 @@
   "entity.kamen_rider.star_lord_baron": "Star Lord Baron",
 
   "item group.kamen_rider_boss_you_and_me_kinds_tab": "KamenRiderBossYouAndMe Kinds of",
-  "key.kamen_rider_boss_you_and_me.kick": "Rider Kick"
+  "key.kamen_rider_boss_you_and_me.kick": "Rider Kick",
+  "dialog.kivat.notfound": "Not found Kivat"
 }

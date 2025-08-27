@@ -22,25 +22,38 @@ public class KivatItemTossHandler {
         CompoundTag tag = stack.getTag();
         if (tag == null || !tag.getBoolean("FromKivatEntity")) return;
 
-        // 取消原本的掉落，避免玩家真正捡起
         e.setCanceled(true);
 
         Level level = ie.level();
         KivatBatTwoNd bat = ModEntityTypes.KIVAT_BAT_II.get().create(level);
         if (bat == null) return;
 
-        // 位置：直接出现在玩家面前 1 格
+        // 去掉坐标相关字段，防止被 load 覆盖
+        tag.remove("Pos");
+        tag.remove("Rotation");
+        tag.remove("Motion");
+
         Player player = e.getPlayer();
         Vec3 pos = player.position().add(player.getLookAngle().scale(1.0));
+
+        // 先 load 其他数据（血量、名字、模式等）
+        bat.load(tag);               // 读存档数据
+        bat.absMoveTo(pos.x, pos.y, pos.z, player.getYRot(), 0); // 关键：强刷坐标
+        bat.setDeltaMovement(Vec3.ZERO);
+
+        // 安全地停止导航
+        if (bat.getNavigation() != null) {
+            bat.getNavigation().stop();
+        }
+
+        // 再手动设置新位置
         bat.moveTo(pos.x, pos.y + 0.5, pos.z, player.getYRot(), 0);
 
-        // 恢复数据
-        bat.load(tag);
         if (tag.hasUUID("OwnerUUID")) {
             bat.tame(player);
         }
 
         level.addFreshEntity(bat);
-        ie.discard();   // 物品消失
+        ie.discard();
     }
 }
