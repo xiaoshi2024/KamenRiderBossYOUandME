@@ -34,6 +34,8 @@
   "dialog.kivat.clownbat.broadcast": "§7%s 成功召唤了小丑蝙蝠！",
   "dialog.kivat.notfound": "附近没有小丑蝙蝠",
 
+  "dialog.kivat.full": "§aKivat 已经吃饱了！",
+  "dialog.kivat.hungry": "§c你太饿了，无法喂食 Kivat！",
   "dialog.kivat.mode_change.normal": "常态",
   "dialog.kivat.mode_change.say": "闲逛",
   "dialog.kivat.mode_change.sleep": "睡觉",

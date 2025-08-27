@@ -27,6 +27,8 @@
 
   "kamen_rider_boss_you_and_me.effect.fang_bloodline": "Fang bloodline",
 
+  "dialog.kivat.full": "§aKivat itSFull！",
+  "dialog.kivat.hungry": "§cYou're so hungry，Unable to feed Kivat！",
   "dialog.kivat.mode_change.normal": "normality",
   "dialog.kivat.mode_change.say": "loitered",
   "dialog.kivat.mode_change.sleep": "sleep",
