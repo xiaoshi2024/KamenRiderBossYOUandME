@@ -20,6 +20,7 @@ public final class KickDamageHelper {
         if (helmet.is(ModItems.RIDER_BARONS_HELMET.get()))     return 16F; // 巴隆
         if (helmet.is(ModItems.SIGURD_HELMET.get()))           return 15F; // 假面骑士西格
         if (helmet.is(ModItems.TYRANT_HELMET.get()))           return 20F; // 假面骑士暴君
+        if (helmet.is(ModItems.DARK_KIVA_HELMET.get()))        return 24F; // 黑暗月骑 - 参考剧中表现设置高伤害
 
         return 8F; // 默认
     }
@@ -35,6 +36,7 @@ public final class KickDamageHelper {
         if (helmet.is(ModItems.RIDER_BARONS_HELMET.get()))     return 2.5F;
         if (helmet.is(ModItems.SIGURD_HELMET.get()))           return 2.2F;
         if (helmet.is(ModItems.TYRANT_HELMET.get()))           return 3.5F;
+        if (helmet.is(ModItems.DARK_KIVA_HELMET.get()))        return 4.5F; // 黑暗月骑 - 更大的爆炸范围
 
         return 2.0F; // 默认
     }

@@ -1,42 +1,54 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public class PlayerAnimationPacket {
-    private UUID playerUUID;
-    private ResourceLocation animation;
+    private final Component animation;
+    private final int targetId;
+    private final boolean override;
 
-    public PlayerAnimationPacket(UUID playerUUID, ResourceLocation animation) {
-        this.playerUUID = playerUUID;
+    public PlayerAnimationPacket(Component animation, int targetId, boolean override) {
         this.animation = animation;
+        this.targetId = targetId;
+        this.override = override;
     }
 
-    public PlayerAnimationPacket(FriendlyByteBuf buf) {
-        this.playerUUID = buf.readUUID();
-        this.animation = buf.readResourceLocation();
+    public static void encode(PlayerAnimationPacket packet, FriendlyByteBuf buffer) {
+        buffer.writeComponent(packet.animation);
+        buffer.writeInt(packet.targetId);
+        buffer.writeBoolean(packet.override);
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
-        buf.writeUUID(playerUUID);
-        buf.writeResourceLocation(animation);
+    public static PlayerAnimationPacket decode(FriendlyByteBuf buffer) {
+        return new PlayerAnimationPacket(
+                buffer.readComponent(),
+                buffer.readInt(),
+                buffer.readBoolean()
+        );
     }
 
-    public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
+    public static void handle(PlayerAnimationPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
-            if (player != null && player.getUUID().equals(playerUUID)) {
-                // 调用动画播放方法
-                PlayerAnimationSetup.playAnimation((ServerLevel) player.level(), player, animation);
+            // 客户端处理动画
+            if (context.getDirection().getReceptionSide().isClient()) {
+                handleClientAnimation(packet);
             }
         });
         context.setPacketHandled(true);
+    }
+
+    private static void handleClientAnimation(PlayerAnimationPacket packet) {
+        net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+        if (mc.level != null) {
+            net.minecraft.world.entity.Entity entity = mc.level.getEntity(packet.targetId);
+            if (entity instanceof net.minecraft.client.player.AbstractClientPlayer player) {
+                PlayerAnimationSetup.playAnimation(player, packet.animation.getString(), packet.override);
+            }
+        }
     }
 }

@@ -340,6 +340,11 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
     protected void customServerAiStep() {
         super.customServerAiStep();
 
+        // 首要检查：如果实体无效，立即终止所有逻辑
+        if (this.isRemoved() || this.level() == null || !this.isAlive() || this.navigation == null) {
+            return; // 最关键的一步，将检查提到最前面！
+        }
+
         // 处理飞行状态更新
         boolean wasFlying = entityData.get(DATA_FLYING);
         boolean shouldFly = !isResting() && !isOrderedToSit() && !isSleeping();
@@ -350,24 +355,45 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
 
         // 飞行时处理逻辑
         if (shouldFly) {
-            // 确保导航系统在工作
-            if (targetPosition != null && navigation.isDone()) {
-                // 到达目标后寻找新目标
-                targetPosition = clampToWorld(
-                        getOwner() == null ? randomNearby() : randomAround(getOwner()));
-                if (targetPosition != null) {
-                    navigation.moveTo(
-                            targetPosition.getX() + 0.5,
-                            targetPosition.getY() + 0.5,
-                            targetPosition.getZ() + 0.5,
-                            1.0D
-                    );
+            // 导航已结束，准备下一个目标
+            if (navigation.isDone()) {
+                // 防御性检查：获取所有者，并确保其有效
+                LivingEntity owner = getOwner();
+                BlockPos newTarget = null;
+
+                if (owner != null && owner.isAlive() && !owner.isRemoved()) {
+                    // 如果主人有效，围绕主人飞行
+                    newTarget = randomAround(owner);
+                } else {
+                    // 没有主人或主人无效，则在附近随机飞行
+                    newTarget = randomNearby();
+                }
+
+                // 再次检查 newTarget 是否有效
+                if (newTarget != null) {
+                    targetPosition = clampToWorld(newTarget);
+                } else {
+                    // 如果计算失败，提供一个安全的默认值（例如当前位置）
+                    targetPosition = this.blockPosition();
                 }
             }
+
+            // 最终移动前的最终检查：targetPosition 和 navigation 必须有效
+            if (targetPosition != null && this.navigation != null) {
+                navigation.moveTo(
+                        targetPosition.getX() + 0.5,
+                        targetPosition.getY() + 0.5,
+                        targetPosition.getZ() + 0.5,
+                        1.0D
+                );
+            }
         }
+
+        // 变形逻辑
         if (pendingTransformPlayer != null) {
             Player player = level().getPlayerByUUID(pendingTransformPlayer);
-            if (player != null && this.distanceTo(player) <= 2.0) {
+            // 检查玩家是否有效且距离足够近
+            if (player != null && player.isAlive() && !player.isRemoved() && this.distanceTo(player) <= 2.0) {
                 this.pendingTransformPlayer = null;
                 this.transform(player);
             }

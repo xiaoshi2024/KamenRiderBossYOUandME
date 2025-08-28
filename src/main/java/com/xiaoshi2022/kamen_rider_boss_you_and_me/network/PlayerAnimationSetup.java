@@ -1,25 +1,19 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
-import com.zigythebird.playeranimatorapi.API.PlayerAnimAPI;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
+import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
+import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
+import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PlayerAnimationSetup {
-    public static final ResourceLocation STORIOUS_VFX_HEIXIN = new ResourceLocation("kamen_rider_boss_you_and_me", "storiousvfxheixin");
-    public static final ResourceLocation NECROM_HENSHIN = new ResourceLocation("kamen_rider_boss_you_and_me", "necrom_henshin");
-    public static final ResourceLocation NECROM_HENSHINX = new ResourceLocation("kamen_rider_boss_you_and_me", "necrom_henshinx");
 
-
-    @OnlyIn(Dist.CLIENT)
     public static void clientInit() {
-        // 注册动画工厂
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(
                 new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"),
                 1000,
@@ -27,14 +21,30 @@ public class PlayerAnimationSetup {
         );
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public static IAnimation registerPlayerAnimations(AbstractClientPlayer player) {
-        // 返回一个动画层
+    /**
+     * 返回 ModifierLayer 实例，而不是裸接口 IAnimation
+     */
+    private static ModifierLayer<IAnimation> registerPlayerAnimations(AbstractClientPlayer player) {
         return new ModifierLayer<>();
     }
 
-    public static void playAnimation(ServerLevel level, Player player, ResourceLocation animation) {
-        // 调用 PlayerAnimatorAPI 的 playPlayerAnim 方法
-        PlayerAnimAPI.playPlayerAnim(level, player, animation);
+    @OnlyIn(Dist.CLIENT)
+    public static void playAnimation(AbstractClientPlayer player, String animationName, boolean override) {
+        var animationData = PlayerAnimationAccess.getPlayerAssociatedData(player)
+                .get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
+
+        // 现在可以直接强制转换，不再警告
+        if (animationData instanceof ModifierLayer<?> layer) {
+            @SuppressWarnings("unchecked")
+            ModifierLayer<IAnimation> animationLayer = (ModifierLayer<IAnimation>) layer;
+
+            if (override || !animationLayer.isActive()) {
+                var animation = PlayerAnimationRegistry.getAnimation(
+                        new ResourceLocation("kamen_rider_boss_you_and_me", animationName));
+                if (animation != null) {
+                    animationLayer.setAnimation(new KeyframeAnimationPlayer(animation));
+                }
+            }
+        }
     }
 }

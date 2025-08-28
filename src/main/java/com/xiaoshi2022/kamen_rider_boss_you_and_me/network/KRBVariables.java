@@ -121,22 +121,30 @@ public class  KRBVariables {
 		public long kickStartTime = 0L;
 		public double kickStartY = 0.0D;
 		public double kickInitialVelocity = 0.0D;
-	// 锁种相关变量
-	public boolean cherry_ready = false;
-	public long cherry_ready_time = 0L;
-	public boolean lemon_ready = false;
-	public long lemon_ready_time = 0L;
-	public boolean peach_ready = false;
-	public long peach_ready_time = 0L;
-	public boolean melon_ready = false;
-	public long melon_ready_time = 0L;
-	public boolean banana_ready = false;
-	public long banana_ready_time = 0L;
-	public boolean orange_ready = false;
-    public long orange_ready_time = 0L;
+		// 锁种相关变量
+		public boolean cherry_ready = false;
+		public long cherry_ready_time = 0L;
+		public boolean lemon_ready = false;
+		public long lemon_ready_time = 0L;
+		public boolean peach_ready = false;
+		public long peach_ready_time = 0L;
+		public boolean melon_ready = false;
+		public long melon_ready_time = 0L;
+		public boolean banana_ready = false;
+		public long banana_ready_time = 0L;
+		public boolean orange_ready = false;
+		public long orange_ready_time = 0L;
 		public boolean dragonfruit_ready = false;
 		public long dragonfruit_ready_time = 0L;
 		public long dragonfruit_time = 0L;
+		// 黑暗Kiva相关变量
+		public boolean dark_kiva_bat_mode = false;    // 蝙蝠形态
+		public long dark_kiva_bat_mode_time = 0L;     // 蝙蝠形态开始时间
+		public boolean dark_kiva_blood_suck_active = false; // 吸血能力激活状态
+		public long dark_kiva_blood_suck_cooldown = 0L; // 吸血能力冷却时间
+		public boolean dark_kiva_sonic_blast_active = false; // 声波爆破激活状态
+		public long dark_kiva_sonic_blast_cooldown = 0L; // 声波爆破冷却时间
+		public long dark_kiva_blood_steal_cooldown = 0L; // 生命偷取冷却时间
 
         public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
@@ -168,6 +176,14 @@ public class  KRBVariables {
 		nbt.putBoolean("dragonfruit_ready", dragonfruit_ready);
 		nbt.putLong("dragonfruit_ready_time", dragonfruit_ready_time);
 		nbt.putLong("dragonfruit_time", dragonfruit_time);
+		// 序列化黑暗Kiva相关变量
+		nbt.putBoolean("dark_kiva_bat_mode", dark_kiva_bat_mode);
+		nbt.putLong("dark_kiva_bat_mode_time", dark_kiva_bat_mode_time);
+		nbt.putBoolean("dark_kiva_blood_suck_active", dark_kiva_blood_suck_active);
+		nbt.putLong("dark_kiva_blood_suck_cooldown", dark_kiva_blood_suck_cooldown);
+		nbt.putBoolean("dark_kiva_sonic_blast_active", dark_kiva_sonic_blast_active);
+		nbt.putLong("dark_kiva_sonic_blast_cooldown", dark_kiva_sonic_blast_cooldown);
+		nbt.putLong("dark_kiva_blood_steal_cooldown", dark_kiva_blood_steal_cooldown);
 		return nbt;
 	}
 

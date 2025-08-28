@@ -1,6 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
@@ -87,6 +89,18 @@ public class PlayerDeathHandler {
                     );
                 });
 
+        // --- 3. DrakKivaBelt（新增） ---
+        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof DrakKivaBelt)
+                .ifPresent(curio -> {
+                    ItemStack belt = curio.stack().copy();
+                    // 如果有模式需要重置可以在这里调用
+                    // ((DrakKivaBelt) belt.getItem()).xxxx(belt, ...);
+                    if (!player.getInventory().add(belt)) player.drop(belt, false);
+                    CuriosApi.getCuriosInventory(player).ifPresent(inv ->
+                            inv.getStacksHandler(curio.slotContext().identifier()).ifPresent(handler ->
+                                    handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY)));
+                });
+
     }
 
     // 检查玩家是否装备了变身盔甲
@@ -102,7 +116,8 @@ public class PlayerDeathHandler {
                         stack.getItem() instanceof TyrantItem ||
                     stack.getItem() instanceof Sigurd ||
                         stack.getItem() instanceof Dark_orangels ||
-                    stack.getItem() instanceof Marika
+                    stack.getItem() instanceof Marika ||
+                        stack.getItem() instanceof DarkKivaItem
                 ) {
                     return true;
                 }
@@ -123,6 +138,7 @@ public class PlayerDeathHandler {
                 armorStack.getItem() instanceof Sigurd ||
                 armorStack.getItem() instanceof TyrantItem ||
                     armorStack.getItem() instanceof Dark_orangels ||
+                    armorStack.getItem() instanceof DarkKivaItem ||
                 armorStack.getItem() instanceof Marika) {
                 player.getInventory().armor.set(i, ItemStack.EMPTY);
             }

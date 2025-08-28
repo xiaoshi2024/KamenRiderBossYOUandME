@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.arm
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -78,30 +79,21 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
 
     @Override
     public void tick(Player player) {
-        ServerPlayer serverPlayer = (ServerPlayer) player;
-
-        // 冷却更新
-        if (bloodStealCooldown > 0) bloodStealCooldown--;
-
-        // 全套效果：夜视+生命偷取
-        if (isFullArmorEquipped(serverPlayer)) {
-            if (!player.hasEffect(MobEffects.NIGHT_VISION)) {
-                player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, true, false));
-            }
-
-            // 每5秒触发一次吸血
-            if (bloodStealCooldown == 0 && player.level().getGameTime() % 100 == 0) {
-                player.heal(2.0f);
-                bloodStealCooldown = 100;
-                spawnBatParticles(player);
-            }
-        }
+        // 移除了所有基础buff处理逻辑，这些逻辑现在在DarkKivaAbilityHandler中处理
     }
-
+    
+    // 添加客户端专用的黑暗Kiva盔甲检测方法
+    private static boolean isDarkKivaArmorEquipped(LocalPlayer player) {
+        // 检查是否穿着黑暗Kiva头盔、胸甲和护腿（不需要鞋子）
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DarkKivaItem &&
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DarkKivaItem &&
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof DarkKivaItem;
+    }
+    
     private void spawnBatParticles(Player player) {
         // 可扩展粒子：蝙蝠群飞散效果
     }
-
+    
     public static boolean isFullArmorEquipped(ServerPlayer player) {
         return player.getInventory().armor.get(3).getItem() instanceof DarkKivaItem &&
                 player.getInventory().armor.get(2).getItem() instanceof DarkKivaItem &&

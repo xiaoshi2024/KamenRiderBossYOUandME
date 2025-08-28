@@ -4,6 +4,10 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkSquash
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.JinbaGuardPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.LemonBoostPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBatModePacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +31,8 @@ public class PacketHandler {
 
     public static void registerPackets() {
         int index = 0;
-        INSTANCE.registerMessage(index++, PlayerAnimationPacket.class, PlayerAnimationPacket::toBytes, PlayerAnimationPacket::new, PlayerAnimationPacket::handle);
+        INSTANCE.registerMessage(index++, PlayerAnimationPacket.class,
+                PlayerAnimationPacket::encode, PlayerAnimationPacket::decode, PlayerAnimationPacket::handle);
         INSTANCE.registerMessage(index++, SoundStopPacket.class, SoundStopPacket::encode, SoundStopPacket::decode, SoundStopPacket.Handler::handle);
         INSTANCE.registerMessage(index++, InvisibilityPacket.class, InvisibilityPacket::encode, InvisibilityPacket::decode, InvisibilityPacket::handle);
         INSTANCE.registerMessage(index++, RemoveEntityPacket.class, RemoveEntityPacket::toBytes, RemoveEntityPacket::new, RemoveEntityPacket::handle);
@@ -78,6 +83,11 @@ public class PacketHandler {
                 SyncBloodlinePacket::new,
                 SyncBloodlinePacket::handle
         );
+        
+        // 在registerMessages方法中添加数据包注册
+        INSTANCE.registerMessage(index++, DarkKivaBatModePacket.class, DarkKivaBatModePacket::encode, DarkKivaBatModePacket::new, DarkKivaBatModePacket::handle);
+        INSTANCE.registerMessage(index++, DarkKivaBloodSuckPacket.class, DarkKivaBloodSuckPacket::encode, DarkKivaBloodSuckPacket::new, DarkKivaBloodSuckPacket::handle);
+        INSTANCE.registerMessage(index++, DarkKivaSonicBlastPacket.class, DarkKivaSonicBlastPacket::encode, DarkKivaSonicBlastPacket::new, DarkKivaSonicBlastPacket::handle);
     }
 
     public static void sendToServer(Object packet) {
@@ -93,6 +103,21 @@ public class PacketHandler {
         if (player != null && !player.hasDisconnected()) {
             INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), packet);
         }
+    }
+
+    public static void sendAnimationToAll(Component animation, int entityId, boolean override) {
+        PlayerAnimationPacket packet = new PlayerAnimationPacket(animation, entityId, override);
+        sendToAll(packet);
+    }
+
+    public static void sendAnimationToClient(Component animation, int entityId, boolean override, ServerPlayer player) {
+        PlayerAnimationPacket packet = new PlayerAnimationPacket(animation, entityId, override);
+        sendToClient(packet, player);
+    }
+
+    public static void sendAnimationToAllTracking(Component animation, int entityId, boolean override, Entity entity) {
+        PlayerAnimationPacket packet = new PlayerAnimationPacket(animation, entityId, override);
+        sendToAllTracking(packet, entity);
     }
 
     public static void sendToAllTracking(Object packet, Entity entity) {
