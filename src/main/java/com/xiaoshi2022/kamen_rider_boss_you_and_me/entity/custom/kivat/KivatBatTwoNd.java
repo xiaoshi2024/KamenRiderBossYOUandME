@@ -1,8 +1,13 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.PlayerBloodlineHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -23,6 +28,7 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.*;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -31,6 +37,7 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.constant.DataTickets;
@@ -39,9 +46,13 @@ import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
 
 public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
 
@@ -55,6 +66,8 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
     private static final EntityDataAccessor<Boolean> DATA_FLYING   = SynchedEntityData.defineId(KivatBatTwoNd.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_RESTING  = SynchedEntityData.defineId(KivatBatTwoNd.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_SLEEPING = SynchedEntityData.defineId(KivatBatTwoNd.class, EntityDataSerializers.BOOLEAN);
+
+    public UUID pendingTransformPlayer = null;
 
     /* ===== 飞行常量 ===== */
     public  static final int TICKS_PER_FLAP = Mth.ceil(2.4166098F);
@@ -86,19 +99,39 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
         setSleeping(false);
         setFlying(true);
     }
-    public static Component reply(String input) {
+    public static Component reply(String input, KivatBatTwoNd kivatBat, ServerLevel level) {
         input = input.toLowerCase(Locale.ROOT);
-        if (input.contains("hello") || input.contains("你好") || input.contains("hi"))
-            return Component.translatable("dialog.kivat.hello");
-        if (input.contains("food") || input.contains("饿") || input.contains("meal"))
-            return Component.translatable("dialog.kivat.food");
-        if (input.contains("sleep") || input.contains("睡觉") || input.contains("rest"))
-            return Component.translatable("dialog.kivat.sleep");
-        if (input.matches(".*(?:血|blood|fang).*"))
-            return Component.translatable("dialog.kivat.blood");
-        return Component.translatable("dialog.kivat.unknown");
-    }
+        Component response;
+        if (input.contains("hello") || input.contains("你好") || input.contains("hi")) {
+            response = Component.translatable("dialog.kivat.hello");
+        } else if (input.contains("food") || input.contains("饿") || input.contains("meal")) {
+            response = Component.translatable("dialog.kivat.food");
+        } else if (input.contains("sleep") || input.contains("睡觉") || input.contains("rest")) {
+            response = Component.translatable("dialog.kivat.sleep");
+        } else if (input.matches(".*(?:血|blood|fang).*")) {
+            response = Component.translatable("dialog.kivat.blood");
+        } else {
+            response = Component.translatable("dialog.kivat.unknown");
+        }
 
+        // 定义可见范围
+        double visibleRange = 16.0; // 可见范围为16格
+
+        // 遍历所有玩家
+        for (Player player : level.players()) {
+            if (player instanceof ServerPlayer) {
+                ServerPlayer serverPlayer = (ServerPlayer) player;
+                // 计算玩家与实体的距离
+                double distance = kivatBat.distanceTo(serverPlayer);
+                if (distance <= visibleRange) {
+                    // 如果玩家在可见范围内，发送消息
+                    serverPlayer.sendSystemMessage(response);
+                }
+            }
+        }
+
+        return response;
+    }
 
 
     public enum Mode { NORMAL, SAY, SLEEP }
@@ -111,7 +144,6 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
     public KivatBatTwoNd(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
         this.moveControl = new FlyingMoveControl(this, 20, true);
-        this.navigation = new FlyingPathNavigation(this, level);
         this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.COCOA, -1.0F);
         this.setPathfindingMalus(BlockPathTypes.FENCE, -1.0F);
@@ -141,6 +173,11 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
         entityData.define(DATA_RESTING,  true);
         entityData.define(DATA_SLEEPING, false);
         entityData.define(DATA_MODE, Mode.NORMAL.ordinal());
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new FlyingPathNavigation(this, level);
     }
 
     /* ------------------------------------------------------------ */
@@ -217,6 +254,10 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
         public boolean canContinueToUse() {
             return isSleeping();
         }
+    }
+
+    private static boolean isKamenBossArmor(ItemStack stack) {
+        return stack.getItem() instanceof KamenBossArmor;
     }
 
     /* ------------------------------------------------------------ */
@@ -312,7 +353,8 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
             // 确保导航系统在工作
             if (targetPosition != null && navigation.isDone()) {
                 // 到达目标后寻找新目标
-                targetPosition = getOwner() == null ? randomNearby() : randomAround(getOwner());
+                targetPosition = clampToWorld(
+                        getOwner() == null ? randomNearby() : randomAround(getOwner()));
                 if (targetPosition != null) {
                     navigation.moveTo(
                             targetPosition.getX() + 0.5,
@@ -321,6 +363,13 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
                             1.0D
                     );
                 }
+            }
+        }
+        if (pendingTransformPlayer != null) {
+            Player player = level().getPlayerByUUID(pendingTransformPlayer);
+            if (player != null && this.distanceTo(player) <= 2.0) {
+                this.pendingTransformPlayer = null;
+                this.transform(player);
             }
         }
     }
@@ -461,6 +510,114 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
         return super.mobInteract(player, hand);
     }
 
+    public void transform(Player player) {
+        // 检查是否穿着 KamenBossArmor 盔甲
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+                ItemStack armor = player.getItemBySlot(slot);
+                if (!armor.isEmpty() && isKamenBossArmor(armor)) {
+                    if (!player.level().isClientSide) {
+                        KivatBatTwoNd.reply("请先解除变身！", this, (ServerLevel) player.level());
+                    }
+                    return; // 阻止变身
+                }
+            }
+        }
+
+        if (!isTame() || !isOwnedBy(player)) {
+            player.sendSystemMessage(Component.translatable("dialog.kivat.not_tamed"));
+            return;
+        }
+
+        if (this.distanceTo(player) > 2.0) {
+            // 先飞过来，再变身
+            this.temptToPlayer(player);
+            this.pendingTransformPlayer = player.getUUID();
+            player.sendSystemMessage(Component.translatable("dialog.kivat.coming"));
+            return;
+        }
+
+        // 以下是你原来的变身逻辑
+        boolean hasArmor = false;
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() == EquipmentSlot.Type.ARMOR && !player.getItemBySlot(slot).isEmpty()) {
+                hasArmor = true;
+                break;
+            }
+        }
+
+        if (hasArmor) {
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+                    ItemStack armor = player.getItemBySlot(slot);
+                    if (!armor.isEmpty()) {
+                        if (!player.getInventory().add(armor)) {
+                            player.drop(armor, false);
+                        }
+                        player.setItemSlot(slot, ItemStack.EMPTY);
+                    }
+                }
+            }
+        }
+
+        // 生成腰带
+        // 1. 生成腰带并写入蝙蝠 NBT
+        ItemStack belt = new ItemStack(ModItems.DRAK_KIVA_BELT.get());
+        CompoundTag batTag = new CompoundTag();
+
+// 必须：身份 & 驯服
+        batTag.putUUID("UUID",        this.getUUID());          // 让实体真正“还是它自己”
+        batTag.putUUID("OwnerUUID",   this.getOwnerUUID());     // 保持已驯服
+
+// 基本状态
+        batTag.putFloat("Health",     this.getHealth());
+        batTag.putFloat("AbsorptionAmount", this.getAbsorptionAmount()); // 有护盾时不丢
+        batTag.putString("CustomName", this.getCustomName() != null
+                ? Component.Serializer.toJson(this.getCustomName())
+                : "");
+
+// 2. 强制塞进 Curios belt 槽（优先空位，没有再塞主手）
+        boolean equipped = CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .map(handler -> {
+                    // 尝试所有 belt 槽
+                    var stacksHandler = handler.getStacksHandler("belt").orElse(null);
+                    if (stacksHandler == null) return false;
+                    for (int i = 0; i < stacksHandler.getSlots(); i++) {
+                        if (stacksHandler.getStacks().getStackInSlot(i).isEmpty()) {
+                            stacksHandler.getStacks().setStackInSlot(i, belt);
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .orElse(false);
+
+// 如果 Curios 没成功，就塞进主手
+        if (!equipped) {
+            player.getInventory().setItem(player.getInventory().selected, belt);
+        }
+
+// 3. 立刻触发 henshin 动画
+        if (!player.level().isClientSide && player instanceof ServerPlayer sp) {
+            CuriosApi.getCuriosInventory(sp)
+                    .resolve()
+                    .flatMap(h -> h.findFirstCurio(s -> s.getItem() instanceof DrakKivaBelt))
+                    .ifPresent(result -> {
+                        ItemStack beltStack = result.stack();
+                        ((DrakKivaBelt) beltStack.getItem()).setHenshin(beltStack, true);
+                        PacketHandler.sendToAllTracking(
+                                new BeltAnimationPacket(player.getId(), "henshin", DrakKivaBelt.DrakKivaBeltMode.DEFAULT),
+                                player
+                        );
+                    });
+        }
+
+// 4. 让蝙蝠真正消失
+        this.discard();
+    }
+
+
     public Mode getMode() {
         return Mode.values()[entityData.get(DATA_MODE)];
     }
@@ -493,6 +650,15 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
         if (!level().isClientSide) {
             ((ServerLevel) level()).scheduleTick(blockPosition(), level().getBlockState(blockPosition()).getBlock(), 5);
         }
+    }
+
+    private BlockPos clampToWorld(BlockPos pos) {
+        int minY = level().getMinBuildHeight();
+        int maxY = level().getMaxBuildHeight() - 1; // 上边界是 exclusive
+        return new BlockPos(
+                pos.getX(),
+                Mth.clamp(pos.getY(), minY, maxY),
+                pos.getZ());
     }
 
     @Override
@@ -636,7 +802,8 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
         @Override
         public void start() {
             cooldown = 40 + random.nextInt(40);
-            targetPosition = getOwner() == null ? randomNearby() : randomAround(getOwner());
+
+            targetPosition = clampToWorld(getOwner() == null ? randomNearby() : randomAround(getOwner()));
 
             // 实际移动到目标位置
             if (targetPosition != null) {

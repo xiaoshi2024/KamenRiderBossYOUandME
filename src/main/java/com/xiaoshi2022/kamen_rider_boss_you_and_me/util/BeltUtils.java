@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +41,17 @@ public class BeltUtils {
             }
         }
 
+        // 检查黑暗Kiva腰带
+        Optional<SlotResult> drakKivaBelt = CuriosApi.getCuriosInventory(player)
+                .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof DrakKivaBelt));
+
+        if (drakKivaBelt.isPresent()) {
+            ItemStack beltStack = drakKivaBelt.get().stack();
+            DrakKivaBelt belt = (DrakKivaBelt) beltStack.getItem();
+            // 假设DrakKivaBelt没有模式变化，始终返回false
+            return false;
+        }
+
         return false;
     }
 
@@ -67,6 +79,15 @@ public class BeltUtils {
             ItemStack beltStack = sengokuBelt.get().stack();
             sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
             return belt.getMode(beltStack).name();
+        }
+
+        // 检查黑暗Kiva腰带
+        Optional<SlotResult> drakKivaBelt = CuriosApi.getCuriosInventory(player)
+                .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof DrakKivaBelt));
+
+        if (drakKivaBelt.isPresent()) {
+            // 假设DrakKivaBelt没有模式变化，始终返回DEFAULT
+            return "DEFAULT";
         }
 
         return "DEFAULT";

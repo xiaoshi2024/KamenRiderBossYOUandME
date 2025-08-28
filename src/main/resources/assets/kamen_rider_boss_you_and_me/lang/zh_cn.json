@@ -16,6 +16,10 @@
   "item.kamen_rider_boss_you_and_me.bananafruit": "香蕉锁种",
   "item.kamen_rider_boss_you_and_me.orangefruit": "橙子锁种",
   "item.kamen_rider_boss_you_and_me.genesis_driver": "创世纪驱动器",
+
+  "item.kamen_rider_boss_you_and_me.drak_kiva_belt": "黑暗月蝠装载腰带",
+
+
   "item.kamen_rider_boss_you_and_me.lemon_energy": "柠檬能量锁种",
   "item.kamen_rider_boss_you_and_me.peach_energy": "桃子能量锁种",
   "item.kamen_rider_boss_you_and_me.dragonfruit": "火龙果能量锁种",
@@ -118,6 +122,7 @@
 
   "item group.kamen_rider_boss_you_and_me_heixin_tab": "反派骑士系统",
   "item group.kamen_rider_boss_you_and_me_kinds_tab": "假面骑士你与我的反派编年史的杂货",
-  "key.kamen_rider_boss_you_and_me.kick": "骑士踢键"
+  "key.kamen_rider_boss_you_and_me.kick": "骑士踢键",
+  "dialog.kivat.too_far": "如你所愿，灭绝时刻，现在开始！"
 
 }

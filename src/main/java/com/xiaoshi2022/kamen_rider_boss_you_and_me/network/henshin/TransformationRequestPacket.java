@@ -1,7 +1,9 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ReleaseBeltPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -33,31 +35,44 @@ public class TransformationRequestPacket {
         return new TransformationRequestPacket(playerId, riderType, isRelease);
     }
 
-    public static void handle(TransformationRequestPacket msg, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(TransformationRequestPacket msg,
+                              Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
-            if (player != null && player.getUUID().equals(msg.playerId)) {
-                if (msg.isRelease) {
-                    // 处理解除变身逻辑
-                    ReleaseBeltPacket.handleRelease(player, msg.riderType);
-                } else {
-                    // 根据变身类型调用对应的处理方法
-                    if (RiderTypes.LEMON_ENERGY.equals(msg.riderType)) {
-                        LemonTransformationRequestPacket.handle(new LemonTransformationRequestPacket(player.getUUID()), ctx);
-                    } else if (RiderTypes.BANANA.equals(msg.riderType)) {
-                        BananaTransformationRequestPacket.handle(new BananaTransformationRequestPacket(player.getUUID()), ctx);
-                    }else if (RiderTypes.MELON_ENERGY.equals(msg.riderType)) {
-                        MelonTransformationRequestPacket.handle(
-                                new MelonTransformationRequestPacket(player.getUUID()), ctx);
-                    } else if (RiderTypes.CHERRY_ENERGY.equals(msg.riderType)) {
-                        CherryTransformationRequestPacket.handle(
-                                new CherryTransformationRequestPacket(player.getUUID()), ctx);
-                    }else if (RiderTypes.ORANGELS.equals(msg.riderType)) {
-                        DarkOrangeTransformationRequestPacket.handle(
-                                new DarkOrangeTransformationRequestPacket(player.getUUID()), ctx);
-                    }else if (RiderTypes.DRAGONFRUIT_ENERGY.equals(msg.riderType)) {
-                        DragonfruitTransformationRequestPacket.handle(
-                                new DragonfruitTransformationRequestPacket(player.getUUID()), ctx);
+            if (player == null || !player.getUUID().equals(msg.playerId))
+                return;
+
+            if (msg.isRelease) {
+                ReleaseBeltPacket.handleRelease(player, msg.riderType);
+            } else {
+                switch (msg.riderType) {
+                    case RiderTypes.LEMON_ENERGY -> LemonTransformationRequestPacket.handle(
+                            new LemonTransformationRequestPacket(player.getUUID()), ctx);
+                    case RiderTypes.BANANA -> BananaTransformationRequestPacket.handle(
+                            new BananaTransformationRequestPacket(player.getUUID()), ctx);
+                    case RiderTypes.MELON_ENERGY -> MelonTransformationRequestPacket.handle(
+                            new MelonTransformationRequestPacket(player.getUUID()), ctx);
+                    case RiderTypes.CHERRY_ENERGY -> CherryTransformationRequestPacket.handle(
+                            new CherryTransformationRequestPacket(player.getUUID()), ctx);
+                    case RiderTypes.ORANGELS -> DarkOrangeTransformationRequestPacket.handle(
+                            new DarkOrangeTransformationRequestPacket(player.getUUID()), ctx);
+                    case RiderTypes.DRAGONFRUIT_ENERGY -> DragonfruitTransformationRequestPacket.handle(
+                            new DragonfruitTransformationRequestPacket(player.getUUID()), ctx);
+                    case "DARK_KIVA" -> {
+                        if (msg.isRelease) {
+                            // 解除变身
+                            ReleaseBeltPacket.handleRelease(player, "DARK_KIVA");
+                        } else {
+                            // 变身：设置腰带状态并触发动画
+                            CurioUtils.findFirstCurio(player,
+                                            stack -> stack.getItem() instanceof DrakKivaBelt)
+                                    .ifPresent(curio -> {
+                                        DrakKivaBelt belt = (DrakKivaBelt) curio.stack().getItem();
+                                        DrakKivaBelt.setHenshin(curio.stack(), true);
+                                        // 触发动画
+                                        belt.triggerAnim(player, "controller", "henshin");
+                                    });
+                        }
                     }
                 }
             }

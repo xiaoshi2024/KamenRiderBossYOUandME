@@ -6,9 +6,12 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.giifusteamp;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.dragonfruit;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
@@ -122,6 +125,9 @@ public class ModItems {
             () -> new sengokudrivers_epmty(new Item.Properties()));
     public static final RegistryObject<Genesis_driver> GENESIS_DRIVER = ITEMS.register("genesis_driver",
             () -> new Genesis_driver(new Item.Properties()));
+    public static final RegistryObject<DrakKivaBelt> DRAK_KIVA_BELT = ITEMS.register("drak_kiva_belt",
+            () -> new DrakKivaBelt(new Item.Properties()));
+
 
     public static final RegistryObject<RidernecromItem> RIDERNECROM_HELMET = ITEMS.register("ridernecrom_helmet", () -> new RidernecromItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<RidernecromItem> RIDERNECROM_CHESTPLATE = ITEMS.register("ridernecrom_chestplate", () -> new RidernecromItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
@@ -163,5 +169,8 @@ public class ModItems {
     public static final RegistryObject<TyrantItem> TYRANT_CHESTPLATE = ITEMS.register("tyrant_chestplate", () -> new TyrantItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<TyrantItem> TYRANT_LEGGINGS = ITEMS.register("tyrant_leggings", () -> new TyrantItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
+    public static final RegistryObject<DarkKivaItem> DARK_KIVA_HELMET = ITEMS.register("dark_kiva_helmet", () -> new DarkKivaItem(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<DarkKivaItem> DARK_KIVA_CHESTPLATE = ITEMS.register("dark_kiva_chestplate", () -> new DarkKivaItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<DarkKivaItem> DARK_KIVA_LEGGINGS = ITEMS.register("dark_kiva_leggings", () -> new DarkKivaItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
 }

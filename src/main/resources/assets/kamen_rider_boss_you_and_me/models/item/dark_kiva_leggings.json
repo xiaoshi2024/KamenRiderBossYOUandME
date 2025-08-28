@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kamen_rider_boss_you_and_me:item/dark_bat"
+  }
+}

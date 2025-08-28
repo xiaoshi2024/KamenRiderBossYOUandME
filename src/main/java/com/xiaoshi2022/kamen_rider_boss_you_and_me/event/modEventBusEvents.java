@@ -13,9 +13,11 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatT
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -130,8 +132,8 @@ public class modEventBusEvents {
 
         @SubscribeEvent
         public static void onPlayerChat(ServerChatEvent event) {
-            String msg = event.getMessage().getString();
-            Player player = event.getPlayer();
+            String msg = event.getMessage().getString(); // 获取玩家发送的消息
+            Player player = event.getPlayer(); // 获取发送消息的玩家
             Level level = player.level(); // 获取玩家所在的世界
 
             // 安全检查：确保世界和玩家有效
@@ -182,7 +184,33 @@ public class modEventBusEvents {
             }
 
             String query = msg.substring("@kivat".length()).trim();
-            player.sendSystemMessage(KivatBatTwoNd.reply(query));
+            if (level instanceof ServerLevel) {
+                if (query.equals("变身") || query.equals("好了!灭绝时刻到了") || query.equals("henshin")) {
+
+                    // 1. 先检查盔甲
+                    for (EquipmentSlot slot : EquipmentSlot.values()) {
+                        if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+                            ItemStack armor = player.getItemBySlot(slot);
+                            if (!armor.isEmpty() && armor.getItem() instanceof KamenBossArmor) {
+                                player.sendSystemMessage(Component.translatable("dialog.kivat.already_transformed"));
+                                return;
+                            }
+                        }
+                    }
+
+                    // 2. 再检查距离
+                    if (kivat.distanceTo(player) <= 2.0) {
+                        kivat.transform(player);
+                    } else {
+                        player.sendSystemMessage(Component.translatable("dialog.kivat.too_far"));
+                        // 如果你想让它飞过来再变身，把下面两行取消注释
+                         kivat.temptToPlayer(player);
+                         kivat.pendingTransformPlayer = player.getUUID();
+                    }
+                } else {
+                    KivatBatTwoNd.reply(query, kivat, (ServerLevel) level);
+                }
+            }
         }
     }
 

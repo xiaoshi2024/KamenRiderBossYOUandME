@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShin.ZangetsuShinArmorRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;
@@ -8,6 +9,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -20,7 +22,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
-public class ZangetsuShinItem extends ArmorItem implements GeoItem , KamenBossArmor {
+public class ZangetsuShinItem extends ArmorItem implements GeoItem , KamenBossArmor , ArmorAnimationFactory.AnimatableAccessor {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String animationprocedure = "empty";
@@ -111,5 +113,15 @@ public class ZangetsuShinItem extends ArmorItem implements GeoItem , KamenBossAr
     public static boolean isArmorEquipped(ServerPlayer player, Item armorItem) {
         return player.getInventory().armor.stream()
                 .anyMatch(s -> s.getItem() == armorItem);
+    }
+
+    @Override
+    public void setAnimationProcedure(String procedure) {
+        this.animationprocedure = procedure;
+    }
+
+    @Override
+    public void tick(Player player) {
+
     }
 }

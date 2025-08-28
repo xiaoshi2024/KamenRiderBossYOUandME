@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import net.minecraft.client.Minecraft;
@@ -30,7 +31,11 @@ public class BeltAnimationPacket {
         this(entityId, animationName, "genesis", mode.name());
     }
 
-    private BeltAnimationPacket(int entityId, String animationName, String beltType, String beltMode) {
+    public BeltAnimationPacket(int entityId, String animationName, DrakKivaBelt.DrakKivaBeltMode mode) {
+        this(entityId, animationName, "drakkiva", mode.name());
+    }
+
+    public BeltAnimationPacket(int entityId, String animationName, String beltType, String beltMode) {
         this.entityId = entityId;
         this.animationName = animationName;
         this.beltType = beltType;
@@ -45,15 +50,20 @@ public class BeltAnimationPacket {
     }
 
     public static BeltAnimationPacket decode(FriendlyByteBuf buf) {
-        int id   = buf.readInt();
+        int id = buf.readInt();
         String anim = buf.readUtf();
         String type = buf.readUtf();
         String mode = buf.readUtf();
 
-        if ("sengoku".equals(type)) {
-            return new BeltAnimationPacket(id, anim, sengokudrivers_epmty.BeltMode.valueOf(mode));
-        } else {
-            return new BeltAnimationPacket(id, anim, Genesis_driver.BeltMode.valueOf(mode));
+        switch (type) {
+            case "sengoku":
+                return new BeltAnimationPacket(id, anim, sengokudrivers_epmty.BeltMode.valueOf(mode));
+            case "genesis":
+                return new BeltAnimationPacket(id, anim, Genesis_driver.BeltMode.valueOf(mode));
+            case "drakkiva":
+                return new BeltAnimationPacket(id, anim, DrakKivaBelt.DrakKivaBeltMode.valueOf(mode));
+            default:
+                throw new IllegalArgumentException("Unknown belt type: " + type);
         }
     }
 
@@ -74,12 +84,15 @@ public class BeltAnimationPacket {
                             s.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof Genesis_driver g) {
                             g.triggerAnim(living, "controller", msg.animationName);
+                        } else if (item instanceof DrakKivaBelt dk) {
+                            dk.triggerAnim(living, "controller", msg.animationName);
                         }
                     })
             );
         });
         ctx.get().setPacketHandled(true);
     }
+
 
     /* ---------------- Getter 供调试 ---------------- */
 

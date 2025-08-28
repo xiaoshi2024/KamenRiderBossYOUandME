@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.dukes.DukeArmorRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.BlockPos;
@@ -37,7 +38,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.Random;
 
-public class Duke extends ArmorItem implements GeoItem , KamenBossArmor {
+public class Duke extends ArmorItem implements GeoItem , KamenBossArmor, ArmorAnimationFactory.AnimatableAccessor  {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String animationprocedure = "empty"; 
     private static final Random RANDOM = new Random();
@@ -307,5 +308,10 @@ public class Duke extends ArmorItem implements GeoItem , KamenBossArmor {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    @Override
+    public void setAnimationProcedure(String procedure) {
+        this.animationprocedure = procedure;
     }
 }

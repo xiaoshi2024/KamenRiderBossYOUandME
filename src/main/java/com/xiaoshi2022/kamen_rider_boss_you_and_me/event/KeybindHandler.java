@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
@@ -15,10 +16,13 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkOrangeRel
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
@@ -69,15 +73,20 @@ public class KeybindHandler {
     }
 
     private static String getBeltType(ItemStack beltStack) {
-        if (!(beltStack.getItem() instanceof Genesis_driver gd)) return "BARONS";
-        return switch (gd.getMode(beltStack)) {
-            case LEMON -> "GENESIS";
-            case MELON -> "GENESIS_MELON";
-            case CHERRY -> "GENESIS_CHERRY";
-            case PEACH -> "GENESIS_PEACH";
-            case DRAGONFRUIT -> "GENESIS_DRAGONFRUIT";
-            default -> "GENESIS";   // 或者 DEFAULT 时直接 return ""
-        };
+        if (beltStack.getItem() instanceof DrakKivaBelt) {
+            return "DARK_KIVA";
+        }
+        if (beltStack.getItem() instanceof Genesis_driver gd) {
+            return switch (gd.getMode(beltStack)) {
+                case LEMON -> "GENESIS";
+                case MELON -> "GENESIS_MELON";
+                case CHERRY -> "GENESIS_CHERRY";
+                case PEACH -> "GENESIS_PEACH";
+                case DRAGONFRUIT -> "GENESIS_DRAGONFRUIT";
+                default -> "GENESIS";
+            };
+        }
+        return "BARONS";
     }
 
     private static void checkCherryLockSeedTimeout(Player player) {
@@ -255,6 +264,21 @@ public class KeybindHandler {
                     }
                 });
 
+        // 在 handleKeyPress 方法中，找到 Dark Kiva 部分：
+        CurioUtils.findFirstCurio(player,
+                        stack -> stack.getItem() instanceof DrakKivaBelt)
+                .ifPresent(curio -> {
+                    ItemStack beltStack = curio.stack();
+                    boolean isDarkKiva = player.getInventory().armor.get(3).getItem() == ModItems.DARK_KIVA_HELMET.get();
+
+                    if (isDarkKiva) {
+                        // 发送解除变身请求
+                        PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "DARK_KIVA", true));
+                        delayTicks = 60;
+                        delayedBeltStack = beltStack.copy();
+                    }
+                });
+
         // 香蕉和DarkOrange逻辑
         CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof sengokudrivers_epmty)
                 .ifPresent(curio -> {
@@ -287,6 +311,14 @@ public class KeybindHandler {
             case "GENESIS_DRAGONFRUIT" -> handleDragonfruitRelease(player); // 火龙果
             case "BARONS"          -> handleBaronsBeltRelease(player);    // 香蕉
             case "DUKE"            -> handleDukeBeltRelease(player);      // 公爵
+        }
+    }
+
+    public static void delayedCompleteBeltRelease(ServerPlayer player, String beltType, int delayTicks) {
+        if (player.level() instanceof ServerLevel serverLevel) {
+            serverLevel.scheduleTick(new BlockPos(player.blockPosition()),
+                    serverLevel.getBlockState(player.blockPosition()).getBlock(), delayTicks
+            );
         }
     }
 

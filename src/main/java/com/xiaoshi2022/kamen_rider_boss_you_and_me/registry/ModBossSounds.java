@@ -32,6 +32,11 @@ public class ModBossSounds {
   public static final RegistryObject<SoundEvent> PEACH_ENERGY = REGISTRY.register("peach_energy",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "peach_energy")));
 
+  public static final RegistryObject<SoundEvent> DARK_KIVAS = REGISTRY.register("dark_kivas",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "dark_kivas")));
+  public static final RegistryObject<SoundEvent> DRAK_KIVA_DISASSEMBLY = REGISTRY.register("drak_kiva_disassembly",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "drak_kiva_disassembly")));
+
   public static final RegistryObject<SoundEvent> ORANGE = REGISTRY.register("orange",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "orange")));
   public static final RegistryObject<SoundEvent> ORANGEBY = REGISTRY.register("orangeby",

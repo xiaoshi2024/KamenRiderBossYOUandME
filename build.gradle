@@ -215,7 +215,7 @@ dependencies {
     implementation fg.deobf("curse.maven:woodwalkers-868922:6278864")
 
 
-    implementation fg.deobf("curse.maven:kamenriderweaponcraft-1208615:6314566")
+    implementation fg.deobf("curse.maven:kamenriderweaponcraft-1208615:6933818")
     implementation fg.deobf("curse.maven:terrablender-563928:4647094")
 
     implementation fg.deobf("curse.maven:jade-324717:6106101")

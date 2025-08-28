@@ -250,5 +250,23 @@
         "stream": false
       }
     ]
+  },
+  "dark_kivas": {
+    "subtitle": "gavv l~ ~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:dark_kivas",
+        "stream": false
+      }
+    ]
+  },
+  "drak_kiva_disassembly": {
+    "subtitle": "drak_kiva_ disassembly",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:drak_kiva_disassembly",
+        "stream": false
+      }
+    ]
   }
 }

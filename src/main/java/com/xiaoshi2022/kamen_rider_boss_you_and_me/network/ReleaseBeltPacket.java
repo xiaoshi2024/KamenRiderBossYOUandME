@@ -1,9 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -33,6 +36,10 @@ public class ReleaseBeltPacket {
             case "BARONS"       -> KeybindHandler.completeBeltRelease(player, "BARONS");
             case "MELON_ENERGY" -> KeybindHandler.completeBeltRelease(player, "MELON_ENERGY");
             case "DUKE"         -> KeybindHandler.completeBeltRelease(player, "DUKE");
+            case "DARK_KIVA" -> {
+                // 直接调用 DarkKivaSequence 的解除方法
+                DarkKivaSequence.startDisassembly(player);
+            }
         }
     }
 
@@ -55,10 +62,13 @@ public class ReleaseBeltPacket {
             if (player == null) return;
 
             if (shouldComplete) {
-                // 根据腰带类型调用不同的解除方法
-                KeybindHandler.completeBeltRelease(player, beltType);
+                if ("DARK_KIVA".equals(beltType)) {
+                    // Dark Kiva：服务端直接触发解除动画和后续流程
+                    DarkKivaSequence.startDisassembly(player);
+                } else {
+                    KeybindHandler.completeBeltRelease(player, beltType);
+                }
             } else if (triggerAnimation) {
-                // 根据腰带类型处理不同动画
                 if ("GENESIS".equals(beltType)) {
                     CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Genesis_driver)
                             .ifPresent(curio -> {

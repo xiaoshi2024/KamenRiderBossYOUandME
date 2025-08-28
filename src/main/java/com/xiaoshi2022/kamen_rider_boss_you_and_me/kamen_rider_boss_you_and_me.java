@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.TamedKivatTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
@@ -80,7 +81,8 @@ public class kamen_rider_boss_you_and_me
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         // 注册我们感兴趣的服务器和其他游戏活动
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(kamen_rider_boss_you_and_me.class);
+
 
         MinecraftForge.EVENT_BUS.register(KivatItemTossHandler.class);
 
@@ -143,7 +145,7 @@ public class kamen_rider_boss_you_and_me
     }
 
     @SubscribeEvent
-    public void tick(TickEvent.ServerTickEvent event) {
+    public static void tick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             List<AbstractMap.SimpleEntry<Runnable, Integer>> actions = new ArrayList<>();
             workQueue.forEach(work -> {
@@ -221,6 +223,7 @@ public class kamen_rider_boss_you_and_me
             CuriosRendererRegistry.register(ModItems.MEGA_UIORDER_ITEM.get(), () -> new GenericCurioRenderer());
             CuriosRendererRegistry.register(ModItems.SENGOKUDRIVERS_EPMTY.get(), () -> new GenericCurioRenderer());
             CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new GenericCurioRenderer());
+            CuriosRendererRegistry.register(ModItems.DRAK_KIVA_BELT.get(), ()->new DrakKivaBeltRenderer());
         }
     }
 

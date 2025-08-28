@@ -16,6 +16,7 @@ public class PlayerAnimationSetup {
     public static final ResourceLocation NECROM_HENSHIN = new ResourceLocation("kamen_rider_boss_you_and_me", "necrom_henshin");
     public static final ResourceLocation NECROM_HENSHINX = new ResourceLocation("kamen_rider_boss_you_and_me", "necrom_henshinx");
 
+
     @OnlyIn(Dist.CLIENT)
     public static void clientInit() {
         // 注册动画工厂

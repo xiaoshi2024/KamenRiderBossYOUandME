@@ -15,6 +15,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class KivatItemTossHandler {
     @SubscribeEvent
     public static void onPlayerToss(ItemTossEvent e) {
+        Level level = e.getEntity().level();
+        if (level.isClientSide) return;          // 只在服务端执行
+
         ItemEntity ie = e.getEntity();
         ItemStack stack = ie.getItem();
         if (!stack.is(ModItems.KIVAT_BAT_TWO_ND_ITEM.get())) return;
@@ -22,13 +25,12 @@ public class KivatItemTossHandler {
         CompoundTag tag = stack.getTag();
         if (tag == null || !tag.getBoolean("FromKivatEntity")) return;
 
-        e.setCanceled(true);
+        e.setCanceled(true);                     // 1. 取消原掉落
+        ie.discard();                            // 2. 把原来的 ItemEntity 移除
 
-        Level level = ie.level();
         KivatBatTwoNd bat = ModEntityTypes.KIVAT_BAT_II.get().create(level);
         if (bat == null) return;
 
-        // 去掉坐标相关字段，防止被 load 覆盖
         tag.remove("Pos");
         tag.remove("Rotation");
         tag.remove("Motion");
@@ -36,24 +38,11 @@ public class KivatItemTossHandler {
         Player player = e.getPlayer();
         Vec3 pos = player.position().add(player.getLookAngle().scale(1.0));
 
-        // 先 load 其他数据（血量、名字、模式等）
-        bat.load(tag);               // 读存档数据
-        bat.absMoveTo(pos.x, pos.y, pos.z, player.getYRot(), 0); // 关键：强刷坐标
-        bat.setDeltaMovement(Vec3.ZERO);
-
-        // 安全地停止导航
-        if (bat.getNavigation() != null) {
-            bat.getNavigation().stop();
-        }
-
-        // 再手动设置新位置
+        bat.load(tag);
         bat.moveTo(pos.x, pos.y + 0.5, pos.z, player.getYRot(), 0);
+        bat.setDeltaMovement(Vec3.ZERO);
+        if (tag.hasUUID("OwnerUUID")) bat.tame(player);
 
-        if (tag.hasUUID("OwnerUUID")) {
-            bat.tame(player);
-        }
-
-        level.addFreshEntity(bat);
-        ie.discard();
+        level.addFreshEntity(bat);               // 3. 生成实体
     }
 }

@@ -33,6 +33,8 @@
   "dialog.kivat.mode_change.say": "loitered",
   "dialog.kivat.mode_change.sleep": "sleep",
 
+  "item.kamen_rider_boss_you_and_me.drak_kiva_belt": "Drak Kiva Belt",
+
 
   "dialog.kivat.hello": "§6Kivat:§r My contractor, today is another day full of fighting spirit!",
   "dialog.kivat.food":  "§6Kivat:§r Grant me a blood feast, and I shall fight for you!",
@@ -129,5 +131,9 @@
 
   "item group.kamen_rider_boss_you_and_me_kinds_tab": "KamenRiderBossYouAndMe Kinds of",
   "key.kamen_rider_boss_you_and_me.kick": "Rider Kick",
-  "dialog.kivat.notfound": "Not found Kivat"
+  "dialog.kivat.notfound": "Not found Kivat",
+  "dialog.kivat.too_far": "As you wished, the extinction moment has begun now!",
+  "dialog.kivat.already_transformed": "Please deactivate the transformation first!",
+  "dialog.kivat.coming": "Kivat Coming up",
+  "dialog.kivat.not_tamed": "kivat not tamed!"
 }

@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.BronLemons.baronLemonArmorRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,11 +25,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
 
-public class baron_lemonItem extends ArmorItem implements GeoItem , KamenBossArmor {
+public class baron_lemonItem extends ArmorItem implements GeoItem , KamenBossArmor, ArmorAnimationFactory.AnimatableAccessor {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String animationprocedure = "empty";
-
-
 
     public baron_lemonItem(ArmorItem.Type type, Item.Properties properties) {
         super(new ArmorMaterial() {
@@ -171,5 +170,15 @@ public class baron_lemonItem extends ArmorItem implements GeoItem , KamenBossArm
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    @Override
+    public void tick(Player player) {
+
+    }
+
+    @Override
+    public void setAnimationProcedure(String procedure) {
+        this.animationprocedure = procedure;
     }
 }
