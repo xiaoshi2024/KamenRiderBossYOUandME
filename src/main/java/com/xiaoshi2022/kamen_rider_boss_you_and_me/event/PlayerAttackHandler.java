@@ -1,8 +1,15 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -11,18 +18,23 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber
 public class PlayerAttackHandler {
     private static final Map<UUID, AttackData> pendingAttacks = new HashMap<>();
+    private static final Random RANDOM = new Random();
+    
+    // 残血触发概率 (50%)
+    private static final float LOW_HEALTH_MESSAGE_CHANCE = 0.5f;
+    // 残血判定阈值 (3点生命值)
+    private static final float LOW_HEALTH_THRESHOLD = 3.0f;
 
     /* ======== 香蕉加成 ======== */
     private static final float BANANA_JUMP_LEVEL   = 3.0f;   // 跳跃Ⅲ
@@ -97,6 +109,13 @@ public class PlayerAttackHandler {
     @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
         Entity attacker = event.getSource().getEntity();
+        LivingEntity target = event.getEntity();
+        
+        // 检查黑暗Kiva攻击残血玩家的情况
+        if (attacker instanceof Player darkKivaPlayer && target instanceof Player victimPlayer) {
+            checkAndSendDarkKivaMessage(darkKivaPlayer, victimPlayer, event.getAmount());
+        }
+        
         if (attacker instanceof Player player) {
             ItemStack chestArmor = player.getItemBySlot(EquipmentSlot.CHEST);
             boolean isBaronLemon = chestArmor.getItem() instanceof baron_lemonItem;
@@ -134,6 +153,85 @@ public class PlayerAttackHandler {
                     player.heal(heal);
                 }
             }
+        }
+    }
+
+    /**
+     * 检查并发送黑暗Kiva攻击残血玩家的自定义消息，同时处理解除变身和转移蝙蝠主人
+     */
+    private static void checkAndSendDarkKivaMessage(Player attacker, Player victim, float damageAmount) {
+        // 检查攻击者是否穿着全套黑暗Kiva盔甲
+        boolean isDarkKiva = false;
+        if (attacker instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+            isDarkKiva = DarkKivaItem.isFullArmorEquipped(serverPlayer);
+        }
+        
+        // 检查受害者是否处于残血状态（伤害后血量可能低于阈值）
+        float remainingHealth = victim.getHealth() - damageAmount;
+        boolean isLowHealth = remainingHealth <= LOW_HEALTH_THRESHOLD && remainingHealth > 0;
+        
+        // 触发条件：攻击者是黑暗Kiva，受害者是残血玩家，且随机概率通过
+        if (isDarkKiva && isLowHealth && RANDOM.nextFloat() < LOW_HEALTH_MESSAGE_CHANCE) {
+            // 发送自定义消息给攻击者
+            attacker.sendSystemMessage(Component.literal("小丑蝙蝠：你在欺负弱小的人类吗？真是邪恶的骑士啊！"));
+            
+            // 也发送消息给受害者
+            victim.sendSystemMessage(Component.literal("小丑蝙蝠：这个骑士太邪恶了，让我来帮助你！"));
+            
+            // 如果是服务端，处理解除变身和转移蝙蝠主人
+            if (attacker instanceof ServerPlayer serverAttacker && victim instanceof ServerPlayer serverVictim) {
+                // 1. 解除攻击者的变身
+                DarkKivaSequence.startDisassembly(serverAttacker);
+                
+                // 2. 延迟处理蝙蝠转移，确保解除变身完成
+                serverAttacker.getServer().tell(new net.minecraft.server.TickTask(
+                        serverAttacker.getServer().getTickCount() + 20, // 1秒延迟
+                        () -> transferKivatToVictim(serverAttacker, serverVictim)
+                ));
+            }
+        }
+    }
+
+    /**
+     * 将黑暗Kiva的蝙蝠从攻击者转移给受害者，并强制受害者变身
+     */
+    private static void transferKivatToVictim(ServerPlayer attacker, ServerPlayer victim) {
+        // 在攻击者周围查找Kivat蝙蝠
+        ServerLevel level = attacker.serverLevel();
+        List<KivatBatTwoNd> bats = level.getEntitiesOfClass(KivatBatTwoNd.class,
+                new AABB(attacker.blockPosition()).inflate(10),
+                bat -> bat.isTame() && bat.isOwnedBy(attacker));
+        
+        if (!bats.isEmpty()) {
+            KivatBatTwoNd bat = bats.get(0); // 获取第一只找到的蝙蝠
+            
+            // 1. 改变蝙蝠的主人
+            bat.tame(victim);
+            
+            // 2. 设置蝙蝠飞向受害者并触发变身
+            bat.temptToPlayer(victim);
+            bat.pendingTransformPlayer = victim.getUUID();
+            
+            // 3. 给受害者一些提示消息
+            victim.sendSystemMessage(Component.literal("小丑蝙蝠：现在你获得了黑暗的力量！"));
+            
+            // 4. 生成一些视觉效果
+            spawnEffectParticles(level, victim);
+        }
+    }
+
+    /**
+     * 生成特效粒子
+     */
+    private static void spawnEffectParticles(ServerLevel level, Player player) {
+        for (int i = 0; i < 20; i++) {
+            level.sendParticles(
+                    ParticleTypes.FLASH,
+                    player.getX() + (level.random.nextDouble() - 0.5) * 2,
+                    player.getY() + 1 + level.random.nextDouble(),
+                    player.getZ() + (level.random.nextDouble() - 0.5) * 2,
+                    1, 0, 0.1, 0, 0.1
+            );
         }
     }
 

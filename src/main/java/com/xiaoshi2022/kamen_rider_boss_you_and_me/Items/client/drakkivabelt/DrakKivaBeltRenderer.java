@@ -43,7 +43,7 @@ public class DrakKivaBeltRenderer extends GeoItemRenderer<DrakKivaBelt>  impleme
             model.body.translateAndRotate(poseStack);
 
             // 调整位置和旋转，使其看起来像胸甲
-            poseStack.scale(0.4F, 0.5F, 0.4F); // 可以根据需要调整缩放
+            poseStack.scale(0.5F, 0.5F, 0.5F); // 可以根据需要调整缩放
             poseStack.translate(0.0F, 1.2, -0.4); // 微调位置使其居中
 
             // 如果需要，可以添加旋转
