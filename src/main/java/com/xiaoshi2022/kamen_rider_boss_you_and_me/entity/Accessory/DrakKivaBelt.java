@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -71,11 +72,7 @@ public class DrakKivaBelt extends Item implements GeoItem, ICurioItem {
 
         /* -------- 变身序列 -------- */
         if (henshin) {
-            if (state.getController().getCurrentAnimation() == null ||
-                    !state.getController().getCurrentAnimation().animation().name().equals("henshin")) {
-                return state.setAndContinue(HENSHIN);
-            }
-            return PlayState.CONTINUE;
+            return state.setAndContinue(HENSHIN);
         }
 
         /* -------- 解除变身 -------- */
@@ -116,7 +113,7 @@ public class DrakKivaBelt extends Item implements GeoItem, ICurioItem {
         return stack.getOrCreateTag().getBoolean("IsDisassembly");
     }
 
-    public void setDisassembly(ItemStack stack, boolean flag) {
+    public static void setDisassembly(ItemStack stack, boolean flag) {
         stack.getOrCreateTag().putBoolean("IsDisassembly", flag);
     }
 
@@ -162,6 +159,8 @@ public class DrakKivaBelt extends Item implements GeoItem, ICurioItem {
         if (!stillEquipped) {
             // 无论变身与否，统一完整解除
             DarkKivaSequence.doFullDisassembly(sp, stack);
+            DrakKivaBelt.setHenshin(stack, false);       // 保险再清一次
+            stack.getOrCreateTag().remove("HenshinHandled");
         }
     }
 
@@ -222,19 +221,31 @@ public class DrakKivaBelt extends Item implements GeoItem, ICurioItem {
     public void triggerAnim(LivingEntity entity, String ctrl, String anim) {
         if (entity == null || entity.level() == null) return;
 
-        // 发送网络包触发动画
+        // 服务端逻辑
         if (!entity.level().isClientSide && entity instanceof ServerPlayer sp) {
             PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(entity.getId(), anim, DrakKivaBeltMode.DEFAULT),
-                    entity
-            );
+                    new BeltAnimationPacket(entity.getId(), anim, DrakKivaBeltMode.DEFAULT), entity);
 
-            // 同时设置本地状态（重要！）
-            if (anim.equals("henshin")) {
-                setHenshin(getBeltStack(sp), true);
-            } else if (anim.equals("disassembly")) {
-                setDisassembly(getBeltStack(sp), true);
-            }
+            if ("henshin".equals(anim)) setHenshin(getBeltStack(sp), true);
+            else if ("disassembly".equals(anim)) setDisassembly(getBeltStack(sp), true);
+        }
+
+        // 客户端逻辑（GeckoLib 4.0）
+        if (entity.level().isClientSide && entity instanceof Player) {
+            CuriosApi.getCuriosInventory(entity).ifPresent(inv ->
+                    inv.findCurio("belt", 0).ifPresent(slot -> {
+                        ItemStack stack = slot.stack();
+                        if (stack.getItem() instanceof DrakKivaBelt belt) {
+                            if ("henshin".equals(anim)) {
+                                DrakKivaBelt.setHenshin(stack, true);
+                            } else if ("disassembly".equals(anim)) {
+                                DrakKivaBelt.setDisassembly(stack, true);
+                            }
+                            // 4.0 触发器写法
+                            belt.triggerAnim((Player) entity, "controller", anim);
+                        }
+                    })
+            );
         }
     }
 

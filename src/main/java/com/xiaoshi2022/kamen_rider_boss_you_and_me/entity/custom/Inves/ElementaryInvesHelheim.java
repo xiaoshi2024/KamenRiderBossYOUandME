@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.AttractGoal;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.FlyAndAttackGoal;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.PickUpHelheimFruitGoal;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
@@ -55,7 +56,7 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     protected static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("Attack");
     protected static final RawAnimation RUN = RawAnimation.begin().thenLoop("run");
     protected static final RawAnimation FLY = RawAnimation.begin().thenLoop("fly"); // 添加飞行动画
-    private static final TagKey<Item> HELHEIM_FOOD_TAG =
+    public static final TagKey<Item> HELHEIM_FOOD_TAG =
             ItemTags.create(new ResourceLocation("kamen_rider_weapon_craft", "kamen_rider_helheim_food"));
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -365,6 +366,9 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
 
         // 优先级7 - 水中漂浮
         this.goalSelector.addGoal(7, new FloatGoal(this));
+
+        // 优先级 这里放 8
+        this.goalSelector.addGoal(8, new PickUpHelheimFruitGoal(this));
     }
 
     // 在ElementaryInvesHelheim类中

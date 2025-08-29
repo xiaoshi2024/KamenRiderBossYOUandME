@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -26,9 +27,9 @@ import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
 import net.minecraft.client.player.LocalPlayer;
@@ -69,9 +70,18 @@ public class KivatBatTwoNdItem extends Item implements GeoItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!level.isClientSide) {
-            // 恢复右键切换动画的功能
+            // 如果没有UUID，初始化一个
+            if (!stack.getOrCreateTag().hasUUID("UUID")) {
+                CompoundTag tag = stack.getOrCreateTag();
+                tag.putUUID("UUID", UUID.randomUUID());
+                tag.putUUID("OwnerUUID", player.getUUID()); // 默认绑定使用者
+                tag.putBoolean("FromKivatEntity", true);
+                tag.putFloat("Health", 80.0F);
+                tag.putString("CustomName", "{\"text\":\"Kivat Bat II\"}");
+            }
+
             int state = stack.getOrCreateTag().getInt("animationState");
-            state = (state + 1) % 5;          // 0-4 循环
+            state = (state + 1) % 5;
             stack.getOrCreateTag().putInt("animationState", state);
         }
         return InteractionResultHolder.success(stack);

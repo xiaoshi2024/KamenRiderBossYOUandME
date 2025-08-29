@@ -223,36 +223,46 @@ public class modEventBusEvents {
             // 统一使用自定义属性系统
 
             event.put(ModEntityTypes.LORD_BARON.get(), LordBaronEntity.createAttributes()
-                    .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 5.0D)
-                    .add(Attributes.MAX_HEALTH, 100.0D)
+                    .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 15.0D)
+                    .add(Attributes.MAX_HEALTH, 300.0D)
+                    .add(Attributes.ARMOR, 10.0D)
+                    .add(Attributes.ARMOR_TOUGHNESS, 5.0D)
                     .build()
             );
 
             event.put(ModEntityTypes.GIIFUDEMOS_ENTITY.get(),
                     GiifuDemosEntity.createAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 5.0D)
-                            .add(Attributes.MAX_HEALTH, 100.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 12.0D)
+                            .add(Attributes.MAX_HEALTH, 250.0D)
+                            .add(Attributes.ARMOR, 8.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 4.0D)
                             .build()
             );
 
             event.put(ModEntityTypes.STORIOUS.get(),
                     StoriousEntity.createAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 5.0D)
-                            .add(Attributes.MAX_HEALTH, 122.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 14.0D)
+                            .add(Attributes.MAX_HEALTH, 280.0D)
+                            .add(Attributes.ARMOR, 9.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 4.5D)
                             .build()
             );
 
             event.put(ModEntityTypes.GIFFTARIAN.get(),
                     Gifftarian.createMonsterAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 8.0D)
-                            .add(Attributes.MAX_HEALTH, 80.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 16.0D)
+                            .add(Attributes.MAX_HEALTH, 180.0D)
+                            .add(Attributes.ARMOR, 6.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 3.0D)
                             .build()
             );
 
             event.put(ModEntityTypes.INVES_HEILEHIM.get(),
                     ElementaryInvesHelheim.createMonsterAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 6.0D)
-                            .add(Attributes.MAX_HEALTH, 50.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 10.0D)
+                            .add(Attributes.MAX_HEALTH, 100.0D)
+                            .add(Attributes.ARMOR, 5.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 2.0D)
                             .build()
             );
 

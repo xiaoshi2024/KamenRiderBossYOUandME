@@ -27,6 +27,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class DarkKivaSequence {
 
+    // 玩家 UUID -> 蝙蝠 UUID（null 代表要新生成）
+    public static final Map<UUID, UUID> BAT_RESTORE_MAP = new ConcurrentHashMap<>();
+
+
     /* ========== 变身序列 ========== */
     public static void startHenshin(ServerPlayer player) {
         if (player.getInventory().armor.get(3).getItem() == ModItems.DARK_KIVA_HELMET.get()) {
@@ -59,7 +63,7 @@ public final class DarkKivaSequence {
         spawnHenshinParticles(player, level);
 
         /* 5. 延迟穿戴盔甲 */
-        applyArmorAfterDelay(player, 100); // 100 ticks = 5秒
+        applyArmorAfterDelay(player, 125); // 100 ticks = 5秒
     }
 
     /* 播放变身粒子效果 */
@@ -101,12 +105,10 @@ public final class DarkKivaSequence {
             if (player == null) return;
 
             // 真正穿盔甲
-            if (player.getInventory().armor.get(3).getItem() != ModItems.DARK_KIVA_HELMET.get()) {
-                player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.DARK_KIVA_HELMET.get()));
-                player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.DARK_KIVA_CHESTPLATE.get()));
-                player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.DARK_KIVA_LEGGINGS.get()));
-                System.out.println("Dark Kiva 盔甲已穿戴（TickEvent）");
-            }
+            // 不再判断，直接强制穿上
+            player.setItemSlot(EquipmentSlot.HEAD,   new ItemStack(ModItems.DARK_KIVA_HELMET.get()));
+            player.setItemSlot(EquipmentSlot.CHEST,  new ItemStack(ModItems.DARK_KIVA_CHESTPLATE.get()));
+            player.setItemSlot(EquipmentSlot.LEGS,   new ItemStack(ModItems.DARK_KIVA_LEGGINGS.get()));
         } else {
             HENSHIN_COOLDOWN.put(uuid, left);
         }
@@ -139,7 +141,14 @@ public final class DarkKivaSequence {
         );
 
         /* 4. 读取腰带数据并生成蝙蝠 */
+// 先把主人写进去，再生成
+        CompoundTag beltTag = beltStack.getOrCreateTag();
+        beltTag.putUUID("OwnerUUID", player.getUUID());   // 关键！
         spawnKivatFromBelt(player, level, beltStack);
+
+        /* 新增：把状态复位，以便下次还能播动画 */
+        DrakKivaBelt.setHenshin(beltStack, false);   // ← 关键
+        beltStack.getOrCreateTag().remove("HenshinHandled"); // 清掉“已处理”标记
 
         /* 5. 删除腰带 */
         beltStack.shrink(1);
@@ -155,31 +164,30 @@ public final class DarkKivaSequence {
     }
 
     /* 从腰带生成Kivat蝙蝠 */
+    /* 从腰带生成Kivat蝙蝠 */
     private static void spawnKivatFromBelt(ServerPlayer player, ServerLevel level, ItemStack beltStack) {
-        CompoundTag tag = beltStack.getOrCreateTag();
-        UUID beltUUID = tag.hasUUID("UUID") ? tag.getUUID("UUID") : UUID.randomUUID();
-        UUID ownerUUID = tag.hasUUID("OwnerUUID") ? tag.getUUID("OwnerUUID") : player.getUUID();
-        String name = tag.contains("CustomName") ? tag.getString("CustomName") : null;
+        UUID restoreId = BAT_RESTORE_MAP.remove(player.getUUID());
 
-        // 保底血量
-        float health = tag.contains("Health", net.minecraft.nbt.Tag.TAG_ANY_NUMERIC)
-                ? tag.getFloat("Health")
-                : 79.0F;
+        KivatBatTwoNd bat;
 
-        KivatBatTwoNd bat = ModEntityTypes.KIVAT_BAT_II.get().create(level);
-        if (bat != null) {
-            CompoundTag batTag = new CompoundTag();
-            batTag.putUUID("UUID", beltUUID);
-            batTag.putUUID("OwnerUUID", ownerUUID);
-            if (name != null) batTag.putString("CustomName", name);
-            batTag.putFloat("Health", health);
-
-            bat.load(batTag);
-            bat.moveTo(player.getX(), player.getY() + 0.5, player.getZ());
-            bat.setDeltaMovement(Vec3.ZERO);
-            bat.tame(player);
-            level.addFreshEntity(bat);
+        if (restoreId == null) {
+            /* 生成全新的蝙蝠 */
+            bat = ModEntityTypes.KIVAT_BAT_II.get().create(level);
+        } else {
+            /* 尝试取回旧实体 */
+            bat = (KivatBatTwoNd) level.getEntity(restoreId);
+            if (bat == null) {
+                /* 实体已卸载，用腰带 NBT 重新造 */
+                bat = ModEntityTypes.KIVAT_BAT_II.get().create(level);
+                CompoundTag tag = beltStack.getOrCreateTag();
+                if (tag.contains("UUID")) bat.load(tag);
+            }
         }
+
+        bat.moveTo(player.getX(), player.getY() + 0.5, player.getZ());
+        bat.setDeltaMovement(Vec3.ZERO);
+        bat.tame(player);          // 无论哪种情况，都重新绑定主人
+        level.addFreshEntity(bat);
     }
 
     /* ========== 玩家动画支持 ========== */

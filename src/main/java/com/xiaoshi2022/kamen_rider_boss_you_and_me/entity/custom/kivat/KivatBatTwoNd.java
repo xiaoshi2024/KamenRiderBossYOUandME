@@ -74,6 +74,9 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
 
     public UUID pendingTransformPlayer = null;
 
+    /* 在 KivatBatTwoNd 里加一个字段 */
+    private boolean isAttackingForOwner = false;
+
     /* ===== 飞行常量 ===== */
     public  static final int TICKS_PER_FLAP = Mth.ceil(2.4166098F);
     private static final double FOLLOW_SPEED  = 1.2D;
@@ -190,7 +193,7 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
     /* ------------------------------------------------------------ */
     @Override
     protected void registerGoals() {
-        /* 行为 Goal */
+        /* 行为 */
         goalSelector.addGoal(1, new FloatGoal(this));
         goalSelector.addGoal(2, new BatSleepOnSpotGoal());
         goalSelector.addGoal(3, new BatFollowOwnerGoal(this, FOLLOW_SPEED,
@@ -199,15 +202,15 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
             @Override protected double getAttackReachSqr(LivingEntity target) {
                 return 3.0 * 3.0;
             }
-        });
-        goalSelector.addGoal(5, new BatRestGoal());
-        goalSelector.addGoal(6, new BatWanderGoal());
+        });        goalSelector.addGoal(5, new BatRestGoal());
+        goalSelector.addGoal(6, new BatWanderGoal());   // 低优先级
         goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8F));
 
-        /* 目标选择器（必须！） */
+        /* 目标 */
         targetSelector.addGoal(0, new OwnerHurtByTargetGoal(this));
         targetSelector.addGoal(1, new OwnerHurtTargetGoal(this));
-        targetSelector.addGoal(2, new HurtByTargetGoal(this));
+        targetSelector.addGoal(2, new OwnerAttackedTargetGoal()); // 只在 SAY 模式下启用
+        targetSelector.addGoal(3, new HurtByTargetGoal(this));
     }
 
     private class BatFollowOwnerGoal extends FollowOwnerGoal {
@@ -821,35 +824,38 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
     private class BatWanderGoal extends Goal {
         private int cooldown = 0;
 
-        BatWanderGoal() {
-            setFlags(EnumSet.of(Flag.MOVE));
-        }
+        BatWanderGoal() { setFlags(EnumSet.of(Flag.MOVE)); }
 
         @Override
         public boolean canUse() {
-            return !isResting() && !isOrderedToSit() && !isSleeping() && --cooldown <= 0;
+            return !isResting()
+                    && !isOrderedToSit()
+                    && !isSleeping()
+                    && !isAttackingForOwner   // ← 直接访问外部类字段
+                    && --cooldown <= 0;
         }
 
         @Override
         public void start() {
             cooldown = 40 + random.nextInt(40);
-
-            targetPosition = clampToWorld(getOwner() == null ? randomNearby() : randomAround(getOwner()));
-
-            // 实际移动到目标位置
+            targetPosition = clampToWorld(
+                    getOwner() == null ? randomNearby() : randomAround(getOwner()));
             if (targetPosition != null) {
                 navigation.moveTo(
                         targetPosition.getX() + 0.5,
                         targetPosition.getY() + 0.5,
                         targetPosition.getZ() + 0.5,
-                        1.0D
-                );
+                        1.0D);
             }
         }
 
         @Override
         public boolean canContinueToUse() {
-            return !navigation.isDone() && !isResting() && !isOrderedToSit() && !isSleeping();
+            return !navigation.isDone()
+                    && !isResting()
+                    && !isOrderedToSit()
+                    && !isSleeping()
+                    && !isAttackingForOwner;   // ← 同样要判断
         }
     }
 
@@ -924,6 +930,56 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
             }
         } catch (Exception ignored) {
             // 如果反射调用失败，静默处理
+        }
+    }
+
+
+    /* ------------------------------------------------------------ */
+    /*  AI：锁定主人正在攻击的生物                                    */
+    /* ------------------------------------------------------------ */
+    private class OwnerAttackedTargetGoal extends TargetGoal {
+        private LivingEntity ownerLastTarget;
+        private int timeout;
+
+        OwnerAttackedTargetGoal() {
+            super(KivatBatTwoNd.this, false, false);
+        }
+
+        @Override
+        public boolean canUse() {
+            if (getMode() != Mode.SAY) return false;
+            LivingEntity owner = getOwner();
+            if (owner == null || !owner.isAlive()) return false;
+
+            LivingEntity target = owner.getLastHurtMob();
+            if (target == null || !target.isAlive()) return false;
+            if (owner.distanceTo(target) > 32.0) return false;
+
+            ownerLastTarget = target;
+            timeout = 60;
+            return true;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (ownerLastTarget == null || !ownerLastTarget.isAlive()) return false;
+            LivingEntity owner = getOwner();
+            if (owner == null || !owner.isAlive()) return false;
+            if (owner.distanceTo(ownerLastTarget) > 32.0 || --timeout <= 0) return false;
+            return true;
+        }
+
+        @Override
+        public void start() {
+            isAttackingForOwner = true;     // ← 直接写外部类字段
+            setTarget(ownerLastTarget);
+        }
+
+        @Override
+        public void stop() {
+            isAttackingForOwner = false;
+            setTarget(null);
+            ownerLastTarget = null;
         }
     }
     
