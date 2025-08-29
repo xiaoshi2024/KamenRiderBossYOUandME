@@ -30,6 +30,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DarkGaimJinb
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.TyrantAbilityHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.DarkBatParticle;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.LemonsliceParticle;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.*;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -182,6 +183,8 @@ public class kamen_rider_boss_you_and_me
             event.registerSpriteSet(ParticleTypesRegistry.CHERRYSLICE.get(), LemonsliceParticle.Provider::new);
             event.registerSpriteSet(ParticleTypesRegistry.PEACHSLICE.get(), LemonsliceParticle.Provider::new);
             event.registerSpriteSet(ParticleTypesRegistry.DRAGONLICE.get(), LemonsliceParticle.Provider::new);
+            // 修改这一行，使用新的DarkBatParticle.Provider
+            event.registerSpriteSet(ParticleTypesRegistry.DARK_BAT.get(), DarkBatParticle.Provider::new);
         }
 
 //        @SubscribeEvent

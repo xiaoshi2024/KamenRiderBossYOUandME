@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
@@ -15,12 +14,17 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
+@Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class DarkKivaSequence {
 
     /* ========== 变身序列 ========== */
@@ -55,7 +59,7 @@ public final class DarkKivaSequence {
         spawnHenshinParticles(player, level);
 
         /* 5. 延迟穿戴盔甲 */
-        applyArmorAfterDelay(player, 300); // 300 ticks = 15秒
+        applyArmorAfterDelay(player, 100); // 100 ticks = 5秒
     }
 
     /* 播放变身粒子效果 */
@@ -73,24 +77,39 @@ public final class DarkKivaSequence {
 
     /* 延迟穿戴盔甲 */
     public static void applyArmorAfterDelay(ServerPlayer player, int delayTicks) {
-        ServerLevel level = (ServerLevel) player.level();
+        HENSHIN_COOLDOWN.put(player.getUUID(), delayTicks);
 
-        level.getServer().tell(
-                new net.minecraft.server.TickTask(
-                        level.getServer().getTickCount() + delayTicks,
-                        () -> {
-                            if (!player.isAlive()) return;
-                            if (player.getInventory().armor.get(3).getItem() == ModItems.DARK_KIVA_HELMET.get()) return;
+    }
 
-                            // 穿戴盔甲
-                            player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.DARK_KIVA_HELMET.get()));
-                            player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.DARK_KIVA_CHESTPLATE.get()));
-                            player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.DARK_KIVA_LEGGINGS.get()));
+    /* 1. 在 DarkKivaSequence 里建一个 Map 记录倒计时 */
+    private static final Map<UUID,Integer> HENSHIN_COOLDOWN = new ConcurrentHashMap<>();
 
-                            System.out.println("Dark Kiva 盔甲已穿戴");
-                        }
-                )
-        );
+    /* 3. 用 Forge TickEvent 每 tick 减 1 */
+    @SubscribeEvent
+    public static void onTick(TickEvent.PlayerTickEvent e) {
+        if (e.phase != TickEvent.Phase.END || e.player.level().isClientSide()) return;
+        ServerPlayer player = (ServerPlayer) e.player;
+        UUID uuid = player.getUUID();
+        if (!HENSHIN_COOLDOWN.containsKey(uuid)) return;
+
+        int left = HENSHIN_COOLDOWN.get(uuid) - 1;
+        if (left <= 0) {
+            HENSHIN_COOLDOWN.remove(uuid);
+            if (!player.isAlive()) return;
+            // 重新拿最新实例
+            player = (ServerPlayer) player.level().getPlayerByUUID(uuid);
+            if (player == null) return;
+
+            // 真正穿盔甲
+            if (player.getInventory().armor.get(3).getItem() != ModItems.DARK_KIVA_HELMET.get()) {
+                player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.DARK_KIVA_HELMET.get()));
+                player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.DARK_KIVA_CHESTPLATE.get()));
+                player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.DARK_KIVA_LEGGINGS.get()));
+                System.out.println("Dark Kiva 盔甲已穿戴（TickEvent）");
+            }
+        } else {
+            HENSHIN_COOLDOWN.put(uuid, left);
+        }
     }
 
     /* ========== 解除变身序列 ========== */

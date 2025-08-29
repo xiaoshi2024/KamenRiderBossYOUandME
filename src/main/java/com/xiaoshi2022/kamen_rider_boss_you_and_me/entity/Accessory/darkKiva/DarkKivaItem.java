@@ -41,8 +41,8 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
             }
 
             @Override
-            public int getDefenseForType(ArmorItem.Type type) {
-                return new int[]{4, 8, 7, 4}[type.getSlot().getIndex()]; // 总防御23
+            public int getDefenseForType(Type type) {
+                return new int[]{3, 7, 6, 4}[type.getSlot().getIndex()]; // 头盔3 胸甲7 护腿6 靴子4
             }
 
             @Override
@@ -120,7 +120,7 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
     }
 
     private <T extends GeoItem> PlayState predicate(AnimationState<T> state) {
-        state.getController().setAnimation(RawAnimation.begin().thenLoop(ANIMATION_IDLE));
+        state.getController().setAnimation(RawAnimation.begin().thenPlayAndHold(ANIMATION_IDLE));
         return PlayState.CONTINUE;
     }
 
@@ -133,4 +133,6 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
     public void setAnimationProcedure(String procedure) {
         this.animationprocedure = procedure;
     }
+
+
 }

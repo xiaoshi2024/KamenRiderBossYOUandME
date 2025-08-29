@@ -54,6 +54,11 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.particles.ParticleTypes;
+
 public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
 
     /* ===== 动画 ===== */
@@ -847,4 +852,105 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
             return !navigation.isDone() && !isResting() && !isOrderedToSit() && !isSleeping();
         }
     }
+
+    /* ------------------------------------------------------------ */
+    /*  吸血功能实现                                                 */
+    /* ------------------------------------------------------------ */
+    @Override
+    public boolean doHurtTarget(Entity entity) {
+        // 调用父类的攻击方法
+        boolean success = super.doHurtTarget(entity);
+        
+        // 只有攻击成功且目标是生物时才执行吸血逻辑
+        if (success && entity instanceof LivingEntity target && !this.level().isClientSide) {
+            // 获取主人
+            Player owner = (Player) getOwner();
+            if (owner != null && owner.isAlive()) {
+                // 执行吸血逻辑
+                suckBlood(target, owner);
+            }
+        }
+        
+        return success;
+    }
+    
+    /**
+     * 从目标生物吸血并增加主人的吸血鬼饱食度
+     */
+    private void suckBlood(LivingEntity target, Player owner) {
+        // 1. 从目标吸取血量（造成额外伤害）
+        float damage = 2.0f; // 吸取的血量
+        target.hurt(this.level().damageSources().mobAttack(this), damage);
+        // 2. 治疗蝙蝠自己
+        this.heal(damage * 0.8f); // 80%的伤害转化为蝙蝠的生命恢复
+
+        // 3. 如果安装了Vampirism模组，增加主人的吸血鬼饱食度
+        if (isVampirismLoaded()) {
+            increaseVampirismThirst(owner);
+        } else {
+            // 如果没有安装Vampirism模组，增加主人的普通饱食度
+            if (owner instanceof ServerPlayer serverPlayer) {
+                serverPlayer.getFoodData().eat(1, 0.3f);
+            }
+        }
+
+        // 4. 播放吸血音效和粒子效果
+        this.level().playSound(null, this.blockPosition(), SoundEvents.HONEY_DRINK, this.getSoundSource(), 0.5f, 1.0f);
+        spawnBloodSuckParticles(target);
+    }
+    
+    /**
+     * 使用反射调用VampirismAPI增加玩家的吸血鬼饱食度
+     */
+    private void increaseVampirismThirst(Player player) {
+        try {
+            // 1. 获取VampirismAPI类
+            Class<?> vampirismApiClass = Class.forName("de.teamlapen.vampirism.api.VampirismAPI");
+            
+            // 2. 获取PlayerAPI实例
+            Object playerApi = vampirismApiClass.getMethod("getPlayer vampire API").invoke(null);
+            
+            // 3. 调用getVampire方法获取IVampirePlayer实例
+            Object vampirePlayer = playerApi.getClass()
+                    .getMethod("getVampire", Player.class)
+                    .invoke(playerApi, player);
+            
+            // 4. 如果玩家是吸血鬼，增加饱食度
+            if (vampirePlayer != null) {
+                // 增加5点饱食度（可以根据需要调整数值）
+                vampirePlayer.getClass()
+                        .getMethod("addThirst", int.class, float.class)
+                        .invoke(vampirePlayer, 5, 1.0f);
+            }
+        } catch (Exception ignored) {
+            // 如果反射调用失败，静默处理
+        }
+    }
+    
+    /**
+     * 生成吸血粒子效果
+     */
+    private void spawnBloodSuckParticles(LivingEntity target) {
+        for (int i = 0; i < 8; i++) {
+            double dx = (this.random.nextDouble() - 0.5) * 0.5;
+            double dy = this.random.nextDouble() * 0.5 + 0.5;
+            double dz = (this.random.nextDouble() - 0.5) * 0.5;
+            
+            // 从目标到蝙蝠的粒子效果
+            this.level().addParticle(
+                    ParticleTypes.ENTITY_EFFECT,
+                    target.getX() + dx,
+                    target.getY() + dy,
+                    target.getZ() + dz,
+                    0.8, 0.0, 0.0
+            );
+        }
+    }
+    
+    // 添加这个方法来检查Vampirism模组是否加载
+    private boolean isVampirismLoaded() {
+        return net.minecraftforge.fml.ModList.get().isLoaded("vampirism");
+    }
+    
+    // ... 现有代码 ...
 }

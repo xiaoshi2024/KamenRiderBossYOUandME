@@ -28,4 +28,9 @@ public class ParticleTypesRegistry {
     public static final RegistryObject<SimpleParticleType> DRAGONLICE =
             PARTICLE_TYPES.register("dragonlice",
                     () -> new SimpleParticleType(false));   // false = 不需要额外数据
+    
+    // 新增：黑暗蝙蝠粒子
+    public static final RegistryObject<SimpleParticleType> DARK_BAT =
+            PARTICLE_TYPES.register("dark_bat",
+                    () -> new SimpleParticleType(false));   // false = 不需要额外数据
 }

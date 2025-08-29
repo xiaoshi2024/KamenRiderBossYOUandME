@@ -43,11 +43,14 @@ public class PlayerAttackHandler {
     private static final float BANANA_LANDING_DMG  = 4.0f;   // 冲击波伤害
 
     // 基础加成配置
-    private static final float BARE_HAND_BONUS = 3.0f;
-    private static final float WEAPON_BASE_BONUS = 4.0f;
-    private static final float LEMON_EXTRA_BONUS = 1.0f;
-    private static final float LEMON_BOW_BONUS = 3.0f;
-    private static final float LEMON_SPEED_LEVEL = 2.0f; // 速度效果等级
+    private static final float BARE_HAND_BONUS = 3.0f;          // 基础空手加成
+    private static final float WEAPON_BASE_BONUS = 4.0f;        // 武器基础加成
+    private static final float LEMON_EXTRA_BONUS = 2.0f;        // 柠檬额外加成（从1.0提高到2.0）
+    private static final float LEMON_BOW_BONUS = 3.0f;          // 柠檬弓箭加成
+    private static final float LEMON_SPEED_LEVEL = 2.0f;        // 速度效果等级
+    private static final float DARK_KIVA_BONUS = 5.0f;          // 黑暗月骑额外加成
+    private static final float DUKE_BONUS = 3.5f;               // 公爵额外加成
+    private static final float DARK_GAIM_BONUS = 4.0f;          // 黑暗铠武额外加成
 
     private static class AttackData {
         public final UUID attackerId;

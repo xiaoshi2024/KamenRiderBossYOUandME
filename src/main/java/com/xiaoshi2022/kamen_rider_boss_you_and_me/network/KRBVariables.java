@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
@@ -20,7 +21,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -146,6 +150,11 @@ public class  KRBVariables {
 		public long dark_kiva_sonic_blast_cooldown = 0L; // 声波爆破冷却时间
 		public long dark_kiva_blood_steal_cooldown = 0L; // 生命偷取冷却时间
 
+		// 在PlayerVariables类中添加字段
+		public double baseMaxHealth = 20.0D; // 默认基础生命值为20点
+		public int lastCustomArmorCount = 0;
+    public boolean isDarkKivaBeltEquipped = false; // 新增字段：记录是否装备了黑暗Kiva腰带
+
         public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
 				 kamen_rider_boss_you_and_me.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
@@ -184,6 +193,8 @@ public class  KRBVariables {
 		nbt.putBoolean("dark_kiva_sonic_blast_active", dark_kiva_sonic_blast_active);
 		nbt.putLong("dark_kiva_sonic_blast_cooldown", dark_kiva_sonic_blast_cooldown);
 		nbt.putLong("dark_kiva_blood_steal_cooldown", dark_kiva_blood_steal_cooldown);
+
+			nbt.putDouble("baseMaxHealth", baseMaxHealth);   // ← 新增
 		return nbt;
 	}
 
@@ -212,6 +223,8 @@ public class  KRBVariables {
 		dragonfruit_ready = nbt.getBoolean("dragonfruit_ready");
 		dragonfruit_ready_time = nbt.getLong("dragonfruit_ready_time");
 		dragonfruit_time = nbt.getLong("dragonfruit_time");
+
+			baseMaxHealth = nbt.getDouble("baseMaxHealth");  // ← 新增
 	}
 	}
 
@@ -255,9 +268,14 @@ public class  KRBVariables {
 			variables.banana_ready_time = message.data.banana_ready_time;
 			variables.orange_ready = message.data.orange_ready;
 			variables.orange_ready_time = message.data.orange_ready_time;
+
+					variables.baseMaxHealth = message.data.baseMaxHealth;
+				variables.lastCustomArmorCount = message.data.lastCustomArmorCount; // 添加这行，同步lastCustomArmorCount
+				variables.isDarkKivaBeltEquipped = message.data.isDarkKivaBeltEquipped; // 添加这行，同步黑暗Kiva腰带状态
 				}
 			});
 			context.setPacketHandled(true);
 		}
 	}
 }
+
