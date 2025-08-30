@@ -46,6 +46,7 @@ public class ModTab {
             .displayItems(((parameters, output) -> {
                 output.accept(INVES_MEAT.get());
                 output.accept(GLOBALISM.get());
+                output.accept(THRONE_BLOCK_ITEM.get());
                 output.accept(BLOODLINE_FANG.get());
             })).build());
 }

@@ -27,7 +27,7 @@ public class HelheimVineHandler {
 
     // 硬编码的锁种列表作为备选方案
     private static final List<Supplier<Item>> LOCKSEEDS = List.of(
-            com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.BANANAFRUIT::get,
+            ModItems.BANANAFRUIT::get,
             com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY::get,
             com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.MELON::get,
             ModItems.LEMON_ENERGY::get,

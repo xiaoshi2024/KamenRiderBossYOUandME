@@ -115,7 +115,19 @@
   "block.kamen_rider_boss_you_and_me.orangelsx": "Orange-lemons dark Block",
   "block.kamen_rider_boss_you_and_me.dragonfruitx_block": "Dragon Fruit Block",
 
+  "block.kamen_rider_boss_you_and_me.throne_block": "kivas throne",
 
+  "message.summon.cooldown": "§c Summoning is in cooldown. Please wait for  %s§r",
+  "message.summon.player_has_bat": "§You already have a clown bat§r",
+  "message.summon.global_limit": "§There are too many clown bats in the world§r",
+
+  "message.summon.altar_incomplete": "§cThe altar structure is incomplete. Gold blocks and diamond blocks need to be placed in a triangular pattern§r",
+  "message.summon.already_exists": "§There is already a clown bat nearby§r",
+  "message.summon.success": "§5「'I haven't woken up yet. Who summoned me...」§r",
+  "message.summon.failed": "§Summoning failed§r",
+  "message.summon.show_guide": "§aThe altar structure guide (particle effect) has been displayed§r",
+
+  "message.summon.guide_usage": "§7Right-click the throne while in stealth or use /kiva showaltar to view the altar structure §r",
 
 
 

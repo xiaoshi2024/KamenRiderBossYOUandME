@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Another_Zi_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
@@ -45,6 +46,12 @@ public class ModEntityTypes {
                             .sized(0.5F, 0.5F)
                             .clientTrackingRange(8)
                             .build("kivat_bat_ii"));
+
+    //椅子实体
+    public static final RegistryObject<EntityType<SeatEntity>> SEAT = ENTITY_TYPES.register("seat",
+            () -> EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC)
+                    .sized(0.001F, 0.001F) // 非常小的碰撞箱
+                    .build("seat"));
 
 //    public static final RegistryObject<EntityType<KnecromghostEntity>> KNECROMGHOST = registerMob("knecromghost", KnecromghostEntity::new,
 //            0.6f, 1.6f, 0x1F1F1F, 0x0D0D0D);

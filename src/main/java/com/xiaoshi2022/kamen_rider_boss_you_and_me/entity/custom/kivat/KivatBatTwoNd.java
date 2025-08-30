@@ -633,18 +633,18 @@ public class KivatBatTwoNd extends TamableAnimal implements GeoEntity {
         }
 
 // 3. 立刻触发 henshin 动画
+        // 服务端立即广播动画
         if (!player.level().isClientSide && player instanceof ServerPlayer sp) {
-            CuriosApi.getCuriosInventory(sp)
-                    .resolve()
-                    .flatMap(h -> h.findFirstCurio(s -> s.getItem() instanceof DrakKivaBelt))
-                    .ifPresent(result -> {
-                        ItemStack beltStack = result.stack();
-                        ((DrakKivaBelt) beltStack.getItem()).setHenshin(beltStack, true);
+            CuriosApi.getCuriosInventory(sp).ifPresent(inv ->
+                    inv.findFirstCurio(s -> s.getItem() instanceof DrakKivaBelt).ifPresent(slot -> {
+                        ItemStack belts = slot.stack();
+                        DrakKivaBelt.setHenshin(belts, true);  // 写NBT
                         PacketHandler.sendToAllTracking(
-                                new BeltAnimationPacket(player.getId(), "henshin", DrakKivaBelt.DrakKivaBeltMode.DEFAULT),
-                                player
+                                new BeltAnimationPacket(sp.getId(), "henshin", DrakKivaBelt.DrakKivaBeltMode.DEFAULT),
+                                sp
                         );
-                    });
+                    })
+            );
         }
 
 // 4. 让蝙蝠真正消失

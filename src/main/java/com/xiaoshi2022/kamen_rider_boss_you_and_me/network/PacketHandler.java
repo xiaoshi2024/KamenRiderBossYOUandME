@@ -16,8 +16,6 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-import static dev.kosmx.playerAnim.forge.ForgeModInterface.LOGGER;
-
 public class PacketHandler {
     private static int currentId = 0;
 
@@ -83,6 +81,7 @@ public class PacketHandler {
                 SyncBloodlinePacket::new,
                 SyncBloodlinePacket::handle
         );
+        INSTANCE.registerMessage(index++, PlayerJoinSyncPacket.class, PlayerJoinSyncPacket::encode, PlayerJoinSyncPacket::decode, PlayerJoinSyncPacket::handle);
         
         // 在registerMessages方法中添加数据包注册
         INSTANCE.registerMessage(index++, DarkKivaBatModePacket.class, DarkKivaBatModePacket::encode, DarkKivaBatModePacket::new, DarkKivaBatModePacket::handle);
@@ -133,5 +132,24 @@ public class PacketHandler {
                 )),
                 packet
         );
+    }
+
+    public static void sendToAllTrackingAndSelf(Object packet, Entity entity) {
+        if (entity != null && !entity.level().isClientSide && entity instanceof ServerPlayer serverPlayer) {
+            // 发送给所有追踪者
+            INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
+            // 发送给玩家自己
+            INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), packet);
+        }
+    }
+
+    public static void sendToAllTrackingExcept(Object packet, Entity entity, ServerPlayer exclude) {
+        if (entity != null && !entity.level().isClientSide()) {
+            // 获取所有追踪该实体的玩家，然后手动排除
+            for (ServerPlayer trackingPlayer : ((ServerLevel)entity.level())
+                    .getPlayers(player -> player != exclude && player.distanceToSqr(entity) < 64 * 64)) {
+                sendToClient(packet, trackingPlayer);
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.TamedKivatTrigger;
@@ -9,10 +10,13 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Lemonx.LemoxRend
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.MelonSX.melonsxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Peachx.PeachxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.dragon.dragonfruitRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.kivas.thronex.ThroneBlockRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.orange_lemons.OrangelsxRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntityRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.ModCommands;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os.Another_Zi_oRenderer;
@@ -35,17 +39,22 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.LemonsliceParticle;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.*;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkEvent;
@@ -128,7 +137,13 @@ public class kamen_rider_boss_you_and_me
         // 注册 Mixin
         Mixins.addConfiguration("kamen_rider_boss_you_and_me.mixins.json");
     }
-/// 注册的东西
+
+    @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        ModCommands.register(event.getDispatcher());
+    }
+
+    /// 注册的东西
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, MODID), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
     private static int messageID = 0;
@@ -174,6 +189,7 @@ public class kamen_rider_boss_you_and_me
             event.registerBlockEntityRenderer(ModBlockEntities.PEACHX_ENTITY.get(), PeachxRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.ORANGELSX_ENTITY.get(), OrangelsxRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.DRAGONFRUITX_ENTITY.get(), dragonfruitRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.THRONE_ENTITY.get(), ThroneBlockRenderer::new);
         }
 
         @SubscribeEvent
@@ -205,6 +221,8 @@ public class kamen_rider_boss_you_and_me
         {
             PacketHandler.registerPackets();  // <-- 加这一行
             System.out.println("Client packets registered");
+
+            EntityRenderers.register(ModEntityTypes.SEAT.get(), SeatEntityRenderer::new);
 
             EntityRenderers.register(ModEntityTypes.LORD_BARON.get(), LordBaronRenderer::new);
             EntityRenderers.register(ModEntityTypes.GIIFUDEMOS_ENTITY.get(), GiifuDemosRenderer::new);

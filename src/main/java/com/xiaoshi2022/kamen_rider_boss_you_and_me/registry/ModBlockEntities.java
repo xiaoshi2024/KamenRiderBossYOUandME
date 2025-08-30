@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.kivas.ThroneBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
@@ -45,4 +46,9 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("dragonfruitx_entity",
                     () -> BlockEntityType.Builder.of(DragonfruitBlockEntity::new,
                             ModBlocks.DRAGONFRUITX_BLOCK.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<ThroneBlockEntity>> THRONE_ENTITY =
+            BLOCK_ENTITIES.register("throne_entity",
+                    () -> BlockEntityType.Builder.of(ThroneBlockEntity::new,
+                            ModBlocks.THRONE_BLOCK.get()).build(null));
 }

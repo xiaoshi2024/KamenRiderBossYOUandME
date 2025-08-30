@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.giifusteamp;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.dragonfruit;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.kivas.ThroneBlockItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
@@ -44,9 +45,13 @@ public class ModItems {
             () -> new Globalism(new Item.Properties())
     );
 
+    public static final RegistryObject<Item> THRONE_BLOCK_ITEM = ITEMS.register("throne_block_item",
+            () -> new BlockItem(ModBlocks.THRONE_BLOCK.get(), new Item.Properties()));
+
     // 方块特效
     public static final RegistryObject<Item> BANANAS_BLOCK_ITEM = ITEMS.register("bananas_block",
             () -> new BlockItem(ModBlocks.BANANAS_BLOCK.get(), new Item.Properties()));
+
     public static final RegistryObject<Item> LEMONX_ITEM = ITEMS.register("lemonx",
             () -> new BlockItem(ModBlocks.LEMON_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> MELON_ITEM = ITEMS.register("melonx",

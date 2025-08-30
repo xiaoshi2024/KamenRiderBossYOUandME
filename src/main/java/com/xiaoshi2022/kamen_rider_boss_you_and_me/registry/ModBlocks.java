@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.ThroneBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.BananasBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.Lemonx;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.cherryx;
@@ -54,6 +55,12 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> DRAGONFRUITX_BLOCK = BLOCKS.register("dragonfruitx_block",
             () -> new com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.DragonfruitBlock(Block.Properties.of()
+                    .strength(2.0f)
+                    .noOcclusion()
+                    .lightLevel(state -> 15)));
+
+    public static final RegistryObject<Block> THRONE_BLOCK = BLOCKS.register("throne_block",
+            () -> new ThroneBlock(Block.Properties.of()
                     .strength(2.0f)
                     .noOcclusion()
                     .lightLevel(state -> 15)));

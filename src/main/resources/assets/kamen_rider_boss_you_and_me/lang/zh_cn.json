@@ -16,64 +16,48 @@
   "item.kamen_rider_boss_you_and_me.bananafruit": "香蕉锁种",
   "item.kamen_rider_boss_you_and_me.orangefruit": "橙子锁种",
   "item.kamen_rider_boss_you_and_me.genesis_driver": "创世纪驱动器",
-
   "item.kamen_rider_boss_you_and_me.drak_kiva_belt": "黑暗月蝠装载腰带",
-
-
   "item.kamen_rider_boss_you_and_me.lemon_energy": "柠檬能量锁种",
   "item.kamen_rider_boss_you_and_me.peach_energy": "桃子能量锁种",
   "item.kamen_rider_boss_you_and_me.dragonfruit": "火龙果能量锁种",
   "item.kamen_rider_boss_you_and_me.globalism": "古罗巴里萨",
   "item.kamen_rider_boss_you_and_me.kivat_bat_two_ndm": "月蝠2世",
   "item.kamen_rider_boss_you_and_me.bloodline_fang": "牙血鬼之牙",
-
   "dialog.kivat.hello": "§6Kivat:§r 吾之契约者，今天也是充满斗志的一天呢！",
-  "dialog.kivat.food":  "§6Kivat:§r 给我血族的盛宴，我将为你而战！",
+  "dialog.kivat.food": "§6Kivat:§r 给我血族的盛宴，我将为你而战！",
   "dialog.kivat.sleep": "§6Kivat:§r 吾将倒挂休眠，勿扰……",
   "dialog.kivat.blood": "§6Kivat:§r 血的味道……令人怀念。",
   "dialog.kivat.unknown": "§6Kivat:§r 你的话语，如同牙血鬼的低语，难解其意。",
-
   "dialog.kivat.clownbat": "§6Kivat:§r 那边的谁？……算了，过来就过来！",
   "dialog.kivat.noclowntarget": "§c附近没有“小丑蝙蝠”。",
   "dialog.kivat.clownbat.broadcast": "§7%s 成功召唤了小丑蝙蝠！",
   "dialog.kivat.notfound": "附近没有小丑蝙蝠",
-
   "dialog.kivat.full": "§aKivat 已经吃饱了！",
   "dialog.kivat.hungry": "§c你太饿了，无法喂食 Kivat！",
   "dialog.kivat.mode_change.normal": "常态",
   "dialog.kivat.mode_change.say": "闲逛",
   "dialog.kivat.mode_change.sleep": "睡觉",
-
   "kamen_rider_boss_you_and_me.effect.fang_bloodline": "牙血鬼之脉",
-
   "entity.kamen_rider_boss_you_and_me.another_zi_o": "异类时王",
   "entity.kamen_rider_boss_you_and_me.kivat_bat_ii": "月蝠II世",
-
   "key.guard": "阵羽护盾",
   "key.blast": "黑暗爆破",
   "key.boost": "柠檬加速",
   "key.categories.kamen_rider": "假面骑士技能",
-
   "kamen.rider.gift.best": "很好，这股力量归我了！",
-
   "curios.identifier.bracelet": "腕带 插槽",
-
   "advancement.kamen_rider_boss_you_and_me.root.title": "假面骑士中你与我的反派编年史",
   "advancement.kamen_rider_boss_you_and_me.root.desc": "欢迎你，boss！",
   "advancement.kamen_rider_boss_you_and_me.human_to_monster.title": "变异",
   "advancement.kamen_rider_boss_you_and_me.human_to_monster.desc": "接受基夫的力量",
   "advancement.kamen_rider_boss_you_and_me.monster_to_human.title": "拟态",
   "advancement.kamen_rider_boss_you_and_me.monster_to_human.desc": "不多说，你好赤石英雄",
-
   "KEY.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me": "假面骑士中你与我的反派编年史键",
   "KEY.kamen_rider_weapon_craft.change_body": "变身",
   "KEY.kamen_rider_weapon_craft.change_player": "变异",
   "KEY.kamen_rider_weapon_craft.relieve_player": "解除变身",
-
   "item.kamen_rider_boss_you_and_me.inves_meat": "异域者的肉",
   "item.kamen_rider_boss_you_and_me.inves_meat.tooltip": "腐肉？...",
-
-
   "subtitles.stand_by_necrom": "待命中~",
   "subtitles.seal": "缔结~",
   "subtitles.loading_eye": "加载中！",
@@ -84,7 +68,6 @@
   "subtitles.eye_drop": "Eye Drop~! Necrom ",
   "subtitles.another_zi_o_click": "时王!",
   "subtitles.bananafruit_energy": "香蕉 !",
-
   "entity.kamen_rider_boss_you_and_me.lord_baron": "星爵巴隆",
   "entity.kamen_rider.baron.name": "星爵巴隆",
   "msg.kamen_rider.baron.greet1": "我是星爵巴隆！",
@@ -98,8 +81,6 @@
   "msg.kamen_rider.baron.challenge3": "让我看看你的实力！",
   "msg.kamen_rider.baron.victory": "你已经击败我%d次了！",
   "msg.kamen_rider.unknown": "我不明白...",
-
-
   "block.kamen_rider_boss_you_and_me.bananas_block": "裂缝-香蕉",
   "block.kamen_rider_boss_you_and_me.orangelsx": "裂缝-橙子",
   "block.kamen_rider_boss_you_and_me.dragonfruitx_block": "裂缝-火龙果",
@@ -107,6 +88,20 @@
   "block.kamen_rider_boss_you_and_me.melonx": "裂缝-蜜瓜",
   "block.kamen_rider_boss_you_and_me.cherryx": "裂缝-樱桃",
   "block.kamen_rider_boss_you_and_me.peachx": "裂缝-蜜桃",
+
+  "block.kamen_rider_boss_you_and_me.throne_block": "牙血鬼王-王座",
+
+  "message.summon.cooldown": "§c召唤冷却中，请等待 %s§r",
+  "message.summon.player_has_bat": "§c你已经拥有一个小丑蝙蝠了§r",
+  "message.summon.global_limit": "§c世界中已经存在太多小丑蝙蝠§r",
+
+  "message.summon.altar_incomplete": "§c祭坛结构不完整，需要按照三角形摆放黄金块和钻石块§r",
+  "message.summon.already_exists": "§c附近已经存在小丑蝙蝠了§r",
+  "message.summon.success": "§5「还没睡醒，谁将吾召唤而来...」§r",
+  "message.summon.failed": "§c召唤失败§r",
+  "message.summon.show_guide": "§a已显示祭坛结构指引（粒子效果）§r",
+
+  "message.summon.guide_usage": "§7潜行右键王座或使用 /kiva showaltar 查看祭坛结构§r",
 
   "msg.kamen_rider.inves_controlled": "异域者已控制！",
   "msg.kamen_rider.inves_protect": "保护领主巴隆！",

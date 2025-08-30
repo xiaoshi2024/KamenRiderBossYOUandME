@@ -222,13 +222,14 @@ public class DrakKivaBelt extends Item implements GeoItem, ICurioItem {
         if (entity == null || entity.level() == null) return;
 
         // 服务端逻辑
+        // 服务端逻辑：广播给所有追踪者（包括自己）
         if (!entity.level().isClientSide && entity instanceof ServerPlayer sp) {
-            PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(entity.getId(), anim, DrakKivaBeltMode.DEFAULT), entity);
-
-            if ("henshin".equals(anim)) setHenshin(getBeltStack(sp), true);
-            else if ("disassembly".equals(anim)) setDisassembly(getBeltStack(sp), true);
+            PacketHandler.sendToAllTrackingAndSelf(  // ← 关键修改
+                    new BeltAnimationPacket(entity.getId(), anim, DrakKivaBeltMode.DEFAULT),
+                    entity
+            );
         }
+
 
         // 客户端逻辑（GeckoLib 4.0）
         if (entity.level().isClientSide && entity instanceof Player) {

@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
@@ -49,6 +50,12 @@ public final class DarkKivaSequence {
                             ItemStack belt = slot.stack();
                             DrakKivaBelt.setHenshin(belt, true);
                         })
+        );
+
+        // 立即广播变身动画
+        PacketHandler.sendToAllTracking(
+                new BeltAnimationPacket(player.getId(), "henshin", DrakKivaBelt.DrakKivaBeltMode.DEFAULT),
+                player
         );
 
         /* 3. 播放音效 */
@@ -146,9 +153,9 @@ public final class DarkKivaSequence {
         beltTag.putUUID("OwnerUUID", player.getUUID());   // 关键！
         spawnKivatFromBelt(player, level, beltStack);
 
-        /* 新增：把状态复位，以便下次还能播动画 */
-        DrakKivaBelt.setHenshin(beltStack, false);   // ← 关键
-        beltStack.getOrCreateTag().remove("HenshinHandled"); // 清掉“已处理”标记
+        // 在解除变身后允许再次播放
+        DrakKivaBelt.setHenshin(beltStack, false);
+        beltStack.getOrCreateTag().remove("HenshinHandled");
 
         /* 5. 删除腰带 */
         beltStack.shrink(1);

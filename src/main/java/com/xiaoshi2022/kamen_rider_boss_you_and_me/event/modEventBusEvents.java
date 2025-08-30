@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
@@ -13,6 +14,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatT
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerJoinSyncPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager;
 import net.minecraft.client.Minecraft;
@@ -34,6 +36,7 @@ import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.CuriosCapability;
 
 import java.util.List;
@@ -211,6 +214,37 @@ public class modEventBusEvents {
                     KivatBatTwoNd.reply(query, kivat, (ServerLevel) level);
                 }
             }
+        }
+
+        @SubscribeEvent
+        public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+            if (event.getEntity() instanceof ServerPlayer newPlayer) {
+                // ⭐ 给新玩家发送所有已在线玩家的状态
+                for (ServerPlayer onlinePlayer : newPlayer.server.getPlayerList().getPlayers()) {
+                    if (onlinePlayer != newPlayer) {
+                        syncPlayerState(onlinePlayer, newPlayer); // 发送给新玩家
+                    }
+                }
+
+                // ⭐ 同步自己的状态给所有玩家
+                syncPlayerState(newPlayer, null);
+            }
+        }
+
+        // 在 modEventBusEvents.onPlayerLoggedIn 中：
+        private void syncPlayerState(ServerPlayer targetPlayer, ServerPlayer excludePlayer) {
+            CuriosApi.getCuriosInventory(targetPlayer).ifPresent(inv ->
+                    inv.findCurio("belt", 0).ifPresent(slot -> {
+                        ItemStack stack = slot.stack();
+                        if (stack.getItem() instanceof DrakKivaBelt belt && belt.getHenshin(stack)) {
+                            PlayerJoinSyncPacket packet = new PlayerJoinSyncPacket(
+                                    targetPlayer.getId(), "henshin", "drakkiva", "DEFAULT"
+                            );
+                            // 广播给所有追踪者（除了 excludePlayer）
+                            PacketHandler.sendToAllTrackingExcept(packet, targetPlayer, excludePlayer);
+                        }
+                    })
+            );
         }
     }
 
