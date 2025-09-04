@@ -48,7 +48,7 @@ public class TyrantItem extends ArmorItem implements GeoItem , KamenBossArmor , 
 
 			@Override
 			public int getDefenseForType(Type type) {
-				return new int[]{2, 5, 6, 2}[type.getSlot().getIndex()];
+				return new int[]{1, 3, 4, 1}[type.getSlot().getIndex()];
 			}
 
 			@Override

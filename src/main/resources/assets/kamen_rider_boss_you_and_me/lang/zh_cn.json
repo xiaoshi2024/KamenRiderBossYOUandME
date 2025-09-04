@@ -118,6 +118,10 @@
   "item group.kamen_rider_boss_you_and_me_heixin_tab": "反派骑士系统",
   "item group.kamen_rider_boss_you_and_me_kinds_tab": "假面骑士你与我的反派编年史的杂货",
   "key.kamen_rider_boss_you_and_me.kick": "骑士踢键",
-  "dialog.kivat.too_far": "如你所愿，灭绝时刻，现在开始！"
+  "dialog.kivat.too_far": "如你所愿，灭绝时刻，现在开始！",
+  "block.kamen_rider_boss_you_and_me.giifu_sleeping_state": "基夫 石像",
+  "dialog.kivat.already_transformed": "Please deactivate the transformation first!",
+  "dialog.kivat.coming": "Kivat Coming up",
+  "dialog.kivat.not_tamed": "kivat not tamed!"
 
 }

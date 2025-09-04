@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.GiifuSleepingStateBlockEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.kivas.ThroneBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -51,4 +52,9 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("throne_entity",
                     () -> BlockEntityType.Builder.of(ThroneBlockEntity::new,
                             ModBlocks.THRONE_BLOCK.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<GiifuSleepingStateBlockEntity>> GIIFU_SLEEPING_STATE_ENTITY =
+            BLOCK_ENTITIES.register("giifu_sleeping_state_entity",
+                    () -> BlockEntityType.Builder.of(GiifuSleepingStateBlockEntity::new,
+                            ModBlocks.GIIFU_SLEEPING_STATE_BLOCK.get()).build(null));
 }

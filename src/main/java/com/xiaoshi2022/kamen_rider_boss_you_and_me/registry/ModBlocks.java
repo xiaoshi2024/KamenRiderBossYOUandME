@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.giifu.GiifuSleepingStateBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.ThroneBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.BananasBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.Lemonx;
@@ -61,6 +62,12 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> THRONE_BLOCK = BLOCKS.register("throne_block",
             () -> new ThroneBlock(Block.Properties.of()
+                    .strength(2.0f)
+                    .noOcclusion()
+                    .lightLevel(state -> 15)));
+
+    public static final RegistryObject<Block> GIIFU_SLEEPING_STATE_BLOCK = BLOCKS.register("giifu_sleeping_state",
+            () -> new GiifuSleepingStateBlock(Block.Properties.of()
                     .strength(2.0f)
                     .noOcclusion()
                     .lightLevel(state -> 15)));

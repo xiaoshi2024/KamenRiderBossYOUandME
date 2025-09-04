@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Lemonx.LemoxRend
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.MelonSX.melonsxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Peachx.PeachxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.dragon.dragonfruitRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.Giifs.GiifuSleepingStateBlockRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.kivas.thronex.ThroneBlockRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.orange_lemons.OrangelsxRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntityRenderer;
@@ -190,6 +191,7 @@ public class kamen_rider_boss_you_and_me
             event.registerBlockEntityRenderer(ModBlockEntities.ORANGELSX_ENTITY.get(), OrangelsxRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.DRAGONFRUITX_ENTITY.get(), dragonfruitRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.THRONE_ENTITY.get(), ThroneBlockRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.GIIFU_SLEEPING_STATE_ENTITY.get(), GiifuSleepingStateBlockRenderer::new);
         }
 
         @SubscribeEvent

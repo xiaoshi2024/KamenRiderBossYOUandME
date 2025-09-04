@@ -29,20 +29,20 @@ public class TyrantAbilityHandler {
         if (isWearingTyrant(player)) {
             int duration = 100; // 5秒
 
-            // 只在不已有效果时添加
+            // 只在没有效果时添加
             if (!player.hasEffect(MobEffects.HEALTH_BOOST)) {
                 player.addEffect(new MobEffectInstance(
                         MobEffects.HEALTH_BOOST,
-                        duration, 3, false, false));
+                        duration, 0, false, false));
 
-                // 立即恢复生命值
-                player.setHealth(player.getMaxHealth());
+                // 立即恢复生命值，但不超过最大生命值
+                player.setHealth(Math.min(player.getMaxHealth(), player.getHealth()));
             }
 
             // 其他效果...
-            addEffectIfNotPresent(player, MobEffects.DAMAGE_RESISTANCE, duration, 2);
+            addEffectIfNotPresent(player, MobEffects.DAMAGE_RESISTANCE, duration, 0);
             addEffectIfNotPresent(player, MobEffects.FIRE_RESISTANCE, duration, 0);
-            addEffectIfNotPresent(player, MobEffects.REGENERATION, duration, 1);
+            addEffectIfNotPresent(player, MobEffects.REGENERATION, duration, 0);
         }
     }
 
@@ -60,9 +60,9 @@ public class TyrantAbilityHandler {
         if (player.level().isClientSide()) return;
 
         if (isWearingTyrant(player)) {
-            // 反弹20%伤害给攻击者
+            // 反弹10%伤害给攻击者
             if (event.getSource().getEntity() instanceof LivingEntity attacker) {
-                attacker.hurt(player.damageSources().generic(), event.getAmount() * 0.2f);
+                attacker.hurt(player.damageSources().generic(), event.getAmount() * 0.1f);
             }
         }
     }
@@ -76,7 +76,7 @@ public class TyrantAbilityHandler {
 
         if (isWearingTyrant(player) && event.getEntity() instanceof LivingEntity) {
             LivingEntity target = (LivingEntity) event.getEntity();
-            float healAmount = target.getMaxHealth() * 0.03f;
+            float healAmount = target.getMaxHealth() * 0.01f;
             player.heal(healAmount);
         }
     }

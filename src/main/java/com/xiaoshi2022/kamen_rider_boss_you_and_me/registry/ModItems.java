@@ -48,6 +48,9 @@ public class ModItems {
     public static final RegistryObject<Item> THRONE_BLOCK_ITEM = ITEMS.register("throne_block_item",
             () -> new BlockItem(ModBlocks.THRONE_BLOCK.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> GIIFU_SLEEPING_STATE_ITEM = ITEMS.register("giifu_sleeping_state_item",
+            () -> new BlockItem(ModBlocks.GIIFU_SLEEPING_STATE_BLOCK.get(), new Item.Properties()));
+
     // 方块特效
     public static final RegistryObject<Item> BANANAS_BLOCK_ITEM = ITEMS.register("bananas_block",
             () -> new BlockItem(ModBlocks.BANANAS_BLOCK.get(), new Item.Properties()));
