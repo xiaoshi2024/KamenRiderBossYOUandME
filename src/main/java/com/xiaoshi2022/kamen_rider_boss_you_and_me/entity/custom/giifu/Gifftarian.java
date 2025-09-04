@@ -46,20 +46,29 @@ public class Gifftarian extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        // 添加 AI 目标
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 0.37D, true)); // 近战攻击
-        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.45D)); // 随机漫步
-        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F)); // 看向玩家
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this)); // 随机环顾四周
-        this.goalSelector.addGoal(7, new FloatGoal(this)); // 如果在水里，尝试浮在水面上
-        // 添加目标选择
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this)); // 被攻击时反击
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 0.37D, true));
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.45D));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(7, new FloatGoal(this));
 
-        // 攻击玩家
-        this.targetSelector.addGoal(2, new CustomAttackGoal<>(this, Player.class, 20, true, false, CustomAttackGoal::isValidTarget));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 
+        /* 只攻击没有因子的玩家 */
+        this.targetSelector.addGoal(2,
+                new NearestAttackableTargetGoal<>(
+                        this,                              // 实体
+                        Player.class,                      // 目标类型
+                        10,                                // 优先级距离
+                        true,                              // 必须可见
+                        false,                             // 不限视线
+                        target -> {                        // 目标条件
+                            if (!(target instanceof Player player)) return false;
+                            return !player.getPersistentData().getBoolean("hasGiifuDna");
+                        }));
         // 攻击普通村民
         this.targetSelector.addGoal(3, new CustomAttackGoal<>(this, Villager.class, 20, true, false, CustomAttackGoal::isValidTarget));
+
     }
 
     // 自定义攻击目标逻辑

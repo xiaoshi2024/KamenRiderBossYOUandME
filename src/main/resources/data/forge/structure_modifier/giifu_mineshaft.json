@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_processor",
+  "target": {
+    "element": "minecraft:mineshaft",
+    "element_type": "minecraft:single_pool_element"
+  },
+  "processor": {
+    "processor_type": "kamen_rider_boss_you_and_me:giifu_sleeping_state"
+  }
+}

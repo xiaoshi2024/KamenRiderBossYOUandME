@@ -71,15 +71,19 @@ public class PlayerAttackHandler {
             Player player = event.player;
             ItemStack chestArmor = player.getItemBySlot(EquipmentSlot.CHEST);
 
-            // 蜜瓜夜视
+            // 蜜瓜夜视：只有当玩家没有原版夜视效果，或原版效果即将结束时才添加
             if (chestArmor.getItem() instanceof ZangetsuShinItem) {
-                player.addEffect(new MobEffectInstance(
-                        MobEffects.NIGHT_VISION,
-                        220,           // 11 秒，持续刷新就不会闪
-                        0,             // 夜视 I
-                        false,         // 不显示图标
-                        false,         // 不显示粒子
-                        true));        // 图标/粒子可选
+                if (!player.hasEffect(MobEffects.NIGHT_VISION) || 
+                    (player.getEffect(MobEffects.NIGHT_VISION).getDuration() < 260 && 
+                    player.getEffect(MobEffects.NIGHT_VISION).getDuration() != Integer.MAX_VALUE)) {
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.NIGHT_VISION,
+                            320,           // 16 秒，延长持续时间避免闪烁
+                            0,             // 夜视 I
+                            false,         // 不显示图标
+                            false,         // 不显示粒子
+                            true));        // 图标/粒子可选
+                }
             }
             // 香蕉高跳 + 免摔
             if (chestArmor.getItem() instanceof rider_baronsItem) {

@@ -110,6 +110,9 @@ public class DarkOrangeReleaseRequestPacket {
         // 清除变身装甲
         clearTransformationArmor(player);
 
+        // 更新隐身状态
+        com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager.updateInvisibility(player);
+
         // 同时返还橘子和柠檬锁种
         belt.setMode(beltStack, sengokudrivers_epmty.BeltMode.DEFAULT);
 

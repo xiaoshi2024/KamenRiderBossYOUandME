@@ -36,13 +36,24 @@ public class TyrantAbilityHandler {
                         duration, 0, false, false));
 
                 // 立即恢复生命值，但不超过最大生命值
-                player.setHealth(Math.min(player.getMaxHealth(), player.getHealth()));
+                player.heal(8.0f);
             }
 
             // 其他效果...
             addEffectIfNotPresent(player, MobEffects.DAMAGE_RESISTANCE, duration, 0);
             addEffectIfNotPresent(player, MobEffects.FIRE_RESISTANCE, duration, 0);
             addEffectIfNotPresent(player, MobEffects.REGENERATION, duration, 0);
+        } else {
+            // 当玩家不再穿着暴君盔甲时，移除生命提升效果
+            if (player.hasEffect(MobEffects.HEALTH_BOOST)) {
+                player.removeEffect(MobEffects.HEALTH_BOOST);
+                // 确保生命值不会超过新的最大生命值
+                player.setHealth(Math.min(player.getHealth(), player.getMaxHealth()));
+            }
+            // 移除其他效果
+            player.removeEffect(MobEffects.DAMAGE_RESISTANCE);
+            player.removeEffect(MobEffects.FIRE_RESISTANCE);
+            player.removeEffect(MobEffects.REGENERATION);
         }
     }
 

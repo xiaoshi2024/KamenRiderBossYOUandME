@@ -9,23 +9,27 @@ import java.util.stream.Stream;
 
 public final class RiderInvisibilityManager {
 
-    /** 给玩家加/移除隐身 Buff */
+    private static final int OUR_DURATION = 16 * 20;   // 320 tick
+
+    /** 每 tick 调用：齐甲就补 16 秒隐身，缺一立刻扒掉“我们发的” */
     public static void updateInvisibility(Player player) {
         boolean wearingRider = Stream.of(EquipmentSlot.values())
                 .filter(EquipmentSlot::isArmor)
                 .map(player::getItemBySlot)
                 .anyMatch(s -> s.getItem() instanceof KamenBossArmor);
 
-        // 无限时长 + 无粒子
         if (wearingRider) {
+            // 刷新成 16 秒，带“签名”
             player.addEffect(new MobEffectInstance(
                     MobEffects.INVISIBILITY,
-                    Integer.MAX_VALUE,
-                    0,
-                    false, false
-            ));
+                    OUR_DURATION,
+                    0, false, false));
         } else {
-            player.removeEffect(MobEffects.INVISIBILITY);
+            // 只扒掉“我们发的”那一段
+            MobEffectInstance active = player.getEffect(MobEffects.INVISIBILITY);
+            if (active != null && active.getDuration() == OUR_DURATION) {
+                player.removeEffect(MobEffects.INVISIBILITY);
+            }
         }
     }
 }

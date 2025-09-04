@@ -179,11 +179,15 @@ public final class DarkGaimJinbaLemonHandler {
         MobEffectInstance night = new MobEffectInstance(MobEffects.NIGHT_VISION, 320, 0, false, false);
 
         if (isFull) {
-            if (!sp.hasEffect(MobEffects.NIGHT_VISION) || sp.getEffect(MobEffects.NIGHT_VISION).getDuration() < 260) {
+            // 只有当玩家没有原版夜视效果时，才添加骑士的夜视效果
+            if (!sp.hasEffect(MobEffects.NIGHT_VISION) || 
+                (sp.getEffect(MobEffects.NIGHT_VISION).getDuration() < 260 && 
+                sp.getEffect(MobEffects.NIGHT_VISION).getDuration() != Integer.MAX_VALUE)) {
                 sp.addEffect(night);
             }
         } else {
-            sp.removeEffect(MobEffects.NIGHT_VISION);
+            // 当玩家不再穿着骑士盔甲时，不移除原版药水的夜视效果
+            // 不再自动移除夜视效果，保留原版药水的夜视效果
         }
     }
 }

@@ -203,9 +203,11 @@ public final class DarkKivaAbilityHandler {
         long currentTime = sp.level().getGameTime();
         
         if (isDarkKiva) {
-            // 夜视效果：始终保持夜视
+            // 夜视效果：只有当玩家没有原版夜视效果时，才添加骑士的夜视效果
             MobEffectInstance nightVision = new MobEffectInstance(MobEffects.NIGHT_VISION, 320, 0, false, false);
-            if (!sp.hasEffect(MobEffects.NIGHT_VISION) || sp.getEffect(MobEffects.NIGHT_VISION).getDuration() < 260) {
+            if (!sp.hasEffect(MobEffects.NIGHT_VISION) || 
+                (sp.getEffect(MobEffects.NIGHT_VISION).getDuration() < 260 && 
+                sp.getEffect(MobEffects.NIGHT_VISION).getDuration() != Integer.MAX_VALUE)) {
                 sp.addEffect(nightVision);
             }
             
@@ -235,8 +237,8 @@ public final class DarkKivaAbilityHandler {
                 variables.syncPlayerVariables(sp);
             }
         } else {
-            // 当玩家脱下盔甲时，移除所有效果
-            sp.removeEffect(MobEffects.NIGHT_VISION);
+            // 当玩家脱下盔甲时，不移除原版药水的夜视效果
+            // 只移除其他效果，保留原版药水的夜视效果
             sp.removeEffect(MobEffects.DAMAGE_BOOST);
             sp.removeEffect(MobEffects.FIRE_RESISTANCE);
             sp.removeEffect(MobEffects.REGENERATION);

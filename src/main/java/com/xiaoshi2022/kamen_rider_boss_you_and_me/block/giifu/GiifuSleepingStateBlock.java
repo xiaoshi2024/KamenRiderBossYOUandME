@@ -1,16 +1,23 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.block.giifu;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.GiifuSleepingStateBlockEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -38,7 +45,7 @@ public class GiifuSleepingStateBlock extends BaseEntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public GiifuSleepingStateBlock(BlockBehaviour.Properties properties) {
+    public GiifuSleepingStateBlock(Properties properties) {
         super(properties
                 .noOcclusion() // 不遮挡光线
                 .strength(3.0f)); // 假设基夫的石化形态更坚固
@@ -74,34 +81,38 @@ public class GiifuSleepingStateBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        }
+    public InteractionResult use(BlockState state, Level level, BlockPos pos,
+                                 Player player, InteractionHand hand, BlockHitResult hit) {
+        if (level.isClientSide) return InteractionResult.SUCCESS;
 
-        ItemStack itemStack = player.getItemInHand(hand);
+        ItemStack held = player.getItemInHand(hand);
+        if (held.getItem() != Items.GOLDEN_SWORD) return InteractionResult.PASS;
 
-        // 如果玩家拿着黄金剑，尝试抽取石化心脏
-        if (itemStack.getItem() == GOLDEN_SWORD) {
-            // 检查是否已经抽取过心脏
-            if (hasHeartExtracted(level, pos)) {
-                player.sendSystemMessage(Component.translatable("message.giifu.heart_already_extracted"));
-                return InteractionResult.FAIL;
+        // 触发 DNA 事件
+        if (level instanceof ServerLevel server) {
+            double roll = server.random.nextDouble();
+            if (roll < 0.6) {
+                // 死亡 + 生成门徒
+                player.kill();
+                Gifftarian disciple = ModEntityTypes.GIFFTARIAN.get().create(server);
+                disciple.moveTo(player.getX(), player.getY(), player.getZ(), 0, 0);
+                server.addFreshEntity(disciple);
+                player.sendSystemMessage(Component.literal("基夫的DNA侵蚀了你……你死了！"));
+            } else {
+                // 获得因子
+                player.getPersistentData().putBoolean("hasGiifuDna", true);
+                player.addEffect(new MobEffectInstance(
+                        ModEffects.GIIFU_DNA.get(),
+                        -1,     // 永久
+                        0,      // 等级 I
+                        true,   // ← 这里才是 ambient（环境效果）
+                        false   // 无粒子
+                ));
+                player.sendSystemMessage(Component.literal("你继承了基夫的遗传因子！"));
             }
-
-            // 抽取心脏
-            if (extractHeart(level, pos)) {
-                // 播放音效和粒子效果
-
-
-                spawnParticles(level, pos);
-                player.sendSystemMessage(Component.translatable("message.giifu.heart_extracted"));
-                return InteractionResult.SUCCESS;
-            }
-            return InteractionResult.FAIL;
+            server.playSound(null, pos, SoundEvents.ZOMBIE_VILLAGER_CURE, SoundSource.BLOCKS, 1.0F, 0.5F);
         }
-
-        return InteractionResult.PASS;
+        return InteractionResult.SUCCESS;
     }
 
     private boolean hasHeartExtracted(Level level, BlockPos pos) {

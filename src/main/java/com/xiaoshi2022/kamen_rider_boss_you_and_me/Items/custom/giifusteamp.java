@@ -142,6 +142,59 @@ public class giifusteamp extends Item implements GeoItem {
         return super.use(level, player, hand);
     }
 
+    @Override
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        // 只处理“玩家打玩家”
+        if (attacker instanceof Player attackerPlayer && target instanceof Player targetPlayer) {
+            Level level = attackerPlayer.level();
+
+            // 1. 创造/旁观模式直接跳过
+            if (attackerPlayer.isCreative() || attackerPlayer.isSpectator()) {
+                attackerPlayer.displayClientMessage(Component.literal("创造模式或旁观模式下无法使用此功能"), true);
+                return super.hurtEnemy(stack, target, attacker);
+            }
+
+            // 2. 冷却检查（复用 use 里的同一套 key）
+            final int INTERVAL = 12 * 20;
+            long lastPlayed = attackerPlayer.getPersistentData().getLong("lastPlayedSound");
+            long now = level.getGameTime();
+            if (now - lastPlayed < INTERVAL) {
+                attackerPlayer.displayClientMessage(
+                        Component.literal("冷却时间未结束，还需等待 " + (INTERVAL - (now - lastPlayed)) / 20 + " 秒"), true);
+                return super.hurtEnemy(stack, target, attacker);
+            }
+
+            // 3. 目标必须是生存 + 人类
+            if (!targetPlayer.isCreative() && !targetPlayer.isSpectator() && isPlayerInHumanForm(targetPlayer)) {
+                if (level instanceof ServerLevel serverLevel) {
+                    // 3.1 秒杀
+                    targetPlayer.kill();
+
+                    // 3.2 生成门徒
+                    spawnGifftarianAtPlayerLocation(serverLevel, targetPlayer);
+
+                    // 3.3 音效 & 冷却
+                    serverLevel.playSound(
+                            null,
+                            targetPlayer.getX(), targetPlayer.getY(), targetPlayer.getZ(),
+                            ModBossSounds.SEAL.get(),
+                            SoundSource.PLAYERS,
+                            1.0F, 1.0F);
+                    attackerPlayer.getPersistentData().putLong("lastPlayedSound", now);
+
+                    // 3.4 提示
+                    attackerPlayer.displayClientMessage(Component.literal("目标已被杀死，门徒已生成！"), true);
+                }
+                // 表示“已处理”
+                return true;
+            } else {
+                attackerPlayer.displayClientMessage(Component.literal("目标不是人类形态或处于创造/旁观模式！"), true);
+            }
+        }
+        // 其他情况走默认
+        return super.hurtEnemy(stack, target, attacker);
+    }
+
     // Let's add our animation controller
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
