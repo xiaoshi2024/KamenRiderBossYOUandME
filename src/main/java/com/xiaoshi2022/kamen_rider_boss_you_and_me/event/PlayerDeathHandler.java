@@ -177,11 +177,11 @@ public class PlayerDeathHandler {
             return "BANANA";
         } else if (chestplate.getItem() == ModItems.SIGURD_CHESTPLATE.get()) {
             return "CHERRY";
-        } else if (helmet.getItem() == ModItems.DARK_ORANGELS_CHESTPLATE.get()){
+        } else if (chestplate.getItem() == ModItems.DARK_ORANGELS_CHESTPLATE.get()){
             return "ORANGE";
         } else if (chestplate.getItem() == ModItems.ZANGETSU_SHIN_CHESTPLATE.get()) {
             return "MELON";
-        } else if (helmet.getItem() == ModItems.TYRANT_CHESTPLATE.get()) {
+        } else if (chestplate.getItem() == ModItems.TYRANT_CHESTPLATE.get()) {
             return "DRAGONFRUIT";
         }
 

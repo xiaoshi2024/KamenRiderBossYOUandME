@@ -81,6 +81,38 @@ public class  KRBVariables {
 			clone.melon_ready_time = original.melon_ready_time;
 			clone.banana_ready = original.banana_ready;
 			clone.banana_ready_time = original.banana_ready_time;
+			} else {
+			// 玩家死亡重生时，重置所有状态变量
+			clone.kcik = false;
+			clone.wudi = false;
+			clone.lastKickTime = 0L;
+			clone.kickStartTime = 0L;
+			clone.kickStartY = 0.0D;
+			clone.needExplode = false;
+			clone.hasExploded = false;
+			// 重置锁种相关变量
+			clone.cherry_ready = false;
+			clone.cherry_ready_time = 0L;
+			clone.lemon_ready = false;
+			clone.lemon_ready_time = 0L;
+			clone.peach_ready = false;
+			clone.peach_ready_time = 0L;
+			clone.melon_ready = false;
+			clone.melon_ready_time = 0L;
+			clone.banana_ready = false;
+			clone.banana_ready_time = 0L;
+			// 重置黑暗Kiva相关变量
+			clone.dark_kiva_bat_mode = false;
+			clone.dark_kiva_bat_mode_time = 0L;
+			clone.dark_kiva_blood_suck_active = false;
+			clone.dark_kiva_blood_suck_cooldown = 0L;
+			clone.dark_kiva_sonic_blast_active = false;
+			clone.dark_kiva_sonic_blast_cooldown = 0L;
+			clone.dark_kiva_blood_steal_cooldown = 0L;
+			// 新增：重置其他状态变量
+			clone.isDarkKivaBeltEquipped = false;
+			clone.baseMaxHealth = 20.0D;
+			clone.lastCustomArmorCount = 0;
 			}
 		}
 	}

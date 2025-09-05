@@ -1,7 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.GiifuSleepingStateBlockEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.giifu.GiifuSleepingStateBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +18,8 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -31,6 +38,8 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
     protected static final RawAnimation DEATH = RawAnimation.begin().thenPlay("death");
     
     private int specialAttackCooldown = 0;
+
+    private BlockPos sleepingPos = BlockPos.ZERO;
     
     public GiifuHumanEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -48,6 +57,30 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 20.0D);
     }
+
+    public void setSleepingPos(BlockPos pos) {
+        this.sleepingPos = pos.immutable();
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        if (!level().isClientSide && !sleepingPos.equals(BlockPos.ZERO)) {
+            BlockState state = level().getBlockState(sleepingPos);
+            if (state.getBlock() instanceof GiifuSleepingStateBlock) {
+                BlockEntity be = level().getBlockEntity(sleepingPos);
+                if (be instanceof GiifuSleepingStateBlockEntity blockEntity && !blockEntity.isKicked()) {
+                    // 有概率复活
+                    if (random.nextFloat() < 0.5f) { // 50% 概率
+                        GiifuHumanEntity newEntity = ModEntityTypes.GIIFU_HUMAN.get().create(level());
+                        newEntity.setPos(sleepingPos.getX() + 0.5, sleepingPos.getY() + 1, sleepingPos.getZ() + 0.5);
+                        newEntity.setSleepingPos(sleepingPos);
+                        level().addFreshEntity(newEntity);
+                    }
+                }
+            }
+        }
+        this.discard(); // 移除实体
+    }
     
     @Override
     protected void registerGoals() {
@@ -56,7 +89,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         // 战斗相关目标
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(2, new SpecialAttackGoal(this));
-        
+
         // 移动和观察目标
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -65,7 +98,11 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         
         // 目标选择
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2,
+                new NearestAttackableTargetGoal<>(this, Player.class, true, player -> {
+                    // 不攻击拥有因子的玩家
+                    return !player.getPersistentData().getBoolean("hasGiifuDna");
+                }));
     }
     
     // 自定义特殊攻击目标

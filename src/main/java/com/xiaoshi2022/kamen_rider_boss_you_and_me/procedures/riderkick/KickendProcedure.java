@@ -1,5 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.GiifuSleepingStateBlockEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.giifu.GiifuSleepingStateBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
@@ -10,10 +12,14 @@ import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +27,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -78,9 +86,40 @@ public class KickendProcedure {
 		setPlayerVariable(entity, "needExplode", true);
 		setPlayerVariable(entity, "kcik", false);
 
-		// ① 纯特效爆炸（无伤害）
-		if (world instanceof Level _level && !_level.isClientSide()) {
-			_level.explode(null, x, y, z, 0F, Level.ExplosionInteraction.NONE);
+		// ① 纯特效爆炸（无地形破坏）
+		if (world instanceof ServerLevel _level) {
+			// 只播放粒子和音效，不调用真实爆炸
+			_level.sendParticles(
+					ParticleTypes.EXPLOSION_EMITTER,
+					x, y, z,
+					1, 0, 0, 0, 1
+			);
+			_level.playSound(
+					null, x, y, z,
+					SoundEvents.GENERIC_EXPLODE,
+					SoundSource.BLOCKS,
+					1.0f, 1.0f
+			);
+		}
+
+		// ② 只摧毁范围内的基夫石像
+		if (world instanceof ServerLevel _level) {
+			float radius = KickDamageHelper.getKickExplosionRadius(entity);
+			AABB box = new AABB(x, y, z, x, y, z).inflate(radius);
+
+			for (BlockPos pos : BlockPos.betweenClosed(
+					(int) (x - radius), (int) (y - radius), (int) (z - radius),
+					(int) (x + radius), (int) (y + radius), (int) (z + radius)
+			)) {
+				BlockState state = _level.getBlockState(pos);
+				if (state.getBlock() instanceof GiifuSleepingStateBlock) {
+					BlockEntity be = _level.getBlockEntity(pos);
+					if (be instanceof GiifuSleepingStateBlockEntity blockEntity) {
+						float damage = KickDamageHelper.getKickDamage(entity);
+						blockEntity.addDamage(damage); // ✅ 只让石像受爆炸伤害
+					}
+				}
+			}
 		}
 
 		// ② 按头盔计算伤害并给周围敌人

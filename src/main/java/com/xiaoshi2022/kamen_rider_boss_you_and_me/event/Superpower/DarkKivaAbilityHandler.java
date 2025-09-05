@@ -231,10 +231,14 @@ public final class DarkKivaAbilityHandler {
             
             // 每5秒触发一次吸血，但只在玩家存活时执行
             if (currentTime >= variables.dark_kiva_blood_steal_cooldown && sp.isAlive()) {
-                sp.heal(BLOOD_STEAL_AMOUNT);
-                variables.dark_kiva_blood_steal_cooldown = currentTime + BLOOD_STEAL_INTERVAL;
-                spawnBatParticles(sp);
-                variables.syncPlayerVariables(sp);
+                // 简单判定：最近5秒内没有受伤 → 非战斗
+                long lastHurt = sp.getLastHurtByMobTimestamp();
+                if (currentTime - lastHurt > 100) { // 5秒内没被打
+                    sp.heal(BLOOD_STEAL_AMOUNT);
+                    variables.dark_kiva_blood_steal_cooldown = currentTime + BLOOD_STEAL_INTERVAL;
+                    spawnBatParticles(sp);
+                    variables.syncPlayerVariables(sp);
+                }
             }
         } else {
             // 当玩家脱下盔甲时，不移除原版药水的夜视效果

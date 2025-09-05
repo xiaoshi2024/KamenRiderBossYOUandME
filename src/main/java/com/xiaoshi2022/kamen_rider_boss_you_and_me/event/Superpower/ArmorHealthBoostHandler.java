@@ -32,17 +32,30 @@ public class ArmorHealthBoostHandler {
     // 每套盔甲提供的额外生命值（总共100点，按5件套分配）
     private static final double HEALTH_BOOST_PER_ARMOR = 25.0; // 每件盔甲提供25点额外生命，四件共100点
 
-    /**
-     * 每tick检查玩家装备的盔甲情况，并更新生命值上限
-     */
+    /* 记录当前“死亡”玩家，避免在死亡界面期间再改属性 */
+    private static final java.util.Set<UUID> DEAD = new java.util.HashSet<>();
+
+    /* ------ 死亡时标记 ------ */
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        Player player = event.player;
-    
-        // 只在服务器端处理
+    public static void onDeath(net.minecraftforge.event.entity.living.LivingDeathEvent e) {
+        if (e.getEntity() instanceof Player p) DEAD.add(p.getUUID());
+    }
+
+    /* ------ 重生后清除标记 ------ */
+    @SubscribeEvent
+    public static void onRespawn(net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent e) {
+        DEAD.remove(e.getEntity().getUUID());
+    }
+
+    /* ------ 主 Tick ------ */
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
+        if (e.phase != TickEvent.Phase.END) return;
+        Player player = e.player;
         if (player.level().isClientSide()) return;
-    
+        /* 死亡期间直接 return */
+        if (DEAD.contains(player.getUUID())) return;
+
         // 获取或创建玩家变量
         KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
                 .orElse(new KRBVariables.PlayerVariables());
