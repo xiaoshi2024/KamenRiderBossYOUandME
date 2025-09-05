@@ -1,0 +1,11 @@
+{
+  "structures": [
+    { "structure": "kamen_rider_boss_you_and_me:giifu_archaeology_site", "weight": 1 }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 24,
+    "separation": 16,
+    "salt": 1919810
+  }
+}

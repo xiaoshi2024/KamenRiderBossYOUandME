@@ -65,7 +65,7 @@ public final class DarkKivaAbilityHandler {
      * 蝙蝠形态：V键触发，给予飞行能力和速度提升
      */
     public static void tryBatMode(ServerPlayer sp) {
-        if (!DarkKivaItem.isFullArmorEquipped(sp)) return;
+        if (!DarkKivaItem.isFullArmorEquipped(sp) || !sp.isAlive()) return;
         
         KRBVariables.PlayerVariables variables = sp.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         
@@ -93,7 +93,7 @@ public final class DarkKivaAbilityHandler {
      * 吸血能力：B键触发，吸取周围生物的生命
      */
     public static void tryBloodSuck(ServerPlayer sp) {
-        if (!DarkKivaItem.isFullArmorEquipped(sp)) return;
+        if (!DarkKivaItem.isFullArmorEquipped(sp) || !sp.isAlive()) return;
         
         KRBVariables.PlayerVariables variables = sp.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         long currentTime = sp.level().getGameTime();
@@ -131,7 +131,7 @@ public final class DarkKivaAbilityHandler {
      * 声波爆破：N键触发，范围伤害和击退
      */
     public static void trySonicBlast(ServerPlayer sp) {
-        if (!DarkKivaItem.isFullArmorEquipped(sp)) return;
+        if (!DarkKivaItem.isFullArmorEquipped(sp) || !sp.isAlive()) return;
         
         KRBVariables.PlayerVariables variables = sp.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         long currentTime = sp.level().getGameTime();
@@ -229,8 +229,8 @@ public final class DarkKivaAbilityHandler {
                 sp.addEffect(regeneration);
             }
             
-            // 每5秒触发一次吸血
-            if (currentTime >= variables.dark_kiva_blood_steal_cooldown) {
+            // 每5秒触发一次吸血，但只在玩家存活时执行
+            if (currentTime >= variables.dark_kiva_blood_steal_cooldown && sp.isAlive()) {
                 sp.heal(BLOOD_STEAL_AMOUNT);
                 variables.dark_kiva_blood_steal_cooldown = currentTime + BLOOD_STEAL_INTERVAL;
                 spawnBatParticles(sp);

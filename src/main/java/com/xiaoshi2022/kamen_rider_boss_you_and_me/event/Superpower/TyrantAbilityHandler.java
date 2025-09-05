@@ -26,7 +26,7 @@ public class TyrantAbilityHandler {
         Player player = event.player;
         if (player.level().isClientSide()) return;
 
-        if (isWearingTyrant(player)) {
+        if (isWearingTyrant(player) && player.isAlive()) {
             int duration = 100; // 5秒
 
             // 只在没有效果时添加
@@ -45,7 +45,7 @@ public class TyrantAbilityHandler {
             addEffectIfNotPresent(player, MobEffects.REGENERATION, duration, 0);
         } else {
             // 当玩家不再穿着暴君盔甲时，移除生命提升效果
-            if (player.hasEffect(MobEffects.HEALTH_BOOST)) {
+            if (player.hasEffect(MobEffects.HEALTH_BOOST) && player.isAlive()) {
                 player.removeEffect(MobEffects.HEALTH_BOOST);
                 // 确保生命值不会超过新的最大生命值
                 player.setHealth(Math.min(player.getHealth(), player.getMaxHealth()));
@@ -85,7 +85,7 @@ public class TyrantAbilityHandler {
         if (!(event.getSource().getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
 
-        if (isWearingTyrant(player) && event.getEntity() instanceof LivingEntity) {
+        if (isWearingTyrant(player) && event.getEntity() instanceof LivingEntity && player.isAlive()) {
             LivingEntity target = (LivingEntity) event.getEntity();
             float healAmount = target.getMaxHealth() * 0.01f;
             player.heal(healAmount);

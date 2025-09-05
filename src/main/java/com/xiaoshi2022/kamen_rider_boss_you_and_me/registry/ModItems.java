@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.StoriousMonsterB
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.food.InvesMeat;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.giifusteamp;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.GiifuEyeBall;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.dragonfruit;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.kivas.ThroneBlockItem;
@@ -50,6 +51,10 @@ public class ModItems {
 
     public static final RegistryObject<Item> GIIFU_SLEEPING_STATE_ITEM = ITEMS.register("giifu_sleeping_state_item",
             () -> new BlockItem(ModBlocks.GIIFU_SLEEPING_STATE_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> CURSE_BLOCK_ITEM = ITEMS.register("curse_block",
+            () -> new BlockItem(ModBlocks.CURSE_BLOCK.get(), new Item.Properties()));
+
 
     // 方块特效
     public static final RegistryObject<Item> BANANAS_BLOCK_ITEM = ITEMS.register("bananas_block",
@@ -180,5 +185,9 @@ public class ModItems {
     public static final RegistryObject<DarkKivaItem> DARK_KIVA_HELMET = ITEMS.register("dark_kiva_helmet", () -> new DarkKivaItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<DarkKivaItem> DARK_KIVA_CHESTPLATE = ITEMS.register("dark_kiva_chestplate", () -> new DarkKivaItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<DarkKivaItem> DARK_KIVA_LEGGINGS = ITEMS.register("dark_kiva_leggings", () -> new DarkKivaItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    // 基夫眼珠 - 击败基夫人形后掉落 (Geo物品)
+    public static final RegistryObject<GiifuEyeBall> GIIFU_EYEBALL = ITEMS.register("giifu_eyeball",
+            () -> new GiifuEyeBall(new Item.Properties()));
 
 }

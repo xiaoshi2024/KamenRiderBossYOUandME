@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.Elementar
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
@@ -315,6 +316,18 @@ public class modEventBusEvents {
                             .add(Attributes.FLYING_SPEED, 0.6D)
                             .add(Attributes.ATTACK_DAMAGE, 8.0D)          // 必须给标准伤害
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 8.0D)
+                            .build()
+            );
+
+            event.put(ModEntityTypes.GIIFU_HUMAN.get(),
+                    GiifuHumanEntity.createAttributes()
+                            .add(Attributes.MAX_HEALTH, 500.0D)
+                            .add(Attributes.ARMOR, 20.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 10.0D)
+                            .add(Attributes.ATTACK_DAMAGE, 15.0D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.28D)
+                            .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 20.0D)
                             .build()
             );
 

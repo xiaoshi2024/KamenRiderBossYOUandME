@@ -33,8 +33,8 @@ public class MarikaAbilityHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.player instanceof ServerPlayer player && event.phase == TickEvent.Phase.END) {
-            // 检查是否装备全套Marika装甲
-            if (isFullMarikaArmorEquipped(player)) {
+            // 检查是否装备全套Marika装甲且玩家存活
+            if (isFullMarikaArmorEquipped(player) && player.isAlive()) {
                 // 每HEAL_INTERVAL tick触发一次治愈
                 if (player.tickCount % HEAL_INTERVAL == 0) {
                     // 只在生命值未满时触发
@@ -52,8 +52,8 @@ public class MarikaAbilityHandler {
     @SubscribeEvent
     public static void onPlayerHurt(LivingHurtEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            // 检查是否装备全套Marika装甲
-            if (isFullMarikaArmorEquipped(player)) {
+            // 检查是否装备全套Marika装甲且玩家存活
+            if (isFullMarikaArmorEquipped(player) && player.isAlive()) {
                 // 20%几率触发
                 if (random.nextDouble() < 0.2) {
                     // 恢复3点生命值

@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.melonx;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.Peachx;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.orangelsx;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.DragonfruitBlock;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.CurseBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
@@ -71,4 +72,13 @@ public class ModBlocks {
                     .strength(2.0f)
                     .noOcclusion()
                     .lightLevel(state -> 15)));
+
+    // Curse Block - 普通原版方块
+    public static final RegistryObject<Block> CURSE_BLOCK = BLOCKS.register("curse_block",
+            () -> new CurseBlock(Block.Properties.of()
+                    .strength(3.0f, 6.0f) // 硬度3.0，抗爆性6.0
+                    .requiresCorrectToolForDrops() // 需要正确工具挖掘
+                    .lightLevel(state -> 7) // 发光等级7
+                    .friction(0.6f) // 摩擦系数
+                    .destroyTime(1.5f))); // 破坏时间
 }

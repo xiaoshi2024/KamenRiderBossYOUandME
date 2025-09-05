@@ -56,12 +56,13 @@ public class BloodlineManager {
         // 新玩家（重生）
         Player clone = event.getEntity();
 
-        // 强制从源玩家读取
-        original.revive();                          // 防止 Capability 被清空
+        // 从源玩家读取数据（不需要revive）
         CompoundTag nbt = new CompoundTag();
-        get(original).save(nbt);                    // 读取旧数据
-        get(clone).load(nbt);                       // 写进新玩家
-        original.invalidateCaps();                  // 释放旧 Capability
+        // 安全检查：确保原始玩家仍有Bloodline能力
+        original.getCapability(CAP).ifPresent(oldBloodline -> {
+            oldBloodline.save(nbt);                    // 读取旧数据
+            get(clone).load(nbt);                       // 写进新玩家
+        });
     }
 
     private static class Provider implements ICapabilitySerializable<CompoundTag> {

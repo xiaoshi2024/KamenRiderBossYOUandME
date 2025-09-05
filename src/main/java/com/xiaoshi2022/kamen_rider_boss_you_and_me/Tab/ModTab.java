@@ -47,6 +47,8 @@ public class ModTab {
                 output.accept(INVES_MEAT.get());
                 output.accept(GLOBALISM.get());
                 output.accept(THRONE_BLOCK_ITEM.get());
+                output.accept(CURSE_BLOCK_ITEM.get());
+                output.accept(GIIFU_EYEBALL.get());
                 output.accept(GIIFU_SLEEPING_STATE_ITEM.get());
                 output.accept(BLOODLINE_FANG.get());
             })).build());

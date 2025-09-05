@@ -207,6 +207,7 @@ public class PlayerDeathHandler {
 
                 case "DRAGONFRUIT":
                     list.add(new ItemStack(ModItems.DRAGONFRUIT.get()));
+                    break;
             case "ORANGE":
                 // 返回两个锁种
                 list.add(new ItemStack(ModItems.LEMON_ENERGY.get()));

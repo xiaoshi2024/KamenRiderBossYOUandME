@@ -38,6 +38,7 @@
   "dialog.kivat.mode_change.say": "闲逛",
   "dialog.kivat.mode_change.sleep": "睡觉",
   "kamen_rider_boss_you_and_me.effect.fang_bloodline": "牙血鬼之脉",
+  "effect.kamen_rider_boss_you_and_me.giifu_dna": "天魔之因子",
   "entity.kamen_rider_boss_you_and_me.another_zi_o": "异类时王",
   "entity.kamen_rider_boss_you_and_me.kivat_bat_ii": "月蝠II世",
   "key.guard": "阵羽护盾",
@@ -122,6 +123,9 @@
   "block.kamen_rider_boss_you_and_me.giifu_sleeping_state": "基夫 石像",
   "dialog.kivat.already_transformed": "Please deactivate the transformation first!",
   "dialog.kivat.coming": "Kivat Coming up",
-  "dialog.kivat.not_tamed": "kivat not tamed!"
+  "dialog.kivat.not_tamed": "kivat not tamed!",
+  "block.kamen_rider_boss_you_and_me.curse_block": "基夫诅咒印记",
+  "entity.kamen_rider_boss_you_and_me.giifu_human": "基夫-怪人态",
+  "item.kamen_rider_boss_you_and_me.giifu_eyeball": "基夫之眼"
 
 }

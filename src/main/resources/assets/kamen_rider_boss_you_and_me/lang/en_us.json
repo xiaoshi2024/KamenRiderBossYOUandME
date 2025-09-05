@@ -26,6 +26,8 @@
   "item.kamen_rider_boss_you_and_me.globalism":"Globalism Sword",
 
   "kamen_rider_boss_you_and_me.effect.fang_bloodline": "Fang bloodline",
+  "effect.kamen_rider_boss_you_and_me.giifu_dna": "Giifu DNA",
+
 
   "dialog.kivat.full": "§aKivat itSFull！",
   "dialog.kivat.hungry": "§cYou're so hungry，Unable to feed Kivat！",
@@ -149,5 +151,8 @@
   "dialog.kivat.too_far": "As you wished, the extinction moment has begun now!",
   "dialog.kivat.already_transformed": "Please deactivate the transformation first!",
   "dialog.kivat.coming": "Kivat Coming up",
-  "dialog.kivat.not_tamed": "kivat not tamed!"
+  "dialog.kivat.not_tamed": "kivat not tamed!",
+  "block.kamen_rider_boss_you_and_me.curse_block": "Giifu Curse Mark",
+  "entity.kamen_rider_boss_you_and_me.giifu_human": "Giifu Human",
+  "item.kamen_rider_boss_you_and_me.giifu_eyeball": "Giifu Eyeball"
 }

@@ -1,0 +1,21 @@
+{
+  "name": "kamen_rider_boss_you_and_me:giifu_archaeology_site",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "kamen_rider_boss_you_and_me:giifu_archaeology_site",
+        "projection": "rigid",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "kamen_rider_boss_you_and_me:giifu_statue"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
