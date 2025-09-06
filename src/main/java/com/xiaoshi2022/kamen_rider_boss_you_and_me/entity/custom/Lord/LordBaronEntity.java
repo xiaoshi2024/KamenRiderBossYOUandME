@@ -51,6 +51,11 @@ public class LordBaronEntity extends GiifuDemosEntity implements FactionLeader {
     private static final RawAnimation BARON_ATTACK = RawAnimation.begin().thenLoop("baron_attack");
     private static final RawAnimation BARON_WALK = RawAnimation.begin().thenLoop("baron_walk");
 
+    /** 受击召唤冷却，防止 1 次群殴刷出 20 只 */
+    private int hurtSummonCd = 0;
+    /** 受击召唤概率 0~1，这里设 30 % */
+    private static final float HURT_SUMMON_CHANCE = 0.3F;
+
     // 对话系统
     private static final Map<String, String[]> DIALOGUE_TREE = new HashMap<>();
     private final Random random = new Random();
@@ -162,7 +167,7 @@ public class LordBaronEntity extends GiifuDemosEntity implements FactionLeader {
     }
 
     private void openHelheimCracksAndSpawnInves(Entity target) {
-        int numCracks = random.nextInt(3) + 3; // 生成3到5个裂缝
+        int numCracks = random.nextInt(2) + 1; // 生成1到2个裂缝
         for (int i = 0; i < numCracks; i++) {
             double crackX = this.getX() + (random.nextDouble() - 0.5) * 16.0;
             double crackZ = this.getZ() + (random.nextDouble() - 0.5) * 16.0;
@@ -408,11 +413,28 @@ public class LordBaronEntity extends GiifuDemosEntity implements FactionLeader {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        // 记录攻击者
-        if (source.getEntity() instanceof LivingEntity) {
-            this.setLastHurtByMob((LivingEntity) source.getEntity());
+        // 1. 先记录攻击者，供后面用
+        if (source.getEntity() instanceof LivingEntity attacker) {
+            this.setLastHurtByMob(attacker);
         }
-        return super.hurt(source, amount);
+
+        // 2. 执行原版受伤
+        boolean result = super.hurt(source, amount);
+
+        // 3. 只要受伤来源是生物，就尝试召唤
+        if (!level().isClientSide
+                && hurtSummonCd <= 0
+                && source.getEntity() instanceof LivingEntity attacker
+                && attacker != this) {          // 自己不触发
+
+            if (random.nextFloat() < HURT_SUMMON_CHANCE) {
+                // 直接复用现成的裂缝逻辑，数量少点
+                openHelheimCracksAndSpawnInves(attacker);
+                hurtSummonCd = 100;   // 5 s 冷却
+            }
+        }
+
+        return result;
     }
 
     @Override

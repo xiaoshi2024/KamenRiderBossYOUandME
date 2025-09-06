@@ -126,6 +126,14 @@
   "dialog.kivat.not_tamed": "kivat not tamed!",
   "block.kamen_rider_boss_you_and_me.curse_block": "基夫诅咒印记",
   "entity.kamen_rider_boss_you_and_me.giifu_human": "基夫-怪人态",
-  "item.kamen_rider_boss_you_and_me.giifu_eyeball": "基夫之眼"
+  "item.kamen_rider_boss_you_and_me.giifu_eyeball": "基夫之眼",
+  "msg.kamen_rider.giifu_shock_break": "基夫的冲击波粉碎了你的变身！",
+
+  "msg.kamen_rider.curse_block.using_stamp": "§a使用基夫印章的力量传送回主世界...",
+
+  "msg.kamen_rider.curse_block.teleport_to_spawn": "§e传送到世界出生点",
+  "msg.kamen_rider.curse_block.teleport_to_previous": "§a传送到上一次放置的CURSE_BLOCK位置",
+  "msg.kamen_rider.curse_block.previous_destroyed": "§e上一次的方块已被拆除，传送到出生点",
+  "msg.kamen_rider.curse_block.chain_linked": "§a已链接到传送链！"
 
 }

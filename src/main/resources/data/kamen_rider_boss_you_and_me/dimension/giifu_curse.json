@@ -1,0 +1,11 @@
+{
+  "type": "kamen_rider_boss_you_and_me:giifu_curse_type",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "kamen_rider_boss_you_and_me:giifu_curse_noise",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "kamen_rider_boss_you_and_me:giifu_curse_biome"
+    }
+  }
+}

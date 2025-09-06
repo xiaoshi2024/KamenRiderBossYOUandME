@@ -134,6 +134,7 @@ public class GiifuSleepingStateBlock extends BaseEntityBlock {
             GiifuHumanEntity human = ModEntityTypes.GIIFU_HUMAN.get().create(level);
             human.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
             human.setSleepingPos(pos);
+            human.setStatuePos(pos);
             level.addFreshEntity(human);
             player.displayClientMessage(Component.literal("基夫响应了召唤……"), true);
             level.playSound(null, pos, SoundEvents.WITHER_SPAWN, SoundSource.BLOCKS, 1, 1);

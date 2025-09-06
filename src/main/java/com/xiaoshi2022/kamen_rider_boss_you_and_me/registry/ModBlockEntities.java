@@ -57,4 +57,11 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("giifu_sleeping_state_entity",
                     () -> BlockEntityType.Builder.of(GiifuSleepingStateBlockEntity::new,
                             ModBlocks.GIIFU_SLEEPING_STATE_BLOCK.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<CurseBlockEntity>> CURSE_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("curse_block_entity",
+                    () -> BlockEntityType.Builder.of(CurseBlockEntity::new,
+                            ModBlocks.CURSE_BLOCK.get()).build(null));
+
+
 }

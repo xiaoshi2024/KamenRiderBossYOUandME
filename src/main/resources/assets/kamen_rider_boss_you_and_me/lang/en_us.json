@@ -154,5 +154,13 @@
   "dialog.kivat.not_tamed": "kivat not tamed!",
   "block.kamen_rider_boss_you_and_me.curse_block": "Giifu Curse Mark",
   "entity.kamen_rider_boss_you_and_me.giifu_human": "Giifu Human",
-  "item.kamen_rider_boss_you_and_me.giifu_eyeball": "Giifu Eyeball"
+  "item.kamen_rider_boss_you_and_me.giifu_eyeball": "Giifu Eyeball",
+  "msg.kamen_rider.giifu_shock_break": "The shock wave of Giifu shattered your transformation!",
+
+  "msg.kamen_rider.curse_block.using_stamp": "§aUsing Giifu Stamp's power to return to overworld...",
+
+  "msg.kamen_rider.curse_block.teleport_to_spawn": "§e Teleport To The World SpawnPoint",
+  "msg.kamen_rider.curse_block.teleport_to_previous": "§aTeleport to the CURSE_BLOCK position of the last placement",
+  "msg.kamen_rider.curse_block.previous_destroyed": "§ethe last block has been removed，teleportToSpawnPoint",
+  "msg.kamen_rider.curse_block.chain_linked": "§a is linked to a conveyor chain！"
 }

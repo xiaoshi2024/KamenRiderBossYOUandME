@@ -1,15 +1,28 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.api.IGiifuShockable;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.GiifuSleepingStateBlockEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.giifu.GiifuSleepingStateBlock;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.CurseSpaceSkillGoal;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -20,6 +33,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -29,6 +46,10 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.Random;
+
 public class GiifuHumanEntity extends Monster implements GeoEntity {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
@@ -36,14 +57,45 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
     protected static final RawAnimation ATTACK = RawAnimation.begin().thenPlay("attack");
     protected static final RawAnimation SPECIAL_ATTACK = RawAnimation.begin().thenPlay("special_attack");
     protected static final RawAnimation DEATH = RawAnimation.begin().thenPlay("death");
-    
+    public Random random;
+
     private int specialAttackCooldown = 0;
 
     private BlockPos sleepingPos = BlockPos.ZERO;
-    
+
+    private boolean isFlying = false;
+    private static final double FLIGHT_TRIGGER_HEIGHT = 4.0D; // 触发飞行高度差
+
+    /** 石像位置，ZERO 表示无石像（指令刷出） */
+    private BlockPos statuePos = BlockPos.ZERO;
+    /** 拉回检测冷却，防止每 tick 都跑一遍 */
+    private int pullBackCd = 0;
+
+    private int shockCooldown = 0;          // 冲击波冷却
+    private static final int SHOCK_COOL     = 300; // 15 秒
+    private static final float SHOCK_DAMAGE = 10.0F; // 基础伤害
+    private static final double SHOCK_RANGE = 7.0D;   // 半径 7 格
+
+    private final Goal floatGoal        = new FloatGoal(this);
+    private final Goal strollGoal       = new RandomStrollGoal(this, 0.6D);
+
+    /** 引力波冷却 **/
+    private int gravWaveCd = 0;
+    private static final int GRAV_WAVE_COOL = 200;        // 10 s
+    private static final double GRAV_WAVE_RANGE = 20.0D;  // 20 格
+    private static final int LEVITATION_TIME = 100;       // 5 s
+    private static final ParticleType<DustParticleOptions> SCARLET = ParticleTypes.DUST;  // 猩红
+
     public GiifuHumanEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.xpReward = 500;
+        this.random = new Random();
+        this.statuePos = BlockPos.ZERO;
+        this.sleepingPos = BlockPos.ZERO;
+        this.isFlying = false;
+
+        // 如果有飞行相关的特殊导航需求，可以在这里初始化
+        // this.navigation = this.isFlying ? new FlyingPathNavigation(this, level) : new GroundPathNavigation(this, level);
     }
     
     // 设置实体属性
@@ -64,45 +116,47 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
 
     @Override
     public void die(DamageSource source) {
-        if (!level().isClientSide && !sleepingPos.equals(BlockPos.ZERO)) {
-            BlockState state = level().getBlockState(sleepingPos);
+        // 复活逻辑（只在服务端执行且石像存在时）
+        if (!level().isClientSide && !statuePos.equals(BlockPos.ZERO)) {
+            BlockState state = level().getBlockState(statuePos);
             if (state.getBlock() instanceof GiifuSleepingStateBlock) {
-                BlockEntity be = level().getBlockEntity(sleepingPos);
-                if (be instanceof GiifuSleepingStateBlockEntity blockEntity && !blockEntity.isKicked()) {
-                    // 有概率复活
-                    if (random.nextFloat() < 0.5f) { // 50% 概率
-                        GiifuHumanEntity newEntity = ModEntityTypes.GIIFU_HUMAN.get().create(level());
-                        newEntity.setPos(sleepingPos.getX() + 0.5, sleepingPos.getY() + 1, sleepingPos.getZ() + 0.5);
-                        newEntity.setSleepingPos(sleepingPos);
-                        level().addFreshEntity(newEntity);
-                    }
+                // 石像存在 → 必定复活
+                GiifuHumanEntity newEntity = ModEntityTypes.GIIFU_HUMAN.get().create(level());
+                if (newEntity != null) {
+                    newEntity.setPos(statuePos.getX() + 0.5, statuePos.getY() + 1, statuePos.getZ() + 0.5);
+                    newEntity.setStatuePos(statuePos); // 把石像坐标传下去
+                    level().addFreshEntity(newEntity);
                 }
             }
         }
-        this.discard(); // 移除实体
+
+        // 必须调用父类方法以确保掉落物生成等正常死亡流程
+        super.die(source);
     }
-    
+
+    public void setStatuePos(BlockPos pos) { this.statuePos = pos.immutable(); }
+    public BlockPos getStatuePos() { return statuePos; }
+
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        
-        // 战斗相关目标
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, true));
+
+        // 战斗
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(2, new SpecialAttackGoal(this));
 
-        // 移动和观察目标
+        // 地面移动 & 观察（直接在方法内创建）
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(6, new FloatGoal(this));
-        
+        this.goalSelector.addGoal(0, new FloatGoal(this)); // FloatGoal 优先级改为 0
+
         // 目标选择
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2,
-                new NearestAttackableTargetGoal<>(this, Player.class, true, player -> {
-                    // 不攻击拥有因子的玩家
-                    return !player.getPersistentData().getBoolean("hasGiifuDna");
-                }));
+        this.goalSelector.addGoal(2, new CurseSpaceSkillGoal(this));
+        this.targetSelector.addGoal(3,
+                new NearestAttackableTargetGoal<>(this, Player.class, true,
+                        player -> !player.getPersistentData().getBoolean("hasGiifuDna")));
     }
     
     // 自定义特殊攻击目标
@@ -155,17 +209,214 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
             target.push(dx * 2.0D, 1.0D, dz * 2.0D);
         }
     }
-    
+
     @Override
     public void aiStep() {
         super.aiStep();
-        
-        // 更新特殊攻击冷却
-        if (this.specialAttackCooldown > 0) {
-            this.specialAttackCooldown--;
+
+        // 粒子效果
+        if (isFlying && level() instanceof ServerLevel srv) {
+            srv.sendParticles(
+                    new DustParticleOptions(new Vector3f(0.86F, 0.08F, 0.24F), 1.5F),
+                    getX(), getY() - 0.5D, getZ(),
+                    3, 0.2D, 0.1D, 0.2D, 0.1D);
+        }
+
+        LivingEntity target = getTarget();
+        if (target != null) {
+            double heightDiff = target.getY() - this.getY();
+            double groundY = level().getHeight(Heightmap.Types.MOTION_BLOCKING, (int) getX(), (int) getZ());
+            double offGround = getY() - groundY;
+
+            // 飞行逻辑
+            if (!isFlying && heightDiff >= FLIGHT_TRIGGER_HEIGHT) {
+                setFlying(true);
+            } else if (isFlying && heightDiff < 2.0D) {
+                // 简化：只要目标在下面不到2格就降落
+                setFlying(false);
+            }
+
+            // 飞行移动
+            if (isFlying) {
+                performFlightMovement(target);
+            }
+        }
+
+// 添加：没有目标时自动降落
+        if (isFlying && target == null) {
+            double groundY = level().getHeight(Heightmap.Types.MOTION_BLOCKING, (int) getX(), (int) getZ());
+            if (getY() - groundY < 5.0D) {
+                setFlying(false);
+            }
+        }
+
+        // 引力波技能
+        if (gravWaveCd-- <= 0 && target != null) {
+            LivingEntity gravTarget = findGravTarget();
+            if (gravTarget != null) {
+                performGravWave(gravTarget);
+                gravWaveCd = GRAV_WAVE_COOL;
+            }
+        }
+
+        // 冲击波技能
+        if (shockCooldown-- <= 0 && target != null &&
+                distanceToSqr(target) <= SHOCK_RANGE * SHOCK_RANGE) {
+            performShockWave();
+            shockCooldown = SHOCK_COOL;
+        }
+
+        // 其他冷却
+        if (specialAttackCooldown > 0) specialAttackCooldown--;
+        if (--pullBackCd <= 0) {
+            pullBackCd = 10;
+            if (!statuePos.equals(BlockPos.ZERO) && !level().isClientSide) {
+                double dist = distanceToSqr(statuePos.getX() + 0.5, statuePos.getY() + 0.5, statuePos.getZ() + 0.5);
+                if (dist > 20 * 20) {
+                    teleportTo(statuePos.getX() + 0.5, statuePos.getY() + 1, statuePos.getZ() + 0.5);
+                    refreshDimensions();
+                }
+            }
         }
     }
-    
+
+    @Override
+    public void travel(Vec3 travelVector) {
+        if (this.isFlying()) {
+            // 飞行时的移动逻辑
+            if (this.isEffectiveAi() || this.isControlledByLocalInstance()) {
+                this.moveRelative(this.getSpeed(), travelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+            }
+        } else {
+            // 地面移动逻辑
+            super.travel(travelVector);
+        }
+    }
+
+    @Override
+    public boolean onClimbable() {
+        return !this.isFlying() && super.onClimbable();
+    }
+
+    @Override
+    public boolean isNoGravity() {
+        return this.isFlying() || super.isNoGravity();
+    }
+
+    public boolean isFlying() {
+        return isFlying;
+    }
+
+    public void setFlying(boolean flying) {
+        if (this.isFlying == flying) return;
+        this.isFlying = flying;
+
+        // 飞行时停止地面导航
+        if (flying) {
+            this.getNavigation().stop();
+        }
+
+        // 设置无重力状态
+        this.setNoGravity(flying);
+    }
+
+    // 飞行移动方法
+    private void performFlightMovement(LivingEntity target) {
+        if (target == null) return;
+
+        Vec3 direction = target.position().subtract(this.position()).normalize();
+        double speed = 0.08D;
+
+        // 设置飞行速度
+        this.setDeltaMovement(
+                direction.x * speed,
+                // 保持一定高度，稍微向上飞
+                Math.max(0.1D, direction.y * speed * 0.6D),
+                direction.z * speed
+        );
+    }
+
+    @Nullable
+    private LivingEntity findGravTarget() {
+        return level().getEntitiesOfClass(LivingEntity.class,
+                        new AABB(blockPosition()).inflate(GRAV_WAVE_RANGE),
+                        e -> e != this && e.isAlive() && !(e instanceof GiifuHumanEntity))
+                .stream()
+                .min(Comparator.comparingDouble(this::distanceToSqr))
+                .orElse(null);
+    }
+
+    private void performGravWave(LivingEntity target) {
+        if (level().isClientSide) return;
+
+        // 1. 漂浮效果
+        target.addEffect(new MobEffectInstance(MobEffects.LEVITATION,
+                LEVITATION_TIME, 3, false, false, true));
+
+        // 2. 水平拉回：每 tick 微移
+        Vec3 toMe = position().subtract(target.position()).normalize();
+        double pullSpeed = 0.18D;   // 可调
+        target.setDeltaMovement(target.getDeltaMovement()
+                .add(toMe.x * pullSpeed, 0, toMe.z * pullSpeed));
+
+        // 3. 猩红粒子环
+        if (level() instanceof ServerLevel srv) {
+            for (int i = 0; i < 20; i++) {
+                double angle = 2 * Math.PI * i / 20;
+                double px = target.getX() + Math.cos(angle) * 1.2D;
+                double pz = target.getZ() + Math.sin(angle) * 1.2D;
+                double py = target.getY() + target.getBbHeight() * 0.5D;
+
+                srv.sendParticles(new DustParticleOptions(new Vector3f(0.86F, 0.08F, 0.24F), 1.5F),
+                        px, py, pz, 0, 0, 0, 0, 1);
+            }
+        }
+
+        // 4. 音效
+        level().playSound(null, blockPosition(),
+                SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE,
+                1.5F, 0.8F);
+    }
+
+
+    private void performShockWave() {
+        Level level = this.level();
+        if (level.isClientSide) return;
+
+        // 1. 范围伤害（所有 LivingEntity）
+        AABB box = new AABB(blockPosition()).inflate(SHOCK_RANGE);
+        for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box)) {
+            if (e == this) continue;
+            // 基础伤害
+            e.hurt(damageSources().mobAttack(this), SHOCK_DAMAGE);
+
+            // 2. 只对玩家做“解除变身”判定
+            if (e instanceof Player player) {
+                // 2-1 骑士玩家实现接口 → 解除变身
+                if (player instanceof IGiifuShockable knight) {
+                    if (knight.onGiifuShockWave(player)) {
+                        // 成功解除后发聊天
+                        player.displayClientMessage(
+                                Component.translatable("msg.kamen_rider.giifu_shock_break"),
+                                true);
+                    }
+                }
+                // 2-2 非骑士 / 未变身 → 仅伤害，无额外效果
+            }
+        }
+
+        // 3. 客户端特效（粒子 + 音效）
+        if (level instanceof ServerLevel srv) {
+            srv.sendParticles(ParticleTypes.EXPLOSION_EMITTER,
+                    getX(), getY() + 1, getZ(), 1, 0, 0, 0, 1);
+            srv.playSound(null, blockPosition(),
+                    SoundEvents.WITHER_SHOOT, SoundSource.HOSTILE,
+                    1.0f, 0.8f);
+        }
+    }
+
     @Override
     public boolean hurt(DamageSource source, float damage) {
         // 减少受到的伤害
