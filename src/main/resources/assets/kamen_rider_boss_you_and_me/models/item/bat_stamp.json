@@ -1,5 +1,6 @@
 {
   "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
   "texture_size": [
     64,
     64
@@ -121,6 +122,15 @@
     }
   },
   "textures": {
-    "particle": "item/bat_stamp"
-  }
+    "particle": "kamen_rider_boss_you_and_me:item/bat_stamp",
+    "layer0": "kamen_rider_boss_you_and_me:item/bat_stamp"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "geckolib:animatable": 1
+      },
+      "model": "kamen_rider_boss_you_and_me:geo/item/bat_stamp.geo.json"
+    }
+  ]
 }

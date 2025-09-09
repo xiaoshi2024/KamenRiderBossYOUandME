@@ -47,7 +47,7 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
             // 防御值
             @Override
             public int getDefenseForType(ArmorItem.Type type) {
-                return new int[]{3, 7, 6, 3}[type.getSlot().getIndex()]; // 总防御19
+                return new int[]{5, 10, 6, 9}[type.getSlot().getIndex()]; // 总防御30
             }
 
             // 附魔能力

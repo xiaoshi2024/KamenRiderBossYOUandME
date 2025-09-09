@@ -40,9 +40,10 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
                 return new int[]{666, 720, 750, 555}[type.getSlot().getIndex()];
             }
 
+            // 防御：提升至30
             @Override
             public int getDefenseForType(Type type) {
-                return new int[]{3, 7, 6, 4}[type.getSlot().getIndex()]; // 头盔3 胸甲7 护腿6 靴子4
+                return new int[]{6, 10, 5, 9}[type.getSlot().getIndex()];
             }
 
             @Override
@@ -65,15 +66,17 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
                 return "dark_kiva";
             }
 
+            // 盔甲韧性：提高至5.0
             @Override
             public float getToughness() {
-                return 4.0f;
+                return 5.0f;
             }
-
+            // 击退抗性：增加20%
             @Override
             public float getKnockbackResistance() {
-                return 0.3f;
+                return 0.20f;
             }
+
         }, type, properties);
     }
 

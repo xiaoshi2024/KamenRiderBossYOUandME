@@ -41,10 +41,20 @@ public class rider_baronsItem extends ArmorItem implements GeoItem , KamenBossAr
             }
 
 
-            // 调整后的香蕉防御值（仍保持重甲定位但不过于OP）
+            // 防御：提升至24 点（头盔4 胸甲9 护腿8 靴子3） - 假面骑士Baron强化版
             @Override
             public int getDefenseForType(ArmorItem.Type type) {
-                return new int[]{3, 7, 6, 3}[type.getSlot().getIndex()]; // 总防御19
+                return new int[]{4, 9, 8, 3}[type.getSlot().getIndex()];
+            }
+            // 盔甲韧性：添加韧性值4.0
+            @Override
+            public float getToughness() {
+                return 4.0f;
+            }
+            // 击退抗性：增加15%
+            @Override
+            public float getKnockbackResistance() {
+                return 0.15f;
             }
 
 
@@ -72,17 +82,6 @@ public class rider_baronsItem extends ArmorItem implements GeoItem , KamenBossAr
                 return "baron_banana";
             }
 
-            // 高韧性（高于下界合金）
-            @Override
-            public float getToughness() {
-                return 4.0f; // 下界合金3.0
-            }
-
-            // 高击退抗性（香蕉形态稳定性）
-            @Override
-            public float getKnockbackResistance() {
-                return 0.25f; // 25%击退抗性
-            }
         }, type, properties);
     }
 

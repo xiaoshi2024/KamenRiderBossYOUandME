@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.TamedKivatTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
@@ -24,6 +25,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os.A
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.ElementaryInvesHelheimRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.StoriousRender;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batdrakss.BatDarksRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.giifu.GiifuHumanRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.kivat.KivatBatTwoNdRenderer;
@@ -237,6 +239,7 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.INVES_HEILEHIM.get(), ElementaryInvesHelheimRenderer::new);
             EntityRenderers.register(ModEntityTypes.KIVAT_BAT_II.get(), KivatBatTwoNdRenderer::new);
             EntityRenderers.register(ModEntityTypes.GIIFU_HUMAN.get(), GiifuHumanRenderer::new);
+            EntityRenderers.register(ModEntityTypes.BAT_DARKS.get(), BatDarksRenderer::new);
 
 //            EntityRenderers.register(ModEntityTypes.KAITO.get(),
 //                    VillagerEntityMCARenderer::new);
@@ -250,6 +253,7 @@ public class kamen_rider_boss_you_and_me
             CuriosRendererRegistry.register(ModItems.SENGOKUDRIVERS_EPMTY.get(), () -> new GenericCurioRenderer());
             CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new GenericCurioRenderer());
             CuriosRendererRegistry.register(ModItems.DRAK_KIVA_BELT.get(), ()->new DrakKivaBeltRenderer());
+            CuriosRendererRegistry.register(ModItems.TWO_SIDRIVER.get(), ()->new Two_sidriverRenderer());
         }
     }
 

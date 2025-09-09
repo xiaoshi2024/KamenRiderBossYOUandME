@@ -1,6 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.StoriousMonsterBook;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.BatStampItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.food.InvesMeat;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.giifusteamp;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
@@ -9,19 +11,17 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.dragonf
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.kivas.ThroneBlockItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.EvilBatsArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.world.entity.player.Player;
@@ -54,6 +54,12 @@ public class ModItems {
 
     public static final RegistryObject<Item> CURSE_BLOCK_ITEM = ITEMS.register("curse_block",
             () -> new BlockItem(ModBlocks.CURSE_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<BatStampItem> BAT_STAMP = ITEMS.register("bat_stamp",
+            () -> new BatStampItem(new Item.Properties()));
+
+    public static final RegistryObject<TwoWeaponItem> TWO_WEAPON = ITEMS.register("two_weapon",
+            () -> new TwoWeaponItem(new Item.Properties()));
 
 
     // 方块特效
@@ -140,6 +146,9 @@ public class ModItems {
             () -> new Genesis_driver(new Item.Properties()));
     public static final RegistryObject<DrakKivaBelt> DRAK_KIVA_BELT = ITEMS.register("drak_kiva_belt",
             () -> new DrakKivaBelt(new Item.Properties()));
+    public static final RegistryObject<Two_sidriver> TWO_SIDRIVER = ITEMS.register("two_sidriver",
+            () -> new Two_sidriver(new Item.Properties()));
+
 
 
     public static final RegistryObject<RidernecromItem> RIDERNECROM_HELMET = ITEMS.register("ridernecrom_helmet", () -> new RidernecromItem(ArmorItem.Type.HELMET, new Item.Properties()));
@@ -176,6 +185,11 @@ public class ModItems {
     public static final RegistryObject<Dark_orangels> DARK_ORANGELS_HELMET = ITEMS.register("dark_orangels_helmet", () -> new Dark_orangels(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Dark_orangels> DARK_ORANGELS_CHESTPLATE = ITEMS.register("dark_orangels_chestplate", () -> new Dark_orangels(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Dark_orangels> DARK_ORANGELS_LEGGINGS = ITEMS.register("dark_orangels_leggings", () -> new Dark_orangels(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    // 艾比尔装甲
+    public static final RegistryObject<EvilBatsArmor> EVIL_BATS_HELMET = ITEMS.register("evil_bats_helmet", () -> new EvilBatsArmor(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<EvilBatsArmor> EVIL_BATS_CHESTPLATE = ITEMS.register("evil_bats_chestplate", () -> new EvilBatsArmor(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<EvilBatsArmor> EVIL_BATS_LEGGINGS = ITEMS.register("evil_bats_leggings", () -> new EvilBatsArmor(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
     // Tyrant形态盔甲
     public static final RegistryObject<TyrantItem> TYRANT_HELMET = ITEMS.register("tyrant_helmet", () -> new TyrantItem(ArmorItem.Type.HELMET, new Item.Properties()));

@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkSquashPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.JinbaGuardPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.LemonBoostPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBatModePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
@@ -87,6 +88,26 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++, DarkKivaBatModePacket.class, DarkKivaBatModePacket::encode, DarkKivaBatModePacket::new, DarkKivaBatModePacket::handle);
         INSTANCE.registerMessage(index++, DarkKivaBloodSuckPacket.class, DarkKivaBloodSuckPacket::encode, DarkKivaBloodSuckPacket::new, DarkKivaBloodSuckPacket::handle);
         INSTANCE.registerMessage(index++, DarkKivaSonicBlastPacket.class, DarkKivaSonicBlastPacket::encode, DarkKivaSonicBlastPacket::new, DarkKivaSonicBlastPacket::handle);
+        INSTANCE.registerMessage(index++, DriverSyncPacket.class,
+                DriverSyncPacket::encode,
+                DriverSyncPacket::decode,
+                DriverSyncPacket::handle);
+        INSTANCE.registerMessage(index++, XKeyLoadPacket.class,
+                XKeyLoadPacket::encode, XKeyLoadPacket::decode, XKeyLoadPacket::handle);
+        INSTANCE.registerMessage(index++, XKeyEvilPacket.class,
+                XKeyEvilPacket::encode, XKeyEvilPacket::decode, XKeyEvilPacket::handle);
+        INSTANCE.registerMessage(index++, LeftClickShiftPacket.class,
+                LeftClickShiftPacket::encode,
+                LeftClickShiftPacket::decode,
+                LeftClickShiftPacket::handle);
+        // 在 PacketHandler 的 register 方法中添加
+        INSTANCE.registerMessage(
+                index++,
+                BatDarksAnimationPacket.class,
+                BatDarksAnimationPacket::encode,
+                BatDarksAnimationPacket::decode,
+                BatDarksAnimationPacket::handle
+        );
     }
 
     public static void sendToServer(Object packet) {

@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Another_Zi_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatDarksEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
@@ -64,6 +65,13 @@ public class ModEntityTypes {
             () -> EntityType.Builder.<SeatEntity>of(SeatEntity::new, MobCategory.MISC)
                     .sized(0.001F, 0.001F) // 非常小的碰撞箱
                     .build("seat"));
+    
+    // BatDarks 特效实体
+    public static final RegistryObject<EntityType<BatDarksEntity>> BAT_DARKS = ENTITY_TYPES.register("bat_darks",
+            () -> EntityType.Builder.<BatDarksEntity>of(BatDarksEntity::new, MobCategory.MISC)
+                    .sized(0.6F, 1.9F) // 调整碰撞箱大小，使其更易于观察
+                    .clientTrackingRange(8)
+                    .build("bat_darks"));
 
 //    public static final RegistryObject<EntityType<KnecromghostEntity>> KNECROMGHOST = registerMob("knecromghost", KnecromghostEntity::new,
 //            0.6f, 1.6f, 0x1F1F1F, 0x0D0D0D);

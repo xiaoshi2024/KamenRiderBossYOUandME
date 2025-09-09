@@ -121,6 +121,10 @@
 
   "block.kamen_rider_boss_you_and_me.throne_block": "kivas throne",
 
+  "item.kamen_rider_boss_you_and_me.bat_stamp": "Bat-Vistamp",
+  "item.kamen_rider_boss_you_and_me.two_sidriver":"double sided drive",
+  "item.kamen_rider_boss_you_and_me.two_weapon": "double sided weapon",
+
   "message.summon.cooldown": "§c Summoning is in cooldown. Please wait for  %s§r",
   "message.summon.player_has_bat": "§You already have a clown bat§r",
   "message.summon.global_limit": "§There are too many clown bats in the world§r",

@@ -46,9 +46,20 @@ public class RidernecromItem extends ArmorItem implements GeoItem , ArmorAnimati
 				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 25;
 			}
 
+			// 防御：提升至28 点（头盔4 胸甲8 护腿7 靴子3） - 假面骑士Necrom强化版
 			@Override
 			public int getDefenseForType(Type type) {
-				return new int[]{2, 5, 6, 2}[type.getSlot().getIndex()];
+				return new int[]{4, 8, 7, 9}[type.getSlot().getIndex()];
+			}
+			// 盔甲韧性：添加韧性值4.0
+			@Override
+			public float getToughness() {
+				return 4.0f;
+			}
+			// 击退抗性：增加10%
+			@Override
+			public float getKnockbackResistance() {
+				return 0.10f;
 			}
 
 			@Override
@@ -71,15 +82,6 @@ public class RidernecromItem extends ArmorItem implements GeoItem , ArmorAnimati
 				return "ridernecrom";
 			}
 
-			@Override
-			public float getToughness() {
-				return 0f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0f;
-			}
 		}, type, properties);
 	}
 

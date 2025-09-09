@@ -1,24 +1,23 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MarikaTransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DragonfruitTransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.RiderTypes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.Optional;
 
@@ -31,6 +30,10 @@ public final class KeyInputListener {
 
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
+
+        /* ===== 1. 先处理 Two_sidriver 装载武器 ===== */
+        if (tryLoadTwoWeaponOnX(player)) return; // 如果成功装载，本次 X 键不再往下走变身逻辑
+
 
         // 1. 创世纪驱动器
         Optional<Genesis_driver> genesis = CurioUtils.findFirstCurio(player,
@@ -93,6 +96,37 @@ public final class KeyInputListener {
                         new TransformationRequestPacket(player.getUUID(), riderType, false));
             }
         }
+    }
+
+    /**
+     * X 键专属：第一次手持 TwoWeaponItem + 佩戴 DEFAULT 形态 Two_sidriver → 装载并切换 X 形态
+     * @return true 表示已处理，本次 X 键不再往下走
+     */
+    private static boolean tryLoadTwoWeaponOnX(LocalPlayer player) {
+        Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver));
+        if (opt.isEmpty()) return false;
+
+        ItemStack belt = opt.get().stack();
+        Two_sidriver.DriverType type = Two_sidriver.getDriverType(belt);
+
+        if (type == Two_sidriver.DriverType.DEFAULT) {
+            // ① 还需手持武器才发加载包
+            boolean hasWeapon = player.getMainHandItem().getItem() instanceof TwoWeaponItem
+                    || player.getOffhandItem().getItem() instanceof TwoWeaponItem;
+            if (!hasWeapon) return false;   // 不给提示，静默忽略
+            PacketHandler.INSTANCE.sendToServer(new XKeyLoadPacket(player.getUUID()));
+            return true;
+        }
+
+        if (type == Two_sidriver.DriverType.BAT) {
+            // ② BAT 形态直接发最终变身包
+            PacketHandler.INSTANCE.sendToServer(new XKeyEvilPacket(player.getUUID()));
+            return true;
+        }
+
+        return false;   // X 形态什么都不做
     }
 
     /* ========= 判断是否已穿对应骑士装甲 ========= */

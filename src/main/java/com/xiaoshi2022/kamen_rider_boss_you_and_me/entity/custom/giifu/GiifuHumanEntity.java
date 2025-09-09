@@ -14,9 +14,12 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -86,6 +89,13 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
     private static final int LEVITATION_TIME = 100;       // 5 s
     private static final ParticleType<DustParticleOptions> SCARLET = ParticleTypes.DUST;  // 猩红
 
+    // 在 Random random; 附近添加
+    private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(
+            Component.translatable("entity.kamen_rider_boss_you_and_me.giifu_human"),
+            BossEvent.BossBarColor.RED,
+            BossEvent.BossBarOverlay.PROGRESS
+    ).setDarkenScreen(true); // 可选：使屏幕变暗
+
     public GiifuHumanEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.xpReward = 500;
@@ -93,6 +103,9 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         this.statuePos = BlockPos.ZERO;
         this.sleepingPos = BlockPos.ZERO;
         this.isFlying = false;
+
+        // 设置Boss血条名称
+        this.bossEvent.setName(Component.translatable("entity.kamen_rider_boss_you_and_me.giifu_human"));
 
         // 如果有飞行相关的特殊导航需求，可以在这里初始化
         // this.navigation = this.isFlying ? new FlyingPathNavigation(this, level) : new GroundPathNavigation(this, level);
@@ -110,12 +123,29 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
                 .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 20.0D);
     }
 
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossEvent.addPlayer(player);
+    }
+
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossEvent.removePlayer(player);
+    }
+
     public void setSleepingPos(BlockPos pos) {
         this.sleepingPos = pos.immutable();
     }
 
     @Override
     public void die(DamageSource source) {
+        // 移除所有玩家从Boss事件
+        if (!level().isClientSide) {
+            this.bossEvent.removeAllPlayers();
+        }
+
         // 复活逻辑（只在服务端执行且石像存在时）
         if (!level().isClientSide && !statuePos.equals(BlockPos.ZERO)) {
             BlockState state = level().getBlockState(statuePos);
@@ -213,6 +243,11 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
+
+        // 更新Boss血条
+        if (!this.level().isClientSide) {
+            this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+        }
 
         // 粒子效果
         if (isFlying && level() instanceof ServerLevel srv) {

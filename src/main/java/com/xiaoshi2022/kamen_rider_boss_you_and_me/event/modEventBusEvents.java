@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatDarksEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
@@ -259,77 +260,89 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.LORD_BARON.get(), LordBaronEntity.createAttributes()
                     .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 15.0D)
-                    .add(Attributes.MAX_HEALTH, 300.0D)
-                    .add(Attributes.ARMOR, 10.0D)
-                    .add(Attributes.ARMOR_TOUGHNESS, 5.0D)
+                    .add(Attributes.MAX_HEALTH, 350.0D)
+                    .add(Attributes.ARMOR, 15.0D)
+                    .add(Attributes.ARMOR_TOUGHNESS, 8.0D)
+                    .add(Attributes.KNOCKBACK_RESISTANCE, 0.3D)
                     .build()
-            );
+            ); // 增强版：提高防御、韧性和生命值，添加击退抗性
 
             event.put(ModEntityTypes.GIIFUDEMOS_ENTITY.get(),
                     GiifuDemosEntity.createAttributes()
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 12.0D)
-                            .add(Attributes.MAX_HEALTH, 250.0D)
-                            .add(Attributes.ARMOR, 8.0D)
-                            .add(Attributes.ARMOR_TOUGHNESS, 4.0D)
+                            .add(Attributes.MAX_HEALTH, 300.0D)
+                            .add(Attributes.ARMOR, 12.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
+                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.2D)
                             .build()
-            );
+            ); // 增强版：提高防御、韧性和生命值，添加击退抗性
 
             event.put(ModEntityTypes.STORIOUS.get(),
                     StoriousEntity.createAttributes()
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 14.0D)
-                            .add(Attributes.MAX_HEALTH, 280.0D)
-                            .add(Attributes.ARMOR, 9.0D)
-                            .add(Attributes.ARMOR_TOUGHNESS, 4.5D)
+                            .add(Attributes.MAX_HEALTH, 320.0D)
+                            .add(Attributes.ARMOR, 14.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 7.0D)
+                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.25D)
                             .build()
-            );
+            ); // 增强版：提高防御、韧性和生命值，添加击退抗性
 
             event.put(ModEntityTypes.GIFFTARIAN.get(),
                     Gifftarian.createMonsterAttributes()
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 16.0D)
-                            .add(Attributes.MAX_HEALTH, 180.0D)
-                            .add(Attributes.ARMOR, 6.0D)
-                            .add(Attributes.ARMOR_TOUGHNESS, 3.0D)
+                            .add(Attributes.MAX_HEALTH, 220.0D)
+                            .add(Attributes.ARMOR, 10.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 5.0D)
+                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.2D)
                             .build()
-            );
+            ); // 增强版：提高防御、韧性和生命值，添加击退抗性
 
             event.put(ModEntityTypes.INVES_HEILEHIM.get(),
                     ElementaryInvesHelheim.createMonsterAttributes()
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 10.0D)
-                            .add(Attributes.MAX_HEALTH, 100.0D)
-                            .add(Attributes.ARMOR, 5.0D)
-                            .add(Attributes.ARMOR_TOUGHNESS, 2.0D)
+                            .add(Attributes.MAX_HEALTH, 130.0D)
+                            .add(Attributes.ARMOR, 8.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 4.0D)
+                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.15D)
                             .build()
-            );
+            ); // 增强版：提高防御、韧性和生命值，添加击退抗性
 
             event.put(ModEntityTypes.ANOTHER_ZI_O.get(),
                     Monster.createMonsterAttributes()
-                            .add(Attributes.MAX_HEALTH, 80.0D)
-                            .add(Attributes.MOVEMENT_SPEED, 0.26D)      // ← 调低移速
+                            .add(Attributes.MAX_HEALTH, 120.0D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.26D)      // ← 保持移速
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 8.0D)
+                            .add(Attributes.ARMOR, 10.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 4.0D)
+                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.2D)
                             .build()
-            );
+            ); // 增强版：提高生命值、防御和韧性，添加击退抗性
 
             event.put(ModEntityTypes.KIVAT_BAT_II.get(),
                     KivatBatTwoNd.createAttributes()
-                            .add(Attributes.MAX_HEALTH, 80.0D)
+                            .add(Attributes.MAX_HEALTH, 100.0D)
                             .add(Attributes.MOVEMENT_SPEED, 0.26D)
                             .add(Attributes.FLYING_SPEED, 0.6D)
                             .add(Attributes.ATTACK_DAMAGE, 8.0D)          // 必须给标准伤害
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 8.0D)
+                            .add(Attributes.ARMOR, 8.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 3.0D)
                             .build()
-            );
+            ); // 增强版：提高生命值、防御和韧性
 
             event.put(ModEntityTypes.GIIFU_HUMAN.get(),
                     GiifuHumanEntity.createAttributes()
-                            .add(Attributes.MAX_HEALTH, 500.0D)
-                            .add(Attributes.ARMOR, 20.0D)
-                            .add(Attributes.ARMOR_TOUGHNESS, 10.0D)
+                            .add(Attributes.MAX_HEALTH, 600.0D)
+                            .add(Attributes.ARMOR, 25.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 12.0D)
                             .add(Attributes.ATTACK_DAMAGE, 15.0D)
                             .add(Attributes.MOVEMENT_SPEED, 0.28D)
                             .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 20.0D)
                             .build()
-            );
+            ); // 增强版：提高生命值、防御和韧性
+
+            event.put(ModEntityTypes.BAT_DARKS.get(), BatDarksEntity.createAttributes());
 
 //            event.put(ModEntityTypes.KAITO.get(),
 //                    KaitoVillager.createAttributes()

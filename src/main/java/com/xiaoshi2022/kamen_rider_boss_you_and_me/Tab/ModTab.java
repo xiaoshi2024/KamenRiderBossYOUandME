@@ -32,6 +32,9 @@ public class ModTab {
                 output.accept(GENESIS_DRIVER.get());
                 output.accept(BANANAFRUIT.get());
                 output.accept(KIVAT_BAT_TWO_ND_ITEM.get());
+                output.accept(TWO_SIDRIVER.get());
+                output.accept(BAT_STAMP.get());
+                output.accept(TWO_WEAPON.get());
                 output.accept(LEMON_ENERGY.get());
                 output.accept(PEACH_ENERGY.get());
                 output.accept(DRAGONFRUIT.get());

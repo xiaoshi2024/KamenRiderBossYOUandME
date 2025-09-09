@@ -1,0 +1,107 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    128,
+    128
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        -0.25,
+        0.25
+      ],
+      "scale": [
+        1.14453125,
+        1.224609375,
+        1.2265625
+      ]
+    },
+    "thirdperson_lefthand": {
+      "scale": [
+        1.251953125,
+        1.37109375,
+        1.267578125
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        50.75,
+        0,
+        0
+      ],
+      "scale": [
+        1.16796875,
+        1.16796875,
+        1.16796875
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        38,
+        0,
+        0
+      ],
+      "translation": [
+        3.25,
+        0,
+        0
+      ],
+      "scale": [
+        1.107421875,
+        1.107421875,
+        1.107421875
+      ]
+    },
+    "gui": {
+      "rotation": [
+        67.85,
+        -37.11,
+        76.19
+      ],
+      "translation": [
+        -6,
+        -2.75,
+        0
+      ],
+      "scale": [
+        1.263671875,
+        1.263671875,
+        1.263671875
+      ]
+    },
+    "head": {
+      "rotation": [
+        0,
+        0,
+        86.75
+      ],
+      "translation": [
+        0,
+        7.5,
+        0
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        90,
+        46.75,
+        -90
+      ],
+      "translation": [
+        8.25,
+        -3,
+        0
+      ],
+      "scale": [
+        1.400390625,
+        1.400390625,
+        1.400390625
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/two_weapon"
+  }
+}

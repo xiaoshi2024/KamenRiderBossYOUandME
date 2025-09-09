@@ -4,11 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.sengokudriver.sengokudrivers_epmtysRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.Mega_uiorder_item.Mega_uiorderRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -23,6 +21,7 @@ public class GenericCurioRenderer implements ICurioRenderer {
     private final ICurioRenderer sengokuDriverRenderer = new sengokudrivers_epmtysRenderer();
     private final ICurioRenderer genesisDriverRenderer = new GenesisDriverRenderer();
     private final ICurioRenderer drakKivaBeltRenderer = new DrakKivaBeltRenderer();
+    private final ICurioRenderer two_sidriverRenderer = new Two_sidriverRenderer();
 
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource buffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
@@ -35,6 +34,8 @@ public class GenericCurioRenderer implements ICurioRenderer {
                 genesisDriverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             } else if (stack.getItem() instanceof DrakKivaBelt) {
                 drakKivaBeltRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            }else if (stack.getItem() instanceof Two_sidriver) {
+                two_sidriverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }
         }
     }

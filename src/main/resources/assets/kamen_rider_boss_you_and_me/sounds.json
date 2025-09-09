@@ -268,5 +268,32 @@
         "stream": false
       }
     ]
+  },
+  "bat": {
+    "subtitle": "bat",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:bat",
+        "stream": false
+      }
+    ]
+  },
+  "evilr": {
+    "subtitle": "Versus up！Madness！Hopeless！Darkness！Bat！ ",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:evilr",
+        "stream": false
+      }
+    ]
+  },
+  "evil_by": {
+    "subtitle": "Eeny，meeny，miny，moe×N",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:evil_by",
+        "stream": false
+      }
+    ]
   }
 }

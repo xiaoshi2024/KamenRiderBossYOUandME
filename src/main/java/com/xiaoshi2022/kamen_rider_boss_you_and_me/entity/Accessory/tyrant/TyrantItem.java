@@ -46,9 +46,20 @@ public class TyrantItem extends ArmorItem implements GeoItem , KamenBossArmor , 
 				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 25;
 			}
 
+			// 防御：提升至38
 			@Override
 			public int getDefenseForType(Type type) {
-				return new int[]{1, 3, 4, 1}[type.getSlot().getIndex()];
+				return new int[]{9, 9, 7, 3}[type.getSlot().getIndex()];
+			}
+			// 盔甲韧性：添加韧性值4.5
+			@Override
+			public float getToughness() {
+				return 4.5f;
+			}
+			// 击退抗性：增加15%
+			@Override
+			public float getKnockbackResistance() {
+				return 0.15f;
 			}
 
 			@Override
@@ -71,15 +82,6 @@ public class TyrantItem extends ArmorItem implements GeoItem , KamenBossArmor , 
 				return "tyrant";
 			}
 
-			@Override
-			public float getToughness() {
-				return 0f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0f;
-			}
 		}, type, properties);
 	}
 

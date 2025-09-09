@@ -34,10 +34,20 @@ public class ZangetsuShinItem extends ArmorItem implements GeoItem , KamenBossAr
             public int getDurabilityForType(Type type) {
                 return new int[]{520, 600, 640, 440}[type.getSlot().getIndex()];
             }
-            // 防御：17 点（头盔3 胸6 腿5 靴3）
+            // 防御：提升至27
             @Override
             public int getDefenseForType(Type type) {
-                return new int[]{3, 6, 5, 3}[type.getSlot().getIndex()];
+                return new int[]{5, 9, 8, 4}[type.getSlot().getIndex()];
+            }
+            // 盔甲韧性：提高至4.0
+            @Override
+            public float getToughness() {
+                return 4.0f;
+            }
+            // 击退抗性：增加15%
+            @Override
+            public float getKnockbackResistance() {
+                return 0.15f;
             }
             // 高附魔能力
             @Override
@@ -59,16 +69,7 @@ public class ZangetsuShinItem extends ArmorItem implements GeoItem , KamenBossAr
             public String getName() {
                 return "zangetsu_shin";
             }
-            // 韧性：3.5（高于钻石 2.0，略低于下界合金 3.0）
-            @Override
-            public float getToughness() {
-                return 3.5f;
-            }
-            // 击退抗性：20%
-            @Override
-            public float getKnockbackResistance() {
-                return 0.2f;
-            }
+
         }, type, properties);
     }
 

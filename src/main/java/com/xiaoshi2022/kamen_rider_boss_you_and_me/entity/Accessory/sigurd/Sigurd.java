@@ -34,10 +34,20 @@ public class Sigurd extends ArmorItem implements GeoItem , KamenBossArmor , Armo
             public int getDurabilityForType(Type type) {
                 return new int[]{500, 580, 620, 420}[type.getSlot().getIndex()];
             }
-            // 防御：16 点（头盔3 胸5 腿5 靴3）
+            // 防御：提升至23 点（头盔4 胸7 腿7 靴3） - 假面骑士Sigurd强化版
             @Override
             public int getDefenseForType(Type type) {
-                return new int[]{3, 5, 5, 3}[type.getSlot().getIndex()];
+                return new int[]{4, 8, 8, 3}[type.getSlot().getIndex()];
+            }
+            // 盔甲韧性：提高至3.5
+            @Override
+            public float getToughness() {
+                return 3.5f;
+            }
+            // 击退抗性：增加10%
+            @Override
+            public float getKnockbackResistance() {
+                return 0.10f;
             }
             // 高附魔能力
             @Override
@@ -59,16 +69,7 @@ public class Sigurd extends ArmorItem implements GeoItem , KamenBossArmor , Armo
             public String getName() {
                 return "sigurd";
             }
-            // 韧性：3.0（等于下界合金）
-            @Override
-            public float getToughness() {
-                return 3.0f;
-            }
-            // 击退抗性：15%
-            @Override
-            public float getKnockbackResistance() {
-                return 0.15f;
-            }
+
         }, type, properties);
     }
 

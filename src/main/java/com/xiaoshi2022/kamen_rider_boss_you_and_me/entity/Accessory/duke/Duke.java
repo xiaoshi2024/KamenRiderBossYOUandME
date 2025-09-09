@@ -57,7 +57,7 @@ public class Duke extends ArmorItem implements GeoItem , KamenBossArmor, ArmorAn
             // 防御值
             @Override
             public int getDefenseForType(ArmorItem.Type type) {
-                return new int[]{3, 7, 6, 3}[type.getSlot().getIndex()]; // 总防御19
+                return new int[]{5, 9, 8, 7}[type.getSlot().getIndex()]; // 总防御29
             }
 
             // 附魔能力

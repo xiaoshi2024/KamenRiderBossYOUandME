@@ -53,6 +53,13 @@ public class ModBossSounds {
     public static final RegistryObject<SoundEvent> XIUJC = REGISTRY.register("xiujc",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "xiujc")));
 
+    public static final RegistryObject<SoundEvent> BAT = REGISTRY.register("bat",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "bat")));
+    public static final RegistryObject<SoundEvent> EVILR = REGISTRY.register("evilr",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "evilr")));
+    public static final RegistryObject<SoundEvent> EVIL_BY = REGISTRY.register("evil_by",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "evil_by")));
+
     public static final RegistryObject<SoundEvent> SEAL = REGISTRY.register("seal",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "seal")));
     public static final RegistryObject<SoundEvent> STAND_BY_NECROM = REGISTRY.register("stand_by_necrom",

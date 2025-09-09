@@ -31,16 +31,25 @@ public class baron_lemonItem extends ArmorItem implements GeoItem , KamenBossArm
 
     public baron_lemonItem(ArmorItem.Type type, Item.Properties properties) {
         super(new ArmorMaterial() {
-            // 耐久度 (参考下界合金套，但略低)
+            // 耐久度 (提升至接近下界合金套)
             @Override
             public int getDurabilityForType(ArmorItem.Type type) {
-                return new int[]{481, 555, 592, 407}[type.getSlot().getIndex()]; // 约等于钻石套的1.2倍
+                return new int[]{520, 600, 640, 440}[type.getSlot().getIndex()]; // 约等于下界合金套
             }
-
-            // 防御值 (平衡为轻甲类型)
+            // 防御：提升至23 点（头盔4 胸甲9 护腿7 靴子3） - 假面骑士Baron Lemon强化版
             @Override
             public int getDefenseForType(ArmorItem.Type type) {
-                return new int[]{3, 6, 5, 3}[type.getSlot().getIndex()]; // 总防御点数：17（钻石套20）
+                return new int[]{4, 9, 7, 3}[type.getSlot().getIndex()];
+            }
+            // 盔甲韧性：添加韧性值3.5
+            @Override
+            public float getToughness() {
+                return 3.5f;
+            }
+            // 击退抗性：增加10%
+            @Override
+            public float getKnockbackResistance() {
+                return 0.10f;
             }
 
             // 附魔能力（高于钻石）
@@ -67,17 +76,6 @@ public class baron_lemonItem extends ArmorItem implements GeoItem , KamenBossArm
                 return "baron_lemon";
             }
 
-            // 韧性（中等，低于下界合金）
-            @Override
-            public float getToughness() {
-                return 2.5f; // 钻石2.0，下界合金3.0
-            }
-
-            // 击退抗性（部分抗性）
-            @Override
-            public float getKnockbackResistance() {
-                return 0.1f; // 10%击退抗性
-            }
         }, type, properties);
     }
 
