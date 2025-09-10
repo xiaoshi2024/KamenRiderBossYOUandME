@@ -32,7 +32,7 @@ public class EvilBatsAbilityHandler {
                             player.getEffect(MobEffects.NIGHT_VISION).getDuration() != Integer.MAX_VALUE)) {
                 player.addEffect(new MobEffectInstance(
                         MobEffects.NIGHT_VISION,
-                        40, 0, false, false));
+                        220, 0, false, false)); // 增加夜视效果的持续时间到 220 ticks (约 11 秒)
             }
 
             // ② 吸血（黑暗力量）

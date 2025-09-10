@@ -1,5 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatStampFinishEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
@@ -30,13 +32,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkDirection;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KickDamageHelper;
 
 @Mod.EventBusSubscriber
 public class KicktimeProcedure {
+
+	// 添加一个静态变量来跟踪每个玩家的特效实体
+	private static final Map<UUID, Integer> playerToEffectEntity = new HashMap<>();
+
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		if (event.phase == TickEvent.Phase.END) {
@@ -53,7 +58,11 @@ public class KicktimeProcedure {
 			return;
 
 		// 检查是否正在踢击
-		if (!isKicking(entity)) return;
+		if (!isKicking(entity)) {
+			// 如果不在踢击状态，清理特效实体
+			cleanupEffectEntity(entity);
+			return;
+		}
 
 		// 检查头盔类型并处理相应的踢击逻辑
 		ItemStack helmet = getHelmet(entity);
@@ -74,10 +83,130 @@ public class KicktimeProcedure {
 		} else if (helmet.getItem() == ModItems.TYRANT_HELMET.get()) {
 			handleKick(world, entity, ParticleTypesRegistry.DRAGONLICE.get());
 		} else if (helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.DRAGONLICE.get());
+			// 处理 EVIL_BATS_HELMET 的特效和移动
+			handleEvilBatsKick(world, entity);
 		} else if (helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) {
-			// 新增：处理黑暗Kiva骑士踢，使用dark_bat粒子
 			handleKick(world, entity, ParticleTypesRegistry.DARK_BAT.get());
+		}
+	}
+
+	// 处理 EVIL_BATS_HELMET 的骑士踢特效
+	private static void handleEvilBatsKick(LevelAccessor world, Entity entity) {
+		if (world instanceof ServerLevel serverLevel && entity instanceof Player player) {
+			UUID playerId = player.getUUID();
+
+			// 检查是否已经为该玩家创建了特效实体
+			if (!playerToEffectEntity.containsKey(playerId)) {
+				// 创建 BatStampFinishEntity 实体
+				BatStampFinishEntity batStampFinishEntity = new BatStampFinishEntity(ModEntityTypes.BAT_STAMP_FINISH.get(), serverLevel);
+				batStampFinishEntity.setTargetPlayer(player);
+				batStampFinishEntity.startFinish(); // 开始播放 skick 动画
+				serverLevel.addFreshEntity(batStampFinishEntity);
+
+				// 存储实体ID
+				playerToEffectEntity.put(playerId, batStampFinishEntity.getId());
+			} else {
+				// 如果实体已存在，检查是否还存活
+				int entityId = playerToEffectEntity.get(playerId);
+				Entity existingEntity = serverLevel.getEntity(entityId);
+				if (existingEntity == null || !existingEntity.isAlive()) {
+					// 实体已消失，重新创建
+					playerToEffectEntity.remove(playerId);
+					handleEvilBatsKick(world, entity); // 递归调用重新创建
+					return;
+				}
+			}
+
+			// 确保玩家踢击动画正常播放
+			handleAnimation(world, entity);
+			syncAnimation(world, entity);
+		}
+
+		// 单独处理 EVIL_BATS_HELMET 的抛物线移动
+		handleEvilBatsParabolicMovement(world, entity);
+	}
+
+	// 新增：专门处理 EVIL_BATS_HELMET 的抛物线移动
+	private static void handleEvilBatsParabolicMovement(LevelAccessor world, Entity entity) {
+		// 设置移动速度 - 抛物线实现
+		Vec3 look = entity.getLookAngle();
+
+		// 水平速度
+		double horizontalSpeed = 1.5;
+		double horizontalX = look.x * horizontalSpeed;
+		double horizontalZ = look.z * horizontalSpeed;
+
+		// 获取当前垂直速度并应用重力
+		double currentY = entity.getDeltaMovement().y;
+		double newY;
+
+		// 获取踢击状态
+		KRBVariables.PlayerVariables variables = entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+				.orElse(new KRBVariables.PlayerVariables());
+
+		if (variables.kickStartTime == 0L) {
+			// 第一次执行踢击，初始化
+			variables.kickStartTime = System.currentTimeMillis();
+			newY = 0.4; // 初始向上速度
+		} else {
+			// 简单的重力模拟：每tick减少速度
+			newY = currentY - 0.08;
+		}
+
+		// 限制最大下落速度
+		if (newY < -1.0) {
+			newY = -1.0;
+		}
+
+		// 同步变量
+		variables.syncPlayerVariables(entity);
+
+		entity.setDeltaMovement(new Vec3(
+				horizontalX,
+				newY,
+				horizontalZ
+		));
+	}
+
+	// 清理特效实体
+	private static void cleanupEffectEntity(Entity entity) {
+		if (entity instanceof Player player) {
+			UUID playerId = player.getUUID();
+			if (playerToEffectEntity.containsKey(playerId)) {
+				// 从世界中移除实体
+				if (player.level() instanceof ServerLevel serverLevel) {
+					int entityId = playerToEffectEntity.get(playerId);
+					Entity effectEntity = serverLevel.getEntity(entityId);
+					if (effectEntity != null) {
+						effectEntity.discard();
+					}
+				}
+				playerToEffectEntity.remove(playerId);
+			}
+		}
+	}
+
+	// 新增：重置踢击状态（修改这个方法）
+	private static void resetKickStatus(Player player) {
+		KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+				.orElse(new KRBVariables.PlayerVariables());
+
+		variables.kcik = false;
+		variables.kickStartTime = 0L;
+		variables.lastKickTime = System.currentTimeMillis();
+		variables.syncPlayerVariables(player);
+
+		// 清理特效实体
+		cleanupEffectEntity(player);
+
+		// 停止踢击动画
+		if (player.level().isClientSide() && player instanceof net.minecraft.client.player.AbstractClientPlayer clientPlayer) {
+			var animation = (dev.kosmx.playerAnim.api.layered.ModifierLayer<dev.kosmx.playerAnim.api.layered.IAnimation>)
+					dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess.getPlayerAssociatedData(clientPlayer)
+							.get(new net.minecraft.resources.ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
+			if (animation != null) {
+				animation.setAnimation(null);
+			}
 		}
 	}
 
@@ -97,24 +226,23 @@ public class KicktimeProcedure {
 	}
 
 	// 处理踢击逻辑
-	// 处理踢击逻辑
 	private static void handleKick(LevelAccessor world, Entity entity, ParticleOptions particleOptions) {
 		// 设置移动速度 - 更简单的抛物线实现
 		Vec3 look = entity.getLookAngle();
-	
+
 		// 水平速度
 		double horizontalSpeed = 1.5;
 		double horizontalX = look.x * horizontalSpeed;
 		double horizontalZ = look.z * horizontalSpeed;
-	
+
 		// 获取当前垂直速度并应用重力
 		double currentY = entity.getDeltaMovement().y;
 		double newY;
-	
+
 		// 获取踢击状态
 		KRBVariables.PlayerVariables variables = entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
 				.orElse(new KRBVariables.PlayerVariables());
-	
+
 		if (variables.kickStartTime == 0L) {
 			// 第一次执行踢击，初始化
 			variables.kickStartTime = System.currentTimeMillis();
@@ -123,24 +251,24 @@ public class KicktimeProcedure {
 			// 简单的重力模拟：每tick减少速度
 			newY = currentY - 0.08;
 		}
-	
+
 		// 限制最大下落速度
 		if (newY < -1.0) {
 			newY = -1.0;
 		}
-	
+
 		// 同步变量
 		variables.syncPlayerVariables(entity);
-	
+
 		entity.setDeltaMovement(new Vec3(
 				horizontalX,
 				newY,
 				horizontalZ
 		));
-	
+
 		// 处理动画和粒子效果
 		handleAnimation(world, entity);
-	
+
 		if (world instanceof ServerLevel srvLvl) {
 			Vec3 looks = entity.getLookAngle();
 			srvLvl.sendParticles(
@@ -155,36 +283,36 @@ public class KicktimeProcedure {
 					0
 			);
 		}
-	
+
 		syncAnimation(world, entity);
-		
+
 		// 新增：检测附近是否有其他正在踢击的玩家，实现对踢功能
 		checkAndHandleDualKick(world, entity);
 	}
-	
+
 	// 新增：检测并处理对踢
 	private static void checkAndHandleDualKick(LevelAccessor world, Entity kicker) {
 		if (!(world instanceof ServerLevel serverLevel) || !(kicker instanceof Player)) {
 			return;
 		}
-		
+
 		// 获取踢者的变量
 		KRBVariables.PlayerVariables kickerVars = kicker.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
 				.orElse(new KRBVariables.PlayerVariables());
-		
+
 		// 检查踢者是否在空中
 		if (kicker.onGround()) {
 			return;
 		}
-		
+
 		// 扫描附近的实体
 		double scanRadius = 3.0; // 检测半径
 		List<Entity> nearbyEntities = serverLevel.getEntities(
-				kicker, 
+				kicker,
 				kicker.getBoundingBox().inflate(scanRadius),
 				e -> e instanceof Player && e != kicker && !isKickingEntityOnCooldown((Player)e)
 		);
-		
+
 		for (Entity nearbyEntity : nearbyEntities) {
 			if (nearbyEntity instanceof Player targetPlayer && isKicking(nearbyEntity)) {
 				// 两个玩家都在空中进行骑士踢，可以触发对踢
@@ -193,28 +321,28 @@ public class KicktimeProcedure {
 			}
 		}
 	}
-	
+
 	// 新增：检查玩家是否在对踢冷却中
 	private static boolean isKickingEntityOnCooldown(Player player) {
 		KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
 				.orElse(new KRBVariables.PlayerVariables());
-		
+
 		long currentTime = System.currentTimeMillis();
 		return currentTime - variables.lastKickTime < 2000; // 2秒冷却时间
 	}
-	
+
 	// 新增：处理对踢伤害
 	private static void handleDualKickDamage(ServerLevel world, Player kicker, Player target) {
 		// 获取双方的踢击伤害
 		float kickerDamage = KickDamageHelper.getKickDamage(kicker);
 		float targetDamage = KickDamageHelper.getKickDamage(target);
-		
+
 		// 对踢时，双方受到对方的踢击伤害
 		kicker.hurt(kicker.damageSources().playerAttack(target), targetDamage);
 		target.hurt(target.damageSources().playerAttack(kicker), kickerDamage);
-		
+
 		// 播放对踢特效和声音
-		world.playSound(null, kicker.getX(), kicker.getY(), kicker.getZ(), 
+		world.playSound(null, kicker.getX(), kicker.getY(), kicker.getZ(),
 				net.minecraft.sounds.SoundEvents.GENERIC_EXPLODE, net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
 
 		// 创建爆炸粒子效果
@@ -227,32 +355,12 @@ public class KicktimeProcedure {
 				(kicker.getZ() + target.getZ()) / 2,
 				10, 0.5, 0.5, 0.5, 0.1
 		);
-		
+
 		// 重置双方的踢击状态
 		resetKickStatus(kicker);
 		resetKickStatus(target);
 	}
-	
-	// 新增：重置踢击状态
-	private static void resetKickStatus(Player player) {
-		KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-				.orElse(new KRBVariables.PlayerVariables());
-		
-		variables.kcik = false;
-		variables.kickStartTime = 0L;
-		variables.lastKickTime = System.currentTimeMillis();
-		variables.syncPlayerVariables(player);
-		
-		// 停止踢击动画
-		if (player.level().isClientSide() && player instanceof net.minecraft.client.player.AbstractClientPlayer clientPlayer) {
-			var animation = (dev.kosmx.playerAnim.api.layered.ModifierLayer<dev.kosmx.playerAnim.api.layered.IAnimation>) 
-					dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess.getPlayerAssociatedData(clientPlayer)
-					.get(new net.minecraft.resources.ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
-			if (animation != null) {
-				animation.setAnimation(null);
-			}
-		}
-	}
+
 
 	// 处理动画
 	private static void handleAnimation(LevelAccessor world, Entity entity) {

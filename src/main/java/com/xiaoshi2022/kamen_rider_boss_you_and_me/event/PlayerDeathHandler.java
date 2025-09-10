@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
@@ -41,13 +42,22 @@ public class PlayerDeathHandler {
                 // 1. 先确定锁种类型（盔甲还在）
                 String lockseedType = determineLockseedType(player);
 
-                // 2. 再清空盔甲
+                // 2. 检查是否是蝙蝠形态
+                boolean isBatForm = isInBatForm(player);
+
+                // 3. 检查是否需要补偿
+                if (isBatForm && !hasBatFormWeaponInInventory(player)) {
+                    // 如果是蝙蝠形态且背包中没有蝙蝠形态的武器，则进行补偿
+                    returnBatFormItems(player);
+                }
+
+                // 4. 再清空盔甲
                 clearTransformationArmor(player);
 
-                // 3. 返还腰带
-                returnBelt(player);
+                // 5. 返还腰带
+                returnBelt(player, isBatForm);
 
-                // 4. 返还刚才记下来的锁种
+                // 6. 返还刚才记下来的锁种
                 List<ItemStack> lockseeds = getLockseedStacksByType(lockseedType);
                 for (ItemStack stack : lockseeds) {
                     if (!player.getInventory().add(stack)) {
@@ -58,7 +68,50 @@ public class PlayerDeathHandler {
         }
     }
 
-    private static void returnBelt(Player player) {
+    // 修改：检查玩家是否处于蝙蝠形态
+    private static boolean isInBatForm(Player player) {
+        // 检查是否装备了邪恶蝙蝠盔甲
+        if (hasEvilBatsArmor(player)) {
+            return true;
+        }
+
+        // 检查双面驱动器是否是蝙蝠形态
+        return CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Two_sidriver)
+                .map(curio -> {
+                    ItemStack belt = curio.stack();
+                    Two_sidriver.DriverType driverType = ((Two_sidriver) belt.getItem()).getDriverType(belt);
+                    return driverType == Two_sidriver.DriverType.BAT;
+                })
+                .orElse(false);
+    }
+
+    // 修改：检查玩家背包或手中是否有蝙蝠形态的武器
+    private static boolean hasBatFormWeaponInInventory(Player player) {
+        // 检查主手和副手
+        if (isBatWeapon(player.getMainHandItem()) || isBatWeapon(player.getOffhandItem())) {
+            return true;
+        }
+
+        // 检查背包
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (isBatWeapon(stack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 新增：辅助方法检查是否为蝙蝠武器
+    private static boolean isBatWeapon(ItemStack stack) {
+        if (stack.getItem() instanceof TwoWeaponItem) {
+            TwoWeaponItem.Variant variant = ((TwoWeaponItem) stack.getItem()).getWeaponType(stack);
+            return variant == TwoWeaponItem.Variant.BAT;
+        }
+        return false;
+    }
+
+    private static void returnBelt(Player player, boolean isBatForm) {
         // 1. 创世纪驱动器 ----------------------------------------------------------
         CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Genesis_driver)
                 .ifPresent(curio -> {
@@ -75,7 +128,7 @@ public class PlayerDeathHandler {
                     );
                 });
 
-// 2. 战国驱动器 ------------------------------------------------------------
+        // 2. 战国驱动器 ------------------------------------------------------------
         CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof sengokudrivers_epmty)
                 .ifPresent(curio -> {
                     ItemStack belt = curio.stack().copy();
@@ -103,12 +156,15 @@ public class PlayerDeathHandler {
                                     handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY)));
                 });
 
-        // 4. 双面驱动器 ----------------------------------------------------------
+        // 4. 双面驱动器 ------------------------------------------------------------
         CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Two_sidriver)
-                .ifPresent(curio -> {
+                .ifPresent(curio ->
+                {
                     ItemStack belt = curio.stack().copy();
-                    // 如果有模式需要重置可以在这里调用
-                     ((Two_sidriver) belt.getItem()).setDriverType(belt, Two_sidriver.DriverType.DEFAULT);
+                    // 如果是蝙蝠形态，重置为默认形态
+                    if (isBatForm) {
+                        ((Two_sidriver) belt.getItem()).setDriverType(belt, Two_sidriver.DriverType.DEFAULT);
+                    }
 
                     if (!player.getInventory().add(belt)) player.drop(belt, false);
 
@@ -119,15 +175,37 @@ public class PlayerDeathHandler {
                             )
                     );
                 });
-        // 5. 返还蝙蝠印章和双面武器
-        if (hasEvilBatsArmor(player)) {
+    }
+
+    // 新增：返还蝙蝠形态相关的物品
+    private static void returnBatFormItems(Player player) {
+        // 检查腰带是否为蝙蝠形态
+        boolean isBeltBatForm = CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Two_sidriver)
+                .map(curio -> {
+                    ItemStack belt = curio.stack();
+                    Two_sidriver.DriverType driverType = ((Two_sidriver) belt.getItem()).getDriverType(belt);
+                    return driverType == Two_sidriver.DriverType.BAT;
+                })
+                .orElse(false);
+
+        // 只有当腰带是蝙蝠形态时才给予补偿
+        if (isBeltBatForm) {
             // 返还蝙蝠印章
             ItemStack batStamp = new ItemStack(ModItems.BAT_STAMP.get());
-            if (!player.getInventory().add(batStamp)) player.drop(batStamp, false);
+            if (!player.getInventory().add(batStamp)) {
+                player.drop(batStamp, false);
+            }
 
-            // 返还双面武器
-            ItemStack twoWeapon = new ItemStack(ModItems.TWO_WEAPON.get());
-            if (!player.getInventory().add(twoWeapon)) player.drop(twoWeapon, false);
+            // 返还普通双面武器（非蝙蝠形态的武器）
+            ItemStack normalWeapon = new ItemStack(ModItems.TWO_WEAPON.get());
+            // 确保武器是默认形态
+            if (normalWeapon.getItem() instanceof TwoWeaponItem) {
+                ((TwoWeaponItem) normalWeapon.getItem()).setWeaponType(normalWeapon, TwoWeaponItem.Variant.DEFAULT);
+            }
+
+            if (!player.getInventory().add(normalWeapon)) {
+                player.drop(normalWeapon, false);
+            }
         }
     }
 
@@ -137,14 +215,14 @@ public class PlayerDeathHandler {
             if (slot.getType() == EquipmentSlot.Type.ARMOR) {
                 ItemStack stack = player.getItemBySlot(slot);
                 if (stack.getItem() instanceof rider_baronsItem ||
-                    stack.getItem() instanceof baron_lemonItem ||
-                    stack.getItem() instanceof Duke ||
-                    stack.getItem() instanceof RidernecromItem ||
-                    stack.getItem() instanceof ZangetsuShinItem ||
+                        stack.getItem() instanceof baron_lemonItem ||
+                        stack.getItem() instanceof Duke ||
+                        stack.getItem() instanceof RidernecromItem ||
+                        stack.getItem() instanceof ZangetsuShinItem ||
                         stack.getItem() instanceof TyrantItem ||
-                    stack.getItem() instanceof Sigurd ||
+                        stack.getItem() instanceof Sigurd ||
                         stack.getItem() instanceof Dark_orangels ||
-                    stack.getItem() instanceof Marika ||
+                        stack.getItem() instanceof Marika ||
                         stack.getItem() instanceof EvilBatsArmor ||
                         stack.getItem() instanceof DarkKivaItem
                 ) {
@@ -172,16 +250,16 @@ public class PlayerDeathHandler {
         for (int i = 0; i < 4; i++) {
             ItemStack armorStack = player.getInventory().armor.get(i);
             if (armorStack.getItem() instanceof rider_baronsItem ||
-                armorStack.getItem() instanceof baron_lemonItem ||
-                armorStack.getItem() instanceof Duke ||
-                armorStack.getItem() instanceof RidernecromItem ||
-                armorStack.getItem() instanceof ZangetsuShinItem ||
-                armorStack.getItem() instanceof Sigurd ||
-                armorStack.getItem() instanceof TyrantItem ||
+                    armorStack.getItem() instanceof baron_lemonItem ||
+                    armorStack.getItem() instanceof Duke ||
+                    armorStack.getItem() instanceof RidernecromItem ||
+                    armorStack.getItem() instanceof ZangetsuShinItem ||
+                    armorStack.getItem() instanceof Sigurd ||
+                    armorStack.getItem() instanceof TyrantItem ||
                     armorStack.getItem() instanceof Dark_orangels ||
                     armorStack.getItem() instanceof EvilBatsArmor ||
                     armorStack.getItem() instanceof DarkKivaItem ||
-                armorStack.getItem() instanceof Marika) {
+                    armorStack.getItem() instanceof Marika) {
                 player.getInventory().armor.set(i, ItemStack.EMPTY);
             }
         }
@@ -194,7 +272,7 @@ public class PlayerDeathHandler {
         if (helmet.getItem() == ModItems.MARIKA_HELMET.get()) {
             return "PEACH";
         } else if (helmet.getItem() == ModItems.BARON_LEMON_HELMET.get() ||
-                   helmet.getItem() == ModItems.DUKE_HELMET.get()) {
+                helmet.getItem() == ModItems.DUKE_HELMET.get()) {
             return "LEMON";
         } else if (helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()) {
             return "BANANA";
@@ -213,7 +291,7 @@ public class PlayerDeathHandler {
         if (chestplate.getItem() == ModItems.MARIKA_CHESTPLATE.get()) {
             return "PEACH";
         } else if (chestplate.getItem() == ModItems.BARON_LEMON_CHESTPLATE.get() ||
-                   chestplate.getItem() == ModItems.DUKE_CHESTPLATE.get()) {
+                chestplate.getItem() == ModItems.DUKE_CHESTPLATE.get()) {
             return "LEMON";
         } else if (chestplate.getItem() == ModItems.RIDER_BARONS_CHESTPLATE.get()) {
             return "BANANA";
@@ -247,9 +325,9 @@ public class PlayerDeathHandler {
                 list.add(new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY.get()));
                 break;
 
-                case "DRAGONFRUIT":
-                    list.add(new ItemStack(ModItems.DRAGONFRUIT.get()));
-                    break;
+            case "DRAGONFRUIT":
+                list.add(new ItemStack(ModItems.DRAGONFRUIT.get()));
+                break;
             case "ORANGE":
                 // 返回两个锁种
                 list.add(new ItemStack(ModItems.LEMON_ENERGY.get()));

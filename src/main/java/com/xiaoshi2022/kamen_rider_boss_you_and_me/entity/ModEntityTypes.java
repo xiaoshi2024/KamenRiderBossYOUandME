@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Another_Zi_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatDarksEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatStampFinishEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
@@ -72,6 +73,13 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.9F) // 调整碰撞箱大小，使其更易于观察
                     .clientTrackingRange(8)
                     .build("bat_darks"));
+    
+    // BatStampFinish 特效实体
+    public static final RegistryObject<EntityType<BatStampFinishEntity>> BAT_STAMP_FINISH = ENTITY_TYPES.register("bat_stamp_finish",
+            () -> EntityType.Builder.<BatStampFinishEntity>of(BatStampFinishEntity::new, MobCategory.MISC)
+                    .sized(0.8F, 1.5F) // 调整碰撞箱大小
+                    .clientTrackingRange(8)
+                    .build("bat_stamp_finish"));
 
 //    public static final RegistryObject<EntityType<KnecromghostEntity>> KNECROMGHOST = registerMob("knecromghost", KnecromghostEntity::new,
 //            0.6f, 1.6f, 0x1F1F1F, 0x0D0D0D);

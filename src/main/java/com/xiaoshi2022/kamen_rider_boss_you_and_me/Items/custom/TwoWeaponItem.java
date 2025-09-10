@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.TwoWeapon.TwoWeaponRenderer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -56,6 +57,19 @@ public class TwoWeaponItem extends SwordItem implements GeoItem {
 
     public enum Variant {
         DEFAULT, BAT
+    }
+
+    public void setWeaponType(ItemStack stack, Variant type) {
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putString("WeaponType", type.name());
+    }
+
+    public Variant getWeaponType(ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.contains("WeaponType")) {
+            return Variant.valueOf(tag.getString("WeaponType"));
+        }
+        return Variant.DEFAULT;
     }
 
     private static final String VARIANT_TAG = "TwoWeaponVariant";

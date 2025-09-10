@@ -6,17 +6,22 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatDarksEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.worldgen.dimension.GiifuCurseDimension;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.util.ITeleporter;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -55,6 +60,44 @@ public class BatStampItem extends Item implements GeoItem {
                 return this.renderer;
             }
         });
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        Level level = context.getLevel();
+        Player player = context.getPlayer();
+
+        if (player != null && !level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+            // 传送至基夫体内世界
+            teleportToGiifuDimension(serverPlayer);
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide());
+    }
+
+    private void teleportToGiifuDimension(ServerPlayer player) {
+        if (player.level().dimension() == GiifuCurseDimension.GIIFU_CURSE_DIM) {
+            // 如果已经在基夫维度，传送回主世界
+            player.changeDimension(player.server.overworld(), new SimpleTeleporter());
+        } else {
+            // 传送到基夫维度
+            player.changeDimension(
+                    player.server.getLevel(GiifuCurseDimension.GIIFU_CURSE_DIM),
+                    new SimpleTeleporter()
+            );
+        }
+    }
+
+    // 简单的传送器实现
+    private static class SimpleTeleporter implements ITeleporter {
+        public Vec3 getPortalArrivalPosition(net.minecraft.server.level.ServerLevel level, net.minecraft.world.entity.Entity entity, float yRot) {
+            // 传送到平台中心上方
+            return new Vec3(
+                    GiifuCurseDimension.PLATFORM_CENTER.getX() + 0.5,
+                    GiifuCurseDimension.PLATFORM_CENTER.getY() + 1,
+                    GiifuCurseDimension.PLATFORM_CENTER.getZ() + 0.5
+            );
+        }
     }
 
     @Override

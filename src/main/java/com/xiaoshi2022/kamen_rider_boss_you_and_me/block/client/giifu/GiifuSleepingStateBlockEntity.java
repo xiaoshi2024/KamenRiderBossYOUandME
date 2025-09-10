@@ -35,8 +35,8 @@ public class GiifuSleepingStateBlockEntity extends BlockEntity implements GeoBlo
         if (isKicked()) return;
         accumulatedDamage += amount;
 
-        // 每 8 点伤害降低一次硬度
-        float hardnessReduction = accumulatedDamage / 8.0f;
+        // 每 20 点伤害降低一次硬度
+        float hardnessReduction = accumulatedDamage / 20.0f;
         float remainingHardness = Math.max(3.0f - hardnessReduction, 0.0f);
 
         if (remainingHardness <= 0.0f) {
