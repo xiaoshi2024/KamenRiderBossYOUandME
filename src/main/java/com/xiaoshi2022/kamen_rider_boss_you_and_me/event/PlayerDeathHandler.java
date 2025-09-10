@@ -2,8 +2,10 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.EvilBatsArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
@@ -101,6 +103,32 @@ public class PlayerDeathHandler {
                                     handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY)));
                 });
 
+        // 4. 双面驱动器 ----------------------------------------------------------
+        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Two_sidriver)
+                .ifPresent(curio -> {
+                    ItemStack belt = curio.stack().copy();
+                    // 如果有模式需要重置可以在这里调用
+                     ((Two_sidriver) belt.getItem()).setDriverType(belt, Two_sidriver.DriverType.DEFAULT);
+
+                    if (!player.getInventory().add(belt)) player.drop(belt, false);
+
+                    // 真正清槽
+                    CuriosApi.getCuriosInventory(player).ifPresent(inv ->
+                            inv.getStacksHandler(curio.slotContext().identifier()).ifPresent(handler ->
+                                    handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY)
+                            )
+                    );
+                });
+        // 5. 返还蝙蝠印章和双面武器
+        if (hasEvilBatsArmor(player)) {
+            // 返还蝙蝠印章
+            ItemStack batStamp = new ItemStack(ModItems.BAT_STAMP.get());
+            if (!player.getInventory().add(batStamp)) player.drop(batStamp, false);
+
+            // 返还双面武器
+            ItemStack twoWeapon = new ItemStack(ModItems.TWO_WEAPON.get());
+            if (!player.getInventory().add(twoWeapon)) player.drop(twoWeapon, false);
+        }
     }
 
     // 检查玩家是否装备了变身盔甲
@@ -117,8 +145,21 @@ public class PlayerDeathHandler {
                     stack.getItem() instanceof Sigurd ||
                         stack.getItem() instanceof Dark_orangels ||
                     stack.getItem() instanceof Marika ||
+                        stack.getItem() instanceof EvilBatsArmor ||
                         stack.getItem() instanceof DarkKivaItem
                 ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasEvilBatsArmor(Player player) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+                ItemStack stack = player.getItemBySlot(slot);
+                if (stack.getItem() instanceof EvilBatsArmor) {
                     return true;
                 }
             }
@@ -138,6 +179,7 @@ public class PlayerDeathHandler {
                 armorStack.getItem() instanceof Sigurd ||
                 armorStack.getItem() instanceof TyrantItem ||
                     armorStack.getItem() instanceof Dark_orangels ||
+                    armorStack.getItem() instanceof EvilBatsArmor ||
                     armorStack.getItem() instanceof DarkKivaItem ||
                 armorStack.getItem() instanceof Marika) {
                 player.getInventory().armor.set(i, ItemStack.EMPTY);

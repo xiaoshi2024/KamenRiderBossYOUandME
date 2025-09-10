@@ -2,11 +2,13 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.armor.EvilBatsArmorRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -100,6 +102,46 @@ public class EvilBatsArmor extends ArmorItem implements GeoItem, KamenBossArmor,
         if (isFullArmorEquipped((ServerPlayer) player) && player.level().getGameTime() % 20 == 0) {
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 40, 0));
         }
+        
+        // 检查并触发解除变身（如果需要）
+        checkAndTriggerRelease(player);
+    }
+    
+    // 新增：检查并触发解除变身
+    private void checkAndTriggerRelease(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            // 获取玩家变量
+            KRBVariables.PlayerVariables variables = serverPlayer.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+            
+            // 检查玩家是否装备了全套EvilBatsArmor，但EvilBats变身状态为false
+            if (isFullArmorEquipped(serverPlayer) && !variables.isEvilBatsTransformed) {
+                // 自动解除变身，卸除盔甲
+                releaseArmor(serverPlayer);
+            }
+        }
+    }
+    
+    // 新增：独立的解除变身方法
+    public static void releaseArmor(ServerPlayer player) {
+        // 清除盔甲栏的所有EvilBatsArmor
+        for (int i = 0; i < 4; i++) {
+            ItemStack armorStack = player.getInventory().armor.get(i);
+            if (armorStack.getItem() instanceof EvilBatsArmor) {
+                player.getInventory().armor.set(i, ItemStack.EMPTY);
+            }
+        }
+
+        // 更新玩家变量，将EvilBats变身状态设置为false
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        variables.isEvilBatsTransformed = false;
+        variables.syncPlayerVariables(player);
+
+        // 播放解除音效
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.ARMOR_EQUIP_NETHERITE, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+        // 同步玩家物品栏变化
+        player.inventoryMenu.broadcastChanges();
     }
 
     public void triggeridle(Player player, String animationName) {

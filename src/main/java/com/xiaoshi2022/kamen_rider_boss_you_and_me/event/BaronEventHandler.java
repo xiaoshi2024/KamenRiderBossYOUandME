@@ -1,4 +1,4 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.events;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;

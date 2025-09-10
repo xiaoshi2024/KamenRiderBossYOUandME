@@ -20,7 +20,7 @@ public final class XKeyLogic {
     private XKeyLogic() {}
 
     /* -------- ① 加载武器 -------- */
-    public static void loadWeapon(ServerPlayer sp) {
+    public static void loadWeapon(ServerPlayer sp, boolean isBat) {
         Optional<SlotResult> opt = CuriosApi.getCuriosInventory(sp)
                 .resolve()
                 .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver));
@@ -36,9 +36,15 @@ public final class XKeyLogic {
             return;
         }
         weapon.shrink(1);
-        Two_sidriver.setDriverType(belt, Two_sidriver.DriverType.X);
-        Two_sidriver.syncToTracking(sp, belt);
-        sp.sendSystemMessage(Component.literal("§a武器装载——X 形态！"));
+        if (isBat) {
+            Two_sidriver.setDriverType(belt, Two_sidriver.DriverType.BAT);
+            Two_sidriver.syncToTracking(sp, belt);
+            sp.sendSystemMessage(Component.literal("§a武器装载——Bat 形态！"));
+        } else {
+            Two_sidriver.setDriverType(belt, Two_sidriver.DriverType.X);
+            Two_sidriver.syncToTracking(sp, belt);
+            sp.sendSystemMessage(Component.literal("§a武器装载——X 形态！"));
+        }
     }
 
     /* -------- ② 最终变身 -------- */

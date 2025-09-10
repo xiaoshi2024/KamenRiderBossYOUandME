@@ -5,7 +5,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -16,15 +15,22 @@ public class CurioUtils {
 
     /**
      * 安全更新 Curios 槽位物品（5.3.1+ 兼容）
+     *
+     * @return true 如果更新成功，false 如果更新失败
      */
-    public static void updateCurioSlot(Player player, String slotId, int index, ItemStack stack) {
-        CuriosApi.getCuriosInventory(player).ifPresent(inv ->
-                inv.getStacksHandler(slotId).ifPresent(h -> {
-                    h.getStacks().setStackInSlot(index, stack);
-                    h.getCosmeticStacks().setStackInSlot(index, ItemStack.EMPTY);
-                    h.update();
-                })
-        );
+    public static boolean updateCurioSlot(Player player, String slotId, int index, ItemStack stack) {
+        return CuriosApi.getCuriosInventory(player).map(inv ->
+                inv.getStacksHandler(slotId).map(h -> {
+                    if (index >= 0 && index < h.getSlots()) {
+                        h.getStacks().setStackInSlot(index, stack);
+                        h.getCosmeticStacks().setStackInSlot(index, ItemStack.EMPTY);
+                        h.update();
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }).orElse(false)
+        ).orElse(false);
     }
 
     /**

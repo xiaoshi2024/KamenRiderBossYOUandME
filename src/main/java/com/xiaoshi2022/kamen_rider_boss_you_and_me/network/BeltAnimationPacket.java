@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import net.minecraft.client.Minecraft;
@@ -35,6 +36,10 @@ public class BeltAnimationPacket {
         this(entityId, animationName, "drakkiva", mode.name());
     }
 
+    public BeltAnimationPacket(int entityId, String animationName, Two_sidriver.DriverType mode) {
+        this(entityId, animationName, "two_sidriver", mode.name());
+    }
+
     public BeltAnimationPacket(int entityId, String animationName, String beltType, String beltMode) {
         this.entityId = entityId;
         this.animationName = animationName;
@@ -62,6 +67,8 @@ public class BeltAnimationPacket {
                 return new BeltAnimationPacket(id, anim, Genesis_driver.BeltMode.valueOf(mode));
             case "drakkiva":
                 return new BeltAnimationPacket(id, anim, DrakKivaBelt.DrakKivaBeltMode.valueOf(mode));
+            case "two_sidriver":
+                return new BeltAnimationPacket(id, anim, Two_sidriver.DriverType.valueOf(mode));
             default:
                 throw new IllegalArgumentException("Unknown belt type: " + type);
         }
@@ -86,6 +93,8 @@ public class BeltAnimationPacket {
                             g.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof DrakKivaBelt dk) {
                             dk.triggerAnim(living, "controller", msg.animationName);
+                        } else if (item instanceof Two_sidriver ts) {
+                            ts.triggerAnim(living, "controller", msg.animationName);
                         }
                     })
             );

@@ -73,6 +73,8 @@ public class KicktimeProcedure {
 			handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
 		} else if (helmet.getItem() == ModItems.TYRANT_HELMET.get()) {
 			handleKick(world, entity, ParticleTypesRegistry.DRAGONLICE.get());
+		} else if (helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()) {
+			handleKick(world, entity, ParticleTypesRegistry.DRAGONLICE.get());
 		} else if (helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) {
 			// 新增：处理黑暗Kiva骑士踢，使用dark_bat粒子
 			handleKick(world, entity, ParticleTypesRegistry.DARK_BAT.get());
@@ -321,6 +323,7 @@ public class KicktimeProcedure {
 				helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()||
 				helmet.getItem() == ModItems.TYRANT_HELMET.get() ||
 				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
+				helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()||
 				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get(); // 新增：黑暗Kiva头盔
 	}
 }

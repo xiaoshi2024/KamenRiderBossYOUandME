@@ -66,6 +66,16 @@ public class BatStampItem extends Item implements GeoItem {
 
         ItemStack stack = player.getItemInHand(hand);
 
+        // 检查玩家是否佩戴了 Two_sidriver 腰带，并且腰带的变种是否为 X 形态
+        Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver && Two_sidriver.getDriverType(s) == Two_sidriver.DriverType.X));
+
+        if (!opt.isPresent()) {
+            // 如果没有佩戴 Two_sidriver 腰带，或者腰带的变种不是 X 形态，则不触发任何逻辑
+            return InteractionResultHolder.pass(stack);
+        }
+
         // 播放蝙蝠印章的音效
         level.playSound(
                 null,
@@ -75,10 +85,18 @@ public class BatStampItem extends Item implements GeoItem {
                 1.0F, 1.0F
         );
 
-        // 播放玩家动画
+        // 检查是否在服务器端
         if (!level.isClientSide()) {
-            playPlayerAnimation((ServerPlayer) player, "bat_stamp");
+            // 调用 insertIntoBelt 方法
+            insertIntoBelt((ServerPlayer) player, hand, level, player);
         }
+
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+    }
+
+    private void insertIntoBelt(ServerPlayer serverPlayer, InteractionHand hand, Level level, Player player) {
+        // 播放玩家动画
+        playPlayerAnimation(serverPlayer, "bat_stamp");
 
         // 播放待机的音效
         level.playSound(
@@ -90,66 +108,53 @@ public class BatStampItem extends Item implements GeoItem {
         );
 
         // 设置2.5秒的延迟
-        if (!level.isClientSide()) {
-            ServerPlayer serverPlayer = (ServerPlayer) player;
+        level.getServer().execute(() -> {
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            level.getServer().execute(() -> {
+                                ItemStack currentStack = serverPlayer.getItemInHand(hand);
+                                if (currentStack.getItem() == BatStampItem.this) {
+                                    // 查找玩家是否佩戴 Two_sidriver
+                                    Optional<SlotResult> opt = CuriosApi.getCuriosInventory(serverPlayer)
+                                            .resolve()
+                                            .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver));
 
-            // 使用 Minecraft 的 tick 计时而不是 Thread.sleep
-            // 创建一个简单的计时器
-            level.getServer().execute(() -> {
-                // 使用 Forge 的事件总线或简单的计数器
-                new java.util.Timer().schedule(
-                        new java.util.TimerTask() {
-                            @Override
-                            public void run() {
-                                level.getServer().execute(() -> {
-                                    ItemStack currentStack = serverPlayer.getItemInHand(hand);
-                                    if (currentStack.getItem() == BatStampItem.this) {
-                                        insertIntoBelt(serverPlayer, hand, level, player);
+                                    if (opt.isPresent()) {
+                                        ItemStack belt = opt.get().stack();
+
+                                        // 只有 X 形态可以被盖戳成 BAT
+                                        if (Two_sidriver.getDriverType(belt) == Two_sidriver.DriverType.X) {
+                                            Two_sidriver.setDriverType(belt, Two_sidriver.DriverType.BAT);
+                                            Two_sidriver.syncToTracking(serverPlayer, belt);
+
+                                            // 消耗印章 - 从正确的手上移除
+                                            ItemStack handStack = serverPlayer.getItemInHand(hand);
+                                            if (!handStack.isEmpty() && handStack.getItem() == BatStampItem.this) {
+                                                handStack.shrink(1);
+                                                if (handStack.isEmpty()) {
+                                                    serverPlayer.setItemInHand(hand, ItemStack.EMPTY);
+                                                } else {
+                                                    serverPlayer.setItemInHand(hand, handStack);
+                                                }
+                                            }
+
+                                            // 创建 BatDarksEntity 实体
+                                            if (!level.isClientSide()) {
+                                                BatDarksEntity batDarksEntity = new BatDarksEntity(ModEntityTypes.BAT_DARKS.get(), level);
+                                                batDarksEntity.setTargetPlayer(player); // 设置目标玩家并开始骑乘（这个方法内部会处理位置）
+                                                level.addFreshEntity(batDarksEntity);
+                                            }
+                                        }
                                     }
-                                });
-                            }
-                        },
-                        2500 // 2.5秒延迟
-                );
-            });
-        }
-
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
-    }
-
-    private void insertIntoBelt(ServerPlayer serverPlayer, InteractionHand hand, Level level, Player player) {
-        // 查找玩家是否佩戴 Two_sidriver
-        Optional<SlotResult> opt = CuriosApi.getCuriosInventory(serverPlayer)
-                .resolve()
-                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver));
-
-        if (opt.isPresent()) {
-            ItemStack belt = opt.get().stack();
-
-            // 只有 X 形态可以被盖戳成 BAT
-            if (Two_sidriver.getDriverType(belt) == Two_sidriver.DriverType.X) {
-                Two_sidriver.setDriverType(belt, Two_sidriver.DriverType.BAT);
-                Two_sidriver.syncToTracking(serverPlayer, belt);
-
-                // 消耗印章 - 从正确的手上移除
-                ItemStack handStack = serverPlayer.getItemInHand(hand);
-                if (!handStack.isEmpty() && handStack.getItem() == this) {
-                    handStack.shrink(1);
-                    if (handStack.isEmpty()) {
-                        serverPlayer.setItemInHand(hand, ItemStack.EMPTY);
-                    } else {
-                        serverPlayer.setItemInHand(hand, handStack);
-                    }
-                }
-
-                // 创建 BatDarksEntity 实体
-                if (!level.isClientSide()) {
-                    BatDarksEntity batDarksEntity = new BatDarksEntity(ModEntityTypes.BAT_DARKS.get(), level);
-                    batDarksEntity.setTargetPlayer(player); // 设置目标玩家并开始骑乘（这个方法内部会处理位置）
-                    level.addFreshEntity(batDarksEntity);
-                }
-            }
-        }
+                                }
+                            });
+                        }
+                    },
+                    2500 // 2.5秒延迟
+            );
+        });
     }
 
 

@@ -97,11 +97,6 @@ public final class KeyInputListener {
             }
         }
     }
-
-    /**
-     * X 键专属：第一次手持 TwoWeaponItem + 佩戴 DEFAULT 形态 Two_sidriver → 装载并切换 X 形态
-     * @return true 表示已处理，本次 X 键不再往下走
-     */
     private static boolean tryLoadTwoWeaponOnX(LocalPlayer player) {
         Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
                 .resolve()
@@ -111,22 +106,56 @@ public final class KeyInputListener {
         ItemStack belt = opt.get().stack();
         Two_sidriver.DriverType type = Two_sidriver.getDriverType(belt);
 
+        // 检查玩家是否手持bat形态的TwoWeaponItem
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offHand = player.getOffhandItem();
+        boolean hasBatWeapon = (mainHand.getItem() instanceof TwoWeaponItem &&
+                ((TwoWeaponItem)mainHand.getItem()).getVariant(mainHand) == TwoWeaponItem.Variant.BAT) ||
+                (offHand.getItem() instanceof TwoWeaponItem &&
+                        ((TwoWeaponItem)offHand.getItem()).getVariant(offHand) == TwoWeaponItem.Variant.BAT);
+
+        // 检查玩家是否已变身
+        boolean isTransformed = isWearingArmor(player, "EVIL_BATS");
+
         if (type == Two_sidriver.DriverType.DEFAULT) {
-            // ① 还需手持武器才发加载包
-            boolean hasWeapon = player.getMainHandItem().getItem() instanceof TwoWeaponItem
-                    || player.getOffhandItem().getItem() instanceof TwoWeaponItem;
-            if (!hasWeapon) return false;   // 不给提示，静默忽略
-            PacketHandler.INSTANCE.sendToServer(new XKeyLoadPacket(player.getUUID()));
-            return true;
+            if (hasBatWeapon) {
+                // 手持bat形态武器，将腰带变为BAT形态
+                PacketHandler.INSTANCE.sendToServer(new XKeyLoadPacket(player.getUUID(), true));
+                return true;
+            } else {
+                // ① 还需手持普通武器才发加载包
+                boolean hasWeapon = mainHand.getItem() instanceof TwoWeaponItem
+                        || offHand.getItem() instanceof TwoWeaponItem;
+                if (!hasWeapon) return false;   // 不给提示，静默忽略
+                PacketHandler.INSTANCE.sendToServer(new XKeyLoadPacket(player.getUUID(), false));
+                return true;
+            }
         }
 
         if (type == Two_sidriver.DriverType.BAT) {
-            // ② BAT 形态直接发最终变身包
-            PacketHandler.INSTANCE.sendToServer(new XKeyEvilPacket(player.getUUID()));
-            return true;
+            if (isTransformed) {
+                // 已变身状态下，按下X键无反应
+                return true;
+            } else {
+                // ② BAT 形态直接发最终变身包
+                PacketHandler.INSTANCE.sendToServer(new XKeyEvilPacket(player.getUUID()));
+                return true;
+            }
         }
 
-        return false;   // X 形态什么都不做
+        if (type == Two_sidriver.DriverType.X) {
+            if (hasBatWeapon) {
+                // 如果玩家手持bat形态武器，且腰带是X形态，按下X键应该切换为bat形态腰带
+                PacketHandler.INSTANCE.sendToServer(new XKeyLoadPacket(player.getUUID(), true));
+                return true;
+            } else {
+                // 如果玩家手持普通武器，且腰带是X形态，按下X键应该解除变身
+                PacketHandler.INSTANCE.sendToServer(new XKeyEvilPacket(player.getUUID()));
+                return true;
+            }
+        }
+
+        return false;   // 其他形态什么都不做
     }
 
     /* ========= 判断是否已穿对应骑士装甲 ========= */

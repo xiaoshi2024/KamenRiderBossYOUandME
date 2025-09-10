@@ -185,6 +185,7 @@ public class  KRBVariables {
 		public double baseMaxHealth = 20.0D; // 默认基础生命值为20点
 		public int lastCustomArmorCount = 0;
     public boolean isDarkKivaBeltEquipped = false; // 新增字段：记录是否装备了黑暗Kiva腰带
+    public boolean isEvilBatsTransformed = false; // 新增字段：记录是否装备了EvilBats盔甲并变身
 
         public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
@@ -225,6 +226,8 @@ public class  KRBVariables {
 		nbt.putLong("dark_kiva_sonic_blast_cooldown", dark_kiva_sonic_blast_cooldown);
 		nbt.putLong("dark_kiva_blood_steal_cooldown", dark_kiva_blood_steal_cooldown);
 
+		nbt.putBoolean("isEvilBatsTransformed", isEvilBatsTransformed); // 新增：存储EvilBats变身状态
+
 			nbt.putDouble("baseMaxHealth", baseMaxHealth);   // ← 新增
 		return nbt;
 	}
@@ -254,6 +257,8 @@ public class  KRBVariables {
 		dragonfruit_ready = nbt.getBoolean("dragonfruit_ready");
 		dragonfruit_ready_time = nbt.getLong("dragonfruit_ready_time");
 		dragonfruit_time = nbt.getLong("dragonfruit_time");
+
+		isEvilBatsTransformed = nbt.getBoolean("isEvilBatsTransformed"); // 新增：读取EvilBats变身状态
 
 			baseMaxHealth = nbt.getDouble("baseMaxHealth");  // ← 新增
 	}
@@ -303,6 +308,7 @@ public class  KRBVariables {
 					variables.baseMaxHealth = message.data.baseMaxHealth;
 				variables.lastCustomArmorCount = message.data.lastCustomArmorCount; // 添加这行，同步lastCustomArmorCount
 				variables.isDarkKivaBeltEquipped = message.data.isDarkKivaBeltEquipped; // 添加这行，同步黑暗Kiva腰带状态
+				variables.isEvilBatsTransformed = message.data.isEvilBatsTransformed; // 添加这行，同步EvilBats变身状态
 				}
 			});
 			context.setPacketHandled(true);

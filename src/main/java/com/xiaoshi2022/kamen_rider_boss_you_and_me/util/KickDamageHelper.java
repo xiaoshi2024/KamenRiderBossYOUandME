@@ -22,6 +22,8 @@ public final class KickDamageHelper {
             if (helmet.is(ModItems.TYRANT_HELMET.get()))           return 89F; // 假面骑士暴君
             if (helmet.is(ModItems.DARK_ORANGELS_HELMET.get()))    return 92F; // 黑暗铠武
             if (helmet.is(ModItems.DARK_KIVA_HELMET.get()))        return 93F; // 黑暗月骑 - 参考剧中表现设置最高伤害
+
+            if (helmet.is(ModItems.EVIL_BATS_HELMET.get()))        return 73F; // 艾比尔
     
             return 20F; // 默认
         }
@@ -40,6 +42,8 @@ public final class KickDamageHelper {
         if (helmet.is(ModItems.TYRANT_HELMET.get()))           return 4.8F;
         if (helmet.is(ModItems.DARK_ORANGELS_HELMET.get()))    return 5.0F;
         if (helmet.is(ModItems.DARK_KIVA_HELMET.get()))        return 6.5F; // 黑暗月骑 - 更大的爆炸范围
+
+        if (helmet.is(ModItems.EVIL_BATS_HELMET.get()))        return 5.4F; // 艾比尔
 
         return 2.0F; // 默认
     }

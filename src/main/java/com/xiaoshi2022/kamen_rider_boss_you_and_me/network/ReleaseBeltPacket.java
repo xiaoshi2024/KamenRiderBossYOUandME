@@ -40,6 +40,10 @@ public class ReleaseBeltPacket {
                 // 直接调用 DarkKivaSequence 的解除方法
                 DarkKivaSequence.startDisassembly(player);
             }
+            case "EVIL_BATS" -> {
+                // 处理Evil Bats解除变身
+                KeybindHandler.completeBeltRelease(player, "EVIL_BATS");
+            }
         }
     }
 
@@ -65,6 +69,9 @@ public class ReleaseBeltPacket {
                 if ("DARK_KIVA".equals(beltType)) {
                     // Dark Kiva：服务端直接触发解除动画和后续流程
                     DarkKivaSequence.startDisassembly(player);
+                } else if ("EVIL_BATS".equals(beltType)) {
+                    // 处理Evil Bats解除变身
+                    KeybindHandler.completeBeltRelease(player, beltType);
                 } else {
                     KeybindHandler.completeBeltRelease(player, beltType);
                 }

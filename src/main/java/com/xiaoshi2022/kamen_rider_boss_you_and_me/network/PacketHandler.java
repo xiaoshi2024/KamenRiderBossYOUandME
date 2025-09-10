@@ -100,6 +100,10 @@ public class PacketHandler {
                 LeftClickShiftPacket::encode,
                 LeftClickShiftPacket::decode,
                 LeftClickShiftPacket::handle);
+        INSTANCE.registerMessage(index++, WeaponSyncPacket.class,
+                WeaponSyncPacket::encode,
+                WeaponSyncPacket::decode,
+                WeaponSyncPacket::handle);
         // 在 PacketHandler 的 register 方法中添加
         INSTANCE.registerMessage(
                 index++,
@@ -108,6 +112,8 @@ public class PacketHandler {
                 BatDarksAnimationPacket::decode,
                 BatDarksAnimationPacket::handle
         );
+        INSTANCE.registerMessage(index++, WeaponRemovePacket.class,
+                WeaponRemovePacket::encode, WeaponRemovePacket::decode, WeaponRemovePacket::handle);
     }
 
     public static void sendToServer(Object packet) {

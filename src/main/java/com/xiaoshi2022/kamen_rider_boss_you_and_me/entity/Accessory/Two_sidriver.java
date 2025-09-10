@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.*;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -25,6 +26,11 @@ import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class Two_sidriver extends Item implements GeoItem, ICurioItem {
+
+    public void triggerAnim(LivingEntity entity, String controller, String animationName) {
+        // 在这里添加触发动画的逻辑
+        // 例如，使用 GeckoLib 的 AnimationController 来触发动画
+    }
 
     /* =============== 形态 & 武器 =============== */
     public enum DriverType {
@@ -84,8 +90,37 @@ public class Two_sidriver extends Item implements GeoItem, ICurioItem {
     public void curioTick(SlotContext ctx, ItemStack stack) {
         if (!(ctx.entity() instanceof ServerPlayer sp)) return;
         if (sp.tickCount % 20 == 0) syncToSelf(sp, stack);
+        
+        // 检测玩家是否为变身状态和腰带是否存在
+        checkPlayerTransformation(sp);
     }
+    
+    // 新增：检测玩家是否为变身状态和腰带是否存在
+    private void checkPlayerTransformation(ServerPlayer player) {
+        // 获取玩家变量
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
 
+        // 如果玩家装备了EvilBatsArmor且腰带存在状态变化，自动处理
+        if (variables.isEvilBatsTransformed) {
+            // 检查玩家是否还装备着Two_sidriver腰带
+            boolean hasTwoSidriver = false;
+            for (ItemStack stack : player.getInventory().items) {
+                if (stack.getItem() instanceof Two_sidriver) {
+                    hasTwoSidriver = true;
+                    break;
+                }
+            }
+
+            // 如果玩家装备了EvilBatsArmor但没有腰带，自动解除变身
+            if (!hasTwoSidriver) {
+                // 解除EvilBats变身
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler.completeBeltRelease(player, "EVIL_BATS");
+            }
+        }
+
+        // 同步玩家状态
+        variables.syncPlayerVariables(player);
+    }
     /* =============== 工具 =============== */
     public static DriverType getDriverType(ItemStack stack) {
         return DriverType.values()[stack.getOrCreateTag().getInt(KEY_TYPE) % 3];
@@ -106,14 +141,15 @@ public class Two_sidriver extends Item implements GeoItem, ICurioItem {
         withBelt(player, stack -> {
             setDriverType(stack, type);
             syncToTracking(player, stack);
+            syncToSelf(player, stack);
         });
     }
-
     /** 武器切换：按键/技能调用 */
     public static void switchWeapon(ServerPlayer player, WeaponMode mode) {
         withBelt(player, stack -> {
             setWeaponMode(stack, mode);
             syncToTracking(player, stack);
+            syncToSelf(player, stack);
         });
     }
 
@@ -130,7 +166,7 @@ public class Two_sidriver extends Item implements GeoItem, ICurioItem {
         PacketHandler.sendToAllTracking(new DriverSyncPacket(player.getId(), getDriverType(stack), getWeaponMode(stack)), player);
     }
 
-    private static void syncToSelf(ServerPlayer player, ItemStack stack) {
+    public static void syncToSelf(ServerPlayer player, ItemStack stack) {
         PacketHandler.sendToClient(new DriverSyncPacket(player.getId(), getDriverType(stack), getWeaponMode(stack)), player);
     }
 

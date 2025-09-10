@@ -1,28 +1,20 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ReleaseBeltPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MarikaTransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DragonfruitTransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.MelonTransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.CherryTransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkOrangeReleaseRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
@@ -163,6 +155,61 @@ public class KeybindHandler {
     }
 
     private static void handleKeyPress(Player player) {
+        // 检测双面武器是否为bat形态，实现C键解除EvilBats变身或取下武器
+        ItemStack mainHandItem = player.getMainHandItem();
+        ItemStack offHandItem = player.getOffhandItem();
+
+        // 获取玩家变身状态
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        boolean isTransformed = variables.isEvilBatsTransformed;
+
+        // 检查是否佩戴Two_sidriver腰带
+        Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver));
+
+        if (opt.isPresent()) {
+            ItemStack belt = opt.get().stack();
+            Two_sidriver.DriverType type = Two_sidriver.getDriverType(belt);
+            Two_sidriver beltItem = (Two_sidriver) belt.getItem();
+
+            if (type == Two_sidriver.DriverType.BAT) {
+                // 腰带为bat形态，发送请求取下武器或解除变身
+                if (isTransformed) {
+                    // 如果玩家已变身，返回蝙蝠印章并解除变身
+                    PacketHandler.sendToServer(new ReleaseBeltPacket(true, "EVIL_BATS"));
+
+//                    // 将武器变回普通形态
+//                    if (mainHandItem.getItem() instanceof TwoWeaponItem &&
+//                            ((TwoWeaponItem)mainHandItem.getItem()).getVariant(mainHandItem) == TwoWeaponItem.Variant.BAT) {
+//                        TwoWeaponItem.setVariant(mainHandItem, TwoWeaponItem.Variant.DEFAULT);
+//                    }
+//                    if (offHandItem.getItem() instanceof TwoWeaponItem &&
+//                            ((TwoWeaponItem)offHandItem.getItem()).getVariant(offHandItem) == TwoWeaponItem.Variant.BAT) {
+//                        TwoWeaponItem.setVariant(offHandItem, TwoWeaponItem.Variant.DEFAULT);
+//                    }
+
+                    // 发送武器取下数据包
+                    PacketHandler.sendToServer(new WeaponRemovePacket(true));
+                    return;
+                } else {
+                    // 如果玩家未变身，发送武器取下数据包
+                    PacketHandler.sendToServer(new WeaponRemovePacket(true));
+                    return;
+                }
+            }
+        }
+
+// 检测主手或副手武器是否为bat形态
+        if ((mainHandItem.getItem() instanceof TwoWeaponItem &&
+                ((TwoWeaponItem)mainHandItem.getItem()).getVariant(mainHandItem) == TwoWeaponItem.Variant.BAT) ||
+                (offHandItem.getItem() instanceof TwoWeaponItem &&
+                        ((TwoWeaponItem)offHandItem.getItem()).getVariant(offHandItem) == TwoWeaponItem.Variant.BAT)) {
+            // 发送解除EvilBats变身请求到服务端
+            PacketHandler.sendToServer(new ReleaseBeltPacket(true, "EVIL_BATS"));
+            return; // 处理完EvilBats变身后直接返回
+        }
+        
         // 柠檬逻辑
         CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
                 .ifPresent(curio -> {
@@ -194,9 +241,9 @@ public class KeybindHandler {
                         }
                         case MELON -> {
                             // 先判断是变身还是解除
-                            boolean isTransformed =
+                            boolean isTransformeds =
                                     player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
-                            if (isTransformed) {
+                            if (isTransformeds) {
                                 // 解除
                                 PacketHandler.sendToServer(
                                         new TransformationRequestPacket(player.getUUID(), "GENESIS_MELON", true));
@@ -211,9 +258,9 @@ public class KeybindHandler {
                         }
                         case CHERRY -> {
                             // 先判断是变身还是解除
-                            boolean isTransformed =
+                            boolean isTransformeds =
                                     player.getInventory().armor.get(3).getItem() == ModItems.SIGURD_HELMET.get();
-                            if (isTransformed) {
+                            if (isTransformeds) {
                                 // 解除
                                 PacketHandler.sendToServer(
                                         new TransformationRequestPacket(player.getUUID(), "GENESIS_CHERRY", true));
@@ -228,9 +275,9 @@ public class KeybindHandler {
                         }
                         case PEACH -> {
                             // 先判断是变身还是解除
-                            boolean isTransformed = 
+                            boolean isTransformeds =
                                     player.getInventory().armor.get(3).getItem() == ModItems.MARIKA_HELMET.get();
-                            if (isTransformed) {
+                            if (isTransformeds) {
                                 // 解除
                                 PacketHandler.sendToServer(
                                         new TransformationRequestPacket(player.getUUID(), "GENESIS_PEACH", true));
@@ -245,9 +292,9 @@ public class KeybindHandler {
                         }
                         case DRAGONFRUIT -> {
                             // 先判断是变身还是解除
-                            boolean isTransformed = 
+                            boolean isTransformeds =
                                     player.getInventory().armor.get(3).getItem() == ModItems.TYRANT_HELMET.get();
-                            if (isTransformed) {
+                            if (isTransformeds) {
                                 // 解除
                                 PacketHandler.sendToServer(
                                         new TransformationRequestPacket(player.getUUID(), "GENESIS_DRAGONFRUIT", true));
@@ -311,16 +358,88 @@ public class KeybindHandler {
             case "GENESIS_DRAGONFRUIT" -> handleDragonfruitRelease(player); // 火龙果
             case "BARONS"          -> handleBaronsBeltRelease(player);    // 香蕉
             case "DUKE"            -> handleDukeBeltRelease(player);      // 公爵
+            case "EVIL_BATS"       -> handleEvilBatsRelease(player);      // Evil Bats
         }
+    }
+    
+    // 新增：Evil Bats解除变身逻辑
+    private static void handleEvilBatsRelease(ServerPlayer player) {
+        // 检查玩家是否已变身
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        boolean isTransformed = variables.isEvilBatsTransformed;
+
+        // 清除EvilBats盔甲
+        clearTransformationArmor(player);
+
+        // 更新玩家变量，将EvilBats变身状态设置为false
+        variables.isEvilBatsTransformed = false;
+        variables.syncPlayerVariables(player);
+
+        // 检查并更新玩家手持的双面武器，从BAT形态变回普通形态（包括主手和副手）
+        ItemStack mainHandItem = player.getMainHandItem();
+        ItemStack offHandItem = player.getOffhandItem();
+
+        // 处理主手武器
+        if (mainHandItem.getItem() instanceof TwoWeaponItem) {
+            TwoWeaponItem weapon = (TwoWeaponItem) mainHandItem.getItem();
+
+            if (weapon.getVariant(mainHandItem) == TwoWeaponItem.Variant.BAT) {
+                // 将武器形态从BAT改回DEFAULT
+                weapon.setVariant(mainHandItem, TwoWeaponItem.Variant.DEFAULT);
+            }
+        }
+
+        // 处理副手武器
+        if (offHandItem.getItem() instanceof TwoWeaponItem) {
+            TwoWeaponItem weapon = (TwoWeaponItem) offHandItem.getItem();
+
+            if (weapon.getVariant(offHandItem) == TwoWeaponItem.Variant.BAT) {
+                // 将武器形态从BAT改回DEFAULT
+                weapon.setVariant(offHandItem, TwoWeaponItem.Variant.DEFAULT);
+            }
+        }
+
+        // 检查并更新腰带状态
+        Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver));
+
+        if (opt.isPresent()) {
+            ItemStack belt = opt.get().stack();
+            Two_sidriver beltItem = (Two_sidriver) belt.getItem();
+
+            // 检查腰带是否为BAT形态
+            if (beltItem.getDriverType(belt) == Two_sidriver.DriverType.BAT) {
+                // 将腰带从BAT形态改回DEFAULT
+                beltItem.setDriverType(belt, Two_sidriver.DriverType.DEFAULT);
+
+                // 更新腰带槽位
+                SlotResult slotResult = opt.get();
+                boolean updated = CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
+                        slotResult.slotContext().index(), belt);
+
+                if (!updated) {
+                    // 如果更新失败，尝试直接设置
+                    player.getInventory().setItem(slotResult.slotContext().index(), belt);
+                }
+            }
+        }
+
+        // 播放解除音效
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+
+        player.inventoryMenu.broadcastChanges();
+
+        // 返还蝙蝠印章
+        ItemStack batStamp = new ItemStack(ModItems.BAT_STAMP.get());
+        if (!player.getInventory().add(batStamp)) {
+            player.spawnAtLocation(batStamp);
+
+            }
+
     }
 
-    public static void delayedCompleteBeltRelease(ServerPlayer player, String beltType, int delayTicks) {
-        if (player.level() instanceof ServerLevel serverLevel) {
-            serverLevel.scheduleTick(new BlockPos(player.blockPosition()),
-                    serverLevel.getBlockState(player.blockPosition()).getBlock(), delayTicks
-            );
-        }
-    }
 
     private static void handleGenesisBeltRelease(ServerPlayer player) {
         Optional<SlotResult> curio = CuriosApi.getCuriosInventory(player)
@@ -623,7 +742,7 @@ public class KeybindHandler {
     }
 
     private static void clearTransformationArmor(ServerPlayer player) {
-        for (int i = 1; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             player.getInventory().armor.set(i, ItemStack.EMPTY);
         }
     }
