@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ParticleTypesRegistry;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KickDamageHelper;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
@@ -34,13 +35,13 @@ import net.minecraftforge.network.NetworkDirection;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KickDamageHelper;
-
 @Mod.EventBusSubscriber
 public class KicktimeProcedure {
 
 	// 添加一个静态变量来跟踪每个玩家的特效实体
 	private static final Map<UUID, Integer> playerToEffectEntity = new HashMap<>();
+	// 添加调试标记
+	private static final boolean DEBUG = true;
 
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -54,7 +55,7 @@ public class KicktimeProcedure {
 	}
 
 	private static void execute(@Nullable Event event, LevelAccessor world, Entity entity) {
-		if (entity == null)
+		if (entity == null) 
 			return;
 
 		// 检查是否正在踢击
@@ -84,6 +85,9 @@ public class KicktimeProcedure {
 			handleKick(world, entity, ParticleTypesRegistry.DRAGONLICE.get());
 		} else if (helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()) {
 			// 处理 EVIL_BATS_HELMET 的特效和移动
+			if (DEBUG && !world.isClientSide() && entity instanceof Player) {
+				kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: EVIL_BATS_HELMET detected on player {}", ((Player)entity).getScoreboardName());
+			}
 			handleEvilBatsKick(world, entity);
 		} else if (helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) {
 			handleKick(world, entity, ParticleTypesRegistry.DARK_BAT.get());
@@ -97,23 +101,51 @@ public class KicktimeProcedure {
 
 			// 检查是否已经为该玩家创建了特效实体
 			if (!playerToEffectEntity.containsKey(playerId)) {
-				// 创建 BatStampFinishEntity 实体
-				BatStampFinishEntity batStampFinishEntity = new BatStampFinishEntity(ModEntityTypes.BAT_STAMP_FINISH.get(), serverLevel);
-				batStampFinishEntity.setTargetPlayer(player);
-				batStampFinishEntity.startFinish(); // 开始播放 skick 动画
-				serverLevel.addFreshEntity(batStampFinishEntity);
+				// 调试日志：开始创建实体
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Creating BatStampFinishEntity for player {}", player.getScoreboardName());
+				}
+				
+				try {
+					// 创建 BatStampFinishEntity 实体
+					BatStampFinishEntity batStampFinishEntity = new BatStampFinishEntity(ModEntityTypes.BAT_STAMP_FINISH.get(), serverLevel);
+					
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: BatStampFinishEntity created with ID: {}", batStampFinishEntity.getId());
+					}
+					
+					batStampFinishEntity.setTargetPlayer(player);
+					batStampFinishEntity.startFinish(); // 开始播放 skick 动画
+					serverLevel.addFreshEntity(batStampFinishEntity);
 
-				// 存储实体ID
-				playerToEffectEntity.put(playerId, batStampFinishEntity.getId());
+					// 存储实体ID
+					playerToEffectEntity.put(playerId, batStampFinishEntity.getId());
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: BatStampFinishEntity added to world and tracked for player {}", player.getScoreboardName());
+					}
+				} catch (Exception e) {
+					// 捕获并记录任何创建实体时的错误
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.error("KicktimeProcedure: Error creating BatStampFinishEntity for player {}", player.getScoreboardName(), e);
+					}
+				}
 			} else {
 				// 如果实体已存在，检查是否还存活
 				int entityId = playerToEffectEntity.get(playerId);
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Checking existing BatStampFinishEntity with ID: {} for player {}", entityId, player.getScoreboardName());
+				}
 				Entity existingEntity = serverLevel.getEntity(entityId);
 				if (existingEntity == null || !existingEntity.isAlive()) {
 					// 实体已消失，重新创建
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Existing BatStampFinishEntity not found or not alive, recreating for player {}", player.getScoreboardName());
+					}
 					playerToEffectEntity.remove(playerId);
 					handleEvilBatsKick(world, entity); // 递归调用重新创建
 					return;
+				} else if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Existing BatStampFinishEntity with ID: {} is alive for player {}", entityId, player.getScoreboardName());
 				}
 			}
 
@@ -123,6 +155,9 @@ public class KicktimeProcedure {
 		}
 
 		// 单独处理 EVIL_BATS_HELMET 的抛物线移动
+		if (DEBUG && !world.isClientSide() && entity instanceof Player) {
+			kamen_rider_boss_you_and_me.LOGGER.debug("KicktimeProcedure: Handling EVIL_BATS_HELMET parabolic movement for player {}", ((Player)entity).getScoreboardName());
+		}
 		handleEvilBatsParabolicMovement(world, entity);
 	}
 
@@ -178,10 +213,16 @@ public class KicktimeProcedure {
 					int entityId = playerToEffectEntity.get(playerId);
 					Entity effectEntity = serverLevel.getEntity(entityId);
 					if (effectEntity != null) {
+						if (DEBUG) {
+							kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Discarding BatStampFinishEntity with ID: {} for player {}", entityId, player.getScoreboardName());
+						}
 						effectEntity.discard();
 					}
 				}
 				playerToEffectEntity.remove(playerId);
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Removed BatStampFinishEntity tracking for player {}", player.getScoreboardName());
+				}
 			}
 		}
 	}
@@ -198,15 +239,9 @@ public class KicktimeProcedure {
 
 		// 清理特效实体
 		cleanupEffectEntity(player);
-
-		// 停止踢击动画
-		if (player.level().isClientSide() && player instanceof net.minecraft.client.player.AbstractClientPlayer clientPlayer) {
-			var animation = (dev.kosmx.playerAnim.api.layered.ModifierLayer<dev.kosmx.playerAnim.api.layered.IAnimation>)
-					dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess.getPlayerAssociatedData(clientPlayer)
-							.get(new net.minecraft.resources.ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
-			if (animation != null) {
-				animation.setAnimation(null);
-			}
+		
+		if (DEBUG) {
+			kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Reset kick status for player {}", player.getScoreboardName());
 		}
 	}
 

@@ -1,8 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -35,14 +37,22 @@ public class BatStampFinishEntity extends LivingEntity implements GeoEntity {
     private int finishTimer = 0;
     private UUID targetPlayerId;
     private int setupTicks = 0; // 添加设置计时器
-
+    private int maxLifespan = 200; // 最大生命周期（以tick为单位，约10秒）
+    private int lifeTicks = 0; // 生命周期计时器
+    
+    // 添加调试标记
+    private static final boolean DEBUG = true;
 
     public BatStampFinishEntity(EntityType<? extends LivingEntity> type, Level world) {
         super(type, world);
         this.noPhysics = true;
         this.setInvulnerable(true);
+        
+        // 添加调试日志
+        if (DEBUG && !world.isClientSide()) {
+            kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity created with ID: {}", this.getId());
+        }
     }
-
 
     public static AttributeSupplier createAttributes() {
         return LivingEntity.createLivingAttributes()
@@ -72,6 +82,22 @@ public class BatStampFinishEntity extends LivingEntity implements GeoEntity {
         super.tick();
 
         setupTicks++;
+        lifeTicks++;
+
+        // 调试：显示实体位置和状态
+        if (DEBUG && setupTicks % 20 == 0 && !this.level().isClientSide()) {
+            kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}] tick: pos={}, isPassenger={}, targetPlayerId={}, lifeTicks={}", 
+                    this.getId(), this.position(), this.isPassenger(), targetPlayerId, lifeTicks);
+        }
+
+        // 检查生命周期，防止无限存在
+        if (lifeTicks > maxLifespan && !this.level().isClientSide()) {
+            if (DEBUG) {
+                kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}]: Max lifespan reached, discarding", this.getId());
+            }
+            this.discard();
+            return;
+        }
 
         // 获取目标玩家
         Player targetPlayer = null;
@@ -79,6 +105,15 @@ public class BatStampFinishEntity extends LivingEntity implements GeoEntity {
             Entity entity = this.level().getPlayerByUUID(this.targetPlayerId);
             if (entity instanceof Player) {
                 targetPlayer = (Player) entity;
+            } else {
+                if (DEBUG && !this.level().isClientSide()) {
+                    kamen_rider_boss_you_and_me.LOGGER.warn("BatStampFinishEntity[{}]: Target player not found with UUID: {}", 
+                            this.getId(), targetPlayerId);
+                }
+            }
+        } else {
+            if (DEBUG && !this.level().isClientSide()) {
+                kamen_rider_boss_you_and_me.LOGGER.warn("BatStampFinishEntity[{}]: No target player ID set", this.getId());
             }
         }
 
@@ -89,15 +124,26 @@ public class BatStampFinishEntity extends LivingEntity implements GeoEntity {
 
             if (!isPlayerKicking) {
                 // 玩家已停止踢击，移除实体
+                if (DEBUG && !this.level().isClientSide()) {
+                    kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}]: Player stopped kicking, discarding", this.getId());
+                }
                 if (!this.level().isClientSide()) {
                     this.discard();
                 }
                 return;
             }
 
-            // 在前几tick尝试建立骑乘关系
-            if (setupTicks < 20 && !this.isPassenger()) {
-                this.startRiding(targetPlayer, true);
+            // 持续尝试建立骑乘关系，直到成功
+            if (!this.isPassenger()) {
+                if (DEBUG && !this.level().isClientSide() && setupTicks % 10 == 0) {
+                    kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}]: Trying to start riding player {}", 
+                            this.getId(), targetPlayer.getScoreboardName());
+                }
+                boolean mounted = this.startRiding(targetPlayer, true);
+                if (DEBUG && mounted && !this.level().isClientSide()) {
+                    kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}]: Successfully mounted player {}", 
+                            this.getId(), targetPlayer.getScoreboardName());
+                }
             }
 
             // 同步旋转
@@ -123,16 +169,29 @@ public class BatStampFinishEntity extends LivingEntity implements GeoEntity {
                 targetPlayer.addEffect(new MobEffectInstance(MobEffects.GLOWING, 40, 0, false, false));
             }
 
-            // 重置设置计时器，防止实体被丢弃
+            // 播放调试粒子效果
+            if (DEBUG && this.level().isClientSide()) {
+                this.level().addParticle(ParticleTypes.END_ROD, 
+                        this.getX(), this.getY() + 0.5, this.getZ(), 
+                        0.0D, 0.0D, 0.0D);
+            }
+
+            // 重置设置计时器
             setupTicks = 0;
         } else if (setupTicks > 40 && !this.level().isClientSide()) {
             // 只有在长时间找不到目标玩家时才移除实体
+            if (DEBUG) {
+                kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}]: No target player found, discarding", this.getId());
+            }
             this.discard();
         }
 
         if (isFinish) {
             finishTimer++;
             if (finishTimer > 100 && !this.level().isClientSide()) {
+                if (DEBUG) {
+                    kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}]: Finish timer expired, discarding", this.getId());
+                }
                 this.discard();
             }
         }
@@ -144,14 +203,28 @@ public class BatStampFinishEntity extends LivingEntity implements GeoEntity {
 
         // 触发动画播放
         triggerAnim("controller", "skick");
-
+        
+        // 添加调试日志
+        if (DEBUG && !this.level().isClientSide()) {
+            kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}]: Starting finish animation", this.getId());
+        }
     }
-
 
     public void setTargetPlayer(Player player) {
         this.targetPlayerId = player.getUUID();
         // 立即尝试建立骑乘关系
-        this.startRiding(player, true);
+        boolean mounted = this.startRiding(player, true);
+        
+        // 添加调试日志
+        if (DEBUG && !this.level().isClientSide()) {
+            kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}]: Target player set to: {}, mounted={}", 
+                    this.getId(), player.getScoreboardName(), mounted);
+        }
+    }
+
+    // 添加getTargetPlayerId方法，供KickendProcedure使用
+    public UUID getTargetPlayerId() {
+        return targetPlayerId;
     }
 
     @Override

@@ -1,202 +1,323 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.GiifuSleepingStateBlockEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.giifu.GiifuSleepingStateBlock;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatStampFinishEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KickDamageHelper;
-import dev.kosmx.playerAnim.api.layered.IAnimation;
-import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
-import dev.kosmx.playerAnim.api.layered.ModifierLayer;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.Connection;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.NetworkDirection;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 @Mod.EventBusSubscriber
 public class KickendProcedure {
+
+	private static final Map<UUID, Integer> playerToEffectEntity = new WeakHashMap<>();
+    private static final boolean DEBUG = true;
+
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		if (event.phase == TickEvent.Phase.END) {
-			execute(event, event.player.level(), event.player.getX(), event.player.getY(), event.player.getZ(), event.player);
+			Player entity = event.player;
+			LevelAccessor world = event.player.level();
+			execute(event, world, entity);
 		}
 	}
 
-	public static void execute(LevelAccessor world, double x, double y, double z, Entity entity) {
-		execute(null, world, x, y, z, entity);
-	}
-
-	private static void execute(@Nullable Event event, LevelAccessor world, double x, double y, double z, Entity entity) {
+	public static void execute(@Nullable Event event, LevelAccessor world, Player entity) {
 		if (entity == null)
 			return;
 
-		// 检查所有符合条件的头盔
-		if (isValidHelmet(entity) &&
-				(entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables())).kcik == true &&
-				entity.onGround()) {
+		KRBVariables.PlayerVariables variables = entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+				.orElse(new KRBVariables.PlayerVariables());
 
-			handleKickEnd(world, x, y, z, entity);
+		// 检查玩家是否处于踢击状态且装备了正确的头盔
+		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
+		if (variables.kcik && isHelmetValid(helmet) && entity.onGround()) {
+			// 玩家落地，处理踢击结束逻辑
+			handleKickEnd(event, world, entity);
 		}
+
+		// 处理无敌状态的计时和重置
+		handleInvulnerabilityReset(world, entity, variables);
 	}
 
-	// 提取头盔检测逻辑到单独的方法
-	private static boolean isValidHelmet(Entity entity) {
-		if (!(entity instanceof LivingEntity livingEntity)) return false;
-
-		ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
-		return helmet.getItem() == ModItems.BARON_LEMON_HELMET.get() ||
-				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
-				helmet.getItem() == ModItems.MARIKA_HELMET.get() ||
-				helmet.getItem() == ModItems.DUKE_HELMET.get() ||
-				helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get() ||
-				helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get() ||
-				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()||
-				helmet.getItem() == ModItems.TYRANT_HELMET.get()||
-				helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()||
-				helmet.getItem() == ModItems.SIGURD_HELMET.get();
-	}
-
-	private static void handleKickEnd(LevelAccessor world, double x, double y, double z, Entity entity) {
-		setPlayerVariable(entity, "needExplode", true);
-		setPlayerVariable(entity, "kcik", false);
-
-		// ① 纯特效爆炸（无地形破坏）
-		if (world instanceof ServerLevel _level) {
-			// 只播放粒子和音效，不调用真实爆炸
-			_level.sendParticles(
-					ParticleTypes.EXPLOSION_EMITTER,
-					x, y, z,
-					1, 0, 0, 0, 1
-			);
-			_level.playSound(
-					null, x, y, z,
-					SoundEvents.GENERIC_EXPLODE,
-					SoundSource.BLOCKS,
-					1.0f, 1.0f
-			);
+	// 处理踢击结束的逻辑
+	private static void handleKickEnd(@Nullable Event event, LevelAccessor world, Player entity) {
+		if (DEBUG && !world.isClientSide()) {
+			kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Handling kick end for player {}", entity.getScoreboardName());
 		}
 
-		// ② 只摧毁范围内的基夫石像
-		if (world instanceof ServerLevel _level) {
-			float radius = KickDamageHelper.getKickExplosionRadius(entity);
-			AABB box = new AABB(x, y, z, x, y, z).inflate(radius);
+		// 设置爆炸标志并重置踢击标志
+		KRBVariables.PlayerVariables variables = entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+				.orElse(new KRBVariables.PlayerVariables());
 
-			for (BlockPos pos : BlockPos.betweenClosed(
-					(int) (x - radius), (int) (y - radius), (int) (z - radius),
-					(int) (x + radius), (int) (y + radius), (int) (z + radius)
-			)) {
-				BlockState state = _level.getBlockState(pos);
-				if (state.getBlock() instanceof GiifuSleepingStateBlock) {
-					BlockEntity be = _level.getBlockEntity(pos);
-					if (be instanceof GiifuSleepingStateBlockEntity blockEntity) {
-						float damage = KickDamageHelper.getKickDamage(entity);
-						blockEntity.addDamage(damage); // ✅ 只让石像受爆炸伤害
-					}
-				}
-			}
-		}
+		variables.needExplode = true;
+		variables.kcik = false;
 
-		// ② 按头盔计算伤害并给周围敌人
-		if (world instanceof Level _level && !_level.isClientSide()) {
-			float damage = KickDamageHelper.getKickDamage(entity);
-			float radius = KickDamageHelper.getKickExplosionRadius(entity);
-			AABB box = new AABB(x, y, z, x, y, z).inflate(radius);
-			for (LivingEntity le : _level.getEntitiesOfClass(LivingEntity.class, box,
-					e -> e != entity && !e.isAlliedTo(entity))) {
-				le.hurt(((Player) entity).damageSources().playerAttack((Player) entity), damage);
-			}
-		}
-
-		// ③ 动画、无敌、复位等照旧
-		if (world.isClientSide()) {
-			if (entity instanceof AbstractClientPlayer player) {
-				var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player)
-						.get(new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
-				if (animation != null) {
-					animation.setAnimation(new KeyframeAnimationPlayer(
-							PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", "steadily"))));
-				}
-			}
-		}
-
-		kamen_rider_boss_you_and_me.queueServerWork(5, () -> {
-			setPlayerVariable(entity, "wudi", false);
-			setPlayerVariable(entity, "needExplode", false);
-			entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-					.ifPresent(cap -> { cap.kickStartTime = 0L; cap.kickStartY = 0.0; cap.syncPlayerVariables(entity); });
-		});
-	}
-
-	// 处理动画的通用方法
-	private static void handleAnimation(LevelAccessor world, Entity entity, String animationName) {
-		// 客户端动画处理
-		if (world.isClientSide()) {
-			if (entity instanceof AbstractClientPlayer player) {
-				var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player).get(
-						new ResourceLocation("kamen_rider_boss_you_and_me", "player_animation"));
-				if (animation != null) {
-					animation.setAnimation(new KeyframeAnimationPlayer(
-							PlayerAnimationRegistry.getAnimation(new ResourceLocation("kamen_rider_boss_you_and_me", animationName))));
-				}
-			}
-		}
-
-		// 服务端动画同步
+		// 服务器端处理爆炸效果和伤害
 		if (!world.isClientSide()) {
-			if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
-				List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
-				synchronized (connections) {
-					Iterator<Connection> iterator = connections.iterator();
-					while (iterator.hasNext()) {
-						Connection connection = iterator.next();
-						if (!connection.isConnecting() && connection.isConnected())
-							kamen_rider_boss_you_and_me.PACKET_HANDLER.sendTo(
-									new SetupAnimationsProcedure.kamen_rider_boss_you_and_meModAnimationMessage(
-											Component.literal(animationName), entity.getId(), true),
-									connection, NetworkDirection.PLAY_TO_CLIENT);
+			// 播放爆炸音效
+			world.playSound(null, new BlockPos((int) entity.getX(), (int) entity.getY(), (int) entity.getZ()),
+					SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+			// 创建爆炸粒子效果
+			ServerLevel serverLevel = (ServerLevel) world;
+			serverLevel.sendParticles(
+					ParticleTypes.EXPLOSION,
+					entity.getX(),
+					entity.getY(),
+					entity.getZ(),
+					10, 0.5, 0.5, 0.5, 0.1
+			);
+
+			// 专门处理基夫石像的伤害
+			handleGiifuDamage(world, entity);
+
+			// 处理普通敌人的伤害
+			handleEnemyDamage(world, entity);
+
+			// 清理特效实体
+			cleanupEffectEntity(entity, serverLevel);
+		}
+
+		// 客户端处理动画
+		if (world.isClientSide()) {
+			handleAnimation(entity);
+		}
+
+		// 设置无敌状态
+		variables.wudi = true;
+		variables.syncPlayerVariables(entity);
+	}
+
+	// 检查头盔是否有效
+	private static boolean isHelmetValid(ItemStack helmet) {
+		return helmet.getItem() == ModItems.SIGURD_HELMET.get() ||
+			helmet.getItem() == ModItems.BARON_LEMON_HELMET.get() ||
+			helmet.getItem() == ModItems.DUKE_HELMET.get() ||
+			helmet.getItem() == ModItems.MARIKA_HELMET.get() ||
+			helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
+			helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get() ||
+			helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get() ||
+			helmet.getItem() == ModItems.TYRANT_HELMET.get() ||
+			helmet.getItem() == ModItems.EVIL_BATS_HELMET.get() ||
+			helmet.getItem() == ModItems.DARK_KIVA_HELMET.get();
+	}
+
+	// 处理无敌状态的重置
+	private static void handleInvulnerabilityReset(LevelAccessor world, Player entity, KRBVariables.PlayerVariables variables) {
+		// 如果处于无敌状态且需要爆炸
+		if (variables.wudi && variables.needExplode) {
+			// 只在服务器端执行延迟任务
+			if (!world.isClientSide() && entity.getServer() != null) {
+				// 创建一个延迟任务来重置无敌状态
+				entity.getServer().execute(() -> {
+					KRBVariables.PlayerVariables delayedVariables = entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+							.orElse(new KRBVariables.PlayerVariables());
+
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Resetting invulnerability for player {}", entity.getScoreboardName());
 					}
-				}
+
+					delayedVariables.wudi = false;
+					delayedVariables.needExplode = false;
+					delayedVariables.syncPlayerVariables(entity);
+				});
+			} else if (world.isClientSide()) {
+				// 客户端直接重置变量（如果需要的话）
+				variables.wudi = false;
+				variables.needExplode = false;
+				variables.syncPlayerVariables(entity);
 			}
 		}
 	}
 
-	// 设置玩家变量的通用方法
-	// 设置玩家变量的通用方法
-	private static void setPlayerVariable(Entity entity, String variableName, boolean value) {
-		entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-			switch (variableName) {
-				case "kcik" -> capability.kcik = value;
-				case "wudi" -> capability.wudi = value;
-				case "needExplode" -> capability.needExplode = value;
+	// 处理基夫石像的伤害
+	private static void handleGiifuDamage(LevelAccessor world, Player entity) {
+		// 获取基夫石像
+		List<Entity> giifuList = world.getEntities(
+				entity,
+				entity.getBoundingBox().inflate(5.0),
+				e -> e.getType().equals(EntityType.ENDER_DRAGON) && e.hasCustomName() && e.getCustomName().getString().equals("基夫石像")
+		);
+
+		if (!giifuList.isEmpty()) {
+			Entity giifu = giifuList.get(0);
+			// 在基夫石像的NBT中存储伤害值
+			CompoundTag giifuTag = new CompoundTag();
+			if (giifu.getPersistentData().contains("Damage")) {
+				int damage = giifu.getPersistentData().getInt("Damage") + 1;
+				giifu.getPersistentData().putInt("Damage", damage);
+			} else {
+				giifu.getPersistentData().putInt("Damage", 1);
 			}
-			capability.syncPlayerVariables(entity);
-		});
+			if (DEBUG) {
+				kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Dealt damage to Giifu statue, current damage count: {}", 
+						giifu.getPersistentData().getInt("Damage"));
+			}
+		}
+	}
+
+	// 处理普通敌人的伤害
+	private static void handleEnemyDamage(LevelAccessor world, Player entity) {
+		// 根据头盔计算伤害
+		float damage = calculateDamage(entity);
+
+		// 找到范围内的敌人
+		List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(
+				LivingEntity.class,
+				new AABB(
+						entity.getX() - 3.0, entity.getY() - 3.0, entity.getZ() - 3.0,
+						entity.getX() + 3.0, entity.getY() + 3.0, entity.getZ() + 3.0
+				),
+				e -> e != entity && !e.isAlliedTo(entity)
+		);
+
+		// 对每个敌人造成伤害
+		for (LivingEntity enemy : nearbyEntities) {
+			damageEnemy(enemy, entity, damage);
+		}
+	}
+
+	// 根据头盔计算伤害
+	private static float calculateDamage(Player entity) {
+		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
+
+		// 根据不同的头盔类型设置不同的伤害值
+		if (helmet.getItem() == ModItems.BARON_LEMON_HELMET.get()) {
+			return 50.0F;
+		} else if (helmet.getItem() == ModItems.DUKE_HELMET.get()) {
+			return 70.0F;
+		} else if (helmet.getItem() == ModItems.MARIKA_HELMET.get()) {
+			return 45.0F;
+		} else if (helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
+			return 60.0F;
+		} else if (helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()) {
+			return 55.0F;
+		} else if (helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()) {
+			return 65.0F;
+		} else if (helmet.getItem() == ModItems.TYRANT_HELMET.get()) {
+			return 80.0F;
+		} else if (helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()) {
+			return 55.0F;
+		} else if (helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) {
+			return 75.0F;
+		} else {
+			// 默认伤害值（SIGURD_HELMET）
+			return 40.0F;
+		}
+	}
+
+	// 对敌人造成伤害
+	private static void damageEnemy(LivingEntity enemy, Player attacker, float damage) {
+		if (!enemy.isInvulnerableTo(attacker.damageSources().playerAttack(attacker))) {
+			enemy.hurt(attacker.damageSources().playerAttack(attacker), damage);
+			if (DEBUG) {
+				kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Damaged entity {} with {} damage",
+						enemy.getName().getString(), damage);
+			}
+		}
+	}
+
+	// 处理客户端动画
+	private static void handleAnimation(Player entity) {
+		// 设置steadily动画
+		setPlayerVariable(entity, "steadily", 1);
+	}
+
+	// 设置玩家变量
+	private static void setPlayerVariable(Player player, String variableName, int value) {
+		CompoundTag playerData = player.getPersistentData();
+		playerData.putInt(variableName, value);
+	}
+
+	// 清理特效实体
+	private static void cleanupEffectEntity(Player entity, ServerLevel serverLevel) {
+		UUID playerId = entity.getUUID();
+		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
+
+		// 特别是为EVIL_BATS_HELMET清理特效实体
+		if (helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()) {
+			// 方式1：通过KicktimeProcedure中的映射表清理
+			cleanupEffectEntityFromKicktime(entity);
+
+			// 方式2：直接在世界中查找并清理
+			cleanupEffectEntityFromWorld(entity, serverLevel);
+		}
+
+		if (DEBUG) {
+			kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Cleaned up effect entities for player {}", entity.getScoreboardName());
+		}
+	}
+
+	// 从KicktimeProcedure的映射表清理实体
+	private static void cleanupEffectEntityFromKicktime(Player entity) {
+		try {
+			// 使用反射访问KicktimeProcedure中的playerToEffectEntity映射
+			java.lang.reflect.Field field = KicktimeProcedure.class.getDeclaredField("playerToEffectEntity");
+			field.setAccessible(true);
+			Map<UUID, Integer> map = (Map<UUID, Integer>) field.get(null);
+
+			if (map.containsKey(entity.getUUID())) {
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Removing effect entity from KicktimeProcedure map for player {}", 
+						entity.getScoreboardName());
+				}
+				map.remove(entity.getUUID());
+			}
+		} catch (Exception e) {
+			// 如果反射失败，记录错误但继续执行
+			if (DEBUG) {
+				kamen_rider_boss_you_and_me.LOGGER.error("KickendProcedure: Error accessing KicktimeProcedure's playerToEffectEntity", e);
+			}
+		}
+	}
+
+	// 从世界中直接清理实体
+	private static void cleanupEffectEntityFromWorld(Player entity, ServerLevel serverLevel) {
+		// 查找并移除所有与该玩家关联的BatStampFinishEntity
+		List<BatStampFinishEntity> entities = serverLevel.getEntitiesOfClass(
+				BatStampFinishEntity.class,
+				entity.getBoundingBox().inflate(10.0)
+		);
+
+		for (BatStampFinishEntity batEntity : entities) {
+			// 直接调用getTargetPlayerId方法，不再使用反射
+			UUID targetId = batEntity.getTargetPlayerId();
+
+			if (targetId != null && targetId.equals(entity.getUUID())) {
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Discarding BatStampFinishEntity with ID: {}", 
+							batEntity.getId());
+				}
+				batEntity.discard();
+			}
+		}
 	}
 }

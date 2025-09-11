@@ -7,7 +7,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class GiifuDnaEffect extends MobEffect {
+    // 用于存储已经获得蝙蝠印章的玩家UUID
+    private static final Set<UUID> playersWithBatStamp = ConcurrentHashMap.newKeySet();
+
     public GiifuDnaEffect() {
         super(MobEffectCategory.BENEFICIAL, 0x00FF00); // 绿色
     }
@@ -23,23 +30,17 @@ public class GiifuDnaEffect extends MobEffect {
         if (entity instanceof Player player && !player.level().isClientSide()) {
             Level level = player.level();
 
-            // 有10%几率获得蝙蝠印章
-            if (level.random.nextFloat() < 0.1f) {
-                if (!hasBatStamp(player)) {
+            // 检查玩家是否已经获得过蝙蝠印章
+            if (!playersWithBatStamp.contains(player.getUUID())) {
+                // 有10%几率获得蝙蝠印章
+                if (level.random.nextFloat() < 0.1f) {
                     player.addItem(new ItemStack(ModItems.BAT_STAMP.get()));
                     player.displayClientMessage(net.minecraft.network.chat.Component.literal("§d基夫血脉觉醒！获得了蝙蝠印章§r"), true);
+
+                    // 将玩家UUID添加到集合中，标记为已获得
+                    playersWithBatStamp.add(player.getUUID());
                 }
             }
         }
     }
-
-    private boolean hasBatStamp(Player player) {
-        for (ItemStack stack : player.getInventory().items) {
-            if (stack.getItem() == ModItems.BAT_STAMP.get()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }

@@ -399,6 +399,18 @@ public class KeybindHandler {
             }
         }
 
+        //停止待机音
+        ResourceLocation soundLoc = new ResourceLocation(
+                "kamen_rider_boss_you_and_me",
+                "evil_by"
+        );
+        PacketHandler.sendToAllTracking(
+                new SoundStopPacket(player.getId(), soundLoc),
+                player
+        );
+        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
+
+
         // 检查并更新腰带状态
         Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
                 .resolve()

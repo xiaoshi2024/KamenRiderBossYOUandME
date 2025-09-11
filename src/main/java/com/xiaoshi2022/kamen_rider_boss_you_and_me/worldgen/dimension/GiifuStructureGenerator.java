@@ -1,19 +1,18 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.worldgen.dimension;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Mod.EventBusSubscriber
 public class GiifuStructureGenerator {
@@ -21,34 +20,26 @@ public class GiifuStructureGenerator {
     private static final ResourceLocation CHEST_STRUCTURE =
             new ResourceLocation("kamen_rider_boss_you_and_me", "giifu_loot/giifu_chest");
 
-    // 使用更持久的存储来跟踪已生成的结构
-    private static final Set<ResourceKey<Level>> GENERATED_CHESTS = new HashSet<>();
-    private static final Set<ResourceKey<Level>> PENDING_GENERATION = new HashSet<>();
-
     @SubscribeEvent
     public static void onWorldLoad(LevelEvent.Load event) {
         if (event.getLevel() instanceof ServerLevel serverLevel) {
             if (serverLevel.dimension() == GiifuCurseDimension.GIIFU_CURSE_DIM) {
 
-                // 检查是否已经生成过或者正在生成
-                if (GENERATED_CHESTS.contains(serverLevel.dimension()) ||
-                        PENDING_GENERATION.contains(serverLevel.dimension())) {
+                // 使用持久化数据检查是否已经生成
+                GiifuCurseDimension.DimensionData data = GiifuCurseDimension.getDimensionData(serverLevel);
+                if (data.isChestGenerated()) {
                     return;
                 }
-
-                // 标记为正在生成，防止重复触发
-                PENDING_GENERATION.add(serverLevel.dimension());
 
                 // 先确保平台生成
                 GiifuCurseDimension.generatePlatform(serverLevel);
 
-                // 延迟一tick生成宝箱，确保平台已生成完成
+                // 延迟生成宝箱，确保平台已生成完成
                 serverLevel.getServer().execute(() -> {
-                    try {
+                    // 再次检查，防止竞态条件
+                    GiifuCurseDimension.DimensionData delayedData = GiifuCurseDimension.getDimensionData(serverLevel);
+                    if (!delayedData.isChestGenerated()) {
                         generateLootChest(serverLevel);
-                        GENERATED_CHESTS.add(serverLevel.dimension());
-                    } finally {
-                        PENDING_GENERATION.remove(serverLevel.dimension());
                     }
                 });
             }
@@ -56,15 +47,24 @@ public class GiifuStructureGenerator {
     }
 
     public static void generateLootChest(ServerLevel level) {
-        // 再次检查是否已经生成（防止竞态条件）
-        if (GENERATED_CHESTS.contains(level.dimension())) {
+        // 使用持久化数据检查是否已经生成
+        GiifuCurseDimension.DimensionData data = GiifuCurseDimension.getDimensionData(level);
+        if (data.isChestGenerated()) {
+            return;
+        }
+
+        // 检查平台是否就绪
+        if (!GiifuCurseDimension.isPlatformReady(level)) {
+            // 平台未就绪，稍后重试
+            level.getServer().execute(() -> generateLootChest(level));
             return;
         }
 
         // 检查宝箱是否已经存在（防止服务器重启后重复生成）
         if (isChestAlreadyExists(level)) {
             System.out.println("Chest already exists in dimension: " + level.dimension());
-            GENERATED_CHESTS.add(level.dimension());
+            data.setChestGenerated(true);
+            data.setDirty();
             return;
         }
 
@@ -102,14 +102,19 @@ public class GiifuStructureGenerator {
 
             template.placeInWorld(level, chestPos, chestPos, settings, random, 2);
 
+            // 标记为已生成并保存
+            data.setChestGenerated(true);
+            data.setDirty();
+
             // 调试信息
             System.out.println("Generated giifu chest at: " + chestPos + " in dimension: " + level.dimension());
         } else {
             System.out.println("Failed to load structure: " + CHEST_STRUCTURE);
+            // 结构加载失败，可以尝试重新生成或记录错误
         }
     }
 
-    // 新增：检查宝箱是否已经存在
+    // 检查宝箱是否已经存在
     private static boolean isChestAlreadyExists(ServerLevel level) {
         // 在平台范围内搜索箱子
         BlockPos center = GiifuCurseDimension.PLATFORM_CENTER;
@@ -128,21 +133,32 @@ public class GiifuStructureGenerator {
         return false;
     }
 
-    // 新增：手动触发生成（用于调试或其他需要时）
+    // 手动触发生成（用于调试或其他需要时）
     public static void forceGenerateChest(ServerLevel level) {
         if (level.dimension() == GiifuCurseDimension.GIIFU_CURSE_DIM) {
-            GENERATED_CHESTS.remove(level.dimension());
+            // 清除生成状态并重新生成
+            GiifuCurseDimension.DimensionData data = GiifuCurseDimension.getDimensionData(level);
+            data.setChestGenerated(false);
+            data.setDirty();
             generateLootChest(level);
         }
     }
 
-    public static void clearChestCache(ResourceKey<Level> dimension) {
-        GENERATED_CHESTS.remove(dimension);
-        PENDING_GENERATION.remove(dimension);
+    // 清理宝箱数据（用于调试）
+    public static void clearChestData(ServerLevel level) {
+        if (level.dimension() == GiifuCurseDimension.GIIFU_CURSE_DIM) {
+            GiifuCurseDimension.DimensionData data = GiifuCurseDimension.getDimensionData(level);
+            data.setChestGenerated(false);
+            data.setDirty();
+        }
     }
 
-    // 新增：检查是否已经生成
-    public static boolean hasChestGenerated(ResourceKey<Level> dimension) {
-        return GENERATED_CHESTS.contains(dimension);
+    // 检查是否已经生成
+    public static boolean hasChestGenerated(ServerLevel level) {
+        if (level.dimension() == GiifuCurseDimension.GIIFU_CURSE_DIM) {
+            GiifuCurseDimension.DimensionData data = GiifuCurseDimension.getDimensionData(level);
+            return data.isChestGenerated();
+        }
+        return false;
     }
 }
