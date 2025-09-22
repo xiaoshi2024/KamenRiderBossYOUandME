@@ -1,13 +1,9 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Another_Zi_o;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatDarksEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatStampFinishEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
@@ -81,8 +77,11 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .build("bat_stamp_finish"));
 
-//    public static final RegistryObject<EntityType<KnecromghostEntity>> KNECROMGHOST = registerMob("knecromghost", KnecromghostEntity::new,
-//            0.6f, 1.6f, 0x1F1F1F, 0x0D0D0D);
+    public static final RegistryObject<EntityType<KnecromghostEntity>> KNECROMGHOST = ENTITY_TYPES.register("knecromghost",
+            () -> EntityType.Builder.<KnecromghostEntity>of(KnecromghostEntity::new, MobCategory.MISC)
+                    .sized(0.8F, 1.5F) // 调整碰撞箱大小
+                    .clientTrackingRange(8)
+                    .build("knecromghost"));
 
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {

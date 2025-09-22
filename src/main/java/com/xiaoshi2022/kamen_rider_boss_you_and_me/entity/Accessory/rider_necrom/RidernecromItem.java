@@ -1,4 +1,3 @@
-
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.Ridernecrom.RidernecromArmorRenderer;
@@ -35,7 +34,7 @@ import net.minecraft.client.model.HumanoidModel;
 import java.util.function.Consumer;
 import java.util.List;
 
-public class RidernecromItem extends ArmorItem implements GeoItem , ArmorAnimationFactory.AnimatableAccessor {
+public class RidernecromItem extends ArmorItem implements GeoItem, ArmorAnimationFactory.AnimatableAccessor {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
@@ -46,17 +45,16 @@ public class RidernecromItem extends ArmorItem implements GeoItem , ArmorAnimati
 				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 25;
 			}
 
-			// 防御：提升至28 点（头盔4 胸甲8 护腿7 靴子3） - 假面骑士Necrom强化版
 			@Override
 			public int getDefenseForType(Type type) {
 				return new int[]{4, 8, 7, 9}[type.getSlot().getIndex()];
 			}
-			// 盔甲韧性：添加韧性值4.0
+
 			@Override
 			public float getToughness() {
 				return 4.0f;
 			}
-			// 击退抗性：增加10%
+
 			@Override
 			public float getKnockbackResistance() {
 				return 0.10f;
@@ -81,7 +79,6 @@ public class RidernecromItem extends ArmorItem implements GeoItem , ArmorAnimati
 			public String getName() {
 				return "ridernecrom";
 			}
-
 		}, type, properties);
 	}
 
@@ -105,7 +102,6 @@ public class RidernecromItem extends ArmorItem implements GeoItem , ArmorAnimati
 		super.appendHoverText(itemstack, world, list, flag);
 	}
 
-
 	private PlayState predicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
@@ -117,7 +113,6 @@ public class RidernecromItem extends ArmorItem implements GeoItem , ArmorAnimati
 		}
 		return PlayState.STOP;
 	}
-
 	private PlayState procedurePredicate(AnimationState event) {
 		if (!this.animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));

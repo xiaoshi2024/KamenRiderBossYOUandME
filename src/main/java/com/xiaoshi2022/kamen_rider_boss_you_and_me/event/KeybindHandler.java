@@ -1,10 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
@@ -67,6 +64,9 @@ public class KeybindHandler {
     private static String getBeltType(ItemStack beltStack) {
         if (beltStack.getItem() instanceof DrakKivaBelt) {
             return "DARK_KIVA";
+        }
+        if (beltStack.getItem() instanceof Mega_uiorder) {
+            return "MEGA_UIORDER";
         }
         if (beltStack.getItem() instanceof Genesis_driver gd) {
             return switch (gd.getMode(beltStack)) {
@@ -209,7 +209,16 @@ public class KeybindHandler {
             PacketHandler.sendToServer(new ReleaseBeltPacket(true, "EVIL_BATS"));
             return; // 处理完EvilBats变身后直接返回
         }
-        
+
+        //幽冥逻辑
+        // ✅ C 键解除 Necrom 变身
+        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        if (vars.isMegaUiorderTransformed) {
+// 客户端 KeybindHandler.java
+            PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), RiderTypes.RIDERNECROM, true));
+            return; // 解除完直接返回，不再往下走
+        }
+
         // 柠檬逻辑
         CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
                 .ifPresent(curio -> {
@@ -359,9 +368,58 @@ public class KeybindHandler {
             case "BARONS"          -> handleBaronsBeltRelease(player);    // 香蕉
             case "DUKE"            -> handleDukeBeltRelease(player);      // 公爵
             case "EVIL_BATS"       -> handleEvilBatsRelease(player);      // Evil Bats
+            case "RIDERNECROM"      -> handleNecromRelease(player);      // Rider Necrom
         }
     }
-    
+
+    // 新增：Necrom 解除变身
+    private static void handleNecromRelease(ServerPlayer player) {
+        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+                .orElse(new KRBVariables.PlayerVariables());
+
+        // 1. 清除装甲
+        clearTransformationArmor(player);
+
+        // 2. 重置状态
+        vars.isMegaUiorderTransformed = false;
+        vars.syncPlayerVariables(player);
+
+        // 3. 返还眼魂
+        ItemStack eye = new ItemStack(ModItems.NECROM_EYE.get());
+        if (!player.getInventory().add(eye)) player.spawnAtLocation(eye);
+
+        // 4. 停止待机音（可选）
+        ResourceLocation soundLoc = new ResourceLocation(
+                "kamen_rider_boss_you_and_me",
+                "login_by"
+        );
+        PacketHandler.sendToAllTracking(
+                new SoundStopPacket(player.getId(), soundLoc),
+                player
+        );
+        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
+
+        // 重置手环为默认形态
+        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Mega_uiorder)
+                .ifPresent(curio -> {
+                    ItemStack stack = curio.stack();
+                    Mega_uiorder bracelet = (Mega_uiorder) stack.getItem();
+
+                    // 设置为默认模式
+                    bracelet.switchMode(stack, Mega_uiorder.Mode.DEFAULT);
+
+                    // 更新 Curios 槽位
+                    CurioUtils.updateCurioSlot(player,
+                            curio.slotContext().identifier(),
+                            curio.slotContext().index(),
+                            stack);
+                });
+
+        // 5. 播放解除音效
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+    }
+
     // 新增：Evil Bats解除变身逻辑
     private static void handleEvilBatsRelease(ServerPlayer player) {
         // 检查玩家是否已变身
@@ -753,7 +811,7 @@ public class KeybindHandler {
 
     }
 
-    private static void clearTransformationArmor(ServerPlayer player) {
+    public static void clearTransformationArmor(ServerPlayer player) {
         for (int i = 0; i < 4; i++) {
             player.getInventory().armor.set(i, ItemStack.EMPTY);
         }

@@ -1,9 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -40,6 +37,10 @@ public class BeltAnimationPacket {
         this(entityId, animationName, "two_sidriver", mode.name());
     }
 
+    public BeltAnimationPacket(int entityId, String animationName, Mega_uiorder.Mode mode) {
+        this(entityId, animationName, "mega_uiorder", mode.name()); // 修改这里以匹配 Mega_uiorder
+    }
+
     public BeltAnimationPacket(int entityId, String animationName, String beltType, String beltMode) {
         this.entityId = entityId;
         this.animationName = animationName;
@@ -69,6 +70,8 @@ public class BeltAnimationPacket {
                 return new BeltAnimationPacket(id, anim, DrakKivaBelt.DrakKivaBeltMode.valueOf(mode));
             case "two_sidriver":
                 return new BeltAnimationPacket(id, anim, Two_sidriver.DriverType.valueOf(mode));
+            case "mega_uiorder":
+                return new BeltAnimationPacket(id, anim, Mega_uiorder.Mode.valueOf(mode)); // 添加对 Mega_uiorder 的处理
             default:
                 throw new IllegalArgumentException("Unknown belt type: " + type);
         }
@@ -95,6 +98,8 @@ public class BeltAnimationPacket {
                             dk.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof Two_sidriver ts) {
                             ts.triggerAnim(living, "controller", msg.animationName);
+                        } else if (item instanceof Mega_uiorder mu) {
+                            mu.triggerAnim(living, "controller", msg.animationName);
                         }
                     })
             );

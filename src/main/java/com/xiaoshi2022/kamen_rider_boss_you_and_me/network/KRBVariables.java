@@ -81,6 +81,11 @@ public class  KRBVariables {
 			clone.melon_ready_time = original.melon_ready_time;
 			clone.banana_ready = original.banana_ready;
 			clone.banana_ready_time = original.banana_ready_time;
+
+				// 眼魂
+				clone.isMegaUiorderTransformed = original.isMegaUiorderTransformed;
+				clone.isNecromStandby = original.isNecromStandby;
+
 			} else {
 			// 玩家死亡重生时，重置所有状态变量
 			clone.kcik = false;
@@ -109,6 +114,12 @@ public class  KRBVariables {
 			clone.dark_kiva_sonic_blast_active = false;
 			clone.dark_kiva_sonic_blast_cooldown = 0L;
 			clone.dark_kiva_blood_steal_cooldown = 0L;
+
+			// 眼魂
+				clone.isMegaUiorderTransformed = false;
+				clone.isNecromStandby = false;
+
+
 			// 新增：重置其他状态变量
 			clone.isDarkKivaBeltEquipped = false;
 			clone.baseMaxHealth = 20.0D;
@@ -156,6 +167,11 @@ public class  KRBVariables {
 		public long kickStartTime = 0L;
 		public double kickStartY = 0.0D;
 		public double kickInitialVelocity = 0.0D;
+
+		//眼魂相关
+		public boolean isMegaUiorderTransformed = false; // 新增字段：记录是否装备了Mega_uiorder并变身
+		public boolean isNecromStandby = false;
+
 		// 锁种相关变量
 		public boolean cherry_ready = false;
 		public long cherry_ready_time = 0L;
@@ -226,6 +242,10 @@ public class  KRBVariables {
 		nbt.putLong("dark_kiva_sonic_blast_cooldown", dark_kiva_sonic_blast_cooldown);
 		nbt.putLong("dark_kiva_blood_steal_cooldown", dark_kiva_blood_steal_cooldown);
 
+		//眼魂
+			nbt.putBoolean("isMegaUiorderTransformed", isMegaUiorderTransformed); // 新增：序列化Mega_uiorder变身状态
+			nbt.putBoolean("isNecromStandby", isNecromStandby); // 新增：序列化Necrom待机状态
+
 		nbt.putBoolean("isEvilBatsTransformed", isEvilBatsTransformed); // 新增：存储EvilBats变身状态
 
 			nbt.putDouble("baseMaxHealth", baseMaxHealth);   // ← 新增
@@ -258,10 +278,14 @@ public class  KRBVariables {
 		dragonfruit_ready_time = nbt.getLong("dragonfruit_ready_time");
 		dragonfruit_time = nbt.getLong("dragonfruit_time");
 
+		//眼魂
+			isMegaUiorderTransformed = nbt.getBoolean("isMegaUiorderTransformed"); // 新增：读取Mega_uiorder变身状态
+			isNecromStandby = nbt.getBoolean("isNecromStandby"); // 新增：读取Necrom待机状态
+
 		isEvilBatsTransformed = nbt.getBoolean("isEvilBatsTransformed"); // 新增：读取EvilBats变身状态
 
 			baseMaxHealth = nbt.getDouble("baseMaxHealth");  // ← 新增
-	}
+		}
 	}
 
 	public static class PlayerVariablesSyncMessage {
@@ -291,6 +315,11 @@ public class  KRBVariables {
 				variables.kickStartTime = message.data.kickStartTime;
 				variables.kickStartY = message.data.kickStartY;
 				variables.needExplode = message.data.needExplode;
+
+				//眼魂
+					variables.isMegaUiorderTransformed = message.data.isMegaUiorderTransformed; // 新增：同步Mega_uiorder变身状态
+					variables.isNecromStandby = message.data.isNecromStandby;
+
 				// 同步锁种相关变量
 				variables.cherry_ready = message.data.cherry_ready;
 				variables.cherry_ready_time = message.data.cherry_ready_time;

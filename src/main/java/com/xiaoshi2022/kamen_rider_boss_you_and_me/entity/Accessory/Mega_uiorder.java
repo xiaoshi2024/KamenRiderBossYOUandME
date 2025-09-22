@@ -1,11 +1,15 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.Mega_uiorder_item.Mega_uiorderRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.TransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +35,11 @@ public class Mega_uiorder extends Item implements GeoItem, ICurioItem {
     public static final RawAnimation HEIXN = RawAnimation.begin().thenPlay("heixn");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
+    public void triggerAnim(LivingEntity entity, String controller, String animationName) {
+        // 在这里添加触发动画的逻辑
+        // 例如，使用 GeckoLib 的 AnimationController 来触发动画
+    }
+
     public enum Mode {
         DEFAULT,
         NECROM_EYE,
@@ -39,7 +48,8 @@ public class Mega_uiorder extends Item implements GeoItem, ICurioItem {
 
     public Mega_uiorder(Properties properties) {
         super(properties);
-//        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+        // Register our item as server-side handled.
+        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     public void switchMode(ItemStack stack, Mode mode) {
@@ -82,27 +92,28 @@ public class Mega_uiorder extends Item implements GeoItem, ICurioItem {
         ItemStack stack = player.getItemInHand(hand);
         if (level.isClientSide) return super.use(level, player, hand);
 
-        if (player.isShiftKeyDown() && stack.hasTag() && stack.getTag().contains("necrom_eye")) {
-            // 取出手环中的眼魂
-            ItemStack eye = new ItemStack(ModItems.NECROM_EYE.get());
-            eye.setTag(stack.getTag().getCompound("necrom_eye"));
+        // 检查玩家是否持有 Necrom_eye
+        boolean hasNecromEye = player.getInventory().contains(new ItemStack(ModItems.NECROM_EYE.get()));
+        // 检查玩家是否持有额外的道具（例如 Mega_uiorder 的特定模式）
+        boolean hasAdditionalItem = getCurrentMode(stack) == Mode.NECROM_EYE;
 
-            // 将眼魂放入玩家背包
-            if (!player.getInventory().add(eye)) {
-                player.drop(eye, false);
-            }
-
-            // 清除手环中的眼魂 NBT
-            stack.getTag().remove("necrom_eye");
-
-            switchMode(stack, Mode.DEFAULT);
-
+        if (hasNecromEye && hasAdditionalItem) {
+            // 触发变身
+            PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "RIDERNECROM", false));
+            switchMode(stack, Mode.NECROM_EYE); // 切换到 NECROM_EYE 模式
             return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        } else {
+            // 提示玩家缺少必要的道具
+            if (!hasNecromEye) {
+                player.displayClientMessage(Component.literal("You need a Necrom Eye to transform!"), true);
+            }
+            if (!hasAdditionalItem) {
+                player.displayClientMessage(Component.literal("You need to set the Mega_uiorder to NECROM_EYE mode!"), true);
+            }
         }
 
         return super.use(level, player, hand);
     }
-    
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

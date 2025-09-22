@@ -44,6 +44,9 @@ public class ReleaseBeltPacket {
                 // 处理Evil Bats解除变身
                 KeybindHandler.completeBeltRelease(player, "EVIL_BATS");
             }
+            case "RIDERNECROM" -> {
+                KeybindHandler.completeBeltRelease(player, "RIDERNECROM");
+            }
         }
     }
 

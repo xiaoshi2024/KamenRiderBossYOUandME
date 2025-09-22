@@ -2,27 +2,29 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.KivatBatTwoNdItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.KnecromghostEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ReleaseBeltPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
-import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.UUID;
 import java.util.function.Supplier;
+
+import static com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler.clearTransformationArmor;
+import static com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.RiderTypes.RIDERNECROM;
 
 public class TransformationRequestPacket {
     private final UUID playerId;
@@ -125,9 +127,84 @@ public class TransformationRequestPacket {
                         /* 5. 消耗物品 */
                         kivatItem.shrink(1);
                     }
+                    case "RIDERNECROM" -> {
+                        if (msg.isRelease) {
+                            // ✅ 卸下盔甲
+                            clearTransformationArmor(player);
+
+                            // ✅ 重置状态
+                            player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(v -> {
+                                v.isMegaUiorderTransformed = false;
+                                v.syncPlayerVariables(player);
+                            });
+
+                            // ✅ 返还眼魂
+                            ItemStack eye = new ItemStack(ModItems.NECROM_EYE.get());
+                            if (!player.getInventory().add(eye)) {
+                                player.spawnAtLocation(eye);
+                            }
+
+                            // ✅ 停止待机音
+                            ResourceLocation soundLoc = new ResourceLocation(
+                                    "kamen_rider_boss_you_and_me",
+                                    "login_by"
+                            );
+                            PacketHandler.sendToAllTracking(
+                                    new SoundStopPacket(player.getId(), soundLoc),
+                                    player
+                            );
+                            PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
+
+                        } else {
+
+                            // ✅ 变身：穿装甲 + 清待机标记
+                            player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(vars -> {
+                                if (!vars.isNecromStandby) return;
+
+                                // 穿装甲
+                                player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.RIDERNECROM_HELMET.get()));
+                                player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.RIDERNECROM_CHESTPLATE.get()));
+                                player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.RIDERNECROM_LEGGINGS.get()));
+                                player.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.RIDERNECROM_BOOTS.get()));
+
+                                vars.isMegaUiorderTransformed = true;
+                                vars.isNecromStandby = false;
+                                vars.syncPlayerVariables(player);
+                            });
+
+                            // ✅ 停止待机音
+                            ResourceLocation soundLoc = new ResourceLocation(
+                                    "kamen_rider_boss_you_and_me",
+                                    "login_by"
+                            );
+                            PacketHandler.sendToAllTracking(
+                                    new SoundStopPacket(player.getId(), soundLoc),
+                                    player
+                            );
+                            PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
+
+                            for (KnecromghostEntity ghost : player.level().getEntitiesOfClass(
+                                    KnecromghostEntity.class,
+                                    player.getBoundingBox().inflate(10.0D))) {
+                                if (player.getUUID().equals(ghost.targetPlayerId)) {
+                                    ghost.startHenshin();      // 服务端先跑一遍（可选）
+                                    PacketHandler.sendToAllTracking(
+                                            new KnecromGhostAnimationPacket(ghost.getId(), true),
+                                            ghost
+                                    );
+                                    break;
+                                }
+                            }
+
+                            // ✅ 只播变身音
+                            player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                                    ModBossSounds.EYE_DROP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                        }
+                    }
                 }
             }
         });
         ctx.get().setPacketHandled(true);
     }
+
 }

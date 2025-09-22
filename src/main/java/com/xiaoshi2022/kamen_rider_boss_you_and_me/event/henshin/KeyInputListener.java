@@ -2,8 +2,10 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
@@ -11,6 +13,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -71,6 +74,35 @@ public final class KeyInputListener {
                 }
             }
             return;
+        }
+
+        // 3. Necrom 变身
+        Optional<Mega_uiorder> mega = CurioUtils.findFirstCurio(player,
+                        stack -> stack.getItem() instanceof Mega_uiorder)
+                .map(slot -> (Mega_uiorder) slot.stack().getItem());
+
+        if (mega.isPresent()) {
+            Mega_uiorder belt = mega.get();
+            ItemStack beltStack = CurioUtils.findFirstCurio(player,
+                    stack -> stack.getItem() instanceof Mega_uiorder).get().stack();
+
+            if (belt.getCurrentMode(beltStack) == Mega_uiorder.Mode.NECROM_EYE) {
+
+                KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+
+                // ✅ 必须处于“待变身”状态才允许变身
+                if (!vars.isNecromStandby) {
+                    player.displayClientMessage(Component.literal("请先插入眼魂！"), true);
+                    return;
+                }
+
+                // ✅ 已变身则不再触发
+                if (vars.isMegaUiorderTransformed) return;
+
+                // ✅ 发送变身包
+                PacketHandler.INSTANCE.sendToServer(new TransformationRequestPacket(player.getUUID(), RiderTypes.RIDERNECROM, false));
+                return;
+            }
         }
 
         // 2. 战极腰带
@@ -200,6 +232,7 @@ public final class KeyInputListener {
                     player.getInventory().armor.get(3).is(ModItems.TYRANT_HELMET.get()) &&
                     player.getInventory().armor.get(2).is(ModItems.TYRANT_CHESTPLATE.get()) &&
                     player.getInventory().armor.get(1).is(ModItems.TYRANT_LEGGINGS.get());
+
             default -> false;
         };
     }

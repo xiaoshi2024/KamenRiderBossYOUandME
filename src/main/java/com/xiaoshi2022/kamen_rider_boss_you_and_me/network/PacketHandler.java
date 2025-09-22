@@ -114,6 +114,14 @@ public class PacketHandler {
         );
         INSTANCE.registerMessage(index++, WeaponRemovePacket.class,
                 WeaponRemovePacket::encode, WeaponRemovePacket::decode, WeaponRemovePacket::handle);
+
+        INSTANCE.registerMessage(
+                index++,
+                KnecromGhostAnimationPacket.class,
+                KnecromGhostAnimationPacket::encode,
+                KnecromGhostAnimationPacket::decode,
+                KnecromGhostAnimationPacket::handle
+        );
     }
 
     public static void sendToServer(Object packet) {

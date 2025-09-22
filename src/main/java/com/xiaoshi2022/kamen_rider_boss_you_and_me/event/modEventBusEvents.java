@@ -5,12 +5,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatDarksEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatStampFinishEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
@@ -346,6 +343,8 @@ public class modEventBusEvents {
             event.put(ModEntityTypes.BAT_DARKS.get(), BatDarksEntity.createAttributes());
 
             event.put(ModEntityTypes.BAT_STAMP_FINISH.get(), BatStampFinishEntity.createAttributes());
+
+            event.put(ModEntityTypes.KNECROMGHOST.get(), KnecromghostEntity.createAttributes());
 
 //            event.put(ModEntityTypes.KAITO.get(),
 //                    KaitoVillager.createAttributes()

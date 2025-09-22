@@ -1,14 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_eye;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.EvilBatsArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
@@ -16,8 +14,13 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.Tyran
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -57,7 +60,10 @@ public class PlayerDeathHandler {
                 // 5. 返还腰带
                 returnBelt(player, isBatForm);
 
-                // 6. 返还刚才记下来的锁种
+                // 6. 返还眼魂
+                returnNecromEye(player);
+
+                // 7. 返还刚才记下来的锁种
                 List<ItemStack> lockseeds = getLockseedStacksByType(lockseedType);
                 for (ItemStack stack : lockseeds) {
                     if (!player.getInventory().add(stack)) {
@@ -65,8 +71,40 @@ public class PlayerDeathHandler {
                     }
                 }
             }
+
         }
     }
+
+    private static void returnNecromEye(Player player) {
+        /* 只在服务端跑 */
+        if (player.level().isClientSide) return;
+
+        player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(vars -> {
+            /* ===== 取证开始 ===== */
+            boolean mega = vars.isMegaUiorderTransformed;
+            boolean standby = vars.isNecromStandby;
+//            String msg = String.format(
+//                    "[returnNecromEye] mega=%s, standby=%s, hasArmor=%s",
+//                    mega, standby, hasTransformationArmor(player)
+//            );
+//            System.out.println(msg);                       // 写在服务端 latest.log
+//            player.sendSystemMessage(Component.literal(msg)); // 聊天栏
+            /* ===== 取证结束 ===== */
+
+            if (mega || standby) {
+                ItemStack eye = new ItemStack(ModItems.NECROM_EYE.get());
+                if (!player.getInventory().add(eye)) {
+                    player.drop(eye, false);
+                }
+//                player.sendSystemMessage(
+//                        Component.literal("§e[眼魂] 已返还！").withStyle(ChatFormatting.YELLOW)
+//                );
+                vars.isMegaUiorderTransformed = false;
+                vars.isNecromStandby = false;
+            }
+        });
+    }
+
 
     // 修改：检查玩家是否处于蝙蝠形态
     private static boolean isInBatForm(Player player) {
@@ -174,6 +212,32 @@ public class PlayerDeathHandler {
                                     handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY)
                             )
                     );
+                });
+
+        // 5. 手环驱动器（Mega_uiorder）-------------------------------------------
+        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Mega_uiorder)
+                .ifPresent(curio -> {
+                    ItemStack bracelet = curio.stack().copy();
+                    Mega_uiorder ui = (Mega_uiorder) bracelet.getItem();
+                    ui.switchMode(bracelet, Mega_uiorder.Mode.DEFAULT);
+
+                    // ✅ 优先放进背包，满了才掉落
+                    if (!player.getInventory().add(bracelet)) {
+                        player.drop(bracelet, false);
+                    }
+
+                    // ✅ 清槽
+                    if (!player.level().isClientSide) {
+                        CuriosApi.getCuriosInventory(player).ifPresent(inv ->
+                                inv.getStacksHandler(curio.slotContext().identifier()).ifPresent(handler ->
+                                        handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY)
+                                )
+                        );
+                    }
+
+                    // ✅ 清除玩家状态变量，防止重复返还
+                    player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(vars -> {
+                    });
                 });
     }
 
