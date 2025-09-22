@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public final class RiderInvisibilityManager {
 
     private static final int OUR_DURATION = Integer.MAX_VALUE;   // 无限时间
-    private static final int OUR_AMPLIFIER = 100;  // 使用特殊的等级来区分模组添加的隐身效果
+    private static final int OUR_AMPLIFIER = 31;  // 使用特殊的等级来区分模组添加的隐身效果
 
     /** 每 tick 调用：齐甲就持续刷新无限时间隐身，缺一不再移除其他来源的隐身效果 */
     public static void updateInvisibility(Player player) {

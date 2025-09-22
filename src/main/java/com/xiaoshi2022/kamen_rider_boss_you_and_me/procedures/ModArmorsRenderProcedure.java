@@ -144,38 +144,6 @@ public class ModArmorsRenderProcedure {
         }
     }
 
-    // 处理手持物品时的手臂渲染逻辑（玩家隐身时生效）
-    @SubscribeEvent
-    public static void renderHandEvent(RenderHandEvent event) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc == null || mc.player == null) return;
-
-        LocalPlayer player = mc.player;
-        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-        ItemStack mainHandStack = event.getItemStack();
-        InteractionHand hand = event.getHand();
-
-        // 统一判断：本mod胸甲 + 未开启"renderArmUse" + 玩家隐身 + 主手为空 + 未瞄准
-        boolean isModChest = ForgeRegistries.ITEMS.getKey(chest.getItem()).toString().contains("kamen_rider_boss_you_and_me");
-        boolean skipRender = chest.getOrCreateTag().getBoolean("renderArmUse");
-        if (!isModChest || skipRender || !player.isInvisible() || hand != InteractionHand.MAIN_HAND || !mainHandStack.isEmpty() || player.isScoping()) {
-            return;
-        }
-
-        // 渲染原生手臂（适配两种盔甲类型）
-        if (chest.getItem() instanceof GeoItem || chest.getItem() instanceof ArmorItem) {
-            PoseStack poseStack = event.getPoseStack();
-            MultiBufferSource buffSource = event.getMultiBufferSource();
-            int packedLight = event.getPackedLight();
-            float equipProgress = event.getEquipProgress();
-            float swingProgress = event.getSwingProgress();
-
-            poseStack.pushPose();
-            renderPlayerArm(poseStack, buffSource, packedLight, equipProgress, swingProgress, player.getMainArm());
-            poseStack.popPose();
-        }
-    }
-
     // 隐藏Geo盔甲除手臂外的其他部位（内部工具方法）
     private static void SetAllBoneNoVisible(GeoArmorRenderer render) {
         render.getHeadBone().setHidden(true);
