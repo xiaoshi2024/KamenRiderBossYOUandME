@@ -20,6 +20,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.ORANGEFRUIT;
+import net.minecraft.world.effect.MobEffects;
 
 public class DarkOrangeReleaseRequestPacket {
     private final UUID playerId;
@@ -70,6 +71,9 @@ public class DarkOrangeReleaseRequestPacket {
         for (int i = 1; i < 4; i++) {
             player.getInventory().armor.set(i, ItemStack.EMPTY);
         }
+        
+        // 解除变身后立即移除隐身效果
+        player.removeEffect(MobEffects.INVISIBILITY);
     }
 
     static void handleDarkOrangelsRelease(ServerPlayer player, SlotResult beltOptional) {

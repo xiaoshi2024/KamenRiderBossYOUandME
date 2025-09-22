@@ -21,9 +21,12 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -327,6 +330,9 @@ public class PlayerDeathHandler {
                 player.getInventory().armor.set(i, ItemStack.EMPTY);
             }
         }
+        
+        // 玩家死亡时移除隐身效果
+        player.removeEffect(MobEffects.INVISIBILITY);
     }
 
     // 根据玩家装备的盔甲类型确定锁种类型

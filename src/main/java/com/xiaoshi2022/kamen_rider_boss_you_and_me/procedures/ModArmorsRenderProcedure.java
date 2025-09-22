@@ -47,32 +47,32 @@ import java.util.Locale;
 public class ModArmorsRenderProcedure {
 
     // 处理玩家渲染前的模型隐藏逻辑（避免原生模型与自定义盔甲重叠）
-//    @SubscribeEvent
-//    public static void renderPlayerPreEvent(RenderPlayerEvent.Pre event) {
-//        if (event.getEntity() == null) return;
-//        Player player = event.getEntity();
-//        PlayerRenderer renderer = event.getRenderer();
-//        PlayerModel<AbstractClientPlayer> playerModel = renderer.getModel();
-//
-//        ItemStack head = player.getItemBySlot(EquipmentSlot.HEAD);
-//        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-//        ItemStack legs = player.getItemBySlot(EquipmentSlot.LEGS);
-//        ItemStack feet = player.getItemBySlot(EquipmentSlot.FEET);
-//
-//        // 根据GeoItem类型盔甲隐藏原生模型部位
-//        playerModel.head.visible = !(head.getItem() instanceof GeoItem);
-//        playerModel.hat.visible = !(head.getItem() instanceof GeoItem);
-//        playerModel.body.visible = !(chest.getItem() instanceof GeoItem);
-//        playerModel.rightArm.visible = !(chest.getItem() instanceof GeoItem);
-//        playerModel.leftArm.visible = !(chest.getItem() instanceof GeoItem);
-//        playerModel.leftSleeve.visible = !(chest.getItem() instanceof GeoItem);
-//        playerModel.rightSleeve.visible = !(chest.getItem() instanceof GeoItem);
-//        playerModel.jacket.visible = !(chest.getItem() instanceof GeoItem);
-//        playerModel.rightLeg.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
-//        playerModel.leftLeg.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
-//        playerModel.leftPants.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
-//        playerModel.rightPants.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
-//    }
+    @SubscribeEvent
+    public static void renderPlayerPreEvent(RenderPlayerEvent.Pre event) {
+        if (event.getEntity() == null) return;
+        Player player = event.getEntity();
+        PlayerRenderer renderer = event.getRenderer();
+        PlayerModel<AbstractClientPlayer> playerModel = renderer.getModel();
+
+        ItemStack head = player.getItemBySlot(EquipmentSlot.HEAD);
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        ItemStack legs = player.getItemBySlot(EquipmentSlot.LEGS);
+        ItemStack feet = player.getItemBySlot(EquipmentSlot.FEET);
+
+        // 根据GeoItem类型盔甲隐藏原生模型部位
+        playerModel.head.visible = !(head.getItem() instanceof GeoItem);
+        playerModel.hat.visible = !(head.getItem() instanceof GeoItem);
+        playerModel.body.visible = !(chest.getItem() instanceof GeoItem);
+        playerModel.rightArm.visible = !(chest.getItem() instanceof GeoItem);
+        playerModel.leftArm.visible = !(chest.getItem() instanceof GeoItem);
+        playerModel.leftSleeve.visible = !(chest.getItem() instanceof GeoItem);
+        playerModel.rightSleeve.visible = !(chest.getItem() instanceof GeoItem);
+        playerModel.jacket.visible = !(chest.getItem() instanceof GeoItem);
+        playerModel.rightLeg.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
+        playerModel.leftLeg.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
+        playerModel.leftPants.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
+        playerModel.rightPants.visible = !(legs.getItem() instanceof GeoItem || feet.getItem() instanceof GeoItem);
+    }
 
     // 处理手臂渲染逻辑（优先渲染动画盔甲，再渲染普通盔甲）
     @SubscribeEvent

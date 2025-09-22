@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -815,5 +816,8 @@ public class KeybindHandler {
         for (int i = 0; i < 4; i++) {
             player.getInventory().armor.set(i, ItemStack.EMPTY);
         }
+        
+        // 解除变身后立即移除隐身效果
+        player.removeEffect(MobEffects.INVISIBILITY);
     }
 }

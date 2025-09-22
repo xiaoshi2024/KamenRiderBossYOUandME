@@ -2,7 +2,7 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"blade": {
-			"loop": "false",
+			"loop": "hold_on_last_frame",
 			"animation_length": 0.5,
 			"bones": {
 				"bone5": {
@@ -27,20 +27,8 @@
 				}
 			}
 		},
-		"idle": {
-			"loop": "true",
-			"animation_length": 1.0,
-			"bones": {
-				"bone3": {
-					"rotation": [0, 0, 0]
-				},
-				"bone5": {
-					"rotation": [0, 0, 0]
-				}
-			}
-		},
 		"gun": {
-			"loop": "false",
+			"loop": "hold_on_last_frame",
 			"animation_length": 0.75,
 			"bones": {
 				"bone3": {
@@ -61,6 +49,16 @@
 						"0.4167": {
 							"vector": [0, 180, 0]
 						}
+					}
+				}
+			}
+		},
+		"idle": {
+			"animation_length": 0.25,
+			"bones": {
+				"bone4": {
+					"rotation": {
+						"vector": [0, 0, 0]
 					}
 				}
 			}
