@@ -22,11 +22,11 @@ public final class RiderInvisibilityManager {
 
         if (wearingRider) {
             // 直接添加新的无限时间隐身效果，覆盖旧效果
-            // 参数说明：效果类型、持续时间、等级、是否是来自信标、是否显示图标、是否显示粒子
+            // 参数说明：效果类型、持续时间、等级、是否是来自信标、是否显示粒子、是否显示图标
             player.addEffect(new MobEffectInstance(
                     MobEffects.INVISIBILITY,
                     OUR_DURATION,
-                    OUR_AMPLIFIER, false, true, false));
+                    OUR_AMPLIFIER, false, false, true));
         } else {
             // 当玩家不再穿着盔甲时，只移除由本模组添加的隐身效果（特殊等级），保留其他来源的效果
             for (MobEffectInstance effect : player.getActiveEffects()) {
