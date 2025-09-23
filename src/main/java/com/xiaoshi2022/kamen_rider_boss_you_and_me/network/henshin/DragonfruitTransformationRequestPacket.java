@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.FriendlyByteBuf;
@@ -164,6 +165,9 @@ public class DragonfruitTransformationRequestPacket {
             vars.dragonfruit_ready = false;
             vars.dragonfruit_time = 20 * 60; // 60 秒
             vars.syncPlayerVariables(player);
+            
+            // 给予玩家对应的武器（如果配置启用了武器给予功能）
+            TransformationWeaponManager.giveWeaponOnGenesisDriverTransformation(player, Genesis_driver.BeltMode.DRAGONFRUIT);
         });
 
         ctx.get().setPacketHandled(true);

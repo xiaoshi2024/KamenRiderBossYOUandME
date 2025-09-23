@@ -8,6 +8,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -548,6 +549,9 @@ public class KeybindHandler {
 
                 // 清除变身装甲
                 clearTransformationArmor(player);
+                
+                // 清理变身武器
+                TransformationWeaponManager.clearTransformationWeapons(player);
 
                 // 返还柠檬锁种
                 ItemStack lemonLockSeed = new ItemStack(ModItems.LEMON_ENERGY.get());
@@ -601,6 +605,9 @@ public class KeybindHandler {
 
         // 4. 卸掉蜜瓜装甲（3 件）
         clearTransformationArmor(player);
+        
+        // 清理变身武器
+        TransformationWeaponManager.clearTransformationWeapons(player);
 
         // 5. 返还蜜瓜锁种
         ItemStack melonLockSeed = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.MELON.get());
@@ -651,6 +658,9 @@ public class KeybindHandler {
 
         // 4. 卸掉樱桃装甲
         clearTransformationArmor(player);
+        
+        // 清理变身武器
+        TransformationWeaponManager.clearTransformationWeapons(player);
 
         // 5. 返还樱桃锁种
         ItemStack cherryLockSeed = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY.get());
@@ -695,6 +705,9 @@ public class KeybindHandler {
 
         // 4. 卸掉Tyrant装甲
         clearTransformationArmor(player);
+        
+        // 清理变身武器
+        TransformationWeaponManager.clearTransformationWeapons(player);
 
         // 5. 返还火龙果锁种
         ItemStack dragonfruitLockSeed = new ItemStack(ModItems.DRAGONFRUIT.get());
@@ -739,6 +752,9 @@ public class KeybindHandler {
 
         // 4. 卸掉Marika装甲
         clearTransformationArmor(player);
+        
+        // 清理变身武器
+        TransformationWeaponManager.clearTransformationWeapons(player);
 
         // 5. 返还桃子锁种
         ItemStack peachLockSeed = new ItemStack(ModItems.PEACH_ENERGY.get());

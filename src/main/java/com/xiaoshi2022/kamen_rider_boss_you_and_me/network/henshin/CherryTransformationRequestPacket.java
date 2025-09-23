@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -144,6 +145,9 @@ public class CherryTransformationRequestPacket {
         // 清除樱桃就绪标记
         player.getPersistentData().remove("cherry_ready");
         player.getPersistentData().remove("cherry_ready_time");
+        
+        // 给予玩家对应的武器（如果配置启用了武器给予功能）
+        TransformationWeaponManager.giveWeaponOnGenesisDriverTransformation(player, Genesis_driver.BeltMode.CHERRY);
     }
 
     /* ========= 清理樱桃特效方块 ========= */

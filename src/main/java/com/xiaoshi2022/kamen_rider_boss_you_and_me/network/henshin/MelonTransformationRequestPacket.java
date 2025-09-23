@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -143,6 +144,9 @@ public class MelonTransformationRequestPacket {
 
         /* --------------------------------- 发送变身成功提示 --------------------------------- */
         player.sendSystemMessage(Component.literal("蜜瓜能量已激活！"));
+        
+        // 给予玩家对应的武器（如果配置启用了武器给予功能）
+        TransformationWeaponManager.giveWeaponOnGenesisDriverTransformation(player, Genesis_driver.BeltMode.MELON);
     }
 
     /* ========= 清理蜜瓜特效方块 ========= */

@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -155,6 +156,9 @@ public class MarikaTransformationRequestPacket {
         player.sendSystemMessage(Component.literal("桃子模式已激活！获得以下能力："));
         player.sendSystemMessage(Component.literal("1. 每5秒自动恢复1点生命值"));
         player.sendSystemMessage(Component.literal("2. 受到伤害时有20%几率触发额外治愈效果"));
+        
+        // 给予玩家对应的武器（如果配置启用了武器给予功能）
+        TransformationWeaponManager.giveWeaponOnGenesisDriverTransformation(player, Genesis_driver.BeltMode.PEACH);
     }
 
     /* ========= 清理桃子特效方块 ========= */

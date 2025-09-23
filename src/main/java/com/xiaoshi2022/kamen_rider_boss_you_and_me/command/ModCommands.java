@@ -28,6 +28,9 @@ public class ModCommands {
                                         .executes(context -> resetAllCooldownsCommand(context))
                         )
         );
+        
+        // 注册变身武器指令
+        TransformationWeaponCommand.register(dispatcher);
     }
 
     private static int showAltarStructureCommand(CommandContext<CommandSourceStack> context) {
