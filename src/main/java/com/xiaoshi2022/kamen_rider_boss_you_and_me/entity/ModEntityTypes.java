@@ -42,6 +42,9 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<LordBaronEntity>> LORD_BARON = registerMob("lord_baron", LordBaronEntity::new,
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
 
+    public static final RegistryObject<EntityType<DukeKnightEntity>> DUKE_KNIGHT = registerMob("duke_knight", DukeKnightEntity::new,
+            0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
+
     public static final RegistryObject<EntityType<Another_Zi_o>> ANOTHER_ZI_O = registerMob("another_zi_o", Another_Zi_o::new,
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
 //    public static final RegistryObject<EntityType<KaitoVillager>> KAITO =

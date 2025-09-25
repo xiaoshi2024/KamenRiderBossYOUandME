@@ -4,25 +4,14 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.dukes.D
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -34,17 +23,11 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.Random;
 
 public class Duke extends ArmorItem implements GeoItem , KamenBossArmor, ArmorAnimationFactory.AnimatableAccessor  {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public String animationprocedure = "empty"; 
-    private static final Random RANDOM = new Random();
-    private int energySwordCooldown = 0; // 能量剑冷却时间
-    private int energyShieldDuration = 0; // 能量护盾持续时间
-    private int techMasteryTicks = 0; // 技术精通效果计时
+    public String animationprocedure = "empty";
 
     public Duke(ArmorItem.Type type, Item.Properties properties) {
         super(new ArmorMaterial() {
@@ -98,123 +81,9 @@ public class Duke extends ArmorItem implements GeoItem , KamenBossArmor, ArmorAn
         }, type, properties);
     }
 
-    // 技术精通 - 战极凌马作为天才科学家的能力
-    public void techMastery(Player player) {
-        if (techMasteryTicks <= 0) {
-            // 每30秒触发一次技术精通效果
-            techMasteryTicks = 600; // 30秒 = 600 ticks
-            
-            // 随机获得一种增益效果
-            int effectType = RANDOM.nextInt(4);
-            switch (effectType) {
-                case 0:
-                    // 速度提升
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 1));
-                    break;
-                case 1:
-                    // 挖掘速度提升
-                    player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 400, 1));
-                    break;
-                case 2:
-                    // 攻击力提升
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 400, 1));
-                    break;
-                case 3:
-                    // 抗性提升
-                    player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 1));
-                    break;
-            }
-        } else {
-            techMasteryTicks--;
-        }
-    }
-
-    // 能量剑攻击 - 从手部发射能量剑
-    public void energySwordAttack(Player player) {
-        if (energySwordCooldown <= 0) {
-            energySwordCooldown = 40; // 2秒冷却
-            
-            // 播放攻击音效
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
-                    SoundEvents.BLAZE_SHOOT, player.getSoundSource(), 1.0F, 1.0F);
-            
-            // 获取玩家面向方向
-            Vec3 lookVec = player.getLookAngle();
-            Vec3 start = player.getEyePosition();
-            Vec3 end = start.add(lookVec.x * 10, lookVec.y * 10, lookVec.z * 10);
-            
-            // 检测直线上的实体
-            List<Entity> entities = player.level().getEntities(player,
-                    new AABB(start, end).inflate(1.0D),
-                    entity -> entity instanceof LivingEntity && entity != player);
-            
-            // 对命中的实体造成伤害
-            for (Entity entity : entities) {
-                ((LivingEntity) entity).hurt(player.damageSources().playerAttack(player), 8.0F);
-                // 有几率附加凋零效果
-                if (RANDOM.nextFloat() < 0.3F) {
-                    ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 1));
-                }
-            }
-        } else {
-            energySwordCooldown--;
-        }
-    }
-
-    // 激活能量护盾
-    public void activateEnergyShield(Player player) {
-        if (energyShieldDuration <= 0) {
-            energyShieldDuration = 100; // 5秒持续时间
-            
-            // 播放护盾激活音效
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
-                    SoundEvents.BEACON_ACTIVATE, player.getSoundSource(), 1.0F, 1.0F);
-        } else {
-            energyShieldDuration--;
-        }
-    }
-
-    // 检查能量护盾是否激活
-    public boolean isEnergyShieldActive() {
-        return energyShieldDuration > 0;
-    }
-
-    // 护盾伤害减免
-    public float getShieldDamageReduction() {
-        return isEnergyShieldActive() ? 0.5F : 0.0F; // 50%伤害减免
-    }
-
-    // 更新能力状态的tick方法
+    // 空的tick方法，保持兼容性
     public void tick(Player player) {
-        // 更新技术精通状态
-        techMastery(player);
-        
-        // 更新能量剑冷却
-        if (energySwordCooldown > 0) {
-            energySwordCooldown--;
-        }
-        
-        // 更新能量护盾持续时间
-        if (energyShieldDuration > 0) {
-            energyShieldDuration--;
-            // 护盾激活时提供伤害减免视觉反馈
-            if (energyShieldDuration % 5 == 0) {
-                spawnShieldParticles(player);
-            }
-        }
-    }
-
-    // 生成护盾粒子效果
-    private void spawnShieldParticles(Player player) {
-        Level level = player.level();
-        if (level.isClientSide) {
-            for (int i = 0; i < 5; i++) {
-                double x = player.getX() + (RANDOM.nextDouble() - 0.5) * player.getBbWidth() * 2;
-                double y = player.getY() + RANDOM.nextDouble() * player.getBbHeight();
-                double z = player.getZ() + (RANDOM.nextDouble() - 0.5) * player.getBbWidth() * 2;
-                level.addParticle(net.minecraft.core.particles.ParticleTypes.ENCHANTED_HIT, x, y, z, 0, 0, 0);
-            }
-        }
+        // 超能力已修改为召唤Duke骑士实体，相关逻辑在DukeKnightAbilityHandler中处理
     }
 
     // 检查单个盔甲是否装备

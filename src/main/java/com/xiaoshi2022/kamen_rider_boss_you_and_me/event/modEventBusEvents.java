@@ -346,6 +346,8 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.KNECROMGHOST.get(), KnecromghostEntity.createAttributes());
 
+            event.put(ModEntityTypes.DUKE_KNIGHT.get(),DukeKnightEntity.createAttributes());
+
 //            event.put(ModEntityTypes.KAITO.get(),
 //                    KaitoVillager.createAttributes()
 //                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 3.0D)

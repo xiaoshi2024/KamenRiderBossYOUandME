@@ -8,6 +8,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBatModePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombatAnalysisPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -122,6 +123,20 @@ public class PacketHandler {
                 KnecromGhostAnimationPacket::decode,
                 KnecromGhostAnimationPacket::handle
         );
+        INSTANCE.registerMessage(
+                index++,
+                SummonDukeKnightPacket.class,
+                SummonDukeKnightPacket::buffer,
+                SummonDukeKnightPacket::newPacket,
+                SummonDukeKnightPacket::handle);
+        
+        // 注册Duke战斗数据分析数据包
+        INSTANCE.registerMessage(
+                index++,
+                DukeCombatAnalysisPacket.class,
+                DukeCombatAnalysisPacket::buffer,
+                DukeCombatAnalysisPacket::newPacket,
+                DukeCombatAnalysisPacket::handle);
     }
 
     public static void sendToServer(Object packet) {
