@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronE
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BaronLemonEnergyEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -92,6 +93,13 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.0F) // 调整碰撞箱大小
                     .clientTrackingRange(8)
                     .build("baron_banana_energy"));
+    
+    // 巴隆柠檬能量特效实体
+    public static final RegistryObject<EntityType<BaronLemonEnergyEntity>> BARON_LEMON_ENERGY = ENTITY_TYPES.register("baron_lemon_energy",
+            () -> EntityType.Builder.<BaronLemonEnergyEntity>of(BaronLemonEnergyEntity::new, MobCategory.MISC)
+                    .sized(0.6F, 1.0F) // 调整碰撞箱大小
+                    .clientTrackingRange(8)
+                    .build("baron_lemon_energy"));
 
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {

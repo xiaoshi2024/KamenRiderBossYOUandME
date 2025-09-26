@@ -146,6 +146,14 @@ public class PacketHandler {
                 BaronBananaEnergyPacket::encode,
                 BaronBananaEnergyPacket::new,
                 BaronBananaEnergyPacket::handle);
+        
+        // 注册巴隆柠檬形态骑士2技能数据包
+        INSTANCE.registerMessage(
+                index++,
+                BaronLemonAbilityPacket.class,
+                BaronLemonAbilityPacket::toBytes,
+                BaronLemonAbilityPacket::new,
+                BaronLemonAbilityPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

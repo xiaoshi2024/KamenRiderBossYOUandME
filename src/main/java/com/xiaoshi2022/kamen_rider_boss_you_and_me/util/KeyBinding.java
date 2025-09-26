@@ -14,6 +14,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBl
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombatAnalysisPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBananaEnergyPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BaronLemonAbilityPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -58,8 +61,22 @@ public class KeyBinding {
         // 检测玩家是否穿着基础巴隆盔甲
         boolean isBaron = isBaronArmorEquipped(mc.player);
         
-        // 根据当前穿着的盔甲类型决定触发哪个能力
-        if (isDarkKiva) {
+        // 检测玩家是否穿着巴隆柠檬形态盔甲
+        boolean isBaronLemon = isBaronLemonArmorEquipped(mc.player);
+        
+        // 检测玩家是否手持音速弓柠檬模式
+        boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
+        
+        // 优先检查特殊形态 - 巴隆柠檬形态（带武器限制的特殊条件应优先检查）
+        if (isBaronLemon && hasSonicArrowLemonMode) {
+            // 巴隆柠檬形态且手持音速弓柠檬模式时，使用B键触发柠檬能量陷阱技能
+            if (KEY_BLAST.consumeClick()) {
+                PacketHandler.sendToServer(new BaronLemonAbilityPacket());
+                return; // 处理完后直接返回，避免其他技能干扰
+            }
+        } 
+        // 然后检查其他主要形态
+        else if (isDarkKiva) {
             if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new DarkKivaBatModePacket());
             if (KEY_BLAST.consumeClick()) PacketHandler.sendToServer(new DarkKivaBloodSuckPacket());
             if (KEY_BOOST.consumeClick()) PacketHandler.sendToServer(new DarkKivaSonicBlastPacket());
@@ -104,5 +121,27 @@ public class KeyBinding {
     private static boolean isBaronArmorEquipped(LocalPlayer player) {
         // 检查胸甲是否为基础巴隆盔甲
         return player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof rider_baronsItem;
+    }
+    
+    // 客户端专用的巴隆柠檬形态盔甲检测方法
+    private static boolean isBaronLemonArmorEquipped(LocalPlayer player) {
+        // 检查是否穿着巴隆柠檬形态的全套盔甲
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof baron_lemonItem &&
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof baron_lemonItem &&
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof baron_lemonItem;
+    }
+    
+    // 检查玩家是否手持音速弓柠檬模式
+    private static boolean hasSonicArrowLemonMode(LocalPlayer player) {
+        // 获取玩家主手物品
+        net.minecraft.world.item.ItemStack mainHandItem = player.getMainHandItem();
+        
+        // 检查是否为音速弓且处于柠檬模式
+        if (mainHandItem.getItem() instanceof sonicarrow) {
+            sonicarrow sonicArrow = (sonicarrow) mainHandItem.getItem();
+            return sonicArrow.getCurrentMode(mainHandItem) == sonicarrow.Mode.LEMON;
+        }
+        
+        return false;
     }
 }

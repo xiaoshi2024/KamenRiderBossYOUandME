@@ -350,6 +350,8 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyEntity.createAttributes());
 
+            event.put(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyEntity.createAttributes());
+
 //            event.put(ModEntityTypes.KAITO.get(),
 //                    KaitoVillager.createAttributes()
 //                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 3.0D)

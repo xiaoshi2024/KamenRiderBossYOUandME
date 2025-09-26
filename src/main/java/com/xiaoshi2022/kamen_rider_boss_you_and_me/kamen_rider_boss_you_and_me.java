@@ -26,6 +26,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.Giifu
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.ElementaryInvesHelheimRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.StoriousRender;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_banana_energy.BaronBananaEnergyRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_lemon_energy.BaronLemonEnergyRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batdrakss.BatDarksRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batstampfinish.BatStampFinishRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer;
@@ -250,6 +251,7 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.DUKE_KNIGHT.get(), DukeKnightRenderer::new);
 
             EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyRenderer::new);
+            EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyRenderer::new);
 
 //            EntityRenderers.register(ModEntityTypes.KAITO.get(),
 //                    VillagerEntityMCARenderer::new);
