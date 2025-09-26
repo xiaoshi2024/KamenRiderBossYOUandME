@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBa
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombatAnalysisPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBananaEnergyPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -137,6 +138,14 @@ public class PacketHandler {
                 DukeCombatAnalysisPacket::buffer,
                 DukeCombatAnalysisPacket::newPacket,
                 DukeCombatAnalysisPacket::handle);
+        
+        // 注册基础巴隆香蕉能量数据包
+        INSTANCE.registerMessage(
+                index++,
+                BaronBananaEnergyPacket.class,
+                BaronBananaEnergyPacket::encode,
+                BaronBananaEnergyPacket::new,
+                BaronBananaEnergyPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

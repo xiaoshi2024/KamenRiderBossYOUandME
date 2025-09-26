@@ -86,6 +86,13 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .build("knecromghost"));
 
+    // 巴隆香蕉能量特效实体
+    public static final RegistryObject<EntityType<BaronBananaEnergyEntity>> BARON_BANANA_ENERGY = ENTITY_TYPES.register("baron_banana_energy",
+            () -> EntityType.Builder.<BaronBananaEnergyEntity>of(BaronBananaEnergyEntity::new, MobCategory.MISC)
+                    .sized(0.6F, 1.0F) // 调整碰撞箱大小
+                    .clientTrackingRange(8)
+                    .build("baron_banana_energy"));
+
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {
         RegistryObject<EntityType<T>> entityType = ENTITY_TYPES.register(name,

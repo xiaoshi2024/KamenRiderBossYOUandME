@@ -798,6 +798,9 @@ public class KeybindHandler {
                 PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
                 clearTransformationArmor(player);
+                
+                // 清理变身武器
+                TransformationWeaponManager.clearTransformationWeapons(player);
 
                 ItemStack bananaLockSeed = new ItemStack(ModItems.BANANAFRUIT.get());
                 if (!player.getInventory().add(bananaLockSeed)) {

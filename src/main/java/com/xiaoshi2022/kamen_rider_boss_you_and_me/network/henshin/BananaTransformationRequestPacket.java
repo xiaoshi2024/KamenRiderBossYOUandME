@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.sengokudriver.SengokuDriverModel;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.BananasEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
@@ -9,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -105,6 +107,9 @@ public class BananaTransformationRequestPacket {
 
         // 触发变身
         new HeartCoreEvent(player);
+
+        // 给予玩家对应的武器（如果配置启用了武器给予功能）
+        TransformationWeaponManager.giveWeaponOnSengokuDriverTransformation(player, sengokudrivers_epmty.BeltMode.BANANA);
 
         belt.setEquipped(beltStack, true);
         belt.setHenshin(beltStack, true);

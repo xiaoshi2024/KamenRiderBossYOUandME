@@ -348,6 +348,8 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.DUKE_KNIGHT.get(),DukeKnightEntity.createAttributes());
 
+            event.put(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyEntity.createAttributes());
+
 //            event.put(ModEntityTypes.KAITO.get(),
 //                    KaitoVillager.createAttributes()
 //                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 3.0D)

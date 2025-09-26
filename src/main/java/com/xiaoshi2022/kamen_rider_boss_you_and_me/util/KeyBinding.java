@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DukeKnightAbilityHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SummonDukeKnightPacket;
@@ -12,6 +13,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBa
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombatAnalysisPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBananaEnergyPacket;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -53,6 +55,9 @@ public class KeyBinding {
         // 检测玩家是否穿着全套Duke盔甲
         boolean isDuke = isDukeArmorEquipped(mc.player);
         
+        // 检测玩家是否穿着基础巴隆盔甲
+        boolean isBaron = isBaronArmorEquipped(mc.player);
+        
         // 根据当前穿着的盔甲类型决定触发哪个能力
         if (isDarkKiva) {
             if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new DarkKivaBatModePacket());
@@ -67,6 +72,11 @@ public class KeyBinding {
             // Duke盔甲使用B键激活战斗数据分析
             if (KEY_BLAST.consumeClick()) {
                 PacketHandler.sendToServer(new DukeCombatAnalysisPacket());
+            }
+        } else if (isBaron) {
+            // 基础巴隆盔甲使用V键触发香蕉能量技能
+            if (KEY_GUARD.consumeClick()) {
+                PacketHandler.sendToServer(new BaronBananaEnergyPacket());
             }
         } else {
             if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new JinbaGuardPacket());
@@ -88,5 +98,11 @@ public class KeyBinding {
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DarkKivaItem &&
                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DarkKivaItem &&
                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof DarkKivaItem;
+    }
+    
+    // 客户端专用的基础巴隆盔甲检测方法
+    private static boolean isBaronArmorEquipped(LocalPlayer player) {
+        // 检查胸甲是否为基础巴隆盔甲
+        return player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof rider_baronsItem;
     }
 }

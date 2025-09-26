@@ -1,21 +1,69 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class TransformationWeaponManager {
+    
+    /**
+     * 当玩家使用战极驱动器变身后，给予对应的武器
+     * 只有当配置启用时才会执行
+     */
+    public static void giveWeaponOnSengokuDriverTransformation(ServerPlayer player, sengokudrivers_epmty.BeltMode beltMode) {
+        // 检查是否启用了武器给予功能
+        if (!TransformationConfig.isGlobalGiveWeaponEnabled()) {
+            return;
+        }
+        
+        // 根据不同的锁种类型给予对应的武器
+        ItemStack weaponStack = null;
+        
+        switch (beltMode) {
+            case BANANA:
+                // 香蕉锁种 - 给予香蕉矛枪
+                weaponStack = new ItemStack(ModItems.BANA_SPEAR.get());
+                
+                // 为武器添加特殊标签，以便与玩家自己合成的武器区分开
+                addTransformationWeaponTag(weaponStack, beltMode.name());
+                break;
+                
+            case ORANGELS:
+                // 橙子锁种 - 可以给予其他武器
+                // 这里暂时不实现，需要根据实际需求添加
+                break;
+                
+            default:
+                // 默认情况不给予武器
+                return;
+        }
+        
+        // 如果玩家主手为空，则放在主手；否则放在副手；如果都不为空，则放在物品栏
+        if (player.getMainHandItem().isEmpty()) {
+            player.setItemInHand(player.getUsedItemHand(), weaponStack);
+        } else if (player.getOffhandItem().isEmpty()) {
+            player.getInventory().offhand.set(0, weaponStack);
+        } else {
+            // 尝试找到物品栏中的空位
+            int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+            if (emptySlot != -1) {
+                player.getInventory().setItem(emptySlot, weaponStack);
+            }
+            // 如果没有空位，物品会掉落在地上
+        }
+        
+        // 发送消息通知玩家获得了武器
+        player.sendSystemMessage(
+                net.minecraft.network.chat.Component.literal("你获得了变身武器！")
+        );
+    }
     
     /**
      * 当玩家使用创世纪驱动器变身后，给予对应的武器

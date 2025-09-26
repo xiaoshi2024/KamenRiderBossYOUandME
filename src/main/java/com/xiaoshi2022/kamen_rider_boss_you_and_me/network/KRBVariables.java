@@ -227,6 +227,9 @@ public class  KRBVariables {
     // 累积攻击力相关变量 - 用于骑士能量跟随玩家累积攻击力变化
     public double accumulatedAttackDamage = 0.0D; // 玩家累积造成的伤害
     public double accumulatedAttackDamageModifier = 0.1D; // 累积伤害转换为能量的系数
+    
+    // 基础巴隆技能相关变量
+    public long baron_banana_energy_cooldown = 0L; // 香蕉能量技能冷却时间（刻）
 
         public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
@@ -298,6 +301,9 @@ public class  KRBVariables {
         // 序列化累积攻击力相关变量
         nbt.putDouble("accumulatedAttackDamage", accumulatedAttackDamage);
         nbt.putDouble("accumulatedAttackDamageModifier", accumulatedAttackDamageModifier);
+        
+        // 序列化基础巴隆技能相关变量
+        nbt.putLong("baron_banana_energy_cooldown", baron_banana_energy_cooldown);
         return nbt;
 	}
 
@@ -353,6 +359,9 @@ public class  KRBVariables {
         maxRiderEnergy = nbt.getDouble("maxRiderEnergy");
         accumulatedAttackDamage = nbt.getDouble("accumulatedAttackDamage");
         accumulatedAttackDamageModifier = nbt.getDouble("accumulatedAttackDamageModifier");
+        
+        // 反序列化基础巴隆技能相关变量
+        baron_banana_energy_cooldown = nbt.contains("baron_banana_energy_cooldown") ? nbt.getLong("baron_banana_energy_cooldown") : 0L;
 	}
 	}
 
@@ -422,6 +431,9 @@ public class  KRBVariables {
 					// 同步累积攻击力相关变量
 					variables.accumulatedAttackDamage = message.data.accumulatedAttackDamage;
 					variables.accumulatedAttackDamageModifier = message.data.accumulatedAttackDamageModifier;
+                    
+                    // 同步基础巴隆技能相关变量
+                    variables.baron_banana_energy_cooldown = message.data.baron_banana_energy_cooldown;
 				}
 			});
 			context.setPacketHandled(true);
