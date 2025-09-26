@@ -109,6 +109,7 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
     }
 
     // 更新能力状态的tick方法
+    @Override
     public void tick(Player player) {
         // 黑暗能量充能
         if (darkEnergyCooldown > 0) {
@@ -128,6 +129,9 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
         if (isFullArmorEquipped((ServerPlayer) player) && player.level().getGameTime() % 20 == 0) {
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 40, 0));
         }
+        
+        // 添加抗性1效果
+        this.applyResistanceEffect(player);
     }
 
     // 生成护盾粒子效果

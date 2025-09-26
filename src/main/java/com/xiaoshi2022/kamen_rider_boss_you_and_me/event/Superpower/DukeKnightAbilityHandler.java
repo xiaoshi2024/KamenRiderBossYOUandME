@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.DukeKnightEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.RiderEnergyHandler;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -19,7 +20,9 @@ import java.util.Random;
 public class DukeKnightAbilityHandler {
 
     private static final Random RANDOM = new Random();
-    private static final long COOLDOWN_TIME = 30000; // 30秒冷却时间（毫秒）
+    private static final long COOLDOWN_TIME = 5000; // 5秒冷却时间（毫秒）
+    // 技能消耗的骑士能量
+    private static final double ENERGY_COST = 25.0;
 
     // 处理玩家tick事件，更新Duke骑士技能状态
     @SubscribeEvent
@@ -73,15 +76,11 @@ public class DukeKnightAbilityHandler {
             return false;
         }
         
-        // 检查经验值是否足够
-        int requiredLevel = variables.dukeKnightCost;
-        if (player.experienceLevel < requiredLevel) {
-            player.sendSystemMessage(net.minecraft.network.chat.Component.literal("经验值不足，需要 " + requiredLevel + " 级"));
+        // 消耗骑士能量
+        if (!RiderEnergyHandler.consumeRiderEnergy(player, ENERGY_COST)) {
+            player.sendSystemMessage(net.minecraft.network.chat.Component.literal("骑士能量不足，需要 " + (int)ENERGY_COST + " 点能量"));
             return false;
         }
-        
-        // 消耗经验值
-        player.giveExperienceLevels(-requiredLevel);
         
         // 设置冷却时间
         variables.dukeKnightCooldown = currentTime + COOLDOWN_TIME;

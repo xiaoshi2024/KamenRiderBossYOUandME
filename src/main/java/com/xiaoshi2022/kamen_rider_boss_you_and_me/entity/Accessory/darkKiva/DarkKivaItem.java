@@ -83,6 +83,8 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
     @Override
     public void tick(Player player) {
         // 移除了所有基础buff处理逻辑，这些逻辑现在在DarkKivaAbilityHandler中处理
+        // 添加抗性1效果
+        this.applyResistanceEffect(player);
     }
     
     // 添加客户端专用的黑暗Kiva盔甲检测方法

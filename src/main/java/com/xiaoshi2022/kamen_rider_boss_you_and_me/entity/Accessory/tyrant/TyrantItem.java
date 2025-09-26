@@ -152,6 +152,7 @@ public class TyrantItem extends ArmorItem implements GeoItem , KamenBossArmor , 
 
 	@Override
 	public void tick(Player player) {
-
+		// 添加抗性1效果
+		this.applyResistanceEffect(player);
 	}
 }

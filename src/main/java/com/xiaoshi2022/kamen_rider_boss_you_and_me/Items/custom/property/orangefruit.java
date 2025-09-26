@@ -181,6 +181,12 @@ public class orangefruit extends Item implements GeoItem {
             // 已经 ready，但**不立刻变身**
             if (level.isClientSide) return InteractionResultHolder.success(stack);
 
+            // 播放open动画
+            if (level instanceof ServerLevel serverLevel) {
+                triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "controller", "open");
+            }
+
+
             // 1. 消耗主手橘子 + 副手柠檬
             stack.shrink(1);          // 橘子
             offhand.shrink(1);        // 柠檬

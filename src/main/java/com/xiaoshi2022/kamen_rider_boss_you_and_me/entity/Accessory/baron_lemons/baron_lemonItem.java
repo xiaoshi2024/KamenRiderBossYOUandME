@@ -172,7 +172,8 @@ public class baron_lemonItem extends ArmorItem implements GeoItem , KamenBossArm
 
     @Override
     public void tick(Player player) {
-
+        // 添加抗性1效果
+        this.applyResistanceEffect(player);
     }
 
     @Override

@@ -82,8 +82,11 @@ public class Duke extends ArmorItem implements GeoItem , KamenBossArmor, ArmorAn
     }
 
     // 空的tick方法，保持兼容性
+    @Override
     public void tick(Player player) {
         // 超能力已修改为召唤Duke骑士实体，相关逻辑在DukeKnightAbilityHandler中处理
+        // 添加抗性1效果
+        this.applyResistanceEffect(player);
     }
 
     // 检查单个盔甲是否装备

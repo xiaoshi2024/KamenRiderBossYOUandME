@@ -40,6 +40,8 @@ public class DukeKnightEntity extends PathfinderMob implements GeoEntity {
     private static final int ATTACK_COOLDOWN = 10; // 攻击冷却时间(刻)
     private int noTargetTicks = 0; // 无攻击目标的时间计数
     private static final int MAX_NO_TARGET_TICKS = 200; // 10秒(20刻/秒)
+    private static final int MAX_EXISTENCE_TICKS = 600; // 30秒最大存在时间
+    private int existenceTicks = 0; // 当前存在时间计数
     private boolean vanishSoundPlayed = false; // 消失音效是否已播放
     private boolean teleportSoundPlayed = false; // 传送音效是否已播放
     private int teleportCooldownTicks = 0; // 传送音效冷却计时
@@ -209,6 +211,12 @@ public class DukeKnightEntity extends PathfinderMob implements GeoEntity {
             }
         } else {
             noTargetTicks = 0; // 重置无目标计时
+        }
+        
+        // 最大存在时间计数
+        existenceTicks++;
+        if (!shouldVanish && existenceTicks >= MAX_EXISTENCE_TICKS) {
+            setShouldVanish();
         }
         
         // 攻击顺序处理

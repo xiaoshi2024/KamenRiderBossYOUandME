@@ -24,10 +24,7 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -37,8 +34,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public class dragonfruit extends Item implements GeoItem {
-    private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("open");
-    private static final RawAnimation CUT_OPEN = RawAnimation.begin().thenPlay("cut_open");
+    private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("start");
+    private static final RawAnimation CUT_OPEN = RawAnimation.begin().thenPlay("scatter");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public dragonfruit(net.minecraft.world.item.Item.Properties properties) {
@@ -74,6 +71,12 @@ public class dragonfruit extends Item implements GeoItem {
             if (!stack.getOrCreateTag().contains("first_click")) {
                 // 第一次右键点击
                 stack.getOrCreateTag().putBoolean("first_click", true);
+
+                // 播放open动画
+                if (!level.isClientSide()) {
+                    // 在服务器端触发动画
+                    triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "start");
+                }
 
                 // 在玩家头顶生成特效方块
                 BlockPos aboveHead = player.blockPosition().above(2);
@@ -134,12 +137,20 @@ public class dragonfruit extends Item implements GeoItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this, "controller", 0, this::predicate));
+        controllerRegistrar.add(new AnimationController<>(this, "controller", 0, this::predicate)
+                .triggerableAnim("start", OPEN)
+                .triggerableAnim("scatter", CUT_OPEN));
     }
 
+
     private PlayState predicate(AnimationState<dragonfruit> dragonfruitAnimationState) {
+        // 检查是否有正在播放的动画
+        if (dragonfruitAnimationState.getController().getCurrentAnimation() != null) {
+            return PlayState.CONTINUE;
+        }
         return PlayState.STOP;
     }
+
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

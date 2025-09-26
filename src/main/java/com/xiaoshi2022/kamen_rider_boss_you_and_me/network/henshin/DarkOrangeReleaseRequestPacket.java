@@ -136,5 +136,10 @@ public class DarkOrangeReleaseRequestPacket {
         // 重置变身状态
         belt.setHenshin(beltStack, false);
         belt.setEquipped(beltStack, false);
+        
+        // 重置Dark_orangels变身状态变量
+        com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables.PlayerVariables variables = player.getCapability(com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables.PlayerVariables());
+        variables.isDarkOrangelsTransformed = false;
+        variables.syncPlayerVariables(player); // 同步变量到客户端
     }
 }

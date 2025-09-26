@@ -37,7 +37,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 public class peach_energy extends Item implements GeoItem {
-    private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("open");
+    private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("start");
     private static final RawAnimation SCATTER = RawAnimation.begin().thenPlay("scatter");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -74,6 +74,12 @@ public class peach_energy extends Item implements GeoItem {
             if (!stack.getOrCreateTag().contains("first_click")) {
                 // 第一次右键点击
                 stack.getOrCreateTag().putBoolean("first_click", true);
+
+                // 播放open动画
+                if (level instanceof ServerLevel serverLevel) {
+                    triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "controller", "start");
+                }
+
 
                 // 在玩家头顶生成桃子能量特效方块
                 BlockPos aboveHead = player.blockPosition().above(2);
@@ -139,7 +145,7 @@ public class peach_energy extends Item implements GeoItem {
 
         if (currentTime - lastPlayed >= INTERVAL) {
             if (level instanceof ServerLevel serverLevel) {
-                triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "open", "open");
+                triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "start", "start");
 
                 int generatedBlocks = player.getPersistentData().getInt("generatedBlocks");
                 if (generateHelheimCrack(level, player)) {
@@ -206,7 +212,7 @@ public class peach_energy extends Item implements GeoItem {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 20, state -> PlayState.STOP)
-                .triggerableAnim("open", OPEN)
+                .triggerableAnim("start", OPEN)
                 .triggerableAnim("scatter", SCATTER)
                 .setSoundKeyframeHandler(state -> {
                     Player player = ClientUtils.getClientPlayer();

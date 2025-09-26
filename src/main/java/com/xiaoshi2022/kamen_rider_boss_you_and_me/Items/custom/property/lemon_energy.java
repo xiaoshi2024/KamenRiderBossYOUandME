@@ -44,7 +44,7 @@ public class lemon_energy extends Item implements GeoItem {
     private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("open");
     private static final RawAnimation SCATTER = RawAnimation.begin().thenPlay("scatter");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    
+
     // 用于存储当前渲染的物品栈的静态ThreadLocal
     private static final ThreadLocal<ItemStack> CURRENT_RENDER_STACK = new ThreadLocal<>();
 
@@ -52,12 +52,12 @@ public class lemon_energy extends Item implements GeoItem {
         super(properties);
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
-    
+
     // 设置当前渲染的物品栈
     public static void setCurrentRenderStack(ItemStack stack) {
         CURRENT_RENDER_STACK.set(stack);
     }
-    
+
     // 清除当前渲染的物品栈
     public static void clearCurrentRenderStack() {
         CURRENT_RENDER_STACK.remove();
@@ -86,12 +86,12 @@ public class lemon_energy extends Item implements GeoItem {
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 // 获取当前正在渲染的物品栈
                 ItemStack stack = CURRENT_RENDER_STACK.get();
-                
+
                 // 如果没有设置，则默认使用主手物品
                 if (stack == null) {
                     stack = ClientUtils.getClientPlayer().getMainHandItem();
                 }
-                
+
                 if (stack != null && isDarkVariant(stack)) {
                     if (this.darkRenderer == null)
                         this.darkRenderer = (LemonEnergyRenderer) LemonEnergyRenderer.createDarkLemonRenderer();
@@ -119,6 +119,12 @@ public class lemon_energy extends Item implements GeoItem {
             if (!stack.getOrCreateTag().contains("first_click")) {
                 // 第一次右键点击
                 stack.getOrCreateTag().putBoolean("first_click", true);
+
+                // 播放open动画
+                if (level instanceof ServerLevel serverLevel) {
+                    triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "controller", "open");
+                }
+
 
                 // 在玩家头顶生成柠檬能量特效方块
                 BlockPos aboveHead = player.blockPosition().above(2);

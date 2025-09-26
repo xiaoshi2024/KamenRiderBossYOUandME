@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.RiderEnergyHandler;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -22,7 +23,9 @@ public class DukePlayerAbilityHandler {
     // 战斗数据分析持续时间（秒）
     private static final int COMBAT_ANALYSIS_DURATION = 15;
     // 技能冷却时间（秒）
-    private static final long COOLDOWN_TIME = 60000; // 60秒
+    private static final long COOLDOWN_TIME = 5000; // 5秒
+    // 技能消耗的骑士能量
+    private static final double ENERGY_COST = 30.0;
     
     // 保存玩家的攻击力修饰符，用于正确移除
     private static final Map<ServerPlayer, AttributeModifier> playerAttackModifiers = new HashMap<>();
@@ -93,13 +96,11 @@ public class DukePlayerAbilityHandler {
             return false;
         }
         
-        // 消耗10级经验值
-        if (player.experienceLevel < 10) {
-            player.sendSystemMessage(net.minecraft.network.chat.Component.literal("经验值不足，需要 10 级"));
+        // 消耗骑士能量
+        if (!RiderEnergyHandler.consumeRiderEnergy(player, ENERGY_COST)) {
+            player.sendSystemMessage(net.minecraft.network.chat.Component.literal("骑士能量不足，需要 " + (int)ENERGY_COST + " 点能量"));
             return false;
         }
-        
-        player.giveExperienceLevels(-10);
         
         // 激活战斗数据分析
         variables.isDukeCombatAnalysisActive = true;

@@ -232,5 +232,7 @@
   "item.kamen_rider_boss_you_and_me.tyrant_leggings.tooltip": "[Tooltip] Tyrant Leggings.",
   "item.kamen_rider_boss_you_and_me.dark_kiva_helmet.tooltip": "[Tooltip] Dark Kiva Helmet.",
   "item.kamen_rider_boss_you_and_me.dark_kiva_chestplate.tooltip": "[Tooltip] Dark Kiva Chestplate.",
-  "item.kamen_rider_boss_you_and_me.dark_kiva_leggings.tooltip": "[Tooltip] Dark Kiva Leggings."
+  "item.kamen_rider_boss_you_and_me.dark_kiva_leggings.tooltip": "[Tooltip] Dark Kiva Leggings.",
+  "hud.kamen_rider_boss_you_and_me.rider_energy": "Rider Energy: %s",
+  "hud.kamen_rider_boss_you_and_me.rider_cooldown": "Rider Kick Cooldown: %.1fs"
 }

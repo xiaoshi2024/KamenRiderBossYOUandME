@@ -148,6 +148,7 @@ public class RidernecromItem extends ArmorItem implements GeoItem, KamenBossArmo
 
 	@Override
 	public void tick(Player player) {
-
+		// 添加抗性1效果
+		this.applyResistanceEffect(player);
 	}
 }

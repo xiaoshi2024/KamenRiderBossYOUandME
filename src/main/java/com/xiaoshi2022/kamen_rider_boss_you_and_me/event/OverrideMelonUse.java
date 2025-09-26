@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import software.bernie.geckolib.animatable.GeoItem;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
@@ -54,6 +55,15 @@ public class OverrideMelonUse {
                 // 第一次右键
                 tag.putBoolean("first_click", true);
                 BlockPos above = player.blockPosition().above(2);
+
+                // 播放open动画
+                if (level instanceof ServerLevel serverLevel) {
+                    if (stack.getItem() instanceof GeoItem geoItem) {
+                        geoItem.triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "controller", "open");
+                    }
+                }
+
+
                 if (level.isEmptyBlock(above)) {
                     level.setBlock(above,
                             /* 这里放你想生成的方块，例如 ModBlocks.LEMON_BLOCK */

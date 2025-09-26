@@ -203,5 +203,7 @@
   "item.kamen_rider_boss_you_and_me.tyrant_leggings.tooltip": "[提示] 暴君护腿。",
   "item.kamen_rider_boss_you_and_me.dark_kiva_helmet.tooltip": "[提示] 暗黑kiva头盔。",
   "item.kamen_rider_boss_you_and_me.dark_kiva_chestplate.tooltip": "[提示] 暗黑kiva胸甲。",
-  "item.kamen_rider_boss_you_and_me.dark_kiva_leggings.tooltip": "[提示] 暗黑kiva护腿。"
+  "item.kamen_rider_boss_you_and_me.dark_kiva_leggings.tooltip": "[提示] 暗黑kiva护腿。",
+  "hud.kamen_rider_boss_you_and_me.rider_energy": "骑士能量: %s",
+  "hud.kamen_rider_boss_you_and_me.rider_cooldown": "骑士踢冷却: %.1f秒"
   }

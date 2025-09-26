@@ -199,9 +199,14 @@ public class  KRBVariables {
 
 	// 在PlayerVariables类中添加字段
 	public double baseMaxHealth = 20.0D; // 默认基础生命值为20点
-	public int lastCustomArmorCount = 0;
+    public int lastCustomArmorCount = 0;
     public boolean isDarkKivaBeltEquipped = false; // 新增字段：记录是否装备了黑暗Kiva腰带
+    public boolean isGenesisDriverEquipped = false; // 新增字段：记录是否装备了Genesis驱动器
+    public boolean isSengokuDriverEmptyEquipped = false; // 新增字段：记录是否装备了空的Sengoku驱动器
+    public boolean isSengokuDriverFilledEquipped = false; // 新增字段：记录是否装备了有锁种的Sengoku驱动器
+    public boolean isOrochiDriverEquipped = false; // 新增字段：记录是否装备了Orochi驱动器
     public boolean isEvilBatsTransformed = false; // 新增字段：记录是否装备了EvilBats盔甲并变身
+    public boolean isDarkOrangelsTransformed = false; // 新增字段：记录是否装备了Dark_orangels盔甲并变身
     // Duke骑士技能相关变量
     public boolean dukeKnightSummoned = false; // Duke骑士是否已召唤
     public long dukeKnightCooldown = 0L; // Duke骑士技能冷却时间（毫秒）
@@ -210,6 +215,18 @@ public class  KRBVariables {
     public boolean isDukeCombatAnalysisActive = false; // 战斗数据分析是否激活
     public long dukeCombatAnalysisCooldown = 0L; // 战斗数据分析技能冷却时间（毫秒）
     public long dukeCombatAnalysisEndTime = 0L; // 战斗数据分析结束时间（毫秒）
+    
+    // 自定义蓝条系统 - 骑士能量
+    public double riderEnergy = 0.0D; // 当前骑士能量值
+    public double maxRiderEnergy = 100.0D; // 最大骑士能量值
+    public double riderEnergyGainPerDamage = 1.0D; // 每造成1点伤害获得的能量值
+    public double riderEnergyNaturalRegen = 0.02D; // 每秒自然恢复的能量值
+    public boolean isRiderEnergyFull = false; // 能量是否已满（用于客户端显示提示）
+    public long lastEnergyFullTime = 0L; // 上次能量充满的时间（用于防止提示频繁触发）
+    
+    // 累积攻击力相关变量 - 用于骑士能量跟随玩家累积攻击力变化
+    public double accumulatedAttackDamage = 0.0D; // 玩家累积造成的伤害
+    public double accumulatedAttackDamageModifier = 0.1D; // 累积伤害转换为能量的系数
 
         public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
@@ -255,6 +272,12 @@ public class  KRBVariables {
 			nbt.putBoolean("isNecromStandby", isNecromStandby); // 新增：序列化Necrom待机状态
 
 		nbt.putBoolean("isEvilBatsTransformed", isEvilBatsTransformed); // 新增：存储EvilBats变身状态
+		nbt.putBoolean("isDarkKivaBeltEquipped", isDarkKivaBeltEquipped); // 新增字段：记录是否装备了黑暗Kiva腰带
+		nbt.putBoolean("isGenesisDriverEquipped", isGenesisDriverEquipped); // 新增字段：记录是否装备了Genesis驱动器
+		nbt.putBoolean("isSengokuDriverEmptyEquipped", isSengokuDriverEmptyEquipped); // 新增字段：记录是否装备了空的Sengoku驱动器
+		nbt.putBoolean("isSengokuDriverFilledEquipped", isSengokuDriverFilledEquipped); // 新增字段：记录是否装备了有锁种的Sengoku驱动器
+		nbt.putBoolean("isOrochiDriverEquipped", isOrochiDriverEquipped); // 新增字段：记录是否装备了Orochi驱动器
+		nbt.putBoolean("isDarkOrangelsTransformed", isDarkOrangelsTransformed); // 新增字段：记录是否装备了Dark_orangels盔甲并变身
 
 			nbt.putDouble("baseMaxHealth", baseMaxHealth);   // ← 新增
         // Duke骑士技能相关变量
@@ -265,7 +288,17 @@ public class  KRBVariables {
         nbt.putBoolean("isDukeCombatAnalysisActive", isDukeCombatAnalysisActive);
         nbt.putLong("dukeCombatAnalysisCooldown", dukeCombatAnalysisCooldown);
         nbt.putLong("dukeCombatAnalysisEndTime", dukeCombatAnalysisEndTime);
-		return nbt;
+        // 序列化骑士能量相关变量
+        nbt.putDouble("riderEnergy", riderEnergy);
+        nbt.putDouble("maxRiderEnergy", maxRiderEnergy);
+        nbt.putDouble("riderEnergyGainPerDamage", riderEnergyGainPerDamage);
+        nbt.putDouble("riderEnergyNaturalRegen", riderEnergyNaturalRegen);
+        nbt.putBoolean("isRiderEnergyFull", isRiderEnergyFull);
+        nbt.putLong("lastEnergyFullTime", lastEnergyFullTime);
+        // 序列化累积攻击力相关变量
+        nbt.putDouble("accumulatedAttackDamage", accumulatedAttackDamage);
+        nbt.putDouble("accumulatedAttackDamageModifier", accumulatedAttackDamageModifier);
+        return nbt;
 	}
 
 		public void readNBT(Tag tag) {
@@ -299,6 +332,12 @@ public class  KRBVariables {
 			isNecromStandby = nbt.getBoolean("isNecromStandby"); // 新增：读取Necrom待机状态
 
 		isEvilBatsTransformed = nbt.getBoolean("isEvilBatsTransformed"); // 新增：读取EvilBats变身状态
+		isDarkKivaBeltEquipped = nbt.getBoolean("isDarkKivaBeltEquipped"); // 新增字段：读取是否装备了黑暗Kiva腰带
+		isGenesisDriverEquipped = nbt.getBoolean("isGenesisDriverEquipped"); // 新增字段：读取是否装备了Genesis驱动器
+		isSengokuDriverEmptyEquipped = nbt.getBoolean("isSengokuDriverEmptyEquipped"); // 新增字段：读取是否装备了空的Sengoku驱动器
+		isSengokuDriverFilledEquipped = nbt.getBoolean("isSengokuDriverFilledEquipped"); // 新增字段：读取是否装备了有锁种的Sengoku驱动器
+		isOrochiDriverEquipped = nbt.getBoolean("isOrochiDriverEquipped"); // 新增字段：读取是否装备了Orochi驱动器
+		isDarkOrangelsTransformed = nbt.getBoolean("isDarkOrangelsTransformed"); // 新增字段：读取是否装备了Dark_orangels盔甲并变身
 
 			baseMaxHealth = nbt.getDouble("baseMaxHealth");  // ← 新增
         // Duke骑士技能相关变量
@@ -309,6 +348,11 @@ public class  KRBVariables {
         isDukeCombatAnalysisActive = nbt.getBoolean("isDukeCombatAnalysisActive");
         dukeCombatAnalysisCooldown = nbt.getLong("dukeCombatAnalysisCooldown");
         dukeCombatAnalysisEndTime = nbt.getLong("dukeCombatAnalysisEndTime");
+        // 反序列化骑士能量和累积攻击力相关变量
+        riderEnergy = nbt.getDouble("riderEnergy");
+        maxRiderEnergy = nbt.getDouble("maxRiderEnergy");
+        accumulatedAttackDamage = nbt.getDouble("accumulatedAttackDamage");
+        accumulatedAttackDamageModifier = nbt.getDouble("accumulatedAttackDamageModifier");
 	}
 	}
 
@@ -334,34 +378,50 @@ public class  KRBVariables {
 				if (!context.getDirection().getReceptionSide().isServer()) {
 					PlayerVariables variables = ((PlayerVariables) Minecraft.getInstance().player.getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
 					variables.kcik = message.data.kcik;
-				variables.wudi = message.data.wudi;
-				variables.lastKickTime = message.data.lastKickTime;
-				variables.kickStartTime = message.data.kickStartTime;
-				variables.kickStartY = message.data.kickStartY;
-				variables.needExplode = message.data.needExplode;
+					variables.wudi = message.data.wudi;
+					variables.lastKickTime = message.data.lastKickTime;
+					variables.kickStartTime = message.data.kickStartTime;
+					variables.kickStartY = message.data.kickStartY;
+					variables.needExplode = message.data.needExplode;
 
-				//眼魂
+					//眼魂
 					variables.isMegaUiorderTransformed = message.data.isMegaUiorderTransformed; // 新增：同步Mega_uiorder变身状态
 					variables.isNecromStandby = message.data.isNecromStandby;
 
-				// 同步锁种相关变量
-				variables.cherry_ready = message.data.cherry_ready;
-				variables.cherry_ready_time = message.data.cherry_ready_time;
-				variables.lemon_ready = message.data.lemon_ready;
-				variables.lemon_ready_time = message.data.lemon_ready_time;
-				variables.peach_ready = message.data.peach_ready;
-				variables.peach_ready_time = message.data.peach_ready_time;
-				variables.melon_ready = message.data.melon_ready;
-				variables.melon_ready_time = message.data.melon_ready_time;
-				variables.banana_ready = message.data.banana_ready;
-			variables.banana_ready_time = message.data.banana_ready_time;
-			variables.orange_ready = message.data.orange_ready;
-			variables.orange_ready_time = message.data.orange_ready_time;
+					// 同步锁种相关变量
+					variables.cherry_ready = message.data.cherry_ready;
+					variables.cherry_ready_time = message.data.cherry_ready_time;
+					variables.lemon_ready = message.data.lemon_ready;
+					variables.lemon_ready_time = message.data.lemon_ready_time;
+					variables.peach_ready = message.data.peach_ready;
+					variables.peach_ready_time = message.data.peach_ready_time;
+					variables.melon_ready = message.data.melon_ready;
+					variables.melon_ready_time = message.data.melon_ready_time;
+					variables.banana_ready = message.data.banana_ready;
+					variables.banana_ready_time = message.data.banana_ready_time;
+					variables.orange_ready = message.data.orange_ready;
+					variables.orange_ready_time = message.data.orange_ready_time;
 
 					variables.baseMaxHealth = message.data.baseMaxHealth;
-				variables.lastCustomArmorCount = message.data.lastCustomArmorCount; // 添加这行，同步lastCustomArmorCount
-				variables.isDarkKivaBeltEquipped = message.data.isDarkKivaBeltEquipped; // 添加这行，同步黑暗Kiva腰带状态
-				variables.isEvilBatsTransformed = message.data.isEvilBatsTransformed; // 添加这行，同步EvilBats变身状态
+					variables.lastCustomArmorCount = message.data.lastCustomArmorCount; // 添加这行，同步lastCustomArmorCount
+					variables.isDarkKivaBeltEquipped = message.data.isDarkKivaBeltEquipped; // 添加这行，同步黑暗Kiva腰带状态
+					variables.isGenesisDriverEquipped = message.data.isGenesisDriverEquipped; // 添加这行，同步Genesis驱动器状态
+					variables.isSengokuDriverEmptyEquipped = message.data.isSengokuDriverEmptyEquipped; // 添加这行，同步空的Sengoku驱动器状态
+					variables.isSengokuDriverFilledEquipped = message.data.isSengokuDriverFilledEquipped; // 添加这行，同步有锁种的Sengoku驱动器状态
+					variables.isOrochiDriverEquipped = message.data.isOrochiDriverEquipped; // 添加这行，同步Orochi驱动器状态
+					variables.isEvilBatsTransformed = message.data.isEvilBatsTransformed; // 添加这行，同步EvilBats变身状态
+					variables.isDarkOrangelsTransformed = message.data.isDarkOrangelsTransformed; // 添加这行，同步Dark_orangels变身状态
+
+					// 同步所有骑士能量相关变量
+					variables.riderEnergy = message.data.riderEnergy;
+					variables.maxRiderEnergy = message.data.maxRiderEnergy;
+					variables.riderEnergyGainPerDamage = message.data.riderEnergyGainPerDamage;
+					variables.riderEnergyNaturalRegen = message.data.riderEnergyNaturalRegen;
+					variables.isRiderEnergyFull = message.data.isRiderEnergyFull;
+					variables.lastEnergyFullTime = message.data.lastEnergyFullTime;
+					// 同步累积攻击力相关变量
+					variables.accumulatedAttackDamage = message.data.accumulatedAttackDamage;
+					variables.accumulatedAttackDamageModifier = message.data.accumulatedAttackDamageModifier;
 				}
 			});
 			context.setPacketHandled(true);

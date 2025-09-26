@@ -76,6 +76,12 @@ public class bananafruit extends Item implements GeoItem {
                 // 第一次右键点击
                 stack.getOrCreateTag().putBoolean("first_click", true);
 
+                // 播放open动画
+                if (level instanceof ServerLevel serverLevel) {
+                    triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "controller", "open");
+                }
+
+
                 // 在玩家头顶生成特效方块
                 BlockPos aboveHead = player.blockPosition().above(2);
                 if (level.isEmptyBlock(aboveHead)) {

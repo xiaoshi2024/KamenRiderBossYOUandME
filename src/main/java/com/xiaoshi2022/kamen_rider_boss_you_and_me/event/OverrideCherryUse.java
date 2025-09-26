@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import software.bernie.geckolib.animatable.GeoItem;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
@@ -53,6 +55,15 @@ public class OverrideCherryUse {
                 // 第一次右键
                 tag.putBoolean("first_click", true);
                 BlockPos above = player.blockPosition().above(2);
+
+                // 播放open动画
+                if (level instanceof ServerLevel serverLevel) {
+                    if (stack.getItem() instanceof GeoItem geoItem) {
+                        geoItem.triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "controller", "open");
+                    }
+                }
+
+
                 if (level.isEmptyBlock(above)) {
                     level.setBlock(above,
                             /* 这里放樱桃专属方块 */

@@ -123,6 +123,7 @@ public class ZangetsuShinItem extends ArmorItem implements GeoItem , KamenBossAr
 
     @Override
     public void tick(Player player) {
-
+        // 添加抗性1效果
+        this.applyResistanceEffect(player);
     }
 }

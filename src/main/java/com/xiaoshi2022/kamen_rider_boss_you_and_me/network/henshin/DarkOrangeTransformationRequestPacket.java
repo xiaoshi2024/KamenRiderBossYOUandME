@@ -120,9 +120,10 @@ public class DarkOrangeTransformationRequestPacket {
         // 触发Dark_orangels变身事件
         new HeartCoreEvent(player, "DARK_ORANGE");
 
-        // 清除橙子锁种准备状态
+        // 清除橙子锁种准备状态并设置Dark_orangels变身状态
         KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         variables.orange_ready = false;
+        variables.isDarkOrangelsTransformed = true; // 设置Dark_orangels变身状态为true
         variables.syncPlayerVariables(player); // 同步变量到客户端
     }
 
