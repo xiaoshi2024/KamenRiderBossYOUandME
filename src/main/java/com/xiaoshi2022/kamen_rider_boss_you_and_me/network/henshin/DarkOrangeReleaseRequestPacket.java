@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.ORANGEFRUIT;
 import net.minecraft.world.effect.MobEffects;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 
 public class DarkOrangeReleaseRequestPacket {
     private final UUID playerId;
@@ -141,5 +142,8 @@ public class DarkOrangeReleaseRequestPacket {
         com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables.PlayerVariables variables = player.getCapability(com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables.PlayerVariables());
         variables.isDarkOrangelsTransformed = false;
         variables.syncPlayerVariables(player); // 同步变量到客户端
+        
+        // 收回变身武器
+        TransformationWeaponManager.clearTransformationWeapons(player);
     }
 }

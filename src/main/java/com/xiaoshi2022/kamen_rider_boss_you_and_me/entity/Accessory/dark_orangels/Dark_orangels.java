@@ -130,8 +130,45 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 40, 0));
         }
         
-        // 添加抗性1效果
+        // 添加抗性效果
         this.applyResistanceEffect(player);
+        
+        // 调试输出已移除
+    }
+    
+    // 不再提供力量效果，避免与原版药水冲突
+    @Override
+    public int getStrengthLevel() {
+        return 0; // 不使用力量效果
+    }
+    
+    // 覆写getResistanceLevel方法，为Dark_orangels设置自定义抗性等级
+    @Override
+    public int getResistanceLevel() {
+        return 2; // Dark_orangels使用抗性2效果，比基础高一级
+    }
+    
+    // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果
+    @Override
+    public void applyResistanceEffect(Player player) {
+        if (!player.level().isClientSide()) {
+            int resistanceLevel = this.getResistanceLevel();
+            if (resistanceLevel > 0) {
+                int targetAmp = resistanceLevel - 1;
+                MobEffectInstance existing = player.getEffect(MobEffects.DAMAGE_RESISTANCE);
+                
+                // 只有在玩家没有抗性效果，或者现有效果等级低于我们提供的等级时，才添加新效果
+                if (existing == null || existing.getAmplifier() < targetAmp) {
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.DAMAGE_RESISTANCE,
+                            400,
+                            targetAmp,
+                            false,
+                            false // 不显示粒子效果，避免视觉混乱
+                    ));
+                }
+            }
+        }
     }
 
     // 生成护盾粒子效果

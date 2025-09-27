@@ -211,21 +211,18 @@ public final class DarkKivaAbilityHandler {
                 sp.addEffect(nightVision);
             }
             
-            // 攻击力提升：基础伤害增加
-            MobEffectInstance damageBoost = new MobEffectInstance(MobEffects.DAMAGE_BOOST, 20, 0, false, false);
-            if (!sp.hasEffect(MobEffects.DAMAGE_BOOST)) {
-                sp.addEffect(damageBoost);
-            }
+            // 已删除力量效果，避免干扰原版力量药水
             
-            // 火焰抗性：抵抗火焰伤害
+            // 火焰抗性：只有当玩家没有火焰抗性效果或效果等级低于我们提供的等级时，才添加新效果
+            // 这样可以保留玩家通过原版药水获得的更高等级的火焰抗性效果
             MobEffectInstance fireResistance = new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 320, 0, false, false);
-            if (!sp.hasEffect(MobEffects.FIRE_RESISTANCE) || sp.getEffect(MobEffects.FIRE_RESISTANCE).getDuration() < 260) {
+            if (!sp.hasEffect(MobEffects.FIRE_RESISTANCE) || sp.getEffect(MobEffects.FIRE_RESISTANCE).getAmplifier() < 0) {
                 sp.addEffect(fireResistance);
             }
             
-            // 缓慢生命恢复：体现吸血鬼特性
+            // 缓慢生命恢复：只有当玩家没有生命恢复效果或效果等级低于我们提供的等级时，才添加新效果
             MobEffectInstance regeneration = new MobEffectInstance(MobEffects.REGENERATION, 40, 0, false, false);
-            if (!sp.hasEffect(MobEffects.REGENERATION)) {
+            if (!sp.hasEffect(MobEffects.REGENERATION) || sp.getEffect(MobEffects.REGENERATION).getAmplifier() < 0) {
                 sp.addEffect(regeneration);
             }
             
@@ -241,11 +238,8 @@ public final class DarkKivaAbilityHandler {
                 }
             }
         } else {
-            // 当玩家脱下盔甲时，不移除原版药水的夜视效果
-            // 只移除其他效果，保留原版药水的夜视效果
-            sp.removeEffect(MobEffects.DAMAGE_BOOST);
-            sp.removeEffect(MobEffects.FIRE_RESISTANCE);
-            sp.removeEffect(MobEffects.REGENERATION);
+            // 当玩家脱下盔甲时，保留原版药水的效果
+            // 我们不再直接移除效果，而是让它们自然到期
             
             // 重置冷却时间
             variables.dark_kiva_blood_steal_cooldown = 0;

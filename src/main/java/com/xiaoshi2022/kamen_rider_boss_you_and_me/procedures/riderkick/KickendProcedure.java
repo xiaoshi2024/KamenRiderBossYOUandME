@@ -208,30 +208,35 @@ public class KickendProcedure {
 	// 根据头盔计算伤害
 	private static float calculateDamage(Player entity) {
 		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
+		float damage = 40.0F; // 默认伤害值（SIGURD_HELMET）
 
 		// 根据不同的头盔类型设置不同的伤害值
 		if (helmet.getItem() == ModItems.BARON_LEMON_HELMET.get()) {
-			return 50.0F;
+			damage = 50.0F;
 		} else if (helmet.getItem() == ModItems.DUKE_HELMET.get()) {
-			return 70.0F;
+			damage = 70.0F;
 		} else if (helmet.getItem() == ModItems.MARIKA_HELMET.get()) {
-			return 45.0F;
+			damage = 45.0F;
 		} else if (helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
-			return 60.0F;
+			damage = 60.0F;
 		} else if (helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()) {
-			return 55.0F;
+			damage = 55.0F;
 		} else if (helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()) {
-			return 65.0F;
+			damage = 65.0F;
+			// 检查是否激活了踢力增强
+			if (entity.getPersistentData().getBoolean("DarkGaimKickEnhance")) {
+				// 将伤害提升1.3倍
+				damage *= 1.3F;
+			}
 		} else if (helmet.getItem() == ModItems.TYRANT_HELMET.get()) {
-			return 80.0F;
+			damage = 80.0F;
 		} else if (helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()) {
-			return 55.0F;
+			damage = 55.0F;
 		} else if (helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) {
-			return 75.0F;
-		} else {
-			// 默认伤害值（SIGURD_HELMET）
-			return 40.0F;
+			damage = 75.0F;
 		}
+
+		return damage;
 	}
 
 	// 对敌人造成伤害

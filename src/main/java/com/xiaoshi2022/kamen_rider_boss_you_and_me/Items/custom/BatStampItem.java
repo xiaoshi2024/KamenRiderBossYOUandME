@@ -183,12 +183,9 @@ public class BatStampItem extends Item implements GeoItem {
                                                 }
                                             }
 
-                                            // 创建 BatDarksEntity 实体
-                                            if (!level.isClientSide()) {
-                                                BatDarksEntity batDarksEntity = new BatDarksEntity(ModEntityTypes.BAT_DARKS.get(), level);
-                                                batDarksEntity.setTargetPlayer(player); // 设置目标玩家并开始骑乘（这个方法内部会处理位置）
-                                                level.addFreshEntity(batDarksEntity);
-                                            }
+                                            // 注释掉原有的实体生成逻辑，由XKeyLogic中的toEvil方法统一处理
+                                            // 这样可以避免重复生成多个实体
+                                            System.out.println("BatStampItem已标记腰带为BAT形态，实体生成将由XKeyLogic处理");
                                         }
                                     }
                                 }

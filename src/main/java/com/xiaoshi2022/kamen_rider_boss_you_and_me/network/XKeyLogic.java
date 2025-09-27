@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatDarksEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.EvilArmorSequence;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
@@ -63,21 +64,29 @@ public final class XKeyLogic {
             return;
         }
 
-        // 查找附近的 BatDarksEntity
-        boolean foundEntity = false;
+        // 查找附近的 BatDarksEntity，优先选择已经绑定到当前玩家的实体
+        BatDarksEntity targetEntity = null;
         for (BatDarksEntity batDarksEntity : sp.level().getEntitiesOfClass(BatDarksEntity.class, sp.getBoundingBox().inflate(32.0D))) {
-            if (batDarksEntity.distanceTo(sp) < 10.0D) {
-                System.out.println("找到BatDarksEntity，距离: " + batDarksEntity.distanceTo(sp));
-                batDarksEntity.startHenshin(); // 这会自动同步到客户端
-                foundEntity = true;
+            if (batDarksEntity.getTargetPlayerId() != null && batDarksEntity.getTargetPlayerId().equals(sp.getUUID())) {
+                System.out.println("找到已绑定到当前玩家的BatDarksEntity，实体ID: " + batDarksEntity.getId());
+                targetEntity = batDarksEntity;
                 break;
+            } else if (targetEntity == null && batDarksEntity.distanceTo(sp) < 10.0D) {
+                System.out.println("找到附近的BatDarksEntity，距离: " + batDarksEntity.distanceTo(sp));
+                targetEntity = batDarksEntity;
             }
         }
 
-        if (!foundEntity) {
-            sp.sendSystemMessage(Component.literal("§c附近没有找到BatDarks实体！"));
-            return;
+        // 如果没有找到，自动生成一个新的BatDarksEntity
+        if (targetEntity == null) {
+            System.out.println("未找到BatDarksEntity，自动生成一个新的实体");
+            targetEntity = new BatDarksEntity(ModEntityTypes.BAT_DARKS.get(), sp.level());
+            targetEntity.setPos(sp.getX(), sp.getY() + 1, sp.getZ());
+            targetEntity.setTargetPlayer(sp); // 绑定玩家
+            sp.level().addFreshEntity(targetEntity);
         }
+        
+        targetEntity.startHenshin(); // 触发变身动画
 
         // 直接执行变身逻辑（不需要延迟）
         EvilArmorSequence.equip(sp);

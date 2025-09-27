@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -112,6 +113,9 @@ public class DarkOrangeTransformationRequestPacket {
         belt.setBeltMode(beltStack, sengokudrivers_epmty.BeltMode.ORANGELS);
         belt.setEquipped(beltStack, true);
         belt.setHenshin(beltStack, true);
+        
+        // 给予玩家对应的武器（如果配置启用了武器给予功能）
+        TransformationWeaponManager.giveWeaponOnSengokuDriverTransformation(player, sengokudrivers_epmty.BeltMode.ORANGELS);
 
         clearOLEntities(player);
 

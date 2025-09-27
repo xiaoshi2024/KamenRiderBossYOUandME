@@ -7,6 +7,8 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -81,12 +83,45 @@ public class Duke extends ArmorItem implements GeoItem , KamenBossArmor, ArmorAn
         }, type, properties);
     }
 
-    // 空的tick方法，保持兼容性
     @Override
     public void tick(Player player) {
-        // 超能力已修改为召唤Duke骑士实体，相关逻辑在DukeKnightAbilityHandler中处理
-        // 添加抗性1效果
+        // 添加抗性效果
         this.applyResistanceEffect(player);
+    }
+
+    // 不再提供力量效果，避免与原版药水冲突
+    @Override
+    public int getStrengthLevel() {
+        return 0; // 不使用力量效果
+    }
+
+    // 覆写getResistanceLevel方法，设置自定义抗性等级
+    @Override
+    public int getResistanceLevel() {
+        return 1; //使用抗性2效果，比基础高一级
+    }
+
+    // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果
+    @Override
+    public void applyResistanceEffect(Player player) {
+        if (!player.level().isClientSide()) {
+            int resistanceLevel = this.getResistanceLevel();
+            if (resistanceLevel > 0) {
+                int targetAmp = resistanceLevel - 1;
+                MobEffectInstance existing = player.getEffect(MobEffects.DAMAGE_RESISTANCE);
+                
+                // 只有在玩家没有抗性效果，或者现有效果等级低于我们提供的等级时，才添加新效果
+                if (existing == null || existing.getAmplifier() < targetAmp) {
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.DAMAGE_RESISTANCE,
+                            400,
+                            targetAmp,
+                            false,
+                            false // 不显示粒子效果，避免视觉混乱
+                    ));
+                }
+            }
+        }
     }
 
     // 检查单个盔甲是否装备

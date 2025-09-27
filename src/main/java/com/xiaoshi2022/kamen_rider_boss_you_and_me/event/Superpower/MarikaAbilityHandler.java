@@ -58,8 +58,10 @@ public class MarikaAbilityHandler {
                 if (random.nextDouble() < 0.2) {
                     // 恢复3点生命值
                     player.heal(3.0F);
-                    // 给予3秒的生命恢复I效果
-                    player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 0));
+                    // 给予3秒的生命恢复I效果，但只有当玩家没有生命恢复效果或效果等级低于I时才添加
+                    if (!player.hasEffect(MobEffects.REGENERATION) || player.getEffect(MobEffects.REGENERATION).getAmplifier() < 0) {
+                        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 0, false, false));
+                    }
                 }
             }
         }

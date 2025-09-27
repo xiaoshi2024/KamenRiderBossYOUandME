@@ -36,9 +36,9 @@ public class TransformationWeaponManager {
                 break;
                 
             case ORANGELS:
-                // 橙子锁种 - 可以给予其他武器
-                // 这里暂时不实现，需要根据实际需求添加
-                break;
+                // 橙子锁种 - 黑暗铠武形态，给予3把武器
+                giveDarkGaimWeapons(player, beltMode);
+                return; // 因为已经处理了武器放置，所以直接返回
                 
             default:
                 // 默认情况不给予武器
@@ -204,6 +204,98 @@ public class TransformationWeaponManager {
                 player.drop(musousaberd, false);
             }
         }
+    }
+    
+    /**
+     * 给予玩家黑暗铠武的武器
+     */
+    private static void giveDarkGaimWeapons(ServerPlayer player, sengokudrivers_epmty.BeltMode beltMode) {
+        // 创建武器
+        ItemStack musousaberd = new ItemStack(ModItems.MUSOUSABERD.get()); // 无双军刀
+        ItemStack daid = new ItemStack(ModItems.DAIDAIMARU.get()); // 大橙丸
+        ItemStack sonic = new ItemStack(ModItems.SONICARROW.get()); // 音速弩弓
+        
+        // 为所有武器添加特殊标签
+        addTransformationWeaponTag(musousaberd, beltMode.name());
+        addTransformationWeaponTag(daid, beltMode.name());
+        addTransformationWeaponTag(sonic, beltMode.name());
+        
+        // 放置第一把武器 (无双军刀) - 放置在waist_left饰品槽位
+        // 尝试将无双军刀放置在waist_left饰品槽位
+        // 使用数组来存储布尔值，因为lambda表达式中不能修改外部局部变量
+        boolean[] placedInCurios = {false};
+        
+        // 获取Curios Inventory
+        CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
+            // 检查waist_left槽位
+            curiosInventory.getStacksHandler("waist_left").ifPresent(handler -> {
+                ItemStackHandler stacks = (ItemStackHandler) handler.getStacks();
+                for (int i = 0; i < stacks.getSlots(); i++) {
+                    if (stacks.getStackInSlot(i).isEmpty()) {
+                        stacks.setStackInSlot(i, musousaberd);
+                        placedInCurios[0] = true;
+                        break;
+                    }
+                }
+            });
+        });
+        
+        // 如果没有成功放置在饰品槽位，则尝试放置在主手、副手或物品栏
+        if (!placedInCurios[0]) {
+            if (player.getMainHandItem().isEmpty()) {
+                player.setItemInHand(player.getUsedItemHand(), musousaberd);
+            } else if (player.getOffhandItem().isEmpty()) {
+                player.getInventory().offhand.set(0, musousaberd);
+            } else {
+                // 尝试找到物品栏中的空位
+                int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+                if (emptySlot != -1) {
+                    player.getInventory().setItem(emptySlot, musousaberd);
+                } else {
+                    // 如果没有空位，物品会掉落在地上
+                    player.drop(musousaberd, false);
+                }
+            }
+        }
+        
+        // 放置大橙丸
+        // 优先检查主手和副手是否有空间
+        if (player.getMainHandItem().isEmpty()) {
+            player.setItemInHand(player.getUsedItemHand(), daid);
+        } else if (player.getOffhandItem().isEmpty()) {
+            player.getInventory().offhand.set(0, daid);
+        } else {
+            // 尝试找到物品栏中的空位
+            int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+            if (emptySlot != -1) {
+                player.getInventory().setItem(emptySlot, daid);
+            } else {
+                // 如果没有空位，物品会掉落在地上
+                player.drop(daid, false);
+            }
+        }
+
+        // 放置音速弩弓
+        // 优先检查主手和副手是否有空间
+        if (player.getMainHandItem().isEmpty()) {
+            player.setItemInHand(player.getUsedItemHand(), sonic);
+        } else if (player.getOffhandItem().isEmpty()) {
+            player.getInventory().offhand.set(0, sonic);
+        } else {
+            // 尝试找到物品栏中的空位
+            int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+            if (emptySlot != -1) {
+                player.getInventory().setItem(emptySlot, sonic);
+            } else {
+                // 如果没有空位，物品会掉落在地上
+                player.drop(sonic, false);
+            }
+        }
+        
+        // 发送消息通知玩家获得了武器
+        player.sendSystemMessage(
+                net.minecraft.network.chat.Component.literal("你获得了黑暗铠武的武器！")
+        );
     }
     
     /**

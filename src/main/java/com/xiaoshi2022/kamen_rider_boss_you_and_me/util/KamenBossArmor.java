@@ -1,34 +1,44 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
-
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 
 public interface KamenBossArmor {
     void tick(Player player);
-    
-    /**
-     * 为所有实现KamenBossArmor接口的盔甲添加持续抗性1效果
-     * 这是一个默认方法，所有实现类都会自动获得此功能
-     */
+
+    default int getResistanceLevel() {
+        return 0;
+    }
+
+    default int getStrengthLevel() {
+        return 2;
+    }
+
+    // 已删除力量效果，避免干扰原版力量药水
+    default void applyStrengthEffect(Player player) {
+        // 不执行任何操作，完全移除力量效果
+    }
+
     default void applyResistanceEffect(Player player) {
-        // 检查玩家是否穿着至少一件该类型的盔甲
-        boolean isWearingArmor = false;
-        for(int i = 0; i < player.getInventory().armor.size(); i++) {
-            if(player.getInventory().armor.get(i).getItem() instanceof KamenBossArmor) {
-                isWearingArmor = true;
-                break;
+        if (!player.level().isClientSide()) {
+            int resistanceLevel = this.getResistanceLevel();
+            if (resistanceLevel > 0) {
+                int targetAmp = resistanceLevel - 1;
+                MobEffectInstance existing = player.getEffect(MobEffects.DAMAGE_RESISTANCE);
+                
+                // 只有在玩家没有抗性效果，或者现有效果等级低于我们提供的等级时，才添加新效果
+                // 这样可以保留玩家通过原版药水获得的更高等级的抗性效果
+                if (existing == null || existing.getAmplifier() < targetAmp) {
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.DAMAGE_RESISTANCE,
+                            400,
+                            targetAmp,
+                            false,
+                            false // 不显示粒子效果，避免视觉混乱
+                    ));
+                }
             }
         }
-        
-        if(isWearingArmor) {
-            // 如果穿着盔甲，添加抗性1效果
-            // 只有在玩家没有抗性效果或效果即将结束时才添加，不会覆盖原版药水效果
-            if (!player.hasEffect(MobEffects.DAMAGE_RESISTANCE) || player.getEffect(MobEffects.DAMAGE_RESISTANCE).getDuration() < 260) {
-                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 320, 0, false, false));
-            }
-        }
-        // 不再无条件移除抗性效果，避免干扰原版药水效果
     }
 }

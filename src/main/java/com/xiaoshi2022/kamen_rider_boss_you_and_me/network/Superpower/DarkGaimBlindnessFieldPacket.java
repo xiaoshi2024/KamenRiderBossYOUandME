@@ -7,14 +7,14 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/* 黑暗爆破消息 */
-public record DarkSquashPacket() {
-    public static void encode(DarkSquashPacket msg, FriendlyByteBuf buf) {}
-    public static DarkSquashPacket decode(FriendlyByteBuf buf) { return new DarkSquashPacket(); }
-    public static void handle(DarkSquashPacket msg, Supplier<NetworkEvent.Context> ctx) {
+/* 黑暗铠武失明领域技能消息 */
+public record DarkGaimBlindnessFieldPacket() {
+    public static void encode(DarkGaimBlindnessFieldPacket msg, FriendlyByteBuf buf) {}
+    public static DarkGaimBlindnessFieldPacket decode(FriendlyByteBuf buf) { return new DarkGaimBlindnessFieldPacket(); }
+    public static void handle(DarkGaimBlindnessFieldPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer sp = ctx.get().getSender();
-            if (sp != null) DarkGaimJinbaLemonHandler.tryDarkSquash(sp);
+            if (sp != null) DarkGaimJinbaLemonHandler.activateBlindnessField(sp);
         });
         ctx.get().setPacketHandled(true);
     }

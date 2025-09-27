@@ -6,9 +6,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DukeKnightAbilityHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SummonDukeKnightPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkSquashPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.JinbaGuardPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.LemonBoostPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBatModePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
@@ -16,6 +13,10 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombat
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBananaEnergyPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BaronLemonAbilityPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimKickEnhancePacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimBlindnessFieldPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimHelheimCrackPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -64,6 +65,9 @@ public class KeyBinding {
         // 检测玩家是否穿着巴隆柠檬形态盔甲
         boolean isBaronLemon = isBaronLemonArmorEquipped(mc.player);
         
+        // 检测玩家是否穿着黑暗铠武阵羽柠檬盔甲
+        boolean isDarkGaim = isDarkGaimArmorEquipped(mc.player);
+        
         // 检测玩家是否手持音速弓柠檬模式
         boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
         
@@ -76,6 +80,12 @@ public class KeyBinding {
             }
         } 
         // 然后检查其他主要形态
+        else if (isDarkGaim) {
+            // 黑暗铠武阵羽柠檬形态的三个技能
+            if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new DarkGaimKickEnhancePacket());
+            if (KEY_BLAST.consumeClick()) PacketHandler.sendToServer(new DarkGaimBlindnessFieldPacket());
+            if (KEY_BOOST.consumeClick()) PacketHandler.sendToServer(new DarkGaimHelheimCrackPacket());
+        }
         else if (isDarkKiva) {
             if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new DarkKivaBatModePacket());
             if (KEY_BLAST.consumeClick()) PacketHandler.sendToServer(new DarkKivaBloodSuckPacket());
@@ -96,9 +106,7 @@ public class KeyBinding {
                 PacketHandler.sendToServer(new BaronBananaEnergyPacket());
             }
         } else {
-            if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new JinbaGuardPacket());
-            if (KEY_BLAST.consumeClick()) PacketHandler.sendToServer(new DarkSquashPacket());
-            if (KEY_BOOST.consumeClick()) PacketHandler.sendToServer(new LemonBoostPacket());
+            // 基础形态下的技能已被移除
         }
     }
     
@@ -129,6 +137,14 @@ public class KeyBinding {
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof baron_lemonItem &&
                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof baron_lemonItem &&
                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof baron_lemonItem;
+    }
+    
+    // 客户端专用的黑暗铠武阵羽柠檬盔甲检测方法
+    private static boolean isDarkGaimArmorEquipped(LocalPlayer player) {
+        // 检查是否穿着黑暗铠武阵羽柠檬的全套盔甲
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof Dark_orangels &&
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof Dark_orangels &&
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof Dark_orangels;
     }
     
     // 检查玩家是否手持音速弓柠檬模式

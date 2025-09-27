@@ -25,20 +25,29 @@ public class CherrySigurdAbilityHandler {
         if (player.level().isClientSide()) return;
 
         if (isWearingCherrySigurd(player)) {
-            // ① 速度 III（高速移动，比ZangetsuShin更快）
-            player.addEffect(new MobEffectInstance(
+            // ① 速度 III（高速移动，比ZangetsuShin更快）：只有当玩家没有速度效果或效果等级低于III时才添加
+            MobEffectInstance speedEffect = new MobEffectInstance(
                     MobEffects.MOVEMENT_SPEED,
-                    40, 2, false, false));
+                    40, 2, false, false);
+            if (!player.hasEffect(MobEffects.MOVEMENT_SPEED) || player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() < 2) {
+                player.addEffect(speedEffect);
+            }
 
-            // ② 跳跃提升 II
-            player.addEffect(new MobEffectInstance(
+            // ② 跳跃提升 II：只有当玩家没有跳跃提升效果或效果等级低于II时才添加
+            MobEffectInstance jumpEffect = new MobEffectInstance(
                     MobEffects.JUMP,
-                    40, 1, false, false));
+                    40, 1, false, false);
+            if (!player.hasEffect(MobEffects.JUMP) || player.getEffect(MobEffects.JUMP).getAmplifier() < 1) {
+                player.addEffect(jumpEffect);
+            }
 
-            // ③ 急迫 III（快速攻击）
-            player.addEffect(new MobEffectInstance(
+            // ③ 急迫 III（快速攻击）：只有当玩家没有急迫效果或效果等级低于III时才添加
+            MobEffectInstance hasteEffect = new MobEffectInstance(
                     MobEffects.DIG_SPEED,
-                    40, 2, false, false));
+                    40, 2, false, false);
+            if (!player.hasEffect(MobEffects.DIG_SPEED) || player.getEffect(MobEffects.DIG_SPEED).getAmplifier() < 2) {
+                player.addEffect(hasteEffect);
+            }
         }
     }
 

@@ -26,20 +26,29 @@ public class ZangetsuShinAbilityHandler {
         if (player.level().isClientSide()) return;
 
         if (isWearingZangetsuShin(player)) {
-            // ① 速度 II（音速加速）
-            player.addEffect(new MobEffectInstance(
+            // ① 速度 II（音速加速）：只有当玩家没有速度效果或效果等级低于II时才添加
+            MobEffectInstance speedEffect = new MobEffectInstance(
                     MobEffects.MOVEMENT_SPEED,
-                    40, 1, false, false));
+                    40, 1, false, false);
+            if (!player.hasEffect(MobEffects.MOVEMENT_SPEED) || player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() < 1) {
+                player.addEffect(speedEffect);
+            }
 
-            // ② 力量 I（能量斩击）
-            player.addEffect(new MobEffectInstance(
+            // ② 力量 I（能量斩击）：只有当玩家没有力量效果或效果等级低于I时才添加
+            MobEffectInstance strengthEffect = new MobEffectInstance(
                     MobEffects.DAMAGE_BOOST,
-                    40, 0, false, false));
+                    40, 0, false, false);
+            if (!player.hasEffect(MobEffects.DAMAGE_BOOST) || player.getEffect(MobEffects.DAMAGE_BOOST).getAmplifier() < 0) {
+                player.addEffect(strengthEffect);
+            }
 
-            // ③ 跳跃提升 II（高机动）
-            player.addEffect(new MobEffectInstance(
+            // ③ 跳跃提升 II（高机动）：只有当玩家没有跳跃提升效果或效果等级低于II时才添加
+            MobEffectInstance jumpEffect = new MobEffectInstance(
                     MobEffects.JUMP,
-                    40, 1, false, false));
+                    40, 1, false, false);
+            if (!player.hasEffect(MobEffects.JUMP) || player.getEffect(MobEffects.JUMP).getAmplifier() < 1) {
+                player.addEffect(jumpEffect);
+            }
         }
     }
 

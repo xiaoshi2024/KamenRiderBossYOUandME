@@ -7,14 +7,14 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/* 阵羽护盾消息 */
-public record JinbaGuardPacket() {
-    public static void encode(JinbaGuardPacket msg, FriendlyByteBuf buf) {}
-    public static JinbaGuardPacket decode(FriendlyByteBuf buf) { return new JinbaGuardPacket(); }
-    public static void handle(JinbaGuardPacket msg, Supplier<NetworkEvent.Context> ctx) {
+/* 黑暗铠武赫尔海姆裂缝技能消息 */
+public record DarkGaimHelheimCrackPacket() {
+    public static void encode(DarkGaimHelheimCrackPacket msg, FriendlyByteBuf buf) {}
+    public static DarkGaimHelheimCrackPacket decode(FriendlyByteBuf buf) { return new DarkGaimHelheimCrackPacket(); }
+    public static void handle(DarkGaimHelheimCrackPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer sp = ctx.get().getSender();
-            if (sp != null) DarkGaimJinbaLemonHandler.tryJinbaGuard(sp);
+            if (sp != null) DarkGaimJinbaLemonHandler.activateHelheimCrack(sp);
         });
         ctx.get().setPacketHandled(true);
     }

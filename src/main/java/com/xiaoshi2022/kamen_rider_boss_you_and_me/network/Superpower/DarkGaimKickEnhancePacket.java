@@ -7,14 +7,14 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/* 柠檬加速消息 */
-public record LemonBoostPacket() {
-    public static void encode(LemonBoostPacket msg, FriendlyByteBuf buf) {}
-    public static LemonBoostPacket decode(FriendlyByteBuf buf) { return new LemonBoostPacket(); }
-    public static void handle(LemonBoostPacket msg, Supplier<NetworkEvent.Context> ctx) {
+/* 黑暗铠武踢力增强技能消息 */
+public record DarkGaimKickEnhancePacket() {
+    public static void encode(DarkGaimKickEnhancePacket msg, FriendlyByteBuf buf) {}
+    public static DarkGaimKickEnhancePacket decode(FriendlyByteBuf buf) { return new DarkGaimKickEnhancePacket(); }
+    public static void handle(DarkGaimKickEnhancePacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer sp = ctx.get().getSender();
-            if (sp != null) DarkGaimJinbaLemonHandler.tryLemonBoost(sp);
+            if (sp != null) DarkGaimJinbaLemonHandler.activateKickEnhance(sp);
         });
         ctx.get().setPacketHandled(true);
     }

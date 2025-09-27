@@ -119,23 +119,27 @@ public class DukePlayerAbilityHandler {
         player.getAttribute(Attributes.ATTACK_DAMAGE).addTransientModifier(attackModifier);
         playerAttackModifiers.put(player, attackModifier);
         
-        // 添加伤害减免效果（-20%伤害）
-        player.addEffect(new MobEffectInstance(
-                MobEffects.DAMAGE_RESISTANCE, 
-                COMBAT_ANALYSIS_DURATION * 20, // 转换为刻
-                0, 
-                false, 
-                true
-        ));
+        // 添加伤害减免效果（-20%伤害）：只有当玩家没有伤害减免效果或效果等级低于I时才添加
+        if (!player.hasEffect(MobEffects.DAMAGE_RESISTANCE) || player.getEffect(MobEffects.DAMAGE_RESISTANCE).getAmplifier() < 0) {
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.DAMAGE_RESISTANCE, 
+                    COMBAT_ANALYSIS_DURATION * 20, // 转换为刻
+                    0, 
+                    false, 
+                    true
+            ));
+        }
         
-        // 添加速度提升效果（+10%移动速度）
-        player.addEffect(new MobEffectInstance(
-                MobEffects.MOVEMENT_SPEED, 
-                COMBAT_ANALYSIS_DURATION * 20, 
-                0, 
-                false, 
-                true
-        ));
+        // 添加速度提升效果（+10%移动速度）：只有当玩家没有速度效果或效果等级低于I时才添加
+        if (!player.hasEffect(MobEffects.MOVEMENT_SPEED) || player.getEffect(MobEffects.MOVEMENT_SPEED).getAmplifier() < 0) {
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.MOVEMENT_SPEED, 
+                    COMBAT_ANALYSIS_DURATION * 20, 
+                    0, 
+                    false, 
+                    true
+            ));
+        }
         
         // 生成粒子效果
         for (int i = 0; i < 20; i++) {

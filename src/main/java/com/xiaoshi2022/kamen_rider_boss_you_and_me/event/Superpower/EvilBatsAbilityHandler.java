@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -35,22 +36,14 @@ public class EvilBatsAbilityHandler {
                         220, 0, false, false)); // 增加夜视效果的持续时间到 220 ticks (约 11 秒)
             }
 
-            // ② 吸血（黑暗力量）
-            player.addEffect(new MobEffectInstance(
-                    MobEffects.REGENERATION,
-                    40, 0, false, false));
+            // ② 吸血（黑暗力量） - 只在没有效果或效果等级低于我们提供的等级时添加，避免覆盖原版药水
+            addEffectIfBetterOrAbsent(player, MobEffects.REGENERATION, 40, 0);
 
-            // ③ 速度提升（黑暗速度）
-            player.addEffect(new MobEffectInstance(
-                    MobEffects.MOVEMENT_SPEED,
-                    40, 0, false, false));
+            // ③ 速度提升（黑暗速度） - 只在没有效果或效果等级低于我们提供的等级时添加，避免覆盖原版药水
+            addEffectIfBetterOrAbsent(player, MobEffects.MOVEMENT_SPEED, 40, 0);
         } else {
-            // 当玩家不再穿着盔甲时，移除盔甲提供的夜视效果
-            if (player.getEffect(MobEffects.NIGHT_VISION) != null &&
-                    player.getEffect(MobEffects.NIGHT_VISION).getDuration() < 260 &&
-                    player.getEffect(MobEffects.NIGHT_VISION).getDuration() != Integer.MAX_VALUE) {
-                player.removeEffect(MobEffects.NIGHT_VISION);
-            }
+            // 当玩家不再穿着盔甲时，保留原版药水的效果
+            // 我们不再直接移除效果，而是让它们自然到期
         }
     }
 
@@ -78,5 +71,12 @@ public class EvilBatsAbilityHandler {
                 player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof EvilBatsArmor ||
                 player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof EvilBatsArmor ||
                 player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof EvilBatsArmor;
+    }
+    
+    // 辅助方法：只在玩家没有特定效果或现有效果等级低于我们提供的等级时才添加效果
+    private static void addEffectIfBetterOrAbsent(Player player, MobEffect effect, int duration, int amplifier) {
+        if (!player.hasEffect(effect) || player.getEffect(effect).getAmplifier() < amplifier) {
+            player.addEffect(new MobEffectInstance(effect, duration, amplifier, false, false));
+        }
     }
 }

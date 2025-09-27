@@ -83,8 +83,43 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
     @Override
     public void tick(Player player) {
         // 移除了所有基础buff处理逻辑，这些逻辑现在在DarkKivaAbilityHandler中处理
-        // 添加抗性1效果
+        // 添加抗性效果
         this.applyResistanceEffect(player);
+    }
+    
+    // 不再提供力量效果，避免与原版药水冲突
+    @Override
+    public int getStrengthLevel() {
+        return 0; // 不使用力量效果
+    }
+    
+    // 覆写getResistanceLevel方法，为DarkKiva设置自定义抗性等级
+    @Override
+    public int getResistanceLevel() {
+        return 2; // DarkKiva抗性等级2
+    }
+    
+    // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果
+    @Override
+    public void applyResistanceEffect(Player player) {
+        if (!player.level().isClientSide()) {
+            int resistanceLevel = this.getResistanceLevel();
+            if (resistanceLevel > 0) {
+                int targetAmp = resistanceLevel - 1;
+                MobEffectInstance existing = player.getEffect(MobEffects.DAMAGE_RESISTANCE);
+                
+                // 只有在玩家没有抗性效果，或者现有效果等级低于我们提供的等级时，才添加新效果
+                if (existing == null || existing.getAmplifier() < targetAmp) {
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.DAMAGE_RESISTANCE,
+                            400,
+                            targetAmp,
+                            false,
+                            false // 不显示粒子效果，避免视觉混乱
+                    ));
+                }
+            }
+        }
     }
     
     // 添加客户端专用的黑暗Kiva盔甲检测方法

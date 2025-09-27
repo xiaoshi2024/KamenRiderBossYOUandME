@@ -125,5 +125,19 @@ public class Sigurd extends ArmorItem implements GeoItem , KamenBossArmor , Armo
     public void tick(Player player) {
         // 添加抗性1效果
         this.applyResistanceEffect(player);
+        // 添加力量效果
+        this.applyStrengthEffect(player);
+    }
+
+    // 覆写getStrengthLevel方法，自定义力量等级
+    @Override
+    public int getStrengthLevel() {
+        return 2; //级别
+    }
+
+    // 覆写getResistanceLevel方法，设置自定义抗性等级
+    @Override
+    public int getResistanceLevel() {
+        return 1; //级别
     }
 }

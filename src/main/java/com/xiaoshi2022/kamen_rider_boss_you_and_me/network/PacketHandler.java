@@ -1,8 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkSquashPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.JinbaGuardPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.LemonBoostPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimKickEnhancePacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimBlindnessFieldPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimHelheimCrackPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBatModePacket;
@@ -64,15 +64,7 @@ public class PacketHandler {
 
         // 注册 DragonfruitTransformationRequestPacket
         INSTANCE.registerMessage(index++, DragonfruitTransformationRequestPacket.class, DragonfruitTransformationRequestPacket::encode, DragonfruitTransformationRequestPacket::decode, DragonfruitTransformationRequestPacket::handle);
-        INSTANCE.registerMessage(index++, JinbaGuardPacket.class,
-                JinbaGuardPacket::encode, JinbaGuardPacket::decode,
-                JinbaGuardPacket::handle);
-        INSTANCE.registerMessage(index++, DarkSquashPacket.class,
-                DarkSquashPacket::encode, DarkSquashPacket::decode,
-                DarkSquashPacket::handle);
-        INSTANCE.registerMessage(index++, LemonBoostPacket.class,
-                LemonBoostPacket::encode, LemonBoostPacket::decode,
-                LemonBoostPacket::handle);
+
         INSTANCE.registerMessage(index++, SyncTransformationPacket.class,
                 SyncTransformationPacket::encode,
                 SyncTransformationPacket::decode,
@@ -154,6 +146,26 @@ public class PacketHandler {
                 BaronLemonAbilityPacket::toBytes,
                 BaronLemonAbilityPacket::new,
                 BaronLemonAbilityPacket::handle);
+        
+        // 注册黑暗铠武阵羽柠檬技能数据包
+        INSTANCE.registerMessage(
+                index++,
+                DarkGaimKickEnhancePacket.class,
+                DarkGaimKickEnhancePacket::encode,
+                DarkGaimKickEnhancePacket::decode,
+                DarkGaimKickEnhancePacket::handle);
+        INSTANCE.registerMessage(
+                index++,
+                DarkGaimBlindnessFieldPacket.class,
+                DarkGaimBlindnessFieldPacket::encode,
+                DarkGaimBlindnessFieldPacket::decode,
+                DarkGaimBlindnessFieldPacket::handle);
+        INSTANCE.registerMessage(
+                index++,
+                DarkGaimHelheimCrackPacket.class,
+                DarkGaimHelheimCrackPacket::encode,
+                DarkGaimHelheimCrackPacket::decode,
+                DarkGaimHelheimCrackPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

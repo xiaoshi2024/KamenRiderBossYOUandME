@@ -133,6 +133,10 @@ public class BatDarksEntity extends LivingEntity implements GeoEntity {
         // 立即尝试建立骑乘关系
         this.startRiding(player, true);
     }
+    
+    public UUID getTargetPlayerId() {
+        return this.targetPlayerId;
+    }
 
     public void startHenshin() {
         isHenshin = true;

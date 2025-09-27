@@ -15,7 +15,7 @@ public class BatStampFinishRenderer extends GeoEntityRenderer<BatStampFinishEnti
     @Override
     public void render(BatStampFinishEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         // 在渲染之前设置模型的缩放比例
-        poseStack.scale(1.0F, 1.0F, 1.0F); // 放大模型4倍
+        poseStack.scale(4.0F, 4.0F, 4.0F); // 放大模型4倍
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
 }

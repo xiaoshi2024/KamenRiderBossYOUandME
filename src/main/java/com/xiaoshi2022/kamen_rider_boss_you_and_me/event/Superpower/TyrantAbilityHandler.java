@@ -29,7 +29,7 @@ public class TyrantAbilityHandler {
         if (isWearingTyrant(player) && player.isAlive()) {
             int duration = 100; // 5秒
 
-            // 只在没有效果时添加
+            // 只在没有效果时添加生命提升
             if (!player.hasEffect(MobEffects.HEALTH_BOOST)) {
                 player.addEffect(new MobEffectInstance(
                         MobEffects.HEALTH_BOOST,
@@ -39,26 +39,24 @@ public class TyrantAbilityHandler {
                 player.heal(8.0f);
             }
 
-            // 其他效果...
-            addEffectIfNotPresent(player, MobEffects.DAMAGE_RESISTANCE, duration, 0);
-            addEffectIfNotPresent(player, MobEffects.FIRE_RESISTANCE, duration, 0);
-            addEffectIfNotPresent(player, MobEffects.REGENERATION, duration, 0);
+            // 其他效果，只有当没有效果或效果等级低于我们提供的等级时才添加
+            addEffectIfBetterOrAbsent(player, MobEffects.DAMAGE_RESISTANCE, duration, 0);
+            addEffectIfBetterOrAbsent(player, MobEffects.FIRE_RESISTANCE, duration, 0);
+            addEffectIfBetterOrAbsent(player, MobEffects.REGENERATION, duration, 0);
         } else {
-            // 当玩家不再穿着暴君盔甲时，移除生命提升效果
+            // 当玩家不再穿着暴君盔甲时，移除生命提升效果以确保生命值恢复正常
             if (player.hasEffect(MobEffects.HEALTH_BOOST) && player.isAlive()) {
                 player.removeEffect(MobEffects.HEALTH_BOOST);
                 // 确保生命值不会超过新的最大生命值
                 player.setHealth(Math.min(player.getHealth(), player.getMaxHealth()));
             }
-            // 移除其他效果
-            player.removeEffect(MobEffects.DAMAGE_RESISTANCE);
-            player.removeEffect(MobEffects.FIRE_RESISTANCE);
-            player.removeEffect(MobEffects.REGENERATION);
+            // 保留其他通过原版药水获得的效果，不再直接移除
         }
     }
 
-    private static void addEffectIfNotPresent(Player player, MobEffect effect, int duration, int amplifier) {
-        if (!player.hasEffect(effect)) {
+    // 辅助方法：只在玩家没有特定效果或现有效果等级低于我们提供的等级时才添加效果
+    private static void addEffectIfBetterOrAbsent(Player player, MobEffect effect, int duration, int amplifier) {
+        if (!player.hasEffect(effect) || player.getEffect(effect).getAmplifier() < amplifier) {
             player.addEffect(new MobEffectInstance(effect, duration, amplifier, false, false));
         }
     }
