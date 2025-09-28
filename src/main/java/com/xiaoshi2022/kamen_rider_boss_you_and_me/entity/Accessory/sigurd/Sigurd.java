@@ -138,6 +138,6 @@ public class Sigurd extends ArmorItem implements GeoItem , KamenBossArmor , Armo
     // 覆写getResistanceLevel方法，设置自定义抗性等级
     @Override
     public int getResistanceLevel() {
-        return 1; //级别
+        return 3; //级别
     }
 }

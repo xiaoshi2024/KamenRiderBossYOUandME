@@ -96,7 +96,7 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
     // 覆写getResistanceLevel方法，为DarkKiva设置自定义抗性等级
     @Override
     public int getResistanceLevel() {
-        return 2; // DarkKiva抗性等级2
+        return 4; // DarkKiva抗性等级2
     }
     
     // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果

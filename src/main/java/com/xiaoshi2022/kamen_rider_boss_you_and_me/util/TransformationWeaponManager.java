@@ -6,9 +6,11 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class TransformationWeaponManager {
@@ -350,5 +352,16 @@ public class TransformationWeaponManager {
             
             // 这里可以根据需要添加其他需要检查的饰品槽位
         });
+    }
+    
+    /**
+     * 监听玩家死亡事件，在玩家死亡时清理所有变身武器
+     */
+    @SubscribeEvent
+    public static void onPlayerDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof ServerPlayer) {
+            ServerPlayer player = (ServerPlayer) event.getEntity();
+            clearTransformationWeapons(player);
+        }
     }
 }

@@ -116,6 +116,15 @@ public class PacketHandler {
                 KnecromGhostAnimationPacket::decode,
                 KnecromGhostAnimationPacket::handle
         );
+
+        // 注册BatStampFinish实体动画同步数据包
+        INSTANCE.registerMessage(
+                index++,
+                BatStampFinishAnimationPacket.class,
+                BatStampFinishAnimationPacket::encode,
+                BatStampFinishAnimationPacket::decode,
+                BatStampFinishAnimationPacket::handle
+        );
         INSTANCE.registerMessage(
                 index++,
                 SummonDukeKnightPacket.class,

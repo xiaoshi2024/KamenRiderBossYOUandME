@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BatDarksAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.KnecromGhostAnimationPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
@@ -133,16 +133,23 @@ public class KnecromghostEntity extends LivingEntity implements GeoEntity {
     }
 
     public void startHenshin() {
-        isHenshin = true;
-        henshinTimer = 0;
+        setHenshinAnimation(true);
 
         // 服务端同步到所有客户端
         if (!this.level().isClientSide()) {
             PacketHandler.sendToAllTracking(
-                    new BatDarksAnimationPacket(this.getId(), true),
+                    new KnecromGhostAnimationPacket(this.getId(), true),
                     this
             );
         }
+    }
+    
+    /**
+     * 设置变身动画状态，供数据包处理使用
+     */
+    public void setHenshinAnimation(boolean start) {
+        this.isHenshin = start;
+        this.henshinTimer = 0;
     }
 
     @Override

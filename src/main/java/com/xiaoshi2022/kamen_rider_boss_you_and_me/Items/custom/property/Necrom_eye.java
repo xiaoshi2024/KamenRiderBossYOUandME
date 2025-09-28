@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.KnecromGhostAnimationPacket;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -85,10 +86,22 @@ public class Necrom_eye extends Item implements GeoItem {
                     // 消耗物品
                     stack.shrink(1);
 
+                    // 确保只在服务端执行
                     if (!level.isClientSide()) {
+                        // 创建实体
                         KnecromghostEntity necroEntity = new KnecromghostEntity(ModEntityTypes.KNECROMGHOST.get(), level);
-                        necroEntity.setTargetPlayer(player); // 设置目标玩家并开始骑乘（这个方法内部会处理位置）
-                        level.addFreshEntity(necroEntity);
+                        
+                        // 设置目标玩家
+                        necroEntity.setTargetPlayer(player);
+                        
+                        // 确保实体位置正确设置
+                        necroEntity.setPos(player.getX(), player.getY() + player.getEyeHeight() + 0.5, player.getZ());
+                        
+                        // 添加实体到世界 - 使用level.addFreshEntity确保正确持久化
+                        if (level.addFreshEntity(necroEntity)) {
+                            // 额外的同步措施：通过数据包明确告知客户端实体已生成
+                            PacketHandler.sendToClient(new KnecromGhostAnimationPacket(necroEntity.getId(), false), (ServerPlayer) player);
+                        }
                     }
 
                     // 播放固定音效

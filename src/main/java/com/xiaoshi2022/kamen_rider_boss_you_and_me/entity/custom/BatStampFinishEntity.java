@@ -198,16 +198,35 @@ public class BatStampFinishEntity extends LivingEntity implements GeoEntity {
     }
 
     public void startFinish() {
-        isFinish = true;
-        finishTimer = 0;
+        setFinishAnimation(true);
 
-        // 触发动画播放
-        triggerAnim("controller", "skick");
+        // 服务端同步到所有客户端
+        if (!this.level().isClientSide()) {
+            // 使用专用的动画数据包同步动画到所有客户端
+            PacketHandler.sendToAllTracking(
+                    new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BatStampFinishAnimationPacket(
+                            this.getId(), 
+                            true
+                    ),
+                    this
+            );
+        }
         
         // 添加调试日志
         if (DEBUG && !this.level().isClientSide()) {
             kamen_rider_boss_you_and_me.LOGGER.info("BatStampFinishEntity[{}]: Starting finish animation", this.getId());
         }
+    }
+    
+    /**
+     * 设置动画状态，供数据包处理使用
+     */
+    public void setFinishAnimation(boolean start) {
+        this.isFinish = start;
+        this.finishTimer = 0;
+        
+        // 触发动画播放
+        triggerAnim("controller", "skick");
     }
 
     public void setTargetPlayer(Player player) {

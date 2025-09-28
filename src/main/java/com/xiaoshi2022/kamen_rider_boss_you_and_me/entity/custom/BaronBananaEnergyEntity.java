@@ -72,11 +72,11 @@ public class BaronBananaEnergyEntity extends LivingEntity implements GeoEntity {
                             true // 显示粒子效果
                     ));
                     
-                    // 添加跳跃抑制效果（完全防止跳跃）
+                    // 添加跳跃抑制效果（大幅降低跳跃高度，避免使用极端值导致暴毙）
                     livingEntity.addEffect(new MobEffectInstance(
                             MobEffects.JUMP,
                             100, // 5秒持续时间
-                            -100, // 负等级完全禁止跳跃
+                            -3, // 负等级大幅降低跳跃高度，避免使用极端值导致暴毙
                             false,
                             true
                     ));

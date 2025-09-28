@@ -456,6 +456,18 @@ public class KicktimeProcedure {
 			return false;
 		}
 
+		// 检查玩家是否被Baron的技能控制（高等级减速效果）
+		if (entity instanceof LivingEntity livingEntity) {
+			if (livingEntity.hasEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN) && 
+					livingEntity.getEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN).getAmplifier() >= 250) {
+				// 向玩家发送提示信息
+				if (entity instanceof Player player) {
+					player.displayClientMessage(net.minecraft.network.chat.Component.literal("目前没有办法破开这个被控"), true);
+				}
+				return false;
+			}
+		}
+
 		// 检查是否有合适的头盔
 		ItemStack helmet = getHelmet(entity);
 		return helmet.getItem() == ModItems.SIGURD_HELMET.get() ||

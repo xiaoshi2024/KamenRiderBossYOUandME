@@ -6,6 +6,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -328,8 +330,11 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
         LivingEntity le = (LivingEntity) ctx.entity();
         setShowing(stack, true);
         setActive(stack, false);
-        if (!le.level().isClientSide() && le instanceof ServerPlayer sp)
+        if (!le.level().isClientSide() && le instanceof ServerPlayer sp) {
             PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "show", getMode(stack)), sp);
+            // 给玩家添加饱和效果
+            sp.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 0, true, false));
+        }
         triggerAnim(le, "controller", "show");
     }
 
@@ -339,8 +344,11 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
         LivingEntity le = (LivingEntity) ctx.entity();
         setShowing(stack, false);
         setActive(stack, false);
-        if (!le.level().isClientSide() && le instanceof ServerPlayer sp)
+        if (!le.level().isClientSide() && le instanceof ServerPlayer sp) {
             PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "idles", getMode(stack)), sp);
+            // 移除玩家的饱和效果
+            sp.removeEffect(MobEffects.SATURATION);
+        }
         triggerAnim(le, "controller", "idles");
     }
 
@@ -353,6 +361,11 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
         if (sp.tickCount % 100 == 0) {
             PacketHandler.sendToClient(
                     new BeltAnimationPacket(sp.getId(), "sync_state", getMode(stack)), sp);
+            
+            // 每5秒检查一次并重新应用饱和效果，确保效果持续存在
+            if (!sp.hasEffect(MobEffects.SATURATION)) {
+                sp.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 0, true, false));
+            }
         }
     }
 

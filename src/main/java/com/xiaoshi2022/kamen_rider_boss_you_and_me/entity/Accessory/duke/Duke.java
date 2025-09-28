@@ -98,7 +98,7 @@ public class Duke extends ArmorItem implements GeoItem , KamenBossArmor, ArmorAn
     // 覆写getResistanceLevel方法，设置自定义抗性等级
     @Override
     public int getResistanceLevel() {
-        return 1; //使用抗性2效果，比基础高一级
+        return 3; //使用抗性2效果，比基础高一级
     }
 
     // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果

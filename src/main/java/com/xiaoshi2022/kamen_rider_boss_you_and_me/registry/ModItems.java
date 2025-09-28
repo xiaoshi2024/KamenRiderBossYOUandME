@@ -154,7 +154,6 @@ public class ModItems {
     public static final RegistryObject<RidernecromItem> RIDERNECROM_HELMET = ITEMS.register("ridernecrom_helmet", () -> new RidernecromItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<RidernecromItem> RIDERNECROM_CHESTPLATE = ITEMS.register("ridernecrom_chestplate", () -> new RidernecromItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<RidernecromItem> RIDERNECROM_LEGGINGS = ITEMS.register("ridernecrom_leggings", () -> new RidernecromItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
-    public static final RegistryObject<RidernecromItem> RIDERNECROM_BOOTS = ITEMS.register("ridernecrom_boots", () -> new RidernecromItem(ArmorItem.Type.BOOTS, new Item.Properties()));
 
     public static final RegistryObject<rider_baronsItem> RIDER_BARONS_HELMET = ITEMS.register("riderbarons_helmet", () -> new rider_baronsItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<rider_baronsItem> RIDER_BARONS_CHESTPLATE = ITEMS.register("riderbarons_chestplate", () -> new rider_baronsItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));

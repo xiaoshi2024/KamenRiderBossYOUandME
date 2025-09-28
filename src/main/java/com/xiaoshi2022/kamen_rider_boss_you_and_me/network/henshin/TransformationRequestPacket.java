@@ -165,7 +165,6 @@ public class TransformationRequestPacket {
                                 player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.RIDERNECROM_HELMET.get()));
                                 player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.RIDERNECROM_CHESTPLATE.get()));
                                 player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.RIDERNECROM_LEGGINGS.get()));
-                                player.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.RIDERNECROM_BOOTS.get()));
 
                                 vars.isMegaUiorderTransformed = true;
                                 vars.isNecromStandby = false;
