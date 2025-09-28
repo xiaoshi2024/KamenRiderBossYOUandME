@@ -239,4 +239,9 @@ public class BatDarksEntity extends LivingEntity implements GeoEntity {
     public boolean isPickable() {
         return false; // 不可被拾取/选择
     }
+    
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
 }

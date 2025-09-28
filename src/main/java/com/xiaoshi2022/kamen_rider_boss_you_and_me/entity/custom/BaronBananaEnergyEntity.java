@@ -128,6 +128,11 @@ public class BaronBananaEnergyEntity extends LivingEntity implements GeoEntity {
     public boolean isPushable() {
         return false;
     }
+    
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
 
     @Override
     protected void doPush(Entity entity) {

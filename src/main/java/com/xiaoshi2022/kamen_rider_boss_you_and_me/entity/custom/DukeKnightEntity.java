@@ -513,6 +513,11 @@ public class DukeKnightEntity extends PathfinderMob implements GeoEntity {
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
     }
+    
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {

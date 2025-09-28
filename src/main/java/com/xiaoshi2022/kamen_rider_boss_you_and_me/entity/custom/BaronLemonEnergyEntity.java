@@ -232,6 +232,16 @@ public class BaronLemonEnergyEntity extends LivingEntity implements GeoEntity {
         return true; // 禁用重力
     }
     
+    @Override
+    public boolean isPickable() {
+        return false; // 不可被拾取/选择
+    }
+    
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
+    
     // 设置实体的所有者（释放者）
     public void setOwnerId(UUID ownerId) {
         this.ownerId = ownerId;
