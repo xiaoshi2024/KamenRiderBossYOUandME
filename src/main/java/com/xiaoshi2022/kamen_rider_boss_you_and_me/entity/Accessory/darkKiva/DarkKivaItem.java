@@ -85,12 +85,15 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
         // 移除了所有基础buff处理逻辑，这些逻辑现在在DarkKivaAbilityHandler中处理
         // 添加抗性效果
         this.applyResistanceEffect(player);
+
+        // 添加力量效果
+        this.applyStrengthEffect(player);
     }
     
     // 不再提供力量效果，避免与原版药水冲突
     @Override
     public int getStrengthLevel() {
-        return 0; // 不使用力量效果
+        return 3; // 不使用力量效果
     }
     
     // 覆写getResistanceLevel方法，为DarkKiva设置自定义抗性等级

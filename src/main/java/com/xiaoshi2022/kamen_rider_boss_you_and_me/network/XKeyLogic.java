@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.EvilBatsArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatDarksEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.EvilArmorSequence;
@@ -50,6 +51,12 @@ public final class XKeyLogic {
 
     /* -------- ② 最终变身 -------- */
     public static void toEvil(ServerPlayer sp) {
+        // 检查玩家是否已经装备了Evil套装
+        if (EvilBatsArmor.isFullArmorEquipped(sp)) {
+            sp.sendSystemMessage(Component.literal("§c你已经装备了Evil套装！"));
+            return;
+        }
+        
         Optional<SlotResult> opt = CuriosApi.getCuriosInventory(sp)
                 .resolve()
                 .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver));
@@ -119,8 +126,17 @@ public final class XKeyLogic {
 
     /* 工具方法 */
     private static ItemStack findTwoWeapon(ServerPlayer sp) {
-        if (sp.getMainHandItem().getItem() instanceof TwoWeaponItem) return sp.getMainHandItem();
-        if (sp.getOffhandItem().getItem() instanceof TwoWeaponItem) return sp.getOffhandItem();
+        // 检查主手和副手是否为双面武器的任何形态
+        if (sp.getMainHandItem().getItem() instanceof TwoWeaponItem || 
+            sp.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem || 
+            sp.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem) {
+            return sp.getMainHandItem();
+        }
+        if (sp.getOffhandItem().getItem() instanceof TwoWeaponItem || 
+            sp.getOffhandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem || 
+            sp.getOffhandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem) {
+            return sp.getOffhandItem();
+        }
         return null;
     }
 }

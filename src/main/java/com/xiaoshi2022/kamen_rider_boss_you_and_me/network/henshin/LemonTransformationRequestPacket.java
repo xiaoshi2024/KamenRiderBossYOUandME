@@ -87,11 +87,16 @@ public class LemonTransformationRequestPacket {
         // 检测玩家副手是否持有香蕉锁种
         boolean hasBananaLockseed = !player.getOffhandItem().isEmpty() &&
                 player.getOffhandItem().getItem() == ModItems.BANANAFRUIT.get();
+        
+        // 检测玩家是否穿着巴隆香蕉盔甲
+        boolean isWearingBaronBananaArmor = com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem.isArmorEquipped(player, ModItems.RIDER_BARONS_HELMET.get()) &&
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem.isArmorEquipped(player, ModItems.RIDER_BARONS_CHESTPLATE.get()) &&
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem.isArmorEquipped(player, ModItems.RIDER_BARONS_LEGGINGS.get());
 
-        // 根据是否持有香蕉锁种选择不同的变身音效和形态类型
+        // 根据是否持有香蕉锁种或穿着巴隆香蕉盔甲选择不同的变身音效和形态类型
         SoundEvent sound;
         String transformationType;
-        if (hasBananaLockseed) {
+        if (hasBananaLockseed || isWearingBaronBananaArmor) {
             sound = ModBossSounds.LEMON_BARON.get();
             transformationType = "BARON_LEMON";
         } else {

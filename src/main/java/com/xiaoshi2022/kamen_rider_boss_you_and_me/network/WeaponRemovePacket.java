@@ -80,17 +80,25 @@ public class WeaponRemovePacket {
         ItemStack mainHand = player.getMainHandItem();
         if (mainHand.getItem() instanceof TwoWeaponItem) {
             TwoWeaponItem.setVariant(mainHand, TwoWeaponItem.Variant.DEFAULT);
+        } else if (mainHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem || 
+                   mainHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem) {
+            // 对于新的武器类，也需要重置其变体状态
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.setVariant(mainHand, com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.DEFAULT);
         }
 
         // 处理副手武器
         ItemStack offHand = player.getOffhandItem();
         if (offHand.getItem() instanceof TwoWeaponItem) {
             TwoWeaponItem.setVariant(offHand, TwoWeaponItem.Variant.DEFAULT);
+        } else if (offHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem || 
+                  offHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem) {
+            // 对于新的武器类，也需要重置其变体状态
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.setVariant(offHand, com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.DEFAULT);
         }
 
         // 同步武器状态
-        TwoWeaponItem.Variant mainVariant = TwoWeaponItem.getVariant(mainHand);
-        TwoWeaponItem.Variant offVariant = TwoWeaponItem.getVariant(offHand);
+        com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant mainVariant = com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(mainHand);
+        com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant offVariant = com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(offHand);
         WeaponSyncPacket packet = new WeaponSyncPacket(player.getId(), mainVariant, offVariant);
         PacketHandler.sendToAllTrackingAndSelf(packet, player);
 

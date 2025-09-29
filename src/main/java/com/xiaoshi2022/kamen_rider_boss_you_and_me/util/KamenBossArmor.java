@@ -15,9 +15,27 @@ public interface KamenBossArmor {
         return 2;
     }
 
-    // 已删除力量效果，避免干扰原版力量药水
+    // 应用力量效果，不干扰原版更高等级的力量
     default void applyStrengthEffect(Player player) {
-        // 不执行任何操作，完全移除力量效果
+        if (!player.level().isClientSide()) {
+            int strengthLevel = this.getStrengthLevel();
+            if (strengthLevel > 0) {
+                int targetAmp = strengthLevel - 1;
+                MobEffectInstance existing = player.getEffect(MobEffects.DAMAGE_BOOST);
+                
+                // 只有在玩家没有力量效果，或者现有效果等级低于我们提供的等级时，才添加新效果
+                // 这样可以保留玩家通过原版药水获得的更高等级的力量效果
+                if (existing == null || existing.getAmplifier() < targetAmp) {
+                    player.addEffect(new MobEffectInstance(
+                            MobEffects.DAMAGE_BOOST,
+                            400,
+                            targetAmp,
+                            false,
+                            false // 不显示粒子效果，避免视觉混乱
+                    ));
+                }
+            }
+        }
     }
 
     default void applyResistanceEffect(Player player) {

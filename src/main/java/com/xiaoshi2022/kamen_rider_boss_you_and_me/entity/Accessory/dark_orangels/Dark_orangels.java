@@ -132,6 +132,9 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
         
         // 添加抗性效果
         this.applyResistanceEffect(player);
+
+        // 添加力量效果
+        this.applyStrengthEffect(player);
         
         // 调试输出已移除
     }
@@ -139,7 +142,7 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
     // 不再提供力量效果，避免与原版药水冲突
     @Override
     public int getStrengthLevel() {
-        return 0; // 不使用力量效果
+        return 3;
     }
     
     // 覆写getResistanceLevel方法，为Dark_orangels设置自定义抗性等级

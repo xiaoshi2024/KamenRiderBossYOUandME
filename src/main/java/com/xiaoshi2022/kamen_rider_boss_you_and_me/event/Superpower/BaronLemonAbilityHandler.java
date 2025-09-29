@@ -60,8 +60,8 @@ public final class BaronLemonAbilityHandler {
      * 当玩家变身巴隆柠檬形态且手持音速弓柠檬模式时，按下技能按键在视线方向生成柠檬能量实体
      */
     public static void tryLemonEnergyTrap(ServerPlayer sp) {
-        // 检查是否为巴隆柠檬形态
-        if (!isBaronLemonForm(sp)) return;
+        // 检查是否为巴隆柠檬形态或玩家被控
+        if (!isBaronLemonForm(sp) || !sp.isAlive() || isPlayerControlled(sp)) return;
         
         // 检查是否手持音速弓柠檬模式
         ItemStack mainHandItem = sp.getMainHandItem();
@@ -124,6 +124,19 @@ public final class BaronLemonAbilityHandler {
                sp.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof baron_lemonItem &&
                sp.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof baron_lemonItem;
     }
+    
+    /**
+       * 检查玩家是否被控（有控制类负面效果）
+       */
+      private static boolean isPlayerControlled(ServerPlayer player) {
+          // 检查玩家是否有以下控制类负面效果
+          return player.hasEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN) || // 缓慢
+                 player.hasEffect(net.minecraft.world.effect.MobEffects.BLINDNESS) || // 失明
+                 player.hasEffect(net.minecraft.world.effect.MobEffects.CONFUSION) || // 反胃
+                 player.hasEffect(net.minecraft.world.effect.MobEffects.POISON) || // 中毒
+                 player.hasEffect(net.minecraft.world.effect.MobEffects.WITHER) || // 凋零
+                 player.hasEffect(net.minecraft.world.effect.MobEffects.WEAKNESS); // 虚弱
+      }
     
     /** 在目标周围生成2x2范围的柠檬能量实体 */
     private static void spawnLemonEnergyEntities(ServerPlayer sp, LivingEntity target) {

@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.DarkKivaSealBarrierEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -121,6 +123,36 @@ public class PlayerAttackHandler {
         // 检查黑暗Kiva攻击残血玩家的情况
         if (attacker instanceof Player darkKivaPlayer && target instanceof Player victimPlayer) {
             checkAndSendDarkKivaMessage(darkKivaPlayer, victimPlayer, event.getAmount());
+        }
+        
+        // 检查黑暗Kiva玩家攻击被封印结界控制的实体
+        if (attacker instanceof ServerPlayer serverPlayer && target instanceof LivingEntity) {
+            if (DarkKivaItem.isFullArmorEquipped(serverPlayer)) {
+                // 查找世界中所有由当前玩家创建的活跃封印结界实体
+                for (DarkKivaSealBarrierEntity barrier : serverPlayer.level().getEntitiesOfClass(
+                        DarkKivaSealBarrierEntity.class, 
+                        new AABB(
+                            serverPlayer.level().getWorldBorder().getMinX(),
+                            -64, // 下界高度
+                            serverPlayer.level().getWorldBorder().getMinZ(),
+                            serverPlayer.level().getWorldBorder().getMaxX(),
+                            320, // 世界最大高度
+                            serverPlayer.level().getWorldBorder().getMaxZ()
+                        ), // 搜索整个世界范围
+                        barrierEntity -> barrierEntity.getOwner() == serverPlayer && barrierEntity.isActive())) {
+                    
+                    // 检查被攻击的实体是否被该封印结界控制
+                    if (barrier.isEntityTrapped(target)) {
+                        // 直接将实体传送回封印结界位置
+                        Vec3 sealPos = barrier.position();
+                        target.teleportTo(sealPos.x, sealPos.y + 0.5, sealPos.z);
+                        
+                        // 添加短暂的效果提示
+                        serverPlayer.displayClientMessage(Component.literal("将敌人拉回封印位置！"), true);
+                        break;
+                    }
+                }
+            }
         }
         
         if (attacker instanceof Player player) {

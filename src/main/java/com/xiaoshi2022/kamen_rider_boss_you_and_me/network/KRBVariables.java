@@ -189,13 +189,16 @@ public class  KRBVariables {
 	public long dragonfruit_ready_time = 0L;
 	public long dragonfruit_time = 0L;
 	// 黑暗Kiva相关变量
-	public boolean dark_kiva_bat_mode = false;    // 蝙蝠形态
-	public long dark_kiva_bat_mode_time = 0L;     // 蝙蝠形态开始时间
-	public boolean dark_kiva_blood_suck_active = false; // 吸血能力激活状态
-	public long dark_kiva_blood_suck_cooldown = 0L; // 吸血能力冷却时间
-	public boolean dark_kiva_sonic_blast_active = false; // 声波爆破激活状态
-	public long dark_kiva_sonic_blast_cooldown = 0L; // 声波爆破冷却时间
-	public long dark_kiva_blood_steal_cooldown = 0L; // 生命偷取冷却时间
+    public boolean dark_kiva_bat_mode = false;    // 蝙蝠形态
+    public long dark_kiva_bat_mode_time = 0L;     // 蝙蝠形态开始时间
+    public boolean dark_kiva_blood_suck_active = false; // 吸血能力激活状态
+    public long dark_kiva_blood_suck_cooldown = 0L; // 吸血能力冷却时间
+    public boolean dark_kiva_sonic_blast_active = false; // 声波爆破激活状态
+    public long dark_kiva_sonic_blast_cooldown = 0L; // 声波爆破冷却时间
+    public long dark_kiva_blood_steal_cooldown = 0L; // 生命偷取冷却时间
+    // 封印结界（Fuuin Kekkai）技能相关变量
+    public boolean dark_kiva_fuuin_kekkai_active = false; // 封印结界激活状态
+    public long dark_kiva_fuuin_kekkai_cooldown = 0L; // 封印结界冷却时间
 
 	// 在PlayerVariables类中添加字段
 	public double baseMaxHealth = 20.0D; // 默认基础生命值为20点
@@ -265,6 +268,8 @@ public class  KRBVariables {
 		nbt.putBoolean("dark_kiva_bat_mode", dark_kiva_bat_mode);
 		nbt.putLong("dark_kiva_bat_mode_time", dark_kiva_bat_mode_time);
 		nbt.putBoolean("dark_kiva_blood_suck_active", dark_kiva_blood_suck_active);
+		nbt.putLong("dark_kiva_fuuin_kekkai_cooldown", dark_kiva_fuuin_kekkai_cooldown);
+		nbt.putBoolean("dark_kiva_fuuin_kekkai_active", dark_kiva_fuuin_kekkai_active);
 		nbt.putLong("dark_kiva_blood_suck_cooldown", dark_kiva_blood_suck_cooldown);
 		nbt.putBoolean("dark_kiva_sonic_blast_active", dark_kiva_sonic_blast_active);
 		nbt.putLong("dark_kiva_sonic_blast_cooldown", dark_kiva_sonic_blast_cooldown);
@@ -333,9 +338,20 @@ public class  KRBVariables {
 		dragonfruit_ready_time = nbt.getLong("dragonfruit_ready_time");
 		dragonfruit_time = nbt.getLong("dragonfruit_time");
 
-		//眼魂
-			isMegaUiorderTransformed = nbt.getBoolean("isMegaUiorderTransformed"); // 新增：读取Mega_uiorder变身状态
-			isNecromStandby = nbt.getBoolean("isNecromStandby"); // 新增：读取Necrom待机状态
+		// 反序列化黑暗Kiva相关变量
+        dark_kiva_bat_mode = nbt.getBoolean("dark_kiva_bat_mode");
+        dark_kiva_bat_mode_time = nbt.getLong("dark_kiva_bat_mode_time");
+        dark_kiva_blood_suck_active = nbt.getBoolean("dark_kiva_blood_suck_active");
+        dark_kiva_blood_suck_cooldown = nbt.getLong("dark_kiva_blood_suck_cooldown");
+        dark_kiva_sonic_blast_active = nbt.getBoolean("dark_kiva_sonic_blast_active");
+        dark_kiva_sonic_blast_cooldown = nbt.getLong("dark_kiva_sonic_blast_cooldown");
+        dark_kiva_blood_steal_cooldown = nbt.getLong("dark_kiva_blood_steal_cooldown");
+        dark_kiva_fuuin_kekkai_cooldown = nbt.getLong("dark_kiva_fuuin_kekkai_cooldown");
+        dark_kiva_fuuin_kekkai_active = nbt.getBoolean("dark_kiva_fuuin_kekkai_active");
+        
+        // 眼魂
+		isMegaUiorderTransformed = nbt.getBoolean("isMegaUiorderTransformed"); // 新增：读取Mega_uiorder变身状态
+		isNecromStandby = nbt.getBoolean("isNecromStandby"); // 新增：读取Necrom待机状态
 
 		isEvilBatsTransformed = nbt.getBoolean("isEvilBatsTransformed"); // 新增：读取EvilBats变身状态
 		isDarkKivaBeltEquipped = nbt.getBoolean("isDarkKivaBeltEquipped"); // 新增字段：读取是否装备了黑暗Kiva腰带

@@ -8,6 +8,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBatModePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaFuuinKekkaiPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaToggleFlightPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSealBarrierPullPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombatAnalysisPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBananaEnergyPacket;
 import net.minecraft.network.chat.Component;
@@ -82,6 +85,9 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++, DarkKivaBatModePacket.class, DarkKivaBatModePacket::encode, DarkKivaBatModePacket::new, DarkKivaBatModePacket::handle);
         INSTANCE.registerMessage(index++, DarkKivaBloodSuckPacket.class, DarkKivaBloodSuckPacket::encode, DarkKivaBloodSuckPacket::new, DarkKivaBloodSuckPacket::handle);
         INSTANCE.registerMessage(index++, DarkKivaSonicBlastPacket.class, DarkKivaSonicBlastPacket::encode, DarkKivaSonicBlastPacket::new, DarkKivaSonicBlastPacket::handle);
+        INSTANCE.registerMessage(index++, DarkKivaFuuinKekkaiPacket.class, DarkKivaFuuinKekkaiPacket::encode, DarkKivaFuuinKekkaiPacket::new, DarkKivaFuuinKekkaiPacket::handle);
+        INSTANCE.registerMessage(index++, DarkKivaSealBarrierPullPacket.class, DarkKivaSealBarrierPullPacket::encode, DarkKivaSealBarrierPullPacket::new, DarkKivaSealBarrierPullPacket::handle);
+        INSTANCE.registerMessage(index++, DarkKivaToggleFlightPacket.class, DarkKivaToggleFlightPacket::encode, DarkKivaToggleFlightPacket::new, DarkKivaToggleFlightPacket::handle);
         INSTANCE.registerMessage(index++, DriverSyncPacket.class,
                 DriverSyncPacket::encode,
                 DriverSyncPacket::decode,

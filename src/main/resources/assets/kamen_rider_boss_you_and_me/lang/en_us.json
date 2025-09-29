@@ -7,6 +7,9 @@
   "entity.kamen_rider_boss_you_and_me.kaito": "Kaito[KamenRiders]",
 
 
+  "item.kamen_rider_boss_you_and_me.two_weapon_sword": "Two Weapon Sword",
+  "item.kamen_rider_boss_you_and_me.two_weapon_gun": "Two Weapon Gun",
+
   "item.kamen_rider_boss_you_and_me.aiziowc": "another zi-o Watch",
   "item.kamen_rider_boss_you_and_me.giifusteamp": "Giifu Steamp",
   "item group.kamen_rider_boss_you_and_me_tab": "Kamen Rider Boss You And Me",
@@ -234,5 +237,9 @@
   "item.kamen_rider_boss_you_and_me.dark_kiva_chestplate.tooltip": "[Tooltip] Dark Kiva Chestplate.",
   "item.kamen_rider_boss_you_and_me.dark_kiva_leggings.tooltip": "[Tooltip] Dark Kiva Leggings.",
   "hud.kamen_rider_boss_you_and_me.rider_energy": "Rider Energy: %s",
-  "hud.kamen_rider_boss_you_and_me.rider_cooldown": "Rider Kick Cooldown: %.1fs"
+  "hud.kamen_rider_boss_you_and_me.rider_cooldown": "Rider Kick Cooldown: %.1fs",
+  "entity.kamen_rider_boss_you_and_me.bat_stamp_finish": "Bat Stamp Finish",
+  "entity.kamen_rider_boss_you_and_me.dark_kiva_seal_barrier": "Dark Kiva Seal Barrier",
+  "entity.kamen_rider_boss_you_and_me.baron_lemon_energy": "Baron Lemon Energy",
+  "entity.kamen_rider_boss_you_and_me.baron_banana_energy": "Baron Banana Energy"
 }

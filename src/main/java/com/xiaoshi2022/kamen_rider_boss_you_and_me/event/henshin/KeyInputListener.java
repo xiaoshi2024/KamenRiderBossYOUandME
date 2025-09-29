@@ -138,13 +138,24 @@ public final class KeyInputListener {
         ItemStack belt = opt.get().stack();
         Two_sidriver.DriverType type = Two_sidriver.getDriverType(belt);
 
-        // 检查玩家是否手持bat形态的TwoWeaponItem
+        // 检查玩家是否手持bat形态的任何武器
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offHand = player.getOffhandItem();
-        boolean hasBatWeapon = (mainHand.getItem() instanceof TwoWeaponItem &&
+        boolean hasBatWeapon = 
+            // 检查原始TwoWeaponItem
+            (mainHand.getItem() instanceof TwoWeaponItem &&
                 ((TwoWeaponItem)mainHand.getItem()).getVariant(mainHand) == TwoWeaponItem.Variant.BAT) ||
-                (offHand.getItem() instanceof TwoWeaponItem &&
-                        ((TwoWeaponItem)offHand.getItem()).getVariant(offHand) == TwoWeaponItem.Variant.BAT);
+            (offHand.getItem() instanceof TwoWeaponItem &&
+                ((TwoWeaponItem)offHand.getItem()).getVariant(offHand) == TwoWeaponItem.Variant.BAT) ||
+            // 检查新的武器类
+            (mainHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem &&
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(mainHand) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT) ||
+            (offHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem &&
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(offHand) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT) ||
+            (mainHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem &&
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(mainHand) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT) ||
+            (offHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem &&
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(offHand) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT);
 
         // 检查玩家是否已变身
         boolean isTransformed = isWearingArmor(player, "EVIL_BATS");
@@ -156,8 +167,14 @@ public final class KeyInputListener {
                 return true;
             } else {
                 // ① 还需手持普通武器才发加载包
-                boolean hasWeapon = mainHand.getItem() instanceof TwoWeaponItem
-                        || offHand.getItem() instanceof TwoWeaponItem;
+                boolean hasWeapon = 
+                    mainHand.getItem() instanceof TwoWeaponItem ||
+                    offHand.getItem() instanceof TwoWeaponItem ||
+                    // 检测新的武器类
+                    mainHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem ||
+                    offHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem ||
+                    mainHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem ||
+                    offHand.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem;
                 if (!hasWeapon) return false;   // 不给提示，静默忽略
                 PacketHandler.INSTANCE.sendToServer(new XKeyLoadPacket(player.getUUID(), false));
                 return true;

@@ -2,7 +2,7 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"kick": {
-			"animation_length": 5,
+			"animation_length": 2.1,
 			"bones": {
 				"body": {
 					"rotation": {

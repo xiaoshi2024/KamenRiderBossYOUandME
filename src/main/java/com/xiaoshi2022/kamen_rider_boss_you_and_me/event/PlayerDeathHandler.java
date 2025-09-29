@@ -143,11 +143,15 @@ public class PlayerDeathHandler {
         return false;
     }
 
-    // 新增：辅助方法检查是否为蝙蝠武器
+    // 辅助方法检查是否为蝙蝠武器
     private static boolean isBatWeapon(ItemStack stack) {
-        if (stack.getItem() instanceof TwoWeaponItem) {
-            TwoWeaponItem.Variant variant = ((TwoWeaponItem) stack.getItem()).getWeaponType(stack);
-            return variant == TwoWeaponItem.Variant.BAT;
+        // 检查是否为三种武器类型之一
+        if (stack.getItem() instanceof TwoWeaponItem ||
+            stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem ||
+            stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem) {
+            
+            // 统一使用TwoWeaponItem的静态方法检测变体
+            return TwoWeaponItem.getVariant(stack) == TwoWeaponItem.Variant.BAT;
         }
         return false;
     }

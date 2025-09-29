@@ -206,7 +206,16 @@ public class KeybindHandler {
         if ((mainHandItem.getItem() instanceof TwoWeaponItem &&
                 ((TwoWeaponItem)mainHandItem.getItem()).getVariant(mainHandItem) == TwoWeaponItem.Variant.BAT) ||
                 (offHandItem.getItem() instanceof TwoWeaponItem &&
-                        ((TwoWeaponItem)offHandItem.getItem()).getVariant(offHandItem) == TwoWeaponItem.Variant.BAT)) {
+                        ((TwoWeaponItem)offHandItem.getItem()).getVariant(offHandItem) == TwoWeaponItem.Variant.BAT) ||
+                // 检测新的武器类的BAT形态
+                (mainHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem &&
+                        com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(mainHandItem) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT) ||
+                (offHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem &&
+                        com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(offHandItem) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT) ||
+                (mainHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem &&
+                        com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(mainHandItem) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT) ||
+                (offHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem &&
+                        com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(offHandItem) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT)) {
             // 发送解除EvilBats变身请求到服务端
             PacketHandler.sendToServer(new ReleaseBeltPacket(true, "EVIL_BATS"));
             return; // 处理完EvilBats变身后直接返回
@@ -440,22 +449,26 @@ public class KeybindHandler {
         ItemStack offHandItem = player.getOffhandItem();
 
         // 处理主手武器
-        if (mainHandItem.getItem() instanceof TwoWeaponItem) {
-            TwoWeaponItem weapon = (TwoWeaponItem) mainHandItem.getItem();
-
-            if (weapon.getVariant(mainHandItem) == TwoWeaponItem.Variant.BAT) {
+        if (mainHandItem.getItem() instanceof TwoWeaponItem ||
+            mainHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem ||
+            mainHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem) {
+            
+            // 检查武器是否为BAT形态
+            if (TwoWeaponItem.getVariant(mainHandItem) == TwoWeaponItem.Variant.BAT) {
                 // 将武器形态从BAT改回DEFAULT
-                weapon.setVariant(mainHandItem, TwoWeaponItem.Variant.DEFAULT);
+                TwoWeaponItem.setVariant(mainHandItem, TwoWeaponItem.Variant.DEFAULT);
             }
         }
 
         // 处理副手武器
-        if (offHandItem.getItem() instanceof TwoWeaponItem) {
-            TwoWeaponItem weapon = (TwoWeaponItem) offHandItem.getItem();
-
-            if (weapon.getVariant(offHandItem) == TwoWeaponItem.Variant.BAT) {
+        if (offHandItem.getItem() instanceof TwoWeaponItem ||
+            offHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem ||
+            offHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem) {
+            
+            // 检查武器是否为BAT形态
+            if (TwoWeaponItem.getVariant(offHandItem) == TwoWeaponItem.Variant.BAT) {
                 // 将武器形态从BAT改回DEFAULT
-                weapon.setVariant(offHandItem, TwoWeaponItem.Variant.DEFAULT);
+                TwoWeaponItem.setVariant(offHandItem, TwoWeaponItem.Variant.DEFAULT);
             }
         }
 

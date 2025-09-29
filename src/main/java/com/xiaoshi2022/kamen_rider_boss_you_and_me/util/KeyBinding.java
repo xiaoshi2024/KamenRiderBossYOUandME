@@ -9,6 +9,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SummonDukeKnightPacke
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBatModePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaFuuinKekkaiPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaToggleFlightPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSealBarrierPullPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombatAnalysisPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBananaEnergyPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BaronLemonAbilityPacket;
@@ -40,6 +43,8 @@ public class KeyBinding {
     public static final KeyMapping KEY_GUARD  = new KeyMapping("key.skill1",  InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.categories.kamen_rider");
     public static final KeyMapping KEY_BLAST  = new KeyMapping("key.skill2",  InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, "key.categories.kamen_rider");
     public static final KeyMapping KEY_BOOST  = new KeyMapping("key.skill3",  InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_N, "key.categories.kamen_rider");
+    public static final KeyMapping KEY_FLIGHT = new KeyMapping("key.flight_toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F, "key.categories.kamen_rider");
+    public static final KeyMapping KEY_BARRIER_PULL = new KeyMapping("key.barrier_pull", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, "key.categories.kamen_rider");
 
     public static final KeyMapping CHANGE_KEY = new KeyMapping(KEY_CHANGE_BODY, KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_X, KEY_CATEGORY_kamen_rider_boss_you_and_me);
@@ -71,6 +76,11 @@ public class KeyBinding {
         // 检测玩家是否手持音速弓柠檬模式
         boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
         
+        // Z键：结界拉扯功能对所有玩家可用，不限制盔甲
+        if (KEY_BARRIER_PULL.consumeClick()) {
+            PacketHandler.sendToServer(new DarkKivaSealBarrierPullPacket());
+        }
+        
         // 优先检查特殊形态 - 巴隆柠檬形态（带武器限制的特殊条件应优先检查）
         if (isBaronLemon && hasSonicArrowLemonMode) {
             // 巴隆柠檬形态且手持音速弓柠檬模式时，使用B键触发柠檬能量陷阱技能
@@ -87,9 +97,14 @@ public class KeyBinding {
             if (KEY_BOOST.consumeClick()) PacketHandler.sendToServer(new DarkGaimHelheimCrackPacket());
         }
         else if (isDarkKiva) {
-            if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new DarkKivaBatModePacket());
+            // 技能1键（V键）：封印结界
+            if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new DarkKivaFuuinKekkaiPacket());
+            // 技能2键（B键）：吸血能力
             if (KEY_BLAST.consumeClick()) PacketHandler.sendToServer(new DarkKivaBloodSuckPacket());
+            // 技能3键（N键）：声波爆破
             if (KEY_BOOST.consumeClick()) PacketHandler.sendToServer(new DarkKivaSonicBlastPacket());
+            // F键：飞行开关
+            if (KEY_FLIGHT.consumeClick()) PacketHandler.sendToServer(new DarkKivaToggleFlightPacket());
         } else if (isDuke) {
             // Duke盔甲使用N键召唤骑士
             if (KEY_BOOST.consumeClick()) {

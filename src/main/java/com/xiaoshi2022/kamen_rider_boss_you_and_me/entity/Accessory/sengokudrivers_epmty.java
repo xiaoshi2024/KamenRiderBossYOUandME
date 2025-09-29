@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.sengokudriver.sengokudrivers_epmtysRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -9,8 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
@@ -30,7 +29,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
-public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
+public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, ICurioItem {
 
     /* ----------------- 动画常量 ----------------- */
     private static final RawAnimation IDLES          = RawAnimation.begin().thenPlayAndHold("idles");
@@ -211,24 +210,40 @@ public class sengokudrivers_epmty extends Item implements GeoItem, ICurioItem {
     /* -------------- Curio -------------- */
     @Override
     public void onEquip(SlotContext ctx, ItemStack prev, ItemStack stack) {
-        if (!(ctx.entity() instanceof LivingEntity)) return;
-        LivingEntity le = (LivingEntity) ctx.entity();
-        setShowing(stack, true);
-        setRelease(stack, false);
-
-        String anim = switch (getMode(stack)) {
+        super.onEquip(ctx, prev, stack);
+    }
+    
+    /**
+     * 实现基类的腰带装备逻辑
+     */
+    @Override
+    protected void onBeltEquipped(ServerPlayer player, ItemStack beltStack) {
+        setHenshin(beltStack, false);
+        setRelease(beltStack, false);
+        setShowing(beltStack, true);
+        
+        // 同步腰带状态到所有跟踪的玩家
+        String anim = switch (getMode(beltStack)) {
             case BANANA   -> "banana_idle";
             case ORANGELS -> "show";  // ORANGELS模式使用默认展示动画
             default       -> "show";
         };
-
-        if (!le.level().isClientSide() && le instanceof ServerPlayer sp) {
-            PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), anim, getMode(stack)), sp);
-            // 给玩家添加饱和效果
-            sp.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 0, true, false));
-        }
-
-        triggerAnim(le, "controller", anim);
+        
+        PacketHandler.sendToAllTracking(
+                new BeltAnimationPacket(player.getId(), anim, getMode(beltStack)),
+                player);
+        
+        // 更新玩家变量
+        player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
+            variables.isSengokuDriverEmptyEquipped = true;
+            variables.syncPlayerVariables(player);
+        });
+        
+        // 给玩家添加饱和效果
+        player.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 0, true, false));
+        
+        // 触发动画
+        triggerAnim(player, "controller", anim);
     }
 
     @Override

@@ -1,0 +1,134 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    128,
+    128
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        13.75,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        -1.75,
+        1.75
+      ],
+      "scale": [
+        1,
+        1.193359375,
+        1.205078125
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        1.75,
+        -1.25,
+        2
+      ],
+      "scale": [
+        1,
+        1.255859375,
+        1.126953125
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        49.5,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        -1.5,
+        0
+      ],
+      "scale": [
+        1,
+        1.087890625,
+        1.037109375
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        34.75,
+        0,
+        0
+      ],
+      "translation": [
+        4,
+        0,
+        2.75
+      ],
+      "scale": [
+        1,
+        1.056640625,
+        1
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        2,
+        0
+      ]
+    },
+    "gui": {
+      "rotation": [
+        88.21,
+        -56.73,
+        88.48
+      ],
+      "translation": [
+        -7.75,
+        -3.5,
+        0
+      ],
+      "scale": [
+        1.2421875,
+        1.2421875,
+        1.2421875
+      ]
+    },
+    "head": {
+      "rotation": [
+        0,
+        0,
+        70.5
+      ],
+      "translation": [
+        0,
+        7.5,
+        0
+      ],
+      "scale": [
+        1.189453125,
+        1.189453125,
+        1.189453125
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        90,
+        51.5,
+        -90
+      ],
+      "translation": [
+        10,
+        -3.25,
+        2
+      ],
+      "scale": [
+        1.68359375,
+        1.68359375,
+        1.68359375
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/two_weapon"
+  }
+}

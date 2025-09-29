@@ -5,6 +5,10 @@
   "entity.kamen_rider_boss_you_and_me.inves_heilehim": "赫尔海姆 异域者 普通",
   "entity.kamen_rider_boss_you_and_me.knecromghost": "幽冥之魂",
   "entity.kamen_rider_boss_you_and_me.kaito": "驱纹戒斗【附身者】",
+
+  "item.kamen_rider_boss_you_and_me.two_weapon_sword": "双面驱动器-剑",
+  "item.kamen_rider_boss_you_and_me.two_weapon_gun": "双面驱动器-枪",
+
   "item.kamen_rider_boss_you_and_me.aiziowc": "异类时王表盘",
   "item.kamen_rider_boss_you_and_me.giifusteamp": "基夫始祖印章",
   "item group.kamen_rider_boss_you_and_me_tab": "假面骑士中你与我的反派编年史",
@@ -44,6 +48,8 @@
   "key.skill1": "骑士技能1",
   "key.skill2": "骑士技能2",
   "key.skill3": "骑士技能3",
+  "key.flight_toggle": "飞行切换",
+  "key.barrier_pull": "结界拉扯",
   "key.categories.kamen_rider": "假面骑士技能",
   "kamen.rider.gift.best": "很好，这股力量归我了！",
   "curios.identifier.bracelet": "腕带 插槽",
@@ -205,5 +211,9 @@
   "item.kamen_rider_boss_you_and_me.dark_kiva_chestplate.tooltip": "[提示] 暗黑kiva胸甲。",
   "item.kamen_rider_boss_you_and_me.dark_kiva_leggings.tooltip": "[提示] 暗黑kiva护腿。",
   "hud.kamen_rider_boss_you_and_me.rider_energy": "骑士能量: %s",
-  "hud.kamen_rider_boss_you_and_me.rider_cooldown": "骑士踢冷却: %.1f秒"
+  "hud.kamen_rider_boss_you_and_me.rider_cooldown": "骑士踢冷却: %.1f秒",
+  "entity.kamen_rider_boss_you_and_me.bat_stamp_finish": "蝙蝠印章终结体",
+  "entity.kamen_rider_boss_you_and_me.dark_kiva_seal_barrier": "暗黑月骑封印结界",
+  "entity.kamen_rider_boss_you_and_me.baron_lemon_energy": "巴隆柠檬能量体",
+  "entity.kamen_rider_boss_you_and_me.baron_banana_energy": "巴隆香蕉能量体"
   }

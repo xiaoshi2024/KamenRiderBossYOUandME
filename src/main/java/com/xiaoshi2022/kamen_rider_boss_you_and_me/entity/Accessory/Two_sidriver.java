@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +24,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
-public class Two_sidriver extends Item implements GeoItem, ICurioItem {
+public class Two_sidriver extends AbstractRiderBelt implements GeoItem, ICurioItem {
 
     public void triggerAnim(LivingEntity entity, String controller, String animationName) {
         // 在这里添加触发动画的逻辑
@@ -51,6 +50,15 @@ public class Two_sidriver extends Item implements GeoItem, ICurioItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public Two_sidriver(Properties p) { super(p); }
+    
+    /**
+     * 腰带装备后的自定义逻辑
+     */
+    @Override
+    protected void onBeltEquipped(ServerPlayer player, ItemStack beltStack) {
+        // 装备Two_sidriver腰带后的自定义逻辑
+        // 可以在这里添加变身音效、粒子效果等
+    }
 
     /* ================= GeoItem ================= */
     @Override
@@ -83,6 +91,7 @@ public class Two_sidriver extends Item implements GeoItem, ICurioItem {
     /* =============== Curios =============== */
     @Override
     public void onEquip(SlotContext ctx, ItemStack prev, ItemStack stack) {
+        super.onEquip(ctx, prev, stack); // 调用父类方法
         if (ctx.entity() instanceof ServerPlayer sp) syncToTracking(sp, stack);
     }
 

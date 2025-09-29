@@ -2,14 +2,18 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.AbstractRiderBelt;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin.HeartCoreEvent;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
@@ -21,6 +25,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.AbstractRiderBelt;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -28,7 +33,7 @@ import java.util.function.Consumer;
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver.BeltMode.*;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
-public class Genesis_driver extends Item implements GeoItem, ICurioItem {
+public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurioItem {
 
     /* ------------------------- 动画常量 ------------------------- */
     private static final RawAnimation IDLES   = RawAnimation.begin().thenPlayAndHold("idles");
@@ -326,16 +331,71 @@ public class Genesis_driver extends Item implements GeoItem, ICurioItem {
 
     @Override
     public void onEquip(SlotContext ctx, ItemStack prev, ItemStack stack) {
-        if (!(ctx.entity() instanceof LivingEntity)) return;
-        LivingEntity le = (LivingEntity) ctx.entity();
-        setShowing(stack, true);
-        setActive(stack, false);
-        if (!le.level().isClientSide() && le instanceof ServerPlayer sp) {
-            PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "show", getMode(stack)), sp);
-            // 给玩家添加饱和效果
-            sp.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 0, true, false));
+        super.onEquip(ctx, prev, stack);
+        // 确保实体是ServerPlayer类型
+        if (ctx.entity() instanceof ServerPlayer player) {
+            onBeltEquipped(player, stack);
         }
-        triggerAnim(le, "controller", "show");
+    }
+    
+    /**
+     * 实现基类的腰带装备逻辑
+     */
+    @Override
+    protected void onBeltEquipped(ServerPlayer player, ItemStack beltStack) {
+        setShowing(beltStack, true);
+        setActive(beltStack, false);
+        setHenshin(beltStack, false);
+        setRelease(beltStack, false);
+
+        // 同步腰带状态到所有跟踪的玩家
+        PacketHandler.sendToAllTracking(
+                new BeltAnimationPacket(player.getId(), "start", DEFAULT),
+                player);
+        
+        // 更新玩家变量
+        player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
+            variables.isGenesisDriverEquipped = true;
+            variables.syncPlayerVariables(player);
+        });
+
+        // 触发动画
+        triggerAnim(player, "controller", "start");
+    }
+    
+    /**
+     * 检查玩家是否穿着巴隆基础套装，如果是则自动变身巴隆柠檬形态
+     */
+    private void checkBaronLemonTransformation(ServerPlayer player, ItemStack beltStack) {
+        // 检查玩家是否穿着巴隆基础套装
+        boolean wearingBaronBaseSet = isWearingBaronBaseArmor(player);
+        
+        // 如果玩家穿着巴隆基础套装，并且腰带是柠檬形态
+        if (wearingBaronBaseSet) {
+            // 设置腰带为柠檬模式
+            setMode(beltStack, LEMON);
+            
+            // 触发巴隆柠檬形态变身
+            new HeartCoreEvent(player, "LEMON_ENERGY:BARON_LEMON");
+            
+            // 发送系统消息通知玩家
+            player.sendSystemMessage(
+                    net.minecraft.network.chat.Component.literal("已自动变身为巴隆柠檬形态！")
+            );
+        }
+    }
+    
+    /**
+     * 检查玩家是否穿着巴隆基础盔甲套装
+     */
+    private boolean isWearingBaronBaseArmor(Player player) {
+        // 检查头盔、胸甲和护腿是否都是巴隆基础装甲
+        boolean hasHelmet = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() == ModItems.RIDER_BARONS_HELMET.get();
+        boolean hasChestplate = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).getItem() == ModItems.RIDER_BARONS_CHESTPLATE.get();
+        boolean hasLeggings = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.LEGS).getItem() == ModItems.RIDER_BARONS_LEGGINGS.get();
+        
+        // 返回是否穿着全套巴隆基础装甲
+        return hasHelmet && hasChestplate && hasLeggings;
     }
 
     @Override

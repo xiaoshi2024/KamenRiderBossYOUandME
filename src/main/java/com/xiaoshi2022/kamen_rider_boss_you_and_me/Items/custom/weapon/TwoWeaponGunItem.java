@@ -1,4 +1,4 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.TwoWeapon.TwoWeaponRenderer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -21,7 +21,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -29,10 +28,14 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
+import net.minecraft.world.item.Item.Properties;
 
 import java.util.function.Consumer;
 
-public class TwoWeaponItem extends SwordItem implements GeoItem {
+public class TwoWeaponGunItem extends TwoWeaponItem {
+
+
 
     // 参考假面骑士艾比尔的武器性能调整数值
     private static final Tier CUSTOM_TIER = new Tier() {
@@ -45,61 +48,16 @@ public class TwoWeaponItem extends SwordItem implements GeoItem {
     };
 
     // 武器伤害数值
-    private static final float SWORD_MODE_DAMAGE = 26.0F; // 剑模式伤害
     private static final float GUN_MODE_DAMAGE = 28.0F; // 枪模式伤害
-    private static final float SWEEP_DAMAGE = 10.0F; // 横扫伤害
-    private static final float SWEEP_KNOCKBACK = 1.2F; // 击退效果增强
+    
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenPlayAndHold("gun");
 
-    private static final RawAnimation BLADE_ANIM = RawAnimation.begin().thenPlay("blade");
-    private static final RawAnimation GUN_ANIM = RawAnimation.begin().thenPlay("gun");
-    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenLoop("idle");
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    // 用于物品注册的静态引用
+    public static TwoWeaponGunItem ITEM = null; // 会在ModItems中被赋值
 
-    // 模式标签
-    private static final String MODE_TAG = "TwoWeaponMode"; // true=刀模式, false=枪模式
-
-    public TwoWeaponItem(Properties p) {
-        super(CUSTOM_TIER, 8, -2.0F, p); // 基础伤害提升到8，攻击速度调整
+    public TwoWeaponGunItem(Properties p) {
+        super(p); // 调用父类构造函数
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
-    }
-
-    public enum Variant {
-        DEFAULT, BAT
-    }
-
-    public void setWeaponType(ItemStack stack, Variant type) {
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putString("WeaponType", type.name());
-    }
-
-    public Variant getWeaponType(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag != null && tag.contains("WeaponType")) {
-            return Variant.valueOf(tag.getString("WeaponType"));
-        }
-        return Variant.DEFAULT;
-    }
-
-    private static final String VARIANT_TAG = "TwoWeaponVariant";
-
-    public static Variant getVariant(ItemStack stack) {
-        try {
-            return Variant.valueOf(stack.getOrCreateTag().getString(VARIANT_TAG));
-        } catch (Exception e) {
-            return Variant.DEFAULT;
-        }
-    }
-
-    public static void setVariant(ItemStack stack, Variant v) {
-        stack.getOrCreateTag().putString(VARIANT_TAG, v.name());
-    }
-
-    public boolean isBladeMode(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean(MODE_TAG);
-    }
-
-    public void setBladeMode(ItemStack stack, boolean isBladeMode) {
-        stack.getOrCreateTag().putBoolean(MODE_TAG, isBladeMode);
     }
 
     @Override
@@ -115,6 +73,18 @@ public class TwoWeaponItem extends SwordItem implements GeoItem {
                 return this.renderer;
             }
         });
+    }
+
+    // 处理idle动画状态
+    private PlayState handleIdleAnimation(AnimationState<TwoWeaponGunItem> state) {
+        state.getController().setAnimation(IDLE_ANIM);
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        // 主要的idle状态控制器，始终运行
+        controllers.add(new AnimationController<>(this, "idle_controller", 5, this::handleIdleAnimation));
     }
 
     private void shootEnergyBeam(Player player, Level level) {
@@ -167,61 +137,17 @@ public class TwoWeaponItem extends SwordItem implements GeoItem {
         }
     }
 
-
-
-    // 处理idle动画状态
-    private PlayState handleIdleAnimation(AnimationState<TwoWeaponItem> state) {
-        state.getController().setAnimation(IDLE_ANIM);
-        return PlayState.CONTINUE;
-    }
-    
-    // 确保在物品渲染时能够正确反映当前模式
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        // 主要的idle状态控制器，始终运行
-        controllers.add(new AnimationController<>(this, "idle_controller", 5, this::handleIdleAnimation));
-
-        // 单独的触发式动画控制器，不添加条件限制
-        controllers.add(new AnimationController<>(this, "blade_controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("blade", BLADE_ANIM));
-
-        controllers.add(new AnimationController<>(this, "gun_controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("gun", GUN_ANIM));
-    }
-
-    // 强制触发切换动画
-    private void playSwitchAnimation(Player player, ItemStack stack, Level level, boolean toBladeMode) {
-        if (!level.isClientSide && level instanceof ServerLevel serverLevel) {
-            // 确保每次切换都能正确触发动画
-            String controllerName = toBladeMode ? "blade_controller" : "gun_controller";
-            String animName = toBladeMode ? "blade" : "gun";
-            
-            // 触发目标动画
-            triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), controllerName, animName);
-            
-            // 播放相应的音效
-            if (toBladeMode) {
-                level.playSound(null, player.blockPosition(),
-                        SoundEvents.PISTON_CONTRACT, SoundSource.PLAYERS, 1.0F, 0.9F);
-                level.playSound(null, player.blockPosition(),
-                        SoundEvents.IRON_DOOR_OPEN, SoundSource.PLAYERS, 0.7F, 1.2F);
-            } else {
-                level.playSound(null, player.blockPosition(),
-                        SoundEvents.PISTON_EXTEND, SoundSource.PLAYERS, 1.0F, 1.1F);
-                level.playSound(null, player.blockPosition(),
-                        SoundEvents.IRON_DOOR_CLOSE, SoundSource.PLAYERS, 0.7F, 0.8F);
-            }
-        }
-    }
-
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        
+        // 在bat变种情况下进行检测和处理
+        Variant currentVariant = getVariant(stack);
 
-        /* -------- Shift + 右键：直接替换为剑形态武器 -------- */
+        /* -------- Shift + 右键：切换到剑模式 -------- */
         if (player.isShiftKeyDown() && !player.isUsingItem()) {
             if (!level.isClientSide) {
-                // 创建剑形态武器
+                // 创建新的剑形态武器
                 ItemStack swordStack = new ItemStack(com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.TWO_WEAPON_SWORD.get(), 1);
                 
                 // 复制耐久度等重要属性
@@ -236,7 +162,7 @@ public class TwoWeaponItem extends SwordItem implements GeoItem {
                 }
                 
                 // 如果原武器是bat变种，确保新武器也是bat变种
-                if (getVariant(stack) == Variant.BAT) {
+                if (currentVariant == Variant.BAT) {
                     setVariant(swordStack, Variant.BAT);
                 }
                 
@@ -252,49 +178,13 @@ public class TwoWeaponItem extends SwordItem implements GeoItem {
             return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
         }
 
-        /* -------- 正常右键：默认剑形态攻击 -------- */
+        /* -------- 正常右键：枪模式攻击 -------- */
         if (!level.isClientSide) {
-            doSlashAttack(player, level);
+            shootEnergyBeam(player, level);
             return InteractionResultHolder.success(stack);
         }
         return InteractionResultHolder.consume(stack);
     }
 
-    private void doSlashAttack(Player player, Level level) {
-        player.sweepAttack();
 
-        // 增大攻击范围
-        AABB box = player.getBoundingBox()
-                .inflate(2.0D, 1.0D, 2.0D) // 范围增大
-                .move(player.getViewVector(1.0F).scale(1.0D)); // 攻击距离增加
-
-        for (LivingEntity tgt : level.getEntitiesOfClass(LivingEntity.class, box,
-                e -> e != player && !player.isAlliedTo(e))) {
-            if (tgt.invulnerableTime <= 0) {
-                // 造成更高伤害
-                tgt.hurt(player.damageSources().playerAttack(player), SWORD_MODE_DAMAGE);
-                // 增强击退效果
-                tgt.knockback(SWEEP_KNOCKBACK,
-                        player.getX() - tgt.getX(),
-                        player.getZ() - tgt.getZ());
-
-                // 对击中的实体造成额外效果
-                if (tgt.getHealth() <= SWEEP_DAMAGE) {
-                    // 如果目标生命值较低，直接消灭
-                    tgt.hurt(player.damageSources().playerAttack(player), tgt.getHealth());
-                }
-            }
-        }
-
-        // 增强音效
-        level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.5F, 0.9F);
-        level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1.0F, 1.1F);
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
 }

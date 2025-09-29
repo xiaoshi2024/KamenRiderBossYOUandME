@@ -352,6 +352,8 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyEntity.createAttributes());
 
+            event.put(ModEntityTypes.DARK_KIVA_SEAL_BARRIER.get(), DarkKivaSealBarrierEntity.createAttributes());
+
 //            event.put(ModEntityTypes.KAITO.get(),
 //                    KaitoVillager.createAttributes()
 //                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 3.0D)
@@ -369,6 +371,8 @@ public class modEventBusEvents {
             event.register(KEY_GUARD);
             event.register(KEY_BLAST);
             event.register(KEY_BOOST);
+            event.register(KEY_FLIGHT);
+            event.register(KEY_BARRIER_PULL);
         }
     }
 }

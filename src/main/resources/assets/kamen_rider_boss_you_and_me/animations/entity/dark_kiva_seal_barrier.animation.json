@@ -1,0 +1,64 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.darkkivasealbarrier.extrusion": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 5,
+			"bones": {
+				"barrier": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 90]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 11, 0]
+						},
+						"5.0": {
+							"vector": [0, -1, 0]
+						}
+					},
+					"scale": {
+						"vector": [1, 2.58, 2.48]
+					}
+				},
+				"barrier2": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [24, 0, 0]
+						},
+						"5.0": {
+							"vector": [4, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.darkkivasealbarrier.idle": {
+			"animation_length": 2.6667,
+			"bones": {
+				"barrier": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"2.6667": {
+							"vector": [1, 2.3, 2.29]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

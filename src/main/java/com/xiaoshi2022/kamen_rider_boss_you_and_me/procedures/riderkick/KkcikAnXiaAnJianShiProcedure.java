@@ -17,7 +17,7 @@ public class KkcikAnXiaAnJianShiProcedure {
 
 		ItemStack helmet = getHelmet(entity);
 
-		// 检查所有符合条件的头盔
+		// 检查所有符合条件的头盔、是否正在踢击以及玩家是否被控
 		if ((helmet.getItem() == ModItems.BARON_LEMON_HELMET.get() ||
 				helmet.getItem() == ModItems.DUKE_HELMET.get() ||
 				helmet.getItem() == ModItems.MARIKA_HELMET.get() ||
@@ -28,10 +28,28 @@ public class KkcikAnXiaAnJianShiProcedure {
 				helmet.getItem() == ModItems.SIGURD_HELMET.get()||
 				helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()||
 				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) && // 新增：黑暗Kiva头盔
-				!isKicking(entity)) {
+				!isKicking(entity) &&
+				!isPlayerControlled(entity)) {
 
 			handleKickStart(world, entity);
 		}
+	}
+	
+	/**
+	 * 检查玩家是否被控（有控制类负面效果）
+	 */
+	private static boolean isPlayerControlled(Entity entity) {
+		if (!(entity instanceof LivingEntity livingEntity)) {
+			return false;
+		}
+		 
+		// 检查玩家是否有以下控制类负面效果
+		return livingEntity.hasEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN) || // 缓慢
+				livingEntity.hasEffect(net.minecraft.world.effect.MobEffects.BLINDNESS) || // 失明
+				livingEntity.hasEffect(net.minecraft.world.effect.MobEffects.CONFUSION) || // 反胃
+				livingEntity.hasEffect(net.minecraft.world.effect.MobEffects.POISON) || // 中毒
+				livingEntity.hasEffect(net.minecraft.world.effect.MobEffects.WITHER) || // 凋零
+				livingEntity.hasEffect(net.minecraft.world.effect.MobEffects.WEAKNESS); // 虚弱
 	}
 
 	// 获取头盔

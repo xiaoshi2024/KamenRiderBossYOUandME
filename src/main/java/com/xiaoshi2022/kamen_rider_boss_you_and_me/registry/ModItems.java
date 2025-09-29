@@ -9,6 +9,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.GiifuEyeBall;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.dragonfruit;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.kivas.ThroneBlockItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
@@ -45,6 +47,22 @@ public class ModItems {
             "globalism",
             () -> new Globalism(new Item.Properties())
     );
+
+    // 双面武器-剑形态
+    public static final RegistryObject<TwoWeaponSwordItem> TWO_WEAPON_SWORD = ITEMS.register("two_weapon_sword",
+            () -> {
+                TwoWeaponSwordItem item = new TwoWeaponSwordItem(new Item.Properties());
+                TwoWeaponSwordItem.ITEM = item;
+                return item;
+            });
+
+    // 双面武器-枪形态
+    public static final RegistryObject<TwoWeaponGunItem> TWO_WEAPON_GUN = ITEMS.register("two_weapon_gun",
+            () -> {
+                TwoWeaponGunItem item = new TwoWeaponGunItem(new Item.Properties());
+                TwoWeaponGunItem.ITEM = item;
+                return item;
+            });
 
     public static final RegistryObject<Item> THRONE_BLOCK_ITEM = ITEMS.register("throne_block_item",
             () -> new BlockItem(ModBlocks.THRONE_BLOCK.get(), new Item.Properties()));

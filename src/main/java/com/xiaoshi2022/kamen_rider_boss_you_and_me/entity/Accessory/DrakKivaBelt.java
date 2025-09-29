@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -10,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -29,7 +29,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
-public class DrakKivaBelt extends Item implements GeoItem, ICurioItem {
+public class DrakKivaBelt extends AbstractRiderBelt implements GeoItem, ICurioItem {
 
     /* ----------------- 动画常量 ----------------- */
     private static final RawAnimation SAY = RawAnimation.begin().thenPlay("say");
@@ -167,15 +167,30 @@ public class DrakKivaBelt extends Item implements GeoItem, ICurioItem {
     /* -------------- Curio -------------- */
     @Override
     public void onEquip(SlotContext ctx, ItemStack prev, ItemStack stack) {
-        if (!(ctx.entity() instanceof LivingEntity)) return;
-        LivingEntity le = (LivingEntity) ctx.entity();
-        setHenshin(stack, false);
-        setDisassembly(stack, false);
-
-        if (!le.level().isClientSide() && le instanceof ServerPlayer sp)
-            PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "say", DrakKivaBeltMode.DEFAULT), sp);
-
-        triggerAnim(le, "controller", "say");
+        super.onEquip(ctx, prev, stack);
+    }
+    
+    /**
+     * 实现基类的腰带装备逻辑
+     */
+    @Override
+    protected void onBeltEquipped(ServerPlayer player, ItemStack beltStack) {
+        setHenshin(beltStack, false);
+        setDisassembly(beltStack, false);
+        
+        // 同步腰带状态到所有跟踪的玩家
+        PacketHandler.sendToAllTracking(
+                new BeltAnimationPacket(player.getId(), "say", DrakKivaBeltMode.DEFAULT),
+                player);
+        
+        // 更新玩家变量
+        player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
+            variables.isDarkKivaBeltEquipped = true;
+            variables.syncPlayerVariables(player);
+        });
+        
+        // 触发动画
+        triggerAnim(player, "controller", "say");
     }
 
     @Override

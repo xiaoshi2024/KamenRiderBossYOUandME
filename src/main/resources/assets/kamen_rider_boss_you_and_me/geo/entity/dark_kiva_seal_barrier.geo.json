@@ -1,0 +1,54 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.dark_kiva_seal_barrier",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 5,
+				"visible_bounds_offset": [0, 1.5, 0]
+			},
+			"bones": [
+				{
+					"name": "barrier",
+					"pivot": [0, 15, 0],
+					"cubes": [
+						{
+							"origin": [-1, 3, -12.4],
+							"size": [0.6, 23.9, 22.5],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [0.04295, 1.14541]},
+								"east": {"uv": [0, 0], "uv_size": [1.14541, 1.14541]},
+								"south": {"uv": [0, 0], "uv_size": [0.04295, 1.14541]},
+								"west": {"uv": [0, 0], "uv_size": [64, 64]},
+								"up": {"uv": [0.04295, 1.14541], "uv_size": [-0.04295, -1.14541]},
+								"down": {"uv": [0.04295, 1.14541], "uv_size": [-0.04295, -1.14541]}
+							}
+						}
+					]
+				},
+				{
+					"name": "barrier2",
+					"parent": "barrier",
+					"pivot": [-0.5, 15, 0],
+					"cubes": [
+						{
+							"origin": [-0.5, 3, -12],
+							"size": [0.6, 23, 22],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [0.04295, 1.14541]},
+								"east": {"uv": [0, 0], "uv_size": [1.14541, 1.14541]},
+								"south": {"uv": [0, 0], "uv_size": [0.04295, 1.14541]},
+								"west": {"uv": [0, 0], "uv_size": [64, 64]},
+								"up": {"uv": [0.04295, 1.14541], "uv_size": [-0.04295, -1.14541]},
+								"down": {"uv": [0.04295, 1.14541], "uv_size": [-0.04295, -1.14541]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

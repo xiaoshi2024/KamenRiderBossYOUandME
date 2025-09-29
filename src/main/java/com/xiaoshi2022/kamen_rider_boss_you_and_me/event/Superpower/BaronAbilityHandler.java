@@ -46,7 +46,7 @@ public final class BaronAbilityHandler {
      * 香蕉能量：V键触发，在玩家前方生成香蕉能量实体，对范围内敌人造成缓慢效果
      */
     public static void tryBananaEnergy(ServerPlayer sp) {
-        if (!isBaronArmorEquipped(sp) || !sp.isAlive()) return;
+        if (!isBaronArmorEquipped(sp) || !sp.isAlive() || isPlayerControlled(sp)) return;
         
         KRBVariables.PlayerVariables variables = sp.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         long currentTime = sp.level().getGameTime();
@@ -82,6 +82,19 @@ public final class BaronAbilityHandler {
         // 检查胸甲是否为基础巴隆盔甲
         return player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).getItem() instanceof rider_baronsItem;
     }
+    
+    /**
+      * 检查玩家是否被控（有控制类负面效果）
+      */
+     private static boolean isPlayerControlled(ServerPlayer player) {
+         // 检查玩家是否有以下控制类负面效果
+         return player.hasEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN) || // 缓慢
+                player.hasEffect(net.minecraft.world.effect.MobEffects.BLINDNESS) || // 失明
+                player.hasEffect(net.minecraft.world.effect.MobEffects.CONFUSION) || // 反胃
+                player.hasEffect(net.minecraft.world.effect.MobEffects.POISON) || // 中毒
+                player.hasEffect(net.minecraft.world.effect.MobEffects.WITHER) || // 凋零
+                player.hasEffect(net.minecraft.world.effect.MobEffects.WEAKNESS); // 虚弱
+     }
 
     // 处理冷却时间
     private static void handleCooldowns(KRBVariables.PlayerVariables variables, long currentTime) {

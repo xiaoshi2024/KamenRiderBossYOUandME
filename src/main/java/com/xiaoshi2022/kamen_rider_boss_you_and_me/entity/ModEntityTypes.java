@@ -100,6 +100,13 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.0F) // 调整碰撞箱大小
                     .clientTrackingRange(8)
                     .build("baron_lemon_energy"));
+    
+    // 黑暗Kiva封印结界实体
+    public static final RegistryObject<EntityType<DarkKivaSealBarrierEntity>> DARK_KIVA_SEAL_BARRIER = ENTITY_TYPES.register("dark_kiva_seal_barrier",
+            () -> EntityType.Builder.<DarkKivaSealBarrierEntity>of(DarkKivaSealBarrierEntity::new, MobCategory.MISC)
+                    .sized(2.0F, 2.0F) // 默认大小
+                    .clientTrackingRange(16)
+                    .build("dark_kiva_seal_barrier"));
 
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {
