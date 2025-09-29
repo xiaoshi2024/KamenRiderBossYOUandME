@@ -159,7 +159,7 @@ public class DarkKivaSealBarrierEntity extends LivingEntity implements GeoEntity
             AABB searchBox = this.getBoundingBox().inflate(getSize());
             List<LivingEntity> nearbyEntities = level().getEntitiesOfClass(LivingEntity.class, searchBox, 
                     entity -> entity != this && entity != getOwner() && 
-                            !(entity instanceof Player) && 
+                            // 允许控制除了释放者本人之外的玩家
                             this.canAttack(entity));
 
             // 处理新进入范围的实体
@@ -240,9 +240,13 @@ public class DarkKivaSealBarrierEntity extends LivingEntity implements GeoEntity
             entity.setNoGravity(true);
             
             // 应用粘性效果 - 阻止实体移动
-            if (!entity.getType().getCategory().isFriendly()) {
-                // 使用更现代的方式禁用AI
+            // 对所有被控制的实体（包括非友好生物和玩家）应用相同的控制逻辑
+            if (entity instanceof Mob && !entity.getType().getCategory().isFriendly()) {
+                // 对生物禁用AI
                 entity.getPersistentData().putBoolean("NoAI", true);
+            } else if (entity instanceof Player && entity != getOwner()) {
+                // 对玩家实体应用特殊的控制效果
+                entity.setDeltaMovement(Vec3.ZERO); // 停止玩家移动
             }
             
             // 根据拉扯进度定位实体
