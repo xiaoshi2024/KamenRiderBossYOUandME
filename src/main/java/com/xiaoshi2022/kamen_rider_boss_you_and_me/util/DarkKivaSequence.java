@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.sounds.SoundSource;
@@ -171,9 +172,18 @@ public final class DarkKivaSequence {
     }
 
     /* 从腰带生成Kivat蝙蝠 */
-    /* 从腰带生成Kivat蝙蝠 */
     private static void spawnKivatFromBelt(ServerPlayer player, ServerLevel level, ItemStack beltStack) {
         UUID restoreId = BAT_RESTORE_MAP.remove(player.getUUID());
+        
+        // 先获取腰带中的蝙蝠UUID
+        CompoundTag beltTag = beltStack.getOrCreateTag();
+        UUID beltBatId = beltTag.hasUUID("UUID") ? beltTag.getUUID("UUID") : null;
+        
+        // 关键修复：移除所有已经存在的旧蝙蝠实体，确保只保留一个
+        level.getEntitiesOfClass(KivatBatTwoNd.class, player.getBoundingBox().inflate(32))
+             .stream()
+             .filter(b -> b.isOwnedBy(player))  // 只移除属于该玩家的蝙蝠
+             .forEach(Entity::discard);
 
         KivatBatTwoNd bat;
 
@@ -181,13 +191,10 @@ public final class DarkKivaSequence {
             /* 生成全新的蝙蝠 */
             bat = ModEntityTypes.KIVAT_BAT_II.get().create(level);
         } else {
-            /* 尝试取回旧实体 */
-            bat = (KivatBatTwoNd) level.getEntity(restoreId);
-            if (bat == null) {
-                /* 实体已卸载，用腰带 NBT 重新造 */
-                bat = ModEntityTypes.KIVAT_BAT_II.get().create(level);
-                CompoundTag tag = beltStack.getOrCreateTag();
-                if (tag.contains("UUID")) bat.load(tag);
+            /* 尝试取回旧实体 - 由于上面已经移除了所有旧实体，这里实际会创建新实体 */
+            bat = ModEntityTypes.KIVAT_BAT_II.get().create(level);
+            if (beltTag.contains("UUID")) {
+                bat.load(beltTag);
             }
         }
 

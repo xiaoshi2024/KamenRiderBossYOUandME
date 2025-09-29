@@ -8,6 +8,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftaria
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BaronLemonEnergyEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.CherryEnergyArrowEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -107,6 +108,14 @@ public class ModEntityTypes {
                     .sized(2.0F, 2.0F) // 默认大小
                     .clientTrackingRange(16)
                     .build("dark_kiva_seal_barrier"));
+
+    // 樱桃能量箭矢实体
+    public static final RegistryObject<EntityType<CherryEnergyArrowEntity>> CHERRY_ENERGY_ARROW = ENTITY_TYPES.register("cherry_energy_arrow",
+            () -> EntityType.Builder.<CherryEnergyArrowEntity>of(CherryEnergyArrowEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F) // 箭矢大小
+                    .clientTrackingRange(16)
+                    .updateInterval(20)
+                    .build("cherry_energy_arrow"));
 
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {

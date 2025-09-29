@@ -3,10 +3,9 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DukeKnightAbilityHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.CherryEnergyArrowPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SummonDukeKnightPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBatModePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaFuuinKekkaiPacket;
@@ -75,14 +74,25 @@ public class KeyBinding {
         
         // 检测玩家是否手持音速弓柠檬模式
         boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
+        // 检测玩家是否手持音速弓樱桃模式
+        boolean hasSonicArrowCherryMode = hasSonicArrowCherryMode(mc.player);
         
         // Z键：结界拉扯功能对所有玩家可用，不限制盔甲
         if (KEY_BARRIER_PULL.consumeClick()) {
             PacketHandler.sendToServer(new DarkKivaSealBarrierPullPacket());
         }
         
-        // 优先检查特殊形态 - 巴隆柠檬形态（带武器限制的特殊条件应优先检查）
-        if (isBaronLemon && hasSonicArrowLemonMode) {
+        // 优先检查特殊形态 - 樱桃能量箭矢（任何穿着骑士腰带的玩家都可以使用，只要手持音速弓樱桃模式）
+        if (hasSonicArrowCherryMode) {
+            // 手持音速弓樱桃模式时，使用V键触发樱桃能量箭矢技能
+            // 在 KeyBinding 类中修改调用方式
+            if (KEY_GUARD.consumeClick()) {
+                PacketHandler.sendToServer(new CherryEnergyArrowPacket());
+                return;
+            }
+        }
+        // 其次检查巴隆柠檬形态
+        else if (isBaronLemon && hasSonicArrowLemonMode) {
             // 巴隆柠檬形态且手持音速弓柠檬模式时，使用B键触发柠檬能量陷阱技能
             if (KEY_BLAST.consumeClick()) {
                 PacketHandler.sendToServer(new BaronLemonAbilityPacket());
@@ -171,6 +181,20 @@ public class KeyBinding {
         if (mainHandItem.getItem() instanceof sonicarrow) {
             sonicarrow sonicArrow = (sonicarrow) mainHandItem.getItem();
             return sonicArrow.getCurrentMode(mainHandItem) == sonicarrow.Mode.LEMON;
+        }
+        
+        return false;
+    }
+    
+    // 检查玩家是否手持音速弓樱桃模式
+    private static boolean hasSonicArrowCherryMode(LocalPlayer player) {
+        // 获取玩家主手物品
+        net.minecraft.world.item.ItemStack mainHandItem = player.getMainHandItem();
+        
+        // 检查是否为音速弓且处于樱桃模式
+        if (mainHandItem.getItem() instanceof sonicarrow) {
+            sonicarrow sonicArrow = (sonicarrow) mainHandItem.getItem();
+            return sonicArrow.getCurrentMode(mainHandItem) == sonicarrow.Mode.CHERRY;
         }
         
         return false;

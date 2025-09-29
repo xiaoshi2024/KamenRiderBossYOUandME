@@ -1,18 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimKickEnhancePacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimBlindnessFieldPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimHelheimCrackPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBatModePacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaBloodSuckPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSonicBlastPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaFuuinKekkaiPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaToggleFlightPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSealBarrierPullPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombatAnalysisPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBananaEnergyPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -181,6 +171,12 @@ public class PacketHandler {
                 DarkGaimHelheimCrackPacket::encode,
                 DarkGaimHelheimCrackPacket::decode,
                 DarkGaimHelheimCrackPacket::handle);
+        INSTANCE.registerMessage(
+                index++,
+                CherryEnergyArrowPacket.class,
+                CherryEnergyArrowPacket::encode,
+                CherryEnergyArrowPacket::decode,
+                CherryEnergyArrowPacket::handle);
     }
 
     public static void sendToServer(Object packet) {
