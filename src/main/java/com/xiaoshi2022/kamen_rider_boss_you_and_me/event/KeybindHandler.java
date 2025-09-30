@@ -95,7 +95,8 @@ public class KeybindHandler {
             if (currentTime - variables.cherry_ready_time > 600) { // 30秒 = 600 tick
                 variables.cherry_ready = false;
                 variables.cherry_ready_time = 0L;
-                player.displayClientMessage(Component.literal("樱桃锁种已过期，请重新装备"), true);
+                // 注释掉过期提示，防止刷屏
+                // player.displayClientMessage(Component.literal("樱桃锁种已过期，请重新装备"), true);
             }
         }
     }
@@ -109,7 +110,8 @@ public class KeybindHandler {
             if (player.level().getGameTime() - variables.lemon_ready_time > 600) { // 30秒 = 600tick
                 variables.lemon_ready = false;
                 variables.lemon_ready_time = 0L;
-                player.displayClientMessage(Component.literal("柠檬锁种已过期！"), true);
+                // 注释掉过期提示，防止刷屏
+                // player.displayClientMessage(Component.literal("柠檬锁种已过期！"), true);
             }
         }
     }
@@ -123,7 +125,8 @@ public class KeybindHandler {
             if (player.level().getGameTime() - variables.dragonfruit_ready_time > 600) { // 30秒 = 600tick
                 variables.dragonfruit_ready = false;
                 variables.dragonfruit_ready_time = 0L;
-                player.displayClientMessage(Component.literal("火龙果锁种已过期！"), true);
+                // 注释掉过期提示，防止刷屏
+                // player.displayClientMessage(Component.literal("火龙果锁种已过期！"), true);
             }
         }
     }
@@ -137,7 +140,8 @@ public class KeybindHandler {
             if (player.level().getGameTime() - variables.peach_ready_time > 600) { // 30秒 = 600tick
                 variables.peach_ready = false;
                 variables.peach_ready_time = 0L;
-                player.displayClientMessage(Component.literal("桃子锁种已过期！"), true);
+                // 注释掉过期提示，防止刷屏
+                // player.displayClientMessage(Component.literal("桃子锁种已过期！"), true);
             }
         }
     }
@@ -151,7 +155,8 @@ public class KeybindHandler {
             if (player.level().getGameTime() - variables.melon_ready_time > 600) { // 30秒 = 600tick
                 variables.melon_ready = false;
                 variables.melon_ready_time = 0L;
-                player.displayClientMessage(Component.literal("蜜瓜锁种已过期！"), true);
+                // 注释掉过期提示，防止刷屏
+                // player.displayClientMessage(Component.literal("蜜瓜锁种已过期！"), true);
             }
         }
     }
@@ -312,7 +317,7 @@ public class KeybindHandler {
                         }
                         case DRAGONFRUIT -> {
                             // 先判断是变身还是解除
-                            boolean isTransformeds =
+                            boolean isTransformeds = 
                                     player.getInventory().armor.get(3).getItem() == ModItems.TYRANT_HELMET.get();
                             if (isTransformeds) {
                                 // 解除
@@ -321,11 +326,9 @@ public class KeybindHandler {
                                 belt.startReleaseAnimation(player, beltStack);
                                 delayTicks = 40;
                                 delayedBeltStack = beltStack.copy();
-                            } else {
-                                // 变身
-                                PacketHandler.sendToServer(
-                                        new DragonfruitTransformationRequestPacket(player.getUUID()));
                             }
+                            // 移除C键触发变身的功能，只保留解除变身功能
+                            // 变身功能应通过X键在KeyInputListener中触发
                         }
                         default -> {}
                     }

@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.CherryEnergyArrowPacket;
@@ -19,6 +20,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangel
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimKickEnhancePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimBlindnessFieldPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimHelheimCrackPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveLockSeedPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -77,9 +79,17 @@ public class KeyBinding {
         // 检测玩家是否手持音速弓樱桃模式
         boolean hasSonicArrowCherryMode = hasSonicArrowCherryMode(mc.player);
         
-        // Z键：结界拉扯功能对所有玩家可用，不限制盔甲
+    // Z键：优先检查创世纪驱动器临时取下锁种功能，然后是结界拉扯功能
         if (KEY_BARRIER_PULL.consumeClick()) {
-            PacketHandler.sendToServer(new DarkKivaSealBarrierPullPacket());
+            // 检查玩家是否装备了创世纪驱动器
+            boolean hasGenesisDriver = hasGenesisDriver(mc.player);
+            if (hasGenesisDriver) {
+                // 发送临时取下锁种的数据包
+                PacketHandler.sendToServer(new TempRemoveLockSeedPacket());
+            } else {
+                // 没有创世纪驱动器时，执行原来的结界拉扯功能
+                PacketHandler.sendToServer(new DarkKivaSealBarrierPullPacket());
+            }
         }
         
         // 优先检查特殊形态 - 樱桃能量箭矢（任何穿着骑士腰带的玩家都可以使用，只要手持音速弓樱桃模式）
@@ -198,5 +208,13 @@ public class KeyBinding {
         }
         
         return false;
+    }
+    
+    // 检查玩家是否装备了创世纪驱动器
+    private static boolean hasGenesisDriver(Player player) {
+        return top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof Genesis_driver))
+                .isPresent();
     }
 }

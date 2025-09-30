@@ -15,8 +15,8 @@ public class darkOrangeModel <T extends GeoAnimatable> extends DefaultedGeoModel
         return "item";
     }
     @Override
-    public orangefruitModel<T> withAltModel(ResourceLocation altPath) {
-        return (orangefruitModel<T>)super.withAltModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"geo/item/dark_orange.geo.json"));
+    public darkOrangeModel<T> withAltModel(ResourceLocation altPath) {
+        return (darkOrangeModel<T>)super.withAltModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"geo/item/dark_orange.geo.json"));
     }
 
     /**
@@ -24,8 +24,8 @@ public class darkOrangeModel <T extends GeoAnimatable> extends DefaultedGeoModel
      * This is useful if your animatable shares an animations path with another animatable that differs in path to the model and texture for this model
      */
     @Override
-    public orangefruitModel<T> withAltAnimations(ResourceLocation altPath) {
-        return (orangefruitModel<T>)super.withAltAnimations(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"animations/item/dark_orange.animation.json"));
+    public darkOrangeModel<T> withAltAnimations(ResourceLocation altPath) {
+        return (darkOrangeModel<T>)super.withAltAnimations(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"animations/item/dark_orange.animation.json"));
     }
 
     /**
@@ -33,7 +33,7 @@ public class darkOrangeModel <T extends GeoAnimatable> extends DefaultedGeoModel
      * This is useful if your animatable shares a texture path with another animatable that differs in path to the model and animations for this model
      */
     @Override
-    public orangefruitModel<T> withAltTexture(ResourceLocation altPath) {
-        return (orangefruitModel<T>)super.withAltTexture(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"textures/item/dark_orange.png"));
+    public darkOrangeModel<T> withAltTexture(ResourceLocation altPath) {
+        return (darkOrangeModel<T>)super.withAltTexture(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"textures/item/dark_orange.png"));
     }
 }

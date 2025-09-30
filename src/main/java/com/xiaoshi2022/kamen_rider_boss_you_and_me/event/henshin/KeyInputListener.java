@@ -34,8 +34,27 @@ public final class KeyInputListener {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 
+        // 检查是否有创世纪驱动器且处于准备状态（特别是火龙果模式）
+        Optional<Genesis_driver> genesisCheck = CurioUtils.findFirstCurio(player,
+                        stack -> stack.getItem() instanceof Genesis_driver)
+                .map(slot -> (Genesis_driver) slot.stack().getItem());
+
+        boolean hasGenesisReady = false;
+        if (genesisCheck.isPresent()) {
+            Genesis_driver belt = genesisCheck.get();
+            ItemStack beltStack = CurioUtils.findFirstCurio(player,
+                    stack -> stack.getItem() instanceof Genesis_driver).get().stack();
+            Genesis_driver.BeltMode mode = belt.getMode(beltStack);
+
+            // 获取玩家变量
+            KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+
+            // 检查是否处于准备状态，特别是火龙果模式
+            hasGenesisReady = mode == Genesis_driver.BeltMode.DRAGONFRUIT && variables.dragonfruit_ready;
+        }
+
         /* ===== 1. 先处理 Two_sidriver 装载武器 ===== */
-        if (tryLoadTwoWeaponOnX(player)) return; // 如果成功装载，本次 X 键不再往下走变身逻辑
+        if (!hasGenesisReady && tryLoadTwoWeaponOnX(player)) return; // 如果不是火龙果准备状态且成功装载武器，本次 X 键不再往下走变身逻辑
 
 
         // 1. 创世纪驱动器
@@ -45,8 +64,28 @@ public final class KeyInputListener {
 
         if (genesis.isPresent()) {
             Genesis_driver belt = genesis.get();
-            Genesis_driver.BeltMode mode = belt.getMode(CurioUtils.findFirstCurio(player,
-                    stack -> stack.getItem() instanceof Genesis_driver).get().stack());
+            ItemStack beltStack = CurioUtils.findFirstCurio(player,
+                    stack -> stack.getItem() instanceof Genesis_driver).get().stack();
+            Genesis_driver.BeltMode mode = belt.getMode(beltStack);
+
+            // 获取玩家变量
+            KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+
+            // 检查是否处于准备状态
+            boolean isReady = false;
+            switch (mode) {
+                case LEMON -> isReady = variables.lemon_ready;
+                case MELON -> isReady = variables.melon_ready;
+                case CHERRY -> isReady = variables.cherry_ready;
+                case PEACH -> isReady = variables.peach_ready;
+                case DRAGONFRUIT -> isReady = variables.dragonfruit_ready;
+                default -> {}
+            }
+
+            if (!isReady) {
+                player.displayClientMessage(Component.literal("请先右键激活锁种！"), true);
+                return;
+            }
 
             String riderType = switch (mode) {
                 case LEMON -> RiderTypes.LEMON_ENERGY;

@@ -54,7 +54,10 @@ public class CherryTransformationRequestPacket {
         ctx.get().setPacketHandled(true);
     }
 
-    private static void handleCherryTransformation(ServerPlayer player) {
+    /**
+     * 服务器端直接调用的樱桃变身处理方法
+     */
+    public static void handleCherryTransformation(ServerPlayer player) {
         // 1. 检查是否准备好变身
         KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         if (!variables.cherry_ready) {
@@ -143,8 +146,8 @@ public class CherryTransformationRequestPacket {
                 beltStack);
 
         // 清除樱桃就绪标记
-        player.getPersistentData().remove("cherry_ready");
-        player.getPersistentData().remove("cherry_ready_time");
+        variables.cherry_ready = false;
+        variables.syncPlayerVariables(player);
         
         // 给予玩家对应的武器（如果配置启用了武器给予功能）
         TransformationWeaponManager.giveWeaponOnGenesisDriverTransformation(player, Genesis_driver.BeltMode.CHERRY);

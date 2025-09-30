@@ -54,7 +54,7 @@ public class MarikaTransformationRequestPacket {
         ctx.get().setPacketHandled(true);
     }
 
-    private static void handleMarikaTransformation(ServerPlayer player) {
+    public static void handleMarikaTransformation(ServerPlayer player) {
         // 1. 检查是否准备好变身
         KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         if (!variables.peach_ready) {

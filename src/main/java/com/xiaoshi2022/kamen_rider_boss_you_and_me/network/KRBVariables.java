@@ -210,6 +210,8 @@ public class  KRBVariables {
     public boolean isOrochiDriverEquipped = false; // 新增字段：记录是否装备了Orochi驱动器
     public boolean isEvilBatsTransformed = false; // 新增字段：记录是否装备了EvilBats盔甲并变身
     public boolean isDarkOrangelsTransformed = false; // 新增字段：记录是否装备了Dark_orangels盔甲并变身
+    public long beltRemovedTime = 0L; // 记录腰带被移除的时间
+    public String removedBeltType = ""; // 记录被移除的腰带类型
     // Duke骑士技能相关变量
     public boolean dukeKnightSummoned = false; // Duke骑士是否已召唤
     public long dukeKnightCooldown = 0L; // Duke骑士技能冷却时间（毫秒）
@@ -309,6 +311,9 @@ public class  KRBVariables {
         
         // 序列化基础巴隆技能相关变量
         nbt.putLong("baron_banana_energy_cooldown", baron_banana_energy_cooldown);
+        // 序列化腰带移除相关变量
+        nbt.putLong("beltRemovedTime", beltRemovedTime);
+        nbt.putString("removedBeltType", removedBeltType);
         return nbt;
 	}
 
@@ -378,6 +383,9 @@ public class  KRBVariables {
         
         // 反序列化基础巴隆技能相关变量
         baron_banana_energy_cooldown = nbt.contains("baron_banana_energy_cooldown") ? nbt.getLong("baron_banana_energy_cooldown") : 0L;
+        // 反序列化腰带移除相关变量
+        beltRemovedTime = nbt.contains("beltRemovedTime") ? nbt.getLong("beltRemovedTime") : 0L;
+        removedBeltType = nbt.contains("removedBeltType") ? nbt.getString("removedBeltType") : "";
 	}
 	}
 
@@ -426,6 +434,9 @@ public class  KRBVariables {
 					variables.banana_ready_time = message.data.banana_ready_time;
 					variables.orange_ready = message.data.orange_ready;
 					variables.orange_ready_time = message.data.orange_ready_time;
+					// 添加火龙果变量同步
+					variables.dragonfruit_ready = message.data.dragonfruit_ready;
+					variables.dragonfruit_ready_time = message.data.dragonfruit_ready_time;
 
 					variables.baseMaxHealth = message.data.baseMaxHealth;
 					variables.lastCustomArmorCount = message.data.lastCustomArmorCount; // 添加这行，同步lastCustomArmorCount
@@ -450,6 +461,9 @@ public class  KRBVariables {
                     
                     // 同步基础巴隆技能相关变量
                     variables.baron_banana_energy_cooldown = message.data.baron_banana_energy_cooldown;
+                    // 同步腰带移除相关变量
+                    variables.beltRemovedTime = message.data.beltRemovedTime;
+                    variables.removedBeltType = message.data.removedBeltType;
 				}
 			});
 			context.setPacketHandled(true);

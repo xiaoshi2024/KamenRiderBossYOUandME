@@ -5,12 +5,17 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrive
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class TransformationWeaponManager {
@@ -47,6 +52,11 @@ public class TransformationWeaponManager {
                 return;
         }
         
+        // 检查玩家是否已经拥有相同类型和标签的武器
+        if (hasSameWeapon(player, weaponStack)) {
+            return; // 如果已经拥有，就不再给予
+        }
+        
         // 如果玩家主手为空，则放在主手；否则放在副手；如果都不为空，则放在物品栏
         if (player.getMainHandItem().isEmpty()) {
             player.setItemInHand(player.getUsedItemHand(), weaponStack);
@@ -61,10 +71,10 @@ public class TransformationWeaponManager {
             // 如果没有空位，物品会掉落在地上
         }
         
-        // 发送消息通知玩家获得了武器
-        player.sendSystemMessage(
+        // 注释掉多余的聊天栏提示
+        /*player.sendSystemMessage(
                 net.minecraft.network.chat.Component.literal("你获得了变身武器！")
-        );
+        );*/
     }
     
     /**
@@ -83,12 +93,12 @@ public class TransformationWeaponManager {
         switch (beltMode) {
             case LEMON:
                 // 柠檬锁种 - 给予音速弓
-                // 由于目前没有找到音速弓的具体实现，这里假设使用 musousaberd作为临时替代
-                // 后续需要替换为实际的音速弓物品
                 weaponStack = new ItemStack(ModItems.SONICARROW.get());  
                 
-                // 为武器添加特殊标签，以便与玩家自己合成的武器区分开
+                // 为武器添加特殊标签，并存储锁种信息
                 addTransformationWeaponTag(weaponStack, beltMode.name());
+                // 存储锁种信息到武器的NBT标签中，以便解除变身后返回
+                storeLockSeedInWeapon(weaponStack, "kamen_rider_boss_you_and_me:lemon_energy");
                 break;
                 
             case MELON:
@@ -99,27 +109,38 @@ public class TransformationWeaponManager {
             case CHERRY:
                 // 樱桃锁种 - 可以给予其他武器
                 weaponStack = new ItemStack(ModItems.SONICARROW.get());
-                // 为武器添加特殊标签，以便与玩家自己合成的武器区分开
+                // 为武器添加特殊标签，并存储锁种信息
                 addTransformationWeaponTag(weaponStack, beltMode.name());
+                // 存储锁种信息到武器的NBT标签中，以便解除变身后返回
+                storeLockSeedInWeapon(weaponStack, "kamen_rider_weapon_craft:cherry");
                 break;
                 
             case PEACH:
                 // 蜜桃锁种 - 可以给予其他武器
                 weaponStack = new ItemStack(ModItems.SONICARROW.get());
-                // 为武器添加特殊标签，以便与玩家自己合成的武器区分开
+                // 为武器添加特殊标签，并存储锁种信息
                 addTransformationWeaponTag(weaponStack, beltMode.name());
+                // 存储锁种信息到武器的NBT标签中，以便解除变身后返回
+                storeLockSeedInWeapon(weaponStack, "kamen_rider_boss_you_and_me:peach_energy");
                 break;
                 
             case DRAGONFRUIT:
                 // 火龙果锁种 - 可以给予其他武器
                 weaponStack = new ItemStack(ModItems.SONICARROW.get());
-                // 为武器添加特殊标签，以便与玩家自己合成的武器区分开
+                // 为武器添加特殊标签，并存储锁种信息
                 addTransformationWeaponTag(weaponStack, beltMode.name());
+                // 存储锁种信息到武器的NBT标签中，以便解除变身后返回
+                storeLockSeedInWeapon(weaponStack, "kamen_rider_boss_you_and_me:dragonfruit");
                 break;
                 
             default:
                 // 默认情况不给予武器
                 return;
+        }
+        
+        // 检查玩家是否已经拥有相同类型和标签的武器
+        if (hasSameWeapon(player, weaponStack)) {
+            return; // 如果已经拥有，就不再给予
         }
         
         // 如果玩家主手为空，则放在主手；否则放在副手；如果都不为空，则放在物品栏
@@ -170,40 +191,48 @@ public class TransformationWeaponManager {
         ItemStack sonicArrow = new ItemStack(ModItems.SONICARROW.get());
         ItemStack musousaberd = new ItemStack(ModItems.MUSOUSABERD.get());
         
-        // 为所有武器添加特殊标签
+        // 为所有武器添加特殊标签，并为音速弓存储锁种信息
         addTransformationWeaponTag(sonicArrow, beltMode.name());
         addTransformationWeaponTag(musousaberd, beltMode.name());
+        // 存储锁种信息到武器的NBT标签中，以便解除变身后返回
+        storeLockSeedInWeapon(sonicArrow, "kamen_rider_weapon_craft:melon");
         
         // 放置第一把武器 (音速弓)
-        if (player.getMainHandItem().isEmpty()) {
-            player.setItemInHand(player.getUsedItemHand(), sonicArrow);
-        } else if (player.getOffhandItem().isEmpty()) {
-            player.getInventory().offhand.set(0, sonicArrow);
-        } else {
-            // 尝试找到物品栏中的空位
-            int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
-            if (emptySlot != -1) {
-                player.getInventory().setItem(emptySlot, sonicArrow);
+        // 只有在玩家没有相同武器时才给予
+        if (!hasSameWeapon(player, sonicArrow)) {
+            if (player.getMainHandItem().isEmpty()) {
+                player.setItemInHand(player.getUsedItemHand(), sonicArrow);
+            } else if (player.getOffhandItem().isEmpty()) {
+                player.getInventory().offhand.set(0, sonicArrow);
             } else {
-                // 如果没有空位，物品会掉落在地上
-                player.drop(sonicArrow, false);
+                // 尝试找到物品栏中的空位
+                int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+                if (emptySlot != -1) {
+                    player.getInventory().setItem(emptySlot, sonicArrow);
+                } else {
+                    // 如果没有空位，物品会掉落在地上
+                    player.drop(sonicArrow, false);
+                }
             }
         }
         
         // 放置第二把武器 (无双军刀)
-        // 优先检查主手和副手是否有空间
-        if (player.getMainHandItem().isEmpty()) {
-            player.setItemInHand(player.getUsedItemHand(), musousaberd);
-        } else if (player.getOffhandItem().isEmpty()) {
-            player.getInventory().offhand.set(0, musousaberd);
-        } else {
-            // 再次尝试找到物品栏中的空位
-            int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
-            if (emptySlot != -1) {
-                player.getInventory().setItem(emptySlot, musousaberd);
+        // 只有在玩家没有相同武器时才给予
+        if (!hasSameWeapon(player, musousaberd)) {
+            // 优先检查主手和副手是否有空间
+            if (player.getMainHandItem().isEmpty()) {
+                player.setItemInHand(player.getUsedItemHand(), musousaberd);
+            } else if (player.getOffhandItem().isEmpty()) {
+                player.getInventory().offhand.set(0, musousaberd);
             } else {
-                // 如果没有空位，物品会掉落在地上
-                player.drop(musousaberd, false);
+                // 再次尝试找到物品栏中的空位
+                int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+                if (emptySlot != -1) {
+                    player.getInventory().setItem(emptySlot, musousaberd);
+                } else {
+                    // 如果没有空位，物品会掉落在地上
+                    player.drop(musousaberd, false);
+                }
             }
         }
     }
@@ -222,82 +251,224 @@ public class TransformationWeaponManager {
         addTransformationWeaponTag(daid, beltMode.name());
         addTransformationWeaponTag(sonic, beltMode.name());
         
-        // 放置第一把武器 (无双军刀) - 放置在waist_left饰品槽位
-        // 尝试将无双军刀放置在waist_left饰品槽位
-        // 使用数组来存储布尔值，因为lambda表达式中不能修改外部局部变量
-        boolean[] placedInCurios = {false};
+        // 为音速弓存储锁种信息，以便解除变身后返回
+        storeLockSeedInWeapon(sonic, "kamen_rider_boss_you_and_me:dark_orangels");
         
-        // 获取Curios Inventory
+        // 放置第一把武器 (无双军刀) - 放置在waist_left饰品槽位
+        // 只有在玩家没有相同武器时才给予
+        if (!hasSameWeapon(player, musousaberd)) {
+            // 尝试将无双军刀放置在waist_left饰品槽位
+            // 使用数组来存储布尔值，因为lambda表达式中不能修改外部局部变量
+            boolean[] placedInCurios = {false};
+            
+            // 获取Curios Inventory
+            CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
+                // 检查waist_left槽位
+                curiosInventory.getStacksHandler("waist_left").ifPresent(handler -> {
+                    ItemStackHandler stacks = (ItemStackHandler) handler.getStacks();
+                    for (int i = 0; i < stacks.getSlots(); i++) {
+                        if (stacks.getStackInSlot(i).isEmpty()) {
+                            stacks.setStackInSlot(i, musousaberd);
+                            placedInCurios[0] = true;
+                            break;
+                        }
+                    }
+                });
+            });
+            
+            // 如果没有成功放置在饰品槽位，则尝试放置在主手、副手或物品栏
+            if (!placedInCurios[0]) {
+                if (player.getMainHandItem().isEmpty()) {
+                    player.setItemInHand(player.getUsedItemHand(), musousaberd);
+                } else if (player.getOffhandItem().isEmpty()) {
+                    player.getInventory().offhand.set(0, musousaberd);
+                } else {
+                    // 尝试找到物品栏中的空位
+                    int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+                    if (emptySlot != -1) {
+                        player.getInventory().setItem(emptySlot, musousaberd);
+                    } else {
+                        // 如果没有空位，物品会掉落在地上
+                        player.drop(musousaberd, false);
+                    }
+                }
+            }
+        }
+        
+        // 放置大橙丸
+        // 只有在玩家没有相同武器时才给予
+        if (!hasSameWeapon(player, daid)) {
+            // 优先检查主手和副手是否有空间
+            if (player.getMainHandItem().isEmpty()) {
+                player.setItemInHand(player.getUsedItemHand(), daid);
+            } else if (player.getOffhandItem().isEmpty()) {
+                player.getInventory().offhand.set(0, daid);
+            } else {
+                // 尝试找到物品栏中的空位
+                int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+                if (emptySlot != -1) {
+                    player.getInventory().setItem(emptySlot, daid);
+                } else {
+                    // 如果没有空位，物品会掉落在地上
+                    player.drop(daid, false);
+                }
+            }
+        }
+
+        // 放置音速弩弓
+        // 只有在玩家没有相同武器时才给予
+        if (!hasSameWeapon(player, sonic)) {
+            // 优先检查主手和副手是否有空间
+            if (player.getMainHandItem().isEmpty()) {
+                player.setItemInHand(player.getUsedItemHand(), sonic);
+            } else if (player.getOffhandItem().isEmpty()) {
+                player.getInventory().offhand.set(0, sonic);
+            } else {
+                // 尝试找到物品栏中的空位
+                int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+                if (emptySlot != -1) {
+                    player.getInventory().setItem(emptySlot, sonic);
+                } else {
+                    // 如果没有空位，物品会掉落在地上
+                    player.drop(sonic, false);
+                }
+            }
+        }
+        
+        // 注释掉多余的聊天栏提示
+        /*player.sendSystemMessage(
+                net.minecraft.network.chat.Component.literal("你获得了黑暗铠武的武器！")
+        );*/
+    }
+    
+    /**
+     * 将锁种信息存储到武器的NBT标签中
+     */
+    private static void storeLockSeedInWeapon(ItemStack weaponStack, String lockSeedId) {
+        CompoundTag tag = weaponStack.getOrCreateTag();
+        // 存储锁种的物品ID
+        tag.putString("LoadedLockSeed", lockSeedId);
+        // 存储锁种数量
+        tag.putInt("LockSeedCount", 1);
+    }
+    
+    /**
+     * 检查玩家是否已经拥有相同类型的武器
+     * 对于音速弓，只检查物品类型，不检查形态标签
+     */
+    private static boolean hasSameWeapon(ServerPlayer player, ItemStack weaponStack) {
+        // 对于音速弓，只检查物品类型，不检查标签
+        if (weaponStack.getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow) {
+            // 检查主手
+            if (!player.getMainHandItem().isEmpty() && 
+                player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow) {
+                return true;
+            }
+            
+            // 检查副手
+            if (!player.getOffhandItem().isEmpty() && 
+                player.getOffhandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow) {
+                return true;
+            }
+            
+            // 检查物品栏
+            for (ItemStack stack : player.getInventory().items) {
+                if (!stack.isEmpty() && 
+                    stack.getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow) {
+                    return true;
+                }
+            }
+            
+            // 检查饰品槽位
+            // 使用数组来存储布尔值，因为lambda表达式中不能修改外部局部变量
+            boolean[] hasWeapon = {false};
+            
+            CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
+                // 检查waist_left槽位
+                curiosInventory.getStacksHandler("waist_left").ifPresent(handler -> {
+                    ItemStackHandler stacks = (ItemStackHandler) handler.getStacks();
+                    for (int i = 0; i < stacks.getSlots(); i++) {
+                        ItemStack stack = stacks.getStackInSlot(i);
+                        if (!stack.isEmpty() && 
+                            stack.getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow) {
+                            hasWeapon[0] = true;
+                            break;
+                        }
+                    }
+                });
+            });
+            
+            return hasWeapon[0];
+        }
+        
+        // 对于其他武器，仍然检查物品类型和标签
+        // 检查主手
+        if (!player.getMainHandItem().isEmpty() && 
+            player.getMainHandItem().getItem() == weaponStack.getItem() && 
+            isSameWeaponTag(player.getMainHandItem(), weaponStack)) {
+            return true;
+        }
+        
+        // 检查副手
+        if (!player.getOffhandItem().isEmpty() && 
+            player.getOffhandItem().getItem() == weaponStack.getItem() && 
+            isSameWeaponTag(player.getOffhandItem(), weaponStack)) {
+            return true;
+        }
+        
+        // 检查物品栏
+        for (ItemStack stack : player.getInventory().items) {
+            if (!stack.isEmpty() && 
+                stack.getItem() == weaponStack.getItem() && 
+                isSameWeaponTag(stack, weaponStack)) {
+                return true;
+            }
+        }
+        
+        // 检查饰品槽位
+        // 使用数组来存储布尔值，因为lambda表达式中不能修改外部局部变量
+        boolean[] hasWeapon = {false};
+        
         CuriosApi.getCuriosInventory(player).ifPresent(curiosInventory -> {
             // 检查waist_left槽位
             curiosInventory.getStacksHandler("waist_left").ifPresent(handler -> {
                 ItemStackHandler stacks = (ItemStackHandler) handler.getStacks();
                 for (int i = 0; i < stacks.getSlots(); i++) {
-                    if (stacks.getStackInSlot(i).isEmpty()) {
-                        stacks.setStackInSlot(i, musousaberd);
-                        placedInCurios[0] = true;
+                    ItemStack stack = stacks.getStackInSlot(i);
+                    if (!stack.isEmpty() && 
+                        stack.getItem() == weaponStack.getItem() && 
+                        isSameWeaponTag(stack, weaponStack)) {
+                        hasWeapon[0] = true;
                         break;
                     }
                 }
             });
         });
         
-        // 如果没有成功放置在饰品槽位，则尝试放置在主手、副手或物品栏
-        if (!placedInCurios[0]) {
-            if (player.getMainHandItem().isEmpty()) {
-                player.setItemInHand(player.getUsedItemHand(), musousaberd);
-            } else if (player.getOffhandItem().isEmpty()) {
-                player.getInventory().offhand.set(0, musousaberd);
-            } else {
-                // 尝试找到物品栏中的空位
-                int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
-                if (emptySlot != -1) {
-                    player.getInventory().setItem(emptySlot, musousaberd);
-                } else {
-                    // 如果没有空位，物品会掉落在地上
-                    player.drop(musousaberd, false);
-                }
-            }
+        return hasWeapon[0];
+    }
+    
+    /**
+     * 检查两个武器是否有相同的标签
+     */
+    private static boolean isSameWeaponTag(ItemStack stack1, ItemStack stack2) {
+        // 检查两个武器是否都是变身武器
+        if (!isTransformationWeapon(stack1) || !isTransformationWeapon(stack2)) {
+            return false;
         }
         
-        // 放置大橙丸
-        // 优先检查主手和副手是否有空间
-        if (player.getMainHandItem().isEmpty()) {
-            player.setItemInHand(player.getUsedItemHand(), daid);
-        } else if (player.getOffhandItem().isEmpty()) {
-            player.getInventory().offhand.set(0, daid);
-        } else {
-            // 尝试找到物品栏中的空位
-            int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
-            if (emptySlot != -1) {
-                player.getInventory().setItem(emptySlot, daid);
-            } else {
-                // 如果没有空位，物品会掉落在地上
-                player.drop(daid, false);
-            }
-        }
-
-        // 放置音速弩弓
-        // 优先检查主手和副手是否有空间
-        if (player.getMainHandItem().isEmpty()) {
-            player.setItemInHand(player.getUsedItemHand(), sonic);
-        } else if (player.getOffhandItem().isEmpty()) {
-            player.getInventory().offhand.set(0, sonic);
-        } else {
-            // 尝试找到物品栏中的空位
-            int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
-            if (emptySlot != -1) {
-                player.getInventory().setItem(emptySlot, sonic);
-            } else {
-                // 如果没有空位，物品会掉落在地上
-                player.drop(sonic, false);
-            }
+        // 获取两个武器的标签
+        CompoundTag tag1 = stack1.getTag();
+        CompoundTag tag2 = stack2.getTag();
+        
+        // 检查标签是否存在且包含TransformationMode
+        if (tag1 != null && tag2 != null && 
+            tag1.contains("TransformationMode") && tag2.contains("TransformationMode")) {
+            // 比较TransformationMode是否相同
+            return tag1.getString("TransformationMode").equals(tag2.getString("TransformationMode"));
         }
         
-        // 发送消息通知玩家获得了武器
-        player.sendSystemMessage(
-                net.minecraft.network.chat.Component.literal("你获得了黑暗铠武的武器！")
-        );
+        return false;
     }
     
     /**
@@ -305,20 +476,31 @@ public class TransformationWeaponManager {
      * 在解除变身后调用此方法
      */
     public static void clearTransformationWeapons(ServerPlayer player) {
-        // 检查主手
+        // 检查主手 - 先检查是否有装载的锁种
         if (isTransformationWeapon(player.getMainHandItem())) {
+            ItemStack mainHand = player.getMainHandItem();
+            // 检查并返回装载的锁种
+            returnLoadedLockSeed(player, mainHand);
+            // 清理武器
             player.setItemInHand(player.getUsedItemHand(), ItemStack.EMPTY);
         }
         
-        // 检查副手
+        // 检查副手 - 先检查是否有装载的锁种
         if (isTransformationWeapon(player.getOffhandItem())) {
+            ItemStack offhand = player.getOffhandItem();
+            // 检查并返回装载的锁种
+            returnLoadedLockSeed(player, offhand);
+            // 清理武器
             player.getInventory().offhand.set(0, ItemStack.EMPTY);
         }
         
-        // 检查物品栏
+        // 检查物品栏 - 先检查是否有装载的锁种
         for (int i = 0; i < player.getInventory().items.size(); i++) {
             ItemStack stack = player.getInventory().items.get(i);
             if (isTransformationWeapon(stack)) {
+                // 检查并返回装载的锁种
+                returnLoadedLockSeed(player, stack);
+                // 清理武器
                 player.getInventory().items.set(i, ItemStack.EMPTY);
             }
         }
@@ -330,6 +512,106 @@ public class TransformationWeaponManager {
         player.sendSystemMessage(
                 net.minecraft.network.chat.Component.literal("变身武器已被收回！")
         );
+    }
+    
+    /**
+     * 检查武器中是否装载了锁种，如果有则返回给玩家
+     * 对于音速弓，只检测其本身的变种形态来返回对应的锁种
+     */
+    private static void returnLoadedLockSeed(ServerPlayer player, ItemStack weaponStack) {
+        // 检查是否是音速弓
+        if (weaponStack.getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow) {
+            // 获取武器的NBT标签
+            CompoundTag tag = weaponStack.getTag();
+            
+            boolean foundLockSeed = false;
+            String lockSeedId = null;
+            int count = 1;
+            
+            // 只检测音速弓本身的变种形态(Mode标签)
+            if (tag != null && tag.contains("Mode")) {
+                String mode = tag.getString("Mode");
+                
+                // 根据音速弓本身的Mode标签返回对应的锁种
+                switch (mode) {
+                    case "MELON":
+                        lockSeedId = "kamen_rider_weapon_craft:melon";
+                        foundLockSeed = true;
+                        break;
+                    case "LEMON":
+                        lockSeedId = "kamen_rider_boss_you_and_me:lemon_energy";
+                        foundLockSeed = true;
+                        break;
+                    case "CHERRY":
+                        lockSeedId = "kamen_rider_weapon_craft:cheryy";
+                        foundLockSeed = true;
+                        break;
+                    case "PEACH":
+                        lockSeedId = "kamen_rider_boss_you_and_me:peach_energy";
+                        foundLockSeed = true;
+                        break;
+                    // 添加其他可能的形态
+                    case "DRAGONFRUIT":
+                        lockSeedId = "kamen_rider_boss_you_and_me:dragonfruit";
+                        foundLockSeed = true;
+                        break;
+                    case "ORANGELS":
+                        lockSeedId = "kamen_rider_boss_you_and_me:orangefruit";
+                        foundLockSeed = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            if (foundLockSeed && lockSeedId != null && !lockSeedId.isEmpty()) {
+                // 尝试创建锁种物品
+                try {
+                    // 使用getResourceLocation创建ResourceLocation
+                    ResourceLocation lockSeedRL = new ResourceLocation(lockSeedId);
+                    Item lockSeedItem = ForgeRegistries.ITEMS.getValue(lockSeedRL);
+                    
+                    if (lockSeedItem != null) {
+                        // 创建锁种物品堆叠
+                        ItemStack lockSeedStack = new ItemStack(lockSeedItem, Math.max(1, count));
+                        
+                        // 将锁种返回给玩家
+                        player.addItem(lockSeedStack);
+                        
+                        // 发送消息通知玩家
+                        player.sendSystemMessage(
+                                net.minecraft.network.chat.Component.literal("你获得了返回的锁种！" + lockSeedItem.getDescription().getString())
+                        );
+                    }
+                } catch (Exception e) {
+                    // 处理可能的异常，但不显示错误消息
+                }
+                
+                // 从武器的NBT标签中移除锁种信息，防止重复返回
+                if (tag != null) {
+                    tag.remove("LoadedLockSeed");
+                    tag.remove("LockSeedCount");
+                    tag.remove("lock_seed");
+                    tag.remove("lock_seed_count");
+                    tag.remove("LockSeed");
+                    tag.remove("Count");
+                }
+            } else {
+                // 如果没有找到锁种信息，记录详细的调试信息
+                if (tag != null) {
+                    // 打印武器的所有标签键，帮助调试
+                    Set<String> keys = tag.getAllKeys();
+                    System.out.println("音速弓NBT标签键: " + String.join(", ", keys));
+                    
+                    // 打印Mode标签值，如果存在
+                    if (tag.contains("Mode")) {
+                        System.out.println("Mode: " + tag.getString("Mode"));
+                    }
+                } else {
+                    System.out.println("音速弓没有NBT标签");
+                }
+            }
+        }
     }
     
     /**

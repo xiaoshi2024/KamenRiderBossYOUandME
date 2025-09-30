@@ -54,7 +54,10 @@ public class MelonTransformationRequestPacket {
         ctx.get().setPacketHandled(true);
     }
 
-    private static void handleMelonTransformation(ServerPlayer player) {
+    /**
+     * 服务器端直接调用的蜜瓜变身处理方法
+     */
+    public static void handleMelonTransformation(ServerPlayer player) {
         // 1. 取得创世纪驱动器
         Optional<SlotResult> genesisDriver = CuriosApi.getCuriosInventory(player)
                 .resolve()

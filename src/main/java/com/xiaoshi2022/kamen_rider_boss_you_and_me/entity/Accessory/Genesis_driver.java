@@ -1,31 +1,39 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.AbstractRiderBelt;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin.HeartCoreEvent;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.AbstractRiderBelt;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin.HeartCoreEvent;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.AbstractRiderBelt;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -361,6 +369,95 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
 
         // 触发动画
         triggerAnim(player, "controller", "start");
+        
+        // 检查腰带是否已经有锁种形态（非默认模式）
+        BeltMode mode = getMode(beltStack);
+        if (mode != DEFAULT) {
+            // 获取对应的变身类型
+            String riderType = switch (mode) {
+                case LEMON -> "GENESIS";
+                case MELON -> "GENESIS_MELON";
+                case CHERRY -> "GENESIS_CHERRY";
+                case PEACH -> "GENESIS_PEACH";
+                case DRAGONFRUIT -> "GENESIS_DRAGONFRUIT";
+                default -> null;
+            };
+            
+            if (riderType != null) {
+                // 检查玩家是否已经穿着对应盔甲
+                boolean isTransformed = false;
+                switch (mode) {
+                    case LEMON -> 
+                        isTransformed = isWearingSpecificArmor(player, ModItems.RIDER_BARONS_HELMET.get());
+                    case MELON -> 
+                        isTransformed = isWearingSpecificArmor(player, ModItems.ZANGETSU_SHIN_HELMET.get());
+                    case CHERRY -> 
+                        isTransformed = isWearingSpecificArmor(player, ModItems.SIGURD_HELMET.get());
+                    case PEACH -> 
+                        isTransformed = isWearingSpecificArmor(player, ModItems.MARIKA_HELMET.get());
+                    case DRAGONFRUIT -> 
+                        isTransformed = isWearingSpecificArmor(player, ModItems.TYRANT_HELMET.get());
+                }
+                
+                if (!isTransformed) {
+                    // 设置准备变身状态，而不是直接触发变身
+                    // 记录腰带模式，以便玩家按X键时能够正确触发对应形态的变身
+                    setActive(beltStack, true);
+                    
+                    // 获取玩家变量
+                    KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                    
+                    // 设置对应的准备状态
+                    switch (mode) {
+                        case LEMON -> variables.lemon_ready = true;
+                        case MELON -> variables.melon_ready = true;
+                        case CHERRY -> variables.cherry_ready = true;
+                        case PEACH -> variables.peach_ready = true;
+                        case DRAGONFRUIT -> variables.dragonfruit_ready = true;
+                        default -> {}
+                    }
+                    variables.syncPlayerVariables(player);
+                    
+                    // 通知玩家准备好变身，需要按X键触发
+                    player.sendSystemMessage(
+                            Component.literal("腰带已准备好变身！请按 X 键完成变身过程")
+                    );
+                    
+                    // 播放待机音效，表明已经准备就绪
+                    String soundName = switch (mode) {
+                        case LEMON -> "lemon_lockonby";
+                        case MELON -> "lemon_lockonby";
+                        case CHERRY -> "lemon_lockonby";
+                        case PEACH -> "lemon_lockonby";
+                        case DRAGONFRUIT -> "lemon_lockonby";
+                        default -> "lemon_lockonby";
+                    };
+                    
+                    ResourceLocation soundLoc = new ResourceLocation(
+                            "kamen_rider_boss_you_and_me",
+                            soundName
+                    );
+                    
+                    player.level().playSound(
+                            null,
+                            player.getX(),
+                            player.getY(),
+                            player.getZ(),
+                            ForgeRegistries.SOUND_EVENTS.getValue(soundLoc),
+                            SoundSource.PLAYERS,
+                            1.0F,
+                            1.0F
+                    );
+                }
+            }
+        }
+    }
+    
+    /**
+     * 检查玩家是否穿着特定类型的盔甲
+     */
+    private boolean isWearingSpecificArmor(Player player, Item armorItem) {
+        return player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() == armorItem;
     }
     
     /**

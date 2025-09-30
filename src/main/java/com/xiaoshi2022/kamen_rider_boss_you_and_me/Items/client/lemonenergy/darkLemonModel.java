@@ -15,8 +15,8 @@ public class darkLemonModel  <T extends GeoAnimatable> extends DefaultedGeoModel
         return "item";
     }
     @Override
-    public LemonEnergyModel<T> withAltModel(ResourceLocation altPath) {
-        return (LemonEnergyModel<T>)super.withAltModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"geo/item/dark_lemo_energy.geo.json"));
+    public darkLemonModel<T> withAltModel(ResourceLocation altPath) {
+        return (darkLemonModel<T>)super.withAltModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"geo/item/dark_lemo_energy.geo.json"));
     }
 
     /**
@@ -24,8 +24,8 @@ public class darkLemonModel  <T extends GeoAnimatable> extends DefaultedGeoModel
      * This is useful if your animatable shares an animations path with another animatable that differs in path to the model and texture for this model
      */
     @Override
-    public LemonEnergyModel<T> withAltAnimations(ResourceLocation altPath) {
-        return (LemonEnergyModel<T>)super.withAltAnimations(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"animations/item/dark_lemo_energy.animation.json"));
+    public darkLemonModel<T> withAltAnimations(ResourceLocation altPath) {
+        return (darkLemonModel<T>)super.withAltAnimations(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"animations/item/dark_lemo_energy.animation.json"));
     }
 
     /**
@@ -33,8 +33,8 @@ public class darkLemonModel  <T extends GeoAnimatable> extends DefaultedGeoModel
      * This is useful if your animatable shares a texture path with another animatable that differs in path to the model and animations for this model
      */
     @Override
-    public LemonEnergyModel<T> withAltTexture(ResourceLocation altPath) {
-        return (LemonEnergyModel<T>)super.withAltTexture(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"textures/item/dark_lemo_energy.png"));
+    public darkLemonModel<T> withAltTexture(ResourceLocation altPath) {
+        return (darkLemonModel<T>)super.withAltTexture(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"textures/item/dark_lemo_energy.png"));
     }
 }
 

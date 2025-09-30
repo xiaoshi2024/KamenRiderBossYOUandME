@@ -23,13 +23,24 @@ public class ClearArmorWhenRemovedHandler {
         Player player = event.player;
         if (player.level().isClientSide) return;
 
-        // 不处于变身状态就不做任何事
-        if (!PlayerDeathHandler.hasTransformationArmor(player)) return;
+        // 检查玩家是否穿着变身盔甲
+        boolean isTransformed = PlayerDeathHandler.hasTransformationArmor(player);
 
         // 收集所有“变身盔甲”实例
         List<ItemStack> toRemove = new ArrayList<>();
 
-        // 1. 盔甲槽：如果盔甲槽空了，说明被拿走，不做额外处理（下面会扫描背包+投掷）
+        // 1. 盔甲槽：检查变身盔甲是否应该在盔甲槽中
+        for (int i = 0; i < 4; i++) {
+            ItemStack armorStack = player.getInventory().armor.get(i);
+            if (isTransformationArmor(armorStack)) {
+                // 检查玩家是否应该穿着这套盔甲
+                if (!isTransformed) {
+                    // 非变身玩家穿着变身盔甲，应该清除
+                    toRemove.add(armorStack);
+                }
+            }
+        }
+
         // 2. 背包、副手、鼠标上物品：发现变身盔甲就清掉
         for (ItemStack stack : player.getInventory().items) {
             if (isTransformationArmor(stack)) {
@@ -51,11 +62,11 @@ public class ClearArmorWhenRemovedHandler {
         }
 
         if (!toRemove.isEmpty()) {
-            player.displayClientMessage(Component.literal("变身盔甲无法卸下，已自动清除！"), true);
+            player.displayClientMessage(Component.literal("变身盔甲无法被取下或被非变身玩家持有，已自动清除！"), true);
         }
     }
 
-    private static boolean isTransformationArmor(ItemStack stack) {
+    public static boolean isTransformationArmor(ItemStack stack) {
         if (stack.isEmpty()) return false;
         return stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem ||
                 stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem ||

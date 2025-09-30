@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveLockSeedPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import net.minecraft.network.chat.Component;
@@ -104,6 +105,12 @@ public class PacketHandler {
         );
         INSTANCE.registerMessage(index++, WeaponRemovePacket.class,
                 WeaponRemovePacket::encode, WeaponRemovePacket::decode, WeaponRemovePacket::handle);
+
+        // 注册创世纪驱动器临时取下锁种数据包
+        INSTANCE.registerMessage(index++, TempRemoveLockSeedPacket.class,
+                TempRemoveLockSeedPacket::encode,
+                TempRemoveLockSeedPacket::decode,
+                TempRemoveLockSeedPacket::handle);
 
         INSTANCE.registerMessage(
                 index++,

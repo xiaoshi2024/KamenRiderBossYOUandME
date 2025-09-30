@@ -56,7 +56,10 @@ public class LemonTransformationRequestPacket {
         ctx.get().setPacketHandled(true);
     }
 
-    private static void handleLemonTransformation(ServerPlayer player) {
+    /**
+     * 服务器端直接调用的柠檬变身处理方法
+     */
+    public static void handleLemonTransformation(ServerPlayer player) {
         Optional<SlotResult> genesisDriver = CuriosApi.getCuriosInventory(player).resolve()
                 .flatMap(curios -> curios.findFirstCurio(item -> item.getItem() instanceof Genesis_driver));
 
