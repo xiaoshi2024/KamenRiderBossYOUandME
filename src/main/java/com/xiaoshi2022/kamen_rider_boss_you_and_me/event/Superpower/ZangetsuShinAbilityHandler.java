@@ -1,6 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.MelonEnergySlashEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -9,8 +11,11 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -69,7 +74,41 @@ public class ZangetsuShinAbilityHandler {
             }
         }
     }
-
+    
+    /* ---------------- 橙色剑气发射 ---------------- */
+    
+    @SubscribeEvent
+    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        Player player = event.getEntity();
+        if (player.level().isClientSide()) return; // 只在服务端处理
+        
+        // 检查玩家是否穿着斩月-真装甲
+        if (!isWearingZangetsuShin(player)) return;
+        
+        // 检查玩家是否手持蜜瓜形态音速弓
+        ItemStack mainHandItem = player.getMainHandItem();
+        if (!(mainHandItem.getItem() instanceof sonicarrow)) return;
+        
+        sonicarrow sonicArrow = (sonicarrow) mainHandItem.getItem();
+        if (sonicArrow.getCurrentMode(mainHandItem) != sonicarrow.Mode.MELON) return;
+        
+        // 射线检测，获取视线方向的目标位置
+        HitResult hitResult = player.pick(50.0D, 0.0F, false);
+        
+        // 创建并发射橙色剑气
+        MelonEnergySlashEntity slash = new MelonEnergySlashEntity(player.level(), player);
+        slash.setDamage(15.0); // 设置基础伤害
+        slash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
+        player.level().addFreshEntity(slash);
+        
+        // 播放射击音效
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+        
+        // 消耗玩家饥饿值作为能量消耗
+        player.getFoodData().addExhaustion(0.3F);
+    }
+    
     /* ---------------- 工具方法 ---------------- */
     private static boolean isWearingZangetsuShin(Player player) {
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ZangetsuShinItem ||

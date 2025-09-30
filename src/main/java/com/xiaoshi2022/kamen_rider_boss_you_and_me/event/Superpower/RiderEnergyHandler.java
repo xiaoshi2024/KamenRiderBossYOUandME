@@ -71,6 +71,52 @@ public class RiderEnergyHandler {
     }
 
     /**
+     * 为玩家添加骑士能量
+     * @param player 玩家
+     * @param amount 要添加的能量数量
+     */
+    public static void addRiderEnergy(Player player, double amount) {
+        if (player.level().isClientSide()) {
+            return; // 在客户端不执行实际添加
+        }
+
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+                .orElse(new KRBVariables.PlayerVariables());
+
+        // 记录添加前的状态
+        boolean wasFull = variables.isRiderEnergyFull;
+
+        // 添加能量值，但不超过最大值
+        variables.riderEnergy = Math.min(variables.riderEnergy + amount, variables.maxRiderEnergy);
+
+        // 更新能量满状态
+        variables.isRiderEnergyFull = variables.riderEnergy >= variables.maxRiderEnergy;
+
+        // 如果能量刚充满且距离上次提示已超过冷却时间，则发送提示
+        if (variables.isRiderEnergyFull && !wasFull) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - variables.lastEnergyFullTime > FULL_ENERGY_NOTIFICATION_COOLDOWN) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.sendSystemMessage(Component.literal("骑士能量已充满！").withStyle(ChatFormatting.BLUE));
+                }
+                variables.lastEnergyFullTime = currentTime;
+            }
+        }
+
+        // 同步变量到客户端
+        variables.syncPlayerVariables(player);
+    }
+
+    /**
+     * 检查玩家是否可以获取/使用骑士能量
+     * @param player 玩家
+     * @return 是否可以获取/使用能量
+     */
+    public static boolean canUseRiderEnergy(Player player) {
+        return KamenBossArmorUtil.isKamenBossArmorEquipped(player);
+    }
+
+    /**
      * 服务器端tick事件，用于自然恢复骑士能量
      */
     @SubscribeEvent

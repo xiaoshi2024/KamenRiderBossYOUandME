@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.TeleportBehindGoal;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import forge.net.mca.entity.EntitiesMCA;
 import forge.net.mca.entity.VillagerEntityMCA;
@@ -11,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -24,6 +26,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -105,6 +108,42 @@ public class Another_Zi_o extends Monster implements GeoEntity {
             }
         }
         if (teleportCooldown > 0) teleportCooldown--;
+    }
+    
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        // 只在非和平模式下执行攻击逻辑
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL &&
+                !(this.getTarget() instanceof Player && ((Player)this.getTarget()).isCreative())) {
+            LivingEntity target = this.getTarget();
+            if (target != null && this.distanceTo(target) < 2.0D) {
+                float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+                target.hurt(this.damageSources().mobAttack(this), damage);
+            }
+        }
+    }
+    
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+        return target.hurt(this.damageSources().mobAttack(this), damage);
+    }
+    
+    public void hurtNearbyEntities() {
+        if (this.level().isClientSide()) return;
+
+        // 获取攻击伤害属性，如果不存在则使用默认值
+        double damage = this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+
+        // 扫描周围实体
+        for (LivingEntity entity : this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(2.0D),
+                e -> e != this && !(e instanceof Player && ((Player)e).isCreative()))
+        ) {
+            entity.hurt(this.damageSources().mobAttack(this), (float)damage);
+        }
     }
 
     /* ---------- 预测轨迹 ---------- */

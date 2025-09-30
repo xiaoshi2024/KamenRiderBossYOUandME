@@ -105,9 +105,11 @@ public class peach_energy extends Item implements GeoItem {
                         player.sendSystemMessage(Component.literal("您已经装备了其他锁种，请先解除变身！"));
                         return InteractionResultHolder.success(stack);
                     }
+                    
                     // 播放LOCK ON音效
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
                             ModBossSounds.LEMON_LOCKONBY.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    
                     // 消耗锁种
                     stack.shrink(1);
 

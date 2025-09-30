@@ -70,7 +70,7 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     // 在类中添加属性构建方法
     public static AttributeSupplier.Builder createAttributes() {
         return Villager.createAttributes()
-                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 5.0D)
+                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 20.0D)  // 攻击力从5.0D提高到20.0D
                 .add(Attributes.MAX_HEALTH, 100.0D);
     }
 

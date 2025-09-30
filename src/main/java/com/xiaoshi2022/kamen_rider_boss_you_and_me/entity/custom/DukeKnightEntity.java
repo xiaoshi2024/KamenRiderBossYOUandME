@@ -1,8 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -18,6 +20,7 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
@@ -120,10 +123,11 @@ public class DukeKnightEntity extends PathfinderMob implements GeoEntity {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 40.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.45D) // 基于火龙能量武装的高速移动能力
-                .add(Attributes.ATTACK_DAMAGE, 16.0D) // 2倍玩家基础攻击力
+                .add(Attributes.ATTACK_DAMAGE, 21.0D) // 攻击力
                 .add(Attributes.FOLLOW_RANGE, 30.0D) // 增强追踪范围
                 .add(Attributes.ARMOR, 8.0D) // 添加基础护甲
                 .add(Attributes.ARMOR_TOUGHNESS, 2.0D) // 添加护甲韧性
+                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 25.0D)
                 .build();
     }
 
@@ -359,12 +363,30 @@ public class DukeKnightEntity extends PathfinderMob implements GeoEntity {
         this.setShouldVanish();
     }
     
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        // 只在非和平模式下执行攻击逻辑
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL &&
+                !(this.getTarget() instanceof Player && ((Player)this.getTarget()).isCreative())) {
+            LivingEntity target = this.getTarget();
+            if (target != null && this.distanceTo(target) < 2.0D) {
+                float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+                target.hurt(this.damageSources().mobAttack(this), damage);
+            }
+        }
+    }
+    
     /* ---------- 攻击 ---------- */
     @Override
     public boolean doHurtTarget(Entity entity) {
+               //
         // 触发攻击动画
         this.swing(InteractionHand.MAIN_HAND);
-        boolean result = super.doHurtTarget(entity);
+        if (!level().isClientSide()) {
+            this.hurtNearbyEntities(); // 使用自定义伤害方法
+        }
+        boolean result = entity.hurt(this.damageSources().mobAttack(this), (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get()));
         if (result && entity instanceof LivingEntity && !level().isClientSide) {
             setCanAttack(false); // 攻击后设置冷却
             
@@ -385,6 +407,22 @@ public class DukeKnightEntity extends PathfinderMob implements GeoEntity {
             setShouldVanish();
         }
         return result;
+    }
+    
+    public void hurtNearbyEntities() {
+        if (this.level().isClientSide()) return;
+
+        // 获取攻击伤害属性，如果不存在则使用默认值
+        double damage = this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+
+        // 扫描周围实体
+        for (LivingEntity entity : this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(2.0D),
+                e -> e != this && !(e instanceof Player && ((Player)e).isCreative() && e != owner))
+        ) {
+            entity.hurt(this.damageSources().mobAttack(this), (float)damage);
+        }
     }
 
     // 处理战斗数据分析

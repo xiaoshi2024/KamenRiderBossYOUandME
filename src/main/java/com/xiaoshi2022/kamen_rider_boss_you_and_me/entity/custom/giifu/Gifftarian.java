@@ -1,12 +1,17 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.VillagerEvents;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -14,6 +19,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -32,9 +38,18 @@ public class Gifftarian extends Monster implements GeoEntity {
 
     public static boolean shouldPlayRoutAnimation = false; // 全局布尔字段
 
-
     public Gifftarian(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+    }
+    
+    // 设置实体属性
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 40.0D)
+                .add(Attributes.ARMOR, 5.0D)
+                .add(Attributes.ATTACK_DAMAGE, 6.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.35D)
+                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 10.0D);
     }
 
 
@@ -116,10 +131,49 @@ public class Gifftarian extends Monster implements GeoEntity {
     }
 
     protected <E extends Gifftarian> PlayState attackAnimController(final AnimationState<E> event) {
+        if (this.swinging && !this.level().isClientSide()) { // 仅服务端执行
+            this.hurtNearbyEntities(); // 自定义方法处理伤害
+        }
         if (this.swinging) {
             return event.setAndContinue(ATTACK);
         }
         return PlayState.STOP;
+    }
+    
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        // 只在非和平模式下执行攻击逻辑
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL &&
+                !(this.getTarget() instanceof Player && ((Player)this.getTarget()).isCreative())) {
+            LivingEntity target = this.getTarget();
+            if (target != null && this.distanceTo(target) < 2.0D) {
+                float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+                target.hurt(this.damageSources().mobAttack(this), damage);
+            }
+        }
+    }
+    
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+        return target.hurt(this.damageSources().mobAttack(this), damage);
+    }
+    
+    public void hurtNearbyEntities() {
+        if (this.level().isClientSide()) return;
+
+        // 获取攻击伤害属性，如果不存在则使用默认值
+        double damage = this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+
+        // 扫描周围实体
+        for (LivingEntity entity : this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(2.0D),
+                e -> e != this && !(e instanceof Player && ((Player)e).isCreative() && !(e instanceof GiifuDemosEntity) && !(e instanceof StoriousEntity)))
+        ) {
+            entity.hurt(this.damageSources().mobAttack(this), (float)damage);
+        }
     }
 
     @Override

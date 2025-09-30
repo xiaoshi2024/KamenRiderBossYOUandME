@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHuma
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BaronLemonEnergyEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.CherryEnergyArrowEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.MelonEnergySlashEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -101,6 +102,13 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.0F) // 调整碰撞箱大小
                     .clientTrackingRange(8)
                     .build("baron_lemon_energy"));
+    
+    // 蜜瓜能量剑气实体
+    public static final RegistryObject<EntityType<MelonEnergySlashEntity>> MELON_ENERGY_SLASH = ENTITY_TYPES.register("melon_energy_slash",
+            () -> EntityType.Builder.<MelonEnergySlashEntity>of(MelonEnergySlashEntity::new, MobCategory.MISC)
+                    .sized(0.8F, 0.2F) // 调整碰撞箱大小，使其呈扁平状
+                    .clientTrackingRange(8)
+                    .build("melon_energy_slash"));
     
     // 黑暗Kiva封印结界实体
     public static final RegistryObject<EntityType<DarkKivaSealBarrierEntity>> DARK_KIVA_SEAL_BARRIER = ENTITY_TYPES.register("dark_kiva_seal_barrier",

@@ -1,10 +1,9 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.AttractGoal;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.FlyAndAttackGoal;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.PickUpHelheimFruitGoal;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
@@ -12,8 +11,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.helheimtems.FactionLeader;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -28,6 +25,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -48,7 +47,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.UUID;
 
 public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     protected static final RawAnimation GOMAD = RawAnimation.begin().thenPlay("gomad");
@@ -519,7 +517,17 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
         }
     }
 
-
+    public static AttributeSupplier createAttributes() {
+        return GiifuDemosEntity.createAttributes()
+                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 31.0D)
+                .add(Attributes.MAX_HEALTH, 96.D)
+                .add(Attributes.ARMOR, 15.0D)
+                .add(Attributes.ARMOR_TOUGHNESS, 8.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.3D)
+                // 新增穿透属性
+                .add(Attributes.ATTACK_DAMAGE, 25.0D) // 作为备用伤害源
+                .build();
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {

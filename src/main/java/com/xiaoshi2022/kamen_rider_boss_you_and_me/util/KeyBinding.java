@@ -3,7 +3,9 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.CherryEnergyArrowPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SummonDukeKnightPacket;
@@ -21,6 +23,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimKi
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimBlindnessFieldPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimHelheimCrackPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveLockSeedPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.tyrant.TyrantIntangibilityTogglePacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -73,6 +77,12 @@ public class KeyBinding {
         
         // 检测玩家是否穿着黑暗铠武阵羽柠檬盔甲
         boolean isDarkGaim = isDarkGaimArmorEquipped(mc.player);
+        
+        // 检测玩家是否穿着玛丽卡盔甲
+        boolean isMarika = isMarikaArmorEquipped(mc.player);
+        
+        // 检测玩家是否穿着火龙果盔甲
+        boolean isTyrant = isTyrantArmorEquipped(mc.player);
         
         // 检测玩家是否手持音速弓柠檬模式
         boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
@@ -140,6 +150,16 @@ public class KeyBinding {
             if (KEY_GUARD.consumeClick()) {
                 PacketHandler.sendToServer(new BaronBananaEnergyPacket());
             }
+        } else if (isMarika) {
+            // 玛丽卡盔甲使用V键触发感官加强技能
+            if (KEY_GUARD.consumeClick()) {
+                PacketHandler.sendToServer(new MarikaSensoryEnhancementPacket());
+            }
+        } else if (isTyrant) {
+            // 火龙果盔甲使用B键触发虚化技能
+            if (KEY_BLAST.consumeClick()) {
+                PacketHandler.sendToServer(new TyrantIntangibilityTogglePacket());
+            }
         } else {
             // 基础形态下的技能已被移除
         }
@@ -194,6 +214,22 @@ public class KeyBinding {
         }
         
         return false;
+    }
+    
+    // 客户端专用的玛丽卡盔甲检测方法
+    private static boolean isMarikaArmorEquipped(LocalPlayer player) {
+        // 检查是否穿着玛丽卡头盔、胸甲和护腿
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof Marika &&
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof Marika &&
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof Marika;
+    }
+    
+    // 客户端专用的火龙果盔甲检测方法
+    private static boolean isTyrantArmorEquipped(LocalPlayer player) {
+        // 检查是否穿着火龙果头盔、胸甲和护腿
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof TyrantItem &&
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof TyrantItem &&
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof TyrantItem;
     }
     
     // 检查玩家是否手持音速弓樱桃模式

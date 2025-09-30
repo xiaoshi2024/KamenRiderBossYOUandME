@@ -83,9 +83,11 @@ public class OverrideMelonUse {
                         player.sendSystemMessage(Component.literal("您已经装备了其他锁种，请先解除变身！"));
                         return;
                     }
+                    
+                    // 播放LOCK ON音效
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                            ModBossSounds.LEMON_LOCKONBY.get(),
-                            SoundSource.PLAYERS, 1, 1);
+                            ModBossSounds.LEMON_LOCKONBY.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    
                     stack.shrink(1);
 
                     ItemStack beltStack = belt.get().stack();

@@ -1,14 +1,21 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.Tyrant;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.TyrantAbilityHandler;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.cache.object.GeoBone;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.player.Player;
 
 public class TyrantArmorRenderer extends GeoArmorRenderer<TyrantItem> {
+
+	private static final ResourceLocation TRANSLUCENT_TEXTURE = new ResourceLocation("kamen_rider_boss_you_and_me", "textures/item/armor/tyrant_armor_translucent.png");
+
+
 	public TyrantArmorRenderer() {
 		super(new TyrantModel());
 		this.head = new GeoBone(null, "armorHead", false, (double) 0, false, false);
@@ -23,6 +30,15 @@ public class TyrantArmorRenderer extends GeoArmorRenderer<TyrantItem> {
 
 	@Override
 	public RenderType getRenderType(TyrantItem animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
+		// 获取客户端当前玩家
+		Player player = Minecraft.getInstance().player;
+		// 如果当前玩家存在并且处于虚化状态，使用透明贴图
+		if (player != null && TyrantAbilityHandler.isPlayerIntangible(player)) {
+			// 使用透明贴图和半透明渲染类型
+			return RenderType.entityTranslucent(TRANSLUCENT_TEXTURE);
+		}
+		// 否则使用普通贴图和半透明渲染类型
 		return RenderType.entityTranslucent(getTextureLocation(animatable));
 	}
+
 }

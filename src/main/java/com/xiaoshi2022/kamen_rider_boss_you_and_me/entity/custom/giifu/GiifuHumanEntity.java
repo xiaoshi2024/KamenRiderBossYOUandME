@@ -20,9 +20,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
@@ -117,10 +119,10 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 500.0D)
                 .add(Attributes.ARMOR, 20.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 10.0D)
-                .add(Attributes.ATTACK_DAMAGE, 15.0D)
+                .add(Attributes.ATTACK_DAMAGE, 30.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.28D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 20.0D);
+                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 40.0D);
     }
 
     @Override
@@ -154,7 +156,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
                 GiifuHumanEntity newEntity = ModEntityTypes.GIIFU_HUMAN.get().create(level());
                 if (newEntity != null) {
                     newEntity.setPos(statuePos.getX() + 0.5, statuePos.getY() + 1, statuePos.getZ() + 0.5);
-                    newEntity.setStatuePos(statuePos); // 把石像坐标传下去
+                    newEntity.setStatuePos(statuePos);
                     level().addFreshEntity(newEntity);
                 }
             }
@@ -175,11 +177,11 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(2, new SpecialAttackGoal(this));
 
-        // 地面移动 & 观察（直接在方法内创建）
+        // 地面移动 & 观察
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(0, new FloatGoal(this)); // FloatGoal 优先级改为 0
+        this.goalSelector.addGoal(0, new FloatGoal(this));
 
         // 目标选择
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -205,8 +207,8 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         
         @Override
         public void start() {
-            this.attackTick = 40; // 准备时间
-            giifu.specialAttackCooldown = 100; // 冷却时间
+            this.attackTick = 40;
+            giifu.specialAttackCooldown = 100;
         }
         
         @Override
@@ -248,6 +250,16 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         if (!this.level().isClientSide) {
             this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
         }
+        
+        // 只在非和平模式下执行攻击逻辑
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL &&
+                !(this.getTarget() instanceof Player && ((Player)this.getTarget()).isCreative())) {
+            LivingEntity target = this.getTarget();
+            if (target != null && this.distanceTo(target) < 2.0D) {
+                float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+                target.hurt(this.damageSources().mobAttack(this), damage);
+            }
+        }
 
         // 粒子效果
         if (isFlying && level() instanceof ServerLevel srv) {
@@ -277,7 +289,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
             }
         }
 
-// 添加：没有目标时自动降落
+        // 添加：没有目标时自动降落
         if (isFlying && target == null) {
             double groundY = level().getHeight(Heightmap.Types.MOTION_BLOCKING, (int) getX(), (int) getZ());
             if (getY() - groundY < 5.0D) {
@@ -312,6 +324,28 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
                     refreshDimensions();
                 }
             }
+        }
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+        return target.hurt(this.damageSources().mobAttack(this), damage);
+    }
+    
+    public void hurtNearbyEntities() {
+        if (this.level().isClientSide()) return;
+
+        // 获取攻击伤害属性，如果不存在则使用默认值
+        double damage = this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+
+        // 扫描周围实体
+        for (LivingEntity entity : this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(2.0D),
+                e -> e != this && !(e instanceof Player && ((Player)e).isCreative()))
+        ) {
+            entity.hurt(this.damageSources().mobAttack(this), (float)damage);
         }
     }
 
@@ -392,7 +426,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
 
         // 2. 水平拉回：每 tick 微移
         Vec3 toMe = position().subtract(target.position()).normalize();
-        double pullSpeed = 0.18D;   // 可调
+        double pullSpeed = 0.18D;
         target.setDeltaMovement(target.getDeltaMovement()
                 .add(toMe.x * pullSpeed, 0, toMe.z * pullSpeed));
 
@@ -415,7 +449,6 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
                 1.5F, 0.8F);
     }
 
-
     private void performShockWave() {
         Level level = this.level();
         if (level.isClientSide) return;
@@ -427,7 +460,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
             // 基础伤害
             e.hurt(damageSources().mobAttack(this), SHOCK_DAMAGE);
 
-            // 2. 只对玩家做“解除变身”判定
+            // 2. 只对玩家做"解除变身"判定
             if (e instanceof Player player) {
                 // 2-1 骑士玩家实现接口 → 解除变身
                 if (player instanceof IGiifuShockable knight) {

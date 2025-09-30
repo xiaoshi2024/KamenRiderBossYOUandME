@@ -424,30 +424,30 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
                     );
                     
                     // 播放待机音效，表明已经准备就绪
-                    String soundName = switch (mode) {
-                        case LEMON -> "lemon_lockonby";
-                        case MELON -> "lemon_lockonby";
-                        case CHERRY -> "lemon_lockonby";
-                        case PEACH -> "lemon_lockonby";
-                        case DRAGONFRUIT -> "lemon_lockonby";
-                        default -> "lemon_lockonby";
-                    };
-                    
-                    ResourceLocation soundLoc = new ResourceLocation(
-                            "kamen_rider_boss_you_and_me",
-                            soundName
-                    );
-                    
-                    player.level().playSound(
-                            null,
-                            player.getX(),
-                            player.getY(),
-                            player.getZ(),
-                            ForgeRegistries.SOUND_EVENTS.getValue(soundLoc),
-                            SoundSource.PLAYERS,
-                            1.0F,
-                            1.0F
-                    );
+//                    String soundName = switch (mode) {
+//                        case LEMON -> "lemon_lockonby";
+//                        case MELON -> "lemon_lockonby";
+//                        case CHERRY -> "lemon_lockonby";
+//                        case PEACH -> "lemon_lockonby";
+//                        case DRAGONFRUIT -> "lemon_lockonby";
+//                        default -> "lemon_lockonby";
+//                    };
+//                    
+//                    ResourceLocation soundLoc = new ResourceLocation(
+//                            "kamen_rider_boss_you_and_me",
+//                            soundName
+//                    );
+//                    
+//                    player.level().playSound(
+//                            null,
+//                            player.getX(),
+//                            player.getY(),
+//                            player.getZ(),
+//                            ForgeRegistries.SOUND_EVENTS.getValue(soundLoc),
+//                            SoundSource.PLAYERS,
+//                            1.0F,
+//                            1.0F
+//                    );
                 }
             }
         }

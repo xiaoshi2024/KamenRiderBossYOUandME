@@ -152,15 +152,17 @@ public class lemon_energy extends Item implements GeoItem {
                         player.sendSystemMessage(Component.literal("您的腰带中已装有锁种，请先解除变身！"));
                         return InteractionResultHolder.success(stack);
                     }
+                    
                     // 播放LOCK ON音效
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
                             ModBossSounds.LEMON_LOCKONBY.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    
                     // 消耗锁种
                     stack.shrink(1);
 
                     // 更新腰带为柠檬形态
                     ItemStack beltStackx = beltOptional.get().stack();
-					Genesis_driver beltx = (Genesis_driver) beltStackx.getItem();
+                    Genesis_driver beltx = (Genesis_driver) beltStackx.getItem();
                     beltx.setMode(beltStack, Genesis_driver.BeltMode.LEMON);
 
                     // 获取PlayerVariables实例并设置状态

@@ -6,15 +6,18 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.TyrantAbilityHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
@@ -39,6 +42,9 @@ public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> imple
     private final GenesisDriver_dragonfruitModel dragonfruitModel = new GenesisDriver_dragonfruitModel(
             new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "genesis_driver_dragonfruit"));
 
+    // 透明纹理资源
+    private static final ResourceLocation TRANSLUCENT_TEXTURE = new ResourceLocation("kamen_rider_boss_you_and_me", "textures/item/tyrant_belt_translucent.png");
+
 
 
     public GenesisDriverRenderer() {
@@ -60,6 +66,20 @@ public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> imple
             };
         }
         return super.getGeoModel();
+    }
+
+    /* ---------- 虚化状态下使用透明渲染 ---------- */
+    @Override
+    public RenderType getRenderType(Genesis_driver animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
+        // 获取客户端当前玩家
+        Player player = Minecraft.getInstance().player;
+        // 如果当前玩家存在并且处于虚化状态，使用透明贴图
+        if (player != null && TyrantAbilityHandler.isPlayerIntangible(player)) {
+            // 使用透明贴图和半透明渲染类型
+            return RenderType.entityTranslucent(TRANSLUCENT_TEXTURE);
+        }
+        // 否则使用普通贴图和半透明渲染类型
+        return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 
     /* ---------- 物品渲染（手持 / 展示框 / 地面掉落） ---------- */

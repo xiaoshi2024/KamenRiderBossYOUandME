@@ -1,6 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.tyrant.TyrantIntangibilityTogglePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveLockSeedPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
@@ -184,6 +186,22 @@ public class PacketHandler {
                 CherryEnergyArrowPacket::encode,
                 CherryEnergyArrowPacket::decode,
                 CherryEnergyArrowPacket::handle);
+
+        // 注册玛丽卡感官加强数据包
+        INSTANCE.registerMessage(
+                index++,
+                MarikaSensoryEnhancementPacket.class,
+                MarikaSensoryEnhancementPacket::encode,
+                MarikaSensoryEnhancementPacket::decode,
+                MarikaSensoryEnhancementPacket::handle);
+        
+        // 注册火龙果虚化技能切换数据包
+        INSTANCE.registerMessage(
+                index++,
+                TyrantIntangibilityTogglePacket.class,
+                TyrantIntangibilityTogglePacket::encode,
+                TyrantIntangibilityTogglePacket::decode,
+                TyrantIntangibilityTogglePacket::handle);
     }
 
     public static void sendToServer(Object packet) {

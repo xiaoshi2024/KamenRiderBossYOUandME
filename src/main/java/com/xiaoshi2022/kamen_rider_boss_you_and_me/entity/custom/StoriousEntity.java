@@ -129,7 +129,7 @@ public class StoriousEntity extends Villager implements GeoEntity, VillagerLike<
     // 添加属性创建方法
     public static AttributeSupplier.Builder createAttributes() {
         return Villager.createAttributes()
-                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 6.0D)
+                .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 25.0D)  // 攻击力从6.0D提高到25.0D
                 .add(Attributes.MAX_HEALTH, 120.0D);
     }
 

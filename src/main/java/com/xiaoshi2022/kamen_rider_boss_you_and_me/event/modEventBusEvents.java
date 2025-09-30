@@ -18,6 +18,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerJoinSyncPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,13 +34,22 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.CuriosCapability;
 
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.*;
 
@@ -249,6 +259,209 @@ public class modEventBusEvents {
     }
 
 
+    @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID, value = Dist.DEDICATED_SERVER)
+    public static class AttackEventHandler {
+
+        private static final Map<UUID, Long> LAST_ATTACK_TIME = new HashMap<>();
+        private static final long ATTACK_COOLDOWN = 500; // 500ms冷却防止重复计算
+
+        /**
+         * 在攻击开始时应用自定义伤害
+         */
+        @SubscribeEvent
+        public static void onLivingAttack(LivingAttackEvent event) {
+            if (!(event.getSource().getDirectEntity() instanceof ElementaryInvesHelheim inves)) {
+                return;
+            }
+
+            // 防止重复处理
+            UUID attackerId = inves.getUUID();
+            long currentTime = System.currentTimeMillis();
+            if (LAST_ATTACK_TIME.containsKey(attackerId)) {
+                if (currentTime - LAST_ATTACK_TIME.get(attackerId) < ATTACK_COOLDOWN) {
+                    return;
+                }
+            }
+            LAST_ATTACK_TIME.put(attackerId, currentTime);
+
+            LivingEntity target = event.getEntity();
+
+            // 获取自定义攻击伤害
+            double customDamage = inves.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+
+            if (customDamage > 0) {
+                // 取消原版伤害计算，使用我们的自定义伤害
+                event.setCanceled(true);
+
+                // 直接应用穿透后的伤害
+                applyPenetratedDamage(inves, target, (float) customDamage);
+            }
+
+            // 原有的协同攻击逻辑
+            handleLordBaronSynergy(event);
+        }
+
+        /**
+         * 在伤害计算阶段确保伤害不被减免
+         */
+        @SubscribeEvent
+        public static void onLivingHurt(LivingHurtEvent event) {
+            if (!(event.getSource().getDirectEntity() instanceof ElementaryInvesHelheim inves)) {
+                return;
+            }
+
+            // 确保我们的自定义伤害不被减免
+            if (event.getAmount() > 0) {
+                // 二次伤害穿透，确保伤害生效
+                float penetratedDamage = applySecondaryPenetration(inves, event.getEntity(), event.getAmount());
+                event.setAmount(penetratedDamage);
+            }
+        }
+
+        /**
+         * 应用主要穿透伤害
+         */
+        private static void applyPenetratedDamage(ElementaryInvesHelheim attacker, LivingEntity target, float baseDamage) {
+            // 计算穿透后的伤害
+            float finalDamage = calculateFinalDamage(attacker, target, baseDamage);
+
+            // 直接对目标造成伤害，绕过原版伤害系统
+            target.hurt(attacker.damageSources().mobAttack(attacker), finalDamage);
+
+            // 攻击效果
+            spawnAttackParticles(attacker, target);
+
+            // 调试信息
+            if (target instanceof ServerPlayer player) {
+                player.displayClientMessage(
+                        Component.literal("§c受到穿透攻击: " + String.format("%.1f", finalDamage) + " 伤害"),
+                        true
+                );
+                kamen_rider_boss_you_and_me.LOGGER.info(
+                        "穿透攻击: {} -> {}, 伤害: {}",
+                        attacker.getDisplayName().getString(),
+                        player.getScoreboardName(),
+                        finalDamage
+                );
+            }
+        }
+
+        /**
+         * 计算最终伤害（完全穿透）
+         */
+        private static float calculateFinalDamage(ElementaryInvesHelheim attacker, LivingEntity target, float baseDamage) {
+            float damage = baseDamage;
+
+            // 1. 完全忽略护甲（强制穿透）
+            damage = ignoreArmor(target, damage);
+
+            // 2. 完全忽略抗性效果
+            damage = ignoreResistance(target, damage);
+
+            // 3. 对变身玩家额外伤害
+            if (isTransformedPlayer(target)) {
+                damage *= 1.3f; // 增加30%对变身玩家的伤害
+            }
+
+            // 4. 主人协同加成
+            if (attacker.getMaster() instanceof LordBaronEntity) {
+                damage *= 1.2f; // 增加20%协同伤害
+            }
+
+            // 确保最小伤害
+            return Math.max(damage, 5.0f);
+        }
+
+        /**
+         * 完全忽略护甲
+         */
+        private static float ignoreArmor(LivingEntity target, float damage) {
+            // 完全忽略护甲计算，直接返回原伤害
+            return damage;
+        }
+
+        /**
+         * 完全忽略抗性效果
+         */
+        private static float ignoreResistance(LivingEntity target, float damage) {
+            // 完全忽略抗性药水效果
+            return damage;
+        }
+
+        /**
+         * 检查是否是变身玩家
+         */
+        private static boolean isTransformedPlayer(LivingEntity entity) {
+            if (!(entity instanceof Player player)) return false;
+
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                if (slot.getType() == EquipmentSlot.Type.ARMOR) {
+                    ItemStack armor = player.getItemBySlot(slot);
+                    if (!armor.isEmpty() && armor.getItem() instanceof KamenBossArmor) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /**
+         * 二次穿透确保伤害不被减免
+         */
+        private static float applySecondaryPenetration(ElementaryInvesHelheim attacker, LivingEntity target, float currentDamage) {
+            // 如果伤害被减免太多，强制恢复
+            if (currentDamage < 5.0f) {
+                float baseDamage = (float) attacker.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
+                return Math.max(baseDamage * 0.5f, 8.0f); // 至少造成50%基础伤害或8点伤害
+            }
+            return currentDamage;
+        }
+
+        /**
+         * 生成攻击粒子效果
+         */
+        private static void spawnAttackParticles(ElementaryInvesHelheim attacker, LivingEntity target) {
+            if (attacker.level() instanceof ServerLevel serverLevel) {
+                // 红色攻击粒子
+                serverLevel.sendParticles(
+                        ParticleTypes.DAMAGE_INDICATOR,
+                        target.getX(), target.getY() + 1.0, target.getZ(),
+                        5, 0.5, 0.5, 0.5, 0.1
+                );
+            }
+        }
+
+        /**
+         * 原有的协同攻击逻辑
+         */
+        private static void handleLordBaronSynergy(LivingAttackEvent event) {
+            // 保持你原有的协同攻击逻辑...
+            if (event.getSource().getDirectEntity() instanceof ElementaryInvesHelheim inves &&
+                    inves.getMaster() instanceof LordBaronEntity lordBaron) {
+                LivingEntity target = event.getEntity();
+
+                if (lordBaron.isAlliedTo(target)) {
+                    event.setCanceled(true);
+                    return;
+                }
+
+                // LordBaron攻击时，附近受控的ElementaryInvesHelheim获得短暂的伤害提升
+                List<ElementaryInvesHelheim> controlledInves = lordBaron.level().getEntitiesOfClass(
+                        ElementaryInvesHelheim.class,
+                        lordBaron.getBoundingBox().inflate(15.0),
+                        entity -> entity.isAlive() && entity.getMaster() == lordBaron
+                );
+
+                controlledInves.forEach(minion -> {
+                    minion.addEffect(new MobEffectInstance(
+                            MobEffects.DAMAGE_BOOST, 60, 1, false, true // 提升到等级2
+                    ));
+                });
+
+            }
+        }
+    }
+    
     @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public final class CommonListener {
 
@@ -257,7 +470,7 @@ public class modEventBusEvents {
             // 统一使用自定义属性系统
 
             event.put(ModEntityTypes.LORD_BARON.get(), LordBaronEntity.createAttributes()
-                    .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 15.0D)
+                    .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 40.0D)  // 攻击力从15.0D提高到40.0D
                     .add(Attributes.MAX_HEALTH, 350.0D)
                     .add(Attributes.ARMOR, 15.0D)
                     .add(Attributes.ARMOR_TOUGHNESS, 8.0D)
@@ -267,7 +480,7 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.GIIFUDEMOS_ENTITY.get(),
                     GiifuDemosEntity.createAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 12.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 30.0D)  // 攻击力从12.0D提高到30.0D
                             .add(Attributes.MAX_HEALTH, 300.0D)
                             .add(Attributes.ARMOR, 12.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
@@ -277,7 +490,7 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.STORIOUS.get(),
                     StoriousEntity.createAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 14.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 35.0D)  // 攻击力从14.0D提高到35.0D
                             .add(Attributes.MAX_HEALTH, 500.0D)
                             .add(Attributes.ARMOR, 20.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 10.0D)
@@ -287,7 +500,7 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.GIFFTARIAN.get(),
                     Gifftarian.createMonsterAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 16.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 32.0D)  // 攻击力从16.0D提高到32.0D
                             .add(Attributes.MAX_HEALTH, 350.0D)
                             .add(Attributes.ARMOR, 15.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 8.0D)
@@ -295,21 +508,13 @@ public class modEventBusEvents {
                             .build()
             ); // 强化版：大幅提高防御、韧性和生命值，增强击退抗性
 
-            event.put(ModEntityTypes.INVES_HEILEHIM.get(),
-                    ElementaryInvesHelheim.createMonsterAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 10.0D)
-                            .add(Attributes.MAX_HEALTH, 220.0D)
-                            .add(Attributes.ARMOR, 12.0D)
-                            .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
-                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.3D)
-                            .build()
-            ); // 强化版：大幅提高防御、韧性和生命值，增强击退抗性
+            event.put(ModEntityTypes.INVES_HEILEHIM.get(),ElementaryInvesHelheim.createAttributes());
 
             event.put(ModEntityTypes.ANOTHER_ZI_O.get(),
                     Monster.createMonsterAttributes()
                             .add(Attributes.MAX_HEALTH, 200.0D)
                             .add(Attributes.MOVEMENT_SPEED, 0.26D)      // ← 保持移速
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 8.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 35.0D)  // 攻击力从8.0D提高到35.0D
                             .add(Attributes.ARMOR, 15.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
                             .add(Attributes.KNOCKBACK_RESISTANCE, 0.35D)
@@ -321,8 +526,8 @@ public class modEventBusEvents {
                             .add(Attributes.MAX_HEALTH, 150.0D)
                             .add(Attributes.MOVEMENT_SPEED, 0.26D)
                             .add(Attributes.FLYING_SPEED, 0.6D)
-                            .add(Attributes.ATTACK_DAMAGE, 8.0D)          // 必须给标准伤害
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 8.0D)
+                            .add(Attributes.ATTACK_DAMAGE, 16.0D)          // 攻击力从8.0D提高到16.0D
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 16.0D)  // 攻击力从8.0D提高到16.0D
                             .add(Attributes.ARMOR, 12.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 5.0D)
                             .build()
@@ -333,10 +538,10 @@ public class modEventBusEvents {
                             .add(Attributes.MAX_HEALTH, 800.0D)
                             .add(Attributes.ARMOR, 30.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 15.0D)
-                            .add(Attributes.ATTACK_DAMAGE, 15.0D)
+                            .add(Attributes.ATTACK_DAMAGE, 30.0D)  // 攻击力从15.0D提高到30.0D
                             .add(Attributes.MOVEMENT_SPEED, 0.28D)
                             .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 20.0D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 40.0D)  // 攻击力从20.0D提高到40.0D
                             .build()
             ); // 强化版：大幅提高生命值、防御和韧性
 

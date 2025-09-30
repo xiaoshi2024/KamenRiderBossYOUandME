@@ -106,19 +106,17 @@ public class dragonfruit extends Item implements GeoItem {
                         player.sendSystemMessage(Component.literal("您已经装备了其他锁种，请先解除变身！"));
                         return InteractionResultHolder.success(stack);
                     }
-
-                    // 播放待机音效
+                    
+                    // 播放LOCK ON音效
                     level.playSound(null, player.getX(), player.getY(), player.getZ(),
                             ModBossSounds.LEMON_LOCKONBY.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-
+                    
                     // 消耗锁种
                     stack.shrink(1);
-
                     //更新腰带为dragonfruit形态
                     ItemStack beltStack = beltOptional.get().stack();
                     Genesis_driver belt = (Genesis_driver) beltStack.getItem();
                     belt.setMode(beltStack, Genesis_driver.BeltMode.DRAGONFRUIT);
-
                     // 获取PlayerVariables实例并设置状态
                     KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
                     variables.dragonfruit_ready = true;
