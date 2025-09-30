@@ -122,6 +122,7 @@ public class  KRBVariables {
 
 			// 新增：重置其他状态变量
 			clone.isDarkKivaBeltEquipped = false;
+			clone.isOverlord = false; // 玩家死亡时重置Overlord状态
 			clone.baseMaxHealth = 20.0D;
 			clone.lastCustomArmorCount = 0;
 			}
@@ -234,7 +235,10 @@ public class  KRBVariables {
     public double accumulatedAttackDamageModifier = 0.1D; // 累积伤害转换为能量的系数
     
     // 基础巴隆技能相关变量
-    public long baron_banana_energy_cooldown = 0L; // 香蕉能量技能冷却时间（刻）
+    // 玩家是否为星爵巴隆（Overlord）状态
+    public boolean isOverlord = false;
+    // 巴隆香蕉能量技能冷却时间
+    public long baron_banana_energy_cooldown = 0L;
 
         public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
@@ -311,6 +315,8 @@ public class  KRBVariables {
         
         // 序列化基础巴隆技能相关变量
         nbt.putLong("baron_banana_energy_cooldown", baron_banana_energy_cooldown);
+        // 序列化Overlord状态
+        nbt.putBoolean("isOverlord", isOverlord);
         // 序列化腰带移除相关变量
         nbt.putLong("beltRemovedTime", beltRemovedTime);
         nbt.putString("removedBeltType", removedBeltType);
@@ -383,6 +389,8 @@ public class  KRBVariables {
         
         // 反序列化基础巴隆技能相关变量
         baron_banana_energy_cooldown = nbt.contains("baron_banana_energy_cooldown") ? nbt.getLong("baron_banana_energy_cooldown") : 0L;
+        // 反序列化Overlord状态
+        isOverlord = nbt.contains("isOverlord") ? nbt.getBoolean("isOverlord") : false;
         // 反序列化腰带移除相关变量
         beltRemovedTime = nbt.contains("beltRemovedTime") ? nbt.getLong("beltRemovedTime") : 0L;
         removedBeltType = nbt.contains("removedBeltType") ? nbt.getString("removedBeltType") : "";
@@ -461,6 +469,8 @@ public class  KRBVariables {
                     
                     // 同步基础巴隆技能相关变量
                     variables.baron_banana_energy_cooldown = message.data.baron_banana_energy_cooldown;
+                    // 同步Overlord状态
+                    variables.isOverlord = message.data.isOverlord;
                     // 同步腰带移除相关变量
                     variables.beltRemovedTime = message.data.beltRemovedTime;
                     variables.removedBeltType = message.data.removedBeltType;

@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SyncOwnerPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
@@ -96,6 +97,13 @@ public class HelheimFruitHandler {
                 // 使用 Walkers API 进行变身
                 if (PlayerShape.updateShapes(player, lordBaron)) {
                     controlNearbyInves(lordBaron, level);
+                    
+                    // 设置玩家为Overlord状态
+                    player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
+                        variables.isOverlord = true;
+                        variables.syncPlayerVariables(player);
+                    });
+                    
                     player.displayClientMessage(
                             Component.translatable("msg.kamen_rider.star_lord_transformation")
                                     .withStyle(ChatFormatting.GOLD),

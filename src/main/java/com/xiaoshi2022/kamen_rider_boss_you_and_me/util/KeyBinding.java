@@ -17,7 +17,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkKivaSe
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombatAnalysisPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBananaEnergyPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BaronLemonAbilityPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronSummonInvesPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimKickEnhancePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimBlindnessFieldPacket;
@@ -84,6 +86,14 @@ public class KeyBinding {
         // 检测玩家是否穿着火龙果盔甲
         boolean isTyrant = isTyrantArmorEquipped(mc.player);
         
+        // 检查玩家是否拥有Overlord标签
+        boolean isOverlord = false;
+        try {
+            isOverlord = mc.player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables()).isOverlord;
+        } catch (Exception e) {
+            // 处理可能的异常
+        }
+        
         // 检测玩家是否手持音速弓柠檬模式
         boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
         // 检测玩家是否手持音速弓樱桃模式
@@ -112,11 +122,16 @@ public class KeyBinding {
             }
         }
         // 其次检查巴隆柠檬形态
-        else if (isBaronLemon && hasSonicArrowLemonMode) {
-            // 巴隆柠檬形态且手持音速弓柠檬模式时，使用B键触发柠檬能量陷阱技能
-            if (KEY_BLAST.consumeClick()) {
-                PacketHandler.sendToServer(new BaronLemonAbilityPacket());
-                return; // 处理完后直接返回，避免其他技能干扰
+        else if (isBaronLemon) {
+            if (hasSonicArrowLemonMode) {
+                // 巴隆柠檬形态且手持音速弓柠檬模式时，使用B键触发柠檬能量陷阱技能
+                if (KEY_BLAST.consumeClick()) {
+                    PacketHandler.sendToServer(new BaronLemonAbilityPacket());
+                }
+            }
+            // 巴隆柠檬形态使用N键触发召唤异域者技能
+            if (KEY_BOOST.consumeClick()) {
+                PacketHandler.sendToServer(new BaronSummonInvesPacket());
             }
         } 
         // 然后检查其他主要形态
@@ -150,6 +165,10 @@ public class KeyBinding {
             if (KEY_GUARD.consumeClick()) {
                 PacketHandler.sendToServer(new BaronBananaEnergyPacket());
             }
+            // 基础巴隆盔甲使用N键触发召唤异域者技能
+            if (KEY_BOOST.consumeClick()) {
+                PacketHandler.sendToServer(new BaronSummonInvesPacket());
+            }
         } else if (isMarika) {
             // 玛丽卡盔甲使用V键触发感官加强技能
             if (KEY_GUARD.consumeClick()) {
@@ -162,6 +181,10 @@ public class KeyBinding {
             }
         } else {
             // 基础形态下的技能已被移除
+            // 但是如果玩家拥有Overlord标签，允许按下技能3键召唤异域者
+            if (isOverlord && KEY_BOOST.consumeClick()) {
+                PacketHandler.sendToServer(new BaronSummonInvesPacket());
+            }
         }
     }
     

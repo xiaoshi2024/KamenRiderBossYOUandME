@@ -161,6 +161,14 @@ public class PacketHandler {
                 BaronLemonAbilityPacket::new,
                 BaronLemonAbilityPacket::handle);
         
+        // 注册巴隆召唤异域者技能数据包
+        INSTANCE.registerMessage(
+                index++,
+                BaronSummonInvesPacket.class,
+                BaronSummonInvesPacket::toBytes,
+                BaronSummonInvesPacket::new,
+                BaronSummonInvesPacket::handler);
+        
         // 注册黑暗铠武阵羽柠檬技能数据包
         INSTANCE.registerMessage(
                 index++,

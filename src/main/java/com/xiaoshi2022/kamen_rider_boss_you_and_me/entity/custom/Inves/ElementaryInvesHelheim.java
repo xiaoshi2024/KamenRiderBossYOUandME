@@ -8,6 +8,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.helheimtems.FactionLeader;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.ChatFormatting;
@@ -113,6 +114,15 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
             }
             // 攻击主人的敌人
             return true;
+        }
+
+        // 检查目标是否是拥有Overlord标签的玩家
+        if (target instanceof Player) {
+            Player player = (Player) target;
+            KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+            if (variables.isOverlord) {
+                return false; // Overlord标签的玩家不会被攻击
+            }
         }
 
         // 2. 检查阵营关系
