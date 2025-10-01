@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.OverlordTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -57,6 +58,11 @@ public class OverlordCommand {
                 variables.isOverlord = isOverlord;
                 variables.syncPlayerVariables(player);
             });
+            
+            // 当授予Overlord状态时触发成就
+            if (isOverlord) {
+                OverlordTrigger.getInstance().trigger(player);
+            }
             
             String action = isOverlord ? "授予" : "移除";
             context.getSource().sendSuccess(

@@ -293,10 +293,16 @@ public class OverlordFeatureHandler {
         return nearestHostile;
     }
     
-    // 检查实体是否是敌对实体（排除玩家自己、其他玩家和Overlord生物）
+    // 检查实体是否是敌对实体（排除玩家自己和Overlord生物，但允许敌对玩家）
     private static boolean isHostileEntity(LivingEntity entity, Player player) {
-        if (entity == player || entity instanceof Player || entity.getPersistentData().getBoolean("IsOverlord")) {
+        if (entity == player || entity.getPersistentData().getBoolean("IsOverlord")) {
             return false;
+        }
+        
+        // 对玩家特殊处理：只将敌对玩家视为敌对目标
+        if (entity instanceof Player) {
+            Player targetPlayer = (Player) entity;
+            return !player.getTeam().equals(targetPlayer.getTeam()) && player.canAttack(targetPlayer);
         }
         
         // 检查是否为敌对生物
@@ -429,8 +435,8 @@ public class OverlordFeatureHandler {
         List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, area);
         
         for (LivingEntity entity : entities) {
-            // 不影响玩家和已经是Overlord的生物
-            if (!(entity instanceof Player) && !entity.getPersistentData().getBoolean("IsOverlord")) {
+            // 不影响已经是Overlord的生物，但影响敌对玩家
+            if (!entity.getPersistentData().getBoolean("IsOverlord")) {
                 entity.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 0));
             }
         }

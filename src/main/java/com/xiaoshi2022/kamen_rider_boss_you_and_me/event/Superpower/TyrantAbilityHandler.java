@@ -33,6 +33,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import java.util.function.Supplier;
+import java.util.Optional;
+import java.util.function.Function;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.network.NetworkDirection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +49,27 @@ import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public class TyrantAbilityHandler {
+    // 网络通道常量
+    private static final String PROTOCOL_VERSION = "1";
+    private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
+            new ResourceLocation("kamen_rider_boss_you_and_me", "tyrant_ability"),
+            () -> PROTOCOL_VERSION,
+            PROTOCOL_VERSION::equals,
+            PROTOCOL_VERSION::equals
+    );
+    private static int packetId = 0;
+
+    static {
+        // 注册数据包
+        CHANNEL.registerMessage(
+                packetId++,
+                IntangibilitySyncPacket.class,
+                IntangibilitySyncPacket::encode,
+                IntangibilitySyncPacket::decode,
+                IntangibilitySyncPacket::handle
+        );
+    }
+
     // 虚化技能相关常量
     private static final int INTANGIBILITY_MAX_DURATION = 1200; // 60秒 = 1200tick
     private static final float INTANGIBILITY_BREAK_THRESHOLD = 60.0f; // 打破虚化的伤害阈值
@@ -317,6 +347,9 @@ public class TyrantAbilityHandler {
 
             // 添加红色发光效果
             serverPlayer.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0, false, false));
+            
+            // 发送同步数据包到所有客户端
+            IntangibilitySyncPacket.sendToAll((ServerLevel) player.level(), playerId, true);
         }
     }
 
@@ -344,6 +377,9 @@ public class TyrantAbilityHandler {
 
             // 移除发光效果
             serverPlayer.removeEffect(MobEffects.GLOWING);
+            
+            // 发送同步数据包到所有客户端
+            IntangibilitySyncPacket.sendToAll((ServerLevel) player.level(), playerId, false);
         }
     }
 
@@ -359,9 +395,6 @@ public class TyrantAbilityHandler {
         // 检查玩家是否处于虚化模式
         if (INTANGIBLE_PLAYERS.containsKey(playerId)) {
             if (player.level().isClientSide()) {
-                // 客户端：生成红色系粒子效果表示虚化模式
-                generatePhaseModeParticles(player);
-
                 // 客户端Shift键检测
                 handleShiftKeyPress(player);
             } else {
@@ -391,6 +424,11 @@ public class TyrantAbilityHandler {
                                     serverPlayer.getZ()
                             );
                         }
+
+                        // 每20tick在服务端生成一次粒子效果
+                        if (remainingTime % 20 == 0) {
+                            spawnPhaseModeParticlesOnServer(serverPlayer);
+                        }
                     }
 
                     // 每5秒显示剩余时间
@@ -414,10 +452,11 @@ public class TyrantAbilityHandler {
 
         // 检测Shift键按下（从没按到按的状态变化）
         if (isShiftPressed && !wasShiftPressed) {
-            // 发送自定义数据包到服务端执行相位穿透
-            // 这里需要你创建自定义的数据包，或者使用现有的交互方式
-            // 临时解决方案：使用右键交互触发
+            // 使用玩家交互来触发服务端的相位穿透
+            // 这里设置使用键为按下状态，触发交互事件
             Minecraft.getInstance().options.keyUse.setDown(true);
+            // 立即设置为抬起，以模拟点击效果
+            Minecraft.getInstance().options.keyUse.setDown(false);
         }
 
         // 更新Shift键状态
@@ -531,51 +570,124 @@ public class TyrantAbilityHandler {
     }
 
     /**
-     * 生成虚化模式的红色系粒子效果
+     * 在服务端生成虚化模式的红色系粒子效果，所有客户端都能看到
      */
-    private static void generatePhaseModeParticles(Player player) {
-        Vec3 playerPos = player.position();
+    private static void spawnPhaseModeParticlesOnServer(ServerPlayer player) {
+        ServerLevel serverLevel = (ServerLevel) player.level();
+        Vec3 pos = player.position();
 
-        // 生成鲜红色粒子
-        for (int i = 0; i < 10; i++) {
-            double offsetX = (player.getRandom().nextDouble() - 0.5) * 2.0;
-            double offsetY = player.getRandom().nextDouble() * 2.2;
-            double offsetZ = (player.getRandom().nextDouble() - 0.5) * 2.0;
+        // 创建核心能量粒子（最靠近玩家）
+        DustParticleOptions coreParticle = new DustParticleOptions(
+                new Vector3f(1.0F, 0.0F, 0.0F), // 纯红色
+                1.5F // 较大的粒子大小
+        );
 
-            DustParticleOptions brightRedParticle = new DustParticleOptions(
-                    new Vector3f(1.0F, 0.1F, 0.1F), // 鲜红色
-                    1.0F
-            );
+        // 核心粒子 - 非常靠近玩家，模拟能量核心
+        for (int i = 0; i < 30; i++) { // 增加到30个粒子
+            // 较小的分布范围，使粒子更靠近玩家
+            double offsetX = (player.getRandom().nextDouble() - 0.5) * 1.0;
+            double offsetY = 0.5 + player.getRandom().nextDouble() * 1.0; // 集中在玩家身体区域
+            double offsetZ = (player.getRandom().nextDouble() - 0.5) * 1.0;
 
-            player.level().addParticle(
-                    brightRedParticle,
-                    playerPos.x + offsetX,
-                    playerPos.y + offsetY,
-                    playerPos.z + offsetZ,
-                    0, 0.05, 0
+            serverLevel.sendParticles(
+                    coreParticle,
+                    pos.x + offsetX,
+                    pos.y + offsetY,
+                    pos.z + offsetZ,
+                    0, // 不需要额外粒子
+                    0, 0.02, 0, // 轻微向上的速度
+                    0 // 不需要额外速度
             );
         }
 
-        // 生成浅红色粒子
-        for (int i = 0; i < 8; i++) {
-            double offsetX = (player.getRandom().nextDouble() - 0.5) * 1.8;
-            double offsetY = player.getRandom().nextDouble() * 2.0;
-            double offsetZ = (player.getRandom().nextDouble() - 0.5) * 1.8;
+        // 创建中间层粒子（稍大的分布范围）
+        DustParticleOptions middleParticle = new DustParticleOptions(
+                new Vector3f(1.0F, 0.2F, 0.2F), // 亮红色
+                1.2F
+        );
 
-            DustParticleOptions lightRedParticle = new DustParticleOptions(
-                    new Vector3f(1.0F, 0.3F, 0.3F), // 浅红色
-                    0.7F
+        // 中间层粒子 - 围绕玩家身体，添加向内汇聚效果
+        for (int i = 0; i < 40; i++) { // 增加到40个粒子
+            double offsetX = (player.getRandom().nextDouble() - 0.5) * 1.5;
+            double offsetY = player.getRandom().nextDouble() * 1.8;
+            double offsetZ = (player.getRandom().nextDouble() - 0.5) * 1.5;
+
+            // 粒子有轻微的向内汇聚的速度
+            double velocityX = -offsetX * 0.05;
+            double velocityY = 0.02; // 轻微向上
+            double velocityZ = -offsetZ * 0.05;
+
+            serverLevel.sendParticles(
+                    middleParticle,
+                    pos.x + offsetX,
+                    pos.y + offsetY,
+                    pos.z + offsetZ,
+                    0, // 不需要额外粒子
+                    velocityX, velocityY, velocityZ, // 向内汇聚的速度
+                    0 // 不需要额外速度
             );
+        }
 
-            player.level().addParticle(
-                    lightRedParticle,
-                    playerPos.x + offsetX,
-                    playerPos.y + offsetY,
-                    playerPos.z + offsetZ,
-                    0, 0.08, 0
+        // 创建外层环绕粒子（形成能量体轮廓）
+        DustParticleOptions outerParticle = new DustParticleOptions(
+                new Vector3f(0.8F, 0.1F, 0.1F), // 深红色
+                1.0F
+        );
+
+        // 环绕玩家的粒子环，形成能量体的轮廓
+        for (int angle = 0; angle < 360; angle += 10) { // 更密集的环绕
+            double radians = Math.toRadians(angle);
+            double radius = 1.8; // 减小环绕半径，使粒子更靠近玩家
+            
+            // 水平环绕
+            double x = pos.x + Math.cos(radians) * radius;
+            double z = pos.z + Math.sin(radians) * radius;
+            
+            // 垂直方向多层分布，但更靠近玩家
+            for (double y = 0.2; y <= 1.8; y += 0.3) {
+                // 粒子有环绕玩家旋转的速度
+                double velocityX = -Math.sin(radians) * 0.1;
+                double velocityY = 0.01; // 轻微向上
+                double velocityZ = Math.cos(radians) * 0.1;
+                
+                serverLevel.sendParticles(
+                        outerParticle,
+                        x,
+                        pos.y + y,
+                        z,
+                        0,
+                        velocityX, velocityY, velocityZ, // 环绕速度
+                        0
+                );
+            }
+        }
+        
+        // 添加能量流动效果 - 向上流动的粒子流
+        DustParticleOptions flowParticle = new DustParticleOptions(
+                new Vector3f(1.0F, 0.4F, 0.4F), // 浅红色
+                0.8F
+        );
+        
+        // 从玩家脚部向上流动的粒子，模拟能量流动
+        for (int i = 0; i < 20; i++) {
+            double offsetX = (player.getRandom().nextDouble() - 0.5) * 0.8;
+            double offsetY = player.getRandom().nextDouble() * 0.5; // 从脚部开始
+            double offsetZ = (player.getRandom().nextDouble() - 0.5) * 0.8;
+            
+            // 向上流动的速度
+            serverLevel.sendParticles(
+                    flowParticle,
+                    pos.x + offsetX,
+                    pos.y + offsetY,
+                    pos.z + offsetZ,
+                    0,
+                    0, 0.2, 0, // 向上的速度
+                    0
             );
         }
     }
+
+
 
     /**
      * 虚化模式下的伤害处理（保持原有的免疫机制）
@@ -616,5 +728,54 @@ public class TyrantAbilityHandler {
     public static boolean isPlayerIntangible(Player player) {
         if (player == null) return false;
         return INTANGIBLE_PLAYERS.containsKey(player.getUUID());
+    }
+
+    /**
+     * 同步玩家虚化状态的数据包
+     */
+    public static class IntangibilitySyncPacket {
+        private final UUID playerId;
+        private final boolean isIntangible;
+
+        public IntangibilitySyncPacket(UUID playerId, boolean isIntangible) {
+            this.playerId = playerId;
+            this.isIntangible = isIntangible;
+        }
+
+        public static void encode(IntangibilitySyncPacket packet, FriendlyByteBuf buf) {
+            buf.writeUUID(packet.playerId);
+            buf.writeBoolean(packet.isIntangible);
+        }
+
+        public static IntangibilitySyncPacket decode(FriendlyByteBuf buf) {
+            UUID playerId = buf.readUUID();
+            boolean isIntangible = buf.readBoolean();
+            return new IntangibilitySyncPacket(playerId, isIntangible);
+        }
+
+        public static void handle(IntangibilitySyncPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
+            NetworkEvent.Context context = contextSupplier.get();
+            context.enqueueWork(() -> {
+                // 在客户端更新玩家的虚化状态
+                if (Minecraft.getInstance().level != null) {
+                    if (packet.isIntangible) {
+                        INTANGIBLE_PLAYERS.put(packet.playerId, 0);
+                    } else {
+                        INTANGIBLE_PLAYERS.remove(packet.playerId);
+                    }
+                }
+            });
+            context.setPacketHandled(true);
+        }
+
+        /**
+         * 从服务端发送到所有客户端
+         */
+        public static void sendToAll(ServerLevel level, UUID playerId, boolean isIntangible) {
+            IntangibilitySyncPacket packet = new IntangibilitySyncPacket(playerId, isIntangible);
+            for (Player player : level.players()) {
+                CHANNEL.sendTo(packet, ((ServerPlayer) player).connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+            }
+        }
     }
 }

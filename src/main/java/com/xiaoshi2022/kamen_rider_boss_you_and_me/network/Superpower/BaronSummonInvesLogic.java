@@ -21,6 +21,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.UUID;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.PlayerDeathHandler;
+import net.minecraft.network.chat.Component;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 
 public class BaronSummonInvesLogic {
     
@@ -68,6 +70,11 @@ public class BaronSummonInvesLogic {
         // 设置冷却时间
         variables.baron_banana_energy_cooldown = currentTime + cooldownTime;
         variables.syncPlayerVariables(player);
+        
+        // 1. 播放召唤画
+        if (!level.isClientSide()) {
+            PacketHandler.sendAnimationToAll(Component.literal("shows"), player.getId(), false);
+        }
         
         // 创建赫尔海姆裂缝并召唤异域者
         openHelheimCracksAndSpawnInves(player);

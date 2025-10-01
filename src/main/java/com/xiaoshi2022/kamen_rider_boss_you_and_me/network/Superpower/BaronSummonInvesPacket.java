@@ -2,9 +2,11 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 
 public class BaronSummonInvesPacket {
     
@@ -36,6 +38,14 @@ public class BaronSummonInvesPacket {
     }
     
     private static void handleSummonInves(ServerPlayer player) {
+        // 发送动画到客户端
+        if (player.level().isClientSide()) return;
+
+        PacketHandler.sendAnimationToAll(
+                Component.literal("shows"),
+                player.getId(),
+                false
+        );
         // 这里实现召唤异域者的逻辑，参照LordBaronEntity中的方法
         BaronSummonInvesLogic.summonInvesAroundPlayer(player);
     }

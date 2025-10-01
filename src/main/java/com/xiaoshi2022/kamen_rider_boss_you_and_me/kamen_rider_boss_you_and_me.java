@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.OverlordTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.TamedKivatTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Cherryx.cherryxRenderer;
@@ -95,6 +96,7 @@ public class kamen_rider_boss_you_and_me
 
     // 在 Mod 主类或 Setup 类中添加
     public static final TamedKivatTrigger TAMED_KIVAT_TRIGGER = CriteriaTriggers.register(new TamedKivatTrigger());
+    public static final OverlordTrigger OVERLORD_TRIGGER = CriteriaTriggers.register(OverlordTrigger.getInstance());
 
     public kamen_rider_boss_you_and_me()
     {
@@ -146,6 +148,8 @@ public class kamen_rider_boss_you_and_me
         ModBossSounds.REGISTRY.register(modEventBus);
 
         PacketHandler.registerPackets();
+        
+        // 移除重复的触发器注册，触发器已在静态变量定义时注册
 
         ModStructureProcessors.PROCESSORS.register(modEventBus);
 

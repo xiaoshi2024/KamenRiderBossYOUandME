@@ -8,12 +8,17 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.client.model.HumanoidModel;
 
 public class TyrantArmorRenderer extends GeoArmorRenderer<TyrantItem> {
 
 	private static final ResourceLocation TRANSLUCENT_TEXTURE = new ResourceLocation("kamen_rider_boss_you_and_me", "textures/item/armor/tyrant_armor_translucent.png");
+	// 保存当前被渲染的实体
+	private LivingEntity currentEntity;
 
 
 	public TyrantArmorRenderer() {
@@ -28,12 +33,17 @@ public class TyrantArmorRenderer extends GeoArmorRenderer<TyrantItem> {
 		this.leftBoot = new GeoBone(null, "armorLeftBoot", false, (double) 0, false, false);
 	}
 
+	// 保存当前被渲染的实体
+	public void prepForRender(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> originalModel) {
+		super.prepForRender(livingEntity, itemStack, equipmentSlot, originalModel);
+		// 保存当前被渲染的实体
+		this.currentEntity = livingEntity;
+	}
+
 	@Override
 	public RenderType getRenderType(TyrantItem animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-		// 获取客户端当前玩家
-		Player player = Minecraft.getInstance().player;
-		// 如果当前玩家存在并且处于虚化状态，使用透明贴图
-		if (player != null && TyrantAbilityHandler.isPlayerIntangible(player)) {
+		// 使用保存的实体
+		if (currentEntity instanceof Player player && TyrantAbilityHandler.isPlayerIntangible(player)) {
 			// 使用透明贴图和半透明渲染类型
 			return RenderType.entityTranslucent(TRANSLUCENT_TEXTURE);
 		}

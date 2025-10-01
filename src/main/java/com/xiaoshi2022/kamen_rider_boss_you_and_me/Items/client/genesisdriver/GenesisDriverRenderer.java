@@ -44,6 +44,9 @@ public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> imple
 
     // 透明纹理资源
     private static final ResourceLocation TRANSLUCENT_TEXTURE = new ResourceLocation("kamen_rider_boss_you_and_me", "textures/item/tyrant_belt_translucent.png");
+    
+    // 保存当前被渲染的实体
+    private LivingEntity currentEntity;
 
 
 
@@ -71,10 +74,8 @@ public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> imple
     /* ---------- 虚化状态下使用透明渲染 ---------- */
     @Override
     public RenderType getRenderType(Genesis_driver animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        // 获取客户端当前玩家
-        Player player = Minecraft.getInstance().player;
-        // 如果当前玩家存在并且处于虚化状态，使用透明贴图
-        if (player != null && TyrantAbilityHandler.isPlayerIntangible(player)) {
+        // 使用保存的实体
+        if (currentEntity instanceof Player player && TyrantAbilityHandler.isPlayerIntangible(player)) {
             // 使用透明贴图和半透明渲染类型
             return RenderType.entityTranslucent(TRANSLUCENT_TEXTURE);
         }
@@ -84,18 +85,22 @@ public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> imple
 
     /* ---------- 物品渲染（手持 / 展示框 / 地面掉落） ---------- */
     @Override
-    public void renderByItem(ItemStack stack,
-                             ItemDisplayContext transformType,
-                             PoseStack poseStack,
-                             MultiBufferSource buffer,
-                             int packedLight,
+    public void renderByItem(ItemStack stack, 
+                             ItemDisplayContext transformType, 
+                             PoseStack poseStack, 
+                             MultiBufferSource buffer, 
+                             int packedLight, 
                              int packedOverlay) {
+        // 对于物品渲染，我们无法获取实体，所以使用本地玩家
+        this.currentEntity = Minecraft.getInstance().player;
         super.renderByItem(stack, transformType, poseStack, buffer, packedLight, packedOverlay);
     }
 
     /* ---------- Curio 渲染（佩戴在身体上） ---------- */
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack itemStack, SlotContext slotContext, PoseStack poseStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource multiBufferSource, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        // 保存当前被渲染的实体
+        this.currentEntity = slotContext.entity();
         poseStack.pushPose();
         if (renderLayerParent.getModel() instanceof HumanoidModel<?> humanoidModel) {
             HumanoidModel<LivingEntity> model = (HumanoidModel<LivingEntity>) humanoidModel;
