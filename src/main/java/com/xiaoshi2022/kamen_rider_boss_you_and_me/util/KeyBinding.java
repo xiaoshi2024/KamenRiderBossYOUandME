@@ -19,6 +19,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBanan
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BaronLemonAbilityPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronSummonInvesPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronRecallInvesPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.OverlordVineSkillPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
@@ -122,19 +123,25 @@ public class KeyBinding {
         // 优先检查特殊形态 - 樱桃能量箭矢（任何穿着骑士腰带的玩家都可以使用，只要手持音速弓樱桃模式）
         if (hasSonicArrowCherryMode) {
             // 手持音速弓樱桃模式时，使用V键触发樱桃能量箭矢技能
-            // 在 KeyBinding 类中修改调用方式
             if (KEY_GUARD.consumeClick()) {
                 PacketHandler.sendToServer(new CherryEnergyArrowPacket());
                 return;
             }
         }
-        // 其次检查巴隆柠檬形态
+        // 其次检查是否有Overlord标签并按下B键（骑士2技能）
+        else if (isOverlord && KEY_BLAST.isDown()) {
+            // 只有巴隆形态和人类形态的Overlord可以使用B键触发藤蔓技能
+            if (isBaron || isBaronLemon || (!isDarkKiva && !isDuke && !isDarkGaim && !isMarika && !isTyrant)) {
+                KEY_BLAST.consumeClick(); // 只在确认要使用时才消耗按键事件
+                PacketHandler.sendToServer(new OverlordVineSkillPacket());
+                return;
+            }
+        }
+        // 然后检查巴隆柠檬形态
         else if (isBaronLemon) {
-            if (hasSonicArrowLemonMode) {
-                // 巴隆柠檬形态且手持音速弓柠檬模式时，使用B键触发柠檬能量陷阱技能
-                if (KEY_BLAST.consumeClick()) {
-                    PacketHandler.sendToServer(new BaronLemonAbilityPacket());
-                }
+            // 巴隆柠檬形态使用V键触发柠檬能量陷阱技能
+            if (KEY_GUARD.consumeClick()) {
+                PacketHandler.sendToServer(new BaronLemonAbilityPacket());
             }
             // 巴隆柠檬形态使用N键触发召唤异域者技能
             if (KEY_BOOST.consumeClick()) {

@@ -218,6 +218,14 @@ public class PacketHandler {
                 TyrantIntangibilityTogglePacket::encode,
                 TyrantIntangibilityTogglePacket::decode,
                 TyrantIntangibilityTogglePacket::handle);
+                
+        // 注册Overlord藤蔓技能数据包
+        INSTANCE.registerMessage(
+                index++,
+                OverlordVineSkillPacket.class,
+                OverlordVineSkillPacket::toBytes,
+                OverlordVineSkillPacket::new,
+                OverlordVineSkillPacket::handle);
     }
 
     public static void sendToServer(Object packet) {
