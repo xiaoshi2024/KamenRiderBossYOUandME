@@ -168,6 +168,14 @@ public class PacketHandler {
                 BaronSummonInvesPacket::toBytes,
                 BaronSummonInvesPacket::new,
                 BaronSummonInvesPacket::handler);
+                
+        // 注册巴隆召回异域者技能数据包
+        INSTANCE.registerMessage(
+                index++,
+                BaronRecallInvesPacket.class,
+                BaronRecallInvesPacket::encode,
+                BaronRecallInvesPacket::decode,
+                BaronRecallInvesPacket::handle);
         
         // 注册黑暗铠武阵羽柠檬技能数据包
         INSTANCE.registerMessage(

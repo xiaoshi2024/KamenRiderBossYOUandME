@@ -18,6 +18,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DukeCombat
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronBananaEnergyPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BaronLemonAbilityPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronSummonInvesPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BaronRecallInvesPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
@@ -92,6 +93,12 @@ public class KeyBinding {
             isOverlord = mc.player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables()).isOverlord;
         } catch (Exception e) {
             // 处理可能的异常
+        }
+        
+        // 检查Shift+N组合键用于召回异域者（任何拥有Overlord标签的玩家都可以使用）
+        if (isOverlord && hasShiftDown() && KEY_BOOST.consumeClick()) {
+            PacketHandler.sendToServer(new BaronRecallInvesPacket());
+            return; // 优先处理召回功能，不继续执行其他按键检测
         }
         
         // 检测玩家是否手持音速弓柠檬模式
@@ -275,5 +282,11 @@ public class KeyBinding {
                 .resolve()
                 .flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof Genesis_driver))
                 .isPresent();
+    }
+    
+    // 检查是否按下了Shift键
+    private static boolean hasShiftDown() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.options.keyShift.isDown();
     }
 }
