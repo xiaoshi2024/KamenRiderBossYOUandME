@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.OverlordCommand;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.GiifuCommand;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.FangBloodlineCommand;
 
 public class ModCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -36,6 +37,9 @@ public class ModCommands {
         
         // 注册Giifu命令
         GiifuCommand.register(dispatcher);
+        
+        // 注册牙血鬼血脉命令
+        FangBloodlineCommand.register(dispatcher);
         
         // 注册变身武器指令
         TransformationWeaponCommand.register(dispatcher);

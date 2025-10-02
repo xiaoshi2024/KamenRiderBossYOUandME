@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.KnecromghostEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.RiderNecromArmorSequence;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
@@ -129,7 +130,7 @@ public class TransformationRequestPacket {
                     }
                     case "RIDERNECROM" -> {
                         if (msg.isRelease) {
-                            // ✅ 卸下盔甲
+                            // ✅ 卸下盔甲 - 现在盔甲在装备时已经立即返还
                             clearTransformationArmor(player);
 
                             // ✅ 重置状态
@@ -162,9 +163,7 @@ public class TransformationRequestPacket {
                                 if (!vars.isNecromStandby) return;
 
                                 // 穿装甲
-                                player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.RIDERNECROM_HELMET.get()));
-                                player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.RIDERNECROM_CHESTPLATE.get()));
-                                player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.RIDERNECROM_LEGGINGS.get()));
+                                RiderNecromArmorSequence.equip(player);
 
                                 vars.isMegaUiorderTransformed = true;
                                 vars.isNecromStandby = false;

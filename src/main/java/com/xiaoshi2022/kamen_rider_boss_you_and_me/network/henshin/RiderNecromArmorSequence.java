@@ -2,21 +2,24 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
-public final class EvilArmorSequence {
-    private EvilArmorSequence() {}
+public final class RiderNecromArmorSequence {
+    private RiderNecromArmorSequence() {}
     
-    /** 穿3件Evil装甲：头盔、胸甲、护腿 */
+    /** 穿3件RiderNecrom装甲：头盔、胸甲、护腿 */
     public static void equip(ServerPlayer player) {
         // 保存原盔甲（4个槽位）
         ItemStack[] original = saveArmor(player);
 
-        // 穿上Evil装甲
-        player.getInventory().armor.set(3, new ItemStack(ModItems.EVIL_BATS_HELMET.get()));
-        player.getInventory().armor.set(2, new ItemStack(ModItems.EVIL_BATS_CHESTPLATE.get()));
-        player.getInventory().armor.set(1, new ItemStack(ModItems.EVIL_BATS_LEGGINGS.get()));
-        
+        // 穿上RiderNecrom装甲
+        player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.RIDERNECROM_HELMET.get()));
+        player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.RIDERNECROM_CHESTPLATE.get()));
+        player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.RIDERNECROM_LEGGINGS.get()));
+        // 清空鞋子槽位
+        player.setItemSlot(EquipmentSlot.FEET, ItemStack.EMPTY);
+
         // 同步玩家物品栏变化
         player.inventoryMenu.broadcastChanges();
 

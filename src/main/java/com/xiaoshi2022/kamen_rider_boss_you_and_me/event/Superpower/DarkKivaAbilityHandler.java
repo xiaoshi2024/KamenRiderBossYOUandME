@@ -98,10 +98,26 @@ public final class DarkKivaAbilityHandler {
 
         KRBVariables.PlayerVariables variables = sp.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
 
-        if (variables.dark_kiva_bat_mode) {
+        // 检查是否已经有其他飞行模式在控制
+        if (variables.currentFlightController != null && !variables.currentFlightController.equals("DarkKiva") && variables.dark_kiva_bat_mode) {
+            // 如果有其他飞行模式在控制且当前是DarkKiva模式，退出DarkKiva模式
+            variables.dark_kiva_bat_mode = false;
+            sp.removeEffect(MobEffects.MOVEMENT_SPEED);
+            variables.currentFlightController = null;
+            
+            // 恢复飞行能力状态（如果不是创造模式或旁观者模式，取消飞行能力）
+            if (!sp.isCreative() && !sp.isSpectator()) {
+                sp.getAbilities().mayfly = false;
+                sp.getAbilities().flying = false;
+            }
+            sp.onUpdateAbilities();
+            
+            playSound(sp, SoundEvents.BAT_TAKEOFF, 1.0f, 1.2f);
+        } else if (variables.dark_kiva_bat_mode) {
             // 关闭飞行模式
             variables.dark_kiva_bat_mode = false;
             sp.removeEffect(MobEffects.MOVEMENT_SPEED);
+            variables.currentFlightController = null;
             
             // 恢复飞行能力状态（如果不是创造模式或旁观者模式，取消飞行能力）
             if (!sp.isCreative() && !sp.isSpectator()) {
@@ -117,6 +133,7 @@ public final class DarkKivaAbilityHandler {
             // 开启飞行模式
             variables.dark_kiva_bat_mode = true;
             variables.dark_kiva_bat_mode_time = sp.level().getGameTime();
+            variables.currentFlightController = "DarkKiva";
             sp.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 9999, 1, false, false));
             
             // 设置飞行能力

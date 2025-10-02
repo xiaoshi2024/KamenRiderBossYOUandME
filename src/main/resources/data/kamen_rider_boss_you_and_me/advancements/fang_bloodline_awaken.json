@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "kamen_rider_boss_you_and_me:drak_kiva_belt"
+    },
+    "title": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.title"
+    },
+    "description": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "kamen_rider_boss_you_and_me:kamen_rider_boss_you_and_me",
+  "criteria": {
+    "tamed_kivat": {
+      "trigger": "kamen_rider_boss_you_and_me:tamed_kivat"
+    }
+  },
+  "rewards": {
+    "experience": 50
+  }
+}

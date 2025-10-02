@@ -19,6 +19,8 @@ public final class PlayerBloodlineHelper {
         // 只在服务端同步
         if (!player.level().isClientSide && player instanceof ServerPlayer sp) {
             BloodlineManager.sync(sp);
+            // 在设置纯度后检查是否需要觉醒牙血鬼血脉
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.TamedKivatTrigger.checkAndAwakenFangBloodline(sp);
         }
     }
 

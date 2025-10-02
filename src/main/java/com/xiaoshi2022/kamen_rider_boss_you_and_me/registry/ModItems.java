@@ -11,14 +11,13 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.dragonf
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.kivas.ThroneBlockItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
@@ -32,6 +31,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -220,5 +220,30 @@ public class ModItems {
     // 基夫眼珠 - 击败基夫人形后掉落 (Geo物品)
     public static final RegistryObject<GiifuEyeBall> GIIFU_EYEBALL = ITEMS.register("giifu_eyeball",
             () -> new GiifuEyeBall(new Item.Properties()));
+
+    // 刷怪蛋注册
+    public static final RegistryObject<ForgeSpawnEggItem> LORD_BARON_SPAWN_EGG = ITEMS.register("lord_baron_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.LORD_BARON, 0x000000, 0x800080, new Item.Properties()));
+
+    public static final RegistryObject<ForgeSpawnEggItem> KIVAT_BAT_TWO_ND_SPAWN_EGG = ITEMS.register("kivat_bat_two_nd_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.KIVAT_BAT_II, 0x000000, 0xFF0000, new Item.Properties()));
+
+    public static final RegistryObject<ForgeSpawnEggItem> ELEMENTARY_INVES_HELHEIM_SPAWN_EGG = ITEMS.register("elementary_inves_helheim_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.INVES_HEILEHIM, 0x008000, 0x800000, new Item.Properties()));
+
+    public static final RegistryObject<ForgeSpawnEggItem> GIIFU_HUMAN_SPAWN_EGG = ITEMS.register("giifu_human_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.GIIFU_HUMAN, 0x000080, 0xFF00FF, new Item.Properties()));
+
+    public static final RegistryObject<ForgeSpawnEggItem> GIFFTARIAN_SPAWN_EGG = ITEMS.register("gifftarian_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.GIFFTARIAN, 0x808000, 0x00FF00, new Item.Properties()));
+
+    public static final RegistryObject<ForgeSpawnEggItem> ANOTHER_ZI_O_SPAWN_EGG = ITEMS.register("another_zi_o_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.ANOTHER_ZI_O, 0xFFFFFF, 0xFF0000, new Item.Properties()));
+
+    public static final RegistryObject<ForgeSpawnEggItem> GIIFU_DEMOS_SPAWN_EGG = ITEMS.register("giifu_demos_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.GIIFUDEMOS_ENTITY, 0x800000, 0x00FFFF, new Item.Properties()));
+
+    public static final RegistryObject<ForgeSpawnEggItem> STORIOUS_SPAWN_EGG = ITEMS.register("storious_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.STORIOUS, 0x008080, 0xFF8000, new Item.Properties()));
 
 }

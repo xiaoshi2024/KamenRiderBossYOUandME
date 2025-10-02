@@ -78,6 +78,8 @@
   "advancement.kamen_rider_boss_you_and_me.become_overlord.desc": "Become Lord Baron and obtain power beyond humanity.",
   "advancement.kamen_rider_boss_you_and_me.become_giifu.title": "Offer Gratitude, Desperado",
   "advancement.kamen_rider_boss_you_and_me.become_giifu.desc": "Become a member of the Giifu race.",
+  "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.title": "Awakening! Fangire Bloodline",
+  "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.desc": "Awaken the ancient Fangire blood within you and become one of the blood-sucking race.",
 
   "KEY.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me": "Kamen Rider Boss You and Me",
   "KEY.kamen_rider_weapon_craft.change_body": "Henshin",
@@ -143,8 +145,7 @@
   "message.summon.show_guide": "§aThe altar structure guide (particle effect) has been displayed§r",
 
   "message.summon.guide_usage": "§7Right-click the throne while in stealth or use /kiva showaltar to view the altar structure §r",
-
-
+  "message.fang_bloodline.awaken": "§5The ancient Fangire bloodline within you has awakened! You have become one of the blood-sucking race!§r",
 
   "msg.kamen_rider.belt_activation_failed": "Belt activation check failed",
 
@@ -247,5 +248,24 @@
   "entity.kamen_rider_boss_you_and_me.baron_lemon_energy": "Baron Lemon Energy",
   "entity.kamen_rider_boss_you_and_me.baron_banana_energy": "Baron Banana Energy",
   "key.flight_toggle": "Flight",
-  "key.barrier_pull": "BarrierPull"
+  "key.barrier_pull": "BarrierPull",
+  
+  "item.kamen_rider_boss_you_and_me.lord_baron_spawn_egg": "Lord Baron Spawn Egg",
+  "item.kamen_rider_boss_you_and_me.kivat_bat_two_nd_spawn_egg": "Kivat Bat II Spawn Egg",
+  "item.kamen_rider_boss_you_and_me.elementary_inves_helheim_spawn_egg": "Elementary Inves Helheim Spawn Egg",
+  "item.kamen_rider_boss_you_and_me.giifu_human_spawn_egg": "Giifu Human Spawn Egg",
+  "item.kamen_rider_boss_you_and_me.gifftarian_spawn_egg": "Giifutarian Spawn Egg",
+  "item.kamen_rider_boss_you_and_me.another_zi_o_spawn_egg": "Another Zi-O Spawn Egg",
+  "item.kamen_rider_boss_you_and_me.giifu_demos_spawn_egg": "Giifu Demos Spawn Egg",
+  "item.kamen_rider_boss_you_and_me.storious_spawn_egg": "Storious Spawn Egg",
+  
+  "item.kamen_rider_boss_you_and_me.lord_baron_spawn_egg.tooltip": "[Tip] Right-click to spawn Lord Baron.",
+  "item.kamen_rider_boss_you_and_me.kivat_bat_two_nd_spawn_egg.tooltip": "[Tip] Right-click to spawn Kivat Bat II.",
+  "item.kamen_rider_boss_you_and_me.elementary_inves_helheim_spawn_egg.tooltip": "[Tip] Right-click to spawn Elementary Inves Helheim.",
+  "item.kamen_rider_boss_you_and_me.giifu_human_spawn_egg.tooltip": "[Tip] Right-click to spawn Giifu Human.",
+  "item.kamen_rider_boss_you_and_me.gifftarian_spawn_egg.tooltip": "[Tip] Right-click to spawn Giifutarian.",
+  "item.kamen_rider_boss_you_and_me.another_zi_o_spawn_egg.tooltip": "[Tip] Right-click to spawn Another Zi-O.",
+  "item.kamen_rider_boss_you_and_me.giifu_demos_spawn_egg.tooltip": "[Tip] Right-click to spawn Giifu Demos.",
+  "item.kamen_rider_boss_you_and_me.storious_spawn_egg.tooltip": "[Tip] Right-click to spawn Storious.",
+  "item group.kamen_rider_boss_you_and_me_spawn_egg_tab": "BossSpawnEgg"
 }

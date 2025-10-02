@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
@@ -70,8 +71,13 @@ public final class DarkKivaSequence {
         /* 4. 播放变身粒子效果 */
         spawnHenshinParticles(player, level);
 
-        /* 5. 延迟穿戴盔甲 */
-        applyArmorAfterDelay(player, 125); // 100 ticks = 5秒
+        /* 5. 保存玩家原版盔甲 */
+	KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+	variables.isDarkKivaBeltEquipped = true;
+	variables.syncPlayerVariables(player);
+	
+	/* 6. 延迟穿戴盔甲 */
+	applyArmorAfterDelay(player, 125); // 100 ticks = 5秒
     }
 
     /* 播放变身粒子效果 */
@@ -88,10 +94,9 @@ public final class DarkKivaSequence {
     }
 
     /* 延迟穿戴盔甲 */
-    public static void applyArmorAfterDelay(ServerPlayer player, int delayTicks) {
-        HENSHIN_COOLDOWN.put(player.getUUID(), delayTicks);
-
-    }
+	public static void applyArmorAfterDelay(ServerPlayer player, int delayTicks) {
+		HENSHIN_COOLDOWN.put(player.getUUID(), delayTicks);
+	}
 
     /* 1. 在 DarkKivaSequence 里建一个 Map 记录倒计时 */
     private static final Map<UUID,Integer> HENSHIN_COOLDOWN = new ConcurrentHashMap<>();
@@ -113,10 +118,8 @@ public final class DarkKivaSequence {
             if (player == null) return;
 
             // 真正穿盔甲
-            // 不再判断，直接强制穿上
-            player.setItemSlot(EquipmentSlot.HEAD,   new ItemStack(ModItems.DARK_KIVA_HELMET.get()));
-            player.setItemSlot(EquipmentSlot.CHEST,  new ItemStack(ModItems.DARK_KIVA_CHESTPLATE.get()));
-            player.setItemSlot(EquipmentSlot.LEGS,   new ItemStack(ModItems.DARK_KIVA_LEGGINGS.get()));
+            // 使用DarkKivaArmorSequence来装备盔甲，同时保存玩家原版盔甲
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkKivaArmorSequence.equip(player);
         } else {
             HENSHIN_COOLDOWN.put(uuid, left);
         }
@@ -162,13 +165,19 @@ public final class DarkKivaSequence {
         beltStack.shrink(1);
     }
 
-    /* 移除盔甲 */
+    /* 移除盔甲并恢复玩家原版盔甲 */
     private static void removeArmor(ServerPlayer player) {
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            if (slot.getType() == EquipmentSlot.Type.ARMOR) {
-                player.setItemSlot(slot, ItemStack.EMPTY);
-            }
-        }
+        // 现在盔甲在装备时已经立即返还，这里只需要清空盔甲槽位
+        player.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+        player.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
+        player.setItemSlot(EquipmentSlot.LEGS, ItemStack.EMPTY);
+        player.setItemSlot(EquipmentSlot.FEET, ItemStack.EMPTY);
+        player.inventoryMenu.broadcastChanges();
+        
+        // 重置黑暗Kiva腰带状态
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        variables.isDarkKivaBeltEquipped = false;
+        variables.syncPlayerVariables(player);
     }
 
     /* 从腰带生成Kivat蝙蝠 */

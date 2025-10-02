@@ -20,12 +20,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -37,6 +39,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -54,28 +57,39 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     protected static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("Attack");
     protected static final RawAnimation RUN = RawAnimation.begin().thenLoop("run");
-    protected static final RawAnimation FLY = RawAnimation.begin().thenLoop("fly"); // 添加飞行动画
+    protected static final RawAnimation FLY = RawAnimation.begin().thenLoop("fly");
     public static final TagKey<Item> HELHEIM_FOOD_TAG =
             ItemTags.create(new ResourceLocation("kamen_rider_weapon_craft", "kamen_rider_helheim_food"));
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    private String originalFactionId; // 新增字段保存原始阵营ID
-
+    private String originalFactionId;
     private FactionLeader factionLeader;
-
     private static final String[] VARIANTS = {"red", "blue", "green"};
-    private boolean isFlying = false; // 添加飞行状态
-    public int flyingCooldown = 0; // 飞行冷却
-    // 添加飞行状态getter/setter
+    private boolean isFlying = false;
+    public int flyingCooldown = 0;
+    private int shiftPressTime = 0;
+    private int jumpPressTime = 0;
+    private int flightToggleCooldown = 0; // 专门用于飞行切换的冷却
+
     public boolean isFlying() {
         return isFlying;
     }
 
     public void setFlying(boolean flying) {
         this.isFlying = flying;
+        this.setNoGravity(flying);
+
+        if (!flying) {
+            this.setNoGravity(false);
+            // 清除垂直速度
+            this.setDeltaMovement(this.getDeltaMovement().x * 0.8, this.getDeltaMovement().y * 0.5, this.getDeltaMovement().z * 0.8);
+        } else {
+            // 飞行时给予一点初始上升动力
+            this.setDeltaMovement(this.getDeltaMovement().x, 0.2, this.getDeltaMovement().z);
+        }
     }
 
-    private String variant = "blue"; // 默认变种
+    private String variant = "blue";
 
     public void setFactionLeader(FactionLeader leader) {
         this.factionLeader = leader;
@@ -89,12 +103,11 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
 
     private static final double PROTECT_RANGE = 20.0;
     public LivingEntity master;
-    private int loyaltyTime = 0; // 忠诚度计时器
+    private int loyaltyTime = 0;
 
     public void setMaster(LivingEntity master) {
-        // 如果是第一次被控制，保存原始阵营ID
         if (this.master == null && this.factionLeader != null) {
-            this.originalFactionId = this.factionLeader.getFactionId(); // 直接保存String
+            this.originalFactionId = this.factionLeader.getFactionId();
         }
 
         this.master = master;
@@ -106,60 +119,47 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
 
     @Override
     public boolean canAttack(LivingEntity target) {
-        // 1. 优先检查主人关系
         if (this.master != null) {
-            // 不攻击主人及主人的盟友
             if (target == this.master || this.master.isAlliedTo(target)) {
                 return false;
             }
-            
-            // 如果目标有主人，且主人是另一个霸主玩家，允许攻击
+
             if (target instanceof ElementaryInvesHelheim targetInves && targetInves.getMaster() != null) {
-                // 两个不同主人的异域者可以互相攻击
                 return !this.master.equals(targetInves.getMaster());
             }
-            
-            // 如果目标是另一个霸主玩家，允许攻击
+
             if (target instanceof Player targetPlayer) {
                 KRBVariables.PlayerVariables targetVars = targetPlayer.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
                 if (targetVars.isOverlord && !this.master.equals(targetPlayer)) {
                     return true;
                 }
             }
-            
-            // 攻击主人的敌人
+
             return true;
         }
 
-        // 检查目标是否是拥有Overlord标签的玩家
         if (target instanceof Player) {
             Player player = (Player) target;
             KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
             if (variables.isOverlord) {
-                return false; // Overlord标签的玩家不会被攻击
+                return false;
             }
         }
 
-        // 2. 检查阵营关系
         String myFaction = this.factionLeader != null ? this.factionLeader.getFactionId() : null;
         String targetFaction = target instanceof FactionLeader ?
                 ((FactionLeader) target).getFactionId() : null;
 
-        // 双方都有阵营且阵营不同时可以攻击
         if (myFaction != null && targetFaction != null) {
             return !myFaction.equals(targetFaction);
         }
 
-        // 3. 默认行为
         return super.canAttack(target);
     }
 
-
     public ElementaryInvesHelheim(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        // 随机选择一个变种
         this.setVariant(VARIANTS[random.nextInt(VARIANTS.length)]);
-        // 初始化 factionLeader 为 null 或默认值
         this.factionLeader = null;
         this.master = null;
         this.isFlying = false;
@@ -181,15 +181,17 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
 
-        // 读取原始阵营ID
         if (tag.contains("OriginalFactionId", Tag.TAG_STRING)) {
             this.originalFactionId = tag.getString("OriginalFactionId");
         }
 
-        // 读取当前阵营
         if (tag.contains("CurrentFactionId", Tag.TAG_STRING)) {
             String factionId = tag.getString("CurrentFactionId");
             this.factionLeader = findFactionLeaderById(factionId);
+        }
+
+        if (tag.contains("IsFlying", Tag.TAG_BYTE)) {
+            this.isFlying = tag.getBoolean("IsFlying");
         }
     }
 
@@ -197,83 +199,261 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
 
-        // 保存原始阵营ID
         if (this.originalFactionId != null) {
-            tag.putString("OriginalFactionId", this.originalFactionId.toString());
+            tag.putString("OriginalFactionId", this.originalFactionId);
         }
 
-        // 保存当前阵营
         if (this.factionLeader != null) {
             tag.putString("CurrentFactionId", this.factionLeader.getFactionId());
         }
+
+        tag.putBoolean("IsFlying", this.isFlying);
+    }
+
+    public boolean canBeRiddenInWater(Entity rider) {
+        return true;
+    }
+
+    public boolean canBeRidden(Entity rider) {
+        if (rider instanceof Player player && this.master == player) {
+            KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+            return variables.isOverlord;
+        }
+        return false;
     }
 
     @Override
-    public final boolean hurt(DamageSource source, float damageAmount) { // 重写 hurt 方法
-        // 调用父类的 hurt 方法
+    public void rideTick() {
+        super.rideTick();
+
+        Entity rider = this.getFirstPassenger();
+        if (rider instanceof Player player) {
+            // 下马检测
+            if (player.isShiftKeyDown()) {
+                if (this.shiftPressTime++ > 20) {
+                    player.stopRiding();
+                    player.displayClientMessage(Component.literal("已从异域者身上下来"), true);
+                    this.shiftPressTime = 0;
+                    this.jumpPressTime = 0;
+                    return;
+                }
+            } else {
+                this.shiftPressTime = 0;
+            }
+
+            // 飞行切换检测 - 使用更简单直接的方法
+            if (flightToggleCooldown > 0) {
+                flightToggleCooldown--;
+            }
+
+            // 检测空格键按下（飞行切换）
+            if (isJumpKeyPressed(player) && flightToggleCooldown == 0 && this.flyingCooldown <= 0) {
+                flightToggleCooldown = 10; // 防止重复触发
+
+                this.setFlying(!this.isFlying());
+                this.flyingCooldown = 20;
+
+                if (this.isFlying()) {
+                    player.displayClientMessage(Component.literal("飞行模式已启动！WASD移动，空格上升，Shift下降"), true);
+                } else {
+                    player.displayClientMessage(Component.literal("飞行模式已关闭"), true);
+                }
+            }
+
+            // 冷却处理
+            if (this.jumpPressTime > 0) this.jumpPressTime--;
+            if (this.flyingCooldown > 0) this.flyingCooldown--;
+        }
+    }
+
+    // 简化的跳跃键检测
+    private boolean isJumpKeyPressed(Player player) {
+        // 直接检查玩家是否按下了跳跃键
+        // 在 Minecraft 中，当玩家按下空格时，zza 会有特定的表现
+        return player.zza > 0 && !player.onGround();
+    }
+
+    @Override
+    protected boolean canAddPassenger(Entity passenger) {
+        return this.getPassengers().isEmpty() && this.canBeRidden(passenger);
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource source) {
+        if (!this.getPassengers().isEmpty() && this.getFirstPassenger() instanceof Player player) {
+            KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+            if (variables.isOverlord) {
+                return source.is(DamageTypes.IN_WALL) || super.isInvulnerableTo(source);
+            }
+        }
+        return super.isInvulnerableTo(source);
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float damageAmount) {
+        if (!this.getPassengers().isEmpty() && this.getFirstPassenger() instanceof Player player) {
+            KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+            if (variables.isOverlord) {
+                damageAmount *= 0.5F;
+            }
+        }
         return super.hurt(source, damageAmount);
+    }
+
+    @Override
+    public void travel(Vec3 travelVector) {
+        if (this.isAlive() && this.isVehicle() && this.getFirstPassenger() instanceof Player player) {
+            // 同步旋转
+            this.setYRot(player.getYRot());
+            this.yRotO = this.getYRot();
+            this.setXRot(player.getXRot() * 0.5F);
+            this.setRot(this.getYRot(), this.getXRot());
+
+            // 完全停止AI
+            this.getNavigation().stop();
+            this.setTarget(null);
+            this.setAggressive(false);
+
+            // 获取移动输入
+            float forward = player.zza; // 前后移动 (W/S)
+            float strafe = player.xxa;  // 左右移动 (A/D)
+
+            // 计算移动方向 - 简化计算
+            double moveX = 0;
+            double moveZ = 0;
+
+            if (forward != 0 || strafe != 0) {
+                float yRotRad = this.getYRot() * ((float)Math.PI / 180F);
+
+                // 前后移动
+                moveX = -Math.sin(yRotRad) * forward;
+                moveZ = Math.cos(yRotRad) * forward;
+
+                // 左右移动 - 修正方向
+                moveX += Math.cos(yRotRad) * strafe;
+                moveZ += Math.sin(yRotRad) * strafe;
+
+                // 标准化方向向量
+                double length = Math.sqrt(moveX * moveX + moveZ * moveZ);
+                if (length > 0) {
+                    moveX /= length;
+                    moveZ /= length;
+                }
+            }
+
+            // 飞行状态处理
+            if (this.isFlying()) {
+                this.setNoGravity(true);
+
+                // 垂直移动控制
+                double moveY = 0;
+                if (isJumpKeyPressed(player)) {
+                    moveY = 0.15; // 上升
+                } else if (player.isShiftKeyDown()) {
+                    moveY = -0.15; // 下降
+                }
+
+                // 应用飞行移动 - 更平滑的速度
+                double speed = 0.25D;
+                Vec3 currentMovement = this.getDeltaMovement();
+                Vec3 newMovement = new Vec3(
+                        moveX * speed + currentMovement.x * 0.7,
+                        moveY + currentMovement.y * 0.8,
+                        moveZ * speed + currentMovement.z * 0.7
+                );
+
+                this.setDeltaMovement(newMovement);
+
+            } else {
+                // 地面移动 - 更流畅
+                this.setNoGravity(false);
+                double speed = 0.2D;
+                double currentY = this.getDeltaMovement().y;
+
+                Vec3 newMovement = new Vec3(
+                        moveX * speed,
+                        currentY,
+                        moveZ * speed
+                );
+                this.setDeltaMovement(newMovement);
+            }
+
+            // 应用移动 - 关键步骤
+            this.move(MoverType.SELF, this.getDeltaMovement());
+
+            // 更新动画
+            this.calculateEntityAnimation(false);
+            return;
+        }
+
+        // 没有乘客时使用默认移动
+        super.travel(travelVector);
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        // 如果主人已死亡，立即消失
+        // 有乘客时完全禁用AI
+        if (this.isVehicle()) {
+            this.getNavigation().stop();
+            this.setTarget(null);
+            this.setAggressive(false);
+
+            // 清除所有运行的目标
+            this.goalSelector.getRunningGoals().forEach(goal -> goal.stop());
+            this.targetSelector.getRunningGoals().forEach(goal -> goal.stop());
+        }
+
         if (getMaster() != null && !getMaster().isAlive()) {
             this.discard();
             return;
         }
 
-        // 飞行冷却处理
         if (flyingCooldown > 0) {
             flyingCooldown--;
         }
 
-        // 失去目标时降落
-        if (isFlying && this.getTarget() == null) {
+        // 自动关闭飞行
+        if (isFlying && this.getTarget() == null && !this.isVehicle()) {
             this.setFlying(false);
             flyingCooldown = 100;
         }
 
-        // 星爵巴隆控制逻辑
         if (!this.level().isClientSide && this.tickCount % 20 == 0) {
             updateMasterControl();
         }
     }
 
+    public boolean isVehicle() {
+        return !this.getPassengers().isEmpty();
+    }
+
     private void updateMasterControl() {
         if (master != null) {
-            // 减少忠诚时间
             if (loyaltyTime > 0) loyaltyTime--;
 
-            // 检查主人是否有效
             if (!master.isAlive() || loyaltyTime <= 0) {
                 releaseControl();
                 return;
             }
 
-            // 优先攻击主人正在攻击的目标
             LivingEntity masterTarget = master.getLastHurtMob();
             if (masterTarget != null && masterTarget != this.getTarget()) {
                 this.setTarget(masterTarget);
-                this.addEffect(new MobEffectInstance(
-                        MobEffects.DAMAGE_BOOST, 200, 1));
+                this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1));
             }
 
-            // 优先攻击主人的攻击者
             LivingEntity masterAttacker = master.getLastHurtByMob();
             if (masterAttacker != null && masterAttacker != this.getTarget()) {
                 this.setTarget(masterAttacker);
-                this.addEffect(new MobEffectInstance(
-                        MobEffects.DAMAGE_BOOST, 200, 1));
+                this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1));
             }
 
-            // 如果离主人太远，回到主人身边
             if (this.distanceToSqr(master) > PROTECT_RANGE * PROTECT_RANGE) {
                 this.getNavigation().moveTo(master, 1.2);
             }
 
-            // 如果主人是星爵巴隆且正在被攻击，起飞保护
             if (master instanceof LordBaronEntity &&
                     master.getLastHurtByMob() != null &&
                     !this.isFlying()) {
@@ -282,12 +462,12 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
         }
     }
 
-    // 脱离主人时恢复原阵营
     private void releaseControl() {
         if (this.originalFactionId != null) {
-            this.factionLeader = findFactionLeaderById(this.originalFactionId.toString());
+            this.factionLeader = findFactionLeaderById(this.originalFactionId);
         }
         this.master = null;
+        this.loyaltyTime = 0;
     }
 
     private FactionLeader findFactionLeaderById(String factionId) {
@@ -304,19 +484,11 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
         return null;
     }
 
-
     @Override
     protected void dropFromLootTable(DamageSource damageSource, boolean recentlyHit) {
         super.dropFromLootTable(damageSource, recentlyHit);
 
-        // 添加掉落逻辑
         if (!this.level().isClientSide) {
-            // 获取掉落位置
-            double x = this.getX();
-            double y = this.getY();
-            double z = this.getZ();
-
-            // 创建掉落物品
             ItemStack invesMeat = new ItemStack(ModItems.INVES_MEAT.get());
             this.spawnAtLocation(invesMeat, 0.0F);
         }
@@ -324,15 +496,10 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        // ===== 目标选择器 (targetSelector) =====
-        // 优先级0 - 保护主人（最高优先级）
         this.targetSelector.addGoal(0, new ProtectMasterGoal(this));
-
-        // 新增优先级1 - 攻击主人攻击的目标
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
 
-        // 优先级3 - 被攻击时反击（仅当无主人时生效）
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
@@ -344,8 +511,7 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
             }
         });
 
-        // 优先级2 - 攻击玩家（仅当无主人时生效）
-        this.targetSelector.addGoal(2, new CustomAttackGoal<>(
+        this.targetSelector.addGoal(4, new CustomAttackGoal<>(
                 this,
                 Player.class,
                 20,
@@ -354,8 +520,7 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
                 target -> master == null && CustomAttackGoal.isValidTarget(target)
         ));
 
-        // 优先级3 - 攻击村民（仅当无主人时生效）
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(
                 this,
                 Villager.class,
                 30,
@@ -364,43 +529,21 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
                 target -> master == null && !(target instanceof GiifuDemosEntity || target instanceof StoriousEntity)
         ));
 
-        // ===== 行为选择器 (goalSelector) =====
-        // 优先级1 - 近战攻击
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 0.34D, true));
-
-        // 优先级2 - 飞行攻击
         this.goalSelector.addGoal(2, new FlyAndAttackGoal(this));
-
-        // 优先级3 - 被食物吸引
-        this.goalSelector.addGoal(3, new AttractGoal(
-                this,
-                HELHEIM_FOOD_TAG.location(),
-                0.45D
-        ));
-
-        // 优先级4 - 随机漫步
+        this.goalSelector.addGoal(3, new AttractGoal(this, HELHEIM_FOOD_TAG.location(), 0.45D));
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.45D));
-
-        // 优先级5 - 看向玩家
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
-
-        // 优先级6 - 随机环顾
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-
-        // 优先级7 - 水中漂浮
         this.goalSelector.addGoal(7, new FloatGoal(this));
-
-        // 优先级 这里放 8
         this.goalSelector.addGoal(8, new PickUpHelheimFruitGoal(this));
     }
 
-    // 在ElementaryInvesHelheim类中
     @Nullable
     public LivingEntity getMaster() {
         return this.master;
     }
 
-    // 当主人被攻击时，攻击攻击者
     static class OwnerHurtByTargetGoal extends TargetGoal {
         private final ElementaryInvesHelheim inves;
         private LivingEntity attacker;
@@ -430,7 +573,6 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
         }
     }
 
-    // 当主人攻击目标时，也攻击该目标
     static class OwnerHurtTargetGoal extends TargetGoal {
         private final ElementaryInvesHelheim inves;
         private LivingEntity target;
@@ -462,7 +604,6 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
 
     @Override
     public boolean canAttackType(EntityType<?> type) {
-        // 被控制时不攻击玩家
         if (master != null && (type == EntityType.PLAYER || type == ModEntityTypes.LORD_BARON.get())) {
             return false;
         }
@@ -471,30 +612,25 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
 
     @Override
     public boolean isAlliedTo(Entity entity) {
-        // 优先检查主人关系
         if (this.master != null) {
-            // 如果实体是主人，或主人的盟友，视为盟友
             if (entity == this.master || this.master.isAlliedTo(entity)) {
                 return true;
             }
-            
-            // 如果实体是另一个有主人的异域者，且两个主人不同，则不视为盟友
+
             if (entity instanceof ElementaryInvesHelheim otherInves && otherInves.getMaster() != null) {
                 return this.master.equals(otherInves.getMaster());
             }
-            
-            // 如果实体是另一个霸主玩家，且不是自己的主人，则不视为盟友
+
             if (entity instanceof Player otherPlayer) {
                 KRBVariables.PlayerVariables otherVars = otherPlayer.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
                 if (otherVars.isOverlord && !this.master.equals(otherPlayer)) {
                     return false;
                 }
             }
-            
+
             return false;
         }
 
-        // 其次检查阵营关系
         if (this.factionLeader != null && entity instanceof FactionLeader) {
             return this.factionLeader.getFactionId().equals(((FactionLeader) entity).getFactionId());
         }
@@ -502,7 +638,6 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
         return super.isAlliedTo(entity);
     }
 
-    // 新增保护主人的目标
     static class ProtectMasterGoal extends Goal {
         private final ElementaryInvesHelheim inves;
         private LivingEntity target;
@@ -515,12 +650,9 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
         @Override
         public boolean canUse() {
             if (inves.master == null || inves.loyaltyTime <= 0) return false;
-
-            // 每10ticks检查一次（减少性能消耗）
             if (cooldown-- > 0) return false;
             cooldown = 10;
 
-            // 获取主人正在攻击的目标 或 攻击主人的敌人
             this.target = inves.master.getLastHurtByMob();
             if (target == null) {
                 this.target = inves.master.getLastHurtMob();
@@ -528,34 +660,26 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
 
             return target != null &&
                     target.isAlive() &&
-                    inves.distanceToSqr(target) <= 400.0; // 20格范围内
+                    inves.distanceToSqr(target) <= 400.0;
         }
 
         @Override
         public void start() {
             inves.setTarget(target);
             inves.setFlying(true);
-            inves.addEffect(new MobEffectInstance(
-                    MobEffects.MOVEMENT_SPEED,
-                    200, 1, false, true
-            ));
+            inves.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 1, false, true));
         }
     }
 
-    // 自定义攻击目标逻辑
     private static class CustomAttackGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
         public CustomAttackGoal(Mob mob, Class<T> targetClass, int chance, boolean checkSight, boolean onlyNearby, java.util.function.Predicate<LivingEntity> targetPredicate) {
             super(mob, targetClass, chance, checkSight, onlyNearby, targetPredicate);
         }
 
-        // 静态方法，用于目标验证
         private static boolean isValidTarget(LivingEntity target) {
-            // 如果目标是 GiifuDemosEntity 或 StoriousEntity，则不攻击
             if (target instanceof GiifuDemosEntity || target instanceof StoriousEntity) {
                 return false;
             }
-
-            // 如果目标是普通村民或玩家，则攻击
             return target instanceof Player || target instanceof Villager;
         }
     }
@@ -567,24 +691,22 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
                 .add(Attributes.ARMOR, 15.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 8.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.3D)
-                // 新增穿透属性
-                .add(Attributes.ATTACK_DAMAGE, 25.0D) // 作为备用伤害源
+                .add(Attributes.ATTACK_DAMAGE, 25.0D)
                 .build();
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        // 保持原有的两个控制器
         controllers.add(new AnimationController<>(this, "run", 5, this::idleAnimController));
         controllers.add(new AnimationController<>(this, "Attack", 5, this::attackAnimController));
-        controllers.add(new AnimationController<>(this, "fly", 5, this::flyAnimController)); // 新增飞行控制器
+        controllers.add(new AnimationController<>(this, "fly", 5, this::flyAnimController));
     }
 
     protected <E extends ElementaryInvesHelheim> PlayState flyAnimController(final AnimationState<E> event) {
         if (this.isFlying()) {
-            return event.setAndContinue(FLY); // 飞行时播放 fly 动画
+            return event.setAndContinue(FLY);
         }
-        return PlayState.STOP; // 不飞行时停止
+        return PlayState.STOP;
     }
 
     protected <E extends ElementaryInvesHelheim> PlayState idleAnimController(final AnimationState<E> event) {
@@ -596,11 +718,10 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     }
 
     protected <E extends ElementaryInvesHelheim> PlayState attackAnimController(final AnimationState<E> event) {
-        // 攻击动画逻辑保持不变
         if (this.swinging) {
-            if (getRandom().nextInt(100) < 40) { // 40% 概率触发凶暴
+            if (getRandom().nextInt(100) < 40) {
                 return event.setAndContinue(GOMAD);
-            } else if (getRandom().nextInt(100) < 70) { // 70% 概率触发普通攻击
+            } else if (getRandom().nextInt(100) < 70) {
                 return event.setAndContinue(ATTACK);
             }
         }
@@ -612,11 +733,9 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
         return this.geoCache;
     }
 
-    // ===== 阵营标记渲染 =====
     @Override
     public Component getDisplayName() {
         if (this.factionLeader != null) {
-            // 生成阵营符号
             String symbol = switch (factionLeader.getFactionId().hashCode() % 4) {
                 case 0 -> "♛";
                 case 1 -> "♕";
@@ -624,7 +743,6 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
                 default -> "⚜";
             };
 
-            // 返回带符号的名称
             return Component.literal(symbol + " ")
                     .append(super.getDisplayName())
                     .withStyle(ChatFormatting.GOLD);

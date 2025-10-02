@@ -109,20 +109,7 @@ public class KeyBinding {
             return; // 优先处理召回功能，不继续执行其他按键检测
         }
         
-        // 检查玩家是否手持蝙蝠印章并按下V键（骑士1键）
-        if (KEY_GUARD.consumeClick()) {
-            if (mc.player.getMainHandItem().getItem() instanceof BatStampItem) {
-                PacketHandler.sendToServer(new BatUltrasonicAttackPacket());
-                return; // 优先处理，不继续执行其他按键检测
-            }
-        }
-        
-        // 检测玩家是否手持音速弓柠檬模式
-        boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
-        // 检测玩家是否手持音速弓樱桃模式
-        boolean hasSonicArrowCherryMode = hasSonicArrowCherryMode(mc.player);
-        
-    // Z键：优先检查创世纪驱动器临时取下锁种功能，然后是EvilBats临时取下印章功能，最后是结界拉扯功能
+        // Z键：优先检查创世纪驱动器临时取下锁种功能，然后是EvilBats临时取下印章功能，最后是结界拉扯功能
         if (KEY_BARRIER_PULL.consumeClick()) {
             // 检查玩家是否装备了创世纪驱动器
             boolean hasGenesisDriver = hasGenesisDriver(mc.player);
@@ -137,6 +124,11 @@ public class KeyBinding {
                 PacketHandler.sendToServer(new DarkKivaSealBarrierPullPacket());
             }
         }
+        
+        // 检测玩家是否手持音速弓柠檬模式
+        boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
+        // 检测玩家是否手持音速弓樱桃模式
+        boolean hasSonicArrowCherryMode = hasSonicArrowCherryMode(mc.player);
         
         // 优先检查特殊形态 - 樱桃能量箭矢（任何穿着骑士腰带的玩家都可以使用，只要手持音速弓樱桃模式）
         if (hasSonicArrowCherryMode) {
@@ -216,6 +208,14 @@ public class KeyBinding {
             // 但是如果玩家拥有Overlord标签，允许按下技能3键召唤异域者
             if (isOverlord && KEY_BOOST.consumeClick()) {
                 PacketHandler.sendToServer(new BaronSummonInvesPacket());
+            }
+        }
+        
+        // 最后检查玩家是否手持蝙蝠印章并按下V键（骑士1键）
+        // 这个检查放在最后，这样当玩家穿着特定盔甲时，优先使用盔甲的技能
+        if (KEY_GUARD.consumeClick()) {
+            if (mc.player.getMainHandItem().getItem() instanceof BatStampItem) {
+                PacketHandler.sendToServer(new BatUltrasonicAttackPacket());
             }
         }
     }

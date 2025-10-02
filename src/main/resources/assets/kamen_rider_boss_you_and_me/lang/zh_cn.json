@@ -63,6 +63,8 @@
   "advancement.kamen_rider_boss_you_and_me.become_overlord.desc": "成为星爵巴隆，获得超越人类的力量",
   "advancement.kamen_rider_boss_you_and_me.become_giifu.title": "献上感谢，亡命徒",
   "advancement.kamen_rider_boss_you_and_me.become_giifu.desc": "成为基夫种族",
+  "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.title": "觉醒！牙血鬼之脉",
+  "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.desc": "唤醒体内古老的牙血鬼血脉，成为吸血一族的一员",
   "KEY.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me": "假面骑士中你与我的反派编年史键",
   "KEY.kamen_rider_weapon_craft.change_body": "变身",
   "KEY.kamen_rider_weapon_craft.change_player": "变异",
@@ -113,6 +115,7 @@
   "message.summon.show_guide": "§a已显示祭坛结构指引（粒子效果）§r",
 
   "message.summon.guide_usage": "§7潜行右键王座或使用 /kiva showaltar 查看祭坛结构§r",
+  "message.fang_bloodline.awaken": "§5你体内古老的牙血鬼血脉已经觉醒！你成为了吸血一族的一员！§r",
 
   "msg.kamen_rider.inves_controlled": "异域者已控制！",
   "msg.kamen_rider.inves_protect": "保护领主巴隆！",
@@ -219,5 +222,24 @@
   "entity.kamen_rider_boss_you_and_me.bat_stamp_finish": "蝙蝠印章终结体",
   "entity.kamen_rider_boss_you_and_me.dark_kiva_seal_barrier": "暗黑月骑封印结界",
   "entity.kamen_rider_boss_you_and_me.baron_lemon_energy": "巴隆柠檬能量体",
-  "entity.kamen_rider_boss_you_and_me.baron_banana_energy": "巴隆香蕉能量体"
+  "entity.kamen_rider_boss_you_and_me.baron_banana_energy": "巴隆香蕉能量体",
+  
+  "item.kamen_rider_boss_you_and_me.lord_baron_spawn_egg": "星爵巴隆 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.kivat_bat_two_nd_spawn_egg": "月蝠II世 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.elementary_inves_helheim_spawn_egg": "赫尔海姆异域者 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.giifu_human_spawn_egg": "基夫-怪人态 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.gifftarian_spawn_egg": "基夫始门徒 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.another_zi_o_spawn_egg": "异类时王 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.giifu_demos_spawn_egg": "基夫德莫斯 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.storious_spawn_egg": "斯特利乌斯 刷怪蛋",
+  
+  "item.kamen_rider_boss_you_and_me.lord_baron_spawn_egg.tooltip": "[提示] 右键点击生成星爵巴隆。",
+  "item.kamen_rider_boss_you_and_me.kivat_bat_two_nd_spawn_egg.tooltip": "[提示] 右键点击生成月蝠II世。",
+  "item.kamen_rider_boss_you_and_me.elementary_inves_helheim_spawn_egg.tooltip": "[提示] 右键点击生成赫尔海姆异域者。",
+  "item.kamen_rider_boss_you_and_me.giifu_human_spawn_egg.tooltip": "[提示] 右键点击生成基夫-怪人态。",
+  "item.kamen_rider_boss_you_and_me.gifftarian_spawn_egg.tooltip": "[提示] 右键点击生成基夫始门徒。",
+  "item.kamen_rider_boss_you_and_me.another_zi_o_spawn_egg.tooltip": "[提示] 右键点击生成异类时王。",
+  "item.kamen_rider_boss_you_and_me.giifu_demos_spawn_egg.tooltip": "[提示] 右键点击生成基夫德莫斯。",
+  "item.kamen_rider_boss_you_and_me.storious_spawn_egg.tooltip": "[提示] 右键点击生成斯特利乌斯。",
+  "item group.kamen_rider_boss_you_and_me_spawn_egg_tab": "怪人生成"
   }

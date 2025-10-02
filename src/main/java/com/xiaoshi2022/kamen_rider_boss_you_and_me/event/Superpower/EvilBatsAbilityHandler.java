@@ -90,21 +90,33 @@ public class EvilBatsAbilityHandler {
     // 启用飞行能力
     private static void enableFlight(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            // 设置玩家可以飞行
-            serverPlayer.getAbilities().mayfly = true;
-            serverPlayer.getAbilities().flying = serverPlayer.getAbilities().flying;
-            // 同步飞行状态到客户端
-            serverPlayer.onUpdateAbilities();
+            KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+            
+            // 检查是否已经有其他飞行模式在控制
+            if (variables.currentFlightController == null || variables.currentFlightController.equals("EvilBats")) {
+                // 设置飞行控制器为EvilBats
+                variables.currentFlightController = "EvilBats";
+                // 设置玩家可以飞行
+                serverPlayer.getAbilities().mayfly = true;
+                // 同步飞行状态到客户端
+                serverPlayer.onUpdateAbilities();
+                variables.syncPlayerVariables(serverPlayer);
+            }
         }
     }
     
     // 当不穿盔甲时禁用飞行
     private static void disableFlightIfNotWearingArmor(Player player) {
         if (player instanceof ServerPlayer serverPlayer && !serverPlayer.isCreative() && !serverPlayer.isSpectator()) {
-            if (!isWearingEvilBatsArmor(player) && serverPlayer.getAbilities().mayfly) {
+            KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+            
+            // 只有当飞行控制器是EvilBats并且玩家不再穿着盔甲时，才禁用飞行
+            if (!isWearingEvilBatsArmor(player) && variables.currentFlightController != null && variables.currentFlightController.equals("EvilBats")) {
+                variables.currentFlightController = null;
                 serverPlayer.getAbilities().mayfly = false;
                 serverPlayer.getAbilities().flying = false;
                 serverPlayer.onUpdateAbilities();
+                variables.syncPlayerVariables(serverPlayer);
             }
         }
     }

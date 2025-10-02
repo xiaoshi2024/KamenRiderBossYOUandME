@@ -123,6 +123,7 @@ public class KRBVariables {
 			// 新增：重置其他状态变量
 			clone.isDarkKivaBeltEquipped = false;
 			clone.isOverlord = false; // 玩家死亡时重置Overlord状态
+			clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
 			clone.baseMaxHealth = 20.0D; // 重置为默认生命值
@@ -191,16 +192,17 @@ public class KRBVariables {
 	public long dragonfruit_ready_time = 0L;
 	public long dragonfruit_time = 0L;
 	// 黑暗Kiva相关变量
-	public boolean dark_kiva_bat_mode = false;    // 蝙蝠形态
-	public long dark_kiva_bat_mode_time = 0L;     // 蝙蝠形态开始时间
-	public boolean dark_kiva_blood_suck_active = false; // 吸血能力激活状态
-	public long dark_kiva_blood_suck_cooldown = 0L; // 吸血能力冷却时间
-	public boolean dark_kiva_sonic_blast_active = false; // 声波爆破激活状态
-	public long dark_kiva_sonic_blast_cooldown = 0L; // 声波爆破冷却时间
-	public long dark_kiva_blood_steal_cooldown = 0L; // 生命偷取冷却时间
-	// 封印结界（Fuuin Kekkai）技能相关变量
-	public boolean dark_kiva_fuuin_kekkai_active = false; // 封印结界激活状态
-	public long dark_kiva_fuuin_kekkai_cooldown = 0L; // 封印结界冷却时间
+    public boolean dark_kiva_bat_mode = false;    // 蝙蝠形态
+    public long dark_kiva_bat_mode_time = 0L;     // 蝙蝠形态开始时间
+    public boolean dark_kiva_blood_suck_active = false; // 吸血能力激活状态
+    public long dark_kiva_blood_suck_cooldown = 0L; // 吸血能力冷却时间
+    public boolean dark_kiva_sonic_blast_active = false; // 声波爆破激活状态
+    public long dark_kiva_sonic_blast_cooldown = 0L; // 声波爆破冷却时间
+    public long dark_kiva_blood_steal_cooldown = 0L; // 生命偷取冷却时间
+    // 封印结界（Fuuin Kekkai）技能相关变量
+    public boolean dark_kiva_fuuin_kekkai_active = false; // 封印结界激活状态
+    public long dark_kiva_fuuin_kekkai_cooldown = 0L; // 封印结界冷却时间
+    public String currentFlightController = null; // 当前飞行控制器（用于防止不同盔甲的飞行能力冲突）
 
 	// 在PlayerVariables类中添加字段
 	public double baseMaxHealth = 20.0D; // 默认基础生命值为20点
@@ -241,8 +243,14 @@ public class KRBVariables {
 	public boolean isOverlord = false;
 	// 玩家是否为基夫（Giifu）状态
 	public boolean isGiifu = false;
+	// 玩家是否为牙血鬼血脉状态
+	public boolean isFangBloodline = false;
 	// 巴隆香蕉能量技能冷却时间
 	public long baron_banana_energy_cooldown = 0L;
+	// 保存的玩家原版盔甲数据
+	public net.minecraft.nbt.ListTag originalEvilArmor = null;
+	public net.minecraft.nbt.ListTag originalRiderNecromArmor = null;
+	public net.minecraft.nbt.ListTag originalDarkKivaArmor = null;
 
 	public void syncPlayerVariables(Entity entity) {
 		if (entity instanceof ServerPlayer serverPlayer)
@@ -293,6 +301,7 @@ public class KRBVariables {
 		nbt.putBoolean("isEvilBatsStealthed", isEvilBatsStealthed); // 新增：存储EvilBats隐密模式状态
 		nbt.putBoolean("isDarkKivaBeltEquipped", isDarkKivaBeltEquipped); // 新增字段：记录是否装备了黑暗Kiva腰带
 		nbt.putBoolean("isGenesisDriverEquipped", isGenesisDriverEquipped); // 新增字段：记录是否装备了Genesis驱动器
+		nbt.putString("currentFlightController", currentFlightController == null ? "" : currentFlightController); // 新增：存储当前飞行控制器
 		nbt.putBoolean("isSengokuDriverEmptyEquipped", isSengokuDriverEmptyEquipped); // 新增字段：记录是否装备了空的Sengoku驱动器
 		nbt.putBoolean("isSengokuDriverFilledEquipped", isSengokuDriverFilledEquipped); // 新增字段：记录是否装备了有锁种的Sengoku驱动器
 		nbt.putBoolean("isOrochiDriverEquipped", isOrochiDriverEquipped); // 新增字段：记录是否装备了Orochi驱动器
@@ -324,9 +333,21 @@ public class KRBVariables {
 		nbt.putBoolean("isOverlord", isOverlord);
 		// 序列化Giifu状态
 		nbt.putBoolean("isGiifu", isGiifu);
+		// 序列化牙血鬼血脉状态
+		nbt.putBoolean("isFangBloodline", isFangBloodline);
 		// 序列化腰带移除相关变量
 		nbt.putLong("beltRemovedTime", beltRemovedTime);
 		nbt.putString("removedBeltType", removedBeltType);
+		// 序列化保存的玩家原版盔甲数据
+		if (originalEvilArmor != null) {
+			nbt.put("originalEvilArmor", originalEvilArmor);
+		}
+		if (originalRiderNecromArmor != null) {
+			nbt.put("originalRiderNecromArmor", originalRiderNecromArmor);
+		}
+		if (originalDarkKivaArmor != null) {
+			nbt.put("originalDarkKivaArmor", originalDarkKivaArmor);
+		}
 		return nbt;
 	}
 
@@ -375,6 +396,7 @@ public class KRBVariables {
 		isEvilBatsStealthed = nbt.getBoolean("isEvilBatsStealthed"); // 新增：读取EvilBats隐密模式状态
 		isDarkKivaBeltEquipped = nbt.getBoolean("isDarkKivaBeltEquipped"); // 新增字段：读取是否装备了黑暗Kiva腰带
 		isGenesisDriverEquipped = nbt.getBoolean("isGenesisDriverEquipped"); // 新增字段：读取是否装备了Genesis驱动器
+		currentFlightController = nbt.contains("currentFlightController") && !nbt.getString("currentFlightController").isEmpty() ? nbt.getString("currentFlightController") : null; // 新增：读取当前飞行控制器
 		isSengokuDriverEmptyEquipped = nbt.getBoolean("isSengokuDriverEmptyEquipped"); // 新增字段：读取是否装备了空的Sengoku驱动器
 		isSengokuDriverFilledEquipped = nbt.getBoolean("isSengokuDriverFilledEquipped"); // 新增字段：读取是否装备了有锁种的Sengoku驱动器
 		isOrochiDriverEquipped = nbt.getBoolean("isOrochiDriverEquipped"); // 新增字段：读取是否装备了Orochi驱动器
@@ -401,9 +423,27 @@ public class KRBVariables {
 		isOverlord = nbt.contains("isOverlord") ? nbt.getBoolean("isOverlord") : false;
 		// 反序列化Giifu状态
 		isGiifu = nbt.contains("isGiifu") ? nbt.getBoolean("isGiifu") : false;
+		// 反序列化牙血鬼血脉状态
+		isFangBloodline = nbt.contains("isFangBloodline") ? nbt.getBoolean("isFangBloodline") : false;
 		// 反序列化腰带移除相关变量
 		beltRemovedTime = nbt.contains("beltRemovedTime") ? nbt.getLong("beltRemovedTime") : 0L;
 		removedBeltType = nbt.contains("removedBeltType") ? nbt.getString("removedBeltType") : "";
+		// 反序列化保存的玩家原版盔甲数据
+		if (nbt.contains("originalEvilArmor")) {
+			originalEvilArmor = nbt.getList("originalEvilArmor", net.minecraft.nbt.Tag.TAG_COMPOUND);
+		} else {
+			originalEvilArmor = null;
+		}
+		if (nbt.contains("originalRiderNecromArmor")) {
+			originalRiderNecromArmor = nbt.getList("originalRiderNecromArmor", net.minecraft.nbt.Tag.TAG_COMPOUND);
+		} else {
+			originalRiderNecromArmor = null;
+		}
+		if (nbt.contains("originalDarkKivaArmor")) {
+			originalDarkKivaArmor = nbt.getList("originalDarkKivaArmor", net.minecraft.nbt.Tag.TAG_COMPOUND);
+		} else {
+			originalDarkKivaArmor = null;
+		}
 	}
 	}
 
@@ -484,9 +524,15 @@ public class KRBVariables {
                     variables.isOverlord = message.data.isOverlord;
                     // 同步Giifu状态
                     variables.isGiifu = message.data.isGiifu;
+                    // 同步牙血鬼血脉状态
+                    variables.isFangBloodline = message.data.isFangBloodline;
                     // 同步腰带移除相关变量
                     variables.beltRemovedTime = message.data.beltRemovedTime;
                     variables.removedBeltType = message.data.removedBeltType;
+                    // 同步保存的玩家原版盔甲数据
+                    variables.originalEvilArmor = message.data.originalEvilArmor;
+                    variables.originalRiderNecromArmor = message.data.originalRiderNecromArmor;
+                    variables.originalDarkKivaArmor = message.data.originalDarkKivaArmor;
 				}
 			});
 			context.setPacketHandled(true);

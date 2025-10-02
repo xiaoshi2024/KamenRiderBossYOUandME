@@ -55,4 +55,19 @@ public class ModTab {
                 output.accept(GIIFU_SLEEPING_STATE_ITEM.get());
                 output.accept(BLOODLINE_FANG.get());
             })).build());
+
+    public static final RegistryObject<CreativeModeTab> SPAWN_EGG_TAB = TABS.register("kamen_rider_boss_you_and_me_spawn_egg_tab", () -> CreativeModeTab.builder()
+            .icon(() -> LORD_BARON_SPAWN_EGG.get().getDefaultInstance())
+            .title(Component.translatable("item group.kamen_rider_boss_you_and_me_spawn_egg_tab"))
+            .displayItems(((parameters, output) -> {
+                output.accept(LORD_BARON_SPAWN_EGG.get());
+                output.accept(KIVAT_BAT_TWO_ND_SPAWN_EGG.get());
+                output.accept(ELEMENTARY_INVES_HELHEIM_SPAWN_EGG.get());
+                output.accept(GIIFU_HUMAN_SPAWN_EGG.get());
+                output.accept(GIFFTARIAN_SPAWN_EGG.get());
+                output.accept(ANOTHER_ZI_O_SPAWN_EGG.get());
+                output.accept(GIIFU_DEMOS_SPAWN_EGG.get());
+                output.accept(STORIOUS_SPAWN_EGG.get());
+            })).build());
+
 }
