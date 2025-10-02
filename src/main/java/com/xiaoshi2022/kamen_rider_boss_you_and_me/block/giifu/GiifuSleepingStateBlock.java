@@ -4,6 +4,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.GiifuSleep
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -264,7 +266,19 @@ public class GiifuSleepingStateBlock extends BaseEntityBlock {
             srv.addFreshEntity(d);
             player.sendSystemMessage(Component.literal("基夫的DNA侵蚀了你……你死了！"));
         } else {
-            player.getPersistentData().putBoolean("hasGiifuDna", true);
+            // 直接设置玩家为基夫种族，不再使用旧的hasGiifuDna标记
+            player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
+                if (!variables.isGiifu) {
+                    variables.isGiifu = true;
+                    variables.syncPlayerVariables(player);
+                    player.displayClientMessage(net.minecraft.network.chat.Component.literal("§d基夫血脉觉醒！你现在是基夫种族！§r"), true);
+                    
+                    // 触发成就：献上感谢，亡命徒
+                    if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                        kamen_rider_boss_you_and_me.GIIFU_TRIGGER.trigger(serverPlayer);
+                    }
+                }
+            });
             player.addEffect(new MobEffectInstance(ModEffects.GIIFU_DNA.get(), -1, 0, true, false));
             player.sendSystemMessage(Component.literal("你继承了基夫的遗传因子！"));
         }

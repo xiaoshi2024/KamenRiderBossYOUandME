@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.OverlordCommand;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.GiifuCommand;
 
 public class ModCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -32,6 +33,9 @@ public class ModCommands {
         
         // 注册Overlord命令
         OverlordCommand.register(dispatcher);
+        
+        // 注册Giifu命令
+        GiifuCommand.register(dispatcher);
         
         // 注册变身武器指令
         TransformationWeaponCommand.register(dispatcher);

@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.tyrant.TyrantIntangibilityTogglePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveLockSeedPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveBatStampPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import net.minecraft.network.chat.Component;
@@ -218,6 +219,22 @@ public class PacketHandler {
                 TyrantIntangibilityTogglePacket::encode,
                 TyrantIntangibilityTogglePacket::decode,
                 TyrantIntangibilityTogglePacket::handle);
+                
+        // 注册蝙蝠印章超音波攻击数据包
+        INSTANCE.registerMessage(
+                index++,
+                BatUltrasonicAttackPacket.class,
+                BatUltrasonicAttackPacket::encode,
+                BatUltrasonicAttackPacket::new,
+                BatUltrasonicAttackPacket::handle);
+                
+        // 注册EvilBats临时取下蝙蝠印章数据包
+        INSTANCE.registerMessage(
+                index++,
+                TempRemoveBatStampPacket.class,
+                TempRemoveBatStampPacket::encode,
+                TempRemoveBatStampPacket::decode,
+                TempRemoveBatStampPacket::handle);
                 
         // 注册Overlord藤蔓技能数据包
         INSTANCE.registerMessage(

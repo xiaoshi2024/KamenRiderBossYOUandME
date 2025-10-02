@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.GiifuTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.OverlordTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.TamedKivatTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
@@ -97,6 +98,7 @@ public class kamen_rider_boss_you_and_me
     // 在 Mod 主类或 Setup 类中添加
     public static final TamedKivatTrigger TAMED_KIVAT_TRIGGER = CriteriaTriggers.register(new TamedKivatTrigger());
     public static final OverlordTrigger OVERLORD_TRIGGER = CriteriaTriggers.register(OverlordTrigger.getInstance());
+    public static final GiifuTrigger GIIFU_TRIGGER = CriteriaTriggers.register(GiifuTrigger.getInstance());
 
     public kamen_rider_boss_you_and_me()
     {

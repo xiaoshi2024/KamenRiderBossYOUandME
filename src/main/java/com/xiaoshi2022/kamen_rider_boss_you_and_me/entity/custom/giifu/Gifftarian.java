@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.VillagerEvents;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
@@ -68,19 +69,10 @@ public class Gifftarian extends Monster implements GeoEntity {
         this.goalSelector.addGoal(7, new FloatGoal(this));
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        
+        // 主动攻击非基夫种族的玩家
+        this.targetSelector.addGoal(2, new CustomAttackGoal<>(this, Player.class, 20, true, false, CustomAttackGoal::isValidTarget));
 
-        /* 只攻击没有因子的玩家 */
-        this.targetSelector.addGoal(2,
-                new NearestAttackableTargetGoal<>(
-                        this,                              // 实体
-                        Player.class,                      // 目标类型
-                        10,                                // 优先级距离
-                        true,                              // 必须可见
-                        false,                             // 不限视线
-                        target -> {                        // 目标条件
-                            if (!(target instanceof Player player)) return false;
-                            return !player.getPersistentData().getBoolean("hasGiifuDna");
-                        }));
         // 攻击普通村民
         this.targetSelector.addGoal(3, new CustomAttackGoal<>(this, Villager.class, 20, true, false, CustomAttackGoal::isValidTarget));
 
@@ -99,8 +91,16 @@ public class Gifftarian extends Monster implements GeoEntity {
                 return false;
             }
 
-            // 如果目标是普通村民或玩家，则攻击
-            return target instanceof Player || target instanceof Villager;
+            // 如果目标是玩家，检查是否为基夫种族
+            if (target instanceof Player) {
+                Player playerTarget = (Player) target;
+                KRBVariables.PlayerVariables targetVars = playerTarget.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY).orElse(new KRBVariables.PlayerVariables());
+                // 只攻击非基夫种族的玩家
+                return !targetVars.isGiifu;
+            }
+
+            // 攻击普通村民
+            return target instanceof Villager;
         }
     }
 

@@ -2,23 +2,28 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.BatStamp.BatStampRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatDarksEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.worldgen.dimension.GiifuCurseDimension;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.util.ITeleporter;
@@ -34,6 +39,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -84,18 +90,6 @@ public class BatStampItem extends Item implements GeoItem {
             player.changeDimension(
                     player.server.getLevel(GiifuCurseDimension.GIIFU_CURSE_DIM),
                     new SimpleTeleporter()
-            );
-        }
-    }
-
-    // 简单的传送器实现
-    private static class SimpleTeleporter implements ITeleporter {
-        public Vec3 getPortalArrivalPosition(net.minecraft.server.level.ServerLevel level, net.minecraft.world.entity.Entity entity, float yRot) {
-            // 传送到平台中心上方
-            return new Vec3(
-                    GiifuCurseDimension.PLATFORM_CENTER.getX() + 0.5,
-                    GiifuCurseDimension.PLATFORM_CENTER.getY() + 1,
-                    GiifuCurseDimension.PLATFORM_CENTER.getZ() + 0.5
             );
         }
     }
@@ -197,6 +191,141 @@ public class BatStampItem extends Item implements GeoItem {
         });
     }
 
+    /* ========== 超音波攻击功能 ========== */
+    /**
+     * 执行超音波攻击的静态方法
+     * 由BatUltrasonicAttackPacket调用
+     */
+    public static void performUltrasonicAttack(ServerPlayer serverPlayer) {
+        Level level = serverPlayer.level();
+
+        // 检查玩家是否佩戴了Two_sidriver腰带
+        Optional<SlotResult> opt = CuriosApi.getCuriosInventory(serverPlayer)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver));
+
+        boolean isEvilForm;
+        if (opt.isPresent()) {
+            ItemStack belt = opt.get().stack();
+            Two_sidriver.DriverType type = Two_sidriver.getDriverType(belt);
+
+            // 检查是否是evil形态
+            isEvilForm = type == Two_sidriver.DriverType.BAT;
+        } else {
+            isEvilForm = false;
+        }
+
+        // 播放玩家动画 - stamps
+        playPlayerAnimation(serverPlayer, "stamps");
+
+        // 播放超音波攻击音效
+        level.playSound(
+                null,
+                serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(),
+                ModBossSounds.BAT.get(),
+                SoundSource.PLAYERS,
+                1.0F, 1.0F
+        );
+
+        // 在服务器端执行攻击逻辑
+        level.getServer().execute(() -> {
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
+                        @Override
+                        public void run() {
+                            level.getServer().execute(() -> {
+                                // 获取玩家视线方向
+                                Vec3 lookVec = serverPlayer.getLookAngle();
+
+                                // 根据是否为evil形态调整攻击范围和伤害
+                                double range = isEvilForm ? 15.0 : 10.0;
+                                float damage = isEvilForm ? 38.0F : 8.0F;
+                                double knockbackStrength = isEvilForm ? 2.0 : 1.5;
+
+                                // 创建AABB来检测前方的实体
+                                Vec3 startPos = serverPlayer.getEyePosition(1.0F);
+                                Vec3 endPos = startPos.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
+
+                                // 创建一个长方体区域来检测实体
+                                double width = isEvilForm ? 3.0 : 2.0;
+                                AABB aabb = new AABB(
+                                        Math.min(startPos.x, endPos.x) - width,
+                                        Math.min(startPos.y, endPos.y) - 1.0,
+                                        Math.min(startPos.z, endPos.z) - width,
+                                        Math.max(startPos.x, endPos.x) + width,
+                                        Math.max(startPos.y, endPos.y) + 1.0,
+                                        Math.max(startPos.z, endPos.z) + width
+                                );
+
+                                // 获取区域内的所有实体
+                                List<Entity> entities = level.getEntities(serverPlayer, aabb,
+                                        entity -> entity instanceof LivingEntity && !entity.isSpectator() && entity.isAlive());
+
+                                // 对每个实体造成伤害和击退
+                                for (Entity entity : entities) {
+                                    if (entity instanceof LivingEntity livingEntity && livingEntity != serverPlayer) {
+                                        // 计算击退方向（从玩家到实体）
+                                        Vec3 knockbackDir = entity.position().subtract(serverPlayer.position()).normalize();
+
+                                        // 应用伤害
+                                        boolean hurt = livingEntity.hurt(serverPlayer.damageSources().playerAttack(serverPlayer), damage);
+
+                                        if (hurt) {
+                                            // 应用击退效果
+                                            livingEntity.push(knockbackDir.x * knockbackStrength, 0.3, knockbackDir.z * knockbackStrength);
+
+                                            // 在evil形态下添加额外效果，例如减速
+                                            if (isEvilForm) {
+                                                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 1));
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // 生成视觉效果（粒子）
+                                spawnUltrasonicParticles((ServerLevel) level, startPos, endPos, isEvilForm);
+                            });
+                        }
+                    },
+                    500 // 0.5秒延迟，与动画同步
+            );
+        });
+    }
+
+    /**
+     * 生成超音波粒子效果
+     */
+    private static void spawnUltrasonicParticles(ServerLevel level, Vec3 startPos, Vec3 endPos, boolean isEvilForm) {
+        // 计算方向向量和距离
+        Vec3 direction = endPos.subtract(startPos).normalize();
+        double distance = startPos.distanceTo(endPos);
+
+        // 生成粒子
+        int particleCount = isEvilForm ? 60 : 40;
+        for (int i = 0; i < particleCount; i++) {
+            // 计算沿光线的位置
+            double progress = (double) i / particleCount;
+            double offsetX = startPos.x + direction.x * distance * progress + (level.random.nextDouble() - 0.5) * 0.5;
+            double offsetY = startPos.y + direction.y * distance * progress + (level.random.nextDouble() - 0.5) * 0.5;
+            double offsetZ = startPos.z + direction.z * distance * progress + (level.random.nextDouble() - 0.5) * 0.5;
+
+            // 生成粒子
+            level.sendParticles(
+                    ParticleTypes.SONIC_BOOM,
+                    offsetX, offsetY, offsetZ,
+                    1, 0, 0, 0, 0
+            );
+
+            // 在evil形态下额外添加红色粒子
+            if (isEvilForm && level.random.nextBoolean()) {
+                level.sendParticles(
+                        ParticleTypes.DRIPPING_LAVA,
+                        offsetX, offsetY, offsetZ,
+                        1, 0, 0, 0, 0
+                );
+            }
+        }
+    }
 
     /* ========== 玩家动画支持 ========== */
     /* 发送动画到客户端 */
@@ -225,5 +354,17 @@ public class BatStampItem extends Item implements GeoItem {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    // 简单的传送器实现
+    private static class SimpleTeleporter implements ITeleporter {
+        public Vec3 getPortalArrivalPosition(net.minecraft.server.level.ServerLevel level, net.minecraft.world.entity.Entity entity, float yRot) {
+            // 传送到平台中心上方
+            return new Vec3(
+                    GiifuCurseDimension.PLATFORM_CENTER.getX() + 0.5,
+                    GiifuCurseDimension.PLATFORM_CENTER.getY() + 1,
+                    GiifuCurseDimension.PLATFORM_CENTER.getZ() + 0.5
+            );
+        }
     }
 }

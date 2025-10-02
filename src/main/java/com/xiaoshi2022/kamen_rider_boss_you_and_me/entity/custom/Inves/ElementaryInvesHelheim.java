@@ -112,6 +112,21 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
             if (target == this.master || this.master.isAlliedTo(target)) {
                 return false;
             }
+            
+            // 如果目标有主人，且主人是另一个霸主玩家，允许攻击
+            if (target instanceof ElementaryInvesHelheim targetInves && targetInves.getMaster() != null) {
+                // 两个不同主人的异域者可以互相攻击
+                return !this.master.equals(targetInves.getMaster());
+            }
+            
+            // 如果目标是另一个霸主玩家，允许攻击
+            if (target instanceof Player targetPlayer) {
+                KRBVariables.PlayerVariables targetVars = targetPlayer.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                if (targetVars.isOverlord && !this.master.equals(targetPlayer)) {
+                    return true;
+                }
+            }
+            
             // 攻击主人的敌人
             return true;
         }
@@ -458,7 +473,25 @@ public class ElementaryInvesHelheim extends Monster implements GeoEntity {
     public boolean isAlliedTo(Entity entity) {
         // 优先检查主人关系
         if (this.master != null) {
-            return entity == this.master || this.master.isAlliedTo(entity);
+            // 如果实体是主人，或主人的盟友，视为盟友
+            if (entity == this.master || this.master.isAlliedTo(entity)) {
+                return true;
+            }
+            
+            // 如果实体是另一个有主人的异域者，且两个主人不同，则不视为盟友
+            if (entity instanceof ElementaryInvesHelheim otherInves && otherInves.getMaster() != null) {
+                return this.master.equals(otherInves.getMaster());
+            }
+            
+            // 如果实体是另一个霸主玩家，且不是自己的主人，则不视为盟友
+            if (entity instanceof Player otherPlayer) {
+                KRBVariables.PlayerVariables otherVars = otherPlayer.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                if (otherVars.isOverlord && !this.master.equals(otherPlayer)) {
+                    return false;
+                }
+            }
+            
+            return false;
         }
 
         // 其次检查阵营关系

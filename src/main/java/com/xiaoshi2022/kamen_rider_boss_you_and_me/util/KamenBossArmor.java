@@ -14,6 +14,16 @@ public interface KamenBossArmor {
     default int getStrengthLevel() {
         return 2;
     }
+    
+    // 获取额外移动速度加成
+    default double getSpeedBonus() {
+        return 0.0;
+    }
+    
+    // 获取声音降低效果
+    default float getSoundReduction() {
+        return 0.0f;
+    }
 
     // 应用力量效果，不干扰原版更高等级的力量
     default void applyStrengthEffect(Player player) {

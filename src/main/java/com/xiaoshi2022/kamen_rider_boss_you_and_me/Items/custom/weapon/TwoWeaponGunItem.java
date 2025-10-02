@@ -1,9 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.TwoWeapon.TwoWeaponRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.BatStampItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -143,6 +146,37 @@ public class TwoWeaponGunItem extends TwoWeaponItem {
         
         // 在bat变种情况下进行检测和处理
         Variant currentVariant = getVariant(stack);
+
+        /* -------- 副手拿枪形态武器，主手拿蝙蝠印章，右键将武器变为bat形态 -------- */
+        if (hand == InteractionHand.OFF_HAND && !level.isClientSide) {
+            ItemStack mainHandStack = player.getMainHandItem();
+            if (mainHandStack.getItem() instanceof BatStampItem && 
+                currentVariant == Variant.DEFAULT) {
+                // 将副手中的枪形态武器设置为BAT变种
+                setVariant(stack, Variant.BAT);
+                
+                // 播放转换音效
+                level.playSound(null, player.blockPosition(),
+                        SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 1.5F);
+                level.playSound(null, player.blockPosition(),
+                        ModBossSounds.BAT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                
+                // 从主手中移除蝙蝠印章
+                mainHandStack.shrink(1);
+                if (mainHandStack.isEmpty()) {
+                    player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                } else {
+                    player.setItemInHand(InteractionHand.MAIN_HAND, mainHandStack);
+                }
+                
+                // 发送消息提示玩家
+                player.sendSystemMessage(
+                        Component.literal("已将枪形态武器注入蝙蝠力量！")
+                );
+                
+                return InteractionResultHolder.success(stack);
+            }
+        }
 
         /* -------- Shift + 右键：切换到剑模式 -------- */
         if (player.isShiftKeyDown() && !player.isUsingItem()) {

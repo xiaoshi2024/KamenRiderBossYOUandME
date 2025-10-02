@@ -1,11 +1,14 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.BatStampItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.EvilBatsArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.BatUltrasonicAttackPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.CherryEnergyArrowPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SummonDukeKnightPacket;
@@ -27,6 +30,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimKi
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimBlindnessFieldPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.DarkGaimHelheimCrackPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveLockSeedPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveBatStampPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.tyrant.TyrantIntangibilityTogglePacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
@@ -88,6 +92,9 @@ public class KeyBinding {
         // 检测玩家是否穿着火龙果盔甲
         boolean isTyrant = isTyrantArmorEquipped(mc.player);
         
+        // 检测玩家是否穿着全套EvilBats盔甲
+        boolean isEvilBats = isEvilBatsArmorEquipped(mc.player);
+        
         // 检查玩家是否拥有Overlord标签
         boolean isOverlord = false;
         try {
@@ -102,18 +109,29 @@ public class KeyBinding {
             return; // 优先处理召回功能，不继续执行其他按键检测
         }
         
+        // 检查玩家是否手持蝙蝠印章并按下V键（骑士1键）
+        if (KEY_GUARD.consumeClick()) {
+            if (mc.player.getMainHandItem().getItem() instanceof BatStampItem) {
+                PacketHandler.sendToServer(new BatUltrasonicAttackPacket());
+                return; // 优先处理，不继续执行其他按键检测
+            }
+        }
+        
         // 检测玩家是否手持音速弓柠檬模式
         boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
         // 检测玩家是否手持音速弓樱桃模式
         boolean hasSonicArrowCherryMode = hasSonicArrowCherryMode(mc.player);
         
-    // Z键：优先检查创世纪驱动器临时取下锁种功能，然后是结界拉扯功能
+    // Z键：优先检查创世纪驱动器临时取下锁种功能，然后是EvilBats临时取下印章功能，最后是结界拉扯功能
         if (KEY_BARRIER_PULL.consumeClick()) {
             // 检查玩家是否装备了创世纪驱动器
             boolean hasGenesisDriver = hasGenesisDriver(mc.player);
             if (hasGenesisDriver) {
                 // 发送临时取下锁种的数据包
                 PacketHandler.sendToServer(new TempRemoveLockSeedPacket());
+            } else if (isEvilBats) {
+                // 发送临时取下蝙蝠印章的数据包
+                PacketHandler.sendToServer(new TempRemoveBatStampPacket());
             } else {
                 // 没有创世纪驱动器时，执行原来的结界拉扯功能
                 PacketHandler.sendToServer(new DarkKivaSealBarrierPullPacket());
@@ -267,6 +285,14 @@ public class KeyBinding {
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof TyrantItem &&
                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof TyrantItem &&
                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof TyrantItem;
+    }
+    
+    // 客户端专用的EvilBats盔甲检测方法
+    private static boolean isEvilBatsArmorEquipped(LocalPlayer player) {
+        // 检查是否穿着EvilBats头盔、胸甲和护腿
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof EvilBatsArmor &&
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof EvilBatsArmor &&
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof EvilBatsArmor;
     }
     
     // 检查玩家是否手持音速弓樱桃模式

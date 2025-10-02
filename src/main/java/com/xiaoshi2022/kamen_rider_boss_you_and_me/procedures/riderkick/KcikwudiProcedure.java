@@ -53,12 +53,14 @@ public class KcikwudiProcedure {
 		if (entity == null)
 			return;
 
-		// 原有的无敌状态处理
-		if (entity instanceof Player player &&
-				player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-						.orElse(new KRBVariables.PlayerVariables()).wudi) {
-
-			if (event != null && event.isCancelable()) {
+		// 修改无敌状态处理逻辑：只有在踢击动作期间才真正无敌
+		if (entity instanceof Player player) {
+			KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+					.orElse(new KRBVariables.PlayerVariables());
+			
+			// 只有同时满足wudi为true且kcik为true时才无敌
+			// 这样确保无敌状态只在踢击动作期间有效
+			if (variables.wudi && variables.kcik && event != null && event.isCancelable()) {
 				event.setCanceled(true);
 			}
 		}

@@ -186,9 +186,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         // 目标选择
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(2, new CurseSpaceSkillGoal(this));
-        this.targetSelector.addGoal(3,
-                new NearestAttackableTargetGoal<>(this, Player.class, true,
-                        player -> !player.getPersistentData().getBoolean("hasGiifuDna")));
+        // 移除主动攻击玩家的目标选择器，基夫不主动攻击玩家
     }
     
     // 自定义特殊攻击目标
@@ -343,7 +341,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         for (LivingEntity entity : this.level().getEntitiesOfClass(
                 LivingEntity.class,
                 this.getBoundingBox().inflate(2.0D),
-                e -> e != this && !(e instanceof Player && ((Player)e).isCreative()))
+                e -> e != this && !(e instanceof Player && ((Player)e).isCreative()) && !isGiifuDisciple(e))
         ) {
             entity.hurt(this.damageSources().mobAttack(this), (float)damage);
         }
@@ -411,10 +409,19 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
     private LivingEntity findGravTarget() {
         return level().getEntitiesOfClass(LivingEntity.class,
                         new AABB(blockPosition()).inflate(GRAV_WAVE_RANGE),
-                        e -> e != this && e.isAlive() && !(e instanceof GiifuHumanEntity))
+                        e -> e != this && e.isAlive() && !(e instanceof GiifuHumanEntity) && !isGiifuDisciple(e))
                 .stream()
                 .min(Comparator.comparingDouble(this::distanceToSqr))
                 .orElse(null);
+    }
+    
+    /**
+     * 判断实体是否是基夫门徒或基夫德莫斯
+     */
+    private boolean isGiifuDisciple(LivingEntity entity) {
+        String className = entity.getClass().getName().toLowerCase();
+        return !(entity instanceof Player) && 
+               (className.contains("giifudemos") || className.contains("gifftarian") || className.contains("storious"));
     }
 
     private void performGravWave(LivingEntity target) {
@@ -456,7 +463,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         // 1. 范围伤害（所有 LivingEntity）
         AABB box = new AABB(blockPosition()).inflate(SHOCK_RANGE);
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box)) {
-            if (e == this) continue;
+            if (e == this || isGiifuDisciple(e)) continue;
             // 基础伤害
             e.hurt(damageSources().mobAttack(this), SHOCK_DAMAGE);
 

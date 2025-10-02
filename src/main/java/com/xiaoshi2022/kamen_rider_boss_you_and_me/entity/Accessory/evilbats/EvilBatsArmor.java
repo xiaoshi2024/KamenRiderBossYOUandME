@@ -102,12 +102,53 @@ public class EvilBatsArmor extends ArmorItem implements GeoItem, KamenBossArmor,
         this.applyResistanceEffect(player);
         // 添加力量效果
         this.applyStrengthEffect(player);
+        
+        // 检查并更新隐密状态
+        this.updateStealthStatus(player);
     }
 
+    // 更新隐密状态
+    private void updateStealthStatus(Player player) {
+        if (player.level().isClientSide()) return;
+        
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        boolean isFullArmor = isFullArmorEquipped((ServerPlayer) player);
+        
+        // 当装备全套盔甲时设置隐密状态为true
+        if (isFullArmor && !variables.isEvilBatsStealthed) {
+            variables.isEvilBatsStealthed = true;
+            variables.syncPlayerVariables(player);
+        }
+        
+        // 当不再装备全套盔甲时清除隐密状态
+        if (!isFullArmor && variables.isEvilBatsStealthed) {
+            variables.isEvilBatsStealthed = false;
+            variables.syncPlayerVariables(player);
+        }
+    }
+    
     // 不再提供力量效果，避免与原版药水冲突
     @Override
     public int getStrengthLevel() {
         return 2; // 不使用力量效果
+    }
+    
+    // 提供额外的移动速度加成
+    @Override
+    public double getSpeedBonus() {
+        return 0.2; // 20% 额外移动速度
+    }
+    
+    // 提供静音效果加成
+    @Override
+    public float getSoundReduction() {
+        return 0.8f; // 80% 声音降低
+    }
+    
+    // 覆盖原版的力量效果方法，使其不添加力量效果
+    @Override
+    public void applyStrengthEffect(Player player) {
+        // 不添加力量效果，避免与原版药水冲突
     }
 
     // 覆写getResistanceLevel方法，设置自定义抗性等级
