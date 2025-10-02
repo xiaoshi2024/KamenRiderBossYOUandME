@@ -25,6 +25,7 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
@@ -97,6 +98,7 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
 
     public Genesis_driver(Properties properties) {
         super(properties);
+//        // 注册为同步可动画对象，确保多人游戏中材质变化能正确同步
 //        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 

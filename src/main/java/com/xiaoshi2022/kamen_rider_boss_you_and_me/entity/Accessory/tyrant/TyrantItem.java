@@ -16,6 +16,7 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
@@ -85,6 +86,8 @@ public class TyrantItem extends ArmorItem implements GeoItem , KamenBossArmor , 
 			}
 
 		}, type, properties);
+		// 注册为同步可动画对象，确保多人游戏中材质变化能正确同步
+		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
 	@Override

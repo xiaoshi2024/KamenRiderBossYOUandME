@@ -2,17 +2,19 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.Tyra
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.TyrantAbilityHandler;
+import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.cache.object.GeoBone;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.client.model.HumanoidModel;
 
 public class TyrantArmorRenderer extends GeoArmorRenderer<TyrantItem> {
 
@@ -33,11 +35,10 @@ public class TyrantArmorRenderer extends GeoArmorRenderer<TyrantItem> {
 		this.leftBoot = new GeoBone(null, "armorLeftBoot", false, (double) 0, false, false);
 	}
 
-	// 保存当前被渲染的实体
-	public void prepForRender(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> originalModel) {
-		super.prepForRender(livingEntity, itemStack, equipmentSlot, originalModel);
-		// 保存当前被渲染的实体
-		this.currentEntity = livingEntity;
+	@Override
+	public void prepForRender(@Nullable Entity entity, ItemStack stack, @Nullable EquipmentSlot slot, @Nullable HumanoidModel<?> baseModel) {
+		super.prepForRender(entity, stack, slot, baseModel);
+		this.currentEntity = (LivingEntity) entity;
 	}
 
 	@Override

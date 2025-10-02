@@ -8,6 +8,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -37,15 +38,12 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.network.NetworkRegistry;
+
+import java.util.*;
 import java.util.function.Supplier;
-import java.util.Optional;
 import java.util.function.Function;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public class TyrantAbilityHandler {
@@ -575,119 +573,171 @@ public class TyrantAbilityHandler {
     private static void spawnPhaseModeParticlesOnServer(ServerPlayer player) {
         ServerLevel serverLevel = (ServerLevel) player.level();
         Vec3 pos = player.position();
+        Vec3 lookVec = player.getLookAngle();
+        Vec3 movement = player.getDeltaMovement();
+        RandomSource random = player.getRandom();
 
-        // 创建核心能量粒子（最靠近玩家）
+        // 预测下一刻的位置
+        Vec3 predictedPos = pos.add(movement.scale(1.0)); // 增加预测距离
+
+        // 核心能量粒子（最亮的部分）
         DustParticleOptions coreParticle = new DustParticleOptions(
                 new Vector3f(1.0F, 0.0F, 0.0F), // 纯红色
-                1.5F // 较大的粒子大小
+                3.0F // 增大粒子大小
         );
 
-        // 核心粒子 - 非常靠近玩家，模拟能量核心
-        for (int i = 0; i < 30; i++) { // 增加到30个粒子
-            // 较小的分布范围，使粒子更靠近玩家
-            double offsetX = (player.getRandom().nextDouble() - 0.5) * 1.0;
-            double offsetY = 0.5 + player.getRandom().nextDouble() * 1.0; // 集中在玩家身体区域
-            double offsetZ = (player.getRandom().nextDouble() - 0.5) * 1.0;
+        // 生成稳定的核心能量团
+        for (int i = 0; i < 60; i++) {
+            // 使用更小的分布范围，使粒子更紧密地围绕玩家
+            double angle = random.nextDouble() * Math.PI * 2;
+            double radius = random.nextDouble() * 0.8;
+
+            // 球形分布
+            double offsetX = Math.cos(angle) * radius;
+            double offsetY = random.nextGaussian() * 0.3 + 1.0;
+            double offsetZ = Math.sin(angle) * radius;
+
+            // 向中心聚集的速度
+            double velocityX = -offsetX * 0.15;
+            double velocityY = 0.02 + random.nextDouble() * 0.02;
+            double velocityZ = -offsetZ * 0.15;
 
             serverLevel.sendParticles(
                     coreParticle,
-                    pos.x + offsetX,
-                    pos.y + offsetY,
-                    pos.z + offsetZ,
-                    0, // 不需要额外粒子
-                    0, 0.02, 0, // 轻微向上的速度
-                    0 // 不需要额外速度
+                    predictedPos.x + offsetX,
+                    predictedPos.y + offsetY,
+                    predictedPos.z + offsetZ,
+                    0,
+                    velocityX, velocityY, velocityZ,
+                    0.1
             );
         }
 
-        // 创建中间层粒子（稍大的分布范围）
+        // 中间层能量粒子
         DustParticleOptions middleParticle = new DustParticleOptions(
                 new Vector3f(1.0F, 0.2F, 0.2F), // 亮红色
-                1.2F
+                2.0F
         );
 
-        // 中间层粒子 - 围绕玩家身体，添加向内汇聚效果
-        for (int i = 0; i < 40; i++) { // 增加到40个粒子
-            double offsetX = (player.getRandom().nextDouble() - 0.5) * 1.5;
-            double offsetY = player.getRandom().nextDouble() * 1.8;
-            double offsetZ = (player.getRandom().nextDouble() - 0.5) * 1.5;
+        // 生成增强的能量尾巴效果
+        for (int i = 0; i < 100; i++) {
+            // 计算尾巴方向（与移动方向相反）
+            double tailLength = Math.min(movement.length() * 4, 4.0);
+            Vec3 tailDirection = movement.normalize().scale(-1);
 
-            // 粒子有轻微的向内汇聚的速度
-            double velocityX = -offsetX * 0.05;
-            double velocityY = 0.02; // 轻微向上
-            double velocityZ = -offsetZ * 0.05;
+            // 在玩家后方生成尾巴粒子
+            double tailOffset = random.nextDouble() * tailLength;
+            double angle = random.nextDouble() * Math.PI * 2;
+            double radius = random.nextDouble() * 1.2;
+
+            double offsetX = tailDirection.x * tailOffset + Math.cos(angle) * radius;
+            double offsetY = tailDirection.y * tailOffset + (random.nextDouble() - 0.5) * 1.2;
+            double offsetZ = tailDirection.z * tailOffset + Math.sin(angle) * radius;
+
+            // 尾巴粒子的速度（向后飘散）
+            double velocityX = tailDirection.x * 0.3 + (random.nextDouble() - 0.5) * 0.1;
+            double velocityY = tailDirection.y * 0.3 + (random.nextDouble() - 0.5) * 0.1;
+            double velocityZ = tailDirection.z * 0.3 + (random.nextDouble() - 0.5) * 0.1;
 
             serverLevel.sendParticles(
                     middleParticle,
-                    pos.x + offsetX,
-                    pos.y + offsetY,
-                    pos.z + offsetZ,
-                    0, // 不需要额外粒子
-                    velocityX, velocityY, velocityZ, // 向内汇聚的速度
-                    0 // 不需要额外速度
+                    predictedPos.x + offsetX,
+                    predictedPos.y + offsetY,
+                    predictedPos.z + offsetZ,
+                    0,
+                    velocityX, velocityY, velocityZ,
+                    0.2
             );
         }
 
-        // 创建外层环绕粒子（形成能量体轮廓）
+        // 外层能量粒子
         DustParticleOptions outerParticle = new DustParticleOptions(
                 new Vector3f(0.8F, 0.1F, 0.1F), // 深红色
-                1.0F
+                1.5F
         );
 
-        // 环绕玩家的粒子环，形成能量体的轮廓
-        for (int angle = 0; angle < 360; angle += 10) { // 更密集的环绕
-            double radians = Math.toRadians(angle);
-            double radius = 1.8; // 减小环绕半径，使粒子更靠近玩家
-            
-            // 水平环绕
-            double x = pos.x + Math.cos(radians) * radius;
-            double z = pos.z + Math.sin(radians) * radius;
-            
-            // 垂直方向多层分布，但更靠近玩家
-            for (double y = 0.2; y <= 1.8; y += 0.3) {
-                // 粒子有环绕玩家旋转的速度
-                double velocityX = -Math.sin(radians) * 0.1;
-                double velocityY = 0.01; // 轻微向上
-                double velocityZ = Math.cos(radians) * 0.1;
-                
-                serverLevel.sendParticles(
-                        outerParticle,
-                        x,
-                        pos.y + y,
-                        z,
-                        0,
-                        velocityX, velocityY, velocityZ, // 环绕速度
-                        0
-                );
-            }
+        // 生成紧密环绕的能量体轮廓
+        for (int i = 0; i < 120; i++) {
+            // 使用球形分布
+            double phi = random.nextDouble() * Math.PI * 2;
+            double theta = random.nextDouble() * Math.PI;
+            double radius = 1.5 + random.nextGaussian() * 0.3;
+
+            // 转换为笛卡尔坐标
+            double x = predictedPos.x + radius * Math.sin(theta) * Math.cos(phi);
+            double y = predictedPos.y + radius * Math.sin(theta) * Math.sin(phi);
+            double z = predictedPos.z + radius * Math.cos(theta);
+
+            // 添加环绕速度
+            double velocityX = Math.cos(phi) * 0.08;
+            double velocityY = (random.nextDouble() - 0.5) * 0.08;
+            double velocityZ = Math.sin(phi) * 0.08;
+
+            serverLevel.sendParticles(
+                    outerParticle,
+                    x, y, z,
+                    0,
+                    velocityX, velocityY, velocityZ,
+                    0.15
+            );
         }
-        
-        // 添加能量流动效果 - 向上流动的粒子流
+
+        // 添加能量流动效果
         DustParticleOptions flowParticle = new DustParticleOptions(
                 new Vector3f(1.0F, 0.4F, 0.4F), // 浅红色
-                0.8F
+                1.2F
         );
-        
-        // 从玩家脚部向上流动的粒子，模拟能量流动
-        for (int i = 0; i < 20; i++) {
-            double offsetX = (player.getRandom().nextDouble() - 0.5) * 0.8;
-            double offsetY = player.getRandom().nextDouble() * 0.5; // 从脚部开始
-            double offsetZ = (player.getRandom().nextDouble() - 0.5) * 0.8;
-            
-            // 向上流动的速度
+
+        // 生成螺旋上升的能量流
+        for (int i = 0; i < 50; i++) {
+            double angle = random.nextDouble() * Math.PI * 2;
+            double radius = 0.8 + random.nextDouble() * 0.4;
+            double height = random.nextDouble() * 2.5;
+
+            double x = predictedPos.x + Math.cos(angle) * radius;
+            double y = predictedPos.y + height;
+            double z = predictedPos.z + Math.sin(angle) * radius;
+
+            // 螺旋上升的速度
+            double velocityX = -Math.sin(angle) * 0.1;
+            double velocityY = 0.2 + random.nextDouble() * 0.08;
+            double velocityZ = Math.cos(angle) * 0.1;
+
             serverLevel.sendParticles(
                     flowParticle,
-                    pos.x + offsetX,
-                    pos.y + offsetY,
-                    pos.z + offsetZ,
+                    x, y, z,
                     0,
-                    0, 0.2, 0, // 向上的速度
-                    0
+                    velocityX, velocityY, velocityZ,
+                    0.12
+            );
+        }
+
+        // 添加额外的闪烁效果
+        DustParticleOptions flashParticle = new DustParticleOptions(
+                new Vector3f(1.0F, 0.6F, 0.6F), // 浅红色
+                0.8F
+        );
+
+        // 随机生成闪烁粒子
+        for (int i = 0; i < 30; i++) {
+            double angle = random.nextDouble() * Math.PI * 2;
+            double radius = random.nextDouble() * 2.0;
+
+            double x = predictedPos.x + Math.cos(angle) * radius;
+            double y = predictedPos.y + random.nextDouble() * 2.0;
+            double z = predictedPos.z + Math.sin(angle) * radius;
+
+            serverLevel.sendParticles(
+                    flashParticle,
+                    x, y, z,
+                    0,
+                    (random.nextDouble() - 0.5) * 0.2,
+                    (random.nextDouble() - 0.5) * 0.2,
+                    (random.nextDouble() - 0.5) * 0.2,
+                    0.3
             );
         }
     }
-
-
 
     /**
      * 虚化模式下的伤害处理（保持原有的免疫机制）
