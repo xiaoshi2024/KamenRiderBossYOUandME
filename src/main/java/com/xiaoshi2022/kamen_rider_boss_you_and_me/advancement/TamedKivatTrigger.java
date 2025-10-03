@@ -1,19 +1,19 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement;
 
 import com.google.gson.JsonObject;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.PlayerBloodlineHelper;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.chat.Component;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.FangBloodlineEffect;
 
 public class TamedKivatTrigger extends SimpleCriterionTrigger<TamedKivatTrigger.Instance> {
 

@@ -1,11 +1,9 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.orangefruit.darkOrangeModel;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.orangefruit.orangefruitRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.BeltUtils;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -34,9 +32,7 @@ import software.bernie.geckolib.renderer.GeoItemRenderer;
 import software.bernie.geckolib.util.ClientUtils;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotResult;
 
-import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
 

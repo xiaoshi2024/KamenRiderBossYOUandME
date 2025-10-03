@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;

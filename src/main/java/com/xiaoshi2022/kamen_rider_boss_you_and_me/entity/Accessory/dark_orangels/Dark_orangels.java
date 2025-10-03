@@ -126,8 +126,8 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
         }
 
         // 全套盔甲提供生命恢复效果
-        if (isFullArmorEquipped((ServerPlayer) player) && player.level().getGameTime() % 20 == 0) {
-            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 40, 0));
+        if (isFullArmorEquipped((ServerPlayer) player) && player.level().getGameTime() % 120 == 0) {
+            player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 140, 0));
         }
         
         // 添加抗性效果

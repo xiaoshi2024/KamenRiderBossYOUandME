@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "kamen_rider_boss_you_and_me:necrom_eye"
+    },
+    "title": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title"
+    },
+    "description": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.gift_of_the_great_eye.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "kamen_rider_boss_you_and_me:kamen_rider_boss_you_and_me",
+  "criteria": {
+    "trigger": {
+      "trigger": "kamen_rider_boss_you_and_me:become_ghost_eye"
+    }
+  }
+}

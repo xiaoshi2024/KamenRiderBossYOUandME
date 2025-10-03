@@ -7,9 +7,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronE
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BaronLemonEnergyEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.CherryEnergyArrowEntity;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.MelonEnergySlashEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -124,6 +121,14 @@ public class ModEntityTypes {
                     .clientTrackingRange(16)
                     .updateInterval(20)
                     .build("cherry_energy_arrow"));
+    
+    // 眼魂实体
+    public static final RegistryObject<EntityType<GhostEyeEntity>> GHOST_EYE_ENTITY = ENTITY_TYPES.register("ghost_eye_entity",
+            () -> EntityType.Builder.<GhostEyeEntity>of(GhostEyeEntity::new, MobCategory.MISC)
+                    .sized(0.8F, 0.8F) // 眼魂实体大小
+                    .clientTrackingRange(8)
+                    .updateInterval(1)
+                    .build("ghost_eye_entity"));
 
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {

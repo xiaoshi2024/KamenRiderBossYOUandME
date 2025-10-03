@@ -1,8 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.marikas;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
-import software.bernie.geckolib.model.GeoModel;
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.model.GeoModel;
 
 public class MarikaModel extends GeoModel<Marika> {
     @Override

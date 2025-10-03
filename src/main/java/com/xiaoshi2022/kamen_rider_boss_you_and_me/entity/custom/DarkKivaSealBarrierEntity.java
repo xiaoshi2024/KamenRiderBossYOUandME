@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;

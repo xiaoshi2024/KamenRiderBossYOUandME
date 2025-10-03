@@ -1,9 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.Ridernecrom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
-import software.bernie.geckolib.model.GeoModel;
-
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.model.GeoModel;
 
 public class RidernecromModel extends GeoModel<RidernecromItem> {
 	@Override

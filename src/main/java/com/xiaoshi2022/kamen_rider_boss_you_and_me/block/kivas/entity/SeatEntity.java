@@ -1,22 +1,14 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.ThroneBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 

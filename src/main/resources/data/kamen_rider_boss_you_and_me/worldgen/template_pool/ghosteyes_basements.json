@@ -1,0 +1,23 @@
+{
+  "name": "kamen_rider_boss_you_and_me:ghosteyes_basements",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "kamen_rider_boss_you_and_me:ghosteyes_basements",
+        "projection": "rigid",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "minecraft:block_rot",
+              "integrity": 1.0,
+              "keep_waterlogged": true
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

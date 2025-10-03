@@ -1,13 +1,11 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.lemonenergy.LemonEnergyRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.lemonenergy.darkLemonModel;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

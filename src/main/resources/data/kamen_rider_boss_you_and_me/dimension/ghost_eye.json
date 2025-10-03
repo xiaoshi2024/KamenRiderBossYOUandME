@@ -1,0 +1,11 @@
+{
+  "type": "kamen_rider_boss_you_and_me:ghost_eye_type",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "minecraft:overworld",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "kamen_rider_boss_you_and_me:ghost_eye_biome"
+    }
+  }
+}

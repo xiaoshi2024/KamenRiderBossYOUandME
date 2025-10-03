@@ -10,9 +10,6 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.OverlordCommand;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.GiifuCommand;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.FangBloodlineCommand;
 
 public class ModCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -43,6 +40,9 @@ public class ModCommands {
         
         // 注册变身武器指令
         TransformationWeaponCommand.register(dispatcher);
+        
+        // 注册眼魔命令
+        GhostEyeCommand.register(dispatcher);
     }
 
     private static int showAltarStructureCommand(CommandContext<CommandSourceStack> context) {

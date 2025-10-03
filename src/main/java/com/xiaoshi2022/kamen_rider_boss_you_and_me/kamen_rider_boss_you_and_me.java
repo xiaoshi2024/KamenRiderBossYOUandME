@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.GhostEyeTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.GiifuTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.OverlordTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.TamedKivatTrigger;
@@ -33,13 +34,14 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batdrakss.BatDa
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batstampfinish.BatStampFinishRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.cherry_energy_arrow.CherryEnergyArrowRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.dark_kiva_seal_barrier.DarkKivaSealBarrierRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.melon_energy_slash.MelonEnergySlashRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.duke_knight.DukeKnightRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.ghosteye.GhostEyeRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.giifu.GiifuHumanRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.kivat.KivatBatTwoNdRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.knecromghost.KnecromghostRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.LordBaronRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.duke_knight.DukeKnightRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.melon_energy_slash.MelonEnergySlashRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KivatItemTossHandler;
@@ -58,7 +60,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -99,6 +100,7 @@ public class kamen_rider_boss_you_and_me
     public static final TamedKivatTrigger TAMED_KIVAT_TRIGGER = CriteriaTriggers.register(new TamedKivatTrigger());
     public static final OverlordTrigger OVERLORD_TRIGGER = CriteriaTriggers.register(OverlordTrigger.getInstance());
     public static final GiifuTrigger GIIFU_TRIGGER = CriteriaTriggers.register(GiifuTrigger.getInstance());
+    public static final GhostEyeTrigger GHOST_EYE_TRIGGER = CriteriaTriggers.register(GhostEyeTrigger.getInstance());
 
     public kamen_rider_boss_you_and_me()
     {
@@ -258,6 +260,7 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.BAT_STAMP_FINISH.get(), BatStampFinishRenderer::new);
             EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
             EntityRenderers.register(ModEntityTypes.DUKE_KNIGHT.get(), DukeKnightRenderer::new);
+            EntityRenderers.register(ModEntityTypes.GHOST_EYE_ENTITY.get(), GhostEyeRenderer::new);
 
             EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyRenderer::new);
             EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyRenderer::new);

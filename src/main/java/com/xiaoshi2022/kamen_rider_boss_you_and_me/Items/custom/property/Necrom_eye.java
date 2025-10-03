@@ -7,9 +7,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.KnecromghostEnt
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.KnecromGhostAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.KnecromGhostAnimationPacket;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -77,6 +77,15 @@ public class Necrom_eye extends Item implements GeoItem {
                     // 切换模式
                     belt.switchMode(beltStack, Mega_uiorder.Mode.NECROM_EYE);
 
+                    // 获取玩家变量，检查是否是临时取下后重新装载
+                    boolean isReinsert = false;
+                    KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                    if (variables.isNecromTemporaryRemoved) {
+                        isReinsert = true;
+                        variables.isNecromTemporaryRemoved = false;
+                        variables.syncPlayerVariables(player);
+                    }
+
                     playPlayerAnimation((ServerPlayer) player, "necrom_henshin");
 
                     // 同步动画
@@ -87,8 +96,8 @@ public class Necrom_eye extends Item implements GeoItem {
                     stack.shrink(1);
 
                     // 确保只在服务端执行
-                    if (!level.isClientSide()) {
-                        // 创建实体
+                    if (!level.isClientSide() && !isReinsert) {
+                        // 创建实体（仅在第一次插入时）
                         KnecromghostEntity necroEntity = new KnecromghostEntity(ModEntityTypes.KNECROMGHOST.get(), level);
                         
                         // 设置目标玩家
@@ -104,9 +113,11 @@ public class Necrom_eye extends Item implements GeoItem {
                         }
                     }
 
-                    // 播放固定音效
-                    serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(),
-                            ModBossSounds.LOGIN_BY.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    // 播放固定音效（仅在第一次插入时）
+                    if (!isReinsert) {
+                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(),
+                                ModBossSounds.LOGIN_BY.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    }
                     // 置位待机
                     player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
                             .ifPresent(vars -> {

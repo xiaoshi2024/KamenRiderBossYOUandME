@@ -1,8 +1,9 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+
 import java.util.HashMap;
 import java.util.Map;
 

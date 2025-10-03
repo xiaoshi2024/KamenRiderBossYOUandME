@@ -2,22 +2,23 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.KnecromghostEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,6 +27,8 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.Optional;
+
+import static com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils.findFirstCurio;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", value = Dist.CLIENT)
 public class KeybindHandler {
@@ -51,6 +54,12 @@ public class KeybindHandler {
                 handleKeyPress(player);
             } else if (!KeyBinding.RELIEVE_KEY.isDown()) {
                 keyCooldown = false;
+            }
+            
+            // Z键临时取下眼魂
+            if (KeyBinding.KEY_BARRIER_PULL.isDown() && !keyCooldown) {
+                keyCooldown = true;
+                handleZKeyPress(player);
             }
 
             if (delayTicks > 0) {
@@ -230,13 +239,31 @@ public class KeybindHandler {
         // ✅ C 键解除 Necrom 变身
         KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         if (vars.isMegaUiorderTransformed) {
-// 客户端 KeybindHandler.java
-            PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), RiderTypes.RIDERNECROM, true));
-            return; // 解除完直接返回，不再往下走
+            // 检查玩家是否装备了Mega_uiorder手环
+            Optional<SlotResult> megaSlot = findFirstCurio(player,
+                    s -> s.getItem() instanceof Mega_uiorder);
+            
+            // 如果装备了手环，检查是否处于NECROM_EYE模式
+            if (megaSlot.isPresent()) {
+                ItemStack beltStack = megaSlot.get().stack();
+                Mega_uiorder belt = (Mega_uiorder) beltStack.getItem();
+                
+                if (belt.getCurrentMode(beltStack) == Mega_uiorder.Mode.NECROM_EYE) {
+                    // 客户端 KeybindHandler.java
+                    PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), RiderTypes.RIDERNECROM, true));
+                    return; // 解除完直接返回，不再往下走
+                } else {
+                    // 手环不是眼魂状态，无法解除变身，给出提示
+                    player.displayClientMessage(Component.literal("手环不是眼魂状态，无法解除变身！"), true);
+                }
+            }
         }
+        
+        // 检查玩家是否穿着Necrom盔甲并触发眼魔机制
+        checkAndTriggerNecromArmorMechanism(player);
 
         // 柠檬逻辑
-        CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
+        findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
                 .ifPresent(curio -> {
                     ItemStack beltStack = curio.stack();
                     Genesis_driver belt = (Genesis_driver) beltStack.getItem();
@@ -250,7 +277,7 @@ public class KeybindHandler {
                     }
                 });
 
-        CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
+        findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
                 .ifPresent(curio -> {
                     ItemStack beltStack = curio.stack();
                     Genesis_driver belt = (Genesis_driver) beltStack.getItem();
@@ -335,7 +362,7 @@ public class KeybindHandler {
                 });
 
         // 在 handleKeyPress 方法中，找到 Dark Kiva 部分：
-        CurioUtils.findFirstCurio(player,
+        findFirstCurio(player,
                         stack -> stack.getItem() instanceof DrakKivaBelt)
                 .ifPresent(curio -> {
                     ItemStack beltStack = curio.stack();
@@ -350,7 +377,7 @@ public class KeybindHandler {
                 });
 
         // 香蕉和DarkOrange逻辑
-        CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof sengokudrivers_epmty)
+        findFirstCurio(player, stack -> stack.getItem() instanceof sengokudrivers_epmty)
                 .ifPresent(curio -> {
                     ItemStack beltStack = curio.stack();
                     sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
@@ -413,8 +440,17 @@ public class KeybindHandler {
         );
         PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
+        // 清除玩家相关的KnecromghostEntity实体
+        for (KnecromghostEntity ghost : player.level().getEntitiesOfClass(
+                KnecromghostEntity.class,
+                player.getBoundingBox().inflate(20.0D))) {
+            if (player.getUUID().equals(ghost.targetPlayerId)) {
+                ghost.discard();
+            }
+        }
+
         // 重置手环为默认形态
-        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Mega_uiorder)
+        findFirstCurio(player, s -> s.getItem() instanceof Mega_uiorder)
                 .ifPresent(curio -> {
                     ItemStack stack = curio.stack();
                     Mega_uiorder bracelet = (Mega_uiorder) stack.getItem();
@@ -435,6 +471,59 @@ public class KeybindHandler {
     }
 
     // 新增：Evil Bats解除变身逻辑
+    // 处理Z键临时取下眼魂的逻辑
+    private static void handleZKeyPress(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            // 检查玩家是否装备了Mega_uiorder手环
+            Optional<SlotResult> megaSlot = findFirstCurio(player,
+                    s -> s.getItem() instanceof Mega_uiorder);
+            
+            if (megaSlot.isPresent()) {
+                ItemStack beltStack = megaSlot.get().stack();
+                Mega_uiorder belt = (Mega_uiorder) beltStack.getItem();
+                
+                // 检查手环是否处于NECROM_EYE模式
+                if (belt.getCurrentMode(beltStack) == Mega_uiorder.Mode.NECROM_EYE) {
+                    // 获取玩家变量，标记为临时取下
+                    KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                    variables.isNecromTemporaryRemoved = true;
+                    variables.syncPlayerVariables(player);
+                    
+                    // 生成眼魂物品还给玩家
+                    ItemStack eye = new ItemStack(ModItems.NECROM_EYE.get());
+                    if (!player.getInventory().add(eye)) player.spawnAtLocation(eye);
+                    
+                    // 停止待机音
+                    ResourceLocation soundLoc = new ResourceLocation(
+                            "kamen_rider_boss_you_and_me",
+                            "login_by"
+                    );
+                    PacketHandler.sendToAllTracking(
+                            new SoundStopPacket(player.getId(), soundLoc),
+                            player
+                    );
+                    PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
+                    
+                    // 重置手环为默认形态
+                    belt.switchMode(beltStack, Mega_uiorder.Mode.DEFAULT);
+                    
+                    // 更新 Curios 槽位
+                    CurioUtils.updateCurioSlot(player,
+                            megaSlot.get().slotContext().identifier(),
+                            megaSlot.get().slotContext().index(),
+                            beltStack);
+                    
+                    // 播放解除音效
+                    player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                            ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    
+                    player.displayClientMessage(
+                            Component.literal("Ghost Eye temporarily removed. Re-equipping will not play standby sound or spawn effect entity."), true);
+                }
+            }
+        }
+    }
+    
     private static void handleEvilBatsRelease(ServerPlayer player) {
         // 检查玩家是否已变身
         KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
@@ -687,6 +776,74 @@ public class KeybindHandler {
         belt.setHenshin(beltStack, false);
         player.inventoryMenu.broadcastChanges();
     }
+    
+    // 新增：检查并触发Necrom盔甲机制
+    private static void checkAndTriggerNecromArmorMechanism(Player player) {
+        // 检查玩家是否穿着Necrom全套盔甲
+        boolean isNecromArmorEquipped = isNecromArmorEquipped(player);
+        
+        if (isNecromArmorEquipped) {
+            // 检查玩家是否装备了Mega_uiorder手环
+            Optional<SlotResult> megaSlot = findFirstCurio(player,
+                    s -> s.getItem() instanceof Mega_uiorder);
+            
+            if (megaSlot.isPresent()) {
+                ItemStack beltStack = megaSlot.get().stack();
+                Mega_uiorder belt = (Mega_uiorder) beltStack.getItem();
+                
+                // 如果手环不是NECROM_EYE模式，将其切换到该模式
+                if (belt.getCurrentMode(beltStack) != Mega_uiorder.Mode.NECROM_EYE) {
+                    belt.switchMode(beltStack, Mega_uiorder.Mode.NECROM_EYE);
+                    
+                    // 更新Curios槽位
+                    CurioUtils.updateCurioSlot(player,
+                            megaSlot.get().slotContext().identifier(),
+                            megaSlot.get().slotContext().index(),
+                            beltStack);
+                    
+                    // 发送消息提示玩家
+                    player.displayClientMessage(Component.literal("检测到Necrom盔甲，手环已切换至眼魂模式！"), true);
+                }
+                
+                // 检查玩家是否是眼魔
+                boolean isGhostEye = isGhostEyePlayer(player);
+                
+                // 如果不是眼魔，触发眼魔机制
+                if (!isGhostEye) {
+                    // 发送数据包到服务器将玩家设置为眼魔
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        // 这里可以添加将玩家转换为眼魔的逻辑
+                        // 例如：设置眼魔种族、添加相关能力等
+                        
+                        // 记录眼魔状态
+                        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                        vars.isGhostEye = true;
+                        vars.syncPlayerVariables(serverPlayer);
+                        
+                        player.displayClientMessage(Component.literal("已获得眼魔能力！"), true);
+                    }
+                }
+            }
+        }
+    }
+    
+    // 检查玩家是否是眼魔
+    private static boolean isGhostEyePlayer(Player player) {
+        try {
+            return player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables()).isGhostEye;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    // 检查玩家是否穿着Necrom全套盔甲
+    private static boolean isNecromArmorEquipped(Player player) {
+        // 检查玩家是否穿着Necrom头盔、胸甲和护腿
+        return player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() instanceof RidernecromItem &&
+               player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).getItem() instanceof RidernecromItem &&
+               player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.LEGS).getItem() instanceof RidernecromItem;
+    }
+    
 
     private static void handleDragonfruitRelease(ServerPlayer player) {
         Optional<SlotResult> curio = CuriosApi.getCuriosInventory(player)

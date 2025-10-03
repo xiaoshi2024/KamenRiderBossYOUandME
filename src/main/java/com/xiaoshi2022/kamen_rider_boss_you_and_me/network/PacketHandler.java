@@ -1,12 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeRevertPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTransformPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.tyrant.TyrantIntangibilityTogglePacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveLockSeedPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.TempRemoveBatStampPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -236,6 +236,14 @@ public class PacketHandler {
                 TempRemoveBatStampPacket::decode,
                 TempRemoveBatStampPacket::handle);
                 
+        // 注册临时取下眼魂数据包
+        INSTANCE.registerMessage(
+                index++,
+                TempRemoveNecromEyePacket.class,
+                TempRemoveNecromEyePacket::encode,
+                TempRemoveNecromEyePacket::decode,
+                TempRemoveNecromEyePacket::handle);
+                
         // 注册Overlord藤蔓技能数据包
         INSTANCE.registerMessage(
                 index++,
@@ -243,6 +251,38 @@ public class PacketHandler {
                 OverlordVineSkillPacket::toBytes,
                 OverlordVineSkillPacket::new,
                 OverlordVineSkillPacket::handle);
+        
+        // 注册眼魔维度传送数据包
+        INSTANCE.registerMessage(
+                index++,
+                GhostEyeDimensionTeleportPacket.class,
+                GhostEyeDimensionTeleportPacket::encode,
+                GhostEyeDimensionTeleportPacket::decode,
+                GhostEyeDimensionTeleportPacket::handle);
+                
+        // 注册眼魔变身为眼魂实体的数据包
+        INSTANCE.registerMessage(
+                index++,
+                GhostEyeTransformPacket.class,
+                GhostEyeTransformPacket::encode,
+                GhostEyeTransformPacket::decode,
+                GhostEyeTransformPacket::handle);
+                
+        // 注册眼魂实体变回人形的数据包
+        INSTANCE.registerMessage(
+                index++,
+                GhostEyeRevertPacket.class,
+                GhostEyeRevertPacket::encode,
+                GhostEyeRevertPacket::decode,
+                GhostEyeRevertPacket::handle);
+        
+        // 注册眼魂隐身效果数据包
+        INSTANCE.registerMessage(
+                index++,
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvisibilityPacket.class,
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvisibilityPacket::encode,
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvisibilityPacket::decode,
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvisibilityPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

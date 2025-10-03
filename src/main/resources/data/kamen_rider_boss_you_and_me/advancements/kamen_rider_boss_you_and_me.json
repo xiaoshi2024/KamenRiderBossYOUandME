@@ -9,6 +9,7 @@
     "description": {
       "translate": "advancement.kamen_rider_boss_you_and_me.root.desc"
     },
+    "background": "minecraft:textures/block/glass.png",
     "frame": "task",
     "show_toast": false,
     "announce_to_chat": false

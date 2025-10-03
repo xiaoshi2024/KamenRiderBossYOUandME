@@ -4,7 +4,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 
 import java.util.stream.Stream;
 

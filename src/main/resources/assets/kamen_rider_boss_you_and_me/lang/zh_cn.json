@@ -65,6 +65,8 @@
   "advancement.kamen_rider_boss_you_and_me.become_giifu.desc": "成为基夫种族",
   "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.title": "觉醒！牙血鬼之脉",
   "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.desc": "唤醒体内古老的牙血鬼血脉，成为吸血一族的一员",
+  "advancement.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "伟大之眼的恩赐",
+  "advancement.kamen_rider_boss_you_and_me.gift_of_the_great_eye.desc": "转变为眼魔，获得伟大之眼的力量",
   "KEY.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me": "假面骑士中你与我的反派编年史键",
   "KEY.kamen_rider_weapon_craft.change_body": "变身",
   "KEY.kamen_rider_weapon_craft.change_player": "变异",
@@ -241,5 +243,7 @@
   "item.kamen_rider_boss_you_and_me.another_zi_o_spawn_egg.tooltip": "[提示] 右键点击生成异类时王。",
   "item.kamen_rider_boss_you_and_me.giifu_demos_spawn_egg.tooltip": "[提示] 右键点击生成基夫德莫斯。",
   "item.kamen_rider_boss_you_and_me.storious_spawn_egg.tooltip": "[提示] 右键点击生成斯特利乌斯。",
-  "item group.kamen_rider_boss_you_and_me_spawn_egg_tab": "怪人生成"
+  "item group.kamen_rider_boss_you_and_me_spawn_egg_tab": "怪人生成",
+  "entity.kamen_rider_boss_you_and_me.ghost_eye_entity": "眼魂",
+  "advancements.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "一个地狱般的维度"
   }

@@ -1,8 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public final class CherryRiderHenshin {

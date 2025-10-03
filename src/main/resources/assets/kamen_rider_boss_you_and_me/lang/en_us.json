@@ -6,6 +6,7 @@
   "entity.kamen_rider_boss_you_and_me.knecromghost": "Necrom_Ghost",
   "entity.kamen_rider_boss_you_and_me.kaito": "Kaito[KamenRiders]",
 
+  "entity.kamen_rider_boss_you_and_me.ghost_eye_entity": "Ghost Eye",
 
   "item.kamen_rider_boss_you_and_me.two_weapon_sword": "Two Weapon Sword",
   "item.kamen_rider_boss_you_and_me.two_weapon_gun": "Two Weapon Gun",
@@ -80,6 +81,11 @@
   "advancement.kamen_rider_boss_you_and_me.become_giifu.desc": "Become a member of the Giifu race.",
   "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.title": "Awakening! Fangire Bloodline",
   "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.desc": "Awaken the ancient Fangire blood within you and become one of the blood-sucking race.",
+  "advancement.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "The Blessing of the Great Eye",
+
+  "advancements.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "hell",
+
+  "advancement.kamen_rider_boss_you_and_me.gift_of_the_great_eye.desc": "Transform into a Ghost Eye and obtain the power of the Great Eye.",
 
   "KEY.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me": "Kamen Rider Boss You and Me",
   "KEY.kamen_rider_weapon_craft.change_body": "Henshin",

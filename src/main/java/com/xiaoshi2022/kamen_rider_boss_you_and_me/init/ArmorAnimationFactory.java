@@ -1,10 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.init;
 
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.animatable.GeoItem;
 
 @Mod.EventBusSubscriber

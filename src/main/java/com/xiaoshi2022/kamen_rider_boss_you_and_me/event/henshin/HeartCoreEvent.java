@@ -4,9 +4,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driv
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.EquipmentSlot;
 
 public class HeartCoreEvent {
     private final String riderType; // 新增：骑士类型字段

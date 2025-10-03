@@ -1,12 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
+
 import java.util.function.Supplier;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 
 public class BaronSummonInvesPacket {
     

@@ -1,8 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.PeachEnergy;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.peach_energy;
-import software.bernie.geckolib.model.GeoModel;
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.model.GeoModel;
 
 public class PeachEnergyModel extends GeoModel<peach_energy> {
     @Override

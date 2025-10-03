@@ -1,0 +1,27 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"fly": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"Necrom": {
+					"position": {
+						"0.0": {
+							"vector": [0, 14, 0]
+						},
+						"0.5": {
+							"vector": [0, 10, 0],
+							"easing": "easeOutSine"
+						},
+						"1.0": {
+							"vector": [0, 14, 0],
+							"easing": "easeOutSine"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

@@ -1,11 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.orangefruit;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.orangefruit;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
-import net.minecraft.resources.ResourceLocation;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.model.GeoModel;

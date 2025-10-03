@@ -2,20 +2,11 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.giifu.GiifuSleepingStateBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.ThroneBlock;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.BananasBlock;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.Lemonx;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.cherryx;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.melonx;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.Peachx;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.orangelsx;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.DragonfruitBlock;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.CurseBlock;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.*;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.joml.Matrix2dc;
 
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS =

@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
@@ -21,10 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotResult;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -123,6 +119,7 @@ public class KRBVariables {
 			// 新增：重置其他状态变量
 			clone.isDarkKivaBeltEquipped = false;
 			clone.isOverlord = false; // 玩家死亡时重置Overlord状态
+			clone.isGhostEye = false; // 玩家死亡时重置眼魔状态
 			clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
@@ -174,6 +171,7 @@ public class KRBVariables {
 	//眼魂相关
 	public boolean isMegaUiorderTransformed = false; // 新增字段：记录是否装备了Mega_uiorder并变身
 	public boolean isNecromStandby = false;
+	public boolean isNecromTemporaryRemoved = false; // 临时取下眼魂标记
 
 	// 锁种相关变量
 	public boolean cherry_ready = false;
@@ -212,6 +210,7 @@ public class KRBVariables {
 	public boolean isSengokuDriverEmptyEquipped = false; // 新增字段：记录是否装备了空的Sengoku驱动器
 	public boolean isSengokuDriverFilledEquipped = false; // 新增字段：记录是否装备了有锁种的Sengoku驱动器
 	public boolean isOrochiDriverEquipped = false; // 新增字段：记录是否装备了Orochi驱动器
+	public boolean isGhostEye = false; // 新增字段：记录玩家是否是眼魔
 	public boolean isEvilBatsTransformed = false; // 新增字段：记录是否装备了EvilBats盔甲并变身
 	public boolean isEvilBatsStealthed = false; // 新增字段：记录是否处于EvilBats隐密模式
 	public boolean isDarkOrangelsTransformed = false; // 新增字段：记录是否装备了Dark_orangels盔甲并变身
@@ -293,9 +292,11 @@ public class KRBVariables {
 		nbt.putLong("dark_kiva_sonic_blast_cooldown", dark_kiva_sonic_blast_cooldown);
 		nbt.putLong("dark_kiva_blood_steal_cooldown", dark_kiva_blood_steal_cooldown);
 
-		//眼魂
+		// 眼魂
 		nbt.putBoolean("isMegaUiorderTransformed", isMegaUiorderTransformed); // 新增：序列化Mega_uiorder变身状态
 		nbt.putBoolean("isNecromStandby", isNecromStandby); // 新增：序列化Necrom待机状态
+		nbt.putBoolean("isNecromTemporaryRemoved", isNecromTemporaryRemoved); // 序列化临时取下眼魂标记
+		nbt.putBoolean("isGhostEye", isGhostEye); // 新增：序列化眼魔状态
 
 		nbt.putBoolean("isEvilBatsTransformed", isEvilBatsTransformed); // 新增：存储EvilBats变身状态
 		nbt.putBoolean("isEvilBatsStealthed", isEvilBatsStealthed); // 新增：存储EvilBats隐密模式状态
@@ -391,6 +392,8 @@ public class KRBVariables {
 		// 眼魂
 		isMegaUiorderTransformed = nbt.getBoolean("isMegaUiorderTransformed"); // 新增：读取Mega_uiorder变身状态
 		isNecromStandby = nbt.getBoolean("isNecromStandby"); // 新增：读取Necrom待机状态
+		isNecromTemporaryRemoved = nbt.getBoolean("isNecromTemporaryRemoved"); // 读取临时取下眼魂标记
+		isGhostEye = nbt.getBoolean("isGhostEye"); // 新增：读取眼魔状态
 
 		isEvilBatsTransformed = nbt.getBoolean("isEvilBatsTransformed"); // 新增：读取EvilBats变身状态
 		isEvilBatsStealthed = nbt.getBoolean("isEvilBatsStealthed"); // 新增：读取EvilBats隐密模式状态

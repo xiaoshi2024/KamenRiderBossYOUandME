@@ -1,8 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Peachx;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.PeachxEntity;
-import software.bernie.geckolib.model.GeoModel;
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.model.GeoModel;
 
 public class PeachxModel extends GeoModel<PeachxEntity> {
     @Override

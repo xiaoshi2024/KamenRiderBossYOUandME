@@ -7,8 +7,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
-import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.core.animation.AnimationController;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.function.Supplier;

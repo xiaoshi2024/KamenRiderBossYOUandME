@@ -5,7 +5,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.KnecromghostEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.*;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.RiderNecromArmorSequence;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
@@ -17,7 +16,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -25,7 +23,6 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler.clearTransformationArmor;
-import static com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.RiderTypes.RIDERNECROM;
 
 public class TransformationRequestPacket {
     private final UUID playerId;
@@ -155,6 +152,15 @@ public class TransformationRequestPacket {
                                     player
                             );
                             PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
+
+                            // ✅ 清除玩家相关的KnecromghostEntity实体
+                            for (KnecromghostEntity ghost : player.level().getEntitiesOfClass(
+                                    KnecromghostEntity.class,
+                                    player.getBoundingBox().inflate(20.0D))) {
+                                if (player.getUUID().equals(ghost.targetPlayerId)) {
+                                    ghost.discard();
+                                }
+                            }
 
                         } else {
 
