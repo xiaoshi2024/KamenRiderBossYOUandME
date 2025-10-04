@@ -286,5 +286,16 @@ public class CherryEnergyArrowEntity extends AbstractArrow implements GeoEntity 
     public void setDamage(double damage) {
         this.damage = damage;
     }
+    
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
+    
+    // 确保实体ID不显示
+    @Override
+    public boolean shouldShowName() {
+        return false;
+    }
 
 }

@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -508,6 +509,12 @@ public class DarkKivaSealBarrierEntity extends LivingEntity implements GeoEntity
     public boolean isCustomNameVisible() {
         return false;
     }
+    
+    // 确保实体ID不显示
+    @Override
+    public boolean shouldShowName() {
+        return false;
+    }
 
     @Override
     public boolean isAffectedByPotions() {
@@ -527,4 +534,25 @@ public class DarkKivaSealBarrierEntity extends LivingEntity implements GeoEntity
         }
         super.remove(reason);
     }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+    @Override
+    public Component getCustomName() {
+        return null;
+    }
+
+    @Override
+    public Component getName() {
+        return Component.empty();
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.empty();
+    }
+
 }

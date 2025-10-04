@@ -37,7 +37,6 @@ public class PlayerDeathHandler {
     public static void onPlayerDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof Player player) {
             if (hasTransformationArmor(player)) {
-
                 // 1. 先确定锁种类型（盔甲还在）
                 String lockseedType = determineLockseedType(player);
 
@@ -46,59 +45,47 @@ public class PlayerDeathHandler {
 
                 // 3. 检查是否需要补偿
                 if (isBatForm && !hasBatFormWeaponInInventory(player)) {
-                    // 如果是蝙蝠形态且背包中没有蝙蝠形态的武器，则进行补偿
                     returnBatFormItems(player);
                 }
 
-                // 4. 再清空盔甲
+                // 4. 在清空前检查并保存手环状态
+                boolean shouldReturnEye = CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Mega_uiorder)
+                        .map(curio -> {
+                            ItemStack bracelet = curio.stack();
+                            Mega_uiorder ui = (Mega_uiorder) bracelet.getItem();
+                            return ui.getCurrentMode(bracelet) == Mega_uiorder.Mode.NECROM_EYE;
+                        })
+                        .orElse(false);
+
+                // 5. 清空盔甲
                 clearTransformationArmor(player);
 
-                // 5. 返还腰带
+                // 6. 返还腰带
                 returnBelt(player, isBatForm);
 
-                // 6. 返还眼魂
-                returnNecromEye(player);
+                // 7. 如果需要，返还眼魂
+                if (shouldReturnEye) {
+                    ItemStack eye = new ItemStack(ModItems.NECROM_EYE.get());
+                    if (!player.getInventory().add(eye)) {
+                        player.drop(eye, false);
+                    }
+                }
 
-                // 7. 返还刚才记下来的锁种
+                // 8. 返还锁种
                 List<ItemStack> lockseeds = getLockseedStacksByType(lockseedType);
                 for (ItemStack stack : lockseeds) {
                     if (!player.getInventory().add(stack)) {
                         player.drop(stack, false);
                     }
                 }
-            }
 
+                // 9. 重置状态变量
+                player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(vars -> {
+                    vars.isMegaUiorderTransformed = false;
+                    vars.isNecromStandby = false;
+                });
+            }
         }
-    }
-
-    private static void returnNecromEye(Player player) {
-        /* 只在服务端跑 */
-        if (player.level().isClientSide) return;
-
-        player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(vars -> {
-            /* ===== 取证开始 ===== */
-            boolean mega = vars.isMegaUiorderTransformed;
-            boolean standby = vars.isNecromStandby;
-//            String msg = String.format(
-//                    "[returnNecromEye] mega=%s, standby=%s, hasArmor=%s",
-//                    mega, standby, hasTransformationArmor(player)
-//            );
-//            System.out.println(msg);                       // 写在服务端 latest.log
-//            player.sendSystemMessage(Component.literal(msg)); // 聊天栏
-            /* ===== 取证结束 ===== */
-
-            if (mega || standby) {
-                ItemStack eye = new ItemStack(ModItems.NECROM_EYE.get());
-                if (!player.getInventory().add(eye)) {
-                    player.drop(eye, false);
-                }
-//                player.sendSystemMessage(
-//                        Component.literal("§e[眼魂] 已返还！").withStyle(ChatFormatting.YELLOW)
-//                );
-                vars.isMegaUiorderTransformed = false;
-                vars.isNecromStandby = false;
-            }
-        });
     }
 
 

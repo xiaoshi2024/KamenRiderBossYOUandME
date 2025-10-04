@@ -244,6 +244,8 @@ public class KRBVariables {
 	public boolean isGiifu = false;
 	// 玩家是否为牙血鬼血脉状态
 	public boolean isFangBloodline = false;
+	// 玩家是否已获得眼魔世界宝箱
+	public boolean hasReceivedGhostEyeLootChest = false;
 	// 巴隆香蕉能量技能冷却时间
 	public long baron_banana_energy_cooldown = 0L;
 	// 保存的玩家原版盔甲数据
@@ -336,6 +338,8 @@ public class KRBVariables {
 		nbt.putBoolean("isGiifu", isGiifu);
 		// 序列化牙血鬼血脉状态
 		nbt.putBoolean("isFangBloodline", isFangBloodline);
+		// 序列化宝箱领取状态
+		nbt.putBoolean("hasReceivedGhostEyeLootChest", hasReceivedGhostEyeLootChest);
 		// 序列化腰带移除相关变量
 		nbt.putLong("beltRemovedTime", beltRemovedTime);
 		nbt.putString("removedBeltType", removedBeltType);
@@ -428,6 +432,8 @@ public class KRBVariables {
 		isGiifu = nbt.contains("isGiifu") ? nbt.getBoolean("isGiifu") : false;
 		// 反序列化牙血鬼血脉状态
 		isFangBloodline = nbt.contains("isFangBloodline") ? nbt.getBoolean("isFangBloodline") : false;
+		// 反序列化宝箱领取状态
+		hasReceivedGhostEyeLootChest = nbt.contains("hasReceivedGhostEyeLootChest") ? nbt.getBoolean("hasReceivedGhostEyeLootChest") : false;
 		// 反序列化腰带移除相关变量
 		beltRemovedTime = nbt.contains("beltRemovedTime") ? nbt.getLong("beltRemovedTime") : 0L;
 		removedBeltType = nbt.contains("removedBeltType") ? nbt.getString("removedBeltType") : "";
@@ -529,6 +535,8 @@ public class KRBVariables {
                     variables.isGiifu = message.data.isGiifu;
                     // 同步牙血鬼血脉状态
                     variables.isFangBloodline = message.data.isFangBloodline;
+                    // 同步宝箱领取状态
+                    variables.hasReceivedGhostEyeLootChest = message.data.hasReceivedGhostEyeLootChest;
                     // 同步腰带移除相关变量
                     variables.beltRemovedTime = message.data.beltRemovedTime;
                     variables.removedBeltType = message.data.removedBeltType;

@@ -781,29 +781,29 @@ public class KeybindHandler {
     private static void checkAndTriggerNecromArmorMechanism(Player player) {
         // 检查玩家是否穿着Necrom全套盔甲
         boolean isNecromArmorEquipped = isNecromArmorEquipped(player);
-        
+
         if (isNecromArmorEquipped) {
             // 检查玩家是否装备了Mega_uiorder手环
             Optional<SlotResult> megaSlot = findFirstCurio(player,
                     s -> s.getItem() instanceof Mega_uiorder);
-            
+
             if (megaSlot.isPresent()) {
                 ItemStack beltStack = megaSlot.get().stack();
                 Mega_uiorder belt = (Mega_uiorder) beltStack.getItem();
                 
                 // 如果手环不是NECROM_EYE模式，将其切换到该模式
-                if (belt.getCurrentMode(beltStack) != Mega_uiorder.Mode.NECROM_EYE) {
-                    belt.switchMode(beltStack, Mega_uiorder.Mode.NECROM_EYE);
-                    
-                    // 更新Curios槽位
-                    CurioUtils.updateCurioSlot(player,
-                            megaSlot.get().slotContext().identifier(),
-                            megaSlot.get().slotContext().index(),
-                            beltStack);
-                    
-                    // 发送消息提示玩家
-                    player.displayClientMessage(Component.literal("检测到Necrom盔甲，手环已切换至眼魂模式！"), true);
-                }
+//                if (belt.getCurrentMode(beltStack) != Mega_uiorder.Mode.NECROM_EYE) {
+//                    belt.switchMode(beltStack, Mega_uiorder.Mode.NECROM_EYE);
+//
+//                    // 更新Curios槽位
+//                    CurioUtils.updateCurioSlot(player,
+//                            megaSlot.get().slotContext().identifier(),
+//                            megaSlot.get().slotContext().index(),
+//                            beltStack);
+//
+//                    // 发送消息提示玩家
+//                    player.displayClientMessage(Component.literal("检测到Necrom盔甲，手环已切换至眼魂模式！"), true);
+//                }
                 
                 // 检查玩家是否是眼魔
                 boolean isGhostEye = isGhostEyePlayer(player);

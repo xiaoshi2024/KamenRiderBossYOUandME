@@ -253,4 +253,14 @@ public class Another_Zi_o extends Monster implements GeoEntity {
         restored.setHealth(restored.getMaxHealth());
         ((ServerLevel) this.level()).addFreshEntity(restored);
     }
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
+    
+    // 确保实体ID不显示
+    @Override
+    public boolean shouldShowName() {
+        return false;
+    }
 }

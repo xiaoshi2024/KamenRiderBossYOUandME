@@ -58,7 +58,7 @@ public class Mega_uiorder extends Item implements GeoItem, ICurioItem {
         stack.setTag(tag);
     }
 
-    public Mode getCurrentMode(ItemStack stack) {
+    public Mode  getCurrentMode(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains("Mode")) {
             return Mode.valueOf(tag.getString("Mode"));

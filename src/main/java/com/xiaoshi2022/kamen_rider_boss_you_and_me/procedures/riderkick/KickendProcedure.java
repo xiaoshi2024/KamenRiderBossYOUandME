@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatStampFinishEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.NecromEyexEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
@@ -122,7 +123,8 @@ public class KickendProcedure {
 			helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get() ||
 			helmet.getItem() == ModItems.TYRANT_HELMET.get() ||
 			helmet.getItem() == ModItems.EVIL_BATS_HELMET.get() ||
-			helmet.getItem() == ModItems.DARK_KIVA_HELMET.get();
+			helmet.getItem() == ModItems.DARK_KIVA_HELMET.get() ||
+			helmet.getItem() == ModItems.RIDERNECROM_HELMET.get();
 	}
 
 	// 处理无敌状态的重置
@@ -229,6 +231,8 @@ public class KickendProcedure {
 			damage = 55.0F;
 		} else if (helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) {
 			damage = 75.0F;
+		} else if (helmet.getItem() == ModItems.RIDERNECROM_HELMET.get()) {
+			damage = 68.0F;
 		}
 
 		return damage;
@@ -302,12 +306,12 @@ public class KickendProcedure {
 	// 从世界中直接清理实体
 	private static void cleanupEffectEntityFromWorld(Player entity, ServerLevel serverLevel) {
 		// 查找并移除所有与该玩家关联的BatStampFinishEntity
-		List<BatStampFinishEntity> entities = serverLevel.getEntitiesOfClass(
+		List<BatStampFinishEntity> batEntities = serverLevel.getEntitiesOfClass(
 				BatStampFinishEntity.class,
 				entity.getBoundingBox().inflate(10.0)
 		);
 
-		for (BatStampFinishEntity batEntity : entities) {
+		for (BatStampFinishEntity batEntity : batEntities) {
 			// 直接调用getTargetPlayerId方法，不再使用反射
 			UUID targetId = batEntity.getTargetPlayerId();
 
@@ -317,6 +321,25 @@ public class KickendProcedure {
 							batEntity.getId());
 				}
 				batEntity.discard();
+			}
+		}
+
+		// 查找并移除所有与该玩家关联的NecromEyexEntity
+		List<NecromEyexEntity> necromEntities = serverLevel.getEntitiesOfClass(
+				NecromEyexEntity.class,
+				entity.getBoundingBox().inflate(10.0)
+		);
+
+		for (NecromEyexEntity necromEntity : necromEntities) {
+			// 直接调用getTargetPlayerId方法
+			UUID targetId = necromEntity.getTargetPlayerId();
+
+			if (targetId != null && targetId.equals(entity.getUUID())) {
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Discarding NecromEyexEntity with ID: {}", 
+							necromEntity.getId());
+				}
+				necromEntity.discard();
 			}
 		}
 	}

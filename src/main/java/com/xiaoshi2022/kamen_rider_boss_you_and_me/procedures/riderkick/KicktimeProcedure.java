@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatStampFinishEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.NecromEyexEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
@@ -40,7 +41,6 @@ public class KicktimeProcedure {
 
 	// 添加一个静态变量来跟踪每个玩家的特效实体
 	private static final Map<UUID, Integer> playerToEffectEntity = new HashMap<>();
-	// 添加调试标记
 	private static final boolean DEBUG = true;
 
 	@SubscribeEvent
@@ -58,40 +58,144 @@ public class KicktimeProcedure {
 		if (entity == null) 
 			return;
 
-		// 检查是否正在踢击
-		if (!isKicking(entity)) {
+		// 检查玩家是否在进行骑士踢
+		if (entity instanceof Player player && isRiderKicking(player)) {
+			// 记录当前使用的头盔类型
+			ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
+			if (DEBUG && !world.isClientSide()) {
+				kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Player {} is kicking with helmet: {}", 
+					player.getScoreboardName(), helmet.getHoverName().getString());
+			}
+			
+			// 新增：检查是否已经存在特效实体，如果有，并且当前头盔类型与实体不匹配，则先清理旧实体
+			UUID playerId = player.getUUID();
+			if (playerToEffectEntity.containsKey(playerId) && world instanceof ServerLevel serverLevel) {
+				int entityId = playerToEffectEntity.get(playerId);
+				Entity existingEntity = serverLevel.getEntity(entityId);
+				boolean entityTypeMatches = false;
+				
+				if (existingEntity != null) {
+					// 根据头盔类型检查实体类型是否匹配
+					if (helmet.getItem() == ModItems.EVIL_BATS_HELMET.get() && existingEntity instanceof BatStampFinishEntity) {
+						entityTypeMatches = true;
+					} else if (helmet.getItem() == ModItems.RIDERNECROM_HELMET.get() && existingEntity instanceof NecromEyexEntity) {
+						entityTypeMatches = true;
+					}
+				}
+				
+				if (!entityTypeMatches) {
+					// 类型不匹配，清理旧实体
+					if (DEBUG && existingEntity != null) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Helmet type changed, cleaning up mismatched entity for player {}", 
+							player.getScoreboardName());
+					}
+					cleanupEffectEntity(entity);
+				}
+			}
+
+			// 根据头盔类型执行不同的特效
+			if (helmet.getItem() == ModItems.BARON_LEMON_HELMET.get()) {
+				handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
+			} else if (helmet.getItem() == ModItems.MARIKA_HELMET.get()) {
+				handleKick(world, entity, ParticleTypesRegistry.PEACHSLICE.get());
+			} else if (helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
+				handleKick(world, entity, ParticleTypesRegistry.MLONSLICE.get());
+			} else if (helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()) {
+				handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
+			} else if (helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()) {
+				handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
+			} else if (helmet.getItem() == ModItems.TYRANT_HELMET.get()) {
+				handleKick(world, entity, ParticleTypesRegistry.DRAGONLICE.get());
+			} else if (helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()) {
+				// 处理 EVIL_BATS_HELMET 的特效和移动
+				if (DEBUG && !world.isClientSide()) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: EVIL_BATS_HELMET detected on player {}", player.getScoreboardName());
+				}
+				handleEvilBatsKick(world, entity);
+			} else if (helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) {
+				handleKick(world, entity, ParticleTypesRegistry.DARK_BAT.get());
+			} else if (helmet.getItem() == ModItems.RIDERNECROM_HELMET.get()) {
+				// 处理 RIDERNECROM_HELMET 的特效和移动
+				if (DEBUG && !world.isClientSide()) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: RIDERNECROM_HELMET detected on player {}", player.getScoreboardName());
+				}
+				handleRidernecromKick(world, entity);
+			} else if (helmet.getItem() == ModItems.DUKE_HELMET.get()) {
+				handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
+			} else if (helmet.getItem() == ModItems.SIGURD_HELMET.get()) {
+				handleKick(world, entity, ParticleTypesRegistry.CHERRYSLICE.get());
+			}
+		} else {
 			// 如果不在踢击状态，清理特效实体
 			cleanupEffectEntity(entity);
-			return;
+		}
+	}
+
+	// 处理 RIDERNECROM_HELMET 的骑士踢特效
+	private static void handleRidernecromKick(LevelAccessor world, Entity entity) {
+		if (world instanceof ServerLevel serverLevel && entity instanceof Player player) {
+			UUID playerId = player.getUUID();
+
+			// 检查是否已经为该玩家创建了特效实体
+			if (!playerToEffectEntity.containsKey(playerId)) {
+				// 调试日志：开始创建实体
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Creating NecromEyexEntity for player {}", player.getScoreboardName());
+				}
+				
+				try {
+					// 创建 NecromEyexEntity 实体
+					NecromEyexEntity necromEyexEntity = new NecromEyexEntity(ModEntityTypes.NECROM_EYEX.get(), serverLevel);
+					
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: NecromEyexEntity created with ID: {}", necromEyexEntity.getId());
+					}
+					
+					necromEyexEntity.setTargetPlayer(player);
+					necromEyexEntity.startFinish(); // 开始播放动画
+					serverLevel.addFreshEntity(necromEyexEntity);
+
+					// 存储实体ID
+					playerToEffectEntity.put(playerId, necromEyexEntity.getId());
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: NecromEyexEntity added to world and tracked for player {}", player.getScoreboardName());
+					}
+				} catch (Exception e) {
+					// 捕获并记录任何创建实体时的错误
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.error("KicktimeProcedure: Error creating NecromEyexEntity for player {}", player.getScoreboardName(), e);
+					}
+				}
+			} else {
+				// 如果实体已存在，检查是否还存活
+				int entityId = playerToEffectEntity.get(playerId);
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Checking existing NecromEyexEntity with ID: {} for player {}", entityId, player.getScoreboardName());
+				}
+				Entity existingEntity = serverLevel.getEntity(entityId);
+				if (existingEntity == null || !existingEntity.isAlive()) {
+					// 实体已消失，重新创建
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Existing NecromEyexEntity not found or not alive, recreating for player {}", player.getScoreboardName());
+					}
+					playerToEffectEntity.remove(playerId);
+					handleRidernecromKick(world, entity); // 递归调用重新创建
+					return;
+				} else if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Existing NecromEyexEntity with ID: {} is alive for player {}", entityId, player.getScoreboardName());
+				}
+			}
+
+			// 确保玩家踢击动画正常播放
+			handleAnimation(world, entity);
+			syncAnimation(world, entity);
 		}
 
-		// 检查头盔类型并处理相应的踢击逻辑
-		ItemStack helmet = getHelmet(entity);
-		if (helmet.getItem() == ModItems.SIGURD_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.CHERRYSLICE.get());
-		} else if (helmet.getItem() == ModItems.BARON_LEMON_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
-		} else if (helmet.getItem() == ModItems.DUKE_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
-		} else if (helmet.getItem() == ModItems.MARIKA_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.PEACHSLICE.get());
-		} else if (helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.MLONSLICE.get());
-		} else if (helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
-		} else if (helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
-		} else if (helmet.getItem() == ModItems.TYRANT_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.DRAGONLICE.get());
-		} else if (helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()) {
-			// 处理 EVIL_BATS_HELMET 的特效和移动
-			if (DEBUG && !world.isClientSide() && entity instanceof Player) {
-				kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: EVIL_BATS_HELMET detected on player {}", ((Player)entity).getScoreboardName());
-			}
-			handleEvilBatsKick(world, entity);
-		} else if (helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) {
-			handleKick(world, entity, ParticleTypesRegistry.DARK_BAT.get());
+		// 单独处理 RIDERNECROM_HELMET 的抛物线移动
+		if (DEBUG && !world.isClientSide() && entity instanceof Player) {
+			kamen_rider_boss_you_and_me.LOGGER.debug("KicktimeProcedure: Handling RIDERNECROM_HELMET parabolic movement for player {}", ((Player)entity).getScoreboardName());
 		}
+		handleEvilBatsParabolicMovement(world, entity);
 	}
 
 	// 处理 EVIL_BATS_HELMET 的骑士踢特效
@@ -214,14 +318,18 @@ public class KicktimeProcedure {
 					Entity effectEntity = serverLevel.getEntity(entityId);
 					if (effectEntity != null) {
 						if (DEBUG) {
-							kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Discarding BatStampFinishEntity with ID: {} for player {}", entityId, player.getScoreboardName());
+							// 改进：根据实体类型输出正确的日志信息
+							String entityType = effectEntity instanceof BatStampFinishEntity ? "BatStampFinishEntity" : 
+							                   effectEntity instanceof NecromEyexEntity ? "NecromEyexEntity" : "UnknownEntity";
+							kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Discarding {} with ID: {} for player {}", 
+							        entityType, entityId, player.getScoreboardName());
 						}
 						effectEntity.discard();
 					}
 				}
 				playerToEffectEntity.remove(playerId);
 				if (DEBUG) {
-					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Removed BatStampFinishEntity tracking for player {}", player.getScoreboardName());
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Removed special effect entity tracking for player {}", player.getScoreboardName());
 				}
 			}
 		}
@@ -243,6 +351,30 @@ public class KicktimeProcedure {
 		if (DEBUG) {
 			kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Reset kick status for player {}", player.getScoreboardName());
 		}
+	}
+
+	// 判断玩家是否正在进行骑士踢
+	public static boolean isRiderKicking(Player player) {
+		if (player == null) return false;
+		// 获取玩家的头盔
+		ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
+		// 检查是否佩戴了特定的骑士头盔
+		boolean hasSpecialHelmet = helmet.getItem() == ModItems.BARON_LEMON_HELMET.get()
+				|| helmet.getItem() == ModItems.DUKE_HELMET.get()
+				|| helmet.getItem() == ModItems.MARIKA_HELMET.get()
+				|| helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()
+				|| helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()
+				|| helmet.getItem() == ModItems.TYRANT_HELMET.get()
+				|| helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get()
+				|| helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()
+				|| helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()
+				|| helmet.getItem() == ModItems.RIDERNECROM_HELMET.get();
+
+		// 获取玩家的kcik状态
+		boolean isKicking = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+				.orElse(new KRBVariables.PlayerVariables()).kcik;
+
+		return hasSpecialHelmet && isKicking;
 	}
 
 	// 检查是否正在踢击
@@ -479,6 +611,7 @@ public class KicktimeProcedure {
 				helmet.getItem() == ModItems.TYRANT_HELMET.get() ||
 				helmet.getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
 				helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()||
-				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get(); // 新增：黑暗Kiva头盔
+				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get() || // 新增：黑暗Kiva头盔
+				helmet.getItem() == ModItems.RIDERNECROM_HELMET.get(); // 新增：RiderNecrom头盔
 	}
 }

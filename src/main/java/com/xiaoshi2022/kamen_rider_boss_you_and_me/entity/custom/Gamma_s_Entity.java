@@ -66,4 +66,15 @@ public class Gamma_s_Entity extends Monster {
     }
 
     // 使用原版动画，不需要GeckoLib相关代码
+    
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
+    
+    // 确保实体ID不显示
+    @Override
+    public boolean shouldShowName() {
+        return false;
+    }
 }

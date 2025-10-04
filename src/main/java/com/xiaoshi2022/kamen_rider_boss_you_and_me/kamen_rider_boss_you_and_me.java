@@ -44,6 +44,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.kivat.KivatBatT
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.knecromghost.KnecromghostRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.LordBaronRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.melon_energy_slash.MelonEnergySlashRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.necrom_eyex.NecromEyexRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KivatItemTossHandler;
@@ -266,6 +267,7 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.GAMMA_S.get(), Gamma_sRenderer::new);
             // 眼魔眼魂实体渲染器注册
             EntityRenderers.register(ModEntityTypes.GAMMA_EYECON_ENTITY.get(), GammaEyeconRenderer::new);
+            EntityRenderers.register(ModEntityTypes.NECROM_EYEX.get(), NecromEyexRenderer::new);
 
             EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyRenderer::new);
             EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyRenderer::new);

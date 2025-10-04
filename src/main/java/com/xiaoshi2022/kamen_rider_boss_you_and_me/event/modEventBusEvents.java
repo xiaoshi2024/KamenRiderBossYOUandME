@@ -544,6 +544,7 @@ public class modEventBusEvents {
                             .build()
             ); // 强化版：大幅提高生命值、防御和韧性
 
+            event.put(ModEntityTypes.NECROM_EYEX.get(), NecromEyexEntity.createAttributes());
             event.put(ModEntityTypes.GAMMA_S.get(), Gamma_s_Entity.createAttributes());
             event.put(ModEntityTypes.GHOST_EYE_ENTITY.get(), GhostEyeEntity.createAttributes());
             event.put(ModEntityTypes.GAMMA_EYECON_ENTITY.get(), GammaEyeconEntity.createAttributes());

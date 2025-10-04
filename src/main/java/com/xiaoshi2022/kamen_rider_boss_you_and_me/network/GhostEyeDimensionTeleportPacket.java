@@ -1,14 +1,18 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_eye;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.GhostEyeManager;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.SafeTeleportUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -77,32 +81,62 @@ public class GhostEyeDimensionTeleportPacket {
     
     // 将玩家传送到眼魔世界
     private static void transferToGhostEyeDimension(ServerPlayer player) {
+        // 检查玩家是否持有Ridernecrom手环或相关装备
+        if (!hasRidernecromBracelet(player)) {
+            player.displayClientMessage(Component.literal("你需要持有手环或眼魂才能传送到眼魔世界！"), true);
+            return;
+        }
+
+        // 检查玩家是否已经是眼魔状态
+        if (GhostEyeManager.isGhostEye(player)) {
+            player.displayClientMessage(Component.literal("你已经处于眼魔状态！"), true);
+            return;
+        }
+
         ServerLevel ghostEyeLevel = player.server.getLevel(GHOST_EYE_DIM);
         if (ghostEyeLevel == null) return;
 
         // 创建一个安全的传送位置
-        BlockPos teleportPos = new BlockPos(0, 64, 0); // 使用固定坐标
-        BlockPos safeTeleportPos = findOrCreateSafePosition(ghostEyeLevel, teleportPos);
-        
+        BlockPos teleportPos = new BlockPos(0, 64, 0);
+        BlockPos safeTeleportPos = SafeTeleportUtil.findOrCreateSafePosition(ghostEyeLevel, teleportPos);
+
         // 设置眼魔世界的重生点
         player.setRespawnPosition(GHOST_EYE_DIM, safeTeleportPos, 0.0F, true, false);
 
-        // 传送到眼魔世界的安全位置
-        player.teleportTo(ghostEyeLevel,
-                safeTeleportPos.getX() + 0.5D,
-                safeTeleportPos.getY() + 1.0D,
-                safeTeleportPos.getZ() + 0.5D,
-                player.getYRot(),
-                player.getXRot());
+        // 使用安全传送工具执行传送
+        SafeTeleportUtil.safelyTeleport(player, ghostEyeLevel, safeTeleportPos);
 
         // 恢复生命值
         player.setHealth(player.getMaxHealth());
 
         // 使用GhostEyeManager统一设置眼魔状态和相关buff效果
-        // 检查是否是第一次设置眼魔状态
         boolean isFirstTime = !GhostEyeManager.isGhostEye(player);
         GhostEyeManager.setGhostEyeState(player, isFirstTime);
     }
+
+
+    // 检查玩家是否持有Ridernecrom手环或相关装备
+    private static boolean hasRidernecromBracelet(Player player) {
+        // 检查手中物品
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offHand = player.getOffhandItem();
+
+        boolean inHands = mainHand.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.MEGA_UIORDER_ITEM.get() ||
+                offHand.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.MEGA_UIORDER_ITEM.get() ||
+                mainHand.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.NECROM_EYE.get() ||
+                offHand.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.NECROM_EYE.get();
+
+        if (inHands) return true;
+
+        // 检查Curios装备槽
+        return top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(player).map(inv -> {
+            return inv.findFirstCurio(stack ->
+                    stack.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.MEGA_UIORDER_ITEM.get() ||
+                            stack.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.NECROM_EYE.get()
+            ).isPresent();
+        }).orElse(false);
+    }
+
     
     // 将玩家传送到主世界
     private static void transferToOverworld(ServerPlayer player) {
@@ -111,15 +145,9 @@ public class GhostEyeDimensionTeleportPacket {
         
         // 使用主世界的出生点或随机位置
         BlockPos spawnPos = overworld.getSharedSpawnPos();
-        BlockPos safeSpawnPos = findOrCreateSafePosition(overworld, spawnPos);
         
-        // 传送到主世界
-        player.teleportTo(overworld,
-                safeSpawnPos.getX() + 0.5D,
-                safeSpawnPos.getY() + 1.0D,
-                safeSpawnPos.getZ() + 0.5D,
-                player.getYRot(),
-                player.getXRot());
+        // 使用安全传送工具执行传送
+        SafeTeleportUtil.safelyTeleport(player, overworld, spawnPos);
         
         // 使用GhostEyeManager统一移除眼魔状态和相关buff效果
         GhostEyeManager.removeGhostEyeState(player);
@@ -127,79 +155,34 @@ public class GhostEyeDimensionTeleportPacket {
     
     // 设置玩家为眼魔种族
     private static void setPlayerAsGhostEye(ServerPlayer player) {
+        // 检查玩家是否已经是眼魔状态
+        if (GhostEyeManager.isGhostEye(player)) {
+            player.displayClientMessage(Component.literal("你已经处于眼魔状态！"), true);
+            return;
+        }
+
         // 保存玩家当前位置
         BlockPos currentPos = player.blockPosition();
-        
+
         // 使用GhostEyeManager统一设置眼魔状态和相关buff效果
-        // 检查是否是第一次设置眼魔状态
         boolean isFirstTime = !GhostEyeManager.isGhostEye(player);
         GhostEyeManager.setGhostEyeState(player, isFirstTime);
     }
-    
-    // 寻找或创建一个安全的位置
-    private static BlockPos findOrCreateSafePosition(ServerLevel level, BlockPos startPos) {
-        // 首先检查起始位置是否安全
-        if (isPositionSafe(level, startPos)) {
-            return startPos;
-        }
-        
-        // 在周围寻找安全位置
-        int searchRadius = 10;
-        for (int y = -5; y <= 10; y++) {
-            for (int x = -searchRadius; x <= searchRadius; x++) {
-                for (int z = -searchRadius; z <= searchRadius; z++) {
-                    BlockPos pos = startPos.offset(x, y, z);
-                    if (isPositionSafe(level, pos)) {
-                        return pos;
-                    }
-                }
-            }
-        }
-        
-        // 如果没有找到安全位置，创建一个临时平台
-        BlockPos platformPos = new BlockPos(startPos.getX(), 64, startPos.getZ());
-        createTemporaryPlatform(level, platformPos);
-        return platformPos.above();
-    }
-    
-    // 检查指定位置是否安全
-    private static boolean isPositionSafe(ServerLevel level, BlockPos pos) {
-        // 检查Y坐标是否在有效范围内
-        if (pos.getY() < 1 || pos.getY() > level.getHeight()) {
-            return false;
-        }
-        
-        // 检查脚下是否有方块
-        BlockPos below = pos.below();
-        if (level.isEmptyBlock(below)) {
-            return false;
-        }
-        
-        // 检查当前位置和上方是否有足够的空间
-        return !level.getBlockState(pos).blocksMotion() && 
-               !level.getBlockState(pos.above()).blocksMotion();
-    }
-    
-    // 创建一个临时平台
-    private static void createTemporaryPlatform(ServerLevel level, BlockPos center) {
-        // 使用石头创建一个3x3的小平台
-        net.minecraft.world.level.block.Block platformBlock = net.minecraft.world.level.block.Blocks.STONE;
-        
-        for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++) {
-                BlockPos pos = center.offset(x, 0, z);
-                level.setBlock(pos, platformBlock.defaultBlockState(), 3);
-            }
-        }
-    }
-    
+
     // 检查玩家是否手持眼魂
     private static boolean isHoldingGhostEye(Player player) {
         // 检查主手或副手是否持有眼魂
         if (player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_eye ||
-            player.getOffhandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_eye) {
+                player.getOffhandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_eye) {
             return true;
         }
-        return false;
+
+        // 检查Curios装备槽
+        return top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(player).map(inv -> {
+            return inv.findFirstCurio(stack ->
+                    stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_eye
+            ).isPresent();
+        }).orElse(false);
     }
+
 }

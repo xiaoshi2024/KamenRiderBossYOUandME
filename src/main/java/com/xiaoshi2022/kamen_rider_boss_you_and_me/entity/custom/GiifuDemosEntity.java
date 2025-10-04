@@ -327,4 +327,15 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     public void setTradeOffers(MerchantOffers offers) {
         this.villagerComponent.setOffers(offers); // 使用 VillagerEntityMCA 的交易逻辑
     }
+    
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
+    
+    // 确保实体ID不显示
+    @Override
+    public boolean shouldShowName() {
+        return false;
+    }
 }

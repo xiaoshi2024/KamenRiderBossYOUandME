@@ -145,6 +145,13 @@ public class ModEntityTypes {
                     .updateInterval(1)
                     .build("gamma_eyecon_entity"));
 
+    // NecromEyex 特效实体
+    public static final RegistryObject<EntityType<NecromEyexEntity>> NECROM_EYEX = ENTITY_TYPES.register("necrom_eyex",
+            () -> EntityType.Builder.<NecromEyexEntity>of(NecromEyexEntity::new, MobCategory.MISC)
+                    .sized(0.8F, 1.5F) // 调整碰撞箱大小
+                    .clientTrackingRange(8)
+                    .build("necrom_eyex"));
+
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {
         RegistryObject<EntityType<T>> entityType = ENTITY_TYPES.register(name,

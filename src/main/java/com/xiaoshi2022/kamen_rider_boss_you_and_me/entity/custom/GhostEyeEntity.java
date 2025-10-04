@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.damagesource.DamageSource;
@@ -39,6 +40,10 @@ public class GhostEyeEntity extends LivingEntity implements GeoEntity {
         super(type, world);
         this.noPhysics = false; // 允许物理碰撞
         this.setInvulnerable(false); // 不是无敌的
+
+        // 添加以下设置来隐藏实体ID
+        this.setCustomNameVisible(false);  // 确保自定义名称不可见
+        this.setCustomName(null);  // 清除自定义名称
     }
 
     public static AttributeSupplier createAttributes() {
@@ -218,4 +223,36 @@ public class GhostEyeEntity extends LivingEntity implements GeoEntity {
             this.controllingPlayerId = compound.getUUID("ControllingPlayer");
         }
     }
+    
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
+    
+    // 确保实体ID不显示
+    @Override
+    public boolean shouldShowName() {
+        return false;
+    }
+
+    @Override
+    public Component getCustomName() {
+        return null;
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+    @Override
+    public Component getName() {
+        return Component.empty();
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.empty();
+    }
+
 }

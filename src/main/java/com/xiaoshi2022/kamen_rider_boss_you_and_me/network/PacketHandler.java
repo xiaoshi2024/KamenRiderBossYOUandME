@@ -131,6 +131,15 @@ public class PacketHandler {
                 BatStampFinishAnimationPacket::decode,
                 BatStampFinishAnimationPacket::handle
         );
+        
+        // 注册NecromEyex实体动画同步数据包
+        INSTANCE.registerMessage(
+                index++,
+                NecromEyexAnimationPacket.class,
+                NecromEyexAnimationPacket::encode,
+                NecromEyexAnimationPacket::decode,
+                NecromEyexAnimationPacket::handle
+        );
         INSTANCE.registerMessage(
                 index++,
                 SummonDukeKnightPacket.class,

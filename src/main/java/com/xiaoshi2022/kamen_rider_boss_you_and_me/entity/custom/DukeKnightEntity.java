@@ -557,6 +557,12 @@ public class DukeKnightEntity extends PathfinderMob implements GeoEntity {
     public boolean isCustomNameVisible() {
         return false; // 隐藏实体ID显示
     }
+    
+    // 确保实体ID不显示
+    @Override
+    public boolean shouldShowName() {
+        return false;
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {

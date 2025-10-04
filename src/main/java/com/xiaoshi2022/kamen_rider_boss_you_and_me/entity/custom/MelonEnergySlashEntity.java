@@ -250,5 +250,16 @@ public class MelonEnergySlashEntity extends AbstractArrow implements GeoEntity {
     public double getBaseDamage() {
         return this.damage > 0 ? this.damage : 10.0; // 默认伤害值为10
     }
+    
+    @Override
+    public boolean isCustomNameVisible() {
+        return false; // 隐藏实体ID显示
+    }
+    
+    // 确保实体ID不显示
+    @Override
+    public boolean shouldShowName() {
+        return false;
+    }
 
 }
