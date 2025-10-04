@@ -9,6 +9,6 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 public class giifusteampRenderer extends GeoItemRenderer<giifusteamp> {
     public giifusteampRenderer() {
         super(new giifusteampModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"giifusteamp")));
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
+//        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 }

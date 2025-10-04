@@ -66,6 +66,7 @@
   "entity.kamen_rider_boss_you_and_me.another_zi_o": "ANOTHER_ZI-O",
   "entity.kamen_rider_boss_you_and_me.kivat_bat_ii": "kivat bat II",
 
+  "entity.kamen_rider_boss_you_and_me.gamma_eyecon_entity": "Gamma Eyecon",
 
 
 
@@ -139,6 +140,8 @@
   "item.kamen_rider_boss_you_and_me.bat_stamp": "Bat-Vistamp",
   "item.kamen_rider_boss_you_and_me.two_sidriver":"double sided drive",
   "item.kamen_rider_boss_you_and_me.two_weapon": "double sided weapon",
+
+  "item.kamen_rider_boss_you_and_me.gamma_eyecon": "Gamma Eyecon",
 
   "message.summon.cooldown": "§c Summoning is in cooldown. Please wait for  %s§r",
   "message.summon.player_has_bat": "§You already have a clown bat§r",
@@ -263,6 +266,7 @@
   "item.kamen_rider_boss_you_and_me.gifftarian_spawn_egg": "Giifutarian Spawn Egg",
   "item.kamen_rider_boss_you_and_me.another_zi_o_spawn_egg": "Another Zi-O Spawn Egg",
   "item.kamen_rider_boss_you_and_me.giifu_demos_spawn_egg": "Giifu Demos Spawn Egg",
+  "entity.kamen_rider_boss_you_and_me.gamma_s": "Gamma S",
   "item.kamen_rider_boss_you_and_me.storious_spawn_egg": "Storious Spawn Egg",
   
   "item.kamen_rider_boss_you_and_me.lord_baron_spawn_egg.tooltip": "[Tip] Right-click to spawn Lord Baron.",
@@ -273,5 +277,7 @@
   "item.kamen_rider_boss_you_and_me.another_zi_o_spawn_egg.tooltip": "[Tip] Right-click to spawn Another Zi-O.",
   "item.kamen_rider_boss_you_and_me.giifu_demos_spawn_egg.tooltip": "[Tip] Right-click to spawn Giifu Demos.",
   "item.kamen_rider_boss_you_and_me.storious_spawn_egg.tooltip": "[Tip] Right-click to spawn Storious.",
+  "item.kamen_rider_boss_you_and_me.gamma_s_spawn_egg": "Gamma S Spawn Egg",
+  "item.kamen_rider_boss_you_and_me.gamma_s_spawn_egg.tooltip": "[Tip] Right-click to spawn Gamma S.",
   "item group.kamen_rider_boss_you_and_me_spawn_egg_tab": "BossSpawnEgg"
 }

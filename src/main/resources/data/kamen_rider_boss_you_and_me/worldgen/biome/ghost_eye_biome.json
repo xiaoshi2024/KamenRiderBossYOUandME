@@ -16,8 +16,22 @@
       "offset": 2.0
     }
   },
-  "spawners": {},
-  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "kamen_rider_boss_you_and_me:gamma_eyecon_entity",
+        "weight": 89,
+        "minCount": 1,
+        "maxCount": 3
+      }
+    ]
+  },
+  "spawn_costs": {
+    "kamen_rider_boss_you_and_me:gamma_eyecon_entity": {
+      "energy_budget": 1, 
+      "charge": 0.5
+    }
+  },
   "carvers": {},
   "features": []
 }

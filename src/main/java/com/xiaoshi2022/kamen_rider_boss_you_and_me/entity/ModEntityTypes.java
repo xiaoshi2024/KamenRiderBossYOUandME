@@ -19,7 +19,7 @@ import static com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_a
 
 
 public class ModEntityTypes {
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = 
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, "kamen_rider_boss_you_and_me");
 
     public static final RegistryObject<EntityType<GiifuDemosEntity>> GIIFUDEMOS_ENTITY = registerMob("giifudemos", GiifuDemosEntity::new,
@@ -47,6 +47,13 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<Another_Zi_o>> ANOTHER_ZI_O = registerMob("another_zi_o", Another_Zi_o::new,
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
+
+    // 眼魔实体（使用原版动画集）- 修改为MISC类别，防止自然生成
+    public static final RegistryObject<EntityType<Gamma_s_Entity>> GAMMA_S = ENTITY_TYPES.register("gamma_s",
+            () -> EntityType.Builder.of(Gamma_s_Entity::new, MobCategory.MISC)
+                    .sized(0.6f, 1.9f)
+                    .clientTrackingRange(8)
+                    .build("gamma_s"));
 //    public static final RegistryObject<EntityType<KaitoVillager>> KAITO =
 //            ENTITY_TYPES.register("kaito",
 //                    () -> EntityType.Builder.of(KaitoVillager::new, MobCategory.CREATURE)
@@ -129,6 +136,14 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .updateInterval(1)
                     .build("ghost_eye_entity"));
+    
+    // 眼魔眼魂实体
+    public static final RegistryObject<EntityType<GammaEyeconEntity>> GAMMA_EYECON_ENTITY = ENTITY_TYPES.register("gamma_eyecon_entity",
+            () -> EntityType.Builder.<GammaEyeconEntity>of(GammaEyeconEntity::new, MobCategory.AMBIENT)
+                    .sized(0.8F, 0.8F) // 眼魂实体大小
+                    .clientTrackingRange(8)
+                    .updateInterval(1)
+                    .build("gamma_eyecon_entity"));
 
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {

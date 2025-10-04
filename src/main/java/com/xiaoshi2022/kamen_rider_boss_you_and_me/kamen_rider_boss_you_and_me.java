@@ -35,6 +35,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batstampfinish.
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.cherry_energy_arrow.CherryEnergyArrowRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.dark_kiva_seal_barrier.DarkKivaSealBarrierRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.duke_knight.DukeKnightRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gamma_s.Gamma_sRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gamma_eyecon.GammaEyeconRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.ghosteye.GhostEyeRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.giifu.GiifuHumanRenderer;
@@ -261,6 +263,9 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
             EntityRenderers.register(ModEntityTypes.DUKE_KNIGHT.get(), DukeKnightRenderer::new);
             EntityRenderers.register(ModEntityTypes.GHOST_EYE_ENTITY.get(), GhostEyeRenderer::new);
+            EntityRenderers.register(ModEntityTypes.GAMMA_S.get(), Gamma_sRenderer::new);
+            // 眼魔眼魂实体渲染器注册
+            EntityRenderers.register(ModEntityTypes.GAMMA_EYECON_ENTITY.get(), GammaEyeconRenderer::new);
 
             EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyRenderer::new);
             EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyRenderer::new);

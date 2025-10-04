@@ -45,6 +45,7 @@
   "effect.kamen_rider_boss_you_and_me.giifu_dna": "天魔之因子",
   "entity.kamen_rider_boss_you_and_me.another_zi_o": "异类时王",
   "entity.kamen_rider_boss_you_and_me.kivat_bat_ii": "月蝠II世",
+  "entity.kamen_rider_boss_you_and_me.gamma_eyecon_entity": "眼魔眼魂",
   "key.skill1": "骑士技能1",
   "key.skill2": "骑士技能2",
   "key.skill3": "骑士技能3",
@@ -233,6 +234,7 @@
   "item.kamen_rider_boss_you_and_me.gifftarian_spawn_egg": "基夫始门徒 刷怪蛋",
   "item.kamen_rider_boss_you_and_me.another_zi_o_spawn_egg": "异类时王 刷怪蛋",
   "item.kamen_rider_boss_you_and_me.giifu_demos_spawn_egg": "基夫德莫斯 刷怪蛋",
+  "entity.kamen_rider_boss_you_and_me.gamma_s": "眼魔S",
   "item.kamen_rider_boss_you_and_me.storious_spawn_egg": "斯特利乌斯 刷怪蛋",
   
   "item.kamen_rider_boss_you_and_me.lord_baron_spawn_egg.tooltip": "[提示] 右键点击生成星爵巴隆。",
@@ -243,7 +245,10 @@
   "item.kamen_rider_boss_you_and_me.another_zi_o_spawn_egg.tooltip": "[提示] 右键点击生成异类时王。",
   "item.kamen_rider_boss_you_and_me.giifu_demos_spawn_egg.tooltip": "[提示] 右键点击生成基夫德莫斯。",
   "item.kamen_rider_boss_you_and_me.storious_spawn_egg.tooltip": "[提示] 右键点击生成斯特利乌斯。",
+  "item.kamen_rider_boss_you_and_me.gamma_s_spawn_egg": "眼魔S 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.gamma_s_spawn_egg.tooltip": "[提示] 右键点击生成眼魔S。",
   "item group.kamen_rider_boss_you_and_me_spawn_egg_tab": "怪人生成",
   "entity.kamen_rider_boss_you_and_me.ghost_eye_entity": "眼魂",
-  "advancements.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "一个地狱般的维度"
+  "advancements.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "一个地狱般的维度",
+  "item.kamen_rider_boss_you_and_me.gamma_eyecon": "眼魔 眼魂"
   }

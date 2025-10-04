@@ -1,10 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.BatStampItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.StoriousMonsterBook;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.food.InvesMeat;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.giifusteamp;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem;
@@ -151,6 +148,8 @@ public class ModItems {
             }
     );
 
+    public static final RegistryObject<GammaEyecon> GAMMA_EYECON = ITEMS.register("gamma_eyecon",
+            () -> new GammaEyecon(new Item.Properties()));
 
     public static final RegistryObject<Mega_uiorder> MEGA_UIORDER_ITEM = ITEMS.register("mega_uiorder_item",
             () -> new Mega_uiorder(new Item.Properties()));
@@ -242,5 +241,9 @@ public class ModItems {
 
     public static final RegistryObject<ForgeSpawnEggItem> STORIOUS_SPAWN_EGG = ITEMS.register("storious_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntityTypes.STORIOUS, 0x008080, 0xFF8000, new Item.Properties()));
+
+    // 眼魔实体生成蛋
+    public static final RegistryObject<ForgeSpawnEggItem> GAMMA_S_SPAWN_EGG = ITEMS.register("gamma_s_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.GAMMA_S, 0x404040, 0x00FF00, new Item.Properties()));
 
 }
