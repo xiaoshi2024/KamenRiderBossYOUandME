@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.GhostEyeTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.GiifuTrigger;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.MixedRaceTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.OverlordTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.TamedKivatTrigger;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
@@ -104,6 +105,8 @@ public class kamen_rider_boss_you_and_me
     public static final OverlordTrigger OVERLORD_TRIGGER = CriteriaTriggers.register(OverlordTrigger.getInstance());
     public static final GiifuTrigger GIIFU_TRIGGER = CriteriaTriggers.register(GiifuTrigger.getInstance());
     public static final GhostEyeTrigger GHOST_EYE_TRIGGER = CriteriaTriggers.register(GhostEyeTrigger.getInstance());
+    // 添加混合种族成就触发器
+    public static final MixedRaceTrigger MIXED_RACE_TRIGGER = CriteriaTriggers.register(MixedRaceTrigger.getInstance());
 
     public kamen_rider_boss_you_and_me()
     {

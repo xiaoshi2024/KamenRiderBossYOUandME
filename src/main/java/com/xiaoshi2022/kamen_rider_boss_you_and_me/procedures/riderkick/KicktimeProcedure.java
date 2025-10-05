@@ -361,6 +361,7 @@ public class KicktimeProcedure {
 		// 检查是否佩戴了特定的骑士头盔
 		boolean hasSpecialHelmet = helmet.getItem() == ModItems.BARON_LEMON_HELMET.get()
 				|| helmet.getItem() == ModItems.DUKE_HELMET.get()
+				|| helmet.getItem() == ModItems.SIGURD_HELMET.get()
 				|| helmet.getItem() == ModItems.MARIKA_HELMET.get()
 				|| helmet.getItem() == ModItems.DARK_ORANGELS_HELMET.get()
 				|| helmet.getItem() == ModItems.RIDER_BARONS_HELMET.get()

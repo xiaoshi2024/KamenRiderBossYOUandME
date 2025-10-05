@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "kamen_rider_boss_you_and_me:inves_meat"
+    },
+    "title": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.mixed_race.title"
+    },
+    "description": {
+      "translate": "advancement.kamen_rider_boss_you_and_me.mixed_race.desc"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "kamen_rider_boss_you_and_me:kamen_rider_boss_you_and_me",
+  "criteria": {
+    "trigger": {
+      "trigger": "kamen_rider_boss_you_and_me:mixed_race"
+    }
+  }
+}

@@ -180,7 +180,7 @@ public class ClownBatSummoner {
             clownBat.setFlying(true);
 
             // 驯服并设置主人
-            clownBat.tame(player);
+//            clownBat.tame(player);
 
             level.addFreshEntity(clownBat);
 

@@ -217,33 +217,33 @@ public class ModItems {
     public static final RegistryObject<GiifuEyeBall> GIIFU_EYEBALL = ITEMS.register("giifu_eyeball",
             () -> new GiifuEyeBall(new Item.Properties()));
 
-    // 刷怪蛋注册
+    // 刷怪蛋注册 - 修复了底色显示问题，使颜色更符合实体特性
     public static final RegistryObject<ForgeSpawnEggItem> LORD_BARON_SPAWN_EGG = ITEMS.register("lord_baron_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntityTypes.LORD_BARON, 0x000000, 0x800080, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.LORD_BARON, 0x800080, 0x000000, new Item.Properties()));
 
     public static final RegistryObject<ForgeSpawnEggItem> KIVAT_BAT_TWO_ND_SPAWN_EGG = ITEMS.register("kivat_bat_two_nd_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntityTypes.KIVAT_BAT_II, 0x000000, 0xFF0000, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.KIVAT_BAT_II, 0xFF0000, 0x000000, new Item.Properties()));
 
     public static final RegistryObject<ForgeSpawnEggItem> ELEMENTARY_INVES_HELHEIM_SPAWN_EGG = ITEMS.register("elementary_inves_helheim_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntityTypes.INVES_HEILEHIM, 0x008000, 0x800000, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.INVES_HEILEHIM, 0xFF0000, 0x00FF00, new Item.Properties()));
 
     public static final RegistryObject<ForgeSpawnEggItem> GIIFU_HUMAN_SPAWN_EGG = ITEMS.register("giifu_human_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntityTypes.GIIFU_HUMAN, 0x000080, 0xFF00FF, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.GIIFU_HUMAN, 0xFF00FF, 0x000080, new Item.Properties()));
 
     public static final RegistryObject<ForgeSpawnEggItem> GIFFTARIAN_SPAWN_EGG = ITEMS.register("gifftarian_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntityTypes.GIFFTARIAN, 0x808000, 0x00FF00, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.GIFFTARIAN, 0x00FF00, 0x808000, new Item.Properties()));
 
     public static final RegistryObject<ForgeSpawnEggItem> ANOTHER_ZI_O_SPAWN_EGG = ITEMS.register("another_zi_o_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntityTypes.ANOTHER_ZI_O, 0xFFFFFF, 0xFF0000, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.ANOTHER_ZI_O, 0xFF0000, 0xFFFFFF, new Item.Properties()));
 
     public static final RegistryObject<ForgeSpawnEggItem> GIIFU_DEMOS_SPAWN_EGG = ITEMS.register("giifu_demos_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntityTypes.GIIFUDEMOS_ENTITY, 0x800000, 0x00FFFF, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.GIIFUDEMOS_ENTITY, 0x00FFFF, 0x800000, new Item.Properties()));
 
     public static final RegistryObject<ForgeSpawnEggItem> STORIOUS_SPAWN_EGG = ITEMS.register("storious_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntityTypes.STORIOUS, 0x008080, 0xFF8000, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.STORIOUS, 0xFF8000, 0x008080, new Item.Properties()));
 
     // 眼魔实体生成蛋
     public static final RegistryObject<ForgeSpawnEggItem> GAMMA_S_SPAWN_EGG = ITEMS.register("gamma_s_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntityTypes.GAMMA_S, 0x404040, 0x00FF00, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(ModEntityTypes.GAMMA_S, 0x00FF00, 0x404040, new Item.Properties()));
 
 }

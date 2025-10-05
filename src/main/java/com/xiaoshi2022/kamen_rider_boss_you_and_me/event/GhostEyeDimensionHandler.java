@@ -266,9 +266,9 @@ public class GhostEyeDimensionHandler {
 
     // 生成宝箱
     private static void spawnLootChest(ServerLevel level, BlockPos pos) {
-        // 在玩家周围随机位置生成一个宝箱
-        int offsetX = level.random.nextInt(10) - 5;
-        int offsetZ = level.random.nextInt(10) - 5;
+        // 在玩家身边生成宝箱（减少随机偏移范围）
+        int offsetX = level.random.nextInt(3) - 1; // -1到1的范围
+        int offsetZ = level.random.nextInt(3) - 1; // -1到1的范围
         
         BlockPos chestPos = findOrCreateSafePosition(level, pos.offset(offsetX, 0, offsetZ));
         chestPos = chestPos.below(); // 宝箱应该放在地面上

@@ -93,11 +93,12 @@ public class GhostEyeManager {
      * @param player 要添加效果的玩家
      */
     public static void addGhostEyeEffects(ServerPlayer player) {
-        // 添加所有四个眼魔特性效果
+        // 添加所有眼魔特性效果，包括水下呼吸效果
         player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, Integer.MAX_VALUE, 0, false, false));
         player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, Integer.MAX_VALUE, 0, false, false));
         player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, Integer.MAX_VALUE, 1, false, false));
         player.addEffect(new MobEffectInstance(MobEffects.JUMP, Integer.MAX_VALUE, 1, false, false));
+        player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, Integer.MAX_VALUE, 0, false, false));
     }
     
     /**
@@ -105,11 +106,12 @@ public class GhostEyeManager {
      * @param player 要移除效果的玩家
      */
     public static void removeGhostEyeEffects(ServerPlayer player) {
-        // 移除所有四个眼魔特性效果
+        // 移除所有眼魔特性效果，包括水下呼吸效果
         player.removeEffect(MobEffects.NIGHT_VISION);
         player.removeEffect(MobEffects.SLOW_FALLING);
         player.removeEffect(MobEffects.MOVEMENT_SPEED);
         player.removeEffect(MobEffects.JUMP);
+        player.removeEffect(MobEffects.WATER_BREATHING);
     }
     
     /**
@@ -127,7 +129,8 @@ public class GhostEyeManager {
         boolean hasAllEffects = player.hasEffect(MobEffects.NIGHT_VISION) && 
                                player.hasEffect(MobEffects.SLOW_FALLING) && 
                                player.hasEffect(MobEffects.MOVEMENT_SPEED) && 
-                               player.hasEffect(MobEffects.JUMP);
+                               player.hasEffect(MobEffects.JUMP) &&
+                               player.hasEffect(MobEffects.WATER_BREATHING);
         
         // 如果状态和效果不一致，进行同步
         if (isGhostEye && !hasAllEffects) {

@@ -254,8 +254,21 @@ public class KRBVariables {
 	public net.minecraft.nbt.ListTag originalDarkKivaArmor = null;
 
 	public void syncPlayerVariables(Entity entity) {
-		if (entity instanceof ServerPlayer serverPlayer)
+		if (entity instanceof ServerPlayer serverPlayer) {
+			// 检查是否混合了超过一个种族
+			int activeRaces = 0;
+			if (isOverlord) activeRaces++;
+			if (isGiifu) activeRaces++;
+			if (isFangBloodline) activeRaces++;
+			if (isGhostEye) activeRaces++;
+			
+			// 如果混合了超过一个种族，触发成就
+			if (activeRaces > 1) {
+				com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.MixedRaceTrigger.getInstance().trigger(serverPlayer);
+			}
+			
 			kamen_rider_boss_you_and_me.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
+		}
 	}
 
 	public Tag writeNBT() {
