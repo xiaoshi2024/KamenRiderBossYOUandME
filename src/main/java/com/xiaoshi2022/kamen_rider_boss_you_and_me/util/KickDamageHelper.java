@@ -13,18 +13,18 @@ public final class KickDamageHelper {
     public static float getKickDamage(Entity entity) {
         if (entity instanceof LivingEntity livingEntity) {
             ItemStack helmet = livingEntity.getItemBySlot(EquipmentSlot.HEAD);
-            if (helmet.is(ModItems.MARIKA_HELMET.get()))           return 61F; // 假面骑士玛丽卡 - 最低伤害基准
-            if (helmet.is(ModItems.SIGURD_HELMET.get()))           return 58F; // 假面骑士西格
-            if (helmet.is(ModItems.RIDER_BARONS_HELMET.get()))     return 60F; // 巴隆
-            if (helmet.is(ModItems.BARON_LEMON_HELMET.get()))       return 69F; // 巴隆·柠檬
-            if (helmet.is(ModItems.ZANGETSU_SHIN_HELMET.get()))    return 72F; // 斩月·真
-            if (helmet.is(ModItems.DUKE_HELMET.get()))             return 67F; // 公爵
-            if (helmet.is(ModItems.TYRANT_HELMET.get()))           return 89F; // 假面骑士暴君
-            if (helmet.is(ModItems.DARK_ORANGELS_HELMET.get()))    return 92F; // 黑暗铠武
-            if (helmet.is(ModItems.DARK_KIVA_HELMET.get()))        return 93F; // 黑暗月骑 - 参考剧中表现设置最高伤害
-            if (helmet.is(ModItems.RIDERNECROM_HELMET.get()))      return 78F; // 假面骑士幽冥
+            if (helmet.is(ModItems.MARIKA_HELMET.get()))           return 73F; // 假面骑士玛丽卡 - 最低伤害基准
+            if (helmet.is(ModItems.SIGURD_HELMET.get()))           return 68F; // 假面骑士西格
+            if (helmet.is(ModItems.RIDER_BARONS_HELMET.get()))     return 70F; // 巴隆
+            if (helmet.is(ModItems.BARON_LEMON_HELMET.get()))       return 79F; // 巴隆·柠檬
+            if (helmet.is(ModItems.ZANGETSU_SHIN_HELMET.get()))    return 80F; // 斩月·真
+            if (helmet.is(ModItems.DUKE_HELMET.get()))             return 78F; // 公爵
+            if (helmet.is(ModItems.TYRANT_HELMET.get()))           return 98F; // 假面骑士暴君
+            if (helmet.is(ModItems.DARK_ORANGELS_HELMET.get()))    return 99F; // 黑暗铠武
+            if (helmet.is(ModItems.DARK_KIVA_HELMET.get()))        return 101F; // 黑暗月骑 - 参考剧中表现设置最高伤害
+            if (helmet.is(ModItems.RIDERNECROM_HELMET.get()))      return 89F; // 假面骑士幽冥
 
-            if (helmet.is(ModItems.EVIL_BATS_HELMET.get()))        return 73F; // 艾比尔
+            if (helmet.is(ModItems.EVIL_BATS_HELMET.get()))        return 87F; // 艾比尔
     
             return 20F; // 默认
         }

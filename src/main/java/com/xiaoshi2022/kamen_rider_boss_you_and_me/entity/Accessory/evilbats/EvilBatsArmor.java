@@ -130,7 +130,7 @@ public class EvilBatsArmor extends ArmorItem implements GeoItem, KamenBossArmor,
     // 不再提供力量效果，避免与原版药水冲突
     @Override
     public int getStrengthLevel() {
-        return 2; // 不使用力量效果
+        return 2; // 使用力量效果
     }
     
     // 提供额外的移动速度加成
@@ -144,17 +144,11 @@ public class EvilBatsArmor extends ArmorItem implements GeoItem, KamenBossArmor,
     public float getSoundReduction() {
         return 0.8f; // 80% 声音降低
     }
-    
-    // 覆盖原版的力量效果方法，使其不添加力量效果
-    @Override
-    public void applyStrengthEffect(Player player) {
-        // 不添加力量效果，避免与原版药水冲突
-    }
 
     // 覆写getResistanceLevel方法，设置自定义抗性等级
     @Override
     public int getResistanceLevel() {
-        return 3; //使用抗性2效果，比基础高一级
+        return 2; //使用抗性2效果，比基础高一级
     }
 
     // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果

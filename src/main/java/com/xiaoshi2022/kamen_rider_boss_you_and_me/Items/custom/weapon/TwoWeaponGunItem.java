@@ -47,6 +47,7 @@ public class TwoWeaponGunItem extends TwoWeaponItem {
 
     // 武器伤害数值
     private static final float GUN_MODE_DAMAGE = 28.0F; // 枪模式伤害
+    private static final int COOLDOWN_TICKS = 40; // 冷却时间（以tick为单位，20tick=1秒）
     
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().thenPlayAndHold("gun");
 
@@ -209,8 +210,13 @@ public class TwoWeaponGunItem extends TwoWeaponItem {
 
         /* -------- 正常右键：枪模式攻击 -------- */
         if (!level.isClientSide) {
-            shootEnergyBeam(player, level);
-            return InteractionResultHolder.success(stack);
+            // 检查是否处于冷却中
+            if (!player.getCooldowns().isOnCooldown(this)) {
+                shootEnergyBeam(player, level);
+                // 设置冷却时间
+                player.getCooldowns().addCooldown(this, COOLDOWN_TICKS);
+                return InteractionResultHolder.success(stack);
+            }
         }
         return InteractionResultHolder.consume(stack);
     }

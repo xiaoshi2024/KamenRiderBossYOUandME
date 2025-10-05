@@ -537,10 +537,10 @@ public class modEventBusEvents {
                             .add(Attributes.MAX_HEALTH, 800.0D)
                             .add(Attributes.ARMOR, 30.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 15.0D)
-                            .add(Attributes.ATTACK_DAMAGE, 30.0D)  // 攻击力从15.0D提高到30.0D
-                            .add(Attributes.MOVEMENT_SPEED, 0.28D)
+                            .add(Attributes.ATTACK_DAMAGE, 30.0D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.35D)
                             .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 40.0D)  // 攻击力从20.0D提高到40.0D
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 40.0D)
                             .build()
             ); // 强化版：大幅提高生命值、防御和韧性
 

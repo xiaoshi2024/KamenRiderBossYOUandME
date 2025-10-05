@@ -181,7 +181,6 @@ public class baron_lemonItem extends ArmorItem implements GeoItem , KamenBossArm
         this.applyStrengthEffect(player);
     }
 
-    // 不再提供力量效果，避免与原版药水冲突
     @Override
     public int getStrengthLevel() {
         return 2; // 效果
@@ -190,7 +189,7 @@ public class baron_lemonItem extends ArmorItem implements GeoItem , KamenBossArm
     // 覆写getResistanceLevel方法，设置自定义抗性等级
     @Override
     public int getResistanceLevel() {
-        return 3; // 使用抗性2效果
+        return 1; // 使用抗性1效果
     }
 
     // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果

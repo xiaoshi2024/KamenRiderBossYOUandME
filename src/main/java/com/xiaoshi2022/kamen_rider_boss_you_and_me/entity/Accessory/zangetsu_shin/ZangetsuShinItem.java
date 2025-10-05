@@ -144,7 +144,7 @@ public class ZangetsuShinItem extends ArmorItem implements GeoItem , KamenBossAr
     // 覆写getResistanceLevel方法，设置自定义抗性等级
     @Override
     public int getResistanceLevel() {
-        return 3; //级别
+        return 1; //级别
     }
 
     // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果

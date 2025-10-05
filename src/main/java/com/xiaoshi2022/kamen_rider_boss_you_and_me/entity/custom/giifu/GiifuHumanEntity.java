@@ -115,7 +115,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
                 .add(Attributes.ARMOR, 20.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 10.0D)
                 .add(Attributes.ATTACK_DAMAGE, 30.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.28D)
+                .add(Attributes.MOVEMENT_SPEED, 0.35D) // 增加地面移动速度
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 40.0D);
     }
@@ -389,7 +389,7 @@ public class GiifuHumanEntity extends Monster implements GeoEntity {
         if (target == null) return;
 
         Vec3 direction = target.position().subtract(this.position()).normalize();
-        double speed = 0.08D;
+        double speed = 0.12D; // 增加飞行速度
 
         // 设置飞行速度
         this.setDeltaMovement(

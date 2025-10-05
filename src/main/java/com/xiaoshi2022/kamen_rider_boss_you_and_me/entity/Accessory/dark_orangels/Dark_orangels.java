@@ -148,7 +148,7 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
     // 覆写getResistanceLevel方法，为Dark_orangels设置自定义抗性等级
     @Override
     public int getResistanceLevel() {
-        return 4; // Dark_orangels使用抗性3效果，比基础高一级
+        return 3; // Dark_orangels使用抗性3效果，比基础高一级
     }
     
     // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果

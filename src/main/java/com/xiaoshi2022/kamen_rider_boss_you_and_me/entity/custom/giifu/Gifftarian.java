@@ -48,7 +48,7 @@ public class Gifftarian extends Monster implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 40.0D)
                 .add(Attributes.ARMOR, 5.0D)
                 .add(Attributes.ATTACK_DAMAGE, 6.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.35D)
+                .add(Attributes.MOVEMENT_SPEED, 0.42D) // 增加移动速度
                 .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 10.0D);
     }
 

@@ -144,7 +144,7 @@ public class Marika extends ArmorItem implements GeoItem , KamenBossArmor, Armor
     // 覆写getResistanceLevel方法，设置自定义抗性等级
     @Override
     public int getResistanceLevel() {
-        return 3; //使用抗性2效果
+        return 1; //使用抗性1效果
     }
 
     // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果
