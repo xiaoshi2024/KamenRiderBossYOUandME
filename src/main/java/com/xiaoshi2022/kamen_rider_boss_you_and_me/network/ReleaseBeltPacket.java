@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrive
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderParticleEffect;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -29,11 +30,44 @@ public class ReleaseBeltPacket {
     }
 
     public static void handleRelease(ServerPlayer player, String riderType) {
+        // 在解除变身时触发对应的粒子效果
         switch (riderType) {
-            case "GENESIS"      -> KeybindHandler.completeBeltRelease(player, "GENESIS");
-            case "BARONS"       -> KeybindHandler.completeBeltRelease(player, "BARONS");
-            case "MELON_ENERGY" -> KeybindHandler.completeBeltRelease(player, "MELON_ENERGY");
-            case "DUKE"         -> KeybindHandler.completeBeltRelease(player, "DUKE");
+            case "GENESIS", "GENESIS_LEMON", "GENESIS_CHERRY", "GENESIS_PEACH", "GENESIS_DRAGONFRUIT", "GENESIS_MELON" -> {
+                // 根据不同的创世纪骑士类型触发对应的粒子效果
+                Genesis_driver belt = (Genesis_driver) CurioUtils.findFirstCurio(player, 
+                        s -> s.getItem() instanceof Genesis_driver)
+                        .map(curio -> curio.stack().getItem())
+                        .orElse(null);
+                
+                if (belt != null) {
+                    String mode = belt.getMode(CurioUtils.findFirstCurio(player, 
+                            s -> s.getItem() instanceof Genesis_driver)
+                            .map(curio -> curio.stack())
+                            .orElse(null)).name();
+                    
+                    switch (mode) {
+                        case "LEMON" -> RiderParticleEffect.spawnZangetsuShinReleaseParticles(player);
+                        case "CHERRY" -> RiderParticleEffect.spawnSigurdReleaseParticles(player);
+                        case "PEACH" -> RiderParticleEffect.spawnMarikaReleaseParticles(player);
+                        case "DRAGONFRUIT" -> RiderParticleEffect.spawnTyrantReleaseParticles(player);
+                        case "MELON" -> RiderParticleEffect.spawnDukeReleaseParticles(player);
+                    }
+                }
+                
+                KeybindHandler.completeBeltRelease(player, riderType);
+            }
+            case "BARONS" -> {
+                RiderParticleEffect.spawnZangetsuShinReleaseParticles(player);
+                KeybindHandler.completeBeltRelease(player, "BARONS");
+            }
+            case "MELON_ENERGY" -> {
+                RiderParticleEffect.spawnDukeReleaseParticles(player);
+                KeybindHandler.completeBeltRelease(player, "MELON_ENERGY");
+            }
+            case "DUKE" -> {
+                RiderParticleEffect.spawnDukeReleaseParticles(player);
+                KeybindHandler.completeBeltRelease(player, "DUKE");
+            }
             case "DARK_KIVA" -> {
                 // 直接调用 DarkKivaSequence 的解除方法
                 DarkKivaSequence.startDisassembly(player);

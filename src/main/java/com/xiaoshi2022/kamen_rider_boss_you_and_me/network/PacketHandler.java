@@ -75,6 +75,10 @@ public class PacketHandler {
         );
         INSTANCE.registerMessage(index++, PlayerJoinSyncPacket.class, PlayerJoinSyncPacket::encode, PlayerJoinSyncPacket::decode, PlayerJoinSyncPacket::handle);
         
+        // 注册粒子效果数据包
+        INSTANCE.registerMessage(index++, ParticleEffectPacket.class,
+                ParticleEffectPacket::encode, ParticleEffectPacket::decode, ParticleEffectPacket::handle);
+        
         // 在registerMessages方法中添加数据包注册
         INSTANCE.registerMessage(index++, DarkKivaBatModePacket.class, DarkKivaBatModePacket::encode, DarkKivaBatModePacket::new, DarkKivaBatModePacket::handle);
         INSTANCE.registerMessage(index++, DarkKivaBloodSuckPacket.class, DarkKivaBloodSuckPacket::encode, DarkKivaBloodSuckPacket::new, DarkKivaBloodSuckPacket::handle);
