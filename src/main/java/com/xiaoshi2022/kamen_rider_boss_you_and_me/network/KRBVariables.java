@@ -163,6 +163,7 @@ public class KRBVariables {
 	public boolean needExplode = false;
 	public boolean wudi = false;
 	public boolean hasExploded = false;   // ← 新增
+	public boolean allowKickBlockDamage = false; // 控制骑士踢是否允许破坏方块，默认为false
 	public long lastKickTime = 0L;
 	public long kickStartTime = 0L;
 	public double kickStartY = 0.0D;

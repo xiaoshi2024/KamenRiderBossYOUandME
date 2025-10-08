@@ -148,6 +148,15 @@ public class ModItems {
             }
     );
 
+    public static final RegistryObject<SakuraHurricaneLockseed> SAKURAHURRICANE_LOCKSEED = ITEMS.register("sakura_lockseed",
+            () -> new SakuraHurricaneLockseed(new Item.Properties()) {
+                @Override
+                public void onCraftedBy(ItemStack stack, Level world, Player player) {
+                    stack.getOrCreateTag().putInt("is_lockseed", 1); // 标记为锁种
+                }
+            }
+    );
+
     public static final RegistryObject<GammaEyecon> GAMMA_EYECON = ITEMS.register("gamma_eyecon",
             () -> new GammaEyecon(new Item.Properties()));
 

@@ -55,6 +55,7 @@ public class ModTab {
                 output.accept(GIIFU_SLEEPING_STATE_ITEM.get());
                 output.accept(BLOODLINE_FANG.get());
                 output.accept(GAMMA_EYECON.get());
+                output.accept(SAKURAHURRICANE_LOCKSEED.get());
             })).build());
 
     public static final RegistryObject<CreativeModeTab> SPAWN_EGG_TAB = TABS.register("kamen_rider_boss_you_and_me_spawn_egg_tab", () -> CreativeModeTab.builder()

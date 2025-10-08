@@ -31,6 +31,9 @@ public final class KickDamageHelper {
         return 0.0f;
     }
 
+    /**
+     * 获取不同骑士踢的爆炸半径
+     */
     public static float getKickExplosionRadius(Entity entity) {
         ItemStack helmet = getHelmet(entity);
 
@@ -48,6 +51,36 @@ public final class KickDamageHelper {
         if (helmet.is(ModItems.EVIL_BATS_HELMET.get()))        return 5.4F; // 艾比尔
 
         return 2.0F; // 默认
+    }
+
+    /**
+     * 获取不同骑士踢的方块破坏强度（0.0-1.0，1.0表示完全破坏）
+     */
+    public static float getKickBlockDestructionStrength(Entity entity) {
+        ItemStack helmet = getHelmet(entity);
+
+        if (helmet.is(ModItems.MARIKA_HELMET.get()))           return 0.4F; // 较弱的破坏能力
+        if (helmet.is(ModItems.SIGURD_HELMET.get()))           return 0.5F; // 中等破坏能力
+        if (helmet.is(ModItems.RIDER_BARONS_HELMET.get()))     return 0.6F; // 较强的破坏能力
+        if (helmet.is(ModItems.BARON_LEMON_HELMET.get()))       return 0.7F; // 很强的破坏能力
+        if (helmet.is(ModItems.ZANGETSU_SHIN_HELMET.get()))    return 0.75F; // 极强的破坏能力
+        if (helmet.is(ModItems.DUKE_HELMET.get()))             return 0.8F; // 非常强的破坏能力
+        if (helmet.is(ModItems.TYRANT_HELMET.get()))           return 0.9F; // 接近完全破坏
+        if (helmet.is(ModItems.DARK_ORANGELS_HELMET.get()))    return 0.95F; // 几乎完全破坏
+        if (helmet.is(ModItems.DARK_KIVA_HELMET.get()))        return 1.0F; // 完全破坏所有可破坏方块
+        if (helmet.is(ModItems.RIDERNECROM_HELMET.get()))      return 0.85F; // 超强破坏能力
+
+        if (helmet.is(ModItems.EVIL_BATS_HELMET.get()))        return 0.88F; // 极强破坏能力
+
+        return 0.3F; // 默认较弱的破坏能力
+    }
+
+    /**
+     * 检查方块是否为基夫石像（不应被骑士踢破坏）
+     */
+    public static boolean isGiifuStatue(Entity entity) {
+        return entity != null && entity.getType().equals(net.minecraft.world.entity.EntityType.ENDER_DRAGON) && 
+               entity.hasCustomName() && "基夫石像".equals(entity.getCustomName().getString());
     }
 
     private static ItemStack getHelmet(Entity e) {

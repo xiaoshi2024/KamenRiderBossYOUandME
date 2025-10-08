@@ -43,6 +43,9 @@ public class ModCommands {
         
         // 注册眼魔命令
         GhostEyeCommand.register(dispatcher);
+        
+        // 注册骑士踢方块破坏命令
+        KickBlockDamageCommand.register(dispatcher);
     }
 
     private static int showAltarStructureCommand(CommandContext<CommandSourceStack> context) {

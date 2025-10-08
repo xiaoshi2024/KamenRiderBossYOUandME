@@ -32,12 +32,13 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class EntitySakuraHurricane extends Animal implements GeoEntity {
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlay("idle");
     private static final RawAnimation RUN = RawAnimation.begin().thenLoop("run");
-    private static final RawAnimation LEFT = RawAnimation.begin().thenPlay("right");
-    private static final RawAnimation RIGHT = RawAnimation.begin().thenPlay("left");
+    private static final RawAnimation LEFT = RawAnimation.begin().thenPlayAndHold("right");
+    private static final RawAnimation RIGHT = RawAnimation.begin().thenPlayAndHold("left");
     private static final RawAnimation JUMP = RawAnimation.begin().thenPlay("jump"); // 添加跳跃动画
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -246,7 +247,7 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
                 // 播放引擎音效
                 if (!this.level().isClientSide && this.tickCount % 40 == 0 && this.isMoving() && hasFuel) {
                     this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                            SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 0.2F, 2.0F);
+                        SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 0.2F, 2.0F);
                 }
 
                 return;
@@ -284,8 +285,9 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
                 jumpingField.setAccessible(true);
                 wantsToJump = jumpingField.getBoolean(player);
             } catch (Exception e) {
-                // 反射失败时使用备用方案：检查玩家垂直运动
-                wantsToJump = player.getDeltaMovement().y > 0.1 || !player.onGround();
+                // 反射失败时使用更安全的备用方案：只检查垂直速度，不检查是否在地面
+                // 避免玩家刚骑上摩托车时位置变化导致的误触
+                wantsToJump = player.getDeltaMovement().y > 0.5; // 使用更高的阈值
             }
 
             if (wantsToJump && this.onGround()) {
@@ -294,7 +296,7 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
                     this.isJumping = true;
                     this.jumpPower = 0.0F;
                     // 播放蓄力音效
-                    this.playSound(SoundEvents.NOTE_BLOCK_HAT, 0.3F, 1.5F);
+                    this.playSound(SoundEvents.NOTE_BLOCK_HAT.get(), 0.3F, 1.5F);
                 } else {
                     // 蓄力过程
                     if (this.jumpPower < 1.0F) {
@@ -324,7 +326,44 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
         }
     }
 
-    private void playSound(Holder.Reference<SoundEvent> noteBlockHat, float p19939, float p19940) {
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        // 当摩托车被攻击时的逻辑
+        if (!this.level().isClientSide && !this.isInvulnerableTo(source)) {
+            // 检查是否有骑手
+            Entity rider = this.getControllingPassenger();
+            
+            // 只有在没有骑手的情况下，才会变回锁种
+            if (rider == null) {
+                // 生成锁种物品
+                ItemStack lockseedStack = new ItemStack(com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.SAKURAHURRICANE_LOCKSEED.get());
+                
+                // 创建物品实体并设置位置
+                net.minecraft.world.entity.item.ItemEntity itemEntity = new net.minecraft.world.entity.item.ItemEntity(
+                        this.level(), this.getX(), this.getY(), this.getZ(), lockseedStack);
+                
+                // 添加物品实体到世界
+                this.level().addFreshEntity(itemEntity);
+                
+                // 播放锁种关闭音效
+                this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                        com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds.LOCKOFF.get(), 
+                        SoundSource.PLAYERS, 1.0F, 1.0F);
+                
+                // 移除摩托车实体
+                this.remove(Entity.RemovalReason.DISCARDED);
+                
+                // 返回true表示伤害已处理
+                return true;
+            }
+            // 有骑手时，正常处理伤害
+            else {
+                return super.hurt(source, amount);
+            }
+        }
+        
+        // 默认行为
+        return super.hurt(source, amount);
     }
 
     // 执行跳跃
@@ -439,6 +478,21 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
                     currentMotion.z + lookVector.z
             );
         }
+        
+        // 限制水平速度，防止移动错误警告
+        Vec3 motion = this.getDeltaMovement();
+        double horizontalSpeed = motion.horizontalDistance();
+        double maxHorizontalSpeed = 0.9; // 设置一个合理的最大水平速度，高于创飞所需的阈值但低于移动错误的阈值
+        
+        if (horizontalSpeed > maxHorizontalSpeed) {
+            // 保持方向，按比例降低速度
+            double speedRatio = maxHorizontalSpeed / horizontalSpeed;
+            this.setDeltaMovement(
+                    motion.x * speedRatio,
+                    motion.y,
+                    motion.z * speedRatio
+            );
+        }
     }
 
     // 动画控制器
@@ -519,8 +573,8 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
 
     @Override
     public boolean canCollideWith(Entity entity) {
-        // 只与玩家和方块碰撞
-        return entity instanceof Player || super.canCollideWith(entity);
+        // 允许与所有实体碰撞（包括生物和玩家）
+        return true;
     }
 
     @Override
@@ -538,6 +592,41 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
         return false;
     }
 
+    // 当被骑乘时的tick更新
+    @Override
+    public void rideTick() {
+        super.rideTick();
+        
+        // 获取骑乘者
+        Entity rider = this.getFirstPassenger();
+        if (rider instanceof Player player) {
+            // 检查玩家是否已死亡或不在实体上
+            if (!player.isAlive()) {
+                // 玩家被打下或死亡，在服务器端处理
+                if (!this.level().isClientSide) {
+                    // 让玩家停止骑乘
+                    player.stopRiding();
+                    
+                    // 播放锁种关闭音效
+                    this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                            com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds.LOCKOFF.get(), 
+                            SoundSource.PLAYERS, 1.0F, 1.0F);
+                    
+                    // 移除摩托车实体
+                    this.remove(Entity.RemovalReason.DISCARDED);
+                    
+                    // 原地生成锁种物品
+                    this.level().addFreshEntity(new net.minecraft.world.entity.item.ItemEntity(
+                            this.level(), 
+                            this.getX(), 
+                            this.getY(), 
+                            this.getZ(), 
+                            new ItemStack(com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.SAKURAHURRICANE_LOCKSEED.get())));
+                }
+            }
+        }
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -545,6 +634,75 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
         // 确保摩托车在非骑乘时不会移动
         if (!this.isVehicle() && !this.level().isClientSide) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(0.5, 0.5, 0.5));
+        }
+        
+        // 检查是否达到了可以创飞敌人的速度
+        checkForEnemyCollision();
+    }
+    
+    /**
+     * 检查摩托车是否达到足够速度来创飞敌人
+     */
+    private void checkForEnemyCollision() {
+        // 只在服务端执行碰撞检测，避免客户端不同步
+        if (this.level().isClientSide) {
+            return;
+        }
+        
+        // 检查是否有骑手并且正在移动
+        if (!this.isVehicle()) {
+            return;
+        }
+        
+        // 获取当前水平速度
+        double horizontalSpeed = this.getDeltaMovement().horizontalDistance();
+        
+        // 设置创飞敌人的最小速度阈值（降低阈值以确保能够创飞）
+        double minRammingSpeed = 0.5; // 从0.8降低到0.5
+        
+        // 只有当速度超过阈值时才执行碰撞检测
+        if (horizontalSpeed < minRammingSpeed) {
+            return;
+        }
+        
+        // 获取摩托车前方的一个区域进行检测（增大范围）
+        double range = 2.0; // 从1.5增加到2.0
+        List<Entity> nearbyEntities = this.level().getEntities(this, this.getBoundingBox().inflate(range), 
+                entity -> {
+                    // 不检测自己和骑手
+                    if (entity == this || entity == this.getControllingPassenger()) {
+                        return false;
+                    }
+                    
+                    // 只检测可以被伤害的实体
+                    return entity instanceof LivingEntity;
+                });
+        
+        // 对检测到的敌人应用伤害和击退效果
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof LivingEntity livingEntity) {
+                // 根据速度计算伤害（速度越快伤害越高）
+                float damage = (float) (horizontalSpeed * 5.0);
+                
+                // 创建伤害源
+                DamageSource damageSource = this.damageSources().mobAttack(this);
+                
+                // 应用伤害
+                boolean damaged = livingEntity.hurt(damageSource, damage);
+                
+                if (damaged) {
+                    // 根据摩托车的移动方向计算击退方向
+                    Vec3 direction = this.getLookAngle().normalize();
+                    double knockbackStrength = horizontalSpeed * 2.0;
+                    
+                    // 应用击退效果
+                    livingEntity.push(direction.x * knockbackStrength, 0.5, direction.z * knockbackStrength);
+                    
+                    // 播放撞击音效
+                    this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                            SoundEvents.IRON_GOLEM_ATTACK, SoundSource.NEUTRAL, 0.6F, 1.0F);
+                }
+            }
         }
     }
 

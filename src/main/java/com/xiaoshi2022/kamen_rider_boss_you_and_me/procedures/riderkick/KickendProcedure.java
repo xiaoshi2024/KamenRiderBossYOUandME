@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.NecromEyexEntit
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KickDamageHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -17,7 +18,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -91,6 +95,29 @@ public class KickendProcedure {
 					entity.getZ(),
 					10, 0.5, 0.5, 0.5, 0.1
 			);
+
+			// 处理方块破坏（如果允许的话）
+			if (variables.allowKickBlockDamage) {
+				// 获取爆炸半径和破坏强度
+				float radius = KickDamageHelper.getKickExplosionRadius(entity);
+				float destructionStrength = KickDamageHelper.getKickBlockDestructionStrength(entity);
+
+				// 创建一个不会破坏方块的爆炸，但会对实体造成伤害
+				serverLevel.explode(
+						entity, 
+						entity.getX(), 
+						entity.getY(), 
+						entity.getZ(), 
+						radius, 
+						false, // 是否会引起火灾
+						Level.ExplosionInteraction.NONE // 不破坏方块
+				);
+
+				// 自定义方块破坏处理（如果允许的话）
+				if (destructionStrength > 0) {
+						performCustomBlockDestruction(serverLevel, entity, radius, destructionStrength);
+				}
+			}
 
 			// 专门处理基夫石像的伤害
 			handleGiifuDamage(world, entity);
@@ -253,6 +280,52 @@ public class KickendProcedure {
 	private static void handleAnimation(Player entity) {
 		// 设置steadily动画
 		setPlayerVariable(entity, "steadily", 1);
+	}
+
+	/**
+	 * 执行自定义的方块破坏逻辑
+	 */	
+	private static void performCustomBlockDestruction(ServerLevel world, Player player, float radius, float destructionStrength) {
+		// 获取爆炸中心点
+		BlockPos centerPos = new BlockPos((int) player.getX(), (int) player.getY(), (int) player.getZ());
+		int radiusInt = (int) Math.ceil(radius);
+
+		// 遍历爆炸范围内的所有方块
+		for (int x = -radiusInt; x <= radiusInt; x++) {
+			for (int y = -radiusInt; y <= radiusInt; y++) {
+				for (int z = -radiusInt; z <= radiusInt; z++) {
+					BlockPos pos = centerPos.offset(x, y, z);
+					BlockState state = world.getBlockState(pos);
+
+					// 计算方块到爆炸中心的距离
+					double distance = Math.sqrt(x*x + y*y + z*z);
+
+					// 如果方块在爆炸范围内
+					if (distance <= radius) {
+						// 检查是否为基夫石像，如果是则跳过
+						List<Entity> entitiesAtPos = world.getEntities(
+								player, 
+								new AABB(pos), 
+								e -> KickDamageHelper.isGiifuStatue(e)
+						);
+
+						if (entitiesAtPos.isEmpty()) {
+							// 计算爆炸对该方块的破坏力量（距离越远力量越小）
+							float power = 1.0F - (float) (distance / radius);
+							power *= destructionStrength;
+
+							// 获取方块的爆炸抗性
+							float resistance = state.getExplosionResistance(world, pos, null);
+
+							// 如果破坏力量大于方块的爆炸抗性，则破坏方块
+							if (power > resistance / 5.0F && state.getDestroySpeed(world, pos) >= 0) {
+								world.destroyBlock(pos, true);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	// 设置玩家变量

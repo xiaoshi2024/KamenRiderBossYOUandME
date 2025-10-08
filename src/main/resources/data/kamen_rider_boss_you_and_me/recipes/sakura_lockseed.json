@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "rider_boss_smelt",
+  "category": "equipment",
+  "pattern": [
+    "CCC",
+    "C#C",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:cherry_sapling"
+    },
+    "#": {
+      "item": "kamen_rider_weapon_craft:helheimfruit"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_boss_you_and_me:sakura_lockseed",
+    "count": 1
+  }
+}
