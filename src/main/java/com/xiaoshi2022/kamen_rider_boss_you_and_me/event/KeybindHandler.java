@@ -262,21 +262,6 @@ public class KeybindHandler {
         // 检查玩家是否穿着Necrom盔甲并触发眼魔机制
         checkAndTriggerNecromArmorMechanism(player);
 
-        // 柠檬逻辑
-        findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
-                .ifPresent(curio -> {
-                    ItemStack beltStack = curio.stack();
-                    Genesis_driver belt = (Genesis_driver) beltStack.getItem();
-
-                    if (belt.getMode(beltStack) == Genesis_driver.BeltMode.LEMON) {
-                        // 发送解除变身请求
-                        PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "GENESIS", true)); // true 表示是解除变身请求
-                        belt.startReleaseAnimation(player, beltStack);
-                        delayTicks = 40;
-                        delayedBeltStack = beltStack.copy();
-                    }
-                });
-
         findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
                 .ifPresent(curio -> {
                     ItemStack beltStack = curio.stack();
@@ -285,72 +270,61 @@ public class KeybindHandler {
 
                     switch (mode) {
                         case LEMON -> {
-                            PacketHandler.sendToServer(
-                                    new TransformationRequestPacket(player.getUUID(), "GENESIS", true));
-                            belt.startReleaseAnimation(player, beltStack);
+                            // 先播放动画
+                            belt.startReleaseWithPlayerAnimation(player, beltStack);
+                            // 设置延时，在动画播放完后再发送解除变身请求
                             delayTicks = 40;
                             delayedBeltStack = beltStack.copy();
                         }
                         case MELON -> {
                             // 先判断是变身还是解除
-                            boolean isTransformeds =
-                                    player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
+                            boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
                             if (isTransformeds) {
-                                // 解除
-                                PacketHandler.sendToServer(
-                                        new TransformationRequestPacket(player.getUUID(), "GENESIS_MELON", true));
-                                belt.startReleaseAnimation(player, beltStack);
+                                // 先播放动画
+                                belt.startReleaseWithPlayerAnimation(player, beltStack);
+                                // 设置延时，在动画播放完后再发送解除变身请求
                                 delayTicks = 40;
                                 delayedBeltStack = beltStack.copy();
                             } else {
                                 // 变身
-                                PacketHandler.sendToServer(
-                                        new MelonTransformationRequestPacket(player.getUUID()));
+                                PacketHandler.sendToServer(new MelonTransformationRequestPacket(player.getUUID()));
                             }
                         }
                         case CHERRY -> {
                             // 先判断是变身还是解除
-                            boolean isTransformeds =
-                                    player.getInventory().armor.get(3).getItem() == ModItems.SIGURD_HELMET.get();
+                            boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.SIGURD_HELMET.get();
                             if (isTransformeds) {
-                                // 解除
-                                PacketHandler.sendToServer(
-                                        new TransformationRequestPacket(player.getUUID(), "GENESIS_CHERRY", true));
-                                belt.startReleaseAnimation(player, beltStack);
+                                // 先播放动画
+                                belt.startReleaseWithPlayerAnimation(player, beltStack);
+                                // 设置延时，在动画播放完后再发送解除变身请求
                                 delayTicks = 40;
                                 delayedBeltStack = beltStack.copy();
                             } else {
                                 // 变身
-                                PacketHandler.sendToServer(
-                                        new CherryTransformationRequestPacket(player.getUUID()));
+                                PacketHandler.sendToServer(new CherryTransformationRequestPacket(player.getUUID()));
                             }
                         }
                         case PEACH -> {
                             // 先判断是变身还是解除
-                            boolean isTransformeds =
-                                    player.getInventory().armor.get(3).getItem() == ModItems.MARIKA_HELMET.get();
+                            boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.MARIKA_HELMET.get();
                             if (isTransformeds) {
-                                // 解除
-                                PacketHandler.sendToServer(
-                                        new TransformationRequestPacket(player.getUUID(), "GENESIS_PEACH", true));
-                                belt.startReleaseAnimation(player, beltStack);
+                                // 先播放动画
+                                belt.startReleaseWithPlayerAnimation(player, beltStack);
+                                // 设置延时，在动画播放完后再发送解除变身请求
                                 delayTicks = 40;
                                 delayedBeltStack = beltStack.copy();
                             } else {
                                 // 变身
-                                PacketHandler.sendToServer(
-                                        new MarikaTransformationRequestPacket(player.getUUID()));
+                                PacketHandler.sendToServer(new MarikaTransformationRequestPacket(player.getUUID()));
                             }
                         }
                         case DRAGONFRUIT -> {
                             // 先判断是变身还是解除
-                            boolean isTransformeds = 
-                                    player.getInventory().armor.get(3).getItem() == ModItems.TYRANT_HELMET.get();
+                            boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.TYRANT_HELMET.get();
                             if (isTransformeds) {
-                                // 解除
-                                PacketHandler.sendToServer(
-                                        new TransformationRequestPacket(player.getUUID(), "GENESIS_DRAGONFRUIT", true));
-                                belt.startReleaseAnimation(player, beltStack);
+                                // 先播放动画
+                                belt.startReleaseWithPlayerAnimation(player, beltStack);
+                                // 设置延时，在动画播放完后再发送解除变身请求
                                 delayTicks = 40;
                                 delayedBeltStack = beltStack.copy();
                             }
@@ -630,6 +604,10 @@ public class KeybindHandler {
             if (belt.getMode(beltStack) == Genesis_driver.BeltMode.LEMON) {
                 System.out.println("玩家解除柠檬变身");
                 ItemStack newStack = beltStack.copy();
+                
+                // 调用startReleaseWithPlayerAnimation方法确保先播放玩家sodax动画
+                belt.startReleaseWithPlayerAnimation(player, newStack);
+                
                 belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
 
                 CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
@@ -687,14 +665,18 @@ public class KeybindHandler {
 
         if (belt.getMode(beltStack) != Genesis_driver.BeltMode.MELON) return;
 
+        // 调用startReleaseWithPlayerAnimation方法确保先播放玩家sodax动画
+        ItemStack newStack = beltStack.copy();
+        belt.startReleaseWithPlayerAnimation(player, newStack);
+        
         // 1. 重置腰带模式
-        belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+        belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
         SlotResult slotResult = curio.get();
         CurioUtils.updateCurioSlot(
                 player,
                 slotResult.slotContext().identifier(),
                 slotResult.slotContext().index(),
-                beltStack
+                newStack
         );
 
         // 2. 播放解除音效
@@ -741,14 +723,18 @@ public class KeybindHandler {
 
         if (belt.getMode(beltStack) != Genesis_driver.BeltMode.CHERRY) return;
 
+        // 调用startReleaseWithPlayerAnimation方法确保先播放玩家sodax动画
+        ItemStack newStack = beltStack.copy();
+        belt.startReleaseWithPlayerAnimation(player, newStack);
+        
         // 1. 重置腰带模式
-        belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+        belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
         SlotResult slotResult = curio.get();
         CurioUtils.updateCurioSlot(
                 player,
                 slotResult.slotContext().identifier(),
                 slotResult.slotContext().index(),
-                beltStack
+                newStack
         );
 
         // 2. 播放解除音效
@@ -856,14 +842,18 @@ public class KeybindHandler {
 
         if (belt.getMode(beltStack) != Genesis_driver.BeltMode.DRAGONFRUIT) return;
 
+        // 调用startReleaseWithPlayerAnimation方法确保先播放玩家sodax动画
+        ItemStack newStack = beltStack.copy();
+        belt.startReleaseWithPlayerAnimation(player, newStack);
+        
         // 1. 重置腰带模式
-        belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+        belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
         SlotResult slotResult = curio.get();
         CurioUtils.updateCurioSlot(
                 player,
                 slotResult.slotContext().identifier(),
                 slotResult.slotContext().index(),
-                beltStack
+                newStack
         );
 
         // 2. 播放解除音效
@@ -903,14 +893,18 @@ public class KeybindHandler {
 
         if (belt.getMode(beltStack) != Genesis_driver.BeltMode.PEACH) return;
 
+        // 调用startReleaseWithPlayerAnimation方法确保先播放玩家sodax动画
+        ItemStack newStack = beltStack.copy();
+        belt.startReleaseWithPlayerAnimation(player, newStack);
+        
         // 1. 重置腰带模式
-        belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+        belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
         SlotResult slotResult = curio.get();
         CurioUtils.updateCurioSlot(
                 player,
                 slotResult.slotContext().identifier(),
                 slotResult.slotContext().index(),
-                beltStack
+                newStack
         );
 
         // 2. 播放解除音效

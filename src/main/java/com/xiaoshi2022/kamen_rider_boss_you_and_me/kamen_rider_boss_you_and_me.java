@@ -46,6 +46,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.knecromghost.Kn
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.LordBaronRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.melon_energy_slash.MelonEnergySlashRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.necrom_eyex.NecromEyexRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.sakura_hurricane.SakuraHurricaneRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KivatItemTossHandler;
@@ -277,6 +278,8 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.DARK_KIVA_SEAL_BARRIER.get(), DarkKivaSealBarrierRenderer::new);
             EntityRenderers.register(ModEntityTypes.CHERRY_ENERGY_ARROW.get(), CherryEnergyArrowRenderer::new);
             EntityRenderers.register(ModEntityTypes.MELON_ENERGY_SLASH.get(), MelonEnergySlashRenderer::new);
+
+            EntityRenderers.register(ModEntityTypes.SAKURA_HURRICANE.get(), SakuraHurricaneRenderer::new);
 
 //            EntityRenderers.register(ModEntityTypes.KAITO.get(),
 //                    VillagerEntityMCARenderer::new);

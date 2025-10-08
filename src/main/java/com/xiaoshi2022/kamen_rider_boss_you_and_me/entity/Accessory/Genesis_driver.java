@@ -284,10 +284,13 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
 
         System.out.println(">>> Server send packet: " + anim);
 
-        // 1. 服务端：把动画名同步给所有追踪者
+        // 1. 服务端：把腰带动画名同步给所有追踪者
         if (!entity.level().isClientSide && entity instanceof ServerPlayer sp) {
             PacketHandler.sendToAllTracking(
                     new BeltAnimationPacket(sp.getId(), anim, mode), sp);
+
+            // 同时播放玩家sodas动画
+            playPlayerAnimation(sp, "sodas");
         }
 
         // 2. 客户端：本地线程直接播，不再发包
@@ -296,6 +299,20 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
         }
     }
 
+    /**
+     * 先播放玩家sodax动画，然后播放解除变身动画
+     */
+    public void startReleaseWithPlayerAnimation(LivingEntity entity, ItemStack stack) {
+        // 1. 首先播放玩家sodax动画
+        if (!entity.level().isClientSide() && entity instanceof ServerPlayer sp) {
+            // 优先播放玩家sodax动画
+            playPlayerAnimation(sp, "sodax");
+        }
+        
+        // 2. 然后播放解除变身动画
+        startReleaseAnimation(entity, stack);
+    }
+    
     public void startReleaseAnimation(LivingEntity entity, ItemStack stack) {
         setRelease(stack, true);
         setHenshin(stack, false);
@@ -477,6 +494,33 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
                     net.minecraft.network.chat.Component.literal("已自动变身为巴隆柠檬形态！")
             );
         }
+    }
+
+    /* ========== 玩家动画支持 ========== */
+    /* 发送动画到客户端 */
+    public static void playPlayerAnimation(ServerPlayer player, String animationName) {
+        if (player.level().isClientSide()) {
+            // 在客户端，我们需要直接触发本地动画
+            // 但由于Minecraft的限制，我们可能需要通过其他方式实现
+            System.out.println("尝试在客户端播放玩家动画: " + animationName);
+            return;
+        }
+        
+        // 使用sendToClient确保动画对玩家自己可见
+        PacketHandler.sendAnimationToClient(
+                Component.literal(animationName),
+                player.getId(),
+                false,
+                player
+        );
+        
+        // 同时发送给所有跟踪该玩家的客户端
+        PacketHandler.sendAnimationToAllTracking(
+                Component.literal(animationName),
+                player.getId(),
+                false,
+                player
+        );
     }
     
     /**

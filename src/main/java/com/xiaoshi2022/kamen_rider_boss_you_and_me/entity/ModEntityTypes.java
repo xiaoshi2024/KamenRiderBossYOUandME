@@ -73,6 +73,10 @@ public class ModEntityTypes {
                     .sized(0.001F, 0.001F) // 非常小的碰撞箱
                     .build("seat"));
     
+    // 樱花飓风摩托车实体
+    public static final RegistryObject<EntityType<EntitySakuraHurricane>> SAKURA_HURRICANE = registerMob("sakura_hurricane", EntitySakuraHurricane::new,
+            1.0f, 0.7f, 0xFF6B6B, 0xFFE066);
+    
     // BatDarks 特效实体
     public static final RegistryObject<EntityType<BatDarksEntity>> BAT_DARKS = ENTITY_TYPES.register("bat_darks",
             () -> EntityType.Builder.<BatDarksEntity>of(BatDarksEntity::new, MobCategory.MISC)
