@@ -8,8 +8,10 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderParticleEffect;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public class ReleaseBeltPacket {
@@ -34,23 +36,25 @@ public class ReleaseBeltPacket {
         switch (riderType) {
             case "GENESIS", "GENESIS_LEMON", "GENESIS_CHERRY", "GENESIS_PEACH", "GENESIS_DRAGONFRUIT", "GENESIS_MELON" -> {
                 // 根据不同的创世纪骑士类型触发对应的粒子效果
-                Genesis_driver belt = (Genesis_driver) CurioUtils.findFirstCurio(player, 
+                // 只调用一次CurioUtils.findFirstCurio确保获取到一致的腰带状态
+                Optional<ItemStack> beltStackOptional = CurioUtils.findFirstCurio(player,
                         s -> s.getItem() instanceof Genesis_driver)
-                        .map(curio -> curio.stack().getItem())
-                        .orElse(null);
-                
-                if (belt != null) {
-                    String mode = belt.getMode(CurioUtils.findFirstCurio(player, 
-                            s -> s.getItem() instanceof Genesis_driver)
-                            .map(curio -> curio.stack())
-                            .orElse(null)).name();
+                        .map(curio -> curio.stack());
+                        
+                if (beltStackOptional.isPresent()) {
+                    ItemStack beltStack = beltStackOptional.get();
+                    Genesis_driver belt = (Genesis_driver) beltStack.getItem();
                     
+                    // 使用同一份腰带状态来获取模式
+                    Genesis_driver.BeltMode mode = belt.getMode(beltStack);
+                    
+                    // 根据腰带模式触发对应的粒子效果
                     switch (mode) {
-                        case "LEMON" -> RiderParticleEffect.spawnZangetsuShinReleaseParticles(player);
-                        case "CHERRY" -> RiderParticleEffect.spawnSigurdReleaseParticles(player);
-                        case "PEACH" -> RiderParticleEffect.spawnMarikaReleaseParticles(player);
-                        case "DRAGONFRUIT" -> RiderParticleEffect.spawnTyrantReleaseParticles(player);
-                        case "MELON" -> RiderParticleEffect.spawnDukeReleaseParticles(player);
+                        case LEMON -> RiderParticleEffect.spawnZangetsuShinReleaseParticles(player);
+                        case CHERRY -> RiderParticleEffect.spawnSigurdReleaseParticles(player);
+                        case PEACH -> RiderParticleEffect.spawnMarikaReleaseParticles(player);
+                        case DRAGONFRUIT -> RiderParticleEffect.spawnTyrantReleaseParticles(player);
+                        case MELON -> RiderParticleEffect.spawnDukeReleaseParticles(player);
                     }
                 }
                 
@@ -106,9 +110,9 @@ public class ReleaseBeltPacket {
                     DarkKivaSequence.startDisassembly(player);
                 } else if ("EVIL_BATS".equals(beltType)) {
                     // 处理Evil Bats解除变身
-                    KeybindHandler.completeBeltRelease(player, beltType);
+                    handleRelease(player, beltType);
                 } else {
-                    KeybindHandler.completeBeltRelease(player, beltType);
+                    handleRelease(player, beltType);
                 }
             } else if (triggerAnimation) {
                 if ("GENESIS".equals(beltType)) {
