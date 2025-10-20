@@ -86,30 +86,34 @@ public class GiifuFeatureHandler {
         UUID playerUUID = player.getUUID();
         double currentMaxHealth = player.getMaxHealth();
 
-        // 如果还没有应用Giifu生命值加成，或者当前生命值不是目标值
-        if (!giifuHealthApplied.getOrDefault(playerUUID, false) || Math.abs(currentMaxHealth - GIIFU_TARGET_HEALTH) > 0.1) {
-            // 保存原始生命值（只在第一次应用时保存）
-            if (!originalMaxHealth.containsKey(playerUUID)) {
-                originalMaxHealth.put(playerUUID, currentMaxHealth);
-                System.out.println("Saved original max health: " + currentMaxHealth + " for player " + playerUUID);
-            }
+        // 如果还没有应用Giifu生命值加成，保存当前生命值作为基准
+        if (!originalMaxHealth.containsKey(playerUUID)) {
+            originalMaxHealth.put(playerUUID, currentMaxHealth);
+            System.out.println("Saved original max health: " + currentMaxHealth + " for player " + playerUUID);
+        }
 
+        // 计算目标生命值：基础生命值 + Giifu额外生命值
+        double baseHealth = originalMaxHealth.getOrDefault(playerUUID, BASE_HEALTH);
+        double targetHealth = baseHealth + GIIFU_EXTRA_HEALTH;
+
+        // 只有在需要时才更新生命值
+        if (!giifuHealthApplied.getOrDefault(playerUUID, false) || Math.abs(currentMaxHealth - targetHealth) > 0.1) {
             // 设置新的生命值上限
-            player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(GIIFU_TARGET_HEALTH);
+            player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(targetHealth);
 
             // 恢复部分生命值（如果当前生命值较低）
-            if (player.getHealth() < GIIFU_TARGET_HEALTH) {
-                float healthToAdd = Math.min(10.0F, (float) (GIIFU_TARGET_HEALTH - player.getHealth()));
+            if (player.getHealth() < targetHealth) {
+                float healthToAdd = Math.min(10.0F, (float) (targetHealth - player.getHealth()));
                 player.setHealth(player.getHealth() + healthToAdd);
                 System.out.println("Restored health: " + healthToAdd + ", current health: " + player.getHealth());
             }
 
-            // 更新变量
-            variables.baseMaxHealth = GIIFU_TARGET_HEALTH;
+            // 不再更新baseMaxHealth，保持原始基础生命值不变，确保命令设置的值能够保留
+            // 同步其他可能需要同步的变量，但不修改baseMaxHealth
             variables.syncPlayerVariables(player);
             giifuHealthApplied.put(playerUUID, true);
 
-            System.out.println("Applied Giifu health bonus: " + currentMaxHealth + " -> " + GIIFU_TARGET_HEALTH + " for player " + player.getName().getString());
+            System.out.println("Applied Giifu health bonus: " + currentMaxHealth + " -> " + targetHealth + " for player " + player.getName().getString());
         }
     }
 
@@ -121,12 +125,17 @@ public class GiifuFeatureHandler {
 
         // 如果已经应用了Giifu生命值加成
         if (giifuHealthApplied.getOrDefault(playerUUID, false)) {
-            // 恢复原始生命值或基础生命值
+            // 获取原始生命值或基础生命值
             double originalHealth = originalMaxHealth.getOrDefault(playerUUID, BASE_HEALTH);
             double currentMaxHealth = player.getMaxHealth();
-
-            // 只有在当前生命值上限接近Giifu目标值的情况下才恢复
-            if (Math.abs(currentMaxHealth - GIIFU_TARGET_HEALTH) < 1.0) {
+            
+            // 检查当前生命值是否接近Giifu目标值
+            double baseHealth = originalMaxHealth.getOrDefault(playerUUID, BASE_HEALTH);
+            double giifuTargetHealth = baseHealth + GIIFU_EXTRA_HEALTH;
+            
+            // 只有在当前生命值上限接近Giifu目标值的情况下才恢复原始值
+            if (Math.abs(currentMaxHealth - giifuTargetHealth) < 1.0) {
+                // 如果玩家通过命令修改了生命值，originalHealth将包含这个修改后的值
                 player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(originalHealth);
 
                 // 确保当前生命值不超过新的上限
@@ -134,8 +143,8 @@ public class GiifuFeatureHandler {
                     player.setHealth((float) originalHealth);
                 }
 
-                // 更新变量
-                variables.baseMaxHealth = originalHealth;
+                // 不再更新baseMaxHealth，保持原始基础生命值不变，确保命令设置的值能够保留
+                // 同步其他可能需要同步的变量，但不修改baseMaxHealth
                 variables.syncPlayerVariables(player);
 
                 System.out.println("Removed Giifu health bonus: " + currentMaxHealth + " -> " + originalHealth + " for player " + player.getName().getString());

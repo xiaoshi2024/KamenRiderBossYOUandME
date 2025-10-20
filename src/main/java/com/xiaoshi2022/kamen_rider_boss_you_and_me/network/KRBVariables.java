@@ -123,7 +123,7 @@ public class KRBVariables {
 			clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
-			clone.baseMaxHealth = 20.0D; // 重置为默认生命值
+			// 保留baseMaxHealth值，不再强制重置为默认值，以保留通过命令设置的生命值
 			clone.lastCustomArmorCount = 0;
 			}
 		}
@@ -354,6 +354,8 @@ public class KRBVariables {
 		nbt.putBoolean("isFangBloodline", isFangBloodline);
 		// 序列化宝箱领取状态
 		nbt.putBoolean("hasReceivedGhostEyeLootChest", hasReceivedGhostEyeLootChest);
+		// 序列化基础最大生命值，确保通过命令设置的生命值能够持久化保存
+		nbt.putDouble("baseMaxHealth", baseMaxHealth);
 		// 序列化腰带移除相关变量
 		nbt.putLong("beltRemovedTime", beltRemovedTime);
 		nbt.putString("removedBeltType", removedBeltType);

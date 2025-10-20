@@ -11,6 +11,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -66,26 +67,50 @@ public class OverlordFeatureHandler {
         boolean isOverlord = variables.isOverlord;
         boolean isTransformed = PlayerDeathHandler.hasTransformationArmor(player);
 
+        // 获取当前的基础生命值（可能已经被命令或其他方式修改）
+        double currentBaseHealth = variables.baseMaxHealth > 0 ? variables.baseMaxHealth : BASE_HEALTH;
+
         // 根据状态调整生命值上限
         if (isOverlord && !isTransformed) {
             // 应用夜视效果
             player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 2400, 0, true, false));
 
+            // 计算目标生命值：当前基础生命值 + Overlord额外生命值
+            double targetHealth = currentBaseHealth + OVERLORD_EXTRA_HEALTH;
+            
             // 调整生命值上限（只在需要时调整）
-            if (player.getMaxHealth() <= BASE_HEALTH) {
-                player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(BASE_HEALTH + OVERLORD_EXTRA_HEALTH);
+            if (player.getMaxHealth() < targetHealth - 0.1) { // 添加小误差，避免频繁更新
+                player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(targetHealth);
+                // 不再更新baseMaxHealth，保持原始基础生命值不变，确保命令设置的值能够保留
+                
                 // 如果当前生命值低于新的最大值，恢复一些生命值
                 if (player.getHealth() < player.getMaxHealth()) {
                     player.setHealth(Math.min(player.getHealth() + 20.0F, player.getMaxHealth()));
                 }
+                
+                // 同步变量
+                variables.syncPlayerVariables(player);
             }
 
             // 更新冷却时间
             updateCooldowns();
         } else {
-            // 如果不是Overlord或已变身，恢复默认生命值上限
-            if (player.getMaxHealth() > BASE_HEALTH && variables.baseMaxHealth <= BASE_HEALTH) {
-                player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(BASE_HEALTH);
+            // 如果不是Overlord或已变身，恢复基础生命值
+            // 首先确保currentBaseHealth是最新的（可能已通过命令修改）
+            AttributeInstance maxHealthAttribute = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
+            if (maxHealthAttribute != null) {
+                double actualBaseValue = maxHealthAttribute.getBaseValue();
+                // 如果当前记录的baseMaxHealth与实际基础值有较大差异，更新它
+                // 这有助于捕获可能通过命令直接修改的值
+                if (Math.abs(actualBaseValue - currentBaseHealth) > 0.1 && 
+                    !isOverlord && !isTransformed) {
+                    variables.baseMaxHealth = actualBaseValue;
+                    currentBaseHealth = actualBaseValue;
+                }
+            }
+            
+            if (player.getMaxHealth() > currentBaseHealth + 0.1) { // 添加小误差，避免频繁更新
+                player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(currentBaseHealth);
                 // 确保生命值不会超过新的最大值
                 if (player.getHealth() > player.getMaxHealth()) {
                     player.setHealth((float) player.getMaxHealth());

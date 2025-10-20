@@ -18,6 +18,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -93,14 +95,20 @@ public class ArmorHealthBoostHandler {
                 // 确保当前生命值也相应调整
                 player.setHealth(player.getMaxHealth());
             } else {
-                // 如果玩家没有装备任何自定义盔甲，恢复到基础生命值
-                double baseHealth = variables.baseMaxHealth > 0 ? variables.baseMaxHealth : 20.0D; // 默认20点生命值
+                // 获取当前的基础生命值（可能已经被命令或其他方式修改）
+                double currentBaseHealth = maxHealthAttribute.getBaseValue();
                 
                 // 保存当前生命值百分比
                 float healthPercentage = player.getHealth() / player.getMaxHealth();
                 
-                // 恢复基础生命值
-                maxHealthAttribute.setBaseValue(baseHealth);
+                // 更新baseMaxHealth以反映可能通过命令设置的新值
+                // 只有当currentBaseHealth明显大于默认值时才更新，避免循环重置
+                if (currentBaseHealth > 20.1D || currentBaseHealth < 19.9D) {
+                    variables.baseMaxHealth = currentBaseHealth;
+                }
+                
+                // 使用当前的基础生命值（已经包含了命令修改的值）
+                double baseHealth = variables.baseMaxHealth > 0 ? variables.baseMaxHealth : 20.0D; // 默认20点生命值
                 
                 // 按比例调整当前生命值
                 float newHealth = (float) (baseHealth * healthPercentage);
@@ -162,14 +170,39 @@ public class ArmorHealthBoostHandler {
             KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
                     .orElse(new KRBVariables.PlayerVariables());
     
-            // 初始化基础生命值为玩家当前的最大生命值
-            AttributeInstance maxHealthAttribute = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
-            if (maxHealthAttribute != null) {
-                variables.baseMaxHealth = maxHealthAttribute.getBaseValue();
-            }
+            // 不再在这里重置baseMaxHealth，因为它应该已经在NBT加载过程中被正确恢复了
+            // 这样可以保留通过命令设置的生命值
             
             // 同步变量，确保所有状态都被正确加载
             variables.syncPlayerVariables(player);
+        }
+    }
+    
+    // 监听玩家属性更新事件，用于捕获attribute命令修改
+    @SubscribeEvent
+    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+        if (event.getEntity() instanceof Player player && !player.level().isClientSide()) {
+            // 只在服务器端执行
+            // 每20tick(1秒)检查一次生命值，避免过于频繁
+            if (player.tickCount % 20 == 0) {
+                KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+                        .orElse(new KRBVariables.PlayerVariables());
+                
+                AttributeInstance maxHealthAttribute = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
+                if (maxHealthAttribute != null) {
+                    double currentBaseValue = maxHealthAttribute.getBaseValue();
+                    
+                    // 检查当前基础生命值是否与我们记录的baseMaxHealth不同
+                    // 如果不同，更新baseMaxHealth以反映命令修改的值
+                    if (Math.abs(currentBaseValue - variables.baseMaxHealth) > 0.1) {
+                        // 只有当玩家没有装备任何自定义盔甲时才更新，避免与盔甲加成冲突
+                        if (getCustomArmorCount(player) == 0) {
+                            variables.baseMaxHealth = currentBaseValue;
+                            variables.syncPlayerVariables(player);
+                        }
+                    }
+                }
+            }
         }
     }
 }
