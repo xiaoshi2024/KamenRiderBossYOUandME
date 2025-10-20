@@ -40,8 +40,6 @@ public class GiifuFeatureHandler {
     private static final Map<UUID, Integer> giifuSkillCooldowns = new HashMap<>();
     // 存储玩家是否已经应用了Giifu生命值加成
     private static final Map<UUID, Boolean> giifuHealthApplied = new HashMap<>();
-    // 存储玩家的原始生命值上限
-    private static final Map<UUID, Double> originalMaxHealth = new HashMap<>();
 
     // 每秒检查玩家状态并应用Giifu特性
     @SubscribeEvent
@@ -86,18 +84,20 @@ public class GiifuFeatureHandler {
         UUID playerUUID = player.getUUID();
         double currentMaxHealth = player.getMaxHealth();
 
-        // 如果还没有应用Giifu生命值加成，保存当前生命值作为基准
-        if (!originalMaxHealth.containsKey(playerUUID)) {
-            originalMaxHealth.put(playerUUID, currentMaxHealth);
-            System.out.println("Saved original max health: " + currentMaxHealth + " for player " + playerUUID);
+        // 检查玩家是否装备了自定义盔甲，如果是则不更新生命值
+        if (hasCustomArmor(player)) {
+            giifuHealthApplied.put(playerUUID, true);
+            return;
         }
 
+        // 获取当前的基础生命值（可能已经被命令修改）
+        double baseHealth = variables.baseMaxHealth > 0 ? variables.baseMaxHealth : BASE_HEALTH;
+        
         // 计算目标生命值：基础生命值 + Giifu额外生命值
-        double baseHealth = originalMaxHealth.getOrDefault(playerUUID, BASE_HEALTH);
         double targetHealth = baseHealth + GIIFU_EXTRA_HEALTH;
 
-        // 只有在需要时才更新生命值
-        if (!giifuHealthApplied.getOrDefault(playerUUID, false) || Math.abs(currentMaxHealth - targetHealth) > 0.1) {
+        // 更严格地检查是否需要更新生命值，只有在明显不同时才更新
+        if (Math.abs(currentMaxHealth - targetHealth) > 1.0) {
             // 设置新的生命值上限
             player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(targetHealth);
 
@@ -109,11 +109,27 @@ public class GiifuFeatureHandler {
             }
 
             // 不再更新baseMaxHealth，保持原始基础生命值不变，确保命令设置的值能够保留
-            // 同步其他可能需要同步的变量，但不修改baseMaxHealth
             variables.syncPlayerVariables(player);
             giifuHealthApplied.put(playerUUID, true);
 
             System.out.println("Applied Giifu health bonus: " + currentMaxHealth + " -> " + targetHealth + " for player " + player.getName().getString());
+        } else {
+            // 确保状态标志正确设置
+            giifuHealthApplied.put(playerUUID, true);
+        }
+    }
+    
+    // 检查玩家是否装备了自定义盔甲
+    private static boolean hasCustomArmor(Player player) {
+        // 导入ArmorHealthBoostHandler类来检查自定义盔甲
+        try {
+            Class<?> armorHandlerClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.ArmorHealthBoostHandler");
+            java.lang.reflect.Method getCustomArmorMethod = armorHandlerClass.getMethod("getCustomArmorCount", Player.class);
+            int armorCount = (int) getCustomArmorMethod.invoke(null, player);
+            return armorCount > 0;
+        } catch (Exception e) {
+            // 如果反射失败，返回false
+            return false;
         }
     }
 
@@ -125,17 +141,25 @@ public class GiifuFeatureHandler {
 
         // 如果已经应用了Giifu生命值加成
         if (giifuHealthApplied.getOrDefault(playerUUID, false)) {
-            // 获取原始生命值或基础生命值
-            double originalHealth = originalMaxHealth.getOrDefault(playerUUID, BASE_HEALTH);
+            // 获取当前的基础生命值（可能已经被命令修改）
+            double originalHealth = variables.baseMaxHealth > 0 ? variables.baseMaxHealth : BASE_HEALTH;
             double currentMaxHealth = player.getMaxHealth();
             
-            // 检查当前生命值是否接近Giifu目标值
-            double baseHealth = originalMaxHealth.getOrDefault(playerUUID, BASE_HEALTH);
+            // 计算Giifu目标生命值
+            double baseHealth = variables.baseMaxHealth > 0 ? variables.baseMaxHealth : BASE_HEALTH;
             double giifuTargetHealth = baseHealth + GIIFU_EXTRA_HEALTH;
             
+            // 检查玩家是否装备了自定义盔甲，如果是则不更新生命值
+            if (hasCustomArmor(player)) {
+                // 清理状态但不修改生命值
+                giifuHealthApplied.remove(playerUUID);
+                return;
+            }
+            
             // 只有在当前生命值上限接近Giifu目标值的情况下才恢复原始值
+            // 增加一个小的阈值，避免因浮点数精度问题导致无法恢复
             if (Math.abs(currentMaxHealth - giifuTargetHealth) < 1.0) {
-                // 如果玩家通过命令修改了生命值，originalHealth将包含这个修改后的值
+                // 使用variables.baseMaxHealth作为恢复目标值
                 player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(originalHealth);
 
                 // 确保当前生命值不超过新的上限
@@ -143,16 +167,12 @@ public class GiifuFeatureHandler {
                     player.setHealth((float) originalHealth);
                 }
 
-                // 不再更新baseMaxHealth，保持原始基础生命值不变，确保命令设置的值能够保留
-                // 同步其他可能需要同步的变量，但不修改baseMaxHealth
                 variables.syncPlayerVariables(player);
-
                 System.out.println("Removed Giifu health bonus: " + currentMaxHealth + " -> " + originalHealth + " for player " + player.getName().getString());
             }
 
-            // 清理状态
+            // 只在真正处理完后才清理状态
             giifuHealthApplied.remove(playerUUID);
-            originalMaxHealth.remove(playerUUID);
         }
     }
 
@@ -430,7 +450,6 @@ public class GiifuFeatureHandler {
             UUID playerUUID = player.getUUID();
             giifuSkillCooldowns.remove(playerUUID);
             giifuHealthApplied.remove(playerUUID);
-            originalMaxHealth.remove(playerUUID);
         }
     }
 
@@ -454,12 +473,16 @@ public class GiifuFeatureHandler {
 
         UUID playerUUID = player.getUUID();
         boolean applied = giifuHealthApplied.getOrDefault(playerUUID, false);
-        double original = originalMaxHealth.getOrDefault(playerUUID, BASE_HEALTH);
         double current = player.getMaxHealth();
         boolean isGiifu = isPlayerGiifu(player);
         boolean isTransformed = PlayerDeathHandler.hasTransformationArmor(player);
+        
+        // 获取当前的基础生命值（可能已经被命令修改）
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY).orElse(new KRBVariables.PlayerVariables());
+        double baseHealth = variables.baseMaxHealth > 0 ? variables.baseMaxHealth : BASE_HEALTH;
+        double targetHealth = baseHealth + GIIFU_EXTRA_HEALTH;
 
-        return String.format("Giifu: %s, Transformed: %s, HealthApplied: %s, Original: %.1f, Current: %.1f, Target: %.1f",
-                isGiifu, isTransformed, applied, original, current, GIIFU_TARGET_HEALTH);
+        return String.format("Giifu: %s, Transformed: %s, HealthApplied: %s, Current: %.1f, Base: %.1f, Target: %.1f",
+                isGiifu, isTransformed, applied, current, baseHealth, targetHealth);
     }
 }

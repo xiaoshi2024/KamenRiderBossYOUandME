@@ -48,6 +48,8 @@ public class OverlordFeatureHandler {
     private static final int VINE_SKILL_COOLDOWN_HUMAN = 400; // 人类形态下40秒冷却
     // 存储玩家的藤蔓技能冷却时间
     private static final Map<UUID, Integer> vineCooldowns = new HashMap<>();
+    // 存储玩家是否已经应用了Overlord生命值加成
+    private static final Map<UUID, Boolean> overlordHealthApplied = new HashMap<>();
 
     // 每秒检查玩家状态并应用Overlord特性
     @SubscribeEvent
@@ -75,13 +77,20 @@ public class OverlordFeatureHandler {
             // 应用夜视效果
             player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 2400, 0, true, false));
 
+            // 检查玩家是否装备了自定义盔甲，如果是则不更新生命值
+            if (hasCustomArmor(player)) {
+                overlordHealthApplied.put(player.getUUID(), true);
+                return;
+            }
+            
             // 计算目标生命值：当前基础生命值 + Overlord额外生命值
             double targetHealth = currentBaseHealth + OVERLORD_EXTRA_HEALTH;
             
-            // 调整生命值上限（只在需要时调整）
-            if (player.getMaxHealth() < targetHealth - 0.1) { // 添加小误差，避免频繁更新
+            UUID playerUUID = player.getUUID();
+            
+            // 更严格地检查是否需要更新生命值，避免频繁更新和重复叠加
+            if (Math.abs(player.getMaxHealth() - targetHealth) > 1.0) {
                 player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(targetHealth);
-                // 不再更新baseMaxHealth，保持原始基础生命值不变，确保命令设置的值能够保留
                 
                 // 如果当前生命值低于新的最大值，恢复一些生命值
                 if (player.getHealth() < player.getMaxHealth()) {
@@ -90,31 +99,43 @@ public class OverlordFeatureHandler {
                 
                 // 同步变量
                 variables.syncPlayerVariables(player);
+                overlordHealthApplied.put(playerUUID, true);
+            } else {
+                // 确保状态标志正确设置
+                overlordHealthApplied.put(playerUUID, true);
             }
 
             // 更新冷却时间
             updateCooldowns();
         } else {
             // 如果不是Overlord或已变身，恢复基础生命值
-            // 首先确保currentBaseHealth是最新的（可能已通过命令修改）
-            AttributeInstance maxHealthAttribute = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
-            if (maxHealthAttribute != null) {
-                double actualBaseValue = maxHealthAttribute.getBaseValue();
-                // 如果当前记录的baseMaxHealth与实际基础值有较大差异，更新它
-                // 这有助于捕获可能通过命令直接修改的值
-                if (Math.abs(actualBaseValue - currentBaseHealth) > 0.1 && 
-                    !isOverlord && !isTransformed) {
-                    variables.baseMaxHealth = actualBaseValue;
-                    currentBaseHealth = actualBaseValue;
+            // 当玩家不是Overlord且未变身时，恢复到基础生命值
+            UUID playerUUID = player.getUUID();
+            if (overlordHealthApplied.getOrDefault(playerUUID, false)) {
+                // 检查玩家是否装备了自定义盔甲，如果是则不更新生命值
+                if (hasCustomArmor(player)) {
+                    // 清理状态但不修改生命值
+                    overlordHealthApplied.remove(playerUUID);
+                    return;
                 }
-            }
-            
-            if (player.getMaxHealth() > currentBaseHealth + 0.1) { // 添加小误差，避免频繁更新
-                player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(currentBaseHealth);
-                // 确保生命值不会超过新的最大值
-                if (player.getHealth() > player.getMaxHealth()) {
-                    player.setHealth((float) player.getMaxHealth());
+                
+                // 计算Overlord目标生命值，用于检查当前值是否需要恢复
+                double overlordTargetHealth = currentBaseHealth + OVERLORD_EXTRA_HEALTH;
+                
+                // 只有在当前生命值接近Overlord加成值时才恢复
+                if (Math.abs(player.getMaxHealth() - overlordTargetHealth) < 1.0) {
+                    player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(currentBaseHealth);
+                    // 确保生命值不会超过新的最大值
+                    if (player.getHealth() > player.getMaxHealth()) {
+                        player.setHealth((float) player.getMaxHealth());
+                    }
+                    
+                    // 同步变量
+                    variables.syncPlayerVariables(player);
                 }
+                
+                // 清理状态
+                overlordHealthApplied.remove(playerUUID);
             }
         }
     }
@@ -196,6 +217,20 @@ public class OverlordFeatureHandler {
     // 检查玩家是否可以使用藤蔓技能
     private static boolean canUseVineSkill(Player player) {
         return !vineCooldowns.containsKey(player.getUUID());
+    }
+    
+    // 检查玩家是否装备了自定义盔甲
+    private static boolean hasCustomArmor(Player player) {
+        // 导入ArmorHealthBoostHandler类来检查自定义盔甲
+        try {
+            Class<?> armorHandlerClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.ArmorHealthBoostHandler");
+            java.lang.reflect.Method getCustomArmorMethod = armorHandlerClass.getMethod("getCustomArmorCount", Player.class);
+            int armorCount = (int) getCustomArmorMethod.invoke(null, player);
+            return armorCount > 0;
+        } catch (Exception e) {
+            // 如果反射失败，返回false
+            return false;
+        }
     }
 
     // 激活藤蔓技能并设置冷却时间

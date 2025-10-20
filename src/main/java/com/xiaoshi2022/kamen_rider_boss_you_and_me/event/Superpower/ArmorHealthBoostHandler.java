@@ -101,9 +101,15 @@ public class ArmorHealthBoostHandler {
                 // 保存当前生命值百分比
                 float healthPercentage = player.getHealth() / player.getMaxHealth();
                 
-                // 更新baseMaxHealth以反映可能通过命令设置的新值
-                // 只有当currentBaseHealth明显大于默认值时才更新，避免循环重置
-                if (currentBaseHealth > 20.1D || currentBaseHealth < 19.9D) {
+                // 检查玩家是否是怪人种族或Overlord种族
+                boolean isGiifu = variables.isGiifu;
+                boolean isOverlord = variables.isOverlord;
+                boolean isTransformed = hasTransformationArmor(player);
+                
+                // 只有当玩家不是任何特殊种族或已变身后才更新baseMaxHealth
+                // 避免在种族加成状态下错误地将加成后的值作为新基准
+                if ((currentBaseHealth > 20.1D || currentBaseHealth < 19.9D) && 
+                    (!isGiifu && !isOverlord || isTransformed)) {
                     variables.baseMaxHealth = currentBaseHealth;
                 }
                 
@@ -192,17 +198,36 @@ public class ArmorHealthBoostHandler {
                 if (maxHealthAttribute != null) {
                     double currentBaseValue = maxHealthAttribute.getBaseValue();
                     
+                    // 检查玩家是否是怪人种族或Overlord种族
+                    boolean isGiifu = variables.isGiifu;
+                    boolean isOverlord = variables.isOverlord;
+                    boolean isTransformed = hasTransformationArmor(player);
+                    
                     // 检查当前基础生命值是否与我们记录的baseMaxHealth不同
                     // 如果不同，更新baseMaxHealth以反映命令修改的值
+                    // 重要：只在玩家不是特殊种族或已变身后才更新，避免捕获到包含种族加成的值
                     if (Math.abs(currentBaseValue - variables.baseMaxHealth) > 0.1) {
-                        // 只有当玩家没有装备任何自定义盔甲时才更新，避免与盔甲加成冲突
-                        if (getCustomArmorCount(player) == 0) {
+                        // 只有当玩家没有装备任何自定义盔甲且不是特殊种族或已变身时才更新
+                        if (getCustomArmorCount(player) == 0 && (!isGiifu && !isOverlord || isTransformed)) {
                             variables.baseMaxHealth = currentBaseValue;
                             variables.syncPlayerVariables(player);
                         }
                     }
                 }
             }
+        }
+    }
+    
+    // 检查玩家是否装备了变身盔甲
+    private static boolean hasTransformationArmor(Player player) {
+        // 导入PlayerDeathHandler类来检查变身状态
+        try {
+            Class<?> deathHandlerClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.event.PlayerDeathHandler");
+            java.lang.reflect.Method hasTransformationMethod = deathHandlerClass.getMethod("hasTransformationArmor", Player.class);
+            return (boolean) hasTransformationMethod.invoke(null, player);
+        } catch (Exception e) {
+            // 如果反射失败，返回false
+            return false;
         }
     }
 }
