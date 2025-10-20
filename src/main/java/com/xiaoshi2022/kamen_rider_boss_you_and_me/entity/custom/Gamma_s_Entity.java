@@ -28,7 +28,7 @@ public class Gamma_s_Entity extends Monster {
     // 注册实体属性
     public static AttributeSupplier createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 40.0D)
+                .add(Attributes.MAX_HEALTH, 56.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.28D)
                 .add(Attributes.ATTACK_DAMAGE, 29.0D)
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
