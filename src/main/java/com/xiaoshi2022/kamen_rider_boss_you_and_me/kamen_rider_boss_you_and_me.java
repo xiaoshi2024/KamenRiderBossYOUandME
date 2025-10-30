@@ -24,6 +24,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.ModCommands;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.giifu.ModStructureProcessors;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.EntityCuriosListScreen;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os.Another_Zi_oRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer;
@@ -60,9 +61,15 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.LemonsliceParticle;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.worldgen.dimension.CurseDimensionPlayerTickHandler;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -71,11 +78,14 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
@@ -83,6 +93,9 @@ import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixins;
 import software.bernie.geckolib.GeckoLib;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
+
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.VillagerCuriosLayer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.ZombieCuriosLayer;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -163,6 +176,9 @@ public class kamen_rider_boss_you_and_me
         // 移除重复的触发器注册，触发器已在静态变量定义时注册
 
         ModStructureProcessors.PROCESSORS.register(modEventBus);
+        
+        // 注册菜单类型
+        ModMenus.MENUS.register(modEventBus);
 
         // 注册 Mixin
         Mixins.addConfiguration("kamen_rider_boss_you_and_me.mixins.json");
@@ -182,6 +198,7 @@ public class kamen_rider_boss_you_and_me
         PACKET_HANDLER.registerMessage(messageID, messageType, encoder, decoder, messageConsumer);
         messageID++;
     }
+
 
     private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
 
@@ -234,22 +251,41 @@ public class kamen_rider_boss_you_and_me
             event.registerSpriteSet(ParticleTypesRegistry.DARK_BAT.get(), DarkBatParticle.Provider::new);
         }
 
-//        @SubscribeEvent
-//        public static void addLayers(EntityRenderersEvent.AddLayers event) {
-//            // 你的 Kaito 村民（或任何继承 Villager 的实体）
-//            LivingEntityRenderer<?, ?> kaitoRenderer = event.getRenderer(ModEntityTypes.KAITO.get());
-//            if (kaitoRenderer instanceof LivingEntityRenderer<?, ?>) {
-//                // 强制转型到正确的父类
-//                @SuppressWarnings("unchecked")
-//                LivingEntityRenderer<Villager, VillagerModel<Villager>> cast =
-//                        (LivingEntityRenderer<Villager, VillagerModel<Villager>>) kaitoRenderer;
-//                cast.addLayer(new KaitoCuriosLayer(cast));
-//            }
-//        }
+        @SubscribeEvent
+        public static void addLayers(EntityRenderersEvent.AddLayers event) {
+            // 注册MCA村民渲染层
+            // 获取村民渲染器
+            EntityRenderer<? extends LivingEntity> villagerRenderer = event.getRenderer(EntityType.VILLAGER);
+            if (villagerRenderer instanceof LivingEntityRenderer<?, ?>) {
+                @SuppressWarnings("unchecked")
+                LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> castVillager = 
+                        (LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) villagerRenderer;
+                castVillager.addLayer(new VillagerCuriosLayer<>(castVillager));
+            }
+            
+            // 注册僵尸渲染层
+            EntityRenderer<? extends LivingEntity> zombieRenderer = event.getRenderer(EntityType.ZOMBIE);
+            if (zombieRenderer instanceof LivingEntityRenderer<?, ?>) {
+                @SuppressWarnings("unchecked")
+                LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> castZombie = 
+                        (LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) zombieRenderer;
+                castZombie.addLayer(new ZombieCuriosLayer<>(castZombie));
+            }
+            
+            // 注册僵尸村民渲染层
+            EntityRenderer<? extends LivingEntity> zombieVillagerRenderer = event.getRenderer(EntityType.ZOMBIE_VILLAGER);
+            if (zombieVillagerRenderer instanceof LivingEntityRenderer<?, ?>) {
+                @SuppressWarnings("unchecked")
+                LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> castZombieVillager = 
+                        (LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) zombieVillagerRenderer;
+                castZombieVillager.addLayer(new ZombieCuriosLayer<>(castZombieVillager));
+            }
+        }
 
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
+    public static void onClientSetup(FMLClientSetupEvent event)
+    {
+        event.enqueueWork(() -> {
             PacketHandler.registerPackets();  // <-- 加这一行
             System.out.println("Client packets registered");
 
@@ -281,20 +317,26 @@ public class kamen_rider_boss_you_and_me
 
             EntityRenderers.register(ModEntityTypes.SAKURA_HURRICANE.get(), SakuraHurricaneRenderer::new);
 
-//            EntityRenderers.register(ModEntityTypes.KAITO.get(),
-//                    VillagerEntityMCARenderer::new);
+    //            EntityRenderers.register(ModEntityTypes.KAITO.get(),
+    //                    VillagerEntityMCARenderer::new);
 
-//            EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
+    //            EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
             // 注册动画工厂
             PlayerAnimationSetup.clientInit();
-            // 注册饰品渲染器
-            // 注册 Curios 饰品渲染器
-            CuriosRendererRegistry.register(ModItems.MEGA_UIORDER_ITEM.get(), () -> new GenericCurioRenderer());
-            CuriosRendererRegistry.register(ModItems.SENGOKUDRIVERS_EPMTY.get(), () -> new GenericCurioRenderer());
-            CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new GenericCurioRenderer());
-            CuriosRendererRegistry.register(ModItems.DRAK_KIVA_BELT.get(), ()->new DrakKivaBeltRenderer());
-            CuriosRendererRegistry.register(ModItems.TWO_SIDRIVER.get(), ()->new Two_sidriverRenderer());
-        }
+            // 注册Curios相关内容
+            if (ModList.get().isLoaded("curios")) {
+                // 注册Curios饰品渲染器
+                CuriosRendererRegistry.register(ModItems.MEGA_UIORDER_ITEM.get(), () -> new GenericCurioRenderer());
+                CuriosRendererRegistry.register(ModItems.SENGOKUDRIVERS_EPMTY.get(), () -> new GenericCurioRenderer());
+                CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new GenericCurioRenderer());
+                CuriosRendererRegistry.register(ModItems.DRAK_KIVA_BELT.get(), ()->new DrakKivaBeltRenderer());
+                CuriosRendererRegistry.register(ModItems.TWO_SIDRIVER.get(), ()->new Two_sidriverRenderer());
+                
+                // 注册Curio菜单屏幕
+                MenuScreens.register(ModMenus.ENTITY_CURIOS_LIST.get(), EntityCuriosListScreen::new);
+            }
+        });
+    }
     }
 
 }

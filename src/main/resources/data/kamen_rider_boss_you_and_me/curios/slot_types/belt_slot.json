@@ -1,0 +1,7 @@
+{
+  "icon": "kamen_rider_boss_you_and_me:item/empty_slot_belt",
+  "priority": 1,
+  "type": "belt",
+  "size": 1,
+  "name": "gui.kamen_rider_boss_you_and_me.entity_curios.belt_slot"
+}

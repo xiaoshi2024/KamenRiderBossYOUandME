@@ -1,0 +1,4 @@
+{
+  "entities": ["minecraft:villager", "minecraft:zombie_villager", "mca:female_villager", "mca:male_villager"],
+  "slots": ["belt"]
+}
