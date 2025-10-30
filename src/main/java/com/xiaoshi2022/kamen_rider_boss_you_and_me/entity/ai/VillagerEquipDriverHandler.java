@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import forge.net.mca.entity.VillagerEntityMCA;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -124,6 +125,74 @@ public class VillagerEquipDriverHandler {
         entity.getPersistentData().putBoolean("is_transformed_ridder", true);
     }
     
+    // 为MCA村民装备音速弓
+    private static void giveSonicBowToTransformedEntity(LivingEntity entity) {
+        // 确保这是一个MCA村民
+        if (!(entity instanceof VillagerEntityMCA)) {
+            return;
+        }
+        
+        // 检查是否已经装备了音速弓，如果没有则装备
+        ItemStack mainHand = entity.getMainHandItem();
+        // 避免替换已经持有的腰带
+        if (mainHand.isEmpty() || !(mainHand.getItem() instanceof Genesis_driver)) {
+            try {
+                // 尝试获取音速弓物品实例
+                Class<?> modItemsClass = Class.forName("com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems");
+                java.lang.reflect.Field sonicArrowField = modItemsClass.getDeclaredField("SONICARROW");
+                sonicArrowField.setAccessible(true);
+                Object sonicArrow = sonicArrowField.get(null);
+                
+                if (sonicArrow instanceof net.minecraftforge.registries.RegistryObject) {
+                    // 获取RegistryObject实例
+                    net.minecraftforge.registries.RegistryObject<?> registryObject = 
+                            (net.minecraftforge.registries.RegistryObject<?>) sonicArrow;
+                    
+                    if (registryObject.isPresent()) {
+                        // 获取Item对象并直接创建ItemStack
+                        Object itemObj = registryObject.get();
+                        if (itemObj instanceof net.minecraft.world.item.Item) {
+                            net.minecraft.world.item.Item item = (net.minecraft.world.item.Item) itemObj;
+                            ItemStack sonicArrowStack = new ItemStack(item);
+                            // 设置到主手，除非已经持有腰带
+                            entity.setItemSlot(EquipmentSlot.MAINHAND, sonicArrowStack);
+                            
+                            // 确保实体能够使用这把弓进行射击
+                            setupRangedAttackAI(entity);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                // 如果反射失败，记录异常但不崩溃
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    // 设置MCA村民的远程攻击AI，使村民能够使用音速弓射击
+    private static void setupRangedAttackAI(LivingEntity entity) {
+        if (entity instanceof Mob mob) {
+            // 清除现有的AI目标和行为，为新的行为腾出空间
+            mob.setTarget(null);
+            
+            // 使实体具有攻击性，这样它会主动寻找并攻击玩家
+            mob.setAggressive(true);
+            
+            // 确保实体能够自动寻找玩家作为目标
+            if (mob instanceof net.minecraft.world.entity.PathfinderMob pathfinderMob) {
+                pathfinderMob.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(
+                    pathfinderMob, 
+                    net.minecraft.world.entity.player.Player.class, 
+                    true
+                ));
+                
+                // 添加基本的寻路行为
+                pathfinderMob.goalSelector.addGoal(3, new net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal(pathfinderMob, 1.0D));
+                pathfinderMob.goalSelector.addGoal(4, new net.minecraft.world.entity.ai.goal.RandomLookAroundGoal(pathfinderMob));
+            }
+        }
+    }
+    
     /**
      * 为实体移除变身NBT标签
      */
@@ -143,6 +212,17 @@ public class VillagerEquipDriverHandler {
         
         // 综合判断是否已经完成变身
         boolean isFullyTransformed = isAlreadyTransformed && isArmorEquipped;
+        
+        // 只有在第一次变身时才设置血量，避免每次调用都重置血量导致无法被击败
+        if (!isAlreadyTransformed || !isArmorEquipped) {
+            // 提升血量到40点
+            villager.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH)
+                    .setBaseValue(40.0D);
+            villager.setHealth(40.0F);
+        }
+
+        // 给予音速弓
+        giveSonicBowToTransformedEntity(villager);
 
         // 根据腰带模式为村民装备对应的盔甲并播放变身音效
         switch (mode) {

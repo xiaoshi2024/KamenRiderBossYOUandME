@@ -4,10 +4,17 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.CherryEnergyArr
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -61,26 +68,70 @@ public final class CherrySonicArrowAbilityHandler {
         // 检查冷却
         if (sp.getPersistentData().contains("cherry_sonic_arrow_cooldown")) return;
         
+        // 调用通用方法处理技能
+        if (tryCherryEnergyArrowForEntity(sp)) {
+            // 设置冷却
+            sp.getPersistentData().putInt("cherry_sonic_arrow_cooldown", CHERRY_ARROW_COOLDOWN);
+        }
+    }
+    
+    /**
+     * 为非玩家生物触发樱桃能量箭矢技能
+     */
+    public static void tryCherryEnergyArrowForMob(Mob mob) {
+        // 检查生物状态
+        if (!mob.isAlive()) return;
+        
+        // 检查是否手持音速弓樱桃模式
+        ItemStack mainHandItem = mob.getMainHandItem();
+        if (!(mainHandItem.getItem() instanceof sonicarrow)) return;
+        
+        sonicarrow sonicArrow = (sonicarrow) mainHandItem.getItem();
+        if (sonicArrow.getCurrentMode(mainHandItem) != sonicarrow.Mode.CHERRY) return;
+        
+        // 调用通用方法处理技能
+        tryCherryEnergyArrowForEntity(mob);
+    }
+    
+    /**
+     * 通用方法：为实体（玩家或生物）触发樱桃能量箭矢技能
+     */
+    private static boolean tryCherryEnergyArrowForEntity(Entity entity) {
         // 检查并消耗骑士能量
-        if (!RiderEnergyHandler.consumeRiderEnergy(sp, ENERGY_COST)) {
-            return;
+        if (!RiderEnergyHandler.consumeRiderEnergy(entity, ENERGY_COST)) {
+            return false;
         }
         
         // 播放 "Cherry Energy！" 音效
-        sp.level().playSound(null, sp.getX(), sp.getY(), sp.getZ(),
+        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
                 ModSounds.CHERYYENERGY.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         
-        // 射线检测，获取视线方向的目标位置
-        HitResult hitResult = sp.pick(50.0D, 0.0F, false);
-        
         // 创建并发射樱桃能量箭矢
-        CherryEnergyArrowEntity arrow = new CherryEnergyArrowEntity(sp.level(), sp);
+        CherryEnergyArrowEntity arrow = new CherryEnergyArrowEntity(entity.level(), (LivingEntity) entity);
         arrow.setDamage(ARROW_DAMAGE);
-        arrow.shootFromRotation(sp, sp.getXRot(), sp.getYRot(), 0.0F, 3.0F, 1.0F);
-        sp.level().addFreshEntity(arrow);
         
-        // 设置冷却
-        sp.getPersistentData().putInt("cherry_sonic_arrow_cooldown", CHERRY_ARROW_COOLDOWN);
+        // 根据实体类型确定发射方向
+        if (entity instanceof ServerPlayer player) {
+            // 玩家：使用视线方向
+            arrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.0F, 1.0F);
+        } else if (entity instanceof Mob mob) {
+            // 生物：朝向目标
+            Entity target = mob.getTarget();
+            if (target != null && target.isAlive()) {
+                // 计算朝向目标的向量
+                Vec3 direction = target.position().subtract(mob.position()).normalize();
+                double yaw = Math.atan2(direction.z, direction.x) * (180 / Math.PI) - 90.0;
+                double pitch = Math.atan2(-direction.y, Math.sqrt(direction.x * direction.x + direction.z * direction.z)) * (180 / Math.PI);
+                
+                arrow.shootFromRotation(mob, (float)pitch, (float)yaw, 0.0F, 3.0F, 1.0F);
+            } else {
+                // 如果没有目标，使用生物面向的方向
+                arrow.shootFromRotation(mob, mob.getXRot(), mob.getYRot(), 0.0F, 3.0F, 1.0F);
+            }
+        }
+        
+        entity.level().addFreshEntity(arrow);
+        return true;
     }
 
     /* ====== 工具方法 ====== */
@@ -96,6 +147,29 @@ public final class CherrySonicArrowAbilityHandler {
                player.hasEffect(net.minecraft.world.effect.MobEffects.POISON) || // 中毒
                player.hasEffect(net.minecraft.world.effect.MobEffects.WITHER) || // 凋零
                player.hasEffect(net.minecraft.world.effect.MobEffects.WEAKNESS); // 虚弱
+    }
+    
+    /**
+     * 检查生物是否被控（有控制类负面效果）
+     */
+    private static boolean isMobControlled(Mob mob) {
+        // 检查生物是否有以下控制类负面效果
+        return mob.hasEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN) || // 缓慢
+               mob.hasEffect(net.minecraft.world.effect.MobEffects.BLINDNESS) || // 失明
+               mob.hasEffect(net.minecraft.world.effect.MobEffects.CONFUSION) || // 反胃
+               mob.hasEffect(net.minecraft.world.effect.MobEffects.POISON) || // 中毒
+               mob.hasEffect(net.minecraft.world.effect.MobEffects.WITHER); // 凋零
+    }
+    
+    /**
+     * 为非玩家生物添加技能检查和触发
+     * 在MobAbilityHandler中被调用
+     */
+    public static void checkAndTriggerForMob(Mob mob) {
+        // 10%概率触发技能
+        if (Math.random() < 0.1) {
+            tryCherryEnergyArrowForMob(mob);
+        }
     }
     
     /* 禁止实例化 */

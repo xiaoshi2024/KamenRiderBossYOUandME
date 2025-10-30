@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -48,51 +49,104 @@ public class ZombieArmorAutoEquipHandler {
         }
     }
 
-    // 当生物tick时检查，确保即使没有装备变化也能正确装备盔甲
+    // 当生物tick时检查，确保即使没有装备变化也能正确装备盔甲和音速弓
     @SubscribeEvent
       public static void onLivingTick(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
         
-        // 检查是否是僵尸实体
-        if (entity instanceof Zombie zombie && !entity.level().isClientSide) {
-            // 每20tick（1秒）检查一次，避免过于频繁
-            if (entity.tickCount % 20 == 0) {
-                // 检查僵尸是否手持腰带或在Curio槽装备了腰带
-                boolean hasDriver = false;
-                
-                // 检查主手
-                ItemStack mainHandStack = zombie.getMainHandItem();
-                if (mainHandStack.getItem() instanceof Genesis_driver) {
-                    hasDriver = true;
-                }
-                
-                // 检查Curio槽
-                if (!hasDriver && BeltCurioIntegration.hasBeltInCurioSlot(zombie)) {
-                    hasDriver = true;
-                }
-                
-                // 根据是否持有腰带更新NBT标签
-                if (hasDriver) {
-                    addTransformationNBT(entity);
-                } else {
-                    removeTransformationNBT(entity);
-                }
-                
-                // 检查僵尸是否手持腰带，如果是则尝试装备到Curio槽
-                if (mainHandStack.getItem() instanceof Genesis_driver && !BeltCurioIntegration.hasBeltInCurioSlot(zombie)) {
-                    BeltCurioIntegration.tryEquipBeltToCurioSlot(zombie, mainHandStack);
-                }
-                
-                // 如果已装备腰带，处理腰带逻辑
-                if (BeltCurioIntegration.hasBeltInCurioSlot(zombie)) {
-                    BeltCurioIntegration.getBeltFromEntity(zombie).ifPresent(
-                        beltStack -> {
-                            handleZombieWithDriver(zombie, beltStack);
-                            checkAndHandleIdleState(zombie);
-                        }
-                    );
-                }
+        // 每20tick（1秒）检查一次，避免过于频繁
+        if (entity.tickCount % 20 == 0 && !entity.level().isClientSide) {
+            // 检查是否是僵尸实体
+            if (entity instanceof Zombie zombie) {
+                handleZombieTransformation(zombie);
+            } 
+            // 检查是否是村民实体
+            else if (isVillager(entity)) {
+                handleVillagerTransformation(entity);
             }
+        }
+    }
+    
+    // 判断是否是村民
+    private static boolean isVillager(LivingEntity entity) {
+        return entity.getType() == EntityType.VILLAGER || entity.getType() == EntityType.WANDERING_TRADER;
+    }
+    
+    // 处理僵尸变身逻辑
+    private static void handleZombieTransformation(Zombie zombie) {
+        // 检查僵尸是否手持腰带或在Curio槽装备了腰带
+        boolean hasDriver = false;
+        
+        // 检查主手
+        ItemStack mainHandStack = zombie.getMainHandItem();
+        if (mainHandStack.getItem() instanceof Genesis_driver) {
+            hasDriver = true;
+        }
+        
+        // 检查Curio槽
+        if (!hasDriver && BeltCurioIntegration.hasBeltInCurioSlot(zombie)) {
+            hasDriver = true;
+        }
+        
+        // 根据是否持有腰带更新NBT标签
+        if (hasDriver) {
+            addTransformationNBT(zombie);
+        } else {
+            removeTransformationNBT(zombie);
+        }
+        
+        // 检查僵尸是否手持腰带，如果是则尝试装备到Curio槽
+        if (mainHandStack.getItem() instanceof Genesis_driver && !BeltCurioIntegration.hasBeltInCurioSlot(zombie)) {
+            BeltCurioIntegration.tryEquipBeltToCurioSlot(zombie, mainHandStack);
+        }
+        
+        // 如果已装备腰带，处理腰带逻辑
+        if (BeltCurioIntegration.hasBeltInCurioSlot(zombie)) {
+            BeltCurioIntegration.getBeltFromEntity(zombie).ifPresent(
+                beltStack -> {
+                    handleZombieWithDriver(zombie, beltStack);
+                    checkAndHandleIdleState(zombie);
+                }
+            );
+        }
+    }
+    
+    // 处理村民变身逻辑
+    private static void handleVillagerTransformation(LivingEntity villager) {
+        // 检查村民是否手持腰带或在Curio槽装备了腰带
+        boolean hasDriver = false;
+        
+        // 检查主手
+        ItemStack mainHandStack = villager.getMainHandItem();
+        if (mainHandStack.getItem() instanceof Genesis_driver) {
+            hasDriver = true;
+        }
+        
+        // 检查Curio槽
+        if (!hasDriver && BeltCurioIntegration.hasBeltInCurioSlot(villager)) {
+            hasDriver = true;
+        }
+        
+        // 根据是否持有腰带更新NBT标签
+        if (hasDriver) {
+            addTransformationNBT(villager);
+            
+            // 如果已装备腰带，为村民装备音速弓
+            if (BeltCurioIntegration.hasBeltInCurioSlot(villager)) {
+                BeltCurioIntegration.getBeltFromEntity(villager).ifPresent(
+                    beltStack -> {
+                        // 为村民装备音速弓
+                        giveSonicBowToTransformedEntity(villager);
+                    }
+                );
+            }
+        } else {
+            removeTransformationNBT(villager);
+        }
+        
+        // 检查村民是否手持腰带，如果是则尝试装备到Curio槽
+        if (mainHandStack.getItem() instanceof Genesis_driver && !BeltCurioIntegration.hasBeltInCurioSlot(villager)) {
+            BeltCurioIntegration.tryEquipBeltToCurioSlot(villager, mainHandStack);
         }
     }
     
@@ -223,10 +277,23 @@ public class ZombieArmorAutoEquipHandler {
         }
     }
 
-    // 处理手持腰带的僵尸装备盔甲的逻辑
+    // 处理手持腰带的僵尸装备盔甲和音速弓的逻辑
     private static void handleZombieWithDriver(Zombie zombie, ItemStack driverStack) {
         Genesis_driver driver = (Genesis_driver) driverStack.getItem();
         Genesis_driver.BeltMode mode = driver.getMode(driverStack);
+        
+        // 检查僵尸是否已经标记为变身状态
+        boolean isAlreadyTransformed = zombie.getPersistentData().getBoolean("is_transformed_ridder");
+        // 检查是否已经装备了盔甲
+        boolean isArmorEquipped = !zombie.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
+        
+        // 只有在第一次变身时才设置血量，避免每次调用都重置血量导致无法被击败
+        if (!isAlreadyTransformed || !isArmorEquipped) {
+            // 提升血量到40点
+            zombie.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH)
+                    .setBaseValue(40.0D);
+            zombie.setHealth(40.0F);
+        }
 
         // 标记是否需要播放音效（只有当盔甲从无到有时才播放）
         boolean shouldPlaySound = zombie.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
@@ -287,6 +354,9 @@ public class ZombieArmorAutoEquipHandler {
                 // 默认模式不装备盔甲
             }
         }
+        
+        // 为僵尸装备音速弓
+        giveSonicBowToTransformedEntity(zombie);
     }
     
     // 播放变身音效的辅助方法
@@ -309,6 +379,55 @@ public class ZombieArmorAutoEquipHandler {
     private static void equipArmor(Zombie zombie, EquipmentSlot slot, ItemStack armorStack) {
         if (zombie.getItemBySlot(slot).isEmpty()) {
             zombie.setItemSlot(slot, armorStack);
+        }
+    }
+    
+    // 为僵尸和村民装备音速弓
+    private static void giveSonicBowToTransformedEntity(LivingEntity entity) {
+        // 检查是否是僵尸或村民
+        boolean isZombie = entity instanceof Zombie;
+        boolean isVillager = entity.getType() == EntityType.VILLAGER || entity.getType() == EntityType.WANDERING_TRADER;
+        
+        // 只有僵尸或村民才给予音速弓
+        if (!(isZombie || isVillager)) {
+            return;
+        }
+        
+        // 检查是否已经装备了音速弓，如果没有则装备
+        ItemStack mainHand = entity.getMainHandItem();
+        if (mainHand.isEmpty() || !(mainHand.getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow)) {
+            // 创建音速弓实例
+            ItemStack sonicArrow = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.SONICARROW.get());
+            
+            // 设置到主手
+            entity.setItemSlot(EquipmentSlot.MAINHAND, sonicArrow);
+            
+            // 确保实体能够使用这把弓进行射击
+            setupRangedAttackAI(entity);
+        }
+    }
+    
+    // 设置实体的远程攻击AI，使僵尸和村民能够使用音速弓射击
+    private static void setupRangedAttackAI(LivingEntity entity) {
+        if (entity instanceof Mob mob) {
+            // 清除现有的AI目标和行为，为新的行为腾出空间
+            mob.setTarget(null);
+            
+            // 使实体具有攻击性，这样它会主动寻找并攻击玩家
+            mob.setAggressive(true);
+            
+            // 确保实体能够自动寻找玩家作为目标
+            if (mob instanceof net.minecraft.world.entity.PathfinderMob pathfinderMob) {
+                pathfinderMob.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(
+                    pathfinderMob, 
+                    net.minecraft.world.entity.player.Player.class, 
+                    true
+                ));
+                
+                // 添加基本的寻路行为
+                pathfinderMob.goalSelector.addGoal(3, new net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal(pathfinderMob, 1.0D));
+                pathfinderMob.goalSelector.addGoal(4, new net.minecraft.world.entity.ai.goal.RandomLookAroundGoal(pathfinderMob));
+            }
         }
     }
 }
