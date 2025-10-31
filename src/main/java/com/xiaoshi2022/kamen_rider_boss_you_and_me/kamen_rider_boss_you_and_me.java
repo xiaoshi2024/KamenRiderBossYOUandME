@@ -32,6 +32,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.Elementar
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.StoriousRender;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_banana_energy.BaronBananaEnergyRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_lemon_energy.BaronLemonEnergyRenderer;
+
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batdrakss.BatDarksRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batstampfinish.BatStampFinishRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.cherry_energy_arrow.CherryEnergyArrowRenderer;
@@ -309,6 +310,8 @@ public class kamen_rider_boss_you_and_me
             // 眼魔眼魂实体渲染器注册
             EntityRenderers.register(ModEntityTypes.GAMMA_EYECON_ENTITY.get(), GammaEyeconRenderer::new);
             EntityRenderers.register(ModEntityTypes.NECROM_EYEX.get(), NecromEyexRenderer::new);
+            // 注册时劫者实体渲染器
+            EntityRenderers.register(ModEntityTypes.TIME_JACKER.get(), forge.net.mca.client.render.VillagerEntityMCARenderer::new);
 
             EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyRenderer::new);
             EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyRenderer::new);

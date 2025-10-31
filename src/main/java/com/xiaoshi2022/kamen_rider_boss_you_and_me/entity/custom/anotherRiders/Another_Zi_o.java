@@ -82,8 +82,18 @@ public class Another_Zi_o extends Monster implements GeoEntity {
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Villager.class, true));
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        // 如果目标是时劫者，不能攻击
+        if (target instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity) {
+            return false;
+        }
+        // 否则使用默认行为
+        return super.canAttack(target);
     }
 
     /* ---------- 主 tick ---------- */
@@ -118,7 +128,9 @@ public class Another_Zi_o extends Monster implements GeoEntity {
         if (this.level().getDifficulty() != Difficulty.PEACEFUL &&
                 !(this.getTarget() instanceof Player && ((Player)this.getTarget()).isCreative())) {
             LivingEntity target = this.getTarget();
-            if (target != null && this.distanceTo(target) < 2.0D) {
+            // 不攻击时劫者
+            if (target != null && this.distanceTo(target) < 2.0D && 
+                !(target instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity)) {
                 float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
                 target.hurt(this.damageSources().mobAttack(this), damage);
             }
@@ -137,11 +149,12 @@ public class Another_Zi_o extends Monster implements GeoEntity {
         // 获取攻击伤害属性，如果不存在则使用默认值
         double damage = this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
 
-        // 扫描周围实体
+        // 扫描周围实体，但排除时劫者实体
         for (LivingEntity entity : this.level().getEntitiesOfClass(
                 LivingEntity.class,
                 this.getBoundingBox().inflate(2.0D),
-                e -> e != this && !(e instanceof Player && ((Player)e).isCreative()))
+                e -> e != this && !(e instanceof Player && ((Player)e).isCreative()) && 
+                     !(e instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity))
         ) {
             entity.hurt(this.damageSources().mobAttack(this), (float)damage);
         }

@@ -288,8 +288,11 @@
   "item.kamen_rider_boss_you_and_me.storious_spawn_egg.tooltip": "[Tip] Right-click to spawn Storious.",
   "item.kamen_rider_boss_you_and_me.gamma_s_spawn_egg": "Gamma S Spawn Egg",
   "item.kamen_rider_boss_you_and_me.gamma_s_spawn_egg.tooltip": "[Tip] Right-click to spawn Gamma S.",
+  "item.kamen_rider_boss_you_and_me.time_jacker_spawn_egg": "Time Jacker Spawn Egg",
+  "item.kamen_rider_boss_you_and_me.time_jacker_spawn_egg.tooltip": "[Tip] Right-click to spawn Time Jacker.",
   "item group.kamen_rider_boss_you_and_me_spawn_egg_tab": "BossSpawnEgg",
   "entity.kamen_rider_boss_you_and_me.necrom_eyex": "Necrom Eyex",
+  "entity.kamen_rider_boss_you_and_me.time_jacker": "Time Jacker",
 
   "item.kamen_rider_boss_you_and_me.sakura_lockseed": "Sakura Lockseed"
 

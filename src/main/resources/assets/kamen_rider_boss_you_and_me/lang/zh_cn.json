@@ -253,11 +253,14 @@
   "item.kamen_rider_boss_you_and_me.storious_spawn_egg.tooltip": "[提示] 右键点击生成斯特利乌斯。",
   "item.kamen_rider_boss_you_and_me.gamma_s_spawn_egg": "眼魔S 刷怪蛋",
   "item.kamen_rider_boss_you_and_me.gamma_s_spawn_egg.tooltip": "[提示] 右键点击生成眼魔S。",
+  "item.kamen_rider_boss_you_and_me.time_jacker_spawn_egg": "时劫者 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.time_jacker_spawn_egg.tooltip": "[提示] 右键点击生成时劫者。",
   "item group.kamen_rider_boss_you_and_me_spawn_egg_tab": "怪人生成",
   "entity.kamen_rider_boss_you_and_me.another_den_o": "异类电王",
   "entity.kamen_rider_boss_you_and_me.ghost_eye_entity": "眼魂",
   "advancements.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "一个地狱般的维度",
   "item.kamen_rider_boss_you_and_me.gamma_eyecon": "眼魔 眼魂",
   "entity.kamen_rider_boss_you_and_me.necrom_eyex": "幽冥眼魂特效",
+  "entity.kamen_rider_boss_you_and_me.time_jacker": "时劫者",
   "item.kamen_rider_boss_you_and_me.sakura_lockseed": "樱花摩托车锁种"
   }

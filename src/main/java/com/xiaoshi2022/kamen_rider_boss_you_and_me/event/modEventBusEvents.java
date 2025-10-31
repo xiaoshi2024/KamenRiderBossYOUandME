@@ -520,6 +520,7 @@ public class modEventBusEvents {
                             .build()
             ); // 强化版：大幅提高生命值、防御和韧性，增强击退抗性
 
+
             event.put(ModEntityTypes.ANOTHER_DEN_O.get(),
                     Monster.createMonsterAttributes()
                             .add(Attributes.MAX_HEALTH, 200.0D)
@@ -575,6 +576,9 @@ public class modEventBusEvents {
             event.put(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyEntity.createAttributes());
 
             event.put(ModEntityTypes.DARK_KIVA_SEAL_BARRIER.get(), DarkKivaSealBarrierEntity.createAttributes());
+            
+            // 注册时劫者实体属性
+            event.put(ModEntityTypes.TIME_JACKER.get(), TimeJackerEntity.createAttributes().build());
 
 //            event.put(ModEntityTypes.KAITO.get(),
 //                    KaitoVillager.createAttributes()

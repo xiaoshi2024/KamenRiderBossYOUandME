@@ -71,6 +71,7 @@ public class ModTab {
                 output.accept(ANOTHER_DEN_O_SPAWN_EGG.get());
                 output.accept(GIIFU_DEMOS_SPAWN_EGG.get());
                 output.accept(STORIOUS_SPAWN_EGG.get());
+                output.accept(TIME_JACKER_SPAWN_EGG.get());
                 output.accept(GAMMA_S_SPAWN_EGG.get());
             })).build());
 

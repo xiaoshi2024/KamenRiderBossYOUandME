@@ -253,6 +253,10 @@ public class ModItems {
 
     public static final RegistryObject<ForgeSpawnEggItem> STORIOUS_SPAWN_EGG = ITEMS.register("storious_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntityTypes.STORIOUS, 0xFF8000, 0x008080, new Item.Properties()));
+            
+    // 时劫者生成蛋
+    public static final RegistryObject<ForgeSpawnEggItem> TIME_JACKER_SPAWN_EGG = ITEMS.register("time_jacker_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.TIME_JACKER, 0x0000FF, 0xFF0000, new Item.Properties()));
 
     // 眼魔实体生成蛋
     public static final RegistryObject<ForgeSpawnEggItem> GAMMA_S_SPAWN_EGG = ITEMS.register("gamma_s_spawn_egg",

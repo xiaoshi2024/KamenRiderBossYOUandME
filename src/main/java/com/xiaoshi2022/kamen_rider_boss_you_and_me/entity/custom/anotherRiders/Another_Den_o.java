@@ -101,12 +101,36 @@ public class Another_Den_o extends Monster implements GeoEntity {
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
 
+        // 添加目标选择器
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, true));
+        
+        // 添加玩家目标，但排除时劫者
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(
+                this, 
+                Player.class, 
+                true
+        ));
+        
+        // 添加村民目标，但排除时劫者
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(
+                this, 
+                Villager.class, 
+                true
+        ));
+        
+        // 重写checkAttackable方法，在entity类中实现对时劫者的排除
     }
 
-    /* ---------- 主 tick ---------- */
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        // 如果目标是时劫者，不能攻击
+        if (target instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity) {
+            return false;
+        }
+        // 否则使用默认行为
+        return super.canAttack(target);
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -159,7 +183,9 @@ public class Another_Den_o extends Monster implements GeoEntity {
         if (this.level().getDifficulty() != Difficulty.PEACEFUL &&
                 !(this.getTarget() instanceof Player && ((Player)this.getTarget()).isCreative())) {
             LivingEntity target = this.getTarget();
-            if (target != null && this.distanceTo(target) < 2.0D) {
+            // 不攻击时劫者
+            if (target != null && this.distanceTo(target) < 2.0D && 
+                !(target instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity)) {
                 float damage = (float)this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
                 target.hurt(this.damageSources().mobAttack(this), damage);
             }
@@ -186,11 +212,12 @@ public class Another_Den_o extends Monster implements GeoEntity {
         // 获取攻击伤害属性，如果不存在则使用默认值
         double damage = this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
 
-        // 扫描周围实体
+        // 扫描周围实体，但排除时劫者实体
         for (LivingEntity entity : this.level().getEntitiesOfClass(
                 LivingEntity.class,
                 this.getBoundingBox().inflate(2.0D),
-                e -> e != this && !(e instanceof Player && ((Player)e).isCreative()))
+                e -> e != this && !(e instanceof Player && ((Player)e).isCreative()) && 
+                     !(e instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity))
         ) {
             entity.hurt(this.damageSources().mobAttack(this), (float)damage);
         }
@@ -320,11 +347,12 @@ public class Another_Den_o extends Monster implements GeoEntity {
             if (target == null) return;
 
             // 计算方向向量
-            Vec3 direction = target.position().subtract(mob.position()).normalize();
-            direction = new Vec3(direction.x, 0.5, direction.z); // 增加垂直分量用于跳跃
+            Vec3 direction = target.position().subtract(mob.position());
+            // 增加更大的垂直分量使跳跃更高
+            direction = new Vec3(direction.x, direction.y + 3.0, direction.z).normalize();
 
-            // 设置速度和跳跃状态
-            double speed = mob.enraged ? 0.7D : 0.5D; // 狂暴时速度更快
+            // 设置速度和跳跃状态 - 增加跳跃力度
+            double speed = mob.enraged ? 1.2D : 1.0D; // 大幅提高跳跃速度
             mob.setDeltaMovement(direction.scale(speed));
             mob.setJumping(true);
             mob.isJumping = true;
