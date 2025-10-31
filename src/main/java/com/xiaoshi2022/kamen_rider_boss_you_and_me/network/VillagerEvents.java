@@ -5,7 +5,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.giifusteamp;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.ParticleTicker;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Another_Zi_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
@@ -56,35 +57,73 @@ public class VillagerEvents {
 
             // 异类时王表盘处理
             if (stack.getItem() instanceof aiziowc) {
-                int used = aiziowc.getUseCount(stack);
+                aiziowc item = (aiziowc) stack.getItem();
+                aiziowc.Mode mode = item.getCurrentMode(stack);
+                
+                // 异类时王处理（默认模式或异类模式）
+                if (mode == aiziowc.Mode.DEFAULT || mode == aiziowc.Mode.ANOTHER) {
+                    int used = aiziowc.getUseCount(stack);
 
-                // 检查是否已经使用了2次（第3次使用）
-                if (used >= 2) {
-                    // 第3次使用，表盘消失
+                    // 检查是否已经使用了2次（第3次使用）
+                    if (used >= 2) {
+                        // 第3次使用，表盘消失
+                        stack.shrink(1);
+                        player.displayClientMessage(Component.literal("§d表盘已耗尽，无法再产生异类骑士……"), true);
+                        return;
+                    }
+
+                    // 增加使用计数（先增加再使用）
+                    aiziowc.incrUseCount(stack);
+
+                    // 消耗1个物品！
                     stack.shrink(1);
-                    player.displayClientMessage(Component.literal("§d表盘已耗尽，无法再产生异类时王……"), true);
+                    
+                    // 生成异类时王、保存村民数据等...
+                    int remain = aiziowc.MAX_DAMAGE - used - 1;
+                    CompoundTag villagerTag = new CompoundTag();
+                    villager.save(villagerTag);
+
+                    Another_Zi_o another = ModEntityTypes.ANOTHER_ZI_O.get().create(level);
+                    another.moveTo(villager.getX(), villager.getY(), villager.getZ(), villager.getYRot(), 0);
+                    another.getPersistentData().put("StoredVillager", villagerTag);
+                    another.getPersistentData().putInt("DropDamage", remain);
+                    level.addFreshEntity(another);
+                    villager.discard();
+
                     return;
                 }
+                // 异类电王处理（电王模式）
+                else if (mode == aiziowc.Mode.DEN_O) {
+                    int used = aiziowc.getUseCount(stack);
 
-                // 增加使用计数（先增加再使用）
-                aiziowc.incrUseCount(stack);
+                    // 检查是否已经使用了2次（第3次使用）
+                    if (used >= 2) {
+                        // 第3次使用，表盘消失
+                        stack.shrink(1);
+                        player.displayClientMessage(Component.literal("§d表盘已耗尽，无法再产生异类骑士……"), true);
+                        return;
+                    }
 
-                // 消耗1个物品！这是关键缺失的一步
-                stack.shrink(1);
+                    // 增加使用计数（先增加再使用）
+                    aiziowc.incrUseCount(stack);
 
-                // 其余逻辑：生成异类时王、保存村民数据等...
-                int remain = aiziowc.MAX_DAMAGE - used - 1;
-                CompoundTag villagerTag = new CompoundTag();
-                villager.save(villagerTag);
+                    // 消耗1个物品！
+                    stack.shrink(1);
 
-                Another_Zi_o another = ModEntityTypes.ANOTHER_ZI_O.get().create(level);
-                another.moveTo(villager.getX(), villager.getY(), villager.getZ(), villager.getYRot(), 0);
-                another.getPersistentData().put("StoredVillager", villagerTag);
-                another.getPersistentData().putInt("DropDamage", remain);
-                level.addFreshEntity(another);
-                villager.discard();
+                    // 生成异类电王、保存村民数据等...
+                    int remain = aiziowc.MAX_DAMAGE - used - 1;
+                    CompoundTag villagerTag = new CompoundTag();
+                    villager.save(villagerTag);
 
-                return;
+                    Another_Den_o anotherDenO = ModEntityTypes.ANOTHER_DEN_O.get().create(level);
+                    anotherDenO.moveTo(villager.getX(), villager.getY(), villager.getZ(), villager.getYRot(), 0);
+                    anotherDenO.getPersistentData().put("StoredVillager", villagerTag);
+                    anotherDenO.getPersistentData().putInt("DropDamage", remain);
+                    level.addFreshEntity(anotherDenO);
+                    villager.discard();
+
+                    return;
+                }
             }
 
             /* 原有逻辑 */

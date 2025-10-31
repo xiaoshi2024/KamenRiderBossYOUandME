@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Another_Zi_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;

@@ -68,6 +68,7 @@ public class ModTab {
                 output.accept(GIIFU_HUMAN_SPAWN_EGG.get());
                 output.accept(GIFFTARIAN_SPAWN_EGG.get());
                 output.accept(ANOTHER_ZI_O_SPAWN_EGG.get());
+                output.accept(ANOTHER_DEN_O_SPAWN_EGG.get());
                 output.accept(GIIFU_DEMOS_SPAWN_EGG.get());
                 output.accept(STORIOUS_SPAWN_EGG.get());
                 output.accept(GAMMA_S_SPAWN_EGG.get());

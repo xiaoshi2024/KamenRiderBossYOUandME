@@ -1,9 +1,9 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Den_os;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.particles.ParticleTypes;
@@ -18,18 +18,18 @@ import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 
 import javax.annotation.Nullable;
 
-public class Another_Zi_oRenderer extends GeoEntityRenderer<Another_Zi_o> {
+public class Another_Den_oRenderer extends GeoEntityRenderer<Another_Den_o> {
 
     private int currentTick;
 
-    public Another_Zi_oRenderer(EntityRendererProvider.Context context) {
-        super(context, new Another_Zi_oModel());   // ← 换成你的 Another_Zi_oModel
+    public Another_Den_oRenderer(EntityRendererProvider.Context context) {
+        super(context, new Another_Den_oModel());
 
         // 右手持物层
         addRenderLayer(new BlockAndItemGeoLayer<>(this) {
             @Nullable
             @Override
-            protected ItemStack getStackForBone(GeoBone bone, Another_Zi_o entity) {
+            protected ItemStack getStackForBone(GeoBone bone, Another_Den_o entity) {
                 if ("rightItem".equals(bone.getName())) {
                     return entity.getMainHandItem();
                 }
@@ -37,13 +37,13 @@ public class Another_Zi_oRenderer extends GeoEntityRenderer<Another_Zi_o> {
             }
 
             @Override
-            protected ItemDisplayContext getTransformTypeForStack(GeoBone bone, ItemStack stack, Another_Zi_o entity) {
+            protected ItemDisplayContext getTransformTypeForStack(GeoBone bone, ItemStack stack, Another_Den_o entity) {
                 return ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
             }
 
             @Override
             protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack,
-                                              Another_Zi_o entity, MultiBufferSource bufferSource,
+                                              Another_Den_o entity, MultiBufferSource bufferSource,
                                               float partialTick, int packedLight, int packedOverlay) {
                 poseStack.translate(0.1F, 0.2F, 0F);
                 poseStack.mulPose(Axis.XP.rotationDegrees(-90));
@@ -52,20 +52,20 @@ public class Another_Zi_oRenderer extends GeoEntityRenderer<Another_Zi_o> {
         });
     }
 
-    // 耳朵（或任何骨骼）粒子特效
+    // 粒子特效
     @Override
-    public void renderFinal(PoseStack poseStack, Another_Zi_o animatable, BakedGeoModel model,
+    public void renderFinal(PoseStack poseStack, Another_Den_o animatable, BakedGeoModel model,
                             MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick,
                             int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 
         if (this.currentTick < 0 || this.currentTick != animatable.tickCount) {
             this.currentTick = animatable.tickCount;
 
-            // 模型中左耳骨骼名称请与 Blockbench 保持一致
-            this.model.getBone("ziobelt").ifPresent(ear -> {
+            // 模型中腰带骨骼名称，请与 Blockbench 保持一致
+            this.model.getBone("denobelt").ifPresent(belt -> {
                 RandomSource rand = animatable.getRandom();
-                Vector3d pos = ear.getWorldPosition();
-                animatable.level().addParticle(ParticleTypes.PORTAL,
+                Vector3d pos = belt.getWorldPosition();
+                animatable.level().addParticle(ParticleTypes.FLAME,
                         pos.x(), pos.y(), pos.z(),
                         rand.nextDouble() - 0.5D,
                         -rand.nextDouble(),

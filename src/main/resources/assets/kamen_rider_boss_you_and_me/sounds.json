@@ -295,5 +295,14 @@
         "stream": false
       }
     ]
+  },
+  "aiden_owc": {
+    "subtitle": "aiden_owc",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:aiden_owc",
+        "stream": false
+      }
+    ]
   }
 }

@@ -244,6 +244,9 @@ public class ModItems {
 
     public static final RegistryObject<ForgeSpawnEggItem> ANOTHER_ZI_O_SPAWN_EGG = ITEMS.register("another_zi_o_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntityTypes.ANOTHER_ZI_O, 0xFF0000, 0xFFFFFF, new Item.Properties()));
+    
+    public static final RegistryObject<ForgeSpawnEggItem> ANOTHER_DEN_O_SPAWN_EGG = ITEMS.register("another_den_o_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.ANOTHER_DEN_O, 0xFF0000, 0x000000, new Item.Properties()));
 
     public static final RegistryObject<ForgeSpawnEggItem> GIIFU_DEMOS_SPAWN_EGG = ITEMS.register("giifu_demos_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntityTypes.GIIFUDEMOS_ENTITY, 0x00FFFF, 0x800000, new Item.Properties()));

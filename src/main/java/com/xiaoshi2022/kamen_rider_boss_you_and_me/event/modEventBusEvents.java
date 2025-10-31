@@ -520,6 +520,17 @@ public class modEventBusEvents {
                             .build()
             ); // 强化版：大幅提高生命值、防御和韧性，增强击退抗性
 
+            event.put(ModEntityTypes.ANOTHER_DEN_O.get(),
+                    Monster.createMonsterAttributes()
+                            .add(Attributes.MAX_HEALTH, 200.0D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.26D)
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 35.0D)  // 攻击力从8.0D提高到35.0D
+                            .add(Attributes.ARMOR, 15.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
+                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.35D)
+                            .build()
+            ); // 强化版：大幅提高生命值、防御和韧性，增强击退抗性
+
             event.put(ModEntityTypes.KIVAT_BAT_II.get(),
                     KivatBatTwoNd.createAttributes()
                             .add(Attributes.MAX_HEALTH, 150.0D)

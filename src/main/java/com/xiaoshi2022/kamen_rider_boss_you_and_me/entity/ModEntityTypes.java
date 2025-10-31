@@ -4,6 +4,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntity
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
@@ -46,6 +48,9 @@ public class ModEntityTypes {
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
 
     public static final RegistryObject<EntityType<Another_Zi_o>> ANOTHER_ZI_O = registerMob("another_zi_o", Another_Zi_o::new,
+            0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
+    
+    public static final RegistryObject<EntityType<Another_Den_o>> ANOTHER_DEN_O = registerMob("another_den_o", Another_Den_o::new,
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
 
     // 眼魔实体（使用原版动画集）- 修改为MISC类别，防止自然生成

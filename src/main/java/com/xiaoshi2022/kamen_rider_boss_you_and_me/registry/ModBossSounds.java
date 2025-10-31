@@ -75,8 +75,11 @@ public class ModBossSounds {
  public static final RegistryObject<SoundEvent> SPLIT = REGISTRY.register("split",
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "split")));
 
+
  public static final RegistryObject<SoundEvent> ANOTHER_ZI_O_CLICK = REGISTRY.register("another_zi_o_click",
          () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me","another_zi_o_click")));
+public static final RegistryObject<SoundEvent> AIDEN_OWC = REGISTRY.register("aiden_owc",
+         () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me","aiden_owc")));
  public static final RegistryObject<SoundEvent> BANANAFRUITENERGY = REGISTRY.register("bananafruit_energy",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me","bananafruit_energy")));
 

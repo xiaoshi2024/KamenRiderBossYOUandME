@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Another_Zi_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;

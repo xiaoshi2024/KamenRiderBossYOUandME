@@ -12,6 +12,10 @@
   "item.kamen_rider_boss_you_and_me.two_weapon_sword": "Two Weapon Sword",
   "item.kamen_rider_boss_you_and_me.two_weapon_gun": "Two Weapon Gun",
 
+  "item.kamen_rider_boss_you_and_me.another_den_o_spawn_egg": "Another Den-o Spawn",
+  "entity.kamen_rider_boss_you_and_me.another_den_o": "Another Den-o",
+
+
   "item.kamen_rider_boss_you_and_me.aiziowc": "another zi-o Watch",
   "item.kamen_rider_boss_you_and_me.giifusteamp": "Giifu Steamp",
   "item group.kamen_rider_boss_you_and_me_tab": "Kamen Rider Boss You And Me",
@@ -190,6 +194,7 @@
   "msg.kamen_rider.curse_block.previous_destroyed": "§ethe last block has been removed，teleportToSpawnPoint",
   "msg.kamen_rider.curse_block.chain_linked": "§a is linked to a conveyor chain！",
 
+  "item.kamen_rider_boss_you_and_me.another_den_o_spawn_egg.tooltip": "[Tip] Right-click to generate an unusual another den-o .",
   "item.kamen_rider_boss_you_and_me.globalism.tooltip": "[Tip] Star Lord Baron's Sword.",
   "item.kamen_rider_boss_you_and_me.throne_block_item.tooltip": "[Tip] Kiva's Throne.",
   "item.kamen_rider_boss_you_and_me.giifu_sleeping_state_item.tooltip": "[Tip] Giff's Sleeping Form.",
