@@ -270,38 +270,8 @@ public class TimeJackerEntity extends VillagerEntityMCA {
     
     // 检测附近试图攻击的生物并冻结它们
     private void detectAndFreezeAttackers() {
-        if (timeFreezeCooldown > 0) {
-            return; // 在冷却期间无法使用时间冻结
-        }
-        
-        // 查找附近的所有生物
-        List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(
-                LivingEntity.class,
-                this.getBoundingBox().inflate(8.0D),
-                entity -> entity != this && entity.isAlive()
-        );
-        
-        // 优先检查玩家 - 任何在范围内的手持武器的玩家都可能被冻结
-        for (LivingEntity entity : nearbyEntities) {
-            if (entity instanceof Player player) {
-                // 检查玩家是否持有武器或物品
-                if (!player.getMainHandItem().isEmpty() || 
-                    !player.getOffhandItem().isEmpty()) {
-                    // 玩家可能准备攻击，尝试冻结
-                    freezeEntity(entity);
-                    return; // 一次只冻结一个攻击者
-                }
-            }
-        }
-        
-        // 然后检查其他生物
-        for (LivingEntity entity : nearbyEntities) {
-            if (entity instanceof Mob mob && mob.getTarget() == this) {
-                // 生物将时劫者设为目标，尝试冻结
-                freezeEntity(entity);
-                break; // 一次只冻结一个攻击者
-            }
-        }
+        // 移除自动检测手持物品玩家的功能，只在玩家实际攻击时才冻结
+        // 这个方法现在可以保持为空，因为冻结逻辑已经在tick方法中处理了
     }
     
     // 冻结实体
@@ -318,36 +288,37 @@ public class TimeJackerEntity extends VillagerEntityMCA {
             mob.setNoAi(true);
         }
         
-        // 如果是玩家，施加缓慢和虚弱效果
+        // 对所有攻击者（包括玩家和非玩家生物）施加缓慢和虚弱效果
+        // 确保效果可见
+        boolean showParticles = true;
+        boolean showIcon = true;
+        
+        // 施加缓慢效果（等级5，持续3秒）
+        MobEffectInstance slowEffect = new MobEffectInstance(
+            MobEffects.MOVEMENT_SLOWDOWN, 
+            TIME_FREEZE_DURATION, 
+            4, // 0是等级1，所以4是等级5
+            false, 
+            showParticles, 
+            showIcon
+        );
+        entity.addEffect(slowEffect);
+        
+        // 施加虚弱效果（等级5，持续3秒）
+        MobEffectInstance weaknessEffect = new MobEffectInstance(
+            MobEffects.WEAKNESS, 
+            TIME_FREEZE_DURATION, 
+            4, // 0是等级1，所以4是等级5
+            false, 
+            showParticles, 
+            showIcon
+        );
+        entity.addEffect(weaknessEffect);
+        
+        // 如果是玩家，发送消息提示
         if (entity instanceof Player player) {
-            // 确保效果可见
-            boolean showParticles = true;
-            boolean showIcon = true;
-            
-            // 施加缓慢效果（等级5，持续3秒）
-            MobEffectInstance slowEffect = new MobEffectInstance(
-                MobEffects.MOVEMENT_SLOWDOWN, 
-                TIME_FREEZE_DURATION, 
-                4, // 0是等级1，所以4是等级5
-                false, 
-                showParticles, 
-                showIcon
-            );
-            player.addEffect(slowEffect);
-            
-            // 施加虚弱效果（等级5，持续3秒）
-            MobEffectInstance weaknessEffect = new MobEffectInstance(
-                MobEffects.WEAKNESS, 
-                TIME_FREEZE_DURATION, 
-                4, // 0是等级1，所以4是等级5
-                false, 
-                showParticles, 
-                showIcon
-            );
-            player.addEffect(weaknessEffect);
-            
             // 播放冻结音效，让玩家知道被冻结了
-            this.playSound(ModBossSounds.ANOTHER_ZI_O_CLICK.get(), 1.0F, 0.8F);
+//            this.playSound(ModBossSounds.ANOTHER_ZI_O_CLICK.get(), 1.0F, 0.8F);
             
             // 发送消息提示玩家
             player.displayClientMessage(Component.literal("时劫者冻结了你的行动！"), true);
