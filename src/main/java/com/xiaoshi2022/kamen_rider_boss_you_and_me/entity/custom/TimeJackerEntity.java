@@ -24,12 +24,23 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TimeJackerEntity extends VillagerEntityMCA {
     // 标记是否已经使用过异类表盘
@@ -129,6 +140,342 @@ public class TimeJackerEntity extends VillagerEntityMCA {
         return MobType.UNDEFINED;
     }
     
+    // 用于存储上一tick的生命值
+    private float lastHealth = -1.0F;
+    // 用于存储伤害来源
+    private LivingEntity lastAttacker = null;
+    // 伤害来源记忆时间（tick）
+    private int attackerMemoryTicks = 0;
+    private static final int MAX_ATTACKER_MEMORY = 20; // 1秒
+    
+    // 时间冻结相关字段
+    private Map<LivingEntity, Integer> frozenEntities = new HashMap<>(); // 存储被冻结的实体及其冻结时间
+    private int timeFreezeCooldown = 0; // 时间冻结冷却时间（tick）
+    private static final int TIME_FREEZE_COOLDOWN = 100; // 5秒冷却时间（20tick=1秒）
+    private static final int TIME_FREEZE_DURATION = 60; // 冻结持续时间3秒
+    
+    @Override
+    public void tick() {
+        super.tick();
+        
+        // 非客户端执行
+        if (!this.level().isClientSide()) {
+            // 更新冷却时间
+            if (timeFreezeCooldown > 0) {
+                timeFreezeCooldown--;
+            }
+            
+            // 更新冻结实体的时间并解除冻结
+            updateFrozenEntities();
+            
+            // 检查生命值变化来判断是否受到伤害
+            float currentHealth = this.getHealth();
+            
+            if (lastHealth > 0 && currentHealth < lastHealth) {
+                // 生命值减少，说明受到了伤害
+                float damageAmount = lastHealth - currentHealth;
+                
+                // 寻找攻击者（优先检查玩家，然后检查其他敌对实体）
+                LivingEntity attacker = null;
+                
+                // 1. 优先检查附近的玩家
+                List<Player> nearbyPlayers = this.level().getEntitiesOfClass(
+                        Player.class,
+                        this.getBoundingBox().inflate(10.0D)
+                );
+                
+                // 简单方法：任何在范围内的玩家都可能是攻击者
+                // 因为在伤害事件中，我们知道时劫者受到了伤害
+                if (!nearbyPlayers.isEmpty()) {
+                    // 选择最近的玩家作为可能的攻击者
+                    attacker = nearbyPlayers.get(0);
+                    for (Player player : nearbyPlayers) {
+                        if (player.distanceToSqr(this) < attacker.distanceToSqr(this)) {
+                            attacker = player;
+                        }
+                    }
+                } else {
+                    // 2. 如果没找到玩家，检查其他敌对实体
+                    List<LivingEntity> nearbyHostiles = this.level().getEntitiesOfClass(
+                            LivingEntity.class,
+                            this.getBoundingBox().inflate(10.0D),
+                            entity -> entity != this && 
+                                    entity instanceof Mob && 
+                                    ((Mob)entity).getTarget() == this
+                    );
+                    
+                    if (!nearbyHostiles.isEmpty()) {
+                        attacker = nearbyHostiles.get(0);
+                    }
+                }
+                
+                if (attacker != null) {
+                    // 找到了攻击者
+                    lastAttacker = attacker;
+                    attackerMemoryTicks = MAX_ATTACKER_MEMORY;
+                    
+                    // 通知附近的异类骑士
+                    notifyNearbyAnotherRiders(lastAttacker);
+                    
+                    // 尝试高伤害逃离逻辑
+                    tryEscapeOnHighDamage(null, damageAmount);
+                    
+                    // 尝试冻结攻击者
+                    if (timeFreezeCooldown <= 0) {
+                        freezeEntity(lastAttacker);
+                    }
+                }
+            }
+            
+            // 更新上一tick的生命值
+            lastHealth = currentHealth;
+            
+            // 处理攻击者记忆
+            if (attackerMemoryTicks > 0) {
+                attackerMemoryTicks--;
+                // 如果还有攻击者记忆，持续通知异类骑士
+                if (lastAttacker != null && lastAttacker.isAlive()) {
+                    notifyNearbyAnotherRiders(lastAttacker);
+                } else {
+                    lastAttacker = null;
+                }
+            }
+            
+            // 检测附近试图攻击的生物
+            detectAndFreezeAttackers();
+            
+            // 实现时间冻结无敌效果：在非冷却状态（非破绽）时恢复生命值
+            // 这样可以模拟只有在冷却期间才会真正受伤
+            if (!isVulnerable() && this.getHealth() < this.getMaxHealth()) {
+                // 检查是否是被异类骑士攻击导致的伤害
+                boolean recentlyAttackedByAnotherRider = false;
+                
+                // 使用lastAttacker来检查最近的攻击者
+                if (lastAttacker != null) {
+                    String attackerName = lastAttacker.getType().toString().toLowerCase();
+                    String attackerClass = lastAttacker.getClass().getName().toLowerCase();
+                    recentlyAttackedByAnotherRider = attackerName.contains("another") || 
+                                                   attackerClass.contains("another") ||
+                                                   lastAttacker instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o ||
+                                                   lastAttacker instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
+                }
+                
+                // 只有在不是被异类骑士攻击且不在冷却状态时，才恢复生命值（无敌效果）
+                if (!recentlyAttackedByAnotherRider) {
+                    this.setHealth(this.getMaxHealth());
+                }
+            }
+        }
+    }
+    
+    // 检测附近试图攻击的生物并冻结它们
+    private void detectAndFreezeAttackers() {
+        if (timeFreezeCooldown > 0) {
+            return; // 在冷却期间无法使用时间冻结
+        }
+        
+        // 查找附近的所有生物
+        List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(8.0D),
+                entity -> entity != this && entity.isAlive()
+        );
+        
+        // 优先检查玩家 - 任何在范围内的手持武器的玩家都可能被冻结
+        for (LivingEntity entity : nearbyEntities) {
+            if (entity instanceof Player player) {
+                // 检查玩家是否持有武器或物品
+                if (!player.getMainHandItem().isEmpty() || 
+                    !player.getOffhandItem().isEmpty()) {
+                    // 玩家可能准备攻击，尝试冻结
+                    freezeEntity(entity);
+                    return; // 一次只冻结一个攻击者
+                }
+            }
+        }
+        
+        // 然后检查其他生物
+        for (LivingEntity entity : nearbyEntities) {
+            if (entity instanceof Mob mob && mob.getTarget() == this) {
+                // 生物将时劫者设为目标，尝试冻结
+                freezeEntity(entity);
+                break; // 一次只冻结一个攻击者
+            }
+        }
+    }
+    
+    // 冻结实体
+    private void freezeEntity(LivingEntity entity) {
+        if (entity == null || !entity.isAlive() || frozenEntities.containsKey(entity)) {
+            return;
+        }
+        
+        // 添加到冻结列表
+        frozenEntities.put(entity, TIME_FREEZE_DURATION);
+        
+        // 设置实体无法移动（仅对Mob类型有效）
+        if (entity instanceof Mob mob) {
+            mob.setNoAi(true);
+        }
+        
+        // 如果是玩家，施加缓慢和虚弱效果
+        if (entity instanceof Player player) {
+            // 确保效果可见
+            boolean showParticles = true;
+            boolean showIcon = true;
+            
+            // 施加缓慢效果（等级5，持续3秒）
+            MobEffectInstance slowEffect = new MobEffectInstance(
+                MobEffects.MOVEMENT_SLOWDOWN, 
+                TIME_FREEZE_DURATION, 
+                4, // 0是等级1，所以4是等级5
+                false, 
+                showParticles, 
+                showIcon
+            );
+            player.addEffect(slowEffect);
+            
+            // 施加虚弱效果（等级5，持续3秒）
+            MobEffectInstance weaknessEffect = new MobEffectInstance(
+                MobEffects.WEAKNESS, 
+                TIME_FREEZE_DURATION, 
+                4, // 0是等级1，所以4是等级5
+                false, 
+                showParticles, 
+                showIcon
+            );
+            player.addEffect(weaknessEffect);
+            
+            // 播放冻结音效，让玩家知道被冻结了
+            this.playSound(ModBossSounds.ANOTHER_ZI_O_CLICK.get(), 1.0F, 0.8F);
+            
+            // 发送消息提示玩家
+            player.displayClientMessage(Component.literal("时劫者冻结了你的行动！"), true);
+        }
+        
+        // 设置冷却时间
+        timeFreezeCooldown = TIME_FREEZE_COOLDOWN;
+        
+        // 在实体周围生成粒子效果（这里可以根据需要添加）
+        // 例如：this.level().addParticle(...)
+    }
+    
+    // 更新冻结实体的状态
+    private void updateFrozenEntities() {
+        List<LivingEntity> toRemove = new ArrayList<>();
+        
+        for (Map.Entry<LivingEntity, Integer> entry : frozenEntities.entrySet()) {
+            LivingEntity entity = entry.getKey();
+            int remainingTime = entry.getValue() - 1;
+            
+            if (remainingTime <= 0 || !entity.isAlive()) {
+                // 解冻实体（仅对Mob类型有效）
+                if (entity instanceof Mob mob) {
+                    mob.setNoAi(false);
+                }
+                toRemove.add(entity);
+            } else {
+                // 更新剩余冻结时间
+                frozenEntities.put(entity, remainingTime);
+            }
+        }
+        
+        // 移除已解冻的实体
+        for (LivingEntity entity : toRemove) {
+            frozenEntities.remove(entity);
+        }
+    }
+    
+    // 检查时劫者是否处于冷却状态（破绽）
+    public boolean isVulnerable() {
+        return timeFreezeCooldown > 0;
+    }
+    
+    // 通知附近的异类骑士来保护时劫者
+    private void notifyNearbyAnotherRiders(LivingEntity attacker) {
+        if (attacker == null || !attacker.isAlive()) {
+            return;
+        }
+        
+        // 查找附近的所有异类骑士
+        List<LivingEntity> nearbyAnotherRiders = this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(20.0D),
+                entity -> {
+                    // 判断是否是异类骑士实体
+                    String entityName = entity.getType().toString().toLowerCase();
+                    String className = entity.getClass().getName().toLowerCase();
+                    return entityName.contains("another") || 
+                           className.contains("another") || 
+                           entity instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o ||
+                           entity instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
+                }
+        );
+        
+        // 通知每个异类骑士来保护时劫者
+        for (LivingEntity rider : nearbyAnotherRiders) {
+            if (rider instanceof Mob mobRider) {
+                // 设置攻击目标为攻击者
+                mobRider.setTarget(attacker);
+            }
+        }
+    }
+    
+    // 添加一个自定义方法来处理高伤害触发的逃离逻辑
+    // 由于 hurt 方法是 final 的，我们将在其他地方（如 AI 或 tick 方法）调用此方法
+    public void tryEscapeOnHighDamage(DamageSource source, float amount) {
+        // 受到高伤害时，有几率召唤异类电班列
+        if (!this.level().isClientSide() && amount > this.getMaxHealth() * 0.3 && this.random.nextFloat() < 0.4) {
+            // 查找附近的异类骑士（优先找异类电王）
+            List<com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o> nearbyAnotherDenO = this.level().getEntitiesOfClass(
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o.class,
+                    this.getBoundingBox().inflate(20.0D)
+            );
+            
+            // 召唤异类电班列
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity denliner = new com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity(this.level());
+            denliner.setPos(this.getX(), this.getY() + 2, this.getZ());
+            this.level().addFreshEntity(denliner);
+            
+            // 保存自己和附近的异类骑士到班列中
+            List<Entity> entitiesToSave = new ArrayList<>();
+            entitiesToSave.add(this);
+            if (!nearbyAnotherDenO.isEmpty()) {
+                entitiesToSave.add(nearbyAnotherDenO.get(0)); // 保存最近的一个异类电王
+            }
+            
+            // 保存实体并传送 - 传递一个假的玩家（null），因为实际上是AI触发的
+            denliner.saveEntities(null, entitiesToSave.toArray(new Entity[0]));
+            
+            // 传送班列到时之沙漠维度
+            try {
+                if (denliner.level() instanceof ServerLevel) {
+                    // 查找目标维度
+                    ServerLevel timeDesert = null;
+                    for (ServerLevel level : ((ServerLevel) denliner.level()).getServer().getAllLevels()) {
+                        if (level.dimension().location().toString().equals("kamen_rider_weapon_craft:the_desertof_time")) {
+                            timeDesert = level;
+                            break;
+                        }
+                    }
+                    
+                    if (timeDesert != null) {
+                        denliner.changeDimension(timeDesert);
+                        // 随机设置班列在时之沙漠中的位置
+                        denliner.setPos(
+                                -1980 + this.random.nextInt(3960), // X坐标范围
+                                100, // Y坐标固定高度
+                                -1980 + this.random.nextInt(3960)  // Z坐标范围
+                        );
+                    }
+                }
+            } catch (Exception e) {
+                // 如果传送失败，至少确保实体被保存
+                e.printStackTrace();
+            }
+        }
+    }
+    
     // 由于getDisplayName()在父类中是final的，我们不能覆盖它
     
     // 时劫者特有方法：可以创建或控制异类骑士
@@ -168,6 +515,16 @@ public class TimeJackerEntity extends VillagerEntityMCA {
                 anotherRider.setPos(target.getX(), target.getY(), target.getZ());
                 anotherRider.setYRot(target.getYRot());
                 
+                // 播放对应的异类骑士音效
+                if (randomType == 0) {
+                    // 播放异类时王音效
+                    this.playSound(ModBossSounds.ANOTHER_ZI_O_CLICK.get(), 1.0F, 1.0F);
+                } else if (randomType == 1) {
+                    // 播放异类电王音效（如果有）
+                    // 这里使用AIDEN_OWC作为异类电王的音效
+                    this.playSound(ModBossSounds.AIDEN_OWC.get(), 1.0F, 1.0F);
+                }
+                
                 // 添加到世界中
                 this.level().addFreshEntity(anotherRider);
                 
@@ -189,5 +546,43 @@ public class TimeJackerEntity extends VillagerEntityMCA {
     // 提供方法检查是否已使用过表盘，使用持久化数据而不是成员变量
     public boolean hasUsedAnotherWatch() {
         return this.getPersistentData().getBoolean("HasUsedAnotherWatch");
+    }
+    
+    /**
+     * 判断时劫者是否应该害怕某个实体
+     * 时劫者不应该害怕异类骑士
+     */
+    public boolean shouldFearEntity(LivingEntity entity) {
+        // 检查是否是异类骑士实体
+        if (entity != null) {
+            String entityName = entity.getType().toString().toLowerCase();
+            String className = entity.getClass().getName().toLowerCase();
+            
+            // 检查是否是异类骑士相关实体
+            if (entityName.contains("another") || 
+                className.contains("another") || 
+                entityName.contains("den_o") || 
+                className.contains("den_o") ||
+                entity instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o ||
+                entity instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o) {
+                // 不害怕异类骑士
+                return false;
+            }
+        }
+        
+        // 对于其他实体，使用默认逻辑（如果父类有此方法）
+        // 由于没有直接看到父类的实现，这里返回false表示默认不害怕
+        return false;
+    }
+    
+
+    
+    /**
+     * 处理村民传感器使用的isHostile方法
+     * 确保时劫者不会将异类骑士视为敌对实体
+     */
+    public boolean isAfraidOf(LivingEntity entity) {
+        // 调用shouldFearEntity方法来判断是否应该害怕
+        return shouldFearEntity(entity);
     }
 }

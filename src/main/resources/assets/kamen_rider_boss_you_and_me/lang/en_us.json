@@ -294,6 +294,10 @@
   "entity.kamen_rider_boss_you_and_me.necrom_eyex": "Necrom Eyex",
   "entity.kamen_rider_boss_you_and_me.time_jacker": "Time Jacker",
 
-  "item.kamen_rider_boss_you_and_me.sakura_lockseed": "Sakura Lockseed"
+  "item.kamen_rider_boss_you_and_me.sakura_lockseed": "Sakura Lockseed",
+  "message.desert_of_time.entities_spawned": "Time Jacker and Another Den-o have appeared in the Desert of Time!",
+  "msg.desert_of_time.spawn.another_denliner": "Another Den-Liner has arrived in the Desert of Time!",
+  "msg.desert_of_time.spawn.time_jacker": "A Time Jacker has appeared!",
+  "msg.desert_of_time.spawn.another_den_o": "Another Den-o has appeared!"
 
 }

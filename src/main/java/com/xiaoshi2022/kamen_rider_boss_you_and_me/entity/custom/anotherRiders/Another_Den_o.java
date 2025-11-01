@@ -1,14 +1,18 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.TeleportBehindGoal;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import forge.net.mca.entity.EntitiesMCA;
 import forge.net.mca.entity.VillagerEntityMCA;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
@@ -35,8 +39,13 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.levelgen.Heightmap;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity;
 
 public class Another_Den_o extends Monster implements GeoEntity {
 
@@ -74,6 +83,7 @@ public class Another_Den_o extends Monster implements GeoEntity {
 
     /* 半血狂暴 */
     private boolean enraged = false;
+    private boolean isTeleporting = false; // 防止重复创建班列实体的标记
 
     public Another_Den_o(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -177,8 +187,68 @@ public class Another_Den_o extends Monster implements GeoEntity {
     }
     
     @Override
+    public boolean hurt(DamageSource source, float amount) {
+        // 检查当前维度是否为非时之沙漠维度
+        boolean isInTimeDesert = this.level().dimension().location().toString().equals("kamen_rider_weapon_craft:the_desertof_time");
+        
+        // 血量低于40%、未在传送中且不在时之沙漠维度时才触发穿梭
+        if (!this.level().isClientSide() && this.getHealth() <= this.getMaxHealth() * 0.4f && !isTeleporting && !isInTimeDesert) {
+            // 标记为正在传送，防止重复创建班列
+            isTeleporting = true;
+            // 查找附近的时劫者
+            List<com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity> nearbyTimeJackers = this.level().getEntitiesOfClass(
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity.class,
+                    this.getBoundingBox().inflate(20.0D)
+            );
+            
+            // 召唤异类电班列
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity denliner = new com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity(this.level());
+            denliner.setPos(this.getX(), this.getY() + 2, this.getZ());
+            this.level().addFreshEntity(denliner);
+            
+            // 保存自己和时劫者到班列中
+            List<Entity> entitiesToSave = new ArrayList<>();
+            entitiesToSave.add(this);
+            if (!nearbyTimeJackers.isEmpty()) {
+                entitiesToSave.add(nearbyTimeJackers.get(0)); // 保存最近的一个时劫者
+            }
+            
+            // 保存实体并传送 - 传递一个假的玩家（null），因为实际上是AI触发的
+            denliner.saveEntities(null, entitiesToSave.toArray(new Entity[0]));
+            
+            // 班列实体将在其tick方法中自行处理传送逻辑
+            // 不再需要这里直接调用changeDimension
+            
+            // 添加日志确认实体已保存
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me.LOGGER.info("Another_Den_o: Entities saved to denliner, teleportation will be handled by denliner");
+            
+            // 设置一个延迟来重置传送标记，确保传送过程完成
+            this.level().getServer().getPlayerList().getPlayers().forEach(player -> {
+                // 这里只是为了确保服务器线程上执行
+                player.getServer().execute(() -> {
+                    // 延迟重置标记，给班列足够时间完成传送
+                    try {
+                        Thread.sleep(1000);
+                        isTeleporting = false;
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                });
+            });
+            
+            return false; // 这次伤害被规避
+        }
+        return super.hurt(source, amount);
+    }
+    
+    @Override
     public void aiStep() {
         super.aiStep();
+        
+        // 如果实体被移除，重置传送标记
+        if (this.isRemoved()) {
+            isTeleporting = false;
+        }
         // 只在非和平模式下执行攻击逻辑
         if (this.level().getDifficulty() != Difficulty.PEACEFUL &&
                 !(this.getTarget() instanceof Player && ((Player)this.getTarget()).isCreative())) {
@@ -348,18 +418,17 @@ public class Another_Den_o extends Monster implements GeoEntity {
 
             // 计算方向向量
             Vec3 direction = target.position().subtract(mob.position());
-            // 增加更大的垂直分量使跳跃更高
-            direction = new Vec3(direction.x, direction.y + 3.0, direction.z).normalize();
+            // 增加更大的垂直分量使跳跃更高（9格方块高度）
+            direction = new Vec3(direction.x, direction.y + 6.0, direction.z).normalize();
 
-            // 设置速度和跳跃状态 - 增加跳跃力度
-            double speed = mob.enraged ? 1.2D : 1.0D; // 大幅提高跳跃速度
+            // 设置速度和跳跃状态 - 增加跳跃力度以达到9格高度
+            double speed = mob.enraged ? 1.8D : 1.5D; // 提高跳跃速度以实现9格高度跳跃
             mob.setDeltaMovement(direction.scale(speed));
             mob.setJumping(true);
             mob.isJumping = true;
             mob.jumpAttackCooldown = JUMP_ATTACK_COOLDOWN;
             
-            // 播放跳跃音效
-            mob.playSound(SoundEvents.HOGLIN_ANGRY, 1.0F, 1.0F);
+            // 移除跳跃音效播放
         }
 
         @Override
@@ -391,6 +460,38 @@ public class Another_Den_o extends Monster implements GeoEntity {
     }
 
     /* ---------- 掉落 ---------- */
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        
+        // 检查是否在时之沙漠维度
+        if (!level().isClientSide()) {
+            ServerLevel serverLevel = (ServerLevel) level();
+            ResourceLocation dimensionType = serverLevel.dimension().location();
+            
+            // 如果在时之沙漠维度被击败，生成电班列
+            if (dimensionType.toString().equals("kamen_rider_weapon_craft:the_desertof_time")) {
+                try {
+                    // 创建电班列实体
+                    AnotherDenlinerEntity denliner = ModEntityTypes.ANOTHER_DENLINER.get().create(serverLevel);
+                    if (denliner != null) {
+                        // 设置电班列位置在异类电王死亡位置
+                        denliner.setPos(this.getX(), this.getY(), this.getZ());
+                        
+                        // 添加到世界
+                        serverLevel.addFreshEntity(denliner);
+                        
+                        // 记录日志
+                        com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me.LOGGER.info("Another_Den_o: Created AnotherDenliner at position: " + this.position());
+                    }
+                } catch (Exception e) {
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me.LOGGER.error("Another_Den_o: Error creating AnotherDenliner: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    
     @Override
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean hit) {
         super.dropCustomDeathLoot(source, looting, hit);
@@ -430,5 +531,12 @@ public class Another_Den_o extends Monster implements GeoEntity {
     @Override
     public boolean shouldShowName() {
         return false;
+    }
+    
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        // 移除骑士通票右键传送功能
+        // 现在玩家需要击败异类电王后通过生成的电班列返回主世界
+        return super.mobInteract(player, hand);
     }
 }

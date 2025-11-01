@@ -1,0 +1,44 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"loop": true,
+			"animation_length": 1.2917,
+			"bones": {
+				"DenLiner": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.625": {
+							"vector": [-63, 0, 0]
+						},
+						"1.2917": {
+							"vector": [10, 0, 0]
+						}
+					}
+				},
+				"bone22": {
+					"position": {
+						"0.2917": {
+							"vector": [-5.75, 0, 0]
+						},
+						"0.5417": {
+							"vector": [-24.03, 0, 0]
+						},
+						"0.625": {
+							"vector": [-59, 0, 0]
+						},
+						"1.25": {
+							"vector": [42.38, 0, 0]
+						},
+						"1.2917": {
+							"vector": [14, 0, 0]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

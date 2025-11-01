@@ -64,6 +64,19 @@ public class TimeJackerAnotherRiderGoal extends Goal {
 
     @Override
     public void tick() {
+        // 健康检查：当生命值低于阈值时尝试逃离
+        if (this.timeJacker.getHealth() <= this.timeJacker.getMaxHealth() * 0.3) {
+            // 模拟受到伤害触发逃离逻辑
+            // 使用一个假的伤害源和适量伤害值来触发tryEscapeOnHighDamage方法
+            this.timeJacker.tryEscapeOnHighDamage(this.timeJacker.damageSources().generic(), this.timeJacker.getMaxHealth() * 0.4f);
+        }
+        
+        // 如果已经使用过表盘或者正在逃离，不再执行转化逻辑
+        if (timeJacker.hasUsedAnotherWatch()) {
+            this.stop();
+            return;
+        }
+        
         if (this.targetVillager == null || !this.targetVillager.isAlive()) {
             // 如果目标不存在或已死亡，寻找新目标
             this.findNearbyVillager();

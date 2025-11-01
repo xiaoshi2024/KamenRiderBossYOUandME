@@ -21,6 +21,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntity
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.renderer.entity.AnotherDenlinerRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.ModCommands;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.giifu.ModStructureProcessors;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
@@ -315,6 +316,7 @@ public class kamen_rider_boss_you_and_me
 
             EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyRenderer::new);
             EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyRenderer::new);
+            EntityRenderers.register(ModEntityTypes.ANOTHER_DENLINER.get(), AnotherDenlinerRenderer::new);
             EntityRenderers.register(ModEntityTypes.DARK_KIVA_SEAL_BARRIER.get(), DarkKivaSealBarrierRenderer::new);
             EntityRenderers.register(ModEntityTypes.CHERRY_ENERGY_ARROW.get(), CherryEnergyArrowRenderer::new);
             EntityRenderers.register(ModEntityTypes.MELON_ENERGY_SLASH.get(), MelonEnergySlashRenderer::new);
