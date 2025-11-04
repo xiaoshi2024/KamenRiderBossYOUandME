@@ -28,6 +28,7 @@ public class ModTab {
             .displayItems(((parameters, output) -> {
                 output.accept(NECROM_EYE.get());
                 output.accept(MEGA_UIORDER_ITEM.get());
+                output.accept(GHOST_DRIVER.get());
                 output.accept(DARK_RIDER_EYECON.get());
                 output.accept(SENGOKUDRIVERS_EPMTY.get());
                 output.accept(GENESIS_DRIVER.get());

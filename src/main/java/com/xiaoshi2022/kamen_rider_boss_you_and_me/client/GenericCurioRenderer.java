@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.Mega_uiorder_item.Mega_uiorderRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.GhostDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.sengokudriver.sengokudrivers_epmtysRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
@@ -22,6 +23,7 @@ public class GenericCurioRenderer implements ICurioRenderer {
     private final ICurioRenderer genesisDriverRenderer = new GenesisDriverRenderer();
     private final ICurioRenderer drakKivaBeltRenderer = new DrakKivaBeltRenderer();
     private final ICurioRenderer two_sidriverRenderer = new Two_sidriverRenderer();
+    private final ICurioRenderer ghost_driverRenderer = new GhostDriverRenderer();
 
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource buffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
@@ -36,6 +38,8 @@ public class GenericCurioRenderer implements ICurioRenderer {
                 drakKivaBeltRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }else if (stack.getItem() instanceof Two_sidriver) {
                 two_sidriverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            }else if (stack.getItem() instanceof GhostDriver) {
+                ghost_driverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }
         }
     }

@@ -4,15 +4,14 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
-public class GhostDriverModel extends GeoModel<GhostDriver> {
+public class GhostDriverDarkModel extends GeoModel<GhostDriver> {
 
-
-    public GhostDriverModel(ResourceLocation modelResource) {
+    public GhostDriverDarkModel(ResourceLocation modelResource) {
     }
 
     @Override
     public ResourceLocation getModelResource(GhostDriver animatable) {
-        return new ResourceLocation("kamen_rider_boss_you_and_me","geo/item/ghost_driver.geo.json");
+        return new ResourceLocation("kamen_rider_boss_you_and_me","geo/item/ghost_driver_dark.geo.json");
     }
 
     @Override

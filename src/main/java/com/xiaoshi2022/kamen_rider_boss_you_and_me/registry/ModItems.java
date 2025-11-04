@@ -165,16 +165,21 @@ public class ModItems {
             () -> new DarkRiderEyecon(new Item.Properties()));
 
     public static final RegistryObject<Mega_uiorder> MEGA_UIORDER_ITEM = ITEMS.register("mega_uiorder_item",
-            () -> new Mega_uiorder(new Item.Properties()));
+            () -> new Mega_uiorder(new Item.Properties().stacksTo(1)));
+
     public static final RegistryObject<Item> INVES_MEAT = ITEMS.register("inves_meat", InvesMeat::new);
+
     public static final RegistryObject<sengokudrivers_epmty> SENGOKUDRIVERS_EPMTY = ITEMS.register("sengokudrivers_epmty",
-            () -> new sengokudrivers_epmty(new Item.Properties()));
+            () -> new sengokudrivers_epmty(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Genesis_driver> GENESIS_DRIVER = ITEMS.register("genesis_driver",
-            () -> new Genesis_driver(new Item.Properties()));
+            () -> new Genesis_driver(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<DrakKivaBelt> DRAK_KIVA_BELT = ITEMS.register("drak_kiva_belt",
-            () -> new DrakKivaBelt(new Item.Properties()));
+            () -> new DrakKivaBelt(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Two_sidriver> TWO_SIDRIVER = ITEMS.register("two_sidriver",
-            () -> new Two_sidriver(new Item.Properties()));
+            () -> new Two_sidriver(new Item.Properties().stacksTo(1)));
+    
+    public static final RegistryObject<GhostDriver> GHOST_DRIVER = ITEMS.register("ghost_driver",
+            () -> new GhostDriver(new Item.Properties().stacksTo(1)));
 
 
 

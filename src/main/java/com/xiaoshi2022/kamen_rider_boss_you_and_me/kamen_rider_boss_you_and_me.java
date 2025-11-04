@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.GhostDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.GhostEyeTrigger;
@@ -337,6 +338,7 @@ public class kamen_rider_boss_you_and_me
                 CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new GenericCurioRenderer());
                 CuriosRendererRegistry.register(ModItems.DRAK_KIVA_BELT.get(), ()->new DrakKivaBeltRenderer());
                 CuriosRendererRegistry.register(ModItems.TWO_SIDRIVER.get(), ()->new Two_sidriverRenderer());
+                CuriosRendererRegistry.register(ModItems.GHOST_DRIVER.get(),()->new GhostDriverRenderer());
                 
                 // 注册Curio菜单屏幕
                 MenuScreens.register(ModMenus.ENTITY_CURIOS_LIST.get(), EntityCuriosListScreen::new);

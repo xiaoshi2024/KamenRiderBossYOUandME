@@ -211,6 +211,7 @@ public class KRBVariables {
 	public boolean isSengokuDriverEmptyEquipped = false; // 新增字段：记录是否装备了空的Sengoku驱动器
 	public boolean isSengokuDriverFilledEquipped = false; // 新增字段：记录是否装备了有锁种的Sengoku驱动器
 	public boolean isOrochiDriverEquipped = false; // 新增字段：记录是否装备了Orochi驱动器
+	public boolean isGhostDriverEquipped = false; // 新增字段：记录是否装备了Ghost驱动器
 	public boolean isGhostEye = false; // 新增字段：记录玩家是否是眼魔
 	public boolean isEvilBatsTransformed = false; // 新增字段：记录是否装备了EvilBats盔甲并变身
 	public boolean isEvilBatsStealthed = false; // 新增字段：记录是否处于EvilBats隐密模式
@@ -498,20 +499,21 @@ public class KRBVariables {
 					variables.lastKickTime = message.data.lastKickTime;
 					variables.kickStartTime = message.data.kickStartTime;
 					variables.kickStartY = message.data.kickStartY;
-					variables.needExplode = message.data.needExplode;
+			variables.needExplode = message.data.needExplode;
 
-					//眼魂
-					variables.isMegaUiorderTransformed = message.data.isMegaUiorderTransformed; // 新增：同步Mega_uiorder变身状态
-					variables.isNecromStandby = message.data.isNecromStandby;
+			//眼魂
+			variables.isMegaUiorderTransformed = message.data.isMegaUiorderTransformed; // 新增：同步Mega_uiorder变身状态
+			variables.isNecromStandby = message.data.isNecromStandby;
+			variables.isGhostDriverEquipped = message.data.isGhostDriverEquipped;
 
-					// 同步锁种相关变量
-					variables.cherry_ready = message.data.cherry_ready;
-					variables.cherry_ready_time = message.data.cherry_ready_time;
-					variables.lemon_ready = message.data.lemon_ready;
-					variables.lemon_ready_time = message.data.lemon_ready_time;
-					variables.peach_ready = message.data.peach_ready;
-					variables.peach_ready_time = message.data.peach_ready_time;
-					variables.melon_ready = message.data.melon_ready;
+			// 同步锁种相关变量
+			variables.cherry_ready = message.data.cherry_ready;
+			variables.cherry_ready_time = message.data.cherry_ready_time;
+			variables.lemon_ready = message.data.lemon_ready;
+			variables.lemon_ready_time = message.data.lemon_ready_time;
+			variables.peach_ready = message.data.peach_ready;
+			variables.peach_ready_time = message.data.peach_ready_time;
+			variables.melon_ready = message.data.melon_ready;
 					variables.melon_ready_time = message.data.melon_ready_time;
 					variables.banana_ready = message.data.banana_ready;
 					variables.banana_ready_time = message.data.banana_ready_time;

@@ -40,6 +40,10 @@ public class BeltAnimationPacket {
     public BeltAnimationPacket(int entityId, String animationName, Mega_uiorder.Mode mode) {
         this(entityId, animationName, "mega_uiorder", mode.name()); // 修改这里以匹配 Mega_uiorder
     }
+    
+    public BeltAnimationPacket(int entityId, String animationName, GhostDriver.BeltMode mode) {
+        this(entityId, animationName, "ghostdriver", mode.name());
+    }
 
     public BeltAnimationPacket(int entityId, String animationName, String beltType, String beltMode) {
         this.entityId = entityId;
@@ -72,6 +76,8 @@ public class BeltAnimationPacket {
                 return new BeltAnimationPacket(id, anim, Two_sidriver.DriverType.valueOf(mode));
             case "mega_uiorder":
                 return new BeltAnimationPacket(id, anim, Mega_uiorder.Mode.valueOf(mode)); // 添加对 Mega_uiorder 的处理
+            case "ghostdriver":
+                return new BeltAnimationPacket(id, anim, GhostDriver.BeltMode.valueOf(mode));
             default:
                 throw new IllegalArgumentException("Unknown belt type: " + type);
         }
@@ -99,7 +105,9 @@ public class BeltAnimationPacket {
                         } else if (item instanceof Two_sidriver ts) {
                             ts.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof Mega_uiorder mu) {
-                            mu.triggerAnim(living, "controller", msg.animationName);
+                        mu.triggerAnim(living, "controller", msg.animationName);
+                        } else if (item instanceof GhostDriver ghost) {
+                            ghost.triggerAnim(living, "controller", msg.animationName);
                         }
                     })
             );
