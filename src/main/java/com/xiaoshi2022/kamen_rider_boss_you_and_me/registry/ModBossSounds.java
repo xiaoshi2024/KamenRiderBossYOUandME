@@ -76,6 +76,10 @@ public class ModBossSounds {
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "split")));
 
 
+ public static final RegistryObject<SoundEvent> DARK_GHOST = REGISTRY.register("darks_ghost",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "darks_ghost")));
+
+
  public static final RegistryObject<SoundEvent> ANOTHER_ZI_O_CLICK = REGISTRY.register("another_zi_o_click",
          () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me","another_zi_o_click")));
 public static final RegistryObject<SoundEvent> AIDEN_OWC = REGISTRY.register("aiden_owc",
