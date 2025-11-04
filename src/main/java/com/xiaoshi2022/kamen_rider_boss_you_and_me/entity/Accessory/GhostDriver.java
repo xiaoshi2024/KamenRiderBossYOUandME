@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.Ghos
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
+import java.util.UUID;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -37,7 +39,6 @@ import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioItem {
-
     /* ----------------- 动画常量 ----------------- */
     private static final RawAnimation IDLES  = RawAnimation.begin().thenPlayAndHold("idles");
     private static final RawAnimation SHOW   = RawAnimation.begin().thenPlayAndHold("show");
@@ -51,10 +52,6 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         stack.getOrCreateTag().putBoolean("IsEquipped", flag);
     }
 
-    public void setHenshin(ItemStack stack, boolean flag) {
-        stack.getOrCreateTag().putBoolean("IsHenshin", flag);
-    }
-
     public enum BeltMode {
         DEFAULT,
         DARK_RIDER_EYE
@@ -62,6 +59,63 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
     public GhostDriver(Properties properties) {
         super(properties);
+    }
+
+    /* -------------------- 数据读/写 Helper -------------------- */
+    /**
+     * 获取腰带的模式
+     */
+    public BeltMode getMode(ItemStack stack) {
+        CompoundTag tag = stack.getOrCreateTag();
+        String modeName = tag.getString("BeltMode");
+        if (modeName.isEmpty()) {
+            return BeltMode.DEFAULT;
+        }
+        try {
+            return BeltMode.valueOf(modeName);
+        } catch (IllegalArgumentException e) {
+            return BeltMode.DEFAULT;
+        }
+    }
+
+    public boolean getShowing(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsShowing");
+    }
+
+    public void setShowing(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsShowing", flag);
+    }
+
+    public boolean getActive(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsActive");
+    }
+
+    public void setActive(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsActive", flag);
+    }
+
+    public boolean getHenshin(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsHenshin");
+    }
+
+    public void setHenshin(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsHenshin", flag);
+    }
+
+    public boolean getRelease(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsRelease");
+    }
+
+    public void setRelease(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsRelease", flag);
+    }
+    /* ----------------------------------------------------------- */
+    
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        // 根据腰带模式显示不同光效
+        BeltMode mode = getMode(stack);
+        return mode == BeltMode.DARK_RIDER_EYE;
     }
 
     /* ================= GeoItem ================= */
@@ -83,6 +137,7 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         boolean show = getShowing(stack);
         boolean release = getRelease(stack);
         boolean hen = getHenshin(stack);
+        boolean active = getActive(stack);
 
         String cur = state.getController().getCurrentAnimation() == null
                 ? "" : state.getController().getCurrentAnimation().animation().name();
@@ -119,48 +174,33 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         return PlayState.CONTINUE;
     }
 
-    public boolean getHenshin(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsHenshin");
-    }
-
     /* -------------- NBT 工具 -------------- */
-    public BeltMode getMode(ItemStack stack) {
-        try {
-            return BeltMode.valueOf(stack.getOrCreateTag().getString("BeltMode"));
-        } catch (IllegalArgumentException e) {
-            return BeltMode.DEFAULT;
-        }
-    }
-
     public void setModeAndTriggerHenshin(LivingEntity entity, ItemStack stack, BeltMode mode) {
         setMode(stack, mode);
         triggerAnim(entity, "controller", "henshin");
     }
 
+    /**
+     * 设置腰带的模式
+     */
     public void setMode(ItemStack stack, BeltMode mode) {
-        stack.getOrCreateTag().putString("BeltMode", mode.name());
-    }
-
-    public boolean getShowing(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsShowing");
-    }
-
-    public void setShowing(ItemStack stack, boolean v) {
-        stack.getOrCreateTag().putBoolean("IsShowing", v);
-    }
-
-    public boolean getRelease(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsRelease");
-    }
-
-    public void setRelease(ItemStack stack, boolean v) {
-        stack.getOrCreateTag().putBoolean("IsRelease", v);
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putString("BeltMode", mode.name());
+        
+        // 更新物品显示名称，使每条腰带在物品栏中显示其模式
+        String modeText = switch (mode) {
+            case DARK_RIDER_EYE -> "魂灵驱动器 - 暗眼魂形态";
+            default -> "魂灵驱动器 - 普通形态";
+        };
+        
+        stack.setHoverName(Component.literal(modeText));
     }
 
     /* -------------- 业务 -------------- */
     public void startReleaseAnimation(LivingEntity entity, ItemStack stack) {
         setRelease(stack, true);
         setShowing(stack, false);
+        setHenshin(stack, false);
 
         if (!entity.level().isClientSide() && entity instanceof ServerPlayer sp)
             PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "cancel", getMode(stack)), sp);
@@ -187,8 +227,8 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         // 添加当前腰带形态提示
         BeltMode mode = getMode(stack);
         String modeText = switch (mode) {
-            case DARK_RIDER_EYE -> "暗眼魂形态";
-            default -> "普通形态（无眼魂）";
+            case DARK_RIDER_EYE -> Component.translatable("tooltip.ghostdriver.mode.dark_rider_eye").getString();
+            default -> Component.translatable("tooltip.ghostdriver.mode.normal").getString();
         };
         tooltipComponents.add(Component.translatable("tooltip.ghostdriver.mode", modeText));
     }
@@ -207,6 +247,7 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         setHenshin(beltStack, false);
         setRelease(beltStack, false);
         setShowing(beltStack, true);
+        setActive(beltStack, false);
 
         // 同步腰带状态到所有跟踪的玩家
         PacketHandler.sendToAllTracking(
@@ -226,20 +267,35 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         triggerAnim(player, "controller", "show");
     }
 
-    @Override
-    public void onUnequip(SlotContext ctx, ItemStack newStack, ItemStack stack) {
-        if (!(ctx.entity() instanceof LivingEntity)) return;
-        LivingEntity le = (LivingEntity) ctx.entity();
-        setShowing(stack, false);
-        setRelease(stack, false);
-
-        if (!le.level().isClientSide() && le instanceof ServerPlayer sp) {
-            PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "idles", getMode(stack)), sp);
-            // 移除玩家的夜视效果
-            sp.removeEffect(MobEffects.NIGHT_VISION);
+    public void onUnequip(SlotContext ctx, ItemStack prev, ItemStack stack) {
+        if (ctx.entity() instanceof ServerPlayer player) {
+            onBeltUnequipped(player, stack);
         }
+    }
 
-        triggerAnim(le, "controller", "idles");
+    /**
+     * 实现基类的腰带卸下逻辑
+     */
+    protected void onBeltUnequipped(ServerPlayer player, ItemStack beltStack) {
+        setShowing(beltStack, false);
+        setRelease(beltStack, false);
+        
+        // 更新玩家变量
+        player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
+            variables.isGhostDriverEquipped = false;
+            variables.syncPlayerVariables(player);
+        });
+        
+        // 移除玩家的夜视效果
+        player.removeEffect(MobEffects.NIGHT_VISION);
+        
+        // 同步腰带状态到所有跟踪的玩家
+        PacketHandler.sendToAllTracking(
+                new BeltAnimationPacket(player.getId(), "idles", getMode(beltStack)),
+                player);
+        
+        // 触发动画
+        triggerAnim(player, "controller", "idles");
     }
 
     @Override

@@ -263,7 +263,15 @@
   "entity.kamen_rider_boss_you_and_me.ghost_eye_entity": "眼魂",
   "advancements.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "一个地狱般的维度",
   "item.kamen_rider_boss_you_and_me.gamma_eyecon": "眼魔 眼魂",
+  "tooltip.ghostdriver.mode.dark_rider_eye": "暗眼魂形态",
+  "tooltip.ghostdriver.mode.normal": "普通形态（无眼魂）",
+  "tooltip.ghostdriver.mode": "形态: %s",
   "entity.kamen_rider_boss_you_and_me.necrom_eyex": "幽冥眼魂特效",
   "entity.kamen_rider_boss_you_and_me.time_jacker": "时劫者",
-  "item.kamen_rider_boss_you_and_me.sakura_lockseed": "樱花摩托车锁种"
+  "item.kamen_rider_boss_you_and_me.sakura_lockseed": "樱花摩托车锁种",
+
+  "item.kamen_rider_boss_you_and_me.ghost_driver": "魂灵驱动器",
+  "item.kamen_rider_boss_you_and_me.dark_rider_eye": "黑暗骑士眼魂",
+
+  "message.desert_of_time.entities_spawned": "Time Jacker and Another Den-o have appeared in the Desert of Time!"
   }

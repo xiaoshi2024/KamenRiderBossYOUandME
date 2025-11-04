@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -33,16 +34,16 @@ public class BeltAnimationPacket {
         this(entityId, animationName, "drakkiva", mode.name());
     }
 
+    public BeltAnimationPacket(int entityId, String animationName, GhostDriver.BeltMode mode) {
+        this(entityId, animationName, "ghostdriver", mode.name());
+    }
+
     public BeltAnimationPacket(int entityId, String animationName, Two_sidriver.DriverType mode) {
         this(entityId, animationName, "two_sidriver", mode.name());
     }
 
     public BeltAnimationPacket(int entityId, String animationName, Mega_uiorder.Mode mode) {
         this(entityId, animationName, "mega_uiorder", mode.name()); // 修改这里以匹配 Mega_uiorder
-    }
-    
-    public BeltAnimationPacket(int entityId, String animationName, GhostDriver.BeltMode mode) {
-        this(entityId, animationName, "ghostdriver", mode.name());
     }
 
     public BeltAnimationPacket(int entityId, String animationName, String beltType, String beltMode) {
@@ -59,27 +60,27 @@ public class BeltAnimationPacket {
         buf.writeUtf(msg.beltMode);
     }
 
-    public static BeltAnimationPacket decode(FriendlyByteBuf buf) {
-        int id = buf.readInt();
-        String anim = buf.readUtf();
-        String type = buf.readUtf();
-        String mode = buf.readUtf();
+    public static BeltAnimationPacket decode(FriendlyByteBuf buffer) {
+        int id = buffer.readInt();
+        String anim = buffer.readUtf();
+        String beltType = buffer.readUtf();
+        String mode = buffer.readUtf();
 
-        switch (type) {
+        switch (beltType) {
             case "sengoku":
                 return new BeltAnimationPacket(id, anim, sengokudrivers_epmty.BeltMode.valueOf(mode));
             case "genesis":
                 return new BeltAnimationPacket(id, anim, Genesis_driver.BeltMode.valueOf(mode));
             case "drakkiva":
                 return new BeltAnimationPacket(id, anim, DrakKivaBelt.DrakKivaBeltMode.valueOf(mode));
+            case "ghostdriver":
+                return new BeltAnimationPacket(id, anim, GhostDriver.BeltMode.valueOf(mode));
             case "two_sidriver":
                 return new BeltAnimationPacket(id, anim, Two_sidriver.DriverType.valueOf(mode));
             case "mega_uiorder":
                 return new BeltAnimationPacket(id, anim, Mega_uiorder.Mode.valueOf(mode)); // 添加对 Mega_uiorder 的处理
-            case "ghostdriver":
-                return new BeltAnimationPacket(id, anim, GhostDriver.BeltMode.valueOf(mode));
             default:
-                throw new IllegalArgumentException("Unknown belt type: " + type);
+                return new BeltAnimationPacket(id, anim, beltType, mode);
         }
     }
 
@@ -102,12 +103,12 @@ public class BeltAnimationPacket {
                             g.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof DrakKivaBelt dk) {
                             dk.triggerAnim(living, "controller", msg.animationName);
+                        } else if (item instanceof GhostDriver ghost) {
+                            ghost.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof Two_sidriver ts) {
                             ts.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof Mega_uiorder mu) {
-                        mu.triggerAnim(living, "controller", msg.animationName);
-                        } else if (item instanceof GhostDriver ghost) {
-                            ghost.triggerAnim(living, "controller", msg.animationName);
+                            mu.triggerAnim(living, "controller", msg.animationName);
                         }
                     })
             );

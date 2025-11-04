@@ -16,6 +16,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvisibilityPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeRevertPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTransformPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.tyrant.TyrantIntangibilityTogglePacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
@@ -70,6 +73,18 @@ public class KeyBinding {
     public static void onKeyInput(InputEvent.Key event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
+        
+        // 检测黑暗Ghost变身条件
+        if (CHANGE_KEY.isDown()) {
+            LocalPlayer player = mc.player;
+            ItemStack mainHand = player.getMainHandItem();
+            
+            // 检查是否手持暗眼魂且装备了魂灵驱动器
+            if (mainHand.getItem() == ModItems.DARK_RIDER_EYECON.get() && isGhostDriverEquipped(player)) {
+                // 发送黑暗Ghost变身请求
+                PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket());
+            }
+        }
         
         // 直接在客户端检测玩家是否穿着全套黑暗Kiva盔甲
         boolean isDarkKiva = isDarkKivaArmorEquipped(mc.player);
@@ -382,6 +397,15 @@ public class KeyBinding {
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof EvilBatsArmor &&
                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof EvilBatsArmor &&
                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof EvilBatsArmor;
+    }
+    
+    // 检测玩家是否装备了魂灵驱动器
+    private static boolean isGhostDriverEquipped(Player player) {
+        Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof GhostDriver));
+        
+        return opt.isPresent();
     }
     
     // 检查玩家是否手持音速弓樱桃模式

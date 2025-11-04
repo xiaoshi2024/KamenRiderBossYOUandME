@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPa
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeRevertPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTransformPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.tyrant.TyrantIntangibilityTogglePacket;
 import net.minecraft.network.chat.Component;
@@ -61,6 +62,9 @@ public class PacketHandler {
 
         // 注册 DragonfruitTransformationRequestPacket
         INSTANCE.registerMessage(index++, DragonfruitTransformationRequestPacket.class, DragonfruitTransformationRequestPacket::encode, DragonfruitTransformationRequestPacket::decode, DragonfruitTransformationRequestPacket::handle);
+        
+        // 注册 DarkGhostTransformationRequestPacket
+        INSTANCE.registerMessage(index++, DarkGhostTransformationRequestPacket.class, DarkGhostTransformationRequestPacket::encode, DarkGhostTransformationRequestPacket::decode, DarkGhostTransformationRequestPacket::handle);
 
         INSTANCE.registerMessage(index++, SyncTransformationPacket.class,
                 SyncTransformationPacket::encode,

@@ -53,6 +53,7 @@ public class KamenBossArmorUtil {
                         stack.getItem() instanceof Genesis_driver ||
                         stack.getItem() instanceof Mega_uiorder ||
                         stack.getItem() instanceof Two_sidriver ||
+                                stack.getItem() instanceof GhostDriver||
                         stack.getItem() instanceof sengokudrivers_epmty
                     )
                 )
@@ -80,6 +81,7 @@ public class KamenBossArmorUtil {
                         stack.getItem() instanceof Genesis_driver ||
                         stack.getItem() instanceof Mega_uiorder ||
                         stack.getItem() instanceof Two_sidriver ||
+                                stack.getItem() instanceof GhostDriver||
                         stack.getItem() instanceof sengokudrivers_epmty
                     )
                 )

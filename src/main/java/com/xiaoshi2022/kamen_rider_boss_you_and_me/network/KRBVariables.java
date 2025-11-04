@@ -117,10 +117,11 @@ public class KRBVariables {
 
 
 			// 新增：重置其他状态变量
-			clone.isDarkKivaBeltEquipped = false;
-			clone.isOverlord = false; // 玩家死亡时重置Overlord状态
-			clone.isGhostEye = false; // 玩家死亡时重置眼魔状态
-			clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
+		clone.isDarkKivaBeltEquipped = false;
+		clone.isOverlord = false; // 玩家死亡时重置Overlord状态
+		clone.isGhostEye = false; // 玩家死亡时重置眼魔状态
+		clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
+		clone.isDarkGhostTransformed = false; // 玩家死亡时重置黑暗Ghost变身状态
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
 			// 保留baseMaxHealth值，不再强制重置为默认值，以保留通过命令设置的生命值
@@ -216,6 +217,7 @@ public class KRBVariables {
 	public boolean isEvilBatsTransformed = false; // 新增字段：记录是否装备了EvilBats盔甲并变身
 	public boolean isEvilBatsStealthed = false; // 新增字段：记录是否处于EvilBats隐密模式
 	public boolean isDarkOrangelsTransformed = false; // 新增字段：记录是否装备了Dark_orangels盔甲并变身
+	public boolean isDarkGhostTransformed = false; // 新增字段：记录是否装备了黑暗Ghost盔甲并变身
 	public long beltRemovedTime = 0L; // 记录腰带被移除的时间
 	public String removedBeltType = ""; // 记录被移除的腰带类型
 	// Duke骑士技能相关变量
@@ -324,6 +326,7 @@ public class KRBVariables {
 		nbt.putBoolean("isSengokuDriverFilledEquipped", isSengokuDriverFilledEquipped); // 新增字段：记录是否装备了有锁种的Sengoku驱动器
 		nbt.putBoolean("isOrochiDriverEquipped", isOrochiDriverEquipped); // 新增字段：记录是否装备了Orochi驱动器
 		nbt.putBoolean("isDarkOrangelsTransformed", isDarkOrangelsTransformed); // 新增字段：记录是否装备了Dark_orangels盔甲并变身
+		nbt.putBoolean("isDarkGhostTransformed", isDarkGhostTransformed); // 新增字段：记录是否装备了黑暗Ghost盔甲并变身
 
 		nbt.putDouble("baseMaxHealth", baseMaxHealth);   // ← 新增
 		// Duke骑士技能相关变量
@@ -425,6 +428,7 @@ public class KRBVariables {
 		isSengokuDriverFilledEquipped = nbt.getBoolean("isSengokuDriverFilledEquipped"); // 新增字段：读取是否装备了有锁种的Sengoku驱动器
 		isOrochiDriverEquipped = nbt.getBoolean("isOrochiDriverEquipped"); // 新增字段：读取是否装备了Orochi驱动器
 		isDarkOrangelsTransformed = nbt.getBoolean("isDarkOrangelsTransformed"); // 新增字段：读取是否装备了Dark_orangels盔甲并变身
+		isDarkGhostTransformed = nbt.getBoolean("isDarkGhostTransformed"); // 新增字段：记录是否装备了黑暗Ghost盔甲并变身
 
 		baseMaxHealth = nbt.getDouble("baseMaxHealth");  // ← 新增
 		// Duke骑士技能相关变量

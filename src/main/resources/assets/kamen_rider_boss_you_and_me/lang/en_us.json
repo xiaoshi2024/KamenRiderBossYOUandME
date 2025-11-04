@@ -8,6 +8,9 @@
   "entity.kamen_rider_boss_you_and_me.sakura_hurricane": "Sakura Hurricane",
 
   "entity.kamen_rider_boss_you_and_me.ghost_eye_entity": "Ghost Eye",
+  "tooltip.ghostdriver.mode.dark_rider_eye": "Dark Rider Eye Mode",
+  "tooltip.ghostdriver.mode.normal": "Normal Mode (No Eyecon)",
+  "tooltip.ghostdriver.mode": "Mode: %s",
 
   "item.kamen_rider_boss_you_and_me.two_weapon_sword": "Two Weapon Sword",
   "item.kamen_rider_boss_you_and_me.two_weapon_gun": "Two Weapon Gun",
@@ -33,6 +36,9 @@
   "item.kamen_rider_boss_you_and_me.dragonfruit": "Dragon Fruit Energy Lock seed",
   "item.kamen_rider_boss_you_and_me.kivat_bat_two_ndm": "kivat Bat 2 Nd",
   "item.kamen_rider_boss_you_and_me.globalism":"Globalism Sword",
+
+  "item.kamen_rider_boss_you_and_me.ghost_driver": "Ghost Driver",
+  "item.kamen_rider_boss_you_and_me.dark_rider_eye": "Dark Rider Eyecon",
 
   "kamen_rider_boss_you_and_me.effect.fang_bloodline": "Fang bloodline",
   "effect.kamen_rider_boss_you_and_me.giifu_dna": "Giifu DNA",
