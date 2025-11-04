@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
@@ -634,6 +635,58 @@ public class TransformationWeaponManager {
             
             // 这里可以根据需要添加其他需要检查的饰品槽位
         });
+    }
+    
+    /**
+     * 当玩家使用魂灵驱动器变身为黑暗Ghost后，给予对应的武器
+     * 只有当配置启用时才会执行
+     */
+    public static void giveWeaponOnDarkGhostTransformation(ServerPlayer player) {
+        // 检查是否启用了武器给予功能
+        if (!TransformationConfig.isGlobalGiveWeaponEnabled()) {
+            return;
+        }
+        
+        // 给予伽甘枪剑
+        ItemStack gangunSaber = new ItemStack(ModItems.GANGUNSABER.get());
+        
+        // 为武器添加特殊标签
+        addTransformationWeaponTag(gangunSaber, "DARK_GHOST");
+        
+        // 检查玩家是否已经拥有相同类型和标签的武器
+        if (hasSameWeapon(player, gangunSaber)) {
+            return; // 如果已经拥有，就不再给予
+        }
+        
+        // 如果玩家主手为空，则放在主手；否则放在副手；如果都不为空，则放在物品栏
+        if (player.getMainHandItem().isEmpty()) {
+            player.setItemInHand(player.getUsedItemHand(), gangunSaber);
+        } else if (player.getOffhandItem().isEmpty()) {
+            player.getInventory().offhand.set(0, gangunSaber);
+        } else {
+            // 尝试找到物品栏中的空位
+            int emptySlot = player.getInventory().findSlotMatchingItem(ItemStack.EMPTY);
+            if (emptySlot != -1) {
+                player.getInventory().setItem(emptySlot, gangunSaber);
+            } else {
+                // 如果没有空位，物品会掉落在地上
+                player.drop(gangunSaber, false);
+            }
+        }
+        
+        // 发送消息通知玩家获得了武器
+        player.sendSystemMessage(
+                net.minecraft.network.chat.Component.literal("你获得了黑暗Ghost的武器！")
+        );
+    }
+    
+    /**
+     * 当玩家解除GhostDriver变身后，清理对应的武器
+     * 用于清理眼剑枪（伽甘枪剑）
+     */
+    public static void clearWeaponsOnGhostDriverDemorph(ServerPlayer player) {
+        // 直接调用通用的清理方法，它会清理所有带有TransformationWeapon标签的武器
+        clearTransformationWeapons(player);
     }
     
     /**

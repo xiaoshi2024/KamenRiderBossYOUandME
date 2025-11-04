@@ -122,6 +122,11 @@ public class KRBVariables {
 		clone.isGhostEye = false; // 玩家死亡时重置眼魔状态
 		clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
 		clone.isDarkGhostTransformed = false; // 玩家死亡时重置黑暗Ghost变身状态
+		clone.isDarkGhostActive = false; // 玩家死亡时重置黑暗Ghost激活状态
+		clone.darkGhostMaxHealth = 50.0D; // 玩家死亡时重置黑暗幽灵骑士最大生命值
+		clone.isNecromStandby = false; // 玩家死亡时重置眼魂待命状态
+		clone.isMegaUiorderTransformed = false; // 玩家死亡时重置手环变身状态
+		clone.isNecromTemporaryRemoved = false; // 玩家死亡时重置眼魂临时移除状态
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
 			// 保留baseMaxHealth值，不再强制重置为默认值，以保留通过命令设置的生命值
@@ -218,6 +223,8 @@ public class KRBVariables {
 	public boolean isEvilBatsStealthed = false; // 新增字段：记录是否处于EvilBats隐密模式
 	public boolean isDarkOrangelsTransformed = false; // 新增字段：记录是否装备了Dark_orangels盔甲并变身
 	public boolean isDarkGhostTransformed = false; // 新增字段：记录是否装备了黑暗Ghost盔甲并变身
+	public boolean isDarkGhostActive = false; // 新增字段：记录是否处于Dark Ghost激活状态
+	public double darkGhostMaxHealth = 50.0D; // 黑暗幽灵骑士的最大生命值上限
 	public long beltRemovedTime = 0L; // 记录腰带被移除的时间
 	public String removedBeltType = ""; // 记录被移除的腰带类型
 	// Duke骑士技能相关变量
@@ -327,6 +334,8 @@ public class KRBVariables {
 		nbt.putBoolean("isOrochiDriverEquipped", isOrochiDriverEquipped); // 新增字段：记录是否装备了Orochi驱动器
 		nbt.putBoolean("isDarkOrangelsTransformed", isDarkOrangelsTransformed); // 新增字段：记录是否装备了Dark_orangels盔甲并变身
 		nbt.putBoolean("isDarkGhostTransformed", isDarkGhostTransformed); // 新增字段：记录是否装备了黑暗Ghost盔甲并变身
+		nbt.putBoolean("isDarkGhostActive", isDarkGhostActive); // 新增字段：记录是否处于Dark Ghost激活状态
+		nbt.putDouble("darkGhostMaxHealth", darkGhostMaxHealth); // 黑暗幽灵骑士的最大生命值上限
 
 		nbt.putDouble("baseMaxHealth", baseMaxHealth);   // ← 新增
 		// Duke骑士技能相关变量
@@ -429,6 +438,8 @@ public class KRBVariables {
 		isOrochiDriverEquipped = nbt.getBoolean("isOrochiDriverEquipped"); // 新增字段：读取是否装备了Orochi驱动器
 		isDarkOrangelsTransformed = nbt.getBoolean("isDarkOrangelsTransformed"); // 新增字段：读取是否装备了Dark_orangels盔甲并变身
 		isDarkGhostTransformed = nbt.getBoolean("isDarkGhostTransformed"); // 新增字段：记录是否装备了黑暗Ghost盔甲并变身
+		isDarkGhostActive = nbt.getBoolean("isDarkGhostActive"); // 新增字段：记录是否处于Dark Ghost激活状态
+		darkGhostMaxHealth = nbt.contains("darkGhostMaxHealth") ? nbt.getDouble("darkGhostMaxHealth") : 50.0D; // 黑暗幽灵骑士的最大生命值上限
 
 		baseMaxHealth = nbt.getDouble("baseMaxHealth");  // ← 新增
 		// Duke骑士技能相关变量
@@ -537,6 +548,7 @@ public class KRBVariables {
 					variables.isEvilBatsTransformed = message.data.isEvilBatsTransformed; // 添加这行，同步EvilBats变身状态
 					variables.isEvilBatsStealthed = message.data.isEvilBatsStealthed; // 添加这行，同步EvilBats隐密模式状态
 					variables.isDarkOrangelsTransformed = message.data.isDarkOrangelsTransformed; // 添加这行，同步Dark_orangels变身状态
+					variables.isDarkGhostActive = message.data.isDarkGhostActive; // 新增：同步Dark Ghost激活状态
 
 					// 同步所有骑士能量相关变量
 					variables.riderEnergy = message.data.riderEnergy;

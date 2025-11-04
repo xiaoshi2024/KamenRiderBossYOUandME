@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -110,6 +111,9 @@ public class DarkGhostTransformationRequestPacket {
                                         .map(v -> v.isDarkGhostTransformed).orElse(false)) {
                                     // 延迟12秒后装备盔甲
                                     DarkGhostRiderHenshin.trigger(finalPlayer);
+                                    
+                                    // 给予黑暗Ghost的武器
+                                    TransformationWeaponManager.giveWeaponOnDarkGhostTransformation(finalPlayer);
                                 }
                             });
                         } catch (InterruptedException e) {
@@ -191,6 +195,9 @@ public class DarkGhostTransformationRequestPacket {
                 // 重置玩家状态
                 variables.isDarkGhostTransformed = false;
                 variables.syncPlayerVariables(player);
+                
+                // 清理武器
+                TransformationWeaponManager.clearWeaponsOnGhostDriverDemorph(player);
 
                 // 返回黑暗骑士眼魂
                 ItemStack darkEyecon = new ItemStack(ModItems.DARK_RIDER_EYECON.get());

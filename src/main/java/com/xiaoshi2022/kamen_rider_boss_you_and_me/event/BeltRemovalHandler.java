@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffects;
@@ -205,6 +206,11 @@ public class BeltRemovalHandler {
             
             // 根据移除的腰带类型重置对应的变身状态变量
             resetTransformationState(variables);
+            
+            // 清理武器（如果是DARK_GHOST类型）
+            if (variables.removedBeltType.equals("DARK_GHOST")) {
+                TransformationWeaponManager.clearWeaponsOnGhostDriverDemorph(player);
+            }
             
             // 播放解除音效
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
