@@ -51,12 +51,12 @@ public class BeltRemovalHandler {
                 recordBeltRemoval(serverPlayer, variables);
             } else if (hasBelt && variables.beltRemovedTime > 0) {
                 // 如果又重新装备了腰带，重置移除时间
-                resetBeltRemoval(variables);
+                resetBeltRemoval(serverPlayer, variables);
             }
         } else {
             // 如果玩家不在变身状态，重置腰带移除时间
             if (variables.beltRemovedTime > 0) {
-                resetBeltRemoval(variables);
+                resetBeltRemoval(serverPlayer, variables);
             }
         }
     }
@@ -72,8 +72,9 @@ public class BeltRemovalHandler {
             boolean hasMegaUiorder = hasSpecificBelt(player, "Mega_uiorder");
             boolean hasSengokuDriver = hasSpecificBelt(player, "sengokudrivers_epmty");
             boolean hasTwoSidriver = hasSpecificBelt(player, "Two_sidriver");
+            boolean hasGhostDriver = hasSpecificBelt(player, "GhostDriver");
             
-            return hasDrakKivaBelt || hasGenesisDriver || hasMegaUiorder || hasSengokuDriver || hasTwoSidriver;
+            return hasDrakKivaBelt || hasGenesisDriver || hasMegaUiorder || hasSengokuDriver || hasTwoSidriver || hasGhostDriver;
         } catch (Exception e) {
             // 发生异常时返回true，避免错误的解除变身
             return true;
@@ -111,7 +112,7 @@ public class BeltRemovalHandler {
             variables.syncPlayerVariables(player);
         } catch (Exception e) {
             // 发生异常时重置变量
-            resetBeltRemoval(variables);
+            resetBeltRemoval(player, variables);
         }
     }
     
@@ -120,6 +121,12 @@ public class BeltRemovalHandler {
      */
     private static void determineBeltType(ServerPlayer player, KRBVariables.PlayerVariables variables) {
         // 检查玩家是否佩戴了各种特定的变身盔甲，以确定腰带类型
+        
+        // Dark Ghost变身检测
+        if (variables.isDarkGhostTransformed) {
+            variables.removedBeltType = "DARK_GHOST";
+            return;
+        }
         
         // Dark Kiva变身检测
         if (variables.isDarkKivaBeltEquipped) {
@@ -196,12 +203,55 @@ public class BeltRemovalHandler {
             // 直接清除玩家的盔甲来解除变身
             clearPlayerArmor(player);
             
+            // 根据移除的腰带类型重置对应的变身状态变量
+            resetTransformationState(variables);
+            
             // 播放解除音效
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                     ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
             
             // 重置腰带移除相关变量
-            resetBeltRemoval(variables);
+            resetBeltRemoval(player, variables);
+        }
+    }
+    
+    /**
+     * 根据移除的腰带类型重置对应的变身状态变量
+     */
+    private static void resetTransformationState(KRBVariables.PlayerVariables variables) {
+        // 根据之前记录的腰带类型重置对应的变身状态
+        switch (variables.removedBeltType) {
+            case "DARK_GHOST":
+                variables.isDarkGhostTransformed = false;
+                break;
+            case "DARK_KIVA":
+                variables.isDarkKivaBeltEquipped = false;
+                break;
+            case "GENESIS":
+            case "GENESIS_MELON":
+            case "GENESIS_CHERRY":
+            case "GENESIS_PEACH":
+            case "GENESIS_DRAGONFRUIT":
+                variables.isGenesisDriverEquipped = false;
+                variables.lemon_ready = false;
+                variables.melon_ready = false;
+                variables.cherry_ready = false;
+                variables.peach_ready = false;
+                variables.dragonfruit_ready = false;
+                break;
+            case "BARONS":
+                variables.isSengokuDriverFilledEquipped = false;
+                variables.banana_ready = false;
+                break;
+            case "DARK_ORANGE":
+                variables.isDarkOrangelsTransformed = false;
+                break;
+            case "EVIL_BATS":
+                variables.isEvilBatsTransformed = false;
+                break;
+            case "RIDERNECROM":
+                variables.isMegaUiorderTransformed = false;
+                break;
         }
     }
     
@@ -223,9 +273,9 @@ public class BeltRemovalHandler {
     /**
      * 重置腰带移除相关变量
      */
-    private static void resetBeltRemoval(KRBVariables.PlayerVariables variables) {
+    private static void resetBeltRemoval(ServerPlayer player, KRBVariables.PlayerVariables variables) {
         variables.beltRemovedTime = 0L;
         variables.removedBeltType = "";
-        variables.syncPlayerVariables(null); // 同步到客户端
+        variables.syncPlayerVariables(player); // 同步到客户端
     }
 }

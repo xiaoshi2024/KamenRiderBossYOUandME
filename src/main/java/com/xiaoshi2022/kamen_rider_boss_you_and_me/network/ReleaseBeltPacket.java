@@ -83,6 +83,10 @@ public class ReleaseBeltPacket {
             case "RIDERNECROM" -> {
                 KeybindHandler.completeBeltRelease(player, "RIDERNECROM");
             }
+            case "DARK_GHOST" -> {
+                // 处理黑暗灵骑解除变身
+                KeybindHandler.completeBeltRelease(player, "DARK_GHOST");
+            }
         }
     }
 

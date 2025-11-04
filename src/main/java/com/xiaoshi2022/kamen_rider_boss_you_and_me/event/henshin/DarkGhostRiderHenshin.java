@@ -1,6 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +27,15 @@ public final class DarkGhostRiderHenshin {
 
         // 把旧盔甲塞回背包
         giveBack(player, original);
+        
+        // 播放玩家动画
+        if (player instanceof ServerPlayer serverPlayer) {
+            // 创建并发送播放ghost动画的数据包
+            PacketHandler.sendToAllTracking(
+                new PlayerAnimationPacket(Component.literal("ghost"), player.getId(), true),
+                serverPlayer
+            );
+        }
     }
 
     private static ItemStack[] saveArmor(Player p) {

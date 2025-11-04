@@ -83,12 +83,40 @@ public class DarkGhostTransformationRequestPacket {
                         1.0F,
                         1.0F);
 
-                // 换装 & 标记状态
-                DarkGhostRiderHenshin.trigger(player);
+                // 标记状态
                 belt.setHenshin(beltStack, true);
                 belt.setMode(beltStack, GhostDriver.BeltMode.DARK_RIDER_EYE);
                 belt.setShowing(beltStack, false);
                 belt.setActive(beltStack, true);
+                
+                // 标记玩家已变身
+                variables.isDarkGhostTransformed = true;
+                variables.syncPlayerVariables(player);
+                
+                // 延迟12秒后装备盔甲
+                final ServerPlayer finalPlayer = player;
+                final net.minecraft.server.MinecraftServer server = player.getServer();
+                if (server != null) {
+                    // 创建一个新线程来处理延迟
+                    new Thread(() -> {
+                        try {
+                            // 休眠12秒
+                            Thread.sleep(12000);
+                            
+                            // 确保在服务器线程上执行盔甲装备
+                            server.execute(() -> {
+                                // 检查玩家是否仍然在线且状态未变
+                                if (finalPlayer.isAlive() && finalPlayer.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+                                        .map(v -> v.isDarkGhostTransformed).orElse(false)) {
+                                    // 延迟12秒后装备盔甲
+                                    DarkGhostRiderHenshin.trigger(finalPlayer);
+                                }
+                            });
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }).start();
+                }
 
                 // 发送动画包
                 // 使用setModeAndTriggerHenshin方法来触发变身动画
@@ -100,10 +128,6 @@ public class DarkGhostTransformationRequestPacket {
                         ghostDriver.slotContext().identifier(),
                         ghostDriver.slotContext().index(),
                         beltStack);
-
-                // 标记玩家已变身
-                variables.isDarkGhostTransformed = true;
-                variables.syncPlayerVariables(player);
 
                 // 发送变身成功提示
                 player.displayClientMessage(Component.literal("变身！黑暗Ghost！"), true);
@@ -137,7 +161,7 @@ public class DarkGhostTransformationRequestPacket {
                         player.getX(),
                         player.getY(),
                         player.getZ(),
-                        ModBossSounds.LOGIN_BY.get(), // 使用LOGIN_BY音效作为解除变身音效
+                        ModBossSounds.LOCKOFF.get(), // 临时解除变身音效
                         SoundSource.PLAYERS,
                         1.0F,
                         1.0F);
@@ -167,6 +191,13 @@ public class DarkGhostTransformationRequestPacket {
                 // 重置玩家状态
                 variables.isDarkGhostTransformed = false;
                 variables.syncPlayerVariables(player);
+
+                // 返回黑暗骑士眼魂
+                ItemStack darkEyecon = new ItemStack(ModItems.DARK_RIDER_EYECON.get());
+                if (!player.addItem(darkEyecon)) {
+                    // 如果玩家物品栏已满，将眼魂掉落地上
+                    player.drop(darkEyecon, false);
+                }
 
                 // 发送解除变身提示
                 player.displayClientMessage(Component.literal("解除变身！"), true);

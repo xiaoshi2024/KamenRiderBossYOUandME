@@ -4,7 +4,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.Ghos
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -17,7 +16,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
-import java.util.UUID;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -39,6 +37,7 @@ import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioItem {
+
     /* ----------------- 动画常量 ----------------- */
     private static final RawAnimation IDLES  = RawAnimation.begin().thenPlayAndHold("idles");
     private static final RawAnimation SHOW   = RawAnimation.begin().thenPlayAndHold("show");

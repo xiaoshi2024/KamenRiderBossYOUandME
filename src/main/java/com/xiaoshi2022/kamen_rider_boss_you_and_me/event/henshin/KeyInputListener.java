@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
@@ -145,13 +146,13 @@ public final class KeyInputListener {
         }
 
         // 2. 战极腰带
-        Optional<sengokudrivers_epmty> sengoku =
+        Optional<sengokudrivers_epmty> sengoku = 
                 CurioUtils.findFirstCurio(player,
                                 stack -> stack.getItem() instanceof sengokudrivers_epmty)
                         .map(slot -> (sengokudrivers_epmty) slot.stack().getItem());
 
         if (sengoku.isPresent()) {
-            sengokudrivers_epmty.BeltMode mode =
+            sengokudrivers_epmty.BeltMode mode = 
                     sengoku.get().getMode(CurioUtils.findFirstCurio(player,
                             stack -> stack.getItem() instanceof sengokudrivers_epmty).get().stack());
 
@@ -165,6 +166,31 @@ public final class KeyInputListener {
                 if (isWearingArmor(player, riderType)) return;
                 PacketHandler.INSTANCE.sendToServer(
                         new TransformationRequestPacket(player.getUUID(), riderType, false));
+            }
+            return;
+        }
+
+        // 4. Ghost驱动器快捷变身
+        Optional<GhostDriver> ghost = 
+                CurioUtils.findFirstCurio(player,
+                                stack -> stack.getItem() instanceof GhostDriver)
+                        .map(slot -> (GhostDriver) slot.stack().getItem());
+
+        if (ghost.isPresent()) {
+            GhostDriver belt = ghost.get();
+            ItemStack beltStack = CurioUtils.findFirstCurio(player,
+                    stack -> stack.getItem() instanceof GhostDriver).get().stack();
+            
+            // 检查腰带模式是否为黑暗骑士眼魂模式
+            if (belt.getMode(beltStack) == GhostDriver.BeltMode.DARK_RIDER_EYE) {
+                // 获取玩家变量
+                KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                
+                // 检查是否已经变身
+                if (!variables.isDarkGhostTransformed) {
+                    // 发送变身请求包
+                    PacketHandler.INSTANCE.sendToServer(new GhostTransformationRequestPacket(player.getUUID()));
+                }
             }
         }
     }

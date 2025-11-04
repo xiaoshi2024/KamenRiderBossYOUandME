@@ -235,9 +235,35 @@ public class KeybindHandler {
             return; // 处理完EvilBats变身后直接返回
         }
 
+        // 获取玩家变量
+        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        
+        // 黑暗灵骑解除变身逻辑
+        if (vars.isDarkGhostTransformed) {
+            // 检查玩家是否装备了魂灵驱动器
+            Optional<SlotResult> ghostDriverSlot = findFirstCurio(player,
+                    s -> s.getItem() instanceof GhostDriver);
+            
+            if (ghostDriverSlot.isPresent()) {
+                ItemStack beltStack = ghostDriverSlot.get().stack();
+                GhostDriver belt = (GhostDriver) beltStack.getItem();
+                
+                // 检查腰带模式是否为DARK_RIDER_EYE
+                if (belt.getMode(beltStack) == GhostDriver.BeltMode.DARK_RIDER_EYE) {
+                    // 播放解除变身动画
+                    belt.startReleaseAnimation(player, beltStack);
+                    // 设置延时，在动画播放完后再发送解除变身请求
+                    delayTicks = 40;
+                    delayedBeltStack = beltStack.copy();
+                    // 发送解除变身请求
+                    PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket(true));
+                    return; // 解除完直接返回
+                }
+            }
+        }
+        
         //幽冥逻辑
         // ✅ C 键解除 Necrom 变身
-        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         if (vars.isMegaUiorderTransformed) {
             // 检查玩家是否装备了Mega_uiorder手环
             Optional<SlotResult> megaSlot = findFirstCurio(player,
@@ -384,7 +410,27 @@ public class KeybindHandler {
             case "DUKE"            -> handleDukeBeltRelease(player);      // 公爵
             case "EVIL_BATS"       -> handleEvilBatsRelease(player);      // Evil Bats
             case "RIDERNECROM"      -> handleNecromRelease(player);      // Rider Necrom
+            case "DARK_GHOST"      -> handleDarkGhostRelease(player);    // 黑暗灵骑
         }
+    }
+    
+    // 黑暗灵骑解除变身
+    private static void handleDarkGhostRelease(ServerPlayer player) {
+        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+                .orElse(new KRBVariables.PlayerVariables());
+        
+        // 1. 清除玩家的变身盔甲
+        clearTransformationArmor(player);
+        
+        // 2. 确保状态被正确重置
+        if (vars.isDarkGhostTransformed) {
+            vars.isDarkGhostTransformed = false;
+            vars.syncPlayerVariables(player);
+        }
+        
+        // 3. 播放解除音效
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
     }
 
     // 新增：Necrom 解除变身

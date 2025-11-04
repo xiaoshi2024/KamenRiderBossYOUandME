@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeReve
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTransformPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.GhostTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.tyrant.TyrantIntangibilityTogglePacket;
 import net.minecraft.network.chat.Component;
@@ -41,6 +42,7 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++,  SyncOwnerPacket.class,SyncOwnerPacket::encode, SyncOwnerPacket::decode,SyncOwnerPacket::handle);
         INSTANCE.registerMessage(index++, ReleaseBeltPacket.class, ReleaseBeltPacket::encode, ReleaseBeltPacket::decode, ReleaseBeltPacket::handle);
         INSTANCE.registerMessage(index++, TransformationRequestPacket.class, TransformationRequestPacket::encode, TransformationRequestPacket::decode, TransformationRequestPacket::handle);
+        INSTANCE.registerMessage(index++, GhostTransformationRequestPacket.class, GhostTransformationRequestPacket::buffer, GhostTransformationRequestPacket::newInstance, GhostTransformationRequestPacket::handler);
         // 注册 LemonTransformationRequestPacket
         INSTANCE.registerMessage(index++, LemonTransformationRequestPacket.class, LemonTransformationRequestPacket::encode, LemonTransformationRequestPacket::decode, LemonTransformationRequestPacket::handle);
 

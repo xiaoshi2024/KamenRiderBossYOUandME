@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DarkRiderGhost.DarkRiderGhostItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
@@ -19,6 +20,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,6 +29,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.ORANGEFRUIT;
 
@@ -83,6 +86,12 @@ public class PlayerDeathHandler {
                 player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(vars -> {
                     vars.isMegaUiorderTransformed = false;
                     vars.isNecromStandby = false;
+                    vars.isDarkGhostTransformed = false;
+                    vars.isDarkOrangelsTransformed = false;
+                    vars.isEvilBatsTransformed = false;
+                    vars.isDarkKivaBeltEquipped = false;
+                    vars.isGenesisDriverEquipped = false;
+                    vars.isSengokuDriverEmptyEquipped = false;
                 });
             }
         }
@@ -264,6 +273,35 @@ public class PlayerDeathHandler {
 
     // 检查玩家是否装备了变身盔甲
     public static boolean hasTransformationArmor(Player player) {
+        // 首先检查KRBVariables中的变身状态变量
+        AtomicBoolean hasDarkGhostTransformation = new AtomicBoolean(false);
+        AtomicBoolean hasDarkOrangelsTransformation = new AtomicBoolean(false);
+        AtomicBoolean hasEvilBatsTransformation = new AtomicBoolean(false);
+        AtomicBoolean hasNecromTransformation = new AtomicBoolean(false);
+        AtomicBoolean hasDarkKivaTransformation = new AtomicBoolean(false);
+        
+        // 获取玩家变量
+        if (player instanceof ServerPlayer) {
+            ServerPlayer serverPlayer = (ServerPlayer) player;
+            serverPlayer.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
+                hasDarkGhostTransformation.set(variables.isDarkGhostTransformed);
+                hasDarkOrangelsTransformation.set(variables.isDarkOrangelsTransformed);
+                hasEvilBatsTransformation.set(variables.isEvilBatsTransformed);
+                hasNecromTransformation.set(variables.isMegaUiorderTransformed);
+                hasDarkKivaTransformation.set(variables.isDarkKivaBeltEquipped);
+            });
+        } else {
+            // 客户端也需要检查这些状态（通过本地变量）
+            // 这里简化处理，主要依靠盔甲检查
+        }
+        
+        // 如果任何变身状态变量为true，直接返回true
+        if (hasDarkGhostTransformation.get() || hasDarkOrangelsTransformation.get() ||
+                hasEvilBatsTransformation.get() || hasNecromTransformation.get() || hasDarkKivaTransformation.get()) {
+            return true;
+        }
+        
+        // 然后检查玩家装备的盔甲物品类型
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (slot.getType() == EquipmentSlot.Type.ARMOR) {
                 ItemStack stack = player.getItemBySlot(slot);
@@ -276,6 +314,7 @@ public class PlayerDeathHandler {
                         stack.getItem() instanceof Sigurd ||
                         stack.getItem() instanceof Dark_orangels ||
                         stack.getItem() instanceof Marika ||
+                        stack.getItem() instanceof DarkRiderGhostItem ||
                         stack.getItem() instanceof EvilBatsArmor ||
                         stack.getItem() instanceof DarkKivaItem
                 ) {
@@ -311,6 +350,7 @@ public class PlayerDeathHandler {
                     armorStack.getItem() instanceof TyrantItem ||
                     armorStack.getItem() instanceof Dark_orangels ||
                     armorStack.getItem() instanceof EvilBatsArmor ||
+                    armorStack.getItem() instanceof DarkRiderGhostItem ||
                     armorStack.getItem() instanceof DarkKivaItem ||
                     armorStack.getItem() instanceof Marika) {
                 player.getInventory().armor.set(i, ItemStack.EMPTY);

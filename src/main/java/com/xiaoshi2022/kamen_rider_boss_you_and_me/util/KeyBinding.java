@@ -77,12 +77,22 @@ public class KeyBinding {
         // 检测黑暗Ghost变身条件
         if (CHANGE_KEY.isDown()) {
             LocalPlayer player = mc.player;
-            ItemStack mainHand = player.getMainHandItem();
             
-            // 检查是否手持暗眼魂且装备了魂灵驱动器
-            if (mainHand.getItem() == ModItems.DARK_RIDER_EYECON.get() && isGhostDriverEquipped(player)) {
+            // 检查是否装备了魂灵驱动器（腰带如果有眼魂就不需要检测手持）
+            if (isGhostDriverEquipped(player)) {
                 // 发送黑暗Ghost变身请求
                 PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket());
+            }
+        }
+        
+        // 检测解除变身条件
+        if (RELIEVE_KEY.isDown()) {
+            LocalPlayer player = mc.player;
+            
+            // 检查是否装备了魂灵驱动器
+            if (isGhostDriverEquipped(player)) {
+                // 发送解除变身请求，设置isRelease=true
+                PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket(true));
             }
         }
         
