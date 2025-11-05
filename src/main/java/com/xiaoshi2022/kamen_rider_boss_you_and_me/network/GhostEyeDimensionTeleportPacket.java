@@ -1,10 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_eye;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.GhostEyeManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.SafeTeleportUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -109,6 +109,9 @@ public class GhostEyeDimensionTeleportPacket {
         // 恢复生命值
         player.setHealth(player.getMaxHealth());
 
+        // 给予玩家魂灵驱动器和黑暗骑士眼魂
+        giveGhostRiderEquipment(player);
+
         // 使用GhostEyeManager统一设置眼魔状态和相关buff效果
         boolean isFirstTime = !GhostEyeManager.isGhostEye(player);
         GhostEyeManager.setGhostEyeState(player, isFirstTime);
@@ -183,6 +186,57 @@ public class GhostEyeDimensionTeleportPacket {
                     stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_eye
             ).isPresent();
         }).orElse(false);
+    }
+    
+    // 给予玩家魂灵驱动器和黑暗骑士眼魂
+    private static void giveGhostRiderEquipment(ServerPlayer player) {
+        // 检查玩家是否已经获得过装备（通过玩家数据存储）
+        if (hasPlayerReceivedEquipment(player)) {
+            return; // 玩家已经获得过装备，不再重复给予
+        }
+        
+        // 标记玩家已获得装备
+        markPlayerAsReceivedEquipment(player);
+        
+        // 尝试给予魂灵驱动器（GHOST_DRIVER）
+        ItemStack driverStack = new ItemStack(com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.GHOST_DRIVER.get());
+        boolean added = player.getInventory().add(driverStack);
+        if (!added) {
+            // 如果物品栏满了，将物品掉落在玩家附近
+            player.drop(driverStack, false);
+        }
+        
+        // 尝试给予黑暗骑士眼魂（DARK_RIDER_EYECON）
+        ItemStack darkKnightEyeStack = new ItemStack(com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.DARK_RIDER_EYECON.get());
+        added = player.getInventory().add(darkKnightEyeStack);
+        if (!added) {
+            player.drop(darkKnightEyeStack, false);
+        }
+        
+        // 显示获得装备的提示信息
+        player.displayClientMessage(Component.literal("你获得了魂灵驱动器和黑暗骑士眼魂！"), true);
+    }
+    
+    // 检查玩家是否已经获得过装备
+    private static boolean hasPlayerReceivedEquipment(ServerPlayer player) {
+        // 获取玩家的持久化数据
+        CompoundTag playerData = player.getPersistentData();
+        // 确保有主标签
+        CompoundTag persistentData = playerData.getCompound(ServerPlayer.PERSISTED_NBT_TAG);
+        // 检查是否标记为已获得装备
+        return persistentData.getBoolean("ReceivedGhostRiderEquipment");
+    }
+    
+    // 标记玩家已获得装备
+    private static void markPlayerAsReceivedEquipment(ServerPlayer player) {
+        // 获取玩家的持久化数据
+        CompoundTag playerData = player.getPersistentData();
+        // 确保有主标签
+        CompoundTag persistentData = playerData.getCompound(ServerPlayer.PERSISTED_NBT_TAG);
+        // 标记为已获得装备
+        persistentData.putBoolean("ReceivedGhostRiderEquipment", true);
+        // 保存到玩家数据中
+        playerData.put(ServerPlayer.PERSISTED_NBT_TAG, persistentData);
     }
 
 }
