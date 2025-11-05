@@ -12,6 +12,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.RiderEnergyHandler;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +28,10 @@ public class DarkGhostAbilityHandler {
     
     // 生命恢复冷却计时器
     private static final Map<UUID, Integer> regenerationCooldown = new HashMap<>();
+    // 岩浆能量恢复常量
+    private static final int LAVA_ENERGY_RECOVERY_RANGE = 3; // 检测岩浆的范围
+    private static final double LAVA_ENERGY_RECOVERY_AMOUNT = 5.0D; // 每秒恢复的能量值
+    private static final int LAVA_ENERGY_RECOVERY_INTERVAL = 10; // 恢复间隔(tick)，约0.5秒
 
     /* ---------------- 数值常量 ---------------- */
     private static final int INVISIBILITY_DURATION = 100; // 隐身效果持续时间(tick)
@@ -84,6 +91,16 @@ public class DarkGhostAbilityHandler {
             
             // 标记为Dark Ghost状态
             markDarkGhostState(player);
+            
+            // 岩浆附近快速恢复骑士能量
+            if (player instanceof ServerPlayer serverPlayer) {
+                // 每10tick(约0.5秒)检测一次岩浆并恢复能量
+                if (player.tickCount % LAVA_ENERGY_RECOVERY_INTERVAL == 0) {
+                    if (isNearLava(player)) {
+                        RiderEnergyHandler.addRiderEnergy(serverPlayer, LAVA_ENERGY_RECOVERY_AMOUNT);
+                    }
+                }
+            }
         } else {
             // 当玩家不再穿着盔甲时，重置飞行状态
             resetFlightState(player);
@@ -194,6 +211,27 @@ public class DarkGhostAbilityHandler {
         player.removeEffect(MobEffects.REGENERATION);
         player.removeEffect(MobEffects.JUMP);
         player.removeEffect(MobEffects.SLOW_FALLING);
+    }
+    
+    /**
+     * 检查玩家是否在岩浆附近
+     */
+    private static boolean isNearLava(Player player) {
+        BlockPos playerPos = player.blockPosition();
+        
+        // 检查玩家周围的方块是否有岩浆
+        for (int x = -LAVA_ENERGY_RECOVERY_RANGE; x <= LAVA_ENERGY_RECOVERY_RANGE; x++) {
+            for (int y = -LAVA_ENERGY_RECOVERY_RANGE; y <= LAVA_ENERGY_RECOVERY_RANGE; y++) {
+                for (int z = -LAVA_ENERGY_RECOVERY_RANGE; z <= LAVA_ENERGY_RECOVERY_RANGE; z++) {
+                    BlockPos checkPos = playerPos.offset(x, y, z);
+                    // 检查方块是否为岩浆（使用getBlock() == Blocks.LAVA即可匹配所有岩浆类型）
+                    if (player.level().getBlockState(checkPos).getBlock() == Blocks.LAVA) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
     
     /**

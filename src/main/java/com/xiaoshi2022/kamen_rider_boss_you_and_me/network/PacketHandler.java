@@ -302,6 +302,22 @@ public class PacketHandler {
                 com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvisibilityPacket::encode,
                 com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvisibilityPacket::decode,
                 com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvisibilityPacket::handle);
+        
+        // 注册DarkGhost闪电格斗攻击数据包
+        INSTANCE.registerMessage(
+                index++,
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostLightningAttackPacket.class,
+                DarkGhostLightningAttackPacket::encode,
+                DarkGhostLightningAttackPacket::decode,
+                DarkGhostLightningAttackPacket::handle);
+                
+        // 注册DarkGhost短距离瞬移数据包
+        INSTANCE.registerMessage(
+                index++,
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTeleportPacket.class,
+                DarkGhostTeleportPacket::encode,
+                DarkGhostTeleportPacket::decode,
+                DarkGhostTeleportPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

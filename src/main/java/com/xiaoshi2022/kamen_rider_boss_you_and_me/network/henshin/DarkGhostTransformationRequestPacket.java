@@ -90,8 +90,9 @@ public class DarkGhostTransformationRequestPacket {
                 belt.setShowing(beltStack, false);
                 belt.setActive(beltStack, true);
                 
-                // 标记玩家已变身
+                // 标记玩家已变身，同时清除眼魔状态以避免冲突
                 variables.isDarkGhostTransformed = true;
+                variables.isGhostEye = false; // 清除眼魔状态，确保状态互斥
                 variables.syncPlayerVariables(player);
                 
                 // 延迟12秒后装备盔甲

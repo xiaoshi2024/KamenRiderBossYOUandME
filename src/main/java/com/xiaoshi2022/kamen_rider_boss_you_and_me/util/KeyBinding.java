@@ -17,6 +17,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvi
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeRevertPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTransformPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostLightningAttackPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTeleportPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
@@ -149,6 +151,9 @@ public class KeyBinding {
             // 处理可能的异常
         }
         
+        // 检查玩家是否变身为DarkGhost形态
+        boolean isDarkGhostTransformed = isDarkGhostTransformed(mc.player);
+        
         // 检查玩家是否手持眼魂并按下Shift+V键（优先处理维度传送功能）
         if (hasShiftDown() && KEY_GUARD.isDown() && isHoldingGhostEye(mc.player)) {
             if (KEY_GUARD.consumeClick()) {
@@ -209,6 +214,20 @@ public class KeyBinding {
                     mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal("已变身为眼魂实体"), true);
                 }
                 return; // 优先处理眼魔变形功能，不继续执行其他按键检测
+            }
+        }
+        
+        // 检查DarkGhost形态的技能
+        if (isDarkGhostTransformed) {
+            // V键：闪电格斗攻击
+            if (KEY_GUARD.consumeClick()) {
+                PacketHandler.sendToServer(new DarkGhostLightningAttackPacket());
+                return;
+            }
+            // N键：短距离瞬移
+            if (KEY_BOOST.consumeClick()) {
+                PacketHandler.sendToServer(new DarkGhostTeleportPacket());
+                return;
             }
         }
         
@@ -505,6 +524,12 @@ public class KeyBinding {
         return player.hasEffect(MobEffects.NIGHT_VISION) && 
                player.hasEffect(MobEffects.MOVEMENT_SPEED) && 
                player.hasEffect(MobEffects.JUMP);
+    }
+    
+    // 检查玩家是否处于DarkGhost形态 - 现在使用盔甲检测代替字段检测
+    private static boolean isDarkGhostTransformed(Player player) {
+        // 直接调用DarkGhostAbilityHandler中的盔甲检测方法
+        return com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DarkGhostAbilityHandler.isWearingDarkGhostArmor(player);
     }
     
     // 切换眼魔玩家的隐身状态
