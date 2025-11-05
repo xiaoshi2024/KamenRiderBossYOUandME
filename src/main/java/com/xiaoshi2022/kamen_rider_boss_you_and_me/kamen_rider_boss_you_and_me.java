@@ -51,6 +51,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.Lord
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.melon_energy_slash.MelonEnergySlashRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.necrom_eyex.NecromEyexRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.sakura_hurricane.SakuraHurricaneRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.DarkGhostRider.DarkGhostRiderKickRenerer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KivatItemTossHandler;
@@ -321,6 +322,8 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.DARK_KIVA_SEAL_BARRIER.get(), DarkKivaSealBarrierRenderer::new);
             EntityRenderers.register(ModEntityTypes.CHERRY_ENERGY_ARROW.get(), CherryEnergyArrowRenderer::new);
             EntityRenderers.register(ModEntityTypes.MELON_ENERGY_SLASH.get(), MelonEnergySlashRenderer::new);
+            // 黑暗ghost骑士踢特效实体渲染器注册
+            EntityRenderers.register(ModEntityTypes.DARKGHOST_RIDER_KICK.get(), DarkGhostRiderKickRenerer::new);
 
             EntityRenderers.register(ModEntityTypes.SAKURA_HURRICANE.get(), SakuraHurricaneRenderer::new);
 

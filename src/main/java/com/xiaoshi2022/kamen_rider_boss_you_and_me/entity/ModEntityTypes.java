@@ -175,6 +175,12 @@ public class ModEntityTypes {
                     .clientTrackingRange(8)
                     .build("necrom_eyex"));
 
+    public static final RegistryObject<EntityType<DarkGhostRiderKickEntity>> DARKGHOST_RIDER_KICK = ENTITY_TYPES.register("darkghost_rider_kick",
+            () -> EntityType.Builder.<DarkGhostRiderKickEntity>of(DarkGhostRiderKickEntity::new, MobCategory.MISC)
+                    .sized(0.8F, 1.5F) // 调整碰撞箱大小
+                    .clientTrackingRange(8)
+                    .build("necrom_eyex"));
+
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity,
                                                                             float width, float height, int primaryEggColor, int secondaryEggColor) {
         RegistryObject<EntityType<T>> entityType = ENTITY_TYPES.register(name,

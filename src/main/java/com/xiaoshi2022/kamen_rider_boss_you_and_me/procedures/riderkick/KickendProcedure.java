@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.BatStampFinishEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.DarkGhostRiderKickEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.NecromEyexEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
@@ -151,7 +152,15 @@ public class KickendProcedure {
 			helmet.getItem() == ModItems.TYRANT_HELMET.get() ||
 			helmet.getItem() == ModItems.EVIL_BATS_HELMET.get() ||
 			helmet.getItem() == ModItems.DARK_KIVA_HELMET.get() ||
-			helmet.getItem() == ModItems.RIDERNECROM_HELMET.get();
+			helmet.getItem() == ModItems.DARK_RIDER_HELMET.get() ||
+			helmet.getItem() == ModItems.RIDERNECROM_HELMET.get() ||
+			isDarkGhostHelmet(helmet);
+	}
+	
+	// 检查是否是黑暗ghost头盔
+	private static boolean isDarkGhostHelmet(ItemStack helmet) {
+		return helmet != null && !helmet.isEmpty() && 
+				helmet.getItem() == ModItems.DARK_RIDER_HELMET.get();
 	}
 
 	// 处理无敌状态的重置
@@ -260,6 +269,8 @@ public class KickendProcedure {
 			damage = 75.0F;
 		} else if (helmet.getItem() == ModItems.RIDERNECROM_HELMET.get()) {
 			damage = 68.0F;
+		} else if (isDarkGhostHelmet(helmet)) {
+			damage = 72.0F; // 黑暗ghost头盔的伤害值
 		}
 
 		return damage;
@@ -413,6 +424,25 @@ public class KickendProcedure {
 							necromEntity.getId());
 				}
 				necromEntity.discard();
+			}
+		}
+		
+		// 查找并移除所有与该玩家关联的DarkGhostRiderKickEntity
+		List<DarkGhostRiderKickEntity> darkGhostEntities = serverLevel.getEntitiesOfClass(
+				DarkGhostRiderKickEntity.class,
+				entity.getBoundingBox().inflate(10.0)
+		);
+
+		for (DarkGhostRiderKickEntity darkGhostEntity : darkGhostEntities) {
+			// 直接调用getTargetPlayerId方法
+			UUID targetId = darkGhostEntity.getTargetPlayerId();
+
+			if (targetId != null && targetId.equals(entity.getUUID())) {
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Discarding DarkGhostRiderKickEntity with ID: {}", 
+							darkGhostEntity.getId());
+				}
+				darkGhostEntity.discard();
 			}
 		}
 	}
