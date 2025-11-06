@@ -120,6 +120,7 @@
   "subtitles.eye_drop": "Eye Drop~! Necrom ",
   "subtitles.another_zi_o_click": "ZI-o!",
   "subtitles.bananafruit_energy": "Banana !",
+  "subtitles.napoleon_ghost": "To launch a revolution is our destiny!",
 
   "entity.kamen_rider_boss_you_and_me.lord_baron": "Lord Baron",
 
@@ -304,6 +305,13 @@
   "message.desert_of_time.entities_spawned": "Time Jacker and Another Den-o have appeared in the Desert of Time!",
   "msg.desert_of_time.spawn.another_denliner": "Another Den-Liner has arrived in the Desert of Time!",
   "msg.desert_of_time.spawn.time_jacker": "A Time Jacker has appeared!",
-  "msg.desert_of_time.spawn.another_den_o": "Another Den-o has appeared!"
+  "msg.desert_of_time.spawn.another_den_o": "Another Den-O Spawned!",
+  "item.kamen_rider_boss_you_and_me.nb_eye": "Napoleon Eyecon",
+  "item.kamen_rider_boss_you_and_me.nb_eye.tooltip": "[Hint] Napoleon's Eyecon.",
+  "item.kamen_rider_boss_you_and_me.napoleon_ghost_helmet": "Napoleon Ghost Helmet",
+  "item.kamen_rider_boss_you_and_me.napoleon_ghost_chestplate": "Napoleon Ghost Chestplate",
+  "item.kamen_rider_boss_you_and_me.napoleon_ghost_leggings": "Napoleon Ghost Leggings",
+  "item.kamen_rider_boss_you_and_me.napoleon_ghost_boots": "Napoleon Ghost Boots",
+  "tooltip.ghostdriver.mode.napoleon_ghost": "Napoleon Ghost"
 
 }

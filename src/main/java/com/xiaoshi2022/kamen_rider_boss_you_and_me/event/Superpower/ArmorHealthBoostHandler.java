@@ -18,7 +18,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -222,7 +221,7 @@ public class ArmorHealthBoostHandler {
     private static boolean hasTransformationArmor(Player player) {
         // 导入PlayerDeathHandler类来检查变身状态
         try {
-            Class<?> deathHandlerClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.event.PlayerDeathHandler");
+            Class<?> deathHandlerClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.event.armorevnt.PlayerDeathHandler");
             java.lang.reflect.Method hasTransformationMethod = deathHandlerClass.getMethod("hasTransformationArmor", Player.class);
             return (boolean) hasTransformationMethod.invoke(null, player);
         } catch (Exception e) {

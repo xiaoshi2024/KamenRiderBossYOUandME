@@ -137,7 +137,7 @@ public class BatStampFinishEntity extends LivingEntity implements GeoEntity {
         if (targetPlayer != null && targetPlayer.isAlive()) {
             // 检查玩家是否还在踢击状态
             boolean isPlayerKicking = targetPlayer.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-                    .orElse(new KRBVariables.PlayerVariables()).kcik;
+                    .orElse(new KRBVariables.PlayerVariables()).kick;
 
             if (!isPlayerKicking) {
                 // 玩家已停止踢击，移除实体

@@ -67,6 +67,9 @@ public class PacketHandler {
         
         // 注册 DarkGhostTransformationRequestPacket
         INSTANCE.registerMessage(index++, DarkGhostTransformationRequestPacket.class, DarkGhostTransformationRequestPacket::encode, DarkGhostTransformationRequestPacket::decode, DarkGhostTransformationRequestPacket::handle);
+        
+        // 注册 NapoleonGhostTransformationRequestPacket
+        INSTANCE.registerMessage(index++, NapoleonGhostTransformationRequestPacket.class, NapoleonGhostTransformationRequestPacket::encode, NapoleonGhostTransformationRequestPacket::decode, NapoleonGhostTransformationRequestPacket::handle);
 
         INSTANCE.registerMessage(index++, SyncTransformationPacket.class,
                 SyncTransformationPacket::encode,
@@ -318,6 +321,14 @@ public class PacketHandler {
                 DarkGhostTeleportPacket::encode,
                 DarkGhostTeleportPacket::decode,
                 DarkGhostTeleportPacket::handle);
+        
+        // 注册NapoleonGhost远程伤害减免数据包
+        INSTANCE.registerMessage(
+                index++,
+                NapoleonGhostRangedDamageReductionPacket.class,
+                NapoleonGhostRangedDamageReductionPacket::encode,
+                NapoleonGhostRangedDamageReductionPacket::decode,
+                NapoleonGhostRangedDamageReductionPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

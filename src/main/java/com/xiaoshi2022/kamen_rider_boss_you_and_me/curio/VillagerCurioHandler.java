@@ -14,17 +14,17 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import java.util.Optional;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me.MODID;
 
 @Mod.EventBusSubscriber(modid = MODID)
 public class VillagerCurioHandler {
 
-    // 村民状态管理
-    private static final Map<Integer, VillagerState> VILLAGER_STATES = new HashMap<>();
+    // 村民状态管理 - 使用ConcurrentHashMap确保线程安全
+    private static final Map<Integer, VillagerState> VILLAGER_STATES = new ConcurrentHashMap<>();
     private static final Random RANDOM = new Random();
 
     @SubscribeEvent

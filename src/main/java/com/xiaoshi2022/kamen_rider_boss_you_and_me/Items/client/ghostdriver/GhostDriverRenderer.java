@@ -22,6 +22,7 @@ import top.theillusivec4.curios.api.client.ICurioRenderer;
 public class GhostDriverRenderer extends GeoItemRenderer<GhostDriver> implements ICurioRenderer {
     private final GeoModel<GhostDriver> defaultModel = new GhostDriverModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "ghost_driver"));
     private final GeoModel<GhostDriver> darkRiderEyeModel = new GhostDriverDarkModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "ghost_driver_dark"));
+    private final GeoModel<GhostDriver> napoleonGhostModel = new GhostDriverNapoleonModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "ghost_driver_nb"));
 
     public GhostDriverRenderer() {
         super(new GhostDriverModel(new ResourceLocation(kamen_rider_boss_you_and_me.MODID, "ghost_driver")));
@@ -37,6 +38,8 @@ public class GhostDriverRenderer extends GeoItemRenderer<GhostDriver> implements
             switch (mode) {
                 case DARK_RIDER_EYE:
                     return darkRiderEyeModel; // 返回黑暗骑士眼形态模型
+                case NAPOLEON_GHOST:
+                    return napoleonGhostModel; // 返回拿破仑魂形态模型
                 default:
                     return defaultModel; // 返回默认形态模型
             }

@@ -1,8 +1,9 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.armorevnt;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DarkRiderGhost.DarkRiderGhostItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.NapoleonGhost.NapoleonGhostItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
@@ -51,7 +52,7 @@ public class PlayerDeathHandler {
                     returnBatFormItems(player);
                 }
 
-                // 4. 在清空前检查并保存手环状态
+                // 4. 在清空前检查并保存手环状态和拿破仑眼魂状态
                 boolean shouldReturnEye = CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Mega_uiorder)
                         .map(curio -> {
                             ItemStack bracelet = curio.stack();
@@ -59,6 +60,9 @@ public class PlayerDeathHandler {
                             return ui.getCurrentMode(bracelet) == Mega_uiorder.Mode.NECROM_EYE;
                         })
                         .orElse(false);
+                
+                // 检查是否穿着拿破仑幽灵盔甲
+                boolean isWearingNapoleonGhostArmor = isWearingNapoleonGhostArmor(player);
 
                 // 5. 清空盔甲
                 clearTransformationArmor(player);
@@ -72,6 +76,11 @@ public class PlayerDeathHandler {
                     if (!player.getInventory().add(eye)) {
                         player.drop(eye, false);
                     }
+                }
+                
+                // 8. 如果穿着拿破仑幽灵盔甲，返还拿破仑眼魂并重置腰带
+                if (isWearingNapoleonGhostArmor) {
+                    returnNapoleonEyecon(player);
                 }
 
                 // 8. 返还锁种
@@ -92,6 +101,8 @@ public class PlayerDeathHandler {
                     vars.isDarkKivaBeltEquipped = false;
                     vars.isGenesisDriverEquipped = false;
                     vars.isSengokuDriverEmptyEquipped = false;
+                    // 确保拿破仑状态也被重置（即使在上面的方法中已经重置过，这里再次重置以确保）
+                    vars.isNapoleonGhostTransformed = false;
                 });
             }
         }
@@ -143,6 +154,45 @@ public class PlayerDeathHandler {
             return TwoWeaponItem.getVariant(stack) == TwoWeaponItem.Variant.BAT;
         }
         return false;
+    }
+    
+    // 检查玩家是否穿着拿破仑幽灵盔甲
+    private static boolean isWearingNapoleonGhostArmor(Player player) {
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof NapoleonGhostItem &&
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof NapoleonGhostItem &&
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof NapoleonGhostItem;
+    }
+    
+    // 返还拿破仑眼魂并重置腰带
+    private static void returnNapoleonEyecon(Player player) {
+        // 返还拿破仑眼魂
+        ItemStack napoleonEyecon = new ItemStack(ModItems.NAPOLEON_EYECON.get());
+        if (!player.getInventory().add(napoleonEyecon)) {
+            player.drop(napoleonEyecon, false);
+        }
+        
+        // 重置幽灵驱动器
+        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof GhostDriver)
+                .ifPresent(curio -> {
+                    ItemStack belt = curio.stack();
+                    if (belt.getItem() instanceof GhostDriver) {
+                        ((GhostDriver) belt.getItem()).setMode(belt, GhostDriver.BeltMode.DEFAULT);
+                        // 更新腰带槽位
+                        if (!player.level().isClientSide) {
+                            CuriosApi.getCuriosInventory(player).ifPresent(inv ->
+                                    inv.getStacksHandler(curio.slotContext().identifier()).ifPresent(handler ->
+                                            handler.getStacks().setStackInSlot(curio.slotContext().index(), belt)
+                                    )
+                            );
+                        }
+                    }
+                });
+        
+        // 重置玩家状态变量
+        player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(vars -> {
+            vars.isNapoleonGhostTransformed = false;
+            vars.syncPlayerVariables(player);
+        });
     }
 
     private static void returnBelt(Player player, boolean isBatForm) {
@@ -314,6 +364,7 @@ public class PlayerDeathHandler {
                         stack.getItem() instanceof Sigurd ||
                         stack.getItem() instanceof Dark_orangels ||
                         stack.getItem() instanceof Marika ||
+                        stack.getItem() instanceof NapoleonGhostItem ||
                         stack.getItem() instanceof DarkRiderGhostItem ||
                         stack.getItem() instanceof EvilBatsArmor ||
                         stack.getItem() instanceof DarkKivaItem
@@ -350,6 +401,7 @@ public class PlayerDeathHandler {
                     armorStack.getItem() instanceof TyrantItem ||
                     armorStack.getItem() instanceof Dark_orangels ||
                     armorStack.getItem() instanceof EvilBatsArmor ||
+                    armorStack.getItem() instanceof NapoleonGhostItem ||
                     armorStack.getItem() instanceof DarkRiderGhostItem ||
                     armorStack.getItem() instanceof DarkKivaItem ||
                     armorStack.getItem() instanceof Marika) {

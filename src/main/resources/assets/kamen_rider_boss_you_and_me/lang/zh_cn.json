@@ -88,6 +88,7 @@
   "subtitles.eye_drop": "Eye Drop~! Necrom ",
   "subtitles.another_zi_o_click": "时王!",
   "subtitles.bananafruit_energy": "香蕉 !",
+  "subtitles.napoleon_ghost": "发动革命 此乃宿命!",
   "entity.kamen_rider_boss_you_and_me.lord_baron": "星爵巴隆",
   "entity.kamen_rider.baron.name": "星爵巴隆",
   "msg.kamen_rider.baron.greet1": "我是星爵巴隆！",
@@ -273,5 +274,13 @@
   "item.kamen_rider_boss_you_and_me.ghost_driver": "魂灵驱动器",
   "item.kamen_rider_boss_you_and_me.dark_rider_eye": "黑暗骑士眼魂",
 
-  "message.desert_of_time.entities_spawned": "Time Jacker and Another Den-o have appeared in the Desert of Time!"
-  }
+  "message.desert_of_time.entities_spawned": "Time Jacker and Another Den-o have appeared in the Desert of Time!",
+  "item.kamen_rider_boss_you_and_me.nb_eye": "拿破仑眼魂",
+  "item.kamen_rider_boss_you_and_me.nb_eye.tooltip": "[提示] 拿破仑的眼魂。",
+  "item.kamen_rider_boss_you_and_me.napoleon_ghost_helmet": "拿破仑幽灵头盔",
+  "item.kamen_rider_boss_you_and_me.napoleon_ghost_chestplate": "拿破仑幽灵胸甲",
+  "item.kamen_rider_boss_you_and_me.napoleon_ghost_leggings": "拿破仑幽灵护腿",
+  "item.kamen_rider_boss_you_and_me.napoleon_ghost_boots": "拿破仑幽灵靴子",
+  "tooltip.ghostdriver.mode.napoleon_ghost": "拿破仑眼魂"
+
+}

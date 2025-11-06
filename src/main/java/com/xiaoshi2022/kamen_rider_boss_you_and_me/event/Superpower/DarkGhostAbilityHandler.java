@@ -247,7 +247,7 @@ public class DarkGhostAbilityHandler {
         AttributeInstance maxHealth = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
         if (maxHealth != null) {
             // 计算额外生命值提升 - 降低生命值提升幅度，最多只提升到原来的1.5倍
-            double healthBoost = Math.min(playerVars.darkGhostMaxHealth - 20.0D, 10.0D); // 最多额外10点生命值，进一步降低强度
+            double healthBoost = Math.min(playerVars.darkGhostMaxHealth - 20.0D, 35.0D); // 最多额外35点生命值，进一步降低强度
             
             // 移除旧的修改器（如果存在）
             maxHealth.removeModifier(HEALTH_BOOST_UUID);

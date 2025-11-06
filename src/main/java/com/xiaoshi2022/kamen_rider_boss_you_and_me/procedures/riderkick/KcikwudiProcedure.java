@@ -60,7 +60,7 @@ public class KcikwudiProcedure {
 			
 			// 只有同时满足wudi为true且kcik为true时才无敌
 			// 这样确保无敌状态只在踢击动作期间有效
-			if (variables.wudi && variables.kcik && event != null && event.isCancelable()) {
+			if (variables.wudi && variables.kick && event != null && event.isCancelable()) {
 				event.setCanceled(true);
 			}
 		}

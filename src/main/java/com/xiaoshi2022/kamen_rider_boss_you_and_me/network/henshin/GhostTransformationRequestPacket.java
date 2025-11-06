@@ -4,8 +4,10 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
@@ -44,8 +46,27 @@ public class GhostTransformationRequestPacket {
                         
                         beltOptional.ifPresent(result -> {
                             GhostDriver driver = (GhostDriver) result.stack().getItem();
+                            ItemStack beltStack = result.stack();
+                            
+                            // 如果腰带当前有眼魂存在，取下当前眼魂
+                            GhostDriver.BeltMode currentMode = driver.getMode(beltStack);
+                            if (currentMode != GhostDriver.BeltMode.DEFAULT) {
+                                // 取下当前眼魂 - 只处理拿破仑眼魂模式
+                                ItemStack removedEyecon = null;
+                                if (currentMode == GhostDriver.BeltMode.NAPOLEON_GHOST) {
+                                    // 取下拿破仑眼魂
+                                    removedEyecon = new ItemStack(ModItems.NAPOLEON_EYECON.get());
+                                }
+                                
+                                // 如果有眼魂被取下，添加到玩家物品栏
+                                if (removedEyecon != null && !player.addItem(removedEyecon)) {
+                                    // 如果玩家物品栏已满，将眼魂掉落地上
+                                    player.drop(removedEyecon, false);
+                                }
+                            }
+                            
                             // 检查腰带模式是否为黑暗骑士眼魂模式
-                            if (driver.getMode(result.stack()) == GhostDriver.BeltMode.DARK_RIDER_EYE) {
+                            if (driver.getMode(beltStack) == GhostDriver.BeltMode.DARK_RIDER_EYE) {
                                 // 触发变身
                                 variables.isDarkGhostTransformed = true;
                                 variables.syncPlayerVariables(player);

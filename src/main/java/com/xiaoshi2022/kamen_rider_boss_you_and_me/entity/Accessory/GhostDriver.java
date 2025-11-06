@@ -53,7 +53,8 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
     public enum BeltMode {
         DEFAULT,
-        DARK_RIDER_EYE
+        DARK_RIDER_EYE,
+        NAPOLEON_GHOST
     }
 
     public GhostDriver(Properties properties) {
@@ -114,7 +115,7 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
     public boolean isFoil(ItemStack stack) {
         // 根据腰带模式显示不同光效
         BeltMode mode = getMode(stack);
-        return mode == BeltMode.DARK_RIDER_EYE;
+        return mode == BeltMode.DARK_RIDER_EYE || mode == BeltMode.NAPOLEON_GHOST;
     }
 
     /* ================= GeoItem ================= */
@@ -189,6 +190,7 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         // 更新物品显示名称，使每条腰带在物品栏中显示其模式
         String modeText = switch (mode) {
             case DARK_RIDER_EYE -> "魂灵驱动器 - 暗眼魂形态";
+            case NAPOLEON_GHOST -> "魂灵驱动器 - 拿破仑魂形态";
             default -> "魂灵驱动器 - 普通形态";
         };
         
@@ -227,6 +229,7 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         BeltMode mode = getMode(stack);
         String modeText = switch (mode) {
             case DARK_RIDER_EYE -> Component.translatable("tooltip.ghostdriver.mode.dark_rider_eye").getString();
+            case NAPOLEON_GHOST -> Component.translatable("tooltip.ghostdriver.mode.napoleon_ghost").getString();
             default -> Component.translatable("tooltip.ghostdriver.mode.normal").getString();
         };
         tooltipComponents.add(Component.translatable("tooltip.ghostdriver.mode", modeText));

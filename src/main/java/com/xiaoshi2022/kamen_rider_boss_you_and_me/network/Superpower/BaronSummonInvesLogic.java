@@ -2,7 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.PlayerDeathHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.armorevnt.PlayerDeathHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.helheim_crack;

@@ -313,5 +313,14 @@
         "stream": false
       }
     ]
+  },
+  "napoleon_ghost": {
+    "subtitle": "subtitles.napoleon_ghost",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:napoleon_ghost",
+        "stream": false
+      }
+    ]
   }
 }

@@ -29,7 +29,8 @@ public class KkcikAnXiaAnJianShiProcedure {
 				helmet.getItem() == ModItems.DARK_RIDER_HELMET.get()||
 				helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()||
 				helmet.getItem() == ModItems.RIDERNECROM_HELMET.get() ||
-				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()) && // 新增：黑暗Kiva头盔
+				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get() ||
+				helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get()) && // 新增：拿破仑头盔
 				!isKicking(entity) &&
 				!isPlayerControlled(entity)) {
 
@@ -65,7 +66,7 @@ public class KkcikAnXiaAnJianShiProcedure {
 	// 检查是否正在踢击
 	private static boolean isKicking(Entity entity) {
 		return entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-				.orElse(new KRBVariables.PlayerVariables()).kcik;
+				.orElse(new KRBVariables.PlayerVariables()).kick;
 	}
 
 	private static void handleKickStart(LevelAccessor world, Entity entity) {
@@ -76,7 +77,7 @@ public class KkcikAnXiaAnJianShiProcedure {
 
 		// 延迟设置踢击状态
 		kamen_rider_boss_you_and_me.queueServerWork(20, () -> {
-			setPlayerVariable(entity, "kcik", true);
+			setPlayerVariable(entity, "kick", true);
 			setPlayerVariable(entity, "wudi", true);
 
 			// 更新最后踢击时间
@@ -91,7 +92,7 @@ public class KkcikAnXiaAnJianShiProcedure {
 	private static void setPlayerVariable(Entity entity, String variableName, boolean value) {
 		entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
 			switch (variableName) {
-				case "kcik" -> capability.kcik = value;
+				case "kick" -> capability.kick = value;
 				case "wudi" -> capability.wudi = value;
 			}
 			capability.syncPlayerVariables(entity);

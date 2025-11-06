@@ -83,6 +83,8 @@ public class KicktimeProcedure {
 						entityTypeMatches = true;
 					} else if (helmet.getItem() == ModItems.DARK_RIDER_HELMET.get() && existingEntity instanceof DarkGhostRiderKickEntity) {
 						entityTypeMatches = true;
+					} else if (helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get() && existingEntity instanceof DarkGhostRiderKickEntity) {
+						entityTypeMatches = true;
 					}
 				}
 				
@@ -134,6 +136,12 @@ public class KicktimeProcedure {
 				handleKick(world, entity, ParticleTypesRegistry.LEMONSLICE.get());
 			} else if (helmet.getItem() == ModItems.SIGURD_HELMET.get()) {
 				handleKick(world, entity, ParticleTypesRegistry.CHERRYSLICE.get());
+			} else if (helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get()) {
+				// 处理 NAPOLEON_GHOST_HELMET 的特效和移动
+				if (DEBUG && !world.isClientSide()) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: NAPOLEON_GHOST_HELMET detected on player {}", player.getScoreboardName());
+				}
+				handleNapoleonGhostKick(world, entity);
 			}
 		} else {
 			// 如果不在踢击状态，清理特效实体
@@ -377,6 +385,7 @@ public class KicktimeProcedure {
 		// 同步变量
 		variables.syncPlayerVariables(entity);
 
+		// 应用抛物线移动
 		entity.setDeltaMovement(new Vec3(
 				horizontalX,
 				newY,
@@ -418,7 +427,7 @@ public class KicktimeProcedure {
 		KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
 				.orElse(new KRBVariables.PlayerVariables());
 
-		variables.kcik = false;
+		variables.kick = false;
 		variables.kickStartTime = 0L;
 		variables.lastKickTime = System.currentTimeMillis();
 		variables.syncPlayerVariables(player);
@@ -448,11 +457,12 @@ public class KicktimeProcedure {
 				|| helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()
 				|| helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()
 				|| helmet.getItem() == ModItems.DARK_RIDER_HELMET.get()
+				|| helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get()
 				|| helmet.getItem() == ModItems.RIDERNECROM_HELMET.get();
 
-		// 获取玩家的kcik状态
+		// 获取玩家的kick状态
 		boolean isKicking = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-				.orElse(new KRBVariables.PlayerVariables()).kcik;
+				.orElse(new KRBVariables.PlayerVariables()).kick;
 
 		return hasSpecialHelmet && isKicking;
 	}
@@ -460,7 +470,7 @@ public class KicktimeProcedure {
 	// 检查是否正在踢击
 	private static boolean isKicking(Entity entity) {
 		return (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-				.orElse(new KRBVariables.PlayerVariables())).kcik
+				.orElse(new KRBVariables.PlayerVariables())).kick
 				&& !entity.onGround();
 	}
 
@@ -693,6 +703,74 @@ public class KicktimeProcedure {
 				helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()||
 				helmet.getItem() == ModItems.DARK_RIDER_HELMET.get()||
 				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get() || // 新增：黑暗Kiva头盔
-				helmet.getItem() == ModItems.RIDERNECROM_HELMET.get(); // 新增：RiderNecrom头盔
+				helmet.getItem() == ModItems.RIDERNECROM_HELMET.get() || // 新增：RiderNecrom头盔
+				helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get(); // 新增：拿破仑幽灵头盔
+	}
+
+	// 处理 NAPOLEON_GHOST_HELMET 的特效和移动
+	private static void handleNapoleonGhostKick(LevelAccessor world, Entity entity) {
+		if (world instanceof ServerLevel serverLevel && entity instanceof Player player) {
+			UUID playerId = player.getUUID();
+
+			// 检查是否已经为该玩家创建了特效实体
+			if (!playerToEffectEntity.containsKey(playerId)) {
+				// 调试日志：开始创建实体
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Creating DarkGhostRiderKickEntity for player {}", player.getScoreboardName());
+				}
+				
+				try {
+					// 创建 DarkGhostRiderKickEntity 实体
+					DarkGhostRiderKickEntity darkGhostRiderKickEntity = new DarkGhostRiderKickEntity(ModEntityTypes.DARKGHOST_RIDER_KICK.get(), serverLevel);
+					
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: DarkGhostRiderKickEntity created with ID: {}", darkGhostRiderKickEntity.getId());
+					}
+					
+					darkGhostRiderKickEntity.setTargetPlayer(player);
+					darkGhostRiderKickEntity.startFinish(); // 开始播放动画
+					serverLevel.addFreshEntity(darkGhostRiderKickEntity);
+
+					// 存储实体ID
+					playerToEffectEntity.put(playerId, darkGhostRiderKickEntity.getId());
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: DarkGhostRiderKickEntity added to world and tracked for player {}", player.getScoreboardName());
+					}
+				} catch (Exception e) {
+					// 捕获并记录任何创建实体时的错误
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.error("KicktimeProcedure: Error creating DarkGhostRiderKickEntity for player {}", player.getScoreboardName(), e);
+					}
+				}
+			} else {
+				// 如果实体已存在，检查是否还存活
+				int entityId = playerToEffectEntity.get(playerId);
+				if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Checking existing DarkGhostRiderKickEntity with ID: {} for player {}", entityId, player.getScoreboardName());
+				}
+				Entity existingEntity = serverLevel.getEntity(entityId);
+				if (existingEntity == null || !existingEntity.isAlive()) {
+					// 实体已消失，重新创建
+					if (DEBUG) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Existing DarkGhostRiderKickEntity not found or not alive, recreating for player {}", player.getScoreboardName());
+					}
+					playerToEffectEntity.remove(playerId);
+					handleNapoleonGhostKick(world, entity); // 递归调用重新创建
+					return;
+				} else if (DEBUG) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: Existing DarkGhostRiderKickEntity with ID: {} is alive for player {}", entityId, player.getScoreboardName());
+				}
+			}
+
+			// 确保玩家踢击动画正常播放
+			handleAnimation(world, entity);
+			syncAnimation(world, entity);
+		}
+
+		// 单独处理 NAPOLEON_GHOST_HELMET 的抛物线移动
+		if (DEBUG && !world.isClientSide() && entity instanceof Player) {
+			kamen_rider_boss_you_and_me.LOGGER.debug("KicktimeProcedure: Handling NAPOLEON_GHOST_HELMET parabolic movement for player {}", ((Player)entity).getScoreboardName());
+		}
+		handleEvilBatsParabolicMovement(world, entity);
 	}
 }

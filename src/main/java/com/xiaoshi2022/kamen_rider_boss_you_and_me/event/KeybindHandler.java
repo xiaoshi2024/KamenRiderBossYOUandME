@@ -261,6 +261,29 @@ public class KeybindHandler {
                 }
             }
         }
+        // 拿破仑魂解除变身逻辑
+        else if (vars.isNapoleonGhostTransformed) {
+            // 检查玩家是否装备了魂灵驱动器
+            Optional<SlotResult> ghostDriverSlot = findFirstCurio(player,
+                    s -> s.getItem() instanceof GhostDriver);
+            
+            if (ghostDriverSlot.isPresent()) {
+                ItemStack beltStack = ghostDriverSlot.get().stack();
+                GhostDriver belt = (GhostDriver) beltStack.getItem();
+                
+                // 检查腰带模式是否为NAPOLEON_GHOST
+                if (belt.getMode(beltStack) == GhostDriver.BeltMode.NAPOLEON_GHOST) {
+                    // 播放解除变身动画
+                    belt.startReleaseAnimation(player, beltStack);
+                    // 设置延时，在动画播放完后再发送解除变身请求
+                    delayTicks = 40;
+                    delayedBeltStack = beltStack.copy();
+                    // 发送解除变身请求
+                    PacketHandler.sendToServer(new NapoleonGhostTransformationRequestPacket(true));
+                    return; // 解除完直接返回
+                }
+            }
+        }
         
         //幽冥逻辑
         // ✅ C 键解除 Necrom 变身
@@ -411,6 +434,7 @@ public class KeybindHandler {
             case "EVIL_BATS"       -> handleEvilBatsRelease(player);      // Evil Bats
             case "RIDERNECROM"      -> handleNecromRelease(player);      // Rider Necrom
             case "DARK_GHOST"      -> handleDarkGhostRelease(player);    // 黑暗灵骑
+            case "NAPOLEON_GHOST"  -> handleNapoleonGhostRelease(player); // 拿破仑魂
         }
     }
     
@@ -425,6 +449,26 @@ public class KeybindHandler {
         // 2. 确保状态被正确重置
         if (vars.isDarkGhostTransformed) {
             vars.isDarkGhostTransformed = false;
+            vars.syncPlayerVariables(player);
+        }
+        
+        // 3. 播放解除音效
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+    }
+    
+    // 拿破仑魂解除变身
+    private static void handleNapoleonGhostRelease(ServerPlayer player) {
+        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+                .orElse(new KRBVariables.PlayerVariables());
+        
+        // 1. 清除玩家的变身盔甲
+        clearTransformationArmor(player);
+        
+        // 2. 确保状态被正确重置
+        if (vars.isNapoleonGhostTransformed) {
+            vars.isNapoleonGhostTransformed = false;
+            vars.originalNapoleonGhostArmor = null;
             vars.syncPlayerVariables(player);
         }
         

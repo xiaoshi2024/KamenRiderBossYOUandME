@@ -1,0 +1,98 @@
+{
+  "credit": "Made with Blockbench",
+  "texture_size": [
+    64,
+    64
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        -15.25,
+        4.75
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        -15.5,
+        3.25
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        17.75,
+        114,
+        0
+      ],
+      "translation": [
+        0,
+        -6,
+        0
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        110,
+        0
+      ],
+      "translation": [
+        -0.25,
+        -7.75,
+        2.5
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        -12.75,
+        0
+      ]
+    },
+    "gui": {
+      "rotation": [
+        175.09,
+        20.69,
+        -166.36
+      ],
+      "translation": [
+        -3,
+        -21.25,
+        0
+      ],
+      "scale": [
+        1.69922,
+        1.69922,
+        1.69922
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        -22.75,
+        1.25
+      ],
+      "scale": [
+        1.91016,
+        1.91016,
+        1.91016
+      ]
+    },
+    "fixed": {
+      "translation": [
+        -0.75,
+        -25.75,
+        6
+      ],
+      "scale": [
+        1.97266,
+        1.97266,
+        1.97266
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/ghost_drivers_nb"
+  }
+}

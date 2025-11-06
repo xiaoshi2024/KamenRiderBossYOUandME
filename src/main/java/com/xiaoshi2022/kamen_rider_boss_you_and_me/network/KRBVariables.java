@@ -60,7 +60,7 @@ public class KRBVariables {
 			PlayerVariables original = ((PlayerVariables) event.getOriginal().getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
 			PlayerVariables clone = ((PlayerVariables) event.getEntity().getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
 			if (!event.isWasDeath()) {
-				clone.kcik = original.kcik;
+				clone.kick = original.kick;
 			clone.wudi = original.wudi;
 			clone.lastKickTime = original.lastKickTime;
 			clone.kickStartTime = original.kickStartTime;
@@ -84,7 +84,7 @@ public class KRBVariables {
 
 			} else {
 			// 玩家死亡重生时，重置大部分状态变量
-			clone.kcik = false;
+			clone.kick = false;
 			clone.wudi = false;
 			clone.lastKickTime = 0L;
 			clone.kickStartTime = 0L;
@@ -123,6 +123,7 @@ public class KRBVariables {
 		clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
 		clone.isDarkGhostTransformed = false; // 玩家死亡时重置黑暗Ghost变身状态
 		clone.isDarkGhostActive = false; // 玩家死亡时重置黑暗Ghost激活状态
+		clone.isNapoleonGhostTransformed = false; // 玩家死亡时重置拿破仑魂变身状态
 		clone.darkGhostMaxHealth = 50.0D; // 玩家死亡时重置黑暗幽灵骑士最大生命值
 		clone.isNecromStandby = false; // 玩家死亡时重置眼魂待命状态
 		clone.isMegaUiorderTransformed = false; // 玩家死亡时重置手环变身状态
@@ -165,7 +166,7 @@ public class KRBVariables {
 	}
 
 	public static class PlayerVariables {
-	public boolean kcik = false;
+	public boolean kick = false;
 	public boolean needExplode = false;
 	public boolean wudi = false;
 	public boolean hasExploded = false;   // ← 新增
@@ -225,6 +226,7 @@ public class KRBVariables {
 	public boolean isDarkGhostTransformed = false; // 新增字段：记录是否装备了黑暗Ghost盔甲并变身
 	public boolean isDarkGhostActive = false; // 新增字段：记录是否处于Dark Ghost激活状态
 	public double darkGhostMaxHealth = 50.0D; // 黑暗幽灵骑士的最大生命值上限
+	public boolean isNapoleonGhostTransformed = false; // 新增字段：记录是否装备了拿破仑魂盔甲并变身
 	public long beltRemovedTime = 0L; // 记录腰带被移除的时间
 	public String removedBeltType = ""; // 记录被移除的腰带类型
 	// Duke骑士技能相关变量
@@ -263,6 +265,7 @@ public class KRBVariables {
 	public net.minecraft.nbt.ListTag originalEvilArmor = null;
 	public net.minecraft.nbt.ListTag originalRiderNecromArmor = null;
 	public net.minecraft.nbt.ListTag originalDarkKivaArmor = null;
+	public net.minecraft.nbt.ListTag originalNapoleonGhostArmor = null; // 新增字段：保存玩家原版拿破仑魂盔甲数据
 
 	public void syncPlayerVariables(Entity entity) {
 		if (entity instanceof ServerPlayer serverPlayer) {
@@ -284,7 +287,7 @@ public class KRBVariables {
 
 	public Tag writeNBT() {
 		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("kcik", kcik);
+		nbt.putBoolean("kick", kick);
 		nbt.putBoolean("wudi", wudi);
 		nbt.putLong("lastKickTime", lastKickTime);
 		nbt.putLong("kickStartTime", kickStartTime);
@@ -335,6 +338,7 @@ public class KRBVariables {
 		nbt.putBoolean("isDarkOrangelsTransformed", isDarkOrangelsTransformed); // 新增字段：记录是否装备了Dark_orangels盔甲并变身
 		nbt.putBoolean("isDarkGhostTransformed", isDarkGhostTransformed); // 新增字段：记录是否装备了黑暗Ghost盔甲并变身
 		nbt.putBoolean("isDarkGhostActive", isDarkGhostActive); // 新增字段：记录是否处于Dark Ghost激活状态
+		nbt.putBoolean("isNapoleonGhostTransformed", isNapoleonGhostTransformed); // 新增字段：记录是否装备了拿破仑魂盔甲并变身
 		nbt.putDouble("darkGhostMaxHealth", darkGhostMaxHealth); // 黑暗幽灵骑士的最大生命值上限
 
 		nbt.putDouble("baseMaxHealth", baseMaxHealth);   // ← 新增
@@ -382,12 +386,15 @@ public class KRBVariables {
 		if (originalDarkKivaArmor != null) {
 			nbt.put("originalDarkKivaArmor", originalDarkKivaArmor);
 		}
+		if (originalNapoleonGhostArmor != null) {
+			nbt.put("originalNapoleonGhostArmor", originalNapoleonGhostArmor);
+		}
 		return nbt;
 	}
 
 	public void readNBT(Tag tag) {
 		CompoundTag nbt = (CompoundTag) tag;
-		kcik = nbt.getBoolean("kcik");
+		kick = nbt.getBoolean("kick");
 		wudi = nbt.getBoolean("wudi");
 		lastKickTime = nbt.getLong("lastKickTime");
 		kickStartTime = nbt.getLong("kickStartTime");
@@ -439,6 +446,7 @@ public class KRBVariables {
 		isDarkOrangelsTransformed = nbt.getBoolean("isDarkOrangelsTransformed"); // 新增字段：读取是否装备了Dark_orangels盔甲并变身
 		isDarkGhostTransformed = nbt.getBoolean("isDarkGhostTransformed"); // 新增字段：记录是否装备了黑暗Ghost盔甲并变身
 		isDarkGhostActive = nbt.getBoolean("isDarkGhostActive"); // 新增字段：记录是否处于Dark Ghost激活状态
+		isNapoleonGhostTransformed = nbt.contains("isNapoleonGhostTransformed") ? nbt.getBoolean("isNapoleonGhostTransformed") : false; // 新增字段：读取是否装备了拿破仑魂盔甲并变身
 		darkGhostMaxHealth = nbt.contains("darkGhostMaxHealth") ? nbt.getDouble("darkGhostMaxHealth") : 50.0D; // 黑暗幽灵骑士的最大生命值上限
 
 		baseMaxHealth = nbt.getDouble("baseMaxHealth");  // ← 新增
@@ -485,6 +493,11 @@ public class KRBVariables {
 		} else {
 			originalDarkKivaArmor = null;
 		}
+		if (nbt.contains("originalNapoleonGhostArmor")) {
+			originalNapoleonGhostArmor = nbt.getList("originalNapoleonGhostArmor", net.minecraft.nbt.Tag.TAG_COMPOUND);
+		} else {
+			originalNapoleonGhostArmor = null;
+		}
 	}
 	}
 
@@ -509,7 +522,7 @@ public class KRBVariables {
 			context.enqueueWork(() -> {
 				if (!context.getDirection().getReceptionSide().isServer()) {
 					PlayerVariables variables = ((PlayerVariables) Minecraft.getInstance().player.getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
-					variables.kcik = message.data.kcik;
+					variables.kick = message.data.kick;
 					variables.wudi = message.data.wudi;
 					variables.lastKickTime = message.data.lastKickTime;
 					variables.kickStartTime = message.data.kickStartTime;
@@ -549,6 +562,7 @@ public class KRBVariables {
 					variables.isEvilBatsStealthed = message.data.isEvilBatsStealthed; // 添加这行，同步EvilBats隐密模式状态
 					variables.isDarkOrangelsTransformed = message.data.isDarkOrangelsTransformed; // 添加这行，同步Dark_orangels变身状态
 					variables.isDarkGhostActive = message.data.isDarkGhostActive; // 新增：同步Dark Ghost激活状态
+					variables.isNapoleonGhostTransformed = message.data.isNapoleonGhostTransformed; // 添加这行，同步拿破仑魂变身状态
 
 					// 同步所有骑士能量相关变量
 					variables.riderEnergy = message.data.riderEnergy;
@@ -578,6 +592,7 @@ public class KRBVariables {
                     variables.originalEvilArmor = message.data.originalEvilArmor;
                     variables.originalRiderNecromArmor = message.data.originalRiderNecromArmor;
                     variables.originalDarkKivaArmor = message.data.originalDarkKivaArmor;
+                    variables.originalNapoleonGhostArmor = message.data.originalNapoleonGhostArmor;
 				}
 			});
 			context.setPacketHandled(true);

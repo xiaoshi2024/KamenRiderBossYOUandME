@@ -59,7 +59,7 @@ public class KickendProcedure {
 
 		// 检查玩家是否处于踢击状态且装备了正确的头盔
 		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-		if (variables.kcik && isHelmetValid(helmet) && entity.onGround()) {
+		if (variables.kick && isHelmetValid(helmet) && entity.onGround()) {
 			// 玩家落地，处理踢击结束逻辑
 			handleKickEnd(event, world, entity);
 		}
@@ -79,7 +79,7 @@ public class KickendProcedure {
 				.orElse(new KRBVariables.PlayerVariables());
 
 		variables.needExplode = true;
-		variables.kcik = false;
+		variables.kick = false;
 
 		// 服务器端处理爆炸效果和伤害
 		if (!world.isClientSide()) {
@@ -153,6 +153,7 @@ public class KickendProcedure {
 			helmet.getItem() == ModItems.EVIL_BATS_HELMET.get() ||
 			helmet.getItem() == ModItems.DARK_KIVA_HELMET.get() ||
 			helmet.getItem() == ModItems.DARK_RIDER_HELMET.get() ||
+			helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get() ||
 			helmet.getItem() == ModItems.RIDERNECROM_HELMET.get() ||
 			isDarkGhostHelmet(helmet);
 	}
@@ -269,6 +270,8 @@ public class KickendProcedure {
 			damage = 75.0F;
 		} else if (helmet.getItem() == ModItems.RIDERNECROM_HELMET.get()) {
 			damage = 68.0F;
+		} else if (helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get()) {
+			damage = 75.0F;
 		} else if (isDarkGhostHelmet(helmet)) {
 			damage = 72.0F; // 黑暗ghost头盔的伤害值
 		}

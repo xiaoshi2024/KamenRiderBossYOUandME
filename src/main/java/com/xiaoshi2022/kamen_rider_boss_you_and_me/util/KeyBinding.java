@@ -19,6 +19,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTran
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostLightningAttackPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTeleportPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.NapoleonGhostTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
@@ -75,53 +76,76 @@ public class KeyBinding {
     public static void onKeyInput(InputEvent.Key event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
-        
-        // 检测黑暗Ghost变身条件
+
+        // 检测变身条件
         if (CHANGE_KEY.isDown()) {
             LocalPlayer player = mc.player;
-            
-            // 检查是否装备了魂灵驱动器（腰带如果有眼魂就不需要检测手持）
-            if (isGhostDriverEquipped(player)) {
-                // 发送黑暗Ghost变身请求
-                PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket());
-            }
-        }
-        
-        // 检测解除变身条件
-        if (RELIEVE_KEY.isDown()) {
-            LocalPlayer player = mc.player;
-            
+
             // 检查是否装备了魂灵驱动器
             if (isGhostDriverEquipped(player)) {
-                // 发送解除变身请求，设置isRelease=true
-                PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket(true));
+                // 检查是否手持拿破仑眼魂
+                boolean isHoldingNapoleonEyecon = player.getMainHandItem().getItem() == ModItems.NAPOLEON_EYECON.get() ||
+                        player.getOffhandItem().getItem() == ModItems.NAPOLEON_EYECON.get();
+
+                if (isHoldingNapoleonEyecon) {
+                    // 发送拿破仑魂变身请求
+                    PacketHandler.sendToServer(new NapoleonGhostTransformationRequestPacket());
+                } else {
+                    // 发送黑暗Ghost变身请求
+                    PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket());
+                }
             }
         }
-        
+
+        // 检测解除变身条件
+        boolean isNapoleonGhostTransformed = false;
+        if (RELIEVE_KEY.isDown()) {
+            LocalPlayer player = mc.player;
+
+            // 检查是否装备了魂灵驱动器
+            if (isGhostDriverEquipped(player)) {
+                // 检查是否是拿破仑魂形态
+                isNapoleonGhostTransformed = false;
+                try {
+                    isNapoleonGhostTransformed = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables()).isNapoleonGhostTransformed;
+                } catch (Exception e) {
+                    // 处理可能的异常
+                }
+
+                if (isNapoleonGhostTransformed) {
+                    // 发送拿破仑魂解除变身请求
+                    PacketHandler.sendToServer(new NapoleonGhostTransformationRequestPacket(true));
+                } else {
+                    // 发送黑暗Ghost解除变身请求
+                    PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket(true));
+                }
+            }
+        }
+
         // 直接在客户端检测玩家是否穿着全套黑暗Kiva盔甲
         boolean isDarkKiva = isDarkKivaArmorEquipped(mc.player);
-        
+
         // 检测玩家是否穿着全套Duke盔甲
         boolean isDuke = isDukeArmorEquipped(mc.player);
-        
+
         // 检测玩家是否穿着基础巴隆盔甲
         boolean isBaron = isBaronArmorEquipped(mc.player);
-        
+
         // 检测玩家是否穿着巴隆柠檬形态盔甲
         boolean isBaronLemon = isBaronLemonArmorEquipped(mc.player);
-        
+
         // 检测玩家是否穿着黑暗铠武阵羽柠檬盔甲
         boolean isDarkGaim = isDarkGaimArmorEquipped(mc.player);
-        
+
         // 检测玩家是否穿着玛丽卡盔甲
         boolean isMarika = isMarikaArmorEquipped(mc.player);
-        
+
         // 检测玩家是否穿着火龙果盔甲
         boolean isTyrant = isTyrantArmorEquipped(mc.player);
-        
+
         // 检测玩家是否穿着全套EvilBats盔甲
         boolean isEvilBats = isEvilBatsArmorEquipped(mc.player);
-        
+
         // 检查玩家是否拥有Overlord标签
         boolean isOverlord = false;
         try {
@@ -129,10 +153,10 @@ public class KeyBinding {
         } catch (Exception e) {
             // 处理可能的异常
         }
-        
+
         // 检查玩家是否是眼魔
         boolean isGhostEye = isGhostEyePlayer(mc.player);
-        
+
         // 同时从持久化变量检查眼魔状态，确保即使没有效果也能检测到
         try {
             boolean hasGhostEyeFlag = mc.player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables()).isGhostEye;
@@ -142,7 +166,7 @@ public class KeyBinding {
         } catch (Exception e) {
             // 处理可能的异常
         }
-        
+
         // 检查玩家是否变身为假面骑士幽冥
         boolean isNecromTransformed = false;
         try {
@@ -150,10 +174,10 @@ public class KeyBinding {
         } catch (Exception e) {
             // 处理可能的异常
         }
-        
+
         // 检查玩家是否变身为DarkGhost形态
         boolean isDarkGhostTransformed = isDarkGhostTransformed(mc.player);
-        
+
         // 检查玩家是否手持眼魂并按下Shift+V键（优先处理维度传送功能）
         if (hasShiftDown() && KEY_GUARD.isDown() && isHoldingGhostEye(mc.player)) {
             if (KEY_GUARD.consumeClick()) {
@@ -172,7 +196,26 @@ public class KeyBinding {
                 }
             }
         }
-        
+
+        // 检查拿破仑Ghost形态的技能 - 提高优先级，直接调用方法获取变身状态
+        if (isNapoleonGhostTransformed(mc.player)) {
+            // V键：闪电格斗攻击（调用DarkGhost的技能）
+            if (KEY_GUARD.consumeClick()) {
+                PacketHandler.sendToServer(new DarkGhostLightningAttackPacket());
+                return;
+            }
+            // B键：远程伤害减免
+            if (KEY_BLAST.consumeClick()) {
+                PacketHandler.sendToServer(new NapoleonGhostRangedDamageReductionPacket());
+                return;
+            }
+            // N键：短距离瞬移（调用DarkGhost的技能）
+            if (KEY_BOOST.consumeClick()) {
+                PacketHandler.sendToServer(new DarkGhostTeleportPacket());
+                return;
+            }
+        }
+
         // 检查玩家是否手持眼魂并按下V键，在主世界也能获得眼魂种族
         if (KEY_GUARD.isDown() && isHoldingGhostEye(mc.player)) {
             if (KEY_GUARD.consumeClick()) {
@@ -182,8 +225,8 @@ public class KeyBinding {
                 return;
             }
         }
-        
-        // 手持眼魂或变身为幽冥时按B键隐身功能 - 提高优先级，避免与其他技能冲突
+
+        // 手持眼魂或变身为幽冥时按B键隐身功能
         if ((isHoldingGhostEye(mc.player) || isNecromTransformed) && KEY_BLAST.isDown()) {
             if (KEY_BLAST.consumeClick()) {
                 // 检查是否按下Shift键
@@ -199,7 +242,7 @@ public class KeyBinding {
                 return; // 优先处理眼魂隐身功能，不继续执行其他按键检测
             }
         }
-        
+
         // 眼魔玩家或幽冥玩家专属功能：按下B键变身为眼魂实体，按下Shift+B键变回到人形
         if ((isGhostEye || isNecromTransformed)) {
             // 执行变形功能，无论玩家是否手持眼魂
@@ -216,7 +259,7 @@ public class KeyBinding {
                 return; // 优先处理眼魔变形功能，不继续执行其他按键检测
             }
         }
-        
+
         // 检查DarkGhost形态的技能
         if (isDarkGhostTransformed) {
             // V键：闪电格斗攻击
@@ -230,13 +273,13 @@ public class KeyBinding {
                 return;
             }
         }
-        
+
         // 检查Shift+N组合键用于召回异域者（任何拥有Overlord标签的玩家都可以使用）
         if (isOverlord && hasShiftDown() && KEY_BOOST.consumeClick()) {
             PacketHandler.sendToServer(new BaronRecallInvesPacket());
             return; // 优先处理召回功能，不继续执行其他按键检测
         }
-        
+
         // Z键：优先检查创世纪驱动器临时取下锁种功能，然后是EvilBats临时取下印章功能，再是临时取下眼魂功能，最后是结界拉扯功能
         if (KEY_BARRIER_PULL.consumeClick()) {
             // 检查玩家是否装备了创世纪驱动器
@@ -257,12 +300,12 @@ public class KeyBinding {
                 PacketHandler.sendToServer(new DarkKivaSealBarrierPullPacket());
             }
         }
-        
+
         // 检测玩家是否手持音速弓柠檬模式
         boolean hasSonicArrowLemonMode = hasSonicArrowLemonMode(mc.player);
         // 检测玩家是否手持音速弓樱桃模式
         boolean hasSonicArrowCherryMode = hasSonicArrowCherryMode(mc.player);
-        
+
         // 优先检查特殊形态 - 樱桃能量箭矢（任何穿着骑士腰带的玩家都可以使用，只要手持音速弓樱桃模式）
         if (hasSonicArrowCherryMode) {
             // 手持音速弓樱桃模式时，使用V键触发樱桃能量箭矢技能
@@ -290,15 +333,14 @@ public class KeyBinding {
             if (KEY_BOOST.consumeClick()) {
                 PacketHandler.sendToServer(new BaronSummonInvesPacket());
             }
-        } 
+        }
         // 然后检查其他主要形态
         else if (isDarkGaim) {
             // 黑暗铠武阵羽柠檬形态的三个技能
             if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new DarkGaimKickEnhancePacket());
             if (KEY_BLAST.consumeClick()) PacketHandler.sendToServer(new DarkGaimBlindnessFieldPacket());
             if (KEY_BOOST.consumeClick()) PacketHandler.sendToServer(new DarkGaimHelheimCrackPacket());
-        }
-        else if (isDarkKiva) {
+        } else if (isDarkKiva) {
             // 技能1键（V键）：封印结界
             if (KEY_GUARD.consumeClick()) PacketHandler.sendToServer(new DarkKivaFuuinKekkaiPacket());
             // 技能2键（B键）：吸血能力
@@ -343,7 +385,7 @@ public class KeyBinding {
                 PacketHandler.sendToServer(new BaronSummonInvesPacket());
             }
         }
-        
+
         // 最后检查玩家是否手持蝙蝠印章并按下V键（骑士1键）
         // 这个检查放在最后，这样当玩家穿着特定盔甲时，优先使用盔甲的技能
         if (KEY_GUARD.consumeClick()) {
@@ -530,6 +572,14 @@ public class KeyBinding {
     private static boolean isDarkGhostTransformed(Player player) {
         // 直接调用DarkGhostAbilityHandler中的盔甲检测方法
         return com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DarkGhostAbilityHandler.isWearingDarkGhostArmor(player);
+    }
+    
+    // 检查玩家是否变身为拿破仑Ghost形态
+    private static boolean isNapoleonGhostTransformed(Player player) {
+        // 优先检查玩家变量中的变身状态，这样即使盔甲还没完全装备也能检测到变身
+        return player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+                .map(variables -> variables.isNapoleonGhostTransformed)
+                .orElse(false);
     }
     
     // 切换眼魔玩家的隐身状态

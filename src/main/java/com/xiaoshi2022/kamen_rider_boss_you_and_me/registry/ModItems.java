@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.NapoleonEyecon;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.food.InvesMeat;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
@@ -8,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeapon
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DarkRiderGhost.DarkRiderGhostItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.NapoleonGhost.NapoleonGhostItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
@@ -164,6 +166,9 @@ public class ModItems {
     public static final RegistryObject<DarkRiderEyecon> DARK_RIDER_EYECON = ITEMS.register("dark_rider_eye",
             () -> new DarkRiderEyecon(new Item.Properties()));
 
+    public static final RegistryObject<NapoleonEyecon> NAPOLEON_EYECON = ITEMS.register("nb_eye",
+            () -> new NapoleonEyecon(new Item.Properties()));
+
     public static final RegistryObject<Mega_uiorder> MEGA_UIORDER_ITEM = ITEMS.register("mega_uiorder_item",
             () -> new Mega_uiorder(new Item.Properties().stacksTo(1)));
 
@@ -234,6 +239,10 @@ public class ModItems {
     public static final RegistryObject<DarkRiderGhostItem> DARK_RIDER_HELMET = ITEMS.register("dark_rider_ghost_helmet", () -> new DarkRiderGhostItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<DarkRiderGhostItem> DARK_RIDER_CHESTPLATE = ITEMS.register("dark_rider_ghost_chestplate", () -> new DarkRiderGhostItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<DarkRiderGhostItem> DARK_RIDER_LEGGINGS = ITEMS.register("dark_rider_ghost_leggings", () -> new DarkRiderGhostItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    public static final RegistryObject<NapoleonGhostItem> NAPOLEON_GHOST_HELMET = ITEMS.register("napoleon_ghost_helmet", () -> new NapoleonGhostItem(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<NapoleonGhostItem> NAPOLEON_GHOST_CHESTPLATE = ITEMS.register("napoleon_ghost_chestplate", () -> new NapoleonGhostItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<NapoleonGhostItem> NAPOLEON_GHOST_LEGGINGS = ITEMS.register("napoleon_ghost_leggings", () -> new NapoleonGhostItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
     // 基夫眼珠 - 击败基夫人形后掉落 (Geo物品)
     public static final RegistryObject<GiifuEyeBall> GIIFU_EYEBALL = ITEMS.register("giifu_eyeball",
