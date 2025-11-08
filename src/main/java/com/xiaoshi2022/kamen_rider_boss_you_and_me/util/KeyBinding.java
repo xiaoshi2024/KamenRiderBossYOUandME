@@ -52,9 +52,9 @@ public class KeyBinding {
     public static final String KEY_CHANGE_PLAYER = "KEY.kamen_rider_weapon_craft.change_player";
     public static final String KEY_RELIEVE_PLAYER = "KEY.kamen_rider_weapon_craft.relieve_player";
 
-    public static final KeyMapping KEY_GUARD  = new KeyMapping("key.skill1",  InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.categories.kamen_rider");
-    public static final KeyMapping KEY_BLAST  = new KeyMapping("key.skill2",  InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, "key.categories.kamen_rider");
-    public static final KeyMapping KEY_BOOST  = new KeyMapping("key.skill3",  InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_N, "key.categories.kamen_rider");
+    public static final KeyMapping KEY_GUARD = new KeyMapping("key.skill1", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.categories.kamen_rider");
+    public static final KeyMapping KEY_BLAST = new KeyMapping("key.skill2", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, "key.categories.kamen_rider");
+    public static final KeyMapping KEY_BOOST = new KeyMapping("key.skill3", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_N, "key.categories.kamen_rider");
     public static final KeyMapping KEY_FLIGHT = new KeyMapping("key.flight_toggle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F, "key.categories.kamen_rider");
     public static final KeyMapping KEY_BARRIER_PULL = new KeyMapping("key.barrier_pull", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, "key.categories.kamen_rider");
 
@@ -67,11 +67,11 @@ public class KeyBinding {
 
     // 存储正在隐身的眼魔玩家
     private static final java.util.Set<String> invisibleGhostEyePlayers = new java.util.HashSet<>();
-    
+
     // 存储玩家的维度传送冷却时间
     private static final java.util.Map<String, Integer> teleportCooldowns = new java.util.HashMap<>();
     private static final int TELEPORT_COOLDOWN_TICKS = 20 * 5; // 5秒冷却时间（20刻/秒）
-    
+
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         Minecraft mc = Minecraft.getInstance();
@@ -244,8 +244,7 @@ public class KeyBinding {
         }
 
         // 眼魔玩家或幽冥玩家专属功能：按下B键变身为眼魂实体，按下Shift+B键变回到人形
-        if ((isGhostEye || isNecromTransformed)) {
-            // 执行变形功能，无论玩家是否手持眼魂
+        if ((isDarkGhostTransformed || isNecromTransformed)) {
             if (KEY_BLAST.consumeClick()) {
                 if (hasShiftDown()) {
                     // Shift+B键：变回到人形
@@ -394,105 +393,105 @@ public class KeyBinding {
             }
         }
     }
-    
+
     // 检测玩家是否穿着全套Duke盔甲
     private static boolean isDukeArmorEquipped(Player player) {
         return player.getInventory().armor.get(3).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke &&
-               player.getInventory().armor.get(2).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke &&
-               player.getInventory().armor.get(1).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
+                player.getInventory().armor.get(2).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke &&
+                player.getInventory().armor.get(1).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
     }
-    
+
     // 客户端专用的黑暗Kiva盔甲检测方法
     private static boolean isDarkKivaArmorEquipped(LocalPlayer player) {
         // 检查是否穿着黑暗Kiva头盔、胸甲和护腿（不需要鞋子）
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DarkKivaItem &&
-               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DarkKivaItem &&
-               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof DarkKivaItem;
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DarkKivaItem &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof DarkKivaItem;
     }
-    
+
     // 客户端专用的基础巴隆盔甲检测方法
     private static boolean isBaronArmorEquipped(LocalPlayer player) {
         // 检查胸甲是否为基础巴隆盔甲
         return player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof rider_baronsItem;
     }
-    
+
     // 客户端专用的巴隆柠檬形态盔甲检测方法
     private static boolean isBaronLemonArmorEquipped(LocalPlayer player) {
         // 检查是否穿着巴隆柠檬形态的全套盔甲
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof baron_lemonItem &&
-               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof baron_lemonItem &&
-               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof baron_lemonItem;
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof baron_lemonItem &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof baron_lemonItem;
     }
-    
+
     // 客户端专用的黑暗铠武阵羽柠檬盔甲检测方法
     private static boolean isDarkGaimArmorEquipped(LocalPlayer player) {
         // 检查是否穿着黑暗铠武阵羽柠檬的全套盔甲
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof Dark_orangels &&
-               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof Dark_orangels &&
-               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof Dark_orangels;
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof Dark_orangels &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof Dark_orangels;
     }
-    
-    // 检查玩家是否手持音速弓柠檬模式
+
+    // 检查玩家是否穿着音速弓柠檬模式
     private static boolean hasSonicArrowLemonMode(LocalPlayer player) {
         // 获取玩家主手物品
         net.minecraft.world.item.ItemStack mainHandItem = player.getMainHandItem();
-        
+
         // 检查是否为音速弓且处于柠檬模式
         if (mainHandItem.getItem() instanceof sonicarrow) {
             sonicarrow sonicArrow = (sonicarrow) mainHandItem.getItem();
             return sonicArrow.getCurrentMode(mainHandItem) == sonicarrow.Mode.LEMON;
         }
-        
+
         return false;
     }
-    
+
     // 客户端专用的玛丽卡盔甲检测方法
     private static boolean isMarikaArmorEquipped(LocalPlayer player) {
         // 检查是否穿着玛丽卡头盔、胸甲和护腿
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof Marika &&
-               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof Marika &&
-               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof Marika;
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof Marika &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof Marika;
     }
-    
+
     // 客户端专用的火龙果盔甲检测方法
     private static boolean isTyrantArmorEquipped(LocalPlayer player) {
         // 检查是否穿着火龙果头盔、胸甲和护腿
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof TyrantItem &&
-               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof TyrantItem &&
-               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof TyrantItem;
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof TyrantItem &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof TyrantItem;
     }
-    
+
     // 客户端专用的EvilBats盔甲检测方法
     private static boolean isEvilBatsArmorEquipped(LocalPlayer player) {
         // 检查是否穿着EvilBats头盔、胸甲和护腿
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof EvilBatsArmor &&
-               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof EvilBatsArmor &&
-               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof EvilBatsArmor;
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof EvilBatsArmor &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof EvilBatsArmor;
     }
-    
+
     // 检测玩家是否装备了魂灵驱动器
     private static boolean isGhostDriverEquipped(Player player) {
         Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
                 .resolve()
                 .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof GhostDriver));
-        
+
         return opt.isPresent();
     }
-    
+
     // 检查玩家是否手持音速弓樱桃模式
     private static boolean hasSonicArrowCherryMode(LocalPlayer player) {
         // 获取玩家主手物品
         net.minecraft.world.item.ItemStack mainHandItem = player.getMainHandItem();
-        
+
         // 检查是否为音速弓且处于樱桃模式
         if (mainHandItem.getItem() instanceof sonicarrow) {
             sonicarrow sonicArrow = (sonicarrow) mainHandItem.getItem();
             return sonicArrow.getCurrentMode(mainHandItem) == sonicarrow.Mode.CHERRY;
         }
-        
+
         return false;
     }
-    
+
     // 检查玩家是否装备了创世纪驱动器
     private static boolean hasGenesisDriver(Player player) {
         return top.theillusivec4.curios.api.CuriosApi.getCuriosInventory(player)
@@ -500,7 +499,7 @@ public class KeyBinding {
                 .flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof Genesis_driver))
                 .isPresent();
     }
-    
+
     // 检测玩家是否装备了处于NECROM_EYE模式的Mega_uiorder
     private static boolean hasMegaUiorderWithNecromEyeMode(Player player) {
         return CuriosApi.getCuriosInventory(player)
@@ -509,7 +508,7 @@ public class KeyBinding {
                     Optional<SlotResult> result = handler.findFirstCurio(stack -> stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder);
                     if (result.isPresent()) {
                         ItemStack stack = result.get().stack();
-                        com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder belt = 
+                        com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder belt =
                                 (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder) stack.getItem();
                         return belt.getCurrentMode(stack) == com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder.Mode.NECROM_EYE;
                     }
@@ -517,30 +516,30 @@ public class KeyBinding {
                 })
                 .orElse(false);
     }
-    
+
     // 检查玩家是否手持眼魂
     private static boolean isHoldingGhostEye(Player player) {
         return player.getMainHandItem().getItem() instanceof Necrom_eye ||
-               player.getOffhandItem().getItem() instanceof Necrom_eye;
+                player.getOffhandItem().getItem() instanceof Necrom_eye;
     }
-    
+
     // 检查是否按下了Shift键
     private static boolean hasShiftDown() {
         Minecraft mc = Minecraft.getInstance();
         return mc.options.keyShift.isDown();
     }
-    
+
     // 检查玩家是否处于传送冷却中
     private static boolean isTeleportOnCooldown(String playerId) {
         Integer cooldown = teleportCooldowns.get(playerId);
         return cooldown != null && cooldown > 0;
     }
-    
+
     // 设置玩家的传送冷却时间
     private static void setTeleportCooldown(String playerId, int ticks) {
         teleportCooldowns.put(playerId, ticks);
     }
-    
+
     // 处理冷却时间减少
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
@@ -558,22 +557,22 @@ public class KeyBinding {
             }
         }
     }
-    
+
     // 检查玩家是否是眼魔
     private static boolean isGhostEyePlayer(Player player) {
         // 在客户端，我们可以通过检查玩家是否有眼魔特有的效果来判断
         // 注意：这只是一个近似的判断方法，因为服务器才真正存储玩家是否是眼魔
-        return player.hasEffect(MobEffects.NIGHT_VISION) && 
-               player.hasEffect(MobEffects.MOVEMENT_SPEED) && 
-               player.hasEffect(MobEffects.JUMP);
+        return player.hasEffect(MobEffects.NIGHT_VISION) &&
+                player.hasEffect(MobEffects.MOVEMENT_SPEED) &&
+                player.hasEffect(MobEffects.JUMP);
     }
-    
+
     // 检查玩家是否处于DarkGhost形态 - 现在使用盔甲检测代替字段检测
     private static boolean isDarkGhostTransformed(Player player) {
         // 直接调用DarkGhostAbilityHandler中的盔甲检测方法
         return com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DarkGhostAbilityHandler.isWearingDarkGhostArmor(player);
     }
-    
+
     // 检查玩家是否变身为拿破仑Ghost形态
     private static boolean isNapoleonGhostTransformed(Player player) {
         // 优先检查玩家变量中的变身状态，这样即使盔甲还没完全装备也能检测到变身
@@ -581,12 +580,12 @@ public class KeyBinding {
                 .map(variables -> variables.isNapoleonGhostTransformed)
                 .orElse(false);
     }
-    
+
     // 切换眼魔玩家的隐身状态
     private static void toggleGhostEyeInvisibility(LocalPlayer player) {
         String playerId = player.getStringUUID();
         boolean isCurrentlyInvisible = invisibleGhostEyePlayers.contains(playerId);
-        
+
         if (isCurrentlyInvisible) {
             // 取消隐身
             invisibleGhostEyePlayers.remove(playerId);
@@ -599,13 +598,13 @@ public class KeyBinding {
             player.displayClientMessage(net.minecraft.network.chat.Component.literal("已进入隐身状态"), true);
         }
     }
-    
+
     // 处理玩家渲染事件，用于临时关闭幽冥的盔甲渲染
     @SubscribeEvent
     public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
         Player player = event.getEntity();
         String playerId = player.getStringUUID();
-        
+
         // 如果是隐身的眼魔玩家，临时关闭盔甲渲染
         if (invisibleGhostEyePlayers.contains(playerId)) {
             // 直接设置玩家的盔甲物品为空气，这样就不会渲染盔甲
@@ -614,17 +613,24 @@ public class KeyBinding {
             player.setItemSlot(EquipmentSlot.LEGS, net.minecraft.world.item.ItemStack.EMPTY);
         }
     }
-    
+
     // 渲染事件后恢复盔甲渲染
     @SubscribeEvent
     public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
         Player player = event.getEntity();
         String playerId = player.getStringUUID();
-        
+
         // 如果是隐身的眼魔玩家，恢复盔甲渲染
         if (invisibleGhostEyePlayers.contains(playerId)) {
             // 这里不需要恢复，因为我们只是临时修改，不会真正改变玩家的物品栏
             // Minecraft会在每一帧重新从玩家的实际物品栏获取盔甲信息
         }
+    }
+
+    // 检查玩家是否穿着哈密瓜装甲
+    private static boolean isWearingMelonArmor(Player player) {
+        return player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() &&
+                player.getInventory().armor.get(2).getItem() == ModItems.ZANGETSU_SHIN_CHESTPLATE.get() &&
+                player.getInventory().armor.get(1).getItem() == ModItems.ZANGETSU_SHIN_LEGGINGS.get();
     }
 }
