@@ -70,8 +70,17 @@ public class LemonTransformationRequestPacket {
     static void handleGenesisLemonTransformation(ServerPlayer player, SlotResult genesisDriver) {
         ItemStack beltStack = genesisDriver.stack();
         Genesis_driver belt = (Genesis_driver) beltStack.getItem();
-
-
+        
+        // 检查腰带是否处于冷却状态（被瘫痪）
+        if (beltStack.hasTag() && beltStack.getTag().contains("cooldownUntil")) {
+            long cooldownUntil = beltStack.getTag().getLong("cooldownUntil");
+            if (player.level().getGameTime() < cooldownUntil) {
+                long remaining = (cooldownUntil - player.level().getGameTime()) / 20;
+                player.sendSystemMessage(Component.literal("腰带已被瘫痪！剩余时间：" + remaining + " 秒"));
+                return;
+            }
+        }
+        
         // 检查玩家是否已经装备了变身盔甲
         boolean isBaronLemonArmor = player.getInventory().armor.get(3).is(ModItems.BARON_LEMON_HELMET.get()) &&
                 player.getInventory().armor.get(2).is(ModItems.BARON_LEMON_CHESTPLATE.get()) &&

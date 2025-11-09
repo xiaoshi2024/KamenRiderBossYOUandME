@@ -35,6 +35,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
@@ -555,5 +556,15 @@ public class TimeJackerEntity extends VillagerEntityMCA {
     public boolean isAfraidOf(LivingEntity entity) {
         // 调用shouldFearEntity方法来判断是否应该害怕
         return shouldFearEntity(entity);
+    }
+    
+    /**
+     * 死亡掉落逻辑
+     * 使用数据包形式掉落物品，不再在代码中直接添加掉落物
+     */
+    @Override
+    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
+        // 只调用父类方法，让游戏通过战利品表（数据包）处理掉落
+        super.dropCustomDeathLoot(source, looting, recentlyHitIn);
     }
 }

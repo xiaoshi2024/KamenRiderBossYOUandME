@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.KillProcessItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.NapoleonEyecon;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.food.InvesMeat;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
@@ -72,6 +73,10 @@ public class ModItems {
 
     public static final RegistryObject<BatStampItem> BAT_STAMP = ITEMS.register("bat_stamp",
             () -> new BatStampItem(new Item.Properties()));
+            
+    // 终止进程遥控器 - 可以强制解除创世纪驱动器变身的遥控器
+    public static final RegistryObject<KillProcessItem> KILL_PROCESS = ITEMS.register("kill_process",
+            () -> new KillProcessItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<TwoWeaponItem> TWO_WEAPON = ITEMS.register("two_weapon",
             () -> new TwoWeaponItem(new Item.Properties()));

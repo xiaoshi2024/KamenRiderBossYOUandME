@@ -73,6 +73,16 @@ public class MarikaTransformationRequestPacket {
 
         ItemStack beltStack = genesisDriver.get().stack();
         Genesis_driver belt = (Genesis_driver) beltStack.getItem();
+        
+        // 检查腰带是否处于冷却状态（被瘫痪）
+        if (beltStack.hasTag() && beltStack.getTag().contains("cooldownUntil")) {
+            long cooldownUntil = beltStack.getTag().getLong("cooldownUntil");
+            if (player.level().getGameTime() < cooldownUntil) {
+                long remaining = (cooldownUntil - player.level().getGameTime()) / 20;
+                player.displayClientMessage(Component.literal("腰带已被瘫痪！剩余时间：" + remaining + " 秒"), true);
+                return;
+            }
+        }
 
         System.out.println(">>>>> 2. mode check = " + belt.getMode(beltStack));
 

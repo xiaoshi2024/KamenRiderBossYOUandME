@@ -97,6 +97,10 @@
   "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.title": "Awakening! Fangire Bloodline",
   "advancement.kamen_rider_boss_you_and_me.fang_bloodline_awaken.desc": "Awaken the ancient Fangire blood within you and become one of the blood-sucking race.",
   "advancement.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "The Blessing of the Great Eye",
+  "item.kamen_rider_boss_you_and_me.kill_process.activated": "Remote control activated! Searching for Genesis Driver...",
+  "item.kamen_rider_boss_you_and_me.kill_process.disabled": "Warning! Genesis Driver forcibly disengaged and temporarily disabled!",
+  "item.kamen_rider_boss_you_and_me.kill_process.not_found": "No Genesis Driver detected.",
+  "item.kamen_rider_boss_you_and_me.kill_process": "Kill Process Remote Control",
 
   "advancements.kamen_rider_boss_you_and_me.gift_of_the_great_eye.title": "hell",
 
