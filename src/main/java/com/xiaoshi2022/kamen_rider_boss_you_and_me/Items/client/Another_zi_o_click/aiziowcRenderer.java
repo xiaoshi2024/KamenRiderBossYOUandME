@@ -14,13 +14,15 @@ public class aiziowcRenderer extends GeoItemRenderer<aiziowc> {
     private final GeoModel<aiziowc> defaultModel;
     private final GeoModel<aiziowc> anotherModel;
     private final GeoModel<aiziowc> denoModel;
+    private final GeoModel<aiziowc> dcdModel;
 
     public aiziowcRenderer() {
         super(new aiziowcModel<>(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"aiziowc")));
         this.defaultModel = new aiziowcModel<>(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"aiziowc"));
-        // 使用默认模型作为备用，避免找不到aiziowc_another模型文件时崩溃
+        // 使用默认模型作为备用，避免找不到模型文件时崩溃
         this.anotherModel = defaultModel;
         this.denoModel = new aiden_owcModel<>(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"aiden_owc"));
+        this.dcdModel = new aidcdwcModel<>(new ResourceLocation(kamen_rider_boss_you_and_me.MODID,"aidcdwc"));
     }
 
     @Override
@@ -35,6 +37,8 @@ public class aiziowcRenderer extends GeoItemRenderer<aiziowc> {
             currentModel = anotherModel;
         } else if (mode == aiziowc.Mode.DEN_O) {
             currentModel = denoModel;
+        } else if (mode == aiziowc.Mode.DCD) {
+            currentModel = dcdModel;
         } else {
             currentModel = defaultModel;
         }

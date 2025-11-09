@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.Elementar
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Decade;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
@@ -58,6 +59,9 @@ public class ModEntityTypes {
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
     
     public static final RegistryObject<EntityType<Another_Den_o>> ANOTHER_DEN_O = registerMob("another_den_o", Another_Den_o::new,
+            0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
+    
+    public static final RegistryObject<EntityType<Another_Decade>> ANOTHER_DECADE = registerMob("another_decade", Another_Decade::new,
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
     
     // 异类电班列实体

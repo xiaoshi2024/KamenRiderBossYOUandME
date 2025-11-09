@@ -39,7 +39,8 @@ public class aiziowc extends Item implements GeoItem {
     public enum Mode {
         DEFAULT,
         ANOTHER,
-        DEN_O
+        DEN_O,
+        DCD,
     }
 
     public aiziowc(Properties props) {
@@ -107,11 +108,13 @@ public class aiziowc extends Item implements GeoItem {
         if (player.isShiftKeyDown()) {
             Mode currentMode = getCurrentMode(stack);
             Mode newMode;
-            // 循环切换：默认 -> 异类 -> 电王 -> 默认
+            // 循环切换：默认 -> 异类 -> 电王 -> DCD -> 默认
             if (currentMode == Mode.DEFAULT) {
                 newMode = Mode.ANOTHER;
             } else if (currentMode == Mode.ANOTHER) {
                 newMode = Mode.DEN_O;
+            } else if (currentMode == Mode.DEN_O) {
+                newMode = Mode.DCD;
             } else {
                 newMode = Mode.DEFAULT;
             }
@@ -119,7 +122,8 @@ public class aiziowc extends Item implements GeoItem {
             String modeName;
             if (newMode == Mode.DEFAULT) modeName = "默认";
             else if (newMode == Mode.ANOTHER) modeName = "异类";
-            else modeName = "电王";
+            else if (newMode == Mode.DEN_O) modeName = "电王";
+            else modeName = "Decade";
             player.displayClientMessage(Component.literal("已切换至" + modeName + "模式"), true);
             return InteractionResultHolder.success(stack);
         }
@@ -135,9 +139,19 @@ public class aiziowc extends Item implements GeoItem {
                 triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "click", "click");
 
                 // 根据当前模式播放不同的音效
-                if (getCurrentMode(stack) == Mode.DEN_O) {
+                Mode currentMode = getCurrentMode(stack);
+                if (currentMode == Mode.DEN_O) {
                     serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), 
                             ModBossSounds.AIDEN_OWC.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                } else if (currentMode == Mode.DCD) {
+                    // 检查是否有DCD模式对应的音效，如果没有则使用默认音效
+                    try {
+                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), 
+                                ModBossSounds.ANOTHER_DECADE_CLICK.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    } catch (Exception e) {
+                        serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), 
+                                ModBossSounds.ANOTHER_ZI_O_CLICK.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                    }
                 } else {
                     serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), 
                             ModBossSounds.ANOTHER_ZI_O_CLICK.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -164,13 +178,13 @@ public class aiziowc extends Item implements GeoItem {
         String modeName;
         if (mode == Mode.DEFAULT) modeName = "默认";
         else if (mode == Mode.ANOTHER) modeName = "异类";
-        else modeName = "电王";
+        else if (mode == Mode.DEN_O) modeName = "电王";
+        else modeName = "Decade";
         tooltip.add(Component.literal("当前模式: " + modeName)
                 .withStyle(net.minecraft.ChatFormatting.YELLOW));
-        tooltip.add(Component.literal("Shift+右键切换模式 (默认 -> 异类 -> 电王)")
+        tooltip.add(Component.literal("Shift+右键切换模式 (默认 -> 异类 -> 电王 -> Decade)")
                 .withStyle(net.minecraft.ChatFormatting.GRAY));
     }
-
 
     // Let's add our animation controller
     @Override
@@ -188,6 +202,12 @@ public class aiziowc extends Item implements GeoItem {
                             aiziowc item = (aiziowc) player.getMainHandItem().getItem();
                             if (item.getCurrentMode(player.getMainHandItem()) == Mode.DEN_O) {
                                 player.playSound(ModBossSounds.AIDEN_OWC.get(), 1, 1);
+                            } else if (item.getCurrentMode(player.getMainHandItem()) == Mode.DCD) {
+                                try {
+                                    player.playSound(ModBossSounds.ANOTHER_DECADE_CLICK.get(), 1, 1);
+                                } catch (Exception e) {
+                                    player.playSound(ModBossSounds.ANOTHER_ZI_O_CLICK.get(), 1, 1);
+                                }
                             } else {
                                 player.playSound(ModBossSounds.ANOTHER_ZI_O_CLICK.get(), 1, 1);
                             }

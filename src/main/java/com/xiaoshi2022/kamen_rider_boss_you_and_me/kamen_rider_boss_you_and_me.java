@@ -301,6 +301,7 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.GIFFTARIAN.get(), GifftarianRenderer::new);
             EntityRenderers.register(ModEntityTypes.ANOTHER_ZI_O.get(), Another_Zi_oRenderer::new);
             EntityRenderers.register(ModEntityTypes.ANOTHER_DEN_O.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Den_os.Another_Den_oRenderer::new);
+            EntityRenderers.register(ModEntityTypes.ANOTHER_DECADE.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Decades.Another_DecadeRenderer::new);
             EntityRenderers.register(ModEntityTypes.INVES_HEILEHIM.get(), ElementaryInvesHelheimRenderer::new);
             EntityRenderers.register(ModEntityTypes.KIVAT_BAT_II.get(), KivatBatTwoNdRenderer::new);
             EntityRenderers.register(ModEntityTypes.GIIFU_HUMAN.get(), GiifuHumanRenderer::new);

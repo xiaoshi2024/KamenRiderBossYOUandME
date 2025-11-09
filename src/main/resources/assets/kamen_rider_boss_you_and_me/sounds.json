@@ -322,5 +322,14 @@
         "stream": false
       }
     ]
+  },
+  "aidcds": {
+    "subtitle": "another DCD",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:aidcds",
+        "stream": false
+      }
+    ]
   }
 }
