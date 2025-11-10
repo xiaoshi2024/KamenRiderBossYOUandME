@@ -44,6 +44,12 @@ public class ModEntityTypes {
             () -> EntityType.Builder.of(TimeJackerEntity::new, MobCategory.CREATURE)
                     .sized(0.6f, 1.95f)
                     .build(new ResourceLocation(MODID, "time_jacker").toString()));
+                    
+    // 时间王族实体 - 使用特殊注册方式以兼容MCA村民
+    public static final RegistryObject<EntityType<TimeRoyaltyEntity>> TIME_ROYALTY = ENTITY_TYPES.register("time_royalty",
+            () -> EntityType.Builder.of(TimeRoyaltyEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(new ResourceLocation(MODID, "time_royalty").toString()));
     public static final RegistryObject<EntityType<Gifftarian>> GIFFTARIAN = registerMob("gifftarian", Gifftarian::new,
                 0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
     public static final RegistryObject<EntityType<ElementaryInvesHelheim>> INVES_HEILEHIM = registerMob("inves_heilehim", ElementaryInvesHelheim::new,

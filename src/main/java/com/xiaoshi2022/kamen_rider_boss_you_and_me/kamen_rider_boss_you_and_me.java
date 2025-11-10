@@ -316,6 +316,7 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.NECROM_EYEX.get(), NecromEyexRenderer::new);
             // 注册时劫者实体渲染器
             EntityRenderers.register(ModEntityTypes.TIME_JACKER.get(), forge.net.mca.client.render.VillagerEntityMCARenderer::new);
+            EntityRenderers.register(ModEntityTypes.TIME_ROYALTY.get(), forge.net.mca.client.render.VillagerEntityMCARenderer::new);
 
             EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyRenderer::new);
             EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyRenderer::new);
@@ -328,10 +329,6 @@ public class kamen_rider_boss_you_and_me
 
             EntityRenderers.register(ModEntityTypes.SAKURA_HURRICANE.get(), SakuraHurricaneRenderer::new);
 
-    //            EntityRenderers.register(ModEntityTypes.KAITO.get(),
-    //                    VillagerEntityMCARenderer::new);
-
-    //            EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
             // 注册动画工厂
             PlayerAnimationSetup.clientInit();
             // 注册Curios相关内容

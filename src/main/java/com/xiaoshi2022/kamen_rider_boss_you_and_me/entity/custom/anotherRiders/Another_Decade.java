@@ -17,6 +17,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -60,6 +62,11 @@ public class Another_Decade extends Monster implements GeoEntity {
 
     /* 半血狂暴 */
     private boolean enraged = false;
+    
+    /* 安全状态检测相关 - 用于变回时间王族 */
+    private int safetyTimer = 0;
+    private static final int SAFETY_TIME_REQUIRED = 200; // 10秒安全时间
+    private static final int THREAT_CHECK_RANGE = 15; // 威胁检测范围
 
     public Another_Decade(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -121,6 +128,9 @@ public class Another_Decade extends Monster implements GeoEntity {
                 predictPath(player);
             }
         }
+        
+        // 检查安全状态并可能变回时间王族
+        checkSafetyAndRevert();
     }
     
     @Override
@@ -270,6 +280,76 @@ public class Another_Decade extends Monster implements GeoEntity {
             return s;
         }
     }
+    
+    // 检查安全状态并在安全时变回时间王族
+    private void checkSafetyAndRevert() {
+        if (this.level().isClientSide()) return;
+        
+        // 检查附近是否有威胁
+        boolean isThreatPresent = !this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                this.getBoundingBox().inflate(THREAT_CHECK_RANGE),
+                entity -> {
+                    if (entity instanceof Player || entity instanceof Monster) {
+                        return (entity instanceof Mob mob && mob.getTarget() == this) || 
+                               (entity instanceof Player player && !player.getMainHandItem().isEmpty());
+                    }
+                    return false;
+                }
+        ).isEmpty();
+        
+        if (isThreatPresent) {
+            // 有威胁，重置安全计时器
+            safetyTimer = 0;
+        } else {
+            // 无威胁，增加安全计时器
+            safetyTimer++;
+            
+            // 如果安全时间足够长，变回时间王族
+            if (safetyTimer >= SAFETY_TIME_REQUIRED) {
+                revertToTimeRoyalty();
+            }
+        }
+    }
+    
+    // 变回时间王族的方法
+    private void revertToTimeRoyalty() {
+        if (this.level().isClientSide()) return;
+        
+        try {
+            // 检查是否有保存的时间王族数据
+            if (this.getPersistentData().contains("StoredTimeRoyalty")) {
+                CompoundTag storedData = this.getPersistentData().getCompound("StoredTimeRoyalty");
+                CompoundTag timeRoyaltyTag = storedData.getCompound("TimeRoyaltyData");
+                String originalType = storedData.getString("OriginalType");
+                
+                // 创建时间王族实体
+                EntityType<?> type = EntityType.byString(originalType).orElse(com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes.TIME_ROYALTY.get());
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity timeRoyalty = (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity) type.create(this.level());
+                
+                // 恢复数据
+                timeRoyalty.load(timeRoyaltyTag);
+                timeRoyalty.copyPosition(this);
+                
+                // 设置变身后的状态
+                timeRoyalty.getPersistentData().putBoolean("HasTransformed", true);
+                timeRoyalty.setTransformationCooldown(60); // 3秒冷却
+                
+                // 添加到世界
+                this.level().addFreshEntity(timeRoyalty);
+                this.discard();
+                
+                // 显示消息
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.getPlayers(p -> true).forEach(player -> {
+                        player.displayClientMessage(Component.literal("异类帝骑变回了时间王族！"), true);
+                    });
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean hit) {
@@ -290,16 +370,33 @@ public class Another_Decade extends Monster implements GeoEntity {
                 2 + this.random.nextInt(2));
         spawnAtLocation(boards);
 
-        /* 3. 把村民还原 */
-        CompoundTag villagerTag = this.getPersistentData().getCompound("StoredVillager");
-        String entityId = villagerTag.getString("id");
-        EntityType<?> originalType = EntityType.byString(entityId)
-                .orElse(EntitiesMCA.MALE_VILLAGER.get());
-        VillagerEntityMCA restored = (VillagerEntityMCA) originalType.create((ServerLevel) this.level());
-        restored.load(villagerTag);
-        restored.setPos(this.getX(), this.getY(), this.getZ());
-        restored.setHealth(restored.getMaxHealth());
-        ((ServerLevel) this.level()).addFreshEntity(restored);
+        /* 3. 还原时间王族 */
+        try {
+            // 检查是否有保存的时间王族数据
+            if (this.getPersistentData().contains("StoredTimeRoyalty")) {
+                CompoundTag storedData = this.getPersistentData().getCompound("StoredTimeRoyalty");
+                CompoundTag timeRoyaltyTag = storedData.getCompound("TimeRoyaltyData");
+                String originalType = storedData.getString("OriginalType");
+                
+                // 创建时间王族实体
+                EntityType<?> type = EntityType.byString(originalType).orElse(com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes.TIME_ROYALTY.get());
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity timeRoyalty = (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity) type.create(this.level());
+                
+                // 恢复数据
+                timeRoyalty.load(timeRoyaltyTag);
+                timeRoyalty.copyPosition(this);
+                
+                // 设置变身后的状态
+                timeRoyalty.getPersistentData().putBoolean("HasTransformed", true);
+                timeRoyalty.setTransformationCooldown(60); // 3秒冷却
+                
+                // 添加到世界
+                ((ServerLevel) this.level()).addFreshEntity(timeRoyalty);
+            }
+        } catch (Exception e) {
+            // 如果还原失败，记录错误但不影响其他掉落
+            e.printStackTrace();
+        }
     }
 
     @Override

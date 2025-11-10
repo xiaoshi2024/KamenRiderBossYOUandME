@@ -568,6 +568,8 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.SAKURA_HURRICANE.get(), EntitySakuraHurricane.createAttributes());
 
+            event.put(ModEntityTypes.TIME_ROYALTY.get(), TimeRoyaltyEntity.createAttributes().build());
+
             event.put(ModEntityTypes.NECROM_EYEX.get(), NecromEyexEntity.createAttributes());
             event.put(ModEntityTypes.DARKGHOST_RIDER_KICK.get(), DarkGhostRiderKickEntity.createAttributes());
             event.put(ModEntityTypes.GAMMA_S.get(), Gamma_s_Entity.createAttributes());

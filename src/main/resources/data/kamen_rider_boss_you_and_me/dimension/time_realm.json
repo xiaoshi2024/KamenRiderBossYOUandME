@@ -1,0 +1,12 @@
+{
+  "type": "kamen_rider_boss_you_and_me:time_realm_type",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "minecraft:overworld",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "preset": "minecraft:overworld",
+      "seed": 0
+    }
+  }
+}

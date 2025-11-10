@@ -9,12 +9,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.worldgen.dimension.TimeRealmDimensionHandler;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
@@ -184,6 +187,57 @@ public class aiziowc extends Item implements GeoItem {
                 .withStyle(net.minecraft.ChatFormatting.YELLOW));
         tooltip.add(Component.literal("Shift+右键切换模式 (默认 -> 异类 -> 电王 -> Decade)")
                 .withStyle(net.minecraft.ChatFormatting.GRAY));
+        
+        // 添加异类模式右键方块传送提示
+        if (mode == Mode.ANOTHER) {
+            tooltip.add(Component.literal("异类模式下右键方块可传送到时间领域")
+                    .withStyle(net.minecraft.ChatFormatting.GREEN));
+        }
+    }
+    
+    /**
+     * 处理右键方块交互，在异类模式下实现传送功能
+     */
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        Player player = context.getPlayer();
+        Level level = context.getLevel();
+        ItemStack stack = context.getItemInHand();
+        
+        // 只在服务器端处理传送
+        if (!level.isClientSide && player != null) {
+            // 检查是否是异类模式
+            if (getCurrentMode(stack) == Mode.ANOTHER) {
+                // 检查冷却时间
+                final int TELEPORT_COOLDOWN = 10 * 20; // 10秒冷却
+                long lastTeleport = player.getPersistentData().getLong("lastTimeRealmTeleport");
+                long currentTime = level.getGameTime();
+                
+                if (currentTime - lastTeleport >= TELEPORT_COOLDOWN) {
+                    // 执行传送
+                    TimeRealmDimensionHandler.teleportPlayerToTimeRealm((net.minecraft.server.level.ServerPlayer) player);
+                    
+                    // 更新最后传送时间
+                    player.getPersistentData().putLong("lastTimeRealmTeleport", currentTime);
+                    
+                    // 播放传送音效
+                    level.playSound(null, player.getX(), player.getY(), player.getZ(), 
+                            net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT, net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
+                    
+                    // 发送提示消息
+                    player.displayClientMessage(Component.literal("§b已传送到时间领域！"), true);
+                    
+                    return InteractionResult.SUCCESS;
+                } else {
+                    // 提示冷却时间
+                    int remaining = (int) (TELEPORT_COOLDOWN - (currentTime - lastTeleport)) / 20;
+                    player.displayClientMessage(Component.literal("§c传送冷却中，还需等待 " + remaining + " 秒"), true);
+                    return InteractionResult.FAIL;
+                }
+            }
+        }
+        
+        return super.useOn(context);
     }
 
     // Let's add our animation controller
