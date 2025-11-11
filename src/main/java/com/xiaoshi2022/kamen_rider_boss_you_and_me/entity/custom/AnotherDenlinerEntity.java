@@ -14,14 +14,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.ticks.TickPriority;
 import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -473,7 +471,10 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
         super.tick();
         
         lifeTicks++;
-        animationTicks++;
+        // 只在需要时递增animationTicks，避免重复递增
+        if (isDeparting || isArriving) {
+            animationTicks++;
+        }
         
         // 添加移动逻辑 - 缓慢向前移动
         if (!isDeparting && !isArriving) {
@@ -527,11 +528,7 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
             }
         }
         
-        // 调试：显示实体位置和状态
-        if (DEBUG && lifeTicks % 40 == 0 && !this.level().isClientSide()) {
-            kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}] tick: pos={}, hasSavedEntities={}, isDeparting={}, isArriving={}, lifeTicks={}", 
-                    this.getId(), this.position(), hasSavedEntities, isDeparting, isArriving, lifeTicks);
-        }
+        // 调试日志已移除
         
         // 检查生命周期
         if (lifeTicks > maxLifespan && !this.level().isClientSide()) {
@@ -542,24 +539,37 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
             return;
         }
         
-        // 递增动画计时器
-        if (isDeparting) {
-            animationTicks++;
-        }
-        
-        // 自动检测并修复状态不一致：如果有实体但没有开始离开动画
-        if (hasSavedEntities && !isDeparting && !isArriving && !level().isClientSide()) {
-            if (DEBUG) {
-                kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: State inconsistency detected! hasSavedEntities={} but isDeparting={}, forcing depart animation", 
-                        this.getId(), hasSavedEntities, isDeparting);
+        // 增强状态检测逻辑，确保状态一致性
+        if (!level().isClientSide()) {
+            // 核心状态管理：如果有保存的实体，必须处于离开动画状态或已安排传送
+            if (hasSavedEntities) {
+                // 如果既不在离开动画中，也没有安排传送，则这是一个错误状态
+                if (!isDeparting && !teleportScheduled && !isArriving) {
+                    if (DEBUG) {
+                        kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: CRITICAL State inconsistency! hasSavedEntities={} but isDeparting={} and teleportScheduled={}, fixing...", 
+                                this.getId(), hasSavedEntities, isDeparting, teleportScheduled);
+                    }
+                    // 直接设置离开状态，不再重复调用startDepartAnimation以避免重置animationTicks
+                    this.isDeparting = true;
+                    this.teleportScheduled = true;
+                    this.teleportDelayTicks = 80; // 4秒延迟
+                }
+            } else {
+                // 如果没有保存的实体，确保重置相关状态
+                if (teleportScheduled) {
+                    teleportScheduled = false;
+                    if (DEBUG) {
+                        kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: Resetting teleportScheduled as hasSavedEntities is false", this.getId());
+                    }
+                }
             }
-            // 强制启动离开动画
-            startDepartAnimation();
         }
         
-        // 动画控制
+        // 动画控制 - 修复离开动画结束时的状态转换
         if (isDeparting && animationTicks > 40) { // 2秒后结束离开动画
             isDeparting = false;
+            // 重置动画计时器
+            animationTicks = 0;
             // 移除直接传送调用，因为在传送延迟逻辑中已经会触发teleportToDesertOfTime()
             // teleportToDesertOfTime(); // 此调用已移除以避免重复传送
         }
@@ -574,6 +584,8 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
         
         if (isArriving && animationTicks > 40) { // 2秒后结束到达动画
             isArriving = false;
+            // 重置动画计时器
+            animationTicks = 0;
         }
         
         // 添加粒子效果

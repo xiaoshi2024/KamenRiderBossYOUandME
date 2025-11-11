@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.A
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.misc.DimensionalBarrier;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -184,6 +185,13 @@ public class ModEntityTypes {
                     .sized(0.8F, 1.5F) // 调整碰撞箱大小
                     .clientTrackingRange(8)
                     .build("necrom_eyex"));
+    
+    // 次元壁实体
+    public static final RegistryObject<EntityType<DimensionalBarrier>> DIMENSIONAL_BARRIER = ENTITY_TYPES.register("dimensional_barrier",
+            () -> EntityType.Builder.<DimensionalBarrier>of(DimensionalBarrier::new, MobCategory.MISC)
+                    .sized(2.0F, 2.0F) // 次元壁大小
+                    .clientTrackingRange(16)
+                    .build("dimensional_barrier"));
 
     public static final RegistryObject<EntityType<DarkGhostRiderKickEntity>> DARKGHOST_RIDER_KICK = ENTITY_TYPES.register("darkghost_rider_kick",
             () -> EntityType.Builder.<DarkGhostRiderKickEntity>of(DarkGhostRiderKickEntity::new, MobCategory.MISC)

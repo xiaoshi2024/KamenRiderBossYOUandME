@@ -3,6 +3,9 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.ai.goals.TeleportBehindGoal;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.skill.aidcdskill.AnotherDimensionKick;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.skill.aidcdskill.BlastPrison;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.skill.aidcdskill.AnotherWorldSummon;
 import forge.net.mca.entity.EntitiesMCA;
 import forge.net.mca.entity.VillagerEntityMCA;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -67,13 +70,97 @@ public class Another_Decade extends Monster implements GeoEntity {
     private int safetyTimer = 0;
     private static final int SAFETY_TIME_REQUIRED = 200; // 10秒安全时间
     private static final int THREAT_CHECK_RANGE = 15; // 威胁检测范围
+    
+    /* 技能检查计时器 */
+    public int skillCheckTimer = 0;
 
     public Another_Decade(EntityType<? extends Monster> type, Level level) {
         super(type, level);
+        // 初始化技能相关的NBT数据
+        this.getPersistentData().putInt("AnotherDimensionKickCooldown", 0);
+        this.getPersistentData().putInt("BlastPrisonCooldown", 0);
+        this.getPersistentData().putInt("AnotherWorldSummonCooldown", 0);
+        this.getPersistentData().putBoolean("IsSummoning", false);
+        this.getPersistentData().putInt("SummonTimer", 0);
+        this.getPersistentData().putInt("BlastPrisonStage", 0);
+        this.getPersistentData().putInt("BlastPrisonTimer", 0);
     }
 
     // 获取随机源
     public RandomSource getRNG() { return this.random; }
+    
+    // 获取狂暴状态（供技能类使用）
+    public boolean isEnraged() {
+        return enraged;
+    }
+    
+    // 更新技能冷却和状态
+    private void updateSkills() {
+        // 更新AnotherDimensionKick冷却
+        AnotherDimensionKick.updateCooldown(this);
+        
+        // 更新BlastPrison状态
+        BlastPrison.update(this);
+        
+        // 更新AnotherWorldSummon状态
+        AnotherWorldSummon.update(this);
+    }
+    
+    // 技能使用AI目标类
+    private static class SkillUseGoal extends Goal {
+        private final Another_Decade mob;
+
+        SkillUseGoal(Another_Decade mob) {
+            this.mob = mob;
+            setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            // 如果正在召唤过程中，不使用其他技能
+            if (mob.getPersistentData().getBoolean("IsSummoning")) {
+                return false;
+            }
+
+            // 确保有目标且在战斗状态
+            return mob.getTarget() != null && mob.isAlive();
+        }
+
+        @Override
+        public void tick() {
+            // 每20tick检查一次技能使用条件
+            if (mob.skillCheckTimer > 0) {
+                mob.skillCheckTimer--;
+            } else {
+                mob.skillCheckTimer = 20;
+                
+                // 检查目标是否在高处
+                boolean isTargetHighUp = false;
+                if (mob.getTarget() != null) {
+                    double heightDifference = mob.getTarget().getY() - mob.getY();
+                    isTargetHighUp = heightDifference > 2.0D; // 目标在2格以上视为高处
+                }
+
+                // 根据优先级决定使用哪个技能
+                // 如果目标在高处，优先使用AnotherDimensionKick
+                if (isTargetHighUp && AnotherDimensionKick.canUse(mob)) {
+                    AnotherDimensionKick.use(mob);
+                }
+                // 1. 首先检查是否需要使用BlastPrison（群攻/保命）
+                else if (BlastPrison.canUse(mob)) {
+                    BlastPrison.use(mob);
+                }
+                // 2. 然后检查是否需要使用AnotherWorldSummon（召唤支援）
+                else if (AnotherWorldSummon.canUse(mob)) {
+                    AnotherWorldSummon.use(mob);
+                }
+                // 3. 最后检查是否可以使用AnotherDimensionKick（单体爆发）
+                else if (AnotherDimensionKick.canUse(mob)) {
+                    AnotherDimensionKick.use(mob);
+                }
+            }
+        }
+    }
 
     /* ---------- AI ---------- */
     @Override
@@ -82,9 +169,10 @@ public class Another_Decade extends Monster implements GeoEntity {
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, false));
         // 移除不兼容的TeleportBehindGoal
         this.goalSelector.addGoal(2, new PrecogDodgeGoal(this)); // 闪避 goal
-        this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.23D));
-        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(3, new SkillUseGoal(this)); // 技能使用 goal
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 0.23D));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Player.class, true));
@@ -128,11 +216,14 @@ public class Another_Decade extends Monster implements GeoEntity {
                 predictPath(player);
             }
         }
-        
+
+        // 更新技能状态
+        updateSkills();
+
         // 检查安全状态并可能变回时间王族
         checkSafetyAndRevert();
     }
-    
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -160,7 +251,7 @@ public class Another_Decade extends Monster implements GeoEntity {
             if (enraged) {
                 damage *= 1.2F; // 狂暴状态额外20%伤害
             }
-            
+
             boolean result = livingTarget.hurt(this.damageSources().mobAttack(this), damage);
             if (result) {
                 hurtNearbyEntities();
@@ -173,15 +264,15 @@ public class Another_Decade extends Monster implements GeoEntity {
     }
 
     public void hurtNearbyEntities() {
-        List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, 
-                this.getBoundingBox().inflate(3.0D), entity -> 
-                        entity != this && entity instanceof Player && 
+        List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class,
+                this.getBoundingBox().inflate(3.0D), entity ->
+                        entity != this && entity instanceof Player &&
                         !(entity instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity));
 
         // 获取自定义攻击力的一半作为范围伤害
         double customDamage = this.getAttributeValue(ModAttributes.CUSTOM_ATTACK_DAMAGE.get());
         float areaDamage = (float) (customDamage * 0.5);
-        
+
         for (LivingEntity entity : nearbyEntities) {
             // 对周围敌人造成额外伤害
             entity.hurt(this.damageSources().mobAttack(this), areaDamage);
@@ -246,12 +337,12 @@ public class Another_Decade extends Monster implements GeoEntity {
             if (player == null || mob.distanceToSqr(player) > PRECOG_RANGE_SQ) {
                 return false;
             }
-            
+
             Vec3 predictedPos = mob.getPrecog(1);
             if (predictedPos == null) {
                 return false;
             }
-            
+
             // 计算预测位置与自身的距离
             double distance = predictedPos.distanceTo(mob.position());
             return distance < 2.0D && strafeTimer == 0;
@@ -280,68 +371,69 @@ public class Another_Decade extends Monster implements GeoEntity {
             return s;
         }
     }
-    
+
     // 检查安全状态并在安全时变回时间王族
     private void checkSafetyAndRevert() {
         if (this.level().isClientSide()) return;
-        
+
         // 检查附近是否有威胁
         boolean isThreatPresent = !this.level().getEntitiesOfClass(
                 LivingEntity.class,
                 this.getBoundingBox().inflate(THREAT_CHECK_RANGE),
                 entity -> {
                     if (entity instanceof Player || entity instanceof Monster) {
-                        return (entity instanceof Mob mob && mob.getTarget() == this) || 
+                        return (entity instanceof Mob mob && mob.getTarget() == this) ||
                                (entity instanceof Player player && !player.getMainHandItem().isEmpty());
                     }
                     return false;
                 }
         ).isEmpty();
-        
+
         if (isThreatPresent) {
             // 有威胁，重置安全计时器
             safetyTimer = 0;
         } else {
             // 无威胁，增加安全计时器
             safetyTimer++;
-            
+
             // 如果安全时间足够长，变回时间王族
             if (safetyTimer >= SAFETY_TIME_REQUIRED) {
                 revertToTimeRoyalty();
             }
         }
     }
-    
+
     // 变回时间王族的方法
     private void revertToTimeRoyalty() {
         if (this.level().isClientSide()) return;
-        
+
         try {
             // 检查是否有保存的时间王族数据
             if (this.getPersistentData().contains("StoredTimeRoyalty")) {
                 CompoundTag storedData = this.getPersistentData().getCompound("StoredTimeRoyalty");
                 CompoundTag timeRoyaltyTag = storedData.getCompound("TimeRoyaltyData");
                 String originalType = storedData.getString("OriginalType");
-                
+
                 // 创建时间王族实体
                 EntityType<?> type = EntityType.byString(originalType).orElse(com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes.TIME_ROYALTY.get());
                 com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity timeRoyalty = (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity) type.create(this.level());
-                
+
                 // 恢复数据
                 timeRoyalty.load(timeRoyaltyTag);
                 timeRoyalty.copyPosition(this);
-                
+
                 // 设置变身后的状态
                 timeRoyalty.getPersistentData().putBoolean("HasTransformed", true);
                 timeRoyalty.setTransformationCooldown(60); // 3秒冷却
-                
+
                 // 添加到世界
                 this.level().addFreshEntity(timeRoyalty);
                 this.discard();
-                
-                // 显示消息
+
+                // 显示消息 - 只显示给附近的玩家
                 if (this.level() instanceof ServerLevel serverLevel) {
-                    serverLevel.getPlayers(p -> true).forEach(player -> {
+                    double messageRange = 30.0D; // 消息显示范围
+                    serverLevel.getPlayers(p -> p.distanceToSqr(this) <= messageRange * messageRange).forEach(player -> {
                         player.displayClientMessage(Component.literal("异类帝骑变回了时间王族！"), true);
                     });
                 }
@@ -377,19 +469,19 @@ public class Another_Decade extends Monster implements GeoEntity {
                 CompoundTag storedData = this.getPersistentData().getCompound("StoredTimeRoyalty");
                 CompoundTag timeRoyaltyTag = storedData.getCompound("TimeRoyaltyData");
                 String originalType = storedData.getString("OriginalType");
-                
+
                 // 创建时间王族实体
                 EntityType<?> type = EntityType.byString(originalType).orElse(com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes.TIME_ROYALTY.get());
                 com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity timeRoyalty = (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity) type.create(this.level());
-                
+
                 // 恢复数据
                 timeRoyalty.load(timeRoyaltyTag);
                 timeRoyalty.copyPosition(this);
-                
+
                 // 设置变身后的状态
                 timeRoyalty.getPersistentData().putBoolean("HasTransformed", true);
                 timeRoyalty.setTransformationCooldown(60); // 3秒冷却
-                
+
                 // 添加到世界
                 ((ServerLevel) this.level()).addFreshEntity(timeRoyalty);
             }

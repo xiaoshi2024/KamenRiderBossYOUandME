@@ -474,6 +474,7 @@ public class modEventBusEvents {
                     .add(Attributes.ARMOR, 15.0D)
                     .add(Attributes.ARMOR_TOUGHNESS, 8.0D)
                     .add(Attributes.KNOCKBACK_RESISTANCE, 0.3D)
+                    .add(Attributes.MOVEMENT_SPEED, 0.35D)      // 移动速度大幅提高，匹敌拥有速度buff的玩家
                     .build()
             ); // 增强版：提高防御、韧性和生命值，添加击退抗性
 
@@ -484,6 +485,7 @@ public class modEventBusEvents {
                             .add(Attributes.ARMOR, 12.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
                             .add(Attributes.KNOCKBACK_RESISTANCE, 0.2D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.35D)      // 移动速度大幅提高，匹敌拥有速度buff的玩家
                             .build()
             ); // 增强版：提高防御、韧性和生命值，添加击退抗性
 
@@ -494,6 +496,7 @@ public class modEventBusEvents {
                             .add(Attributes.ARMOR, 20.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 10.0D)
                             .add(Attributes.KNOCKBACK_RESISTANCE, 0.4D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.33D)      // 移动速度大幅提高，匹敌拥有速度buff的玩家
                             .build()
             ); // 强化版：大幅提高防御、韧性和生命值，增强击退抗性
 
@@ -504,6 +507,7 @@ public class modEventBusEvents {
                             .add(Attributes.ARMOR, 15.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 8.0D)
                             .add(Attributes.KNOCKBACK_RESISTANCE, 0.35D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.34D)      // 移动速度大幅提高，匹敌拥有速度buff的玩家
                             .build()
             ); // 强化版：大幅提高防御、韧性和生命值，增强击退抗性
 
@@ -512,7 +516,7 @@ public class modEventBusEvents {
             event.put(ModEntityTypes.ANOTHER_ZI_O.get(),
                     Monster.createMonsterAttributes()
                             .add(Attributes.MAX_HEALTH, 200.0D)
-                            .add(Attributes.MOVEMENT_SPEED, 0.26D)      // ← 保持移速
+                            .add(Attributes.MOVEMENT_SPEED, 0.35D)      // 移动速度大幅提高，匹敌拥有速度buff的玩家
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 35.0D)  // 攻击力从8.0D提高到35.0D
                             .add(Attributes.ARMOR, 15.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
@@ -524,7 +528,7 @@ public class modEventBusEvents {
             event.put(ModEntityTypes.ANOTHER_DEN_O.get(),
                     Monster.createMonsterAttributes()
                             .add(Attributes.MAX_HEALTH, 200.0D)
-                            .add(Attributes.MOVEMENT_SPEED, 0.26D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.35D)      // 移动速度大幅提高，匹敌拥有速度buff的玩家
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 35.0D)  // 攻击力从8.0D提高到35.0D
                             .add(Attributes.ARMOR, 15.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
@@ -533,20 +537,20 @@ public class modEventBusEvents {
             ); // 强化版：大幅提高生命值、防御和韧性，增强击退抗性
             event.put(ModEntityTypes.ANOTHER_DECADE.get(),
                     Monster.createMonsterAttributes()
-                            .add(Attributes.MAX_HEALTH, 300.0D)
-                            .add(Attributes.MOVEMENT_SPEED, 0.26D)
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 38.0D)  // 攻击力从8.0D提高到35.0D
-                            .add(Attributes.ARMOR, 16.0D)
-                            .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
-                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.35D)
+                            .add(Attributes.MAX_HEALTH, 800.0D)      // 大幅提高生命值，符合最终Boss身份
+                            .add(Attributes.MOVEMENT_SPEED, 0.38D)      // 移动速度进一步提高，更具威胁性
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 65.0D)  // 大幅提高攻击力，符合最终Boss实力
+                            .add(Attributes.ARMOR, 30.0D)      // 大幅提高护甲，增强生存能力
+                            .add(Attributes.ARMOR_TOUGHNESS, 15.0D)      // 大幅提高护甲韧性，减少高额伤害
+                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.8D)      // 大幅提高击退抗性，难以被击退
                             .build()
-            ); // 强化版：大幅提高生命值、防御和韧性，增强击退抗性
+            ); // 最终Boss版：基于百度百科资料，异类Decade作为Zi-O最终Boss，拥有召唤黑暗骑士、操控时间等强大能力
 
             event.put(ModEntityTypes.KIVAT_BAT_II.get(),
                     KivatBatTwoNd.createAttributes()
                             .add(Attributes.MAX_HEALTH, 150.0D)
-                            .add(Attributes.MOVEMENT_SPEED, 0.26D)
-                            .add(Attributes.FLYING_SPEED, 0.6D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.30D)      // 移动速度大幅提高，匹敌拥有速度buff的玩家
+                            .add(Attributes.FLYING_SPEED, 0.8D)      // 飞行速度调整为更合理的值
                             .add(Attributes.ATTACK_DAMAGE, 16.0D)          // 攻击力从8.0D提高到16.0D
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 16.0D)  // 攻击力从8.0D提高到16.0D
                             .add(Attributes.ARMOR, 12.0D)
@@ -560,7 +564,7 @@ public class modEventBusEvents {
                             .add(Attributes.ARMOR, 30.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 15.0D)
                             .add(Attributes.ATTACK_DAMAGE, 30.0D)
-                            .add(Attributes.MOVEMENT_SPEED, 0.35D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.32D)      // 移动速度大幅提高，匹敌拥有速度buff的玩家
                             .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 40.0D)
                             .build()

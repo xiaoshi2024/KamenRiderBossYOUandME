@@ -18,6 +18,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -47,15 +50,15 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
     // 保存原始属性值，用于变回人形时恢复
     private double originalHealth = 50.0D;
     private double originalDamage = 5.0D;
-    private double originalSpeed = 0.6D;
+    private double originalSpeed = 0.35D;
     
     // 重写父类方法提供实体属性
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 50.0D) // 生命值高于时劫者
-                .add(Attributes.MOVEMENT_SPEED, 0.6D) // 移动速度更快
-                .add(Attributes.ATTACK_DAMAGE, 5.0D) // 攻击力更高
-                .add(Attributes.FOLLOW_RANGE, 20.0D); // 更远的跟踪范围
+                .add(Attributes.MAX_HEALTH, 50.0D) // 原始生命值较低，变身dcd后才和dcd一致
+                .add(Attributes.MOVEMENT_SPEED, 0.35D) // 移动速度
+                .add(Attributes.ATTACK_DAMAGE, 5.0D) // 攻击力
+                .add(Attributes.FOLLOW_RANGE, 20.0D); // 跟踪范围
     }
     
     public TimeRoyaltyEntity(EntityType<? extends TimeJackerEntity> p_35958_, Level p_35959_) {
@@ -77,6 +80,12 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
         this.isInAnotherForm = false;
         if (this.getPersistentData().contains("IsInAnotherForm")) {
             this.getPersistentData().remove("IsInAnotherForm");
+        }
+        
+        // 重置已使用过异类表盘的标志，确保新生成的时间王族可以正常变身
+        this.hasUsedAnotherWatch = false;
+        if (this.getPersistentData().contains("HasUsedAnotherWatch")) {
+            this.getPersistentData().remove("HasUsedAnotherWatch");
         }
         
         // 当实体被添加到世界时，给予更高级的异类表盘
@@ -202,6 +211,11 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
     
     // 检查是否受到伤害的方法（替代hurt方法重写）
     private void checkForDamage() {
+        // 如果实体即将死亡或已死亡，不执行任何操作，防止反复死亡
+        if (this.isDeadOrDying() || this.getHealth() <= 0) {
+            return;
+        }
+        
         float currentHealth = this.getHealth();
         
         // 如果生命值减少且没有在变身冷却中，说明受到了伤害
@@ -228,7 +242,7 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
                     if (entity instanceof Player || entity instanceof Monster) {
                         // 检查是否具有攻击意向（如玩家手持武器或敌对生物）
                     return (entity instanceof Mob mob && mob.getTarget() == this) || 
-                           (entity instanceof Player player && !player.getMainHandItem().isEmpty());
+                           (entity instanceof Player player && isWeaponItem(player.getMainHandItem()));
                     }
                     return false;
                 }
@@ -267,7 +281,18 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
 
             // 传递重要数据
             anotherRider.setCustomName(this.getCustomName());
-            anotherRider.setHealth((float) (this.getHealth() * 1.5)); // 变身时增加生命值
+            anotherRider.setHealth(800.0F); // 变身时设置为800点血量
+
+            // 确保技能系统正确初始化
+            // 重置技能检查计时器，确保技能系统立即开始工作
+            anotherRider.skillCheckTimer = 0;
+            
+            // 确保所有技能冷却都被正确设置
+            anotherRider.getPersistentData().putInt("AnotherWorldSummonCooldown", 0);
+            anotherRider.getPersistentData().putInt("BlastPrisonCooldown", 0);
+            anotherRider.getPersistentData().putInt("AnotherDimensionKickCooldown", 0);
+            anotherRider.getPersistentData().putBoolean("IsSummoning", false);
+            anotherRider.getPersistentData().putInt("SummonTimer", 0);
 
             // 在异类骑士的NBT中保存原始时间王族数据，用于变回
             CompoundTag storedData = new CompoundTag();
@@ -284,9 +309,10 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
             // 保存到NBT以便在重新加载时保持状态
             this.getPersistentData().putBoolean("HasUsedAnotherWatch", hasUsedAnotherWatch);
             
-            // 在聊天框中显示变身消息
+            // 在聊天框中显示变身消息 - 只显示给附近的玩家
             if (this.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
-                serverLevel.getPlayers(p -> true).forEach(player -> {
+                double messageRange = 30.0D; // 消息显示范围
+                serverLevel.getPlayers(p -> p.distanceToSqr(this) <= messageRange * messageRange).forEach(player -> {
                     player.displayClientMessage(Component.literal("时间王族变身为" + boundAnotherRiderType + "！"), true);
                 });
             }
@@ -307,7 +333,7 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
                 entity -> {
                     if (entity instanceof Player || entity instanceof Monster) {
                         return (entity instanceof Mob && ((Mob)entity).getTarget() == this) ||
-                               (entity instanceof Player && !((Player)entity).getMainHandItem().isEmpty());
+                               (entity instanceof Player player && isWeaponItem(player.getMainHandItem()));
                     }
                     return false;
                 }).isEmpty();
@@ -387,7 +413,7 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
         List<LivingEntity> nearbyHostiles = this.level().getEntitiesOfClass(
                 LivingEntity.class,
                 this.getBoundingBox().inflate(10.0D),
-                entity -> entity instanceof Player && entity != this && this.shouldFearEntity(entity)
+                entity -> entity instanceof Player player && entity != this && (this.shouldFearEntity(entity) || isWeaponItem(player.getMainHandItem()))
         );
         
         if (!nearbyHostiles.isEmpty()) {
@@ -462,6 +488,25 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
         super.dropCustomDeathLoot(source, looting, recentlyHitIn);
         // 可以在这里添加特殊掉落物
+    }
+    
+    // 判断物品是否为武器（剑或弓类型）
+    private boolean isWeaponItem(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+        
+        Item item = stack.getItem();
+        // 检查是否为剑类物品
+        if (item instanceof SwordItem) {
+            return true;
+        }
+        // 检查是否为弓或弩
+        if (item instanceof BowItem || item instanceof CrossbowItem) {
+            return true;
+        }
+        
+        return false;
     }
     
     @Override
