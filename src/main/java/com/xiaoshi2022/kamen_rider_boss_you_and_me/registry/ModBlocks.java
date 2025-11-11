@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.giifu.GiifuSleepingStateBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.ThroneBlock;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.portals.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.villagers.TimeJackerTableBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -71,5 +72,13 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops() // 需要正确工具挖掘
                     .lightLevel(state -> 7) // 发光等级7
                     .friction(0.6f) // 摩擦系数
-                    .destroyTime(1.5f))); // 破坏时间
+                    .destroyTime(1.5f)));
+
+    // 时劫者工作台方块 - 用于时劫者职业的工作站点
+    public static final RegistryObject<Block> TIME_JACKER_TABLE_BLOCK = BLOCKS.register("time_jacker_table",
+            () -> new TimeJackerTableBlock(Block.Properties.of()
+                    .strength(2.5f, 6.0f) // 硬度和抗爆性
+                    .requiresCorrectToolForDrops() // 需要正确工具挖掘
+                    .lightLevel(state -> 5) // 轻微发光效果
+                    .noOcclusion())); // 破坏时间
 }

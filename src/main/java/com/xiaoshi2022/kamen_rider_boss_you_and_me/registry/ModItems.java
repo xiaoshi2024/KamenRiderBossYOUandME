@@ -71,6 +71,10 @@ public class ModItems {
     public static final RegistryObject<Item> CURSE_BLOCK_ITEM = ITEMS.register("curse_block",
             () -> new BlockItem(ModBlocks.CURSE_BLOCK.get(), new Item.Properties()));
 
+    // 时劫者工作台方块物品
+    public static final RegistryObject<Item> TIME_JACKER_TABLE_ITEM = ITEMS.register("time_jacker_table",
+            () -> new BlockItem(ModBlocks.TIME_JACKER_TABLE_BLOCK.get(), new Item.Properties()));
+
     public static final RegistryObject<BatStampItem> BAT_STAMP = ITEMS.register("bat_stamp",
             () -> new BatStampItem(new Item.Properties()));
             

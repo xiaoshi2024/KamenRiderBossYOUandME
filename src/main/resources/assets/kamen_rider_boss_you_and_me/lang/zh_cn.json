@@ -117,6 +117,10 @@
   "block.kamen_rider_boss_you_and_me.cherryx": "裂缝-樱桃",
   "block.kamen_rider_boss_you_and_me.peachx": "裂缝-蜜桃",
 
+  "block.kamen_rider_boss_you_and_me.time_jacker_table": "时劫者工作台",
+
+  "entity.minecraft.villager.kamen_rider_boss_you_and_me.time_jacker_profession": "时劫者众",
+
   "block.kamen_rider_boss_you_and_me.throne_block": "牙血鬼王-王座",
 
   "message.summon.cooldown": "§c召唤冷却中，请等待 %s§r",

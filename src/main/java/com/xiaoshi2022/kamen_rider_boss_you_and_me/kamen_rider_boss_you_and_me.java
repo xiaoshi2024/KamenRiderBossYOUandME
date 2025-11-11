@@ -64,6 +64,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationSetup;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.DarkBatParticle;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.particle.LemonsliceParticle;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.villagers.VillagerRegistry;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.worldgen.dimension.CurseDimensionPlayerTickHandler;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -139,6 +140,9 @@ public class kamen_rider_boss_you_and_me
 
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        
+        // 注册村民职业相关内容
+        VillagerRegistry.register(modEventBus);
 
         // 注册HelheimVineHandler
         MinecraftForge.EVENT_BUS.register(new HelheimVineHandler());
