@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
@@ -70,7 +71,13 @@ public class ModEntityTypes {
     
     public static final RegistryObject<EntityType<Another_Decade>> ANOTHER_DECADE = registerMob("another_decade", Another_Decade::new,
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
-    
+
+    public static final RegistryObject<EntityType<EliteMonsterNpc>> ELITE_MONSTER_NPC =
+            ENTITY_TYPES.register("elite_monster_npc",
+                    () -> EntityType.Builder.of(EliteMonsterNpc::new, MobCategory.MONSTER)
+                            .sized(0.6f, 1.95f) // 尺寸
+                            .build("elite_monster_npc"));
+
     // 异类电班列实体
     public static final RegistryObject<EntityType<AnotherDenlinerEntity>> ANOTHER_DENLINER = ENTITY_TYPES.register("another_denliner",
             () -> EntityType.Builder.<AnotherDenlinerEntity>of(AnotherDenlinerEntity::new, MobCategory.MISC)

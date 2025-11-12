@@ -14,6 +14,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -44,6 +45,14 @@ public class BeltCurioIntegration {
     }
 
     /**
+     * 检查实体是否是精英怪物类型
+     */
+    public static boolean isEliteMonsterType(LivingEntity entity) {
+        // 直接检查是否是EliteMonsterNpc实例
+        return entity instanceof EliteMonsterNpc;
+    }
+
+    /**
      * 检查实体是否可以装备腰带到Curio槽位
      */
     public static boolean canEquipToCurioSlot(LivingEntity entity) {
@@ -53,7 +62,7 @@ public class BeltCurioIntegration {
         String entityTypeName = entity.getType().toString();
         // LOGGER.debug("Checking if entity can equip belt: " + entityTypeName + ", isVillagerType: " + isVillagerType(entity));
 
-        return isZombieType(entity) || isVillagerType(entity);
+        return isZombieType(entity) || isVillagerType(entity) || isEliteMonsterType(entity);
     }
 
     /**
@@ -182,7 +191,33 @@ public class BeltCurioIntegration {
      * 从实体的Curio槽位获取腰带
      */
     public static Optional<ItemStack> getBeltFromCurioSlot(LivingEntity entity) {
-        return getCurio(entity, BELT_SLOT_TYPE);
+        if (!isCuriosLoaded() || !canEquipToCurioSlot(entity)) {
+            return Optional.empty();
+        }
+
+        return CuriosApi.getCuriosInventory(entity).resolve()
+                .flatMap(inventory -> {
+                    try {
+                        // 遍历所有Curio槽位
+                        for (Map.Entry<String, ICurioStacksHandler> entry : inventory.getCurios().entrySet()) {
+                            // 检查是否是腰带槽位
+                            if (entry.getKey().equals(BELT_SLOT_TYPE)) {
+                                IDynamicStackHandler stackHandler = entry.getValue().getStacks();
+                                // 检查槽位中的物品
+                                for (int i = 0; i < stackHandler.getSlots(); i++) {
+                                    ItemStack stack = stackHandler.getStackInSlot(i);
+                                    if (!stack.isEmpty() && isBeltItem(stack)) {
+                                        return Optional.of(stack.copy());
+                                    }
+                                }
+                            }
+                        }
+                        return Optional.empty();
+                    } catch (Exception e) {
+                        System.err.println("Error getting belt from curio slot: " + e.getMessage());
+                        return Optional.empty();
+                    }
+                });
     }
 
     /**
@@ -275,7 +310,7 @@ public class BeltCurioIntegration {
                                 // 检查槽位中的物品
                                 for (int i = 0; i < stackHandler.getSlots(); i++) {
                                     ItemStack stack = stackHandler.getStackInSlot(i);
-                                    if (!stack.isEmpty() && stack.getItem() instanceof Genesis_driver) {
+                                    if (!stack.isEmpty() && (isBeltItem(stack))) {
                                         return Optional.of(true);
                                     }
                                 }
@@ -283,10 +318,25 @@ public class BeltCurioIntegration {
                         }
                         return Optional.empty();
                     } catch (Exception e) {
+                        System.err.println("Error checking belt in curio slot: " + e.getMessage());
                         return Optional.empty();
                     }
                 })
                 .orElse(false);
+    }
+    
+    /**
+     * 检查物品是否是腰带类型
+     */
+    public static boolean isBeltItem(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+        
+        return stack.getItem() instanceof Genesis_driver ||
+               stack.getItem() instanceof sengokudrivers_epmty ||
+               stack.getItem() instanceof DrakKivaBelt ||
+               stack.getItem() instanceof Two_sidriver;
     }
 
     /**
@@ -295,14 +345,20 @@ public class BeltCurioIntegration {
     public static Optional<ItemStack> getBeltFromEntity(LivingEntity entity) {
         // 优先从Curio槽位获取
         Optional<ItemStack> curioBelt = getBeltFromCurioSlot(entity);
-        if (curioBelt.isPresent() && curioBelt.get().getItem() instanceof Genesis_driver) {
+        if (curioBelt.isPresent() && isBeltItem(curioBelt.get())) {
             return curioBelt;
         }
 
         // 如果Curio槽位没有，检查主手
         ItemStack mainHandStack = entity.getMainHandItem();
-        if (mainHandStack.getItem() instanceof Genesis_driver) {
+        if (isBeltItem(mainHandStack)) {
             return Optional.of(mainHandStack);
+        }
+        
+        // 检查副手
+        ItemStack offHandStack = entity.getOffhandItem();
+        if (isBeltItem(offHandStack)) {
+            return Optional.of(offHandStack);
         }
 
         return Optional.empty();

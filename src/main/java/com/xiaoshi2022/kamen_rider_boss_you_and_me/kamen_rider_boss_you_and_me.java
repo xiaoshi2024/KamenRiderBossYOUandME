@@ -22,6 +22,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntity
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.EliteMonsterCuriosLayer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.renderer.entity.AnotherDenlinerRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.ModCommands;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.giifu.ModStructureProcessors;
@@ -29,6 +30,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.EntityCuriosListScreen;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os.Another_Zi_oRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.EliteMonster.EliteMonsterRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.ElementaryInvesHelheimRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.StoriousRender;
@@ -87,11 +89,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
@@ -271,6 +271,14 @@ public class kamen_rider_boss_you_and_me
                         (LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) villagerRenderer;
                 castVillager.addLayer(new VillagerCuriosLayer<>(castVillager));
             }
+            //注册怪渲染器
+            EntityRenderer<? extends LivingEntity> EliteMonsterRenderer = event.getRenderer(ModEntityTypes.ELITE_MONSTER_NPC.get());
+            if (EliteMonsterRenderer instanceof LivingEntityRenderer<?, ?>) {
+                @SuppressWarnings("unchecked")
+                LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> castEmonster =
+                        (LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) EliteMonsterRenderer;
+                castEmonster.addLayer(new EliteMonsterCuriosLayer<>(castEmonster));
+            }
             
             // 注册僵尸渲染层
             EntityRenderer<? extends LivingEntity> zombieRenderer = event.getRenderer(EntityType.ZOMBIE);
@@ -334,6 +342,8 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.DIMENSIONAL_BARRIER.get(), DimensionalBarrierRenderer::new);
 
             EntityRenderers.register(ModEntityTypes.SAKURA_HURRICANE.get(), SakuraHurricaneRenderer::new);
+
+            EntityRenderers.register(ModEntityTypes.ELITE_MONSTER_NPC.get(), EliteMonsterRenderer::new);
 
             // 注册动画工厂
             PlayerAnimationSetup.clientInit();

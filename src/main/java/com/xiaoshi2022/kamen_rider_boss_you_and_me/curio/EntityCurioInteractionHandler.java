@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import top.theillusivec4.curios.api.CuriosApi;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me.MODID;
 
@@ -79,8 +78,13 @@ public class EntityCurioInteractionHandler {
         boolean isMCAVillager = entity.getClass().getName().contains("mca") && 
                                (entityTypeName.contains("villager") || 
                                 entity.getClass().getSimpleName().contains("Villager"));
+
+        // 允许本模组的npc：检查类名中是否包含"kamen_rider_boss_you_and_me"和elite_monster_npc相关词汇
+        boolean isKRBelite = entity.getClass().getName().contains("kamen_rider_boss_you_and_me") &&
+                               (entityTypeName.contains("elite_monster_npc") ||
+                                entity.getClass().getSimpleName().contains("elite_monster_npc"));
         
-        return isVillager || isZombie || isMCAVillager;
+        return isVillager || isZombie || isMCAVillager || isKRBelite;
     }
 
     /**

@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driv
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
@@ -480,6 +481,17 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.GIIFUDEMOS_ENTITY.get(),
                     GiifuDemosEntity.createAttributes()
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 30.0D)  // 攻击力从12.0D提高到30.0D
+                            .add(Attributes.MAX_HEALTH, 300.0D)
+                            .add(Attributes.ARMOR, 12.0D)
+                            .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
+                            .add(Attributes.KNOCKBACK_RESISTANCE, 0.2D)
+                            .add(Attributes.MOVEMENT_SPEED, 0.35D)      // 移动速度大幅提高，匹敌拥有速度buff的玩家
+                            .build()
+            ); // 增强版：提高防御、韧性和生命值，添加击退抗性
+
+            event.put(ModEntityTypes.ELITE_MONSTER_NPC.get(),
+                    EliteMonsterNpc.createAttributes()
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 30.0D)  // 攻击力从12.0D提高到30.0D
                             .add(Attributes.MAX_HEALTH, 300.0D)
                             .add(Attributes.ARMOR, 12.0D)

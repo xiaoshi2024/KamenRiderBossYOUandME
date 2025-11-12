@@ -99,7 +99,7 @@ public class BeltAutoEquipHandler {
     /**
      * 播放变身音效
      */
-    private static void playTransformationSound(LivingEntity entity, ItemStack beltStack) {
+    public static void playTransformationSound(LivingEntity entity, ItemStack beltStack) {
         // 获取腰带对应的音效
         net.minecraft.sounds.SoundEvent soundEvent = getTransformationSound(beltStack);
 
