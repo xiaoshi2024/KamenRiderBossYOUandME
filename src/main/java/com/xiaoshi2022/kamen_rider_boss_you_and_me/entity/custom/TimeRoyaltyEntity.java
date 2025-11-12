@@ -21,6 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -512,5 +514,44 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
     @Override
     public MobType getMobType() {
         return MobType.UNDEFINED;
+    }
+    
+    // 处理与玩家手持异类表盘的交互
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        
+        // 检查是否是玩家手持aiziowc物品且处于DCD模式
+        if (stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc) {
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc item = 
+                (com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc) stack.getItem();
+            
+            // 检查模式是否为DCD
+            if (item.getCurrentMode(stack) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc.Mode.DCD) {
+                // 检查是否可以变身（未使用过表盘、不在变身冷却中）
+                if (!hasUsedAnotherWatch && transformationCooldown == 0) {
+                    // 消耗表盘
+                    stack.shrink(1);
+                    
+                    // 触发变身
+                    transformIntoAnotherRider();
+                    
+                    // 显示成功消息
+                    player.displayClientMessage(Component.literal("§a时间王族接受了DCD模式的异类表盘，开始变身！"), true);
+                    
+                    return InteractionResult.SUCCESS;
+                } else if (hasUsedAnotherWatch) {
+                    // 已经使用过表盘
+                    player.displayClientMessage(Component.literal("§c这个时间王族已经使用过异类表盘了！"), true);
+                } else if (transformationCooldown > 0) {
+                    // 还在冷却中
+                    player.displayClientMessage(Component.literal("§c时间王族还在恢复中，无法立即再次变身！"), true);
+                }
+                
+                return InteractionResult.SUCCESS; // 阻止其他交互
+            }
+        }
+        
+        return super.mobInteract(player, hand);
     }
 }

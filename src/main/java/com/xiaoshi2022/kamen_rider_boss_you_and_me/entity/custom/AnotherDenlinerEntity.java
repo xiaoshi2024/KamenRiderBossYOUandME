@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.DesertOfTimeEntityHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import net.minecraft.core.particles.ParticleTypes;
@@ -15,11 +16,13 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.ticks.TickPriority;
 import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -32,6 +35,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.*;
+import java.util.Comparator;
 
 public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlay("idle");
@@ -40,7 +44,8 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     
     // 保存实体的相关数据
-    private List<Map<String, String>> savedEntityData = new ArrayList<>();
+    // 不再需要这个列表，因为我们直接将数据保存到玩家NBT中
+    private List<Map<String, String>> savedEntityData = null;
     private boolean hasSavedEntities = false;
     private boolean isDeparting = false;
     private boolean isArriving = false;
@@ -58,6 +63,9 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
     public AnotherDenlinerEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
         this.noPhysics = true;
+        
+        // 初始化实体数据列表，避免空指针异常
+        this.savedEntityData = new ArrayList<>();
         
         // 添加以下设置来隐藏实体ID
         this.setCustomNameVisible(false);
@@ -122,59 +130,86 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
     }
 
     public void saveEntities(Player summoningPlayer, Entity... entities) {
-        if (!level().isClientSide) {
+        // 确保只在服务器端执行
+        if (level().isClientSide() || entities == null) {
+            return;
+        }
+
+        // 添加null检查，避免空指针异常
+        if (summoningPlayer != null) {
+            this.summoningPlayerId = summoningPlayer.getUUID();
+        } else {
             if (DEBUG) {
-                kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: saveEntities called with {} entities", 
-                        this.getId(), entities != null ? entities.length : 0);
+                kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: 未指定召唤玩家，但会尝试保存实体数据", this.getId());
             }
-            
-            // 添加null检查，避免空指针异常
-            this.summoningPlayerId = summoningPlayer != null ? summoningPlayer.getUUID() : null;
-            
-            // 清空之前的数据
+        }
+
+        // 清空之前的数据（保留这行以避免潜在的空指针异常）
+        if (savedEntityData != null) {
             savedEntityData.clear();
-            
-            int savedCount = 0;
-            for (Entity entity : entities) {
-                if (entity instanceof Mob) {
-                    Mob mob = (Mob) entity;
-                    // 保存实体类型和健康值等关键数据
-                    Map<String, String> entityData = new HashMap<>();
-                    entityData.put("type", Objects.requireNonNull(entity.getType().getDescriptionId()));
-                    entityData.put("health", String.valueOf(mob.getHealth()));
-                    savedEntityData.add(entityData);
-                    savedCount++;
+        }
+
+        int savedCount = 0;
+        // 查找附近的玩家作为实体数据的保存目标
+        Player targetPlayer = summoningPlayer;
+        if (targetPlayer == null && level() instanceof ServerLevel serverLevel) {
+            // 在实体周围寻找最近的玩家 - 使用正确的方法调用格式
+            AABB searchArea = this.getBoundingBox().inflate(20.0D);
+            List<ServerPlayer> nearbyPlayers = serverLevel.getEntitiesOfClass(ServerPlayer.class, searchArea);
+            if (!nearbyPlayers.isEmpty()) {
+                // 找到最近的玩家
+                targetPlayer = nearbyPlayers.stream()
+                        .min(Comparator.comparingDouble(player -> player.distanceToSqr(this)))
+                        .orElse(null);
+                if (targetPlayer != null && DEBUG) {
+                    kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: 未指定召唤玩家，使用附近玩家: {}", 
+                            this.getId(), targetPlayer.getName().getString());
+                }
+            } else {
+                if (DEBUG) {
+                    kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: 未找到附近的玩家来保存实体数据", this.getId());
+                }
+            }
+        }
+        
+        for (Entity entity : entities) {
+            if (entity instanceof Mob && entity.isAlive()) {
+                // 只保存异类电王和时劫者的实体数据
+                if (entity instanceof Another_Den_o || entity instanceof TimeJackerEntity) {
+                    // 只有当有目标玩家时，才保存实体数据
+                    if (targetPlayer != null) {
+                        // 将实体数据保存到玩家的NBT中
+                        DesertOfTimeEntityHandler.saveEntityToPlayerNBT(targetPlayer, (LivingEntity) entity);
+                        savedCount++;
+                    }
                     
                     // 移除原始实体
                     entity.remove(Entity.RemovalReason.DISCARDED);
                     
                     if (DEBUG) {
-                        kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: Saved entity: {}, health: {}", 
-                                this.getId(), entity.getType().getDescriptionId(), mob.getHealth());
+                        kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: 保存了关键实体: {}, 生命值: {}", 
+                                this.getId(), entity.getType().getDescriptionId(), ((Mob)entity).getHealth());
                     }
                 }
             }
-            
-            hasSavedEntities = !savedEntityData.isEmpty();
-            
+        }
+
+        hasSavedEntities = savedCount > 0;
+
+        if (DEBUG) {
+            kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: 保存实体完成，hasSavedEntities={}, 实体数量={}", 
+                    this.getId(), hasSavedEntities, savedCount);
+        }
+
+        if (hasSavedEntities) {
             if (DEBUG) {
-                kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: saveEntities completed, hasSavedEntities={}, entity count={}", 
-                        this.getId(), hasSavedEntities, savedCount);
+                kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: 已保存实体数据到玩家NBT中", this.getId());
             }
-            
-            if (hasSavedEntities) {
-                if (DEBUG) {
-                    kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: hasSavedEntities is true, about to start depart animation", this.getId());
-                }
-                // 开始离开动画
-                startDepartAnimation();
-                
-                // 延迟传送
-                scheduleTeleportToDimension();
-            } else {
-                if (DEBUG) {
-                    kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: hasSavedEntities is false, skipping animation and teleport", this.getId());
-                }
+            // 开始离开动画
+            startDepartAnimation();
+        } else {
+            if (DEBUG) {
+                kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: 没有保存的关键实体，跳过动画", this.getId());
             }
         }
     }
@@ -314,7 +349,9 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
                 try {
                     // 重要：在传送到主世界前清空保存的实体数据，避免后续重新生成怪物
                     // 这是解决被拉回时之沙漠的关键
-                    savedEntityData.clear();
+                    if (savedEntityData != null) {
+                        savedEntityData.clear();
+                    }
                     hasSavedEntities = false;
                     
                     // 设置主世界的传送位置（随机但合理）
@@ -509,24 +546,7 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
             }
         }
         
-        // 处理传送延迟逻辑
-        if (!level().isClientSide() && teleportScheduled && hasSavedEntities && isDeparting) {
-            if (teleportDelayTicks > 0) {
-                teleportDelayTicks--;
-                if (DEBUG && teleportDelayTicks % 20 == 0) {
-                    kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: Teleport delay countdown: {} ticks", 
-                            this.getId(), teleportDelayTicks);
-                }
-            } else {
-                // 延迟结束，执行传送
-                if (DEBUG) {
-                    kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: Delay complete, executing teleport", this.getId());
-                }
-                teleportToDesertOfTime();
-                // 重置传送状态
-                teleportScheduled = false;
-            }
-        }
+        // 不再需要传送延迟逻辑，因为我们不再进行实际的传送
         
         // 调试日志已移除
         
@@ -539,48 +559,37 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
             return;
         }
         
-        // 增强状态检测逻辑，确保状态一致性
-        if (!level().isClientSide()) {
-            // 核心状态管理：如果有保存的实体，必须处于离开动画状态或已安排传送
-            if (hasSavedEntities) {
-                // 如果既不在离开动画中，也没有安排传送，则这是一个错误状态
-                if (!isDeparting && !teleportScheduled && !isArriving) {
-                    if (DEBUG) {
-                        kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: CRITICAL State inconsistency! hasSavedEntities={} but isDeparting={} and teleportScheduled={}, fixing...", 
-                                this.getId(), hasSavedEntities, isDeparting, teleportScheduled);
-                    }
-                    // 直接设置离开状态，不再重复调用startDepartAnimation以避免重置animationTicks
-                    this.isDeparting = true;
-                    this.teleportScheduled = true;
-                    this.teleportDelayTicks = 80; // 4秒延迟
+        // 简化状态检测逻辑
+        if (!level().isClientSide() && hasSavedEntities) {
+            // 确保有保存实体时处于离开动画状态
+            if (!isDeparting && !isArriving) {
+                if (DEBUG) {
+                    kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: 设置离开动画状态", this.getId());
                 }
-            } else {
-                // 如果没有保存的实体，确保重置相关状态
-                if (teleportScheduled) {
-                    teleportScheduled = false;
-                    if (DEBUG) {
-                        kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: Resetting teleportScheduled as hasSavedEntities is false", this.getId());
-                    }
-                }
+                this.isDeparting = true;
             }
         }
         
-        // 动画控制 - 修复离开动画结束时的状态转换
+        // 动画控制 - 离开动画结束时的状态转换
         if (isDeparting && animationTicks > 40) { // 2秒后结束离开动画
             isDeparting = false;
             // 重置动画计时器
             animationTicks = 0;
-            // 移除直接传送调用，因为在传送延迟逻辑中已经会触发teleportToDesertOfTime()
-            // teleportToDesertOfTime(); // 此调用已移除以避免重复传送
+            
+            if (DEBUG && hasSavedEntities) {
+                kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: 离开动画结束，即将消失，实体数据已保存", this.getId());
+            }
+            
+            // 动画结束后，班列消失，但保留实体数据在NBT中
+            // 数据将在玩家进入时之沙漠维度时由DesertOfTimeEntityHandler读取
+            if (hasSavedEntities && summoningPlayerId != null) {
+                // 这里不需要额外操作，实体数据已经保存
+                // DesertOfTimeEntityHandler将在玩家进入时之沙漠时处理这些数据
+            }
         }
         
-        // 在到达动画期间释放实体（适用于所有维度）
-        if (!level().isClientSide() && hasSavedEntities && isArriving && animationTicks > 30) {
-            if (DEBUG) {
-                kamen_rider_boss_you_and_me.LOGGER.info("AnotherDenlinerEntity[{}]: Releasing saved entities during arrival animation", this.getId());
-            }
-            releaseEntitiesAutomatically();
-        }
+        // 不再需要自动释放实体，这将由DesertOfTimeEntityHandler处理
+        // 班列在动画结束后会自行消失
         
         if (isArriving && animationTicks > 40) { // 2秒后结束到达动画
             isArriving = false;

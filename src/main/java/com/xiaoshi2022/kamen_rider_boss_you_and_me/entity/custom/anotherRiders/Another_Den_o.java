@@ -188,56 +188,102 @@ public class Another_Den_o extends Monster implements GeoEntity {
     
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        // 检查当前维度是否为非时之沙漠维度
-        boolean isInTimeDesert = this.level().dimension().location().toString().equals("kamen_rider_weapon_craft:the_desertof_time");
+        // 获取当前维度名称
+        String currentDimension = this.level().dimension().location().toString();
+        // 检查是否在时间的沙漠维度或时间领域维度
+        boolean isInTimeDesert = currentDimension.equals("kamen_rider_weapon_craft:the_desertof_time");
+        boolean isInTimeRealm = currentDimension.equals("kamen_rider_boss_you_and_me:time_realm");
+        boolean isInAllowedDimension = isInTimeDesert || isInTimeRealm;
         
-        // 血量低于40%、未在传送中且不在时之沙漠维度时才触发穿梭
-        if (!this.level().isClientSide() && this.getHealth() <= this.getMaxHealth() * 0.4f && !isTeleporting && !isInTimeDesert) {
-            // 标记为正在传送，防止重复创建班列
-            isTeleporting = true;
-            // 查找附近的时劫者
-            List<com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity> nearbyTimeJackers = this.level().getEntitiesOfClass(
-                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity.class,
-                    this.getBoundingBox().inflate(20.0D)
-            );
+        // 只在非允许维度中，异类电王无法被杀死
+        // 但只有在非时之沙漠维度中才会召唤时之列车
+        if (!this.level().isClientSide() && !isInAllowedDimension) {
+            // 计算伤害后的剩余生命值
+            float remainingHealth = this.getHealth() - amount;
             
-            // 召唤异类电班列
-            com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity denliner = new com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity(this.level());
-            denliner.setPos(this.getX(), this.getY() + 2, this.getZ());
-            this.level().addFreshEntity(denliner);
-            
-            // 保存自己和时劫者到班列中
-            List<Entity> entitiesToSave = new ArrayList<>();
-            entitiesToSave.add(this);
-            if (!nearbyTimeJackers.isEmpty()) {
-                entitiesToSave.add(nearbyTimeJackers.get(0)); // 保存最近的一个时劫者
+            // 如果伤害会导致死亡，则阻止死亡并触发传送
+            if (remainingHealth <= 0 || this.getHealth() <= this.getMaxHealth() * 0.4f) {
+                // 如果不在传送冷却中，则触发传送
+                if (!isTeleporting && teleportCooldown <= 0) {
+                    // 标记为正在传送，防止重复创建班列
+                    isTeleporting = true;
+                    
+                    // 只在非时之沙漠维度中召唤时之列车
+                    if (!isInTimeDesert) {
+                        // 查找附近的时劫者
+                        List<com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity> nearbyTimeJackers = this.level().getEntitiesOfClass(
+                                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity.class,
+                                this.getBoundingBox().inflate(20.0D)
+                        );
+                        
+                        // 如果附近有时劫者，才触发传送逻辑
+                        if (!nearbyTimeJackers.isEmpty()) {
+                            // 召唤异类电班列
+                            com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity denliner = new com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity(this.level());
+                            denliner.setPos(this.getX(), this.getY() + 2, this.getZ());
+                            this.level().addFreshEntity(denliner);
+                            
+                            // 保存自己和时劫者到班列中
+                            List<Entity> entitiesToSave = new ArrayList<>();
+                            entitiesToSave.add(this);
+                            entitiesToSave.add(nearbyTimeJackers.get(0)); // 保存最近的一个时劫者
+                            
+                            // 保存实体并传送 - 传递一个假的玩家（null），因为实际上是AI触发的
+                            denliner.saveEntities(null, entitiesToSave.toArray(new Entity[0]));
+                            
+                            // 添加日志确认实体已保存
+                            com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me.LOGGER.info("Another_Den_o: Entities saved to denliner, teleportation will be handled by denliner");
+                        } else {
+                            // 如果附近没有时劫者，则允许正常受到伤害
+                            return super.hurt(source, amount);
+                        }
+                    } else {
+                        // 在时之沙漠维度中，直接重置传送标记，不召唤时之列车
+                        isTeleporting = false;
+                    }
+                    
+                    // 设置一个延迟来重置传送标记，确保传送过程完成
+                    this.level().getServer().getPlayerList().getPlayers().forEach(player -> {
+                        // 这里只是为了确保服务器线程上执行
+                        player.getServer().execute(() -> {
+                            // 延迟重置标记，给班列足够时间完成传送
+                            try {
+                                Thread.sleep(1000);
+                                isTeleporting = false;
+                                teleportCooldown = TELEPORT_COOLDOWN;
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                            }
+                        });
+                    });
+                }
+                
+                // 修改：如果附近没有时劫者，允许正常击败异类电王
+                List<com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity> nearbyTimeJackers = this.level().getEntitiesOfClass(
+                        com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity.class,
+                        this.getBoundingBox().inflate(20.0D)
+                );
+                
+                if (nearbyTimeJackers.isEmpty()) {
+                    // 如果附近没有时劫者，允许正常受到伤害和死亡
+                    return super.hurt(source, amount);
+                } else {
+                    // 如果附近有时劫者，但传送冷却中，则限制生命值但不杀死
+                    if (this.getHealth() > 1.0F) {
+                        this.setHealth(1.0F);
+                    }
+                    return true; // 表示受到了攻击，但伤害被限制
+                }
             }
             
-            // 保存实体并传送 - 传递一个假的玩家（null），因为实际上是AI触发的
-            denliner.saveEntities(null, entitiesToSave.toArray(new Entity[0]));
-            
-            // 班列实体将在其tick方法中自行处理传送逻辑
-            // 不再需要这里直接调用changeDimension
-            
-            // 添加日志确认实体已保存
-            com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me.LOGGER.info("Another_Den_o: Entities saved to denliner, teleportation will be handled by denliner");
-            
-            // 设置一个延迟来重置传送标记，确保传送过程完成
-            this.level().getServer().getPlayerList().getPlayers().forEach(player -> {
-                // 这里只是为了确保服务器线程上执行
-                player.getServer().execute(() -> {
-                    // 延迟重置标记，给班列足够时间完成传送
-                    try {
-                        Thread.sleep(1000);
-                        isTeleporting = false;
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                });
-            });
-            
-            return false; // 这次伤害被规避
+            // 如果伤害不足以导致死亡，则允许部分伤害，但不能杀死
+            if (remainingHealth <= 1.0F) {
+                this.setHealth(1.0F);
+                return true;
+            }
         }
+        
+        // 在允许维度中，正常处理伤害
         return super.hurt(source, amount);
     }
     

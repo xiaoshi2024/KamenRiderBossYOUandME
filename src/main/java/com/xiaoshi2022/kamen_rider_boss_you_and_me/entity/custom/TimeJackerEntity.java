@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.goal.TimeJackerAnotherRiderGoal;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import forge.net.mca.entity.VillagerEntityMCA;
 import forge.net.mca.entity.ai.relationship.Gender;
 import net.minecraft.nbt.CompoundTag;
@@ -404,46 +405,29 @@ public class TimeJackerEntity extends VillagerEntityMCA {
                     this.getBoundingBox().inflate(20.0D)
             );
             
-            // 召唤异类电班列
-            com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity denliner = new com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity(this.level());
-            denliner.setPos(this.getX(), this.getY() + 2, this.getZ());
-            this.level().addFreshEntity(denliner);
-            
-            // 保存自己和附近的异类骑士到班列中
-            List<Entity> entitiesToSave = new ArrayList<>();
-            entitiesToSave.add(this);
+            // 只有在附近有异类电王时才触发传送机制
             if (!nearbyAnotherDenO.isEmpty()) {
+                // 召唤异类电班列
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity denliner = new com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity(this.level());
+                denliner.setPos(this.getX(), this.getY() + 2, this.getZ());
+                this.level().addFreshEntity(denliner);
+                
+                // 保存自己和附近的异类骑士到班列中
+                List<Entity> entitiesToSave = new ArrayList<>();
+                entitiesToSave.add(this);
                 entitiesToSave.add(nearbyAnotherDenO.get(0)); // 保存最近的一个异类电王
-            }
-            
-            // 保存实体并传送 - 传递一个假的玩家（null），因为实际上是AI触发的
-            denliner.saveEntities(null, entitiesToSave.toArray(new Entity[0]));
-            
-            // 传送班列到时之沙漠维度
-            try {
-                if (denliner.level() instanceof ServerLevel) {
-                    // 查找目标维度
-                    ServerLevel timeDesert = null;
-                    for (ServerLevel level : ((ServerLevel) denliner.level()).getServer().getAllLevels()) {
-                        if (level.dimension().location().toString().equals("kamen_rider_weapon_craft:the_desertof_time")) {
-                            timeDesert = level;
-                            break;
-                        }
-                    }
-                    
-                    if (timeDesert != null) {
-                        denliner.changeDimension(timeDesert);
-                        // 随机设置班列在时之沙漠中的位置
-                        denliner.setPos(
-                                -1980 + this.random.nextInt(3960), // X坐标范围
-                                100, // Y坐标固定高度
-                                -1980 + this.random.nextInt(3960)  // Z坐标范围
-                        );
-                    }
+                
+                // 保存实体数据 - 传递一个假的玩家（null），因为实际上是AI触发的
+                denliner.saveEntities(null, entitiesToSave.toArray(new Entity[0]));
+                
+                if (kamen_rider_boss_you_and_me.LOGGER.isDebugEnabled()) {
+                    kamen_rider_boss_you_and_me.LOGGER.info("TimeJackerEntity: 触发传送机制，保存了异类电王和时劫者的NBT数据");
                 }
-            } catch (Exception e) {
-                // 如果传送失败，至少确保实体被保存
-                e.printStackTrace();
+            } else {
+                // 如果附近没有异类电王，则不触发传送机制，正常承受伤害
+                if (kamen_rider_boss_you_and_me.LOGGER.isDebugEnabled()) {
+                    kamen_rider_boss_you_and_me.LOGGER.info("TimeJackerEntity: 附近没有异类电王，不触发传送机制，正常承受伤害");
+                }
             }
         }
     }

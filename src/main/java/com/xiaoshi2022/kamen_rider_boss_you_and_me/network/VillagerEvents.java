@@ -124,6 +124,14 @@ public class VillagerEvents {
 
                     return;
                 }
+                // 异类decade处理（DCD模式）
+                else if (mode == aiziowc.Mode.DCD) {
+                    // DCD模式只能对时间王族使用，这里检查目标是否为时间王族
+                    // 注意：这里的逻辑是在VillagerEvents中处理，而不是在Item的interactLivingEntity方法中
+                    // 因为之前的修改被移除了，所以在这里重新实现
+                    player.displayClientMessage(Component.literal("§c只有时间王族可以使用DCD模式的异类表盘！"), true);
+                    return;
+                }
             }
 
             /* 原有逻辑 */
