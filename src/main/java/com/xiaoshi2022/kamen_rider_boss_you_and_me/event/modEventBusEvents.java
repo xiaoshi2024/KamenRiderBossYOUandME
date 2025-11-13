@@ -373,11 +373,20 @@ public class modEventBusEvents {
         }
 
         /**
-         * 完全忽略护甲
+         * 考虑护甲值的伤害计算
          */
         private static float ignoreArmor(LivingEntity target, float damage) {
-            // 完全忽略护甲计算，直接返回原伤害
-            return damage;
+            // 不再完全忽略护甲，而是根据装备计算适当的伤害穿透
+            // 获取目标的护甲值
+            double armorValue = target.getAttributeValue(Attributes.ARMOR);
+            
+            // 对于rider_barons装备，我们确保护甲能够正常发挥作用
+            // 但仍然有一定的穿透效果
+            float penetrationFactor = 0.7f; // 保留70%的伤害穿透效果
+            
+            // 计算最终伤害：保留部分穿透效果，但不再完全忽略护甲
+            // 基础穿透伤害 + 考虑护甲后的剩余伤害
+            return (float)(damage * penetrationFactor + damage * (1 - penetrationFactor) * Math.max(0, 1 - armorValue / (25 + armorValue)));
         }
 
         /**
@@ -492,7 +501,7 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.ELITE_MONSTER_NPC.get(),
                     EliteMonsterNpc.createAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 30.0D)  // 攻击力从12.0D提高到30.0D
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 35.0D)  // 攻击力从30.0D提高到35.0D，比肩异类电王
                             .add(Attributes.MAX_HEALTH, 300.0D)
                             .add(Attributes.ARMOR, 12.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 6.0D)
@@ -514,7 +523,7 @@ public class modEventBusEvents {
 
             event.put(ModEntityTypes.GIFFTARIAN.get(),
                     Gifftarian.createMonsterAttributes()
-                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 32.0D)  // 攻击力从16.0D提高到32.0D
+                            .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 32.0D)  // 攻击力从32.0D
                             .add(Attributes.MAX_HEALTH, 350.0D)
                             .add(Attributes.ARMOR, 15.0D)
                             .add(Attributes.ARMOR_TOUGHNESS, 8.0D)

@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -223,6 +224,9 @@ public class VillagerCuriosLayer<T extends LivingEntity, M extends EntityModel<T
         } else if (stack.getItem() instanceof Two_sidriver) {
             matrixStack.translate(0.0D, 0.03D, -0.012D);
             matrixStack.scale(1.06F, 1.06F, 1.06F);
+        } else if (stack.getItem() instanceof GhostDriver) {
+            matrixStack.translate(0.0D, 0.025D, -0.011D);
+            matrixStack.scale(1.05F, 1.05F, 1.05F);
         }
     }
 }

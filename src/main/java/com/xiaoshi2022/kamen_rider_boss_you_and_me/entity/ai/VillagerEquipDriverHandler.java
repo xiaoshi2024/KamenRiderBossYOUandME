@@ -202,6 +202,13 @@ public class VillagerEquipDriverHandler {
     
     // 处理手持腰带的村民装备盔甲和播放音效的逻辑
     static void handleVillagerWithDriver(LivingEntity villager, ItemStack driverStack) {
+        // 首先检查物品是否是Genesis_driver类型
+        if (!(driverStack.getItem() instanceof Genesis_driver)) {
+            // 如果不是Genesis_driver类型，记录警告但不崩溃
+            System.out.println("警告：尝试为非Genesis_driver类型的腰带处理村民变身");
+            return; // 直接返回，避免类型转换错误
+        }
+        
         Genesis_driver driver = (Genesis_driver) driverStack.getItem();
         Genesis_driver.BeltMode mode = driver.getMode(driverStack);
 

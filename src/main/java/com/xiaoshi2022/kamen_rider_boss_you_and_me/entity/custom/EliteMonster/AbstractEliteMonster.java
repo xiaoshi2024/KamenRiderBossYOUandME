@@ -42,14 +42,17 @@ public abstract class AbstractEliteMonster extends Monster {
 
     @Override
     protected void registerGoals() {
+        // 保留基本行为和被攻击时的反击行为
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        // 添加近战攻击目标，确保怪物能够主动攻击玩家
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2D, false));
+        this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        
+        // 添加主动攻击玩家的目标
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        // 保留被攻击时的反击行为
+        this.targetSelector.addGoal(2, (new HurtByTargetGoal(this)).setAlertOthers());
     }
     
     @Override
@@ -65,10 +68,10 @@ public abstract class AbstractEliteMonster extends Monster {
         }
     }
     
-    // 更新技能冷却时间
+    // 更新技能冷却时间 - 使用游戏tick而不是系统时间
     private void updateSkillCooldown() {
-        if (skillCooldown > 0 && System.currentTimeMillis() > skillCooldown) {
-            skillCooldown = 0;
+        if (skillCooldown > 0) {
+            skillCooldown--;
         }
     }
     
@@ -77,18 +80,15 @@ public abstract class AbstractEliteMonster extends Monster {
         return skillCooldown == 0;
     }
     
-    // 设置技能冷却时间
+    // 设置技能冷却时间 - 使用游戏tick（20tick = 1秒）
     protected void setSkillCooldown(long cooldownTime) {
-        this.skillCooldown = System.currentTimeMillis() + cooldownTime;
+        // 将毫秒转换为游戏tick（约20tick/秒）
+        this.skillCooldown = cooldownTime / 50;
     }
     
-    // 获取剩余冷却时间（毫秒）
+    // 获取剩余冷却时间（游戏tick）
     public long getRemainingCooldown() {
-        if (skillCooldown == 0) {
-            return 0;
-        }
-        long remaining = skillCooldown - System.currentTimeMillis();
-        return remaining > 0 ? remaining : 0;
+        return skillCooldown;
     }
     
     // 判断是否应该使用技能（由子类实现）

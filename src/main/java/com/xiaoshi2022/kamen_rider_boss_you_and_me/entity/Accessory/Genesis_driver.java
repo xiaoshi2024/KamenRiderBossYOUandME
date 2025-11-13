@@ -559,12 +559,69 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
         if (sp.tickCount % 100 == 0) {
             PacketHandler.sendToClient(
                     new BeltAnimationPacket(sp.getId(), "sync_state", getMode(stack)), sp);
-            
-            // 每5秒检查一次并重新应用饱和效果，确保效果持续存在
+        }
+        
+        // 每5秒检查一次饱和效果，如果没有则尝试消耗赫尔海姆果实
+        if (sp.tickCount % 100 == 0) {
             if (!sp.hasEffect(MobEffects.SATURATION)) {
-                sp.addEffect(new MobEffectInstance(MobEffects.SATURATION, Integer.MAX_VALUE, 0, true, false));
+                // 尝试消耗背包中的赫尔海姆果实
+                if (consumeHelheimFruit(sp)) {
+                    // 给予5分钟的饱和效果
+                    sp.addEffect(new MobEffectInstance(MobEffects.SATURATION, 5 * 60 * 20, 0, true, false));
+                    sp.sendSystemMessage(
+                            Component.literal("消耗了一颗赫尔海姆果实，获得了5分钟的饱和效果！")
+                    );
+                } else {
+                    // 如果没有果实，发送提示消息（限制频率，避免刷屏）
+                    // 提示已移除
+                }
             }
         }
+    }
+
+    /**
+     * 查找并消耗玩家背包中的赫尔海姆果实
+     * @param player 玩家
+     * @return 是否成功消耗果实
+     */
+    private boolean consumeHelheimFruit(ServerPlayer player) {
+        // 定义赫尔海姆果实的物品列表（需要根据实际情况修改）
+        // 这里假设有一个通用的赫尔海姆果实物品
+        ItemStack fruitStack = findItemInInventory(player, com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.HELHEIMFRUIT.get());
+        
+        if (!fruitStack.isEmpty()) {
+            // 消耗一个果实
+            fruitStack.shrink(1);
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * 在玩家背包中查找指定物品
+     * @param player 玩家
+     * @param item 要查找的物品
+     * @return 找到的物品栈，如果没有找到则返回空栈
+     */
+    private ItemStack findItemInInventory(Player player, Item item) {
+        // 首先检查主手
+        if (player.getMainHandItem().getItem() == item) {
+            return player.getMainHandItem();
+        }
+        
+        // 检查副手
+        if (player.getOffhandItem().getItem() == item) {
+            return player.getOffhandItem();
+        }
+        
+        // 检查背包
+        for (ItemStack stack : player.getInventory().items) {
+            if (stack.getItem() == item) {
+                return stack;
+            }
+        }
+        
+        return ItemStack.EMPTY;
     }
 
     /* -------------------- NBT 同步 -------------------- */

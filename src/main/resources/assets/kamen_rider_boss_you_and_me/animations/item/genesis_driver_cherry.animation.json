@@ -61,6 +61,9 @@
 				}
 			}
 		},
+		"idles": {
+
+		},
 		"cherry_start": {
 			"animation_length": 2,
 			"bones": {

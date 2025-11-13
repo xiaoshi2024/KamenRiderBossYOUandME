@@ -2,6 +2,8 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Decade;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.misc.DimensionalBarrier;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.EliteMonsterEquipHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -187,11 +189,13 @@ public class AnotherWorldSummon {
         if (entityType != null) {
             summonEntity(user, level, entityType, x, y, z);
         } else {
-            // 实体类型不存在，使用备用实体
+            // 实体类型不存在，使用备用实体（百界众）
             if (DEBUG_MODE) {
-                sendDebugMessage(user, "§c实体不存在: §e" + entityId + "§c，使用备用实体");
+                sendDebugMessage(user, "§c实体不存在: §e" + entityId + "§c，使用百界众作为备用实体");
             }
-            summonFallbackEntity(user, level, x, y, z);
+            // 直接使用百界众作为备用实体
+            ResourceLocation backupEntity = new ResourceLocation("kamen_rider_boss_you_and_me:elite_monster_npc");
+            summonEntityByResourceLocation(user, level, backupEntity, x, y, z);
         }
     }
 
@@ -222,6 +226,11 @@ public class AnotherWorldSummon {
             summonedEntity.setTarget(user.getTarget());
         }
 
+        // 特殊处理：为百界众（EliteMonsterNpc）装备随机腰带并触发变身
+        if (summonedEntity instanceof EliteMonsterNpc eliteMonster) {
+            EliteMonsterEquipHandler.equipRandomDriverAndTransform(eliteMonster);
+        }
+
         // 添加到世界
         ((ServerLevel) user.level()).addFreshEntity(summonedEntity);
 
@@ -231,19 +240,16 @@ public class AnotherWorldSummon {
     }
 
     private static void summonFallbackEntity(Another_Decade user, ServerLevel level, double x, double y, double z) {
-        // 备用实体列表
-        EntityType<?>[] fallbackEntities = {
-                EntityType.WITHER_SKELETON,
-                EntityType.RAVAGER,
-                EntityType.VEX,
-                EntityType.ENDERMAN
+        // 备用实体列表 - 只保留百界众
+        ResourceLocation[] fallbackEntities = {
+                new ResourceLocation("kamen_rider_boss_you_and_me:elite_monster_npc")
         };
 
-        EntityType<?> fallbackType = fallbackEntities[user.getRandom().nextInt(fallbackEntities.length)];
-        summonEntity(user, level, fallbackType, x, y, z);
+        ResourceLocation fallbackType = fallbackEntities[user.getRandom().nextInt(fallbackEntities.length)];
+        summonEntityByResourceLocation(user, level, fallbackType, x, y, z);
 
         if (DEBUG_MODE) {
-            sendDebugMessage(user, "§6使用备用实体: §e" + fallbackType.getDescription().getString());
+            sendDebugMessage(user, "§6使用备用实体: §e" + fallbackType);
         }
     }
 
@@ -358,19 +364,14 @@ public class AnotherWorldSummon {
         LOW_HEALTH_ENTITIES.clear();
         ENRAGED_ENTITIES.clear();
 
-        // 默认基础实体
-        SUMMON_ENTITIES.put(new ResourceLocation("minecraft:wither_skeleton"), 1.0);
-        SUMMON_ENTITIES.put(new ResourceLocation("minecraft:ravager"), 0.8);
-        SUMMON_ENTITIES.put(new ResourceLocation("minecraft:vex"), 0.6);
-        SUMMON_ENTITIES.put(new ResourceLocation("minecraft:enderman"), 0.7);
+        // 默认基础实体 - 只保留百界众
+        SUMMON_ENTITIES.put(new ResourceLocation("kamen_rider_boss_you_and_me:elite_monster_npc"), 1.2);
 
-        // 默认低血量实体
-        LOW_HEALTH_ENTITIES.put(new ResourceLocation("minecraft:phantom"), 0.8);
-        LOW_HEALTH_ENTITIES.put(new ResourceLocation("minecraft:ghast"), 0.5);
+        // 默认低血量实体 - 只保留百界众
+        LOW_HEALTH_ENTITIES.put(new ResourceLocation("kamen_rider_boss_you_and_me:elite_monster_npc"), 1.5);
 
-        // 默认愤怒实体
-        ENRAGED_ENTITIES.put(new ResourceLocation("minecraft:blaze"), 1.0);
-        ENRAGED_ENTITIES.put(new ResourceLocation("minecraft:magma_cube"), 0.7);
+        // 默认愤怒实体 - 只保留百界众
+        ENRAGED_ENTITIES.put(new ResourceLocation("kamen_rider_boss_you_and_me:elite_monster_npc"), 2.0);
 
         DEBUG_MODE = false;
     }

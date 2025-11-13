@@ -2,11 +2,13 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.BeltCurioIntegration;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import net.minecraft.util.RandomSource;
 
 /**
  * 精英怪物腰带装备处理类 - 监听EliteMonsterNpc的腰带装备并触发变身
@@ -52,25 +55,48 @@ public class EliteMonsterEquipHandler {
             return;
         }
         
+        // 检查主手是否有腰带，如果有且Curio槽位为空，则尝试装备到Curio槽位
+        ItemStack mainHandItem = eliteMonster.getMainHandItem();
+        if (!mainHandItem.isEmpty() && isValidDriver(mainHandItem) && !BeltCurioIntegration.hasBeltInCurioSlot(eliteMonster)) {
+            if (BeltCurioIntegration.tryEquipBeltToCurioSlot(eliteMonster, mainHandItem)) {
+                // 成功装备到Curio槽位后，清空主手
+                eliteMonster.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            }
+        }
+        
+        // 主动拾取附近的腰带物品 - 从EliteMonsterFindBeltGoal添加的逻辑
+        if (!BeltCurioIntegration.hasBeltInCurioSlot(eliteMonster)) {
+            // 寻找附近的腰带物品
+            double searchRange = 3.0D;
+            eliteMonster.level().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, 
+                    eliteMonster.getBoundingBox().inflate(searchRange), 
+                    item -> item.isAlive() && !item.hasPickUpDelay() && isValidDriver(item.getItem())
+            ).stream().findFirst().ifPresent(targetItem -> {
+                // 当接近物品时，主动拾取
+                ItemStack stack = targetItem.getItem().copy();
+                // 优先拾取到Curio槽位
+                if (BeltCurioIntegration.tryEquipBeltToCurioSlot(eliteMonster, stack)) {
+                    // 从世界中移除物品
+                    targetItem.discard();
+                } else if (eliteMonster.getMainHandItem().isEmpty()) {
+                    // 如果Curio槽位无法装备，则装备到主手
+                    eliteMonster.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack.copy());
+                    targetItem.discard();
+                }
+            });
+        }
+        
         // 用于检测变身状态的关键变量
         boolean shouldBeTransformed = false;
         ItemStack driverItem = ItemStack.EMPTY;
         
-        // 检查Curio槽中是否有腰带
+        // 检查Curio槽中是否有腰带（只支持腰带槽位）
         boolean hasBeltInCurio = BeltCurioIntegration.hasBeltInCurioSlot(eliteMonster);
         
-        // 检查手持物品是否是腰带
-        ItemStack mainHandItem = eliteMonster.getMainHandItem();
-        boolean hasValidDriverInMainHand = isValidDriver(mainHandItem);
+        // 设置shouldBeTransformed标志，只基于Curio槽中的腰带
+        shouldBeTransformed = hasBeltInCurio;
         
-        // 检查副手是否是腰带
-        ItemStack offHandItem = eliteMonster.getOffhandItem();
-        boolean hasValidDriverInOffHand = isValidDriver(offHandItem);
-        
-        // 设置shouldBeTransformed标志
-        shouldBeTransformed = hasBeltInCurio || hasValidDriverInMainHand || hasValidDriverInOffHand;
-        
-        // 检查是否有腰带物品，如果有则优先使用Curio槽的
+        // 检查是否有腰带物品，只检查Curio槽
         if (hasBeltInCurio) {
             Optional<ItemStack> beltOpt = BeltCurioIntegration.getBeltFromCurioSlot(eliteMonster);
             if (beltOpt.isPresent()) {
@@ -137,7 +163,7 @@ public class EliteMonsterEquipHandler {
     /**
      * 触发精英怪物变身
      */
-    private static void triggerTransformation(EliteMonsterNpc eliteMonster, ItemStack beltStack) {
+    static void triggerTransformation(EliteMonsterNpc eliteMonster, ItemStack beltStack) {
         // 确保变身状态正确设置，这将自动触发隐身功能
         
         // 只有在第一次变身时才设置血量，避免每次调用都重置血量导致无法被击败
@@ -156,6 +182,12 @@ public class EliteMonsterEquipHandler {
             Genesis_driver driver = (Genesis_driver) beltStack.getItem();
             Genesis_driver.BeltMode mode = driver.getMode(beltStack);
             
+            // 为非玩家实体强制设置showing状态并禁用其他状态
+            driver.setShowing(beltStack, true);
+            driver.setActive(beltStack, false);
+            driver.setHenshin(beltStack, false);
+            driver.setRelease(beltStack, false);
+            
             // 检查是否已经标记为变身状态
             boolean isAlreadyTransformed = eliteMonster.isTransformed();
             // 检查是否已经装备了盔甲
@@ -164,13 +196,24 @@ public class EliteMonsterEquipHandler {
             // 综合判断是否已经完成变身
             boolean isFullyTransformed = isAlreadyTransformed && isArmorEquipped;
             
+            // 为非玩家实体处理变身动画
+            if (!isFullyTransformed) {
+                // 对于首次变身，触发变身动画序列 - 注释掉以解决单人游戏中无故发送cherry_move数据包的问题
+            // driver.startHenshinAnimation(eliteMonster, beltStack);
+            } else {
+                // 对于已变身的实体，确保它直接使用show动画而不是尝试播放idles
+                // 在客户端，我们需要直接触发show动画
+                if (eliteMonster.level().isClientSide) {
+                    driver.triggerAnim(eliteMonster, "controller", "show");
+                }
+            }
+            
             // 根据腰带模式为精英怪物装备对应的盔甲并播放变身音效
             switch (mode) {
                 case LEMON -> {
                     // Duke 盔甲
-                    equipArmor(eliteMonster, EquipmentSlot.HEAD, new ItemStack(ModItems.DUKE_HELMET.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.CHEST, new ItemStack(ModItems.DUKE_CHESTPLATE.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.LEGS, new ItemStack(ModItems.DUKE_LEGGINGS.get()));
+                    // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.DukeRiderSkill.setArmor(eliteMonster);
                     // 播放柠檬变身音效（仅当未完全变身后且不在冷却中）
                     if (!isFullyTransformed && !isOnSoundCooldown(eliteMonster)) {
                         eliteMonster.level().playSound(
@@ -188,9 +231,8 @@ public class EliteMonsterEquipHandler {
                 }
                 case MELON -> {
                     // Zangetsu Shin 盔甲
-                    equipArmor(eliteMonster, EquipmentSlot.HEAD, new ItemStack(ModItems.ZANGETSU_SHIN_HELMET.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.CHEST, new ItemStack(ModItems.ZANGETSU_SHIN_CHESTPLATE.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.LEGS, new ItemStack(ModItems.ZANGETSU_SHIN_LEGGINGS.get()));
+                    // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.ZangetsuShinSkill.setArmor(eliteMonster);
                     // 播放蜜瓜变身音效（仅当未完全变身后且不在冷却中）
                     if (!isFullyTransformed && !isOnSoundCooldown(eliteMonster)) {
                         eliteMonster.level().playSound(
@@ -208,9 +250,8 @@ public class EliteMonsterEquipHandler {
                 }
                 case CHERRY -> {
                     // Sigurd 盔甲
-                    equipArmor(eliteMonster, EquipmentSlot.HEAD, new ItemStack(ModItems.SIGURD_HELMET.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.CHEST, new ItemStack(ModItems.SIGURD_CHESTPLATE.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.LEGS, new ItemStack(ModItems.SIGURD_LEGGINGS.get()));
+                    // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.SigurdSkill.setArmor(eliteMonster);
                     // 播放樱桃变身音效（仅当未完全变身后且不在冷却中）
                     if (!isFullyTransformed && !isOnSoundCooldown(eliteMonster)) {
                         eliteMonster.level().playSound(
@@ -228,9 +269,8 @@ public class EliteMonsterEquipHandler {
                 }
                 case PEACH -> {
                     // Marika 盔甲
-                    equipArmor(eliteMonster, EquipmentSlot.HEAD, new ItemStack(ModItems.MARIKA_HELMET.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.CHEST, new ItemStack(ModItems.MARIKA_CHESTPLATE.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.LEGS, new ItemStack(ModItems.MARIKA_LEGGINGS.get()));
+                    // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.MarikaSkill.setArmor(eliteMonster);
                     // 播放桃子变身音效（仅当未完全变身后且不在冷却中）
                     if (!isFullyTransformed && !isOnSoundCooldown(eliteMonster)) {
                         eliteMonster.level().playSound(
@@ -248,9 +288,8 @@ public class EliteMonsterEquipHandler {
                 }
                 case DRAGONFRUIT -> {
                     // Tyrant 盔甲
-                    equipArmor(eliteMonster, EquipmentSlot.HEAD, new ItemStack(ModItems.TYRANT_HELMET.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.CHEST, new ItemStack(ModItems.TYRANT_CHESTPLATE.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.LEGS, new ItemStack(ModItems.TYRANT_LEGGINGS.get()));
+                    // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.TyrantSkill.setArmor(eliteMonster);
                     // 播放火龙果变身音效（仅当未完全变身后且不在冷却中）
                     if (!isFullyTransformed && !isOnSoundCooldown(eliteMonster)) {
                         eliteMonster.level().playSound(
@@ -268,9 +307,8 @@ public class EliteMonsterEquipHandler {
                 }
                 default -> {
                     // 默认模式，装备Duke盔甲
-                    equipArmor(eliteMonster, EquipmentSlot.HEAD, new ItemStack(ModItems.DUKE_HELMET.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.CHEST, new ItemStack(ModItems.DUKE_CHESTPLATE.get()));
-                    equipArmor(eliteMonster, EquipmentSlot.LEGS, new ItemStack(ModItems.DUKE_LEGGINGS.get()));
+                    // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.DukeRiderSkill.setArmor(eliteMonster);
                     if (!isFullyTransformed && !isOnSoundCooldown(eliteMonster)) {
                         eliteMonster.level().playSound(
                                 null,
@@ -288,29 +326,85 @@ public class EliteMonsterEquipHandler {
             }
         } else if (beltStack.getItem() instanceof sengokudrivers_epmty) {
             // sengokudrivers_epmty特定处理
-            // 这里可以根据需要添加sengokudrivers_epmty的变身逻辑
+            // 这里变成对应黑暗橙子盔甲！
+            // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.DarkOrangeAngelsSkill.setArmor(eliteMonster);
             if (!isOnSoundCooldown(eliteMonster)) {
                 eliteMonster.level().playSound(
                         null,
                         eliteMonster.getX(),
                         eliteMonster.getY(),
                         eliteMonster.getZ(),
-                        ModBossSounds.LEMON_BARON.get(),
+                        ModBossSounds.JIMBAR_LEMON.get(),
                         SoundSource.PLAYERS,
                         1.0F,
                         1.0F);
                 setSoundCooldown(eliteMonster);
             }
+        } else if (beltStack.getItem() instanceof GhostDriver) {
+            // GhostDriver特定处理
+            GhostDriver driver = (GhostDriver) beltStack.getItem();
+            GhostDriver.BeltMode mode = driver.getMode(beltStack);
+            
+            // 根据不同模式装备不同盔甲
+            switch (mode) {
+                case DARK_RIDER_EYE -> {
+                    // 装备Dark Rider Eye盔甲
+                    // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.DarkRiderGhostSkill.setArmor(eliteMonster);
+                    // 播放变身音效
+                    if (!isOnSoundCooldown(eliteMonster)) {
+                        //黑暗灵骑和拿破仑魂音效！
+                        eliteMonster.level().playSound(
+                                null,
+                                eliteMonster.getX(),
+                                eliteMonster.getY(),
+                                eliteMonster.getZ(),
+                                ModBossSounds.DARK_GHOST.get(),
+                                SoundSource.PLAYERS,
+                                1.0F,
+                                1.0F);
+                        setSoundCooldown(eliteMonster);
+
+                    }
+                }
+                case NAPOLEON_GHOST -> {
+                    // 装备Napoleon Ghost盔甲
+                    // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.NapoleonGhostSkill.setArmor(eliteMonster);
+                    //播放拿破仑魂音效！
+                    if (!isOnSoundCooldown(eliteMonster)) {
+                        eliteMonster.level().playSound(
+                                null,
+                                eliteMonster.getX(),
+                                eliteMonster.getY(),
+                                eliteMonster.getZ(),
+                                ModBossSounds.NAPOLEON_GHOST.get(),
+                                SoundSource.PLAYERS,
+                                1.0F,
+                                1.0F);
+                        setSoundCooldown(eliteMonster);
+                    }
+                }
+                default -> {
+                    // 默认模式，装备基础Ghost盔甲
+                    // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.DarkRiderGhostSkill.setArmor(eliteMonster);
+                }
+            }
+
         } else if (beltStack.getItem() instanceof Two_sidriver) {
             // Two_sidriver特定处理
-            // 这里可以根据需要添加Two_sidriver的变身逻辑
+            // 这里变成对应的evil盔甲！
+            // 调用技能类的setArmor方法，这样会同时设置盔甲和武器
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.skill.EvilBatsArmorSkill.setArmor(eliteMonster);
             if (!isOnSoundCooldown(eliteMonster)) {
                 eliteMonster.level().playSound(
                         null,
                         eliteMonster.getX(),
                         eliteMonster.getY(),
                         eliteMonster.getZ(),
-                        ModBossSounds.LEMON_BARON.get(),
+                        ModBossSounds.EVILR.get(),
                         SoundSource.PLAYERS,
                         1.0F,
                         1.0F);
@@ -329,8 +423,57 @@ public class EliteMonsterEquipHandler {
         
         // 检查是否是各种腰带类型
         return stack.getItem() instanceof Genesis_driver ||
+               stack.getItem() instanceof GhostDriver ||
                stack.getItem() instanceof sengokudrivers_epmty ||
                stack.getItem() instanceof Two_sidriver;
+    }
+    
+    /**
+     * 为已变身的百界众自动装备随机腰带并触发变身效果
+     * 用于生成时已经设置为变身状态的百界众
+     */
+    public static void equipRandomDriverAndTransform(EliteMonsterNpc eliteMonster) {
+        if (eliteMonster.level().isClientSide()) {
+            return;
+        }
+        
+        // 随机选择一种腰带类型
+        RandomSource random = eliteMonster.getRandom();
+        ItemStack driverStack;
+        
+        // 50%概率装备Genesis_driver (百界众腰带)
+        if (random.nextDouble() < 0.5) {
+            driverStack = new ItemStack(ModItems.GENESIS_DRIVER.get());
+            Genesis_driver driver = (Genesis_driver) driverStack.getItem();
+            
+            // 随机选择一种模式
+            Genesis_driver.BeltMode[] modes = Genesis_driver.BeltMode.values();
+            Genesis_driver.BeltMode selectedMode = modes[random.nextInt(modes.length)];
+            driver.setMode(driverStack, selectedMode);
+            
+            // 设置为显示状态
+            driver.setShowing(driverStack, true);
+        } 
+        // 25%概率装备GhostDriver
+        else if (random.nextDouble() < 0.5) {
+            driverStack = new ItemStack(ModItems.GHOST_DRIVER.get());
+            GhostDriver driver = (GhostDriver) driverStack.getItem();
+            
+            // 随机选择一种模式
+            GhostDriver.BeltMode[] modes = GhostDriver.BeltMode.values();
+            GhostDriver.BeltMode selectedMode = modes[random.nextInt(modes.length)];
+            driver.setMode(driverStack, selectedMode);
+        }
+        // 25%概率装备Two_sidriver
+        else {
+            driverStack = new ItemStack(ModItems.TWO_SIDRIVER.get());
+        }
+        
+        // 尝试装备到Curio槽位
+        if (BeltCurioIntegration.tryEquipBeltToCurioSlot(eliteMonster, driverStack)) {
+            // 直接触发变身逻辑
+            triggerTransformation(eliteMonster, driverStack);
+        }
     }
     
     // 辅助方法：装备盔甲，只在当前槽位为空时装备

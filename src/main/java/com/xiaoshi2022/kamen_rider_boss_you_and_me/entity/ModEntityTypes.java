@@ -74,8 +74,9 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<EliteMonsterNpc>> ELITE_MONSTER_NPC =
             ENTITY_TYPES.register("elite_monster_npc",
-                    () -> EntityType.Builder.of(EliteMonsterNpc::new, MobCategory.MONSTER)
+                    () -> EntityType.Builder.of(EliteMonsterNpc::new, MobCategory.MISC)
                             .sized(0.6f, 1.95f) // 尺寸
+                            .clientTrackingRange(8) // 添加客户端跟踪范围
                             .build("elite_monster_npc"));
 
     // 异类电班列实体

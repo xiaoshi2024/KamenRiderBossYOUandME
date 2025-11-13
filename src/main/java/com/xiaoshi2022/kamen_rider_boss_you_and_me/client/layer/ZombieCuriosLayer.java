@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -126,6 +127,9 @@ public class ZombieCuriosLayer<T extends LivingEntity, M extends EntityModel<T>>
             } else if (stack.getItem() instanceof Two_sidriver) {
                 matrixStack.translate(0.0D, 0.04D, -0.015D);
                 matrixStack.scale(1.08F, 1.08F, 1.08F);
+            } else if (stack.getItem() instanceof GhostDriver) {
+                matrixStack.translate(0.0D, 0.035D, -0.012D);
+                matrixStack.scale(1.06F, 1.06F, 1.06F);
             }
         } catch (Exception e) {
             // 如果发生任何错误，使用改进的默认变换

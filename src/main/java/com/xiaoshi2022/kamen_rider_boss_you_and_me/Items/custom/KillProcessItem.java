@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.KillProcess.KillProcessRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
@@ -48,8 +49,13 @@ public class KillProcessItem extends Item implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public KillProcessItem(Item.Properties properties) {
-        super(properties);
+        super(properties.durability(1)); // 设置耐久度为1，只能使用一次
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
+    }
+    
+    @Override
+    public boolean isRepairable(ItemStack stack) {
+        return false; // 设置物品不可修复
     }
 
     @Override
@@ -69,12 +75,14 @@ public class KillProcessItem extends Item implements GeoItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        
         // Trigger start animation on both client and server
         triggerStartAnimation();
         
         if (level.isClientSide) {
             // Client side only plays animation
-            return InteractionResultHolder.success(player.getItemInHand(hand));
+            return InteractionResultHolder.success(itemStack);
         }
 
         // Trigger function on server side
@@ -82,41 +90,46 @@ public class KillProcessItem extends Item implements GeoItem {
         
         // Send message using translation key
         player.sendSystemMessage(Component.translatable("item.kamen_rider_boss_you_and_me.kill_process.activated"));
+        
+        // 减少耐久度，使物品使用一次后就坏掉
+        itemStack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
 
-        return InteractionResultHolder.success(player.getItemInHand(hand));
+        return InteractionResultHolder.success(itemStack);
     }
 
     private void triggerKillProcessEffect(ServerPlayer player, Level level) {
-        // Detect all players within 10 blocks radius
+        // Detect all living entities within 10 blocks radius (including NPCs)
         double radius = 10.0;
         AABB searchBox = new AABB(
                 player.getX() - radius, player.getY() - radius, player.getZ() - radius,
                 player.getX() + radius, player.getY() + radius, player.getZ() + radius
         );
 
-        List<Player> nearbyPlayers = level.getEntitiesOfClass(Player.class, searchBox);
+        // Search for all living entities instead of just players
+        List<LivingEntity> nearbyEntities = level.getEntitiesOfClass(LivingEntity.class, searchBox);
         boolean foundGenesisDriver = false;
 
-        for (Player nearbyPlayer : nearbyPlayers) {
-            if (nearbyPlayer == player) continue;
+        for (LivingEntity entity : nearbyEntities) {
+            // Skip the player using the item
+            if (entity == player) continue;
 
-            // Check if player is equipped with Genesis Driver (using the same pattern as other successful code in the project)
-            Optional<SlotResult> beltSlot = CuriosApi.getCuriosInventory(nearbyPlayer)
+            // Check if entity is equipped with Genesis Driver
+            Optional<SlotResult> beltSlot = CuriosApi.getCuriosInventory(entity)
                     .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof Genesis_driver));
 
             if (beltSlot.isPresent()) {
                 ItemStack beltStack = beltSlot.get().stack();
                 Genesis_driver belt = (Genesis_driver) beltStack.getItem();
 
-                // Check if belt has a lock seed (not default mode) - this is more reliable than checking transformation state
+                // Check if belt has a lock seed (not default mode)
                 if (belt.getMode(beltStack) != Genesis_driver.BeltMode.DEFAULT) {
                     foundGenesisDriver = true;
                     
-                    // Create explosion at player's waist position
+                    // Create explosion at entity's waist position
                     Vec3 waistPosition = new Vec3(
-                            nearbyPlayer.getX(),
-                            nearbyPlayer.getY() + 0.9,
-                            nearbyPlayer.getZ()
+                            entity.getX(),
+                            entity.getY() + 0.9,
+                            entity.getZ()
                     );
                     
                     // Create explosion that doesn't break blocks
@@ -143,7 +156,7 @@ public class KillProcessItem extends Item implements GeoItem {
                     belt.setActive(beltStack, false);
                     
                     // Remove all armor and clear transformation state
-                    removeAllArmor(nearbyPlayer);
+                    removeAllArmor(entity);
                     
                     // Check belt mode and drop the corresponding lock seed
                     Genesis_driver.BeltMode mode = belt.getMode(beltStack);
@@ -170,16 +183,32 @@ public class KillProcessItem extends Item implements GeoItem {
                         }
                         
                         // Always drop the lock seed to the ground
-                        nearbyPlayer.spawnAtLocation(lockSeed, 0.5f);
+                        entity.spawnAtLocation(lockSeed, 0.5f);
                         
-                        // Reset belt mode to default
-                        belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+                        // 检查是否是百界众实体（这里EliteMonster百界众，如果不是则需要修改为正确的实体类）
+                        // 对于百界众，腰带也会跟着锁种掉落下来
+                        if (entity instanceof EliteMonsterNpc || entity.getType().toString().contains("heisei_boss") || entity.getType().toString().contains("world_ending")) {
+                            // 创建一个新的腰带物品栈
+                            ItemStack newBeltStack = new ItemStack(com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.GENESIS_DRIVER.get());
+                            // 设置为默认模式
+                            ((Genesis_driver)newBeltStack.getItem()).setMode(newBeltStack, Genesis_driver.BeltMode.DEFAULT);
+                            // 掉落腰带
+                            entity.spawnAtLocation(newBeltStack, 0.5f);
+                            // 从饰品栏中移除原腰带 - 使用正确的API
+                            beltSlot.get().stack().setCount(0); // 通过设置数量为0来移除物品
+                        } else {
+                            // 对于非百界众，只重置腰带模式
+                            belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+                        }
                     }
                     
                     // Add cooldown to the belt (via NBT)
                     beltStack.getOrCreateTag().putLong("cooldownUntil", level.getGameTime() + 200); // 10 seconds cooldown
                     
-                    nearbyPlayer.sendSystemMessage(Component.translatable("item.kamen_rider_boss_you_and_me.kill_process.disabled"));
+                    // Only send message if entity is a player
+                    if (entity instanceof Player nearbyPlayer) {
+                        nearbyPlayer.sendSystemMessage(Component.translatable("item.kamen_rider_boss_you_and_me.kill_process.disabled"));
+                    }
                 }
             }
         }
@@ -221,10 +250,10 @@ public class KillProcessItem extends Item implements GeoItem {
     }
     
     /**
-     * Removes all armor from the player and clears transformation state
-     * Called when a player's transformation is canceled
+     * Removes all armor from the entity and clears transformation state
+     * Called when an entity's transformation is canceled
      */
-    private void removeAllArmor(Player player) {
+    private void removeAllArmor(LivingEntity entity) {
         // Clear all armor slots
         for (EquipmentSlot slot : new EquipmentSlot[]{
             EquipmentSlot.HEAD, 
@@ -232,14 +261,16 @@ public class KillProcessItem extends Item implements GeoItem {
             EquipmentSlot.LEGS, 
             EquipmentSlot.FEET
         }) {
-            if (!player.getItemBySlot(slot).isEmpty()) {
+            if (!entity.getItemBySlot(slot).isEmpty()) {
                 // Drop the item
-                player.spawnAtLocation(player.getItemBySlot(slot));
-                player.setItemSlot(slot, ItemStack.EMPTY);
+                entity.spawnAtLocation(entity.getItemBySlot(slot));
+                entity.setItemSlot(slot, ItemStack.EMPTY);
             }
         }
         
-        // Clear transformation state marker
-        player.getPersistentData().remove("is_transformed_ridder");
+        // Clear transformation state marker - only for players
+        if (entity instanceof Player player) {
+            player.getPersistentData().remove("is_transformed_ridder");
+        }
     }
 }

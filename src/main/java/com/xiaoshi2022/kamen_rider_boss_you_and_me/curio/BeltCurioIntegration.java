@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -104,7 +105,8 @@ public class BeltCurioIntegration {
         boolean isBelt = beltStack.getItem() instanceof Genesis_driver || 
                         beltStack.getItem() instanceof sengokudrivers_epmty ||
                         beltStack.getItem() instanceof DrakKivaBelt ||
-                        beltStack.getItem() instanceof Two_sidriver;
+                        beltStack.getItem() instanceof Two_sidriver ||
+                        beltStack.getItem() instanceof GhostDriver;
 
         if (!isBelt) {
             // LOGGER.debug("Item is not a belt, cannot equip: " + beltStack.getItem().getClass().getName());
@@ -116,7 +118,7 @@ public class BeltCurioIntegration {
             return false;
         }
 
-        boolean success = equipCurio(entity, beltStack, BELT_SLOT_TYPE);
+        boolean success = equipCurioUsingSetMethod(entity, beltStack, BELT_SLOT_TYPE);
         
         // 为僵尸和村民添加隐藏模型的NBT标签
         if (success && (isZombieType(entity) || isVillagerType(entity))) {
@@ -177,7 +179,7 @@ public class BeltCurioIntegration {
             return false;
         }
         
-        boolean success = equipCurio(zombie, belt, BELT_SLOT_TYPE);
+        boolean success = equipCurioUsingSetMethod(zombie, belt, BELT_SLOT_TYPE);
         
         // 添加隐藏模型的NBT标签
         if (success) {
@@ -336,7 +338,8 @@ public class BeltCurioIntegration {
         return stack.getItem() instanceof Genesis_driver ||
                stack.getItem() instanceof sengokudrivers_epmty ||
                stack.getItem() instanceof DrakKivaBelt ||
-               stack.getItem() instanceof Two_sidriver;
+               stack.getItem() instanceof Two_sidriver ||
+               stack.getItem() instanceof GhostDriver;
     }
 
     /**

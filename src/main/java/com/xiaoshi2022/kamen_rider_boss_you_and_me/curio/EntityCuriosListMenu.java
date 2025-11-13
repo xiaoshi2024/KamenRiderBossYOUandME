@@ -3,12 +3,15 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.curio;
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me.MODID;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModMenus;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -99,13 +102,32 @@ public class EntityCuriosListMenu extends AbstractContainerMenu {
             this.addSlot(new CurioSlot(handler.getStacks(), slotIndex, slotX, slotY, ctx) {
                 @Override
                 public boolean mayPickup(Player player) {
-                    // 允许玩家取出物品
+                    // 检查目标实体是否为僵尸或百界实体（EliteMonsterNpc）
+                    boolean isRestrictedEntity = target instanceof Zombie || target instanceof EliteMonsterNpc;
+                    
+                    // 对于僵尸和百界实体，只有创造模式可以取出物品
+                    if (isRestrictedEntity) {
+                        return player.isCreative();
+                    }
+                    
+                    // 其他实体保持原有行为
                     return true;
                 }
 
                 @Override
                 public boolean mayPlace(ItemStack stack) {
-                    // 允许放入任何物品，包括腰带
+                    // 检查目标实体是否为僵尸或百界实体（EliteMonsterNpc）
+                    boolean isRestrictedEntity = target instanceof Zombie || target instanceof EliteMonsterNpc;
+                    
+                    // 获取打开菜单的玩家（通常是当前玩家）
+                    Player player = Minecraft.getInstance().player;
+                    
+                    // 对于僵尸和百界实体，只有创造模式可以放入物品
+                    if (isRestrictedEntity && player != null) {
+                        return player.isCreative();
+                    }
+                    
+                    // 其他实体保持原有行为
                     return true;
                 }
 

@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -45,18 +46,16 @@ public class EliteMonsterCuriosLayer<T extends LivingEntity, M extends EntityMod
             return;
         }
         
-        // 检查是否装备了腰带（在Curio槽、主手或副手）或者处于变身状态
+        // 检查是否装备了腰带（仅在Curio槽）或者处于变身状态
         EliteMonsterNpc eliteMonster = (EliteMonsterNpc) entity;
-        boolean hasBeltAnywhere = BeltCurioIntegration.hasBeltInCurioSlot(entity) || 
-                                BeltCurioIntegration.isBeltItem(eliteMonster.getMainHandItem()) || 
-                                BeltCurioIntegration.isBeltItem(eliteMonster.getOffhandItem());
+        boolean hasBeltInCurio = BeltCurioIntegration.hasBeltInCurioSlot(entity);
         
-        if (!hasBeltAnywhere && !eliteMonster.isTransformed()) {
+        if (!hasBeltInCurio && !eliteMonster.isTransformed()) {
             return;
         }
 
-        // 尝试获取腰带：优先从Curio槽，然后检查主手和副手
-        Optional<ItemStack> beltOpt = BeltCurioIntegration.getBeltFromEntity(entity);
+        // 仅从Curio槽获取腰带
+        Optional<ItemStack> beltOpt = BeltCurioIntegration.getBeltFromCurioSlot(entity);
         if (beltOpt.isPresent()) {
             ItemStack beltStack = beltOpt.get();
             renderBelt(entity, beltStack, matrixStack, buffer, packedLightIn);
@@ -180,6 +179,9 @@ public class EliteMonsterCuriosLayer<T extends LivingEntity, M extends EntityMod
         } else if (stack.getItem() instanceof Two_sidriver) {
             matrixStack.translate(0.0D, 0.03D, -0.012D);
             matrixStack.scale(1.06F, 1.06F, 1.06F);
+        } else if (stack.getItem() instanceof GhostDriver) {
+            matrixStack.translate(0.0D, 0.025D, -0.011D);
+            matrixStack.scale(1.05F, 1.05F, 1.05F);
         }
     }
 }
