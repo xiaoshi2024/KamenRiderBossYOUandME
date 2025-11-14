@@ -3,7 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;

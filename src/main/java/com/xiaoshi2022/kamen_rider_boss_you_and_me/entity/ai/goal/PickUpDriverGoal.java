@@ -2,7 +2,6 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.goal;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import forge.net.mca.entity.VillagerEntityMCA;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;

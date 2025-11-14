@@ -1,4 +1,4 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
 import net.minecraft.world.entity.player.Player;

@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangel
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.TransformationWeaponManager;
@@ -139,7 +140,7 @@ public class DarkOrangeReleaseRequestPacket {
         belt.setEquipped(beltStack, false);
         
         // 重置Dark_orangels变身状态变量
-        com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables.PlayerVariables variables = player.getCapability(com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables.PlayerVariables());
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         variables.isDarkOrangelsTransformed = false;
         variables.syncPlayerVariables(player); // 同步变量到客户端
         

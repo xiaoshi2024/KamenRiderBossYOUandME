@@ -9,8 +9,6 @@ import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class EliteMonsterRenderer extends HumanoidMobRenderer<EliteMonsterNpc, HumanoidModel<EliteMonsterNpc>> {
 

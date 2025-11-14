@@ -5,7 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

@@ -1,4 +1,4 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.client.Minecraft;

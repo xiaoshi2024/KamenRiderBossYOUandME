@@ -1,10 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.NapoleonGhost.NapoleonGhostItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -15,8 +17,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.DamageSource;
 
 import java.util.HashMap;
 import java.util.Iterator;

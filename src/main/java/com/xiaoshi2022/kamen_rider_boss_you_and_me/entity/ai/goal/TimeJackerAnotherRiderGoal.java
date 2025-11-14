@@ -2,13 +2,10 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.goal;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity;
 import forge.net.mca.entity.VillagerEntityMCA;
-import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.phys.AABB;
+
 import java.util.EnumSet;
 import java.util.List;
 

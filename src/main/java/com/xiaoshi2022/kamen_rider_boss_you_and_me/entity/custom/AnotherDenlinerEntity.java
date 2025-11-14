@@ -1,11 +1,11 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.DesertOfTimeEntityHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -35,7 +35,6 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.*;
-import java.util.Comparator;
 
 public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlay("idle");

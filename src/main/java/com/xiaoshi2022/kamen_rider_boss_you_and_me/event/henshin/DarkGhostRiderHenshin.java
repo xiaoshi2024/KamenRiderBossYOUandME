@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.PlayerAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

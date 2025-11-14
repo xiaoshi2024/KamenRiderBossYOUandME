@@ -13,9 +13,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftaria
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.PlayerJoinSyncPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PlayerJoinSyncPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager;
 import net.minecraft.client.Minecraft;

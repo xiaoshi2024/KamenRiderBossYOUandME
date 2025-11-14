@@ -1,10 +1,9 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.commands;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 
 @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID)
 public class CommandRegistry {

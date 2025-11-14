@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.client;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmorUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

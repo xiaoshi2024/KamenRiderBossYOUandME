@@ -1,7 +1,5 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai;
 
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

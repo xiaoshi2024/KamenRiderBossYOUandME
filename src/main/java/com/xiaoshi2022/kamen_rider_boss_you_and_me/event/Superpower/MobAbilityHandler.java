@@ -1,14 +1,13 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Mega_uiorder;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.CherrySonicArrowAbilityHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.MobRiderVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.MobRiderVariables;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;

@@ -2,7 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.bananafruit.bananafruitRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;

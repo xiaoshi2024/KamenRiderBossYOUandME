@@ -1,14 +1,12 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeRevertPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTransformPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.GhostTransformationRequestPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.marika.MarikaSensoryEnhancementPacket;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.tyrant.TyrantIntangibilityTogglePacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.PlayerAnimationPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;

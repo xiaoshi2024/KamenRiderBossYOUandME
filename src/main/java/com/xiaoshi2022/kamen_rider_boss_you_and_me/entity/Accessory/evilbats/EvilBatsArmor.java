@@ -2,7 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.armor.EvilBatsArmorRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;

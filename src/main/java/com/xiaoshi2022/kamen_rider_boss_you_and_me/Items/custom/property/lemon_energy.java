@@ -2,7 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.lemonenergy.LemonEnergyRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;

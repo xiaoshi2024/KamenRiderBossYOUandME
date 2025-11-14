@@ -5,7 +5,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.init;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KkcikMessage;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.KkcikMessage;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick.KicktimeProcedure;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;

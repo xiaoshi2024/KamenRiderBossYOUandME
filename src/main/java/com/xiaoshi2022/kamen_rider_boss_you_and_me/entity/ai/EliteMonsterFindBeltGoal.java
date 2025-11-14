@@ -2,8 +2,8 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.BeltCurioIntegration;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;

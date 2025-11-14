@@ -1,4 +1,4 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.OverlordFeatureHandler;
 import net.minecraft.network.FriendlyByteBuf;

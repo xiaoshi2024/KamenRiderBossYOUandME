@@ -1,9 +1,9 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BeltAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,9 +12,9 @@ import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
-import java.util.Optional;
 
 public class GhostTransformationRequestPacket {
     private final UUID playerId;

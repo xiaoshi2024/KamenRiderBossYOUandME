@@ -1,4 +1,4 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

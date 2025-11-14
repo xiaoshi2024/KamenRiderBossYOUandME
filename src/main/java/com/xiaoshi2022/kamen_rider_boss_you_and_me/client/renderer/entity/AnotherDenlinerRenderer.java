@@ -5,7 +5,6 @@ import com.mojang.math.Axis;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class AnotherDenlinerRenderer extends GeoEntityRenderer<AnotherDenlinerEntity> {

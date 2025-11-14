@@ -1,4 +1,4 @@
-package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
+package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
 import net.minecraft.client.Minecraft;

@@ -1,15 +1,13 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.registry;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.*;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.KillProcessItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.NapoleonEyecon;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.food.InvesMeat;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.Globalism;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponSwordItem;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DarkRiderGhost.DarkRiderGhostItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.NapoleonGhost.NapoleonGhostItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;

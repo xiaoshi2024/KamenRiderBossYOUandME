@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.KRBVariables;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.MobRiderVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.MobRiderVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmorUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

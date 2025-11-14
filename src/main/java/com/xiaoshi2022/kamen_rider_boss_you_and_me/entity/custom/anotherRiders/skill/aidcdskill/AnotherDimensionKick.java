@@ -9,8 +9,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-
 public class AnotherDimensionKick {
     private static final int COOLDOWN = 100; // 5秒冷却
     private static final float DAMAGE_MULTIPLIER = 1.5F; // 伤害倍数

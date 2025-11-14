@@ -6,7 +6,6 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.resources.ResourceLocation;
 
 public class EliteMonsterArmorLayer extends RenderLayer<EliteMonsterNpc, HumanoidModel<EliteMonsterNpc>> {
 
