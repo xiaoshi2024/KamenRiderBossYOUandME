@@ -1,110 +1,72 @@
 {
   "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
   "texture_size": [
     32,
     32
   ],
   "display": {
     "thirdperson_righthand": {
-      "rotation": [
-        28.75,
-        0,
-        0
-      ],
       "translation": [
         0,
-        -1.5,
-        0
-      ],
-      "scale": [
-        1.7168,
-        1.7168,
-        1.7168
+        -3,
+        -1
       ]
     },
     "thirdperson_lefthand": {
-      "rotation": [
-        117.47,
-        53.48,
-        -145.92
-      ],
       "translation": [
-        -0.5,
-        -3.25,
-        -0.25
-      ],
-      "scale": [
-        1.98438,
-        1.98438,
-        1.98438
+        0,
+        -3,
+        -0.75
       ]
     },
     "firstperson_righthand": {
       "rotation": [
-        12.75,
         0,
+        106,
         0
       ],
       "translation": [
-        0,
-        0,
-        2
+        1.25,
+        0.75,
+        0.75
       ],
       "scale": [
-        2.90039,
-        3.40234,
-        1.82422
+        2,
+        2,
+        2
       ]
     },
     "firstperson_lefthand": {
       "rotation": [
-        -154.75,
-        87.75,
-        -180
+        0,
+        99,
+        0
+      ],
+      "translation": [
+        2.25,
+        0.5,
+        0
       ],
       "scale": [
-        2.7832,
-        3.19531,
-        2.07227
+        2,
+        2,
+        2
       ]
     },
     "ground": {
       "scale": [
-        2.22461,
-        2.22461,
-        1.99414
+        1.5,
+        1.5,
+        1.5
       ]
     },
     "gui": {
       "rotation": [
-        -180,
-        4.25,
-        -180
-      ],
-      "translation": [
         0,
-        -4.75,
+        180,
         0
       ],
-      "scale": [
-        3.625,
-        3.625,
-        3.625
-      ]
-    },
-    "head": {
-      "translation": [
-        0,
-        -2.5,
-        -7.75
-      ],
-      "scale": [
-        3.25391,
-        3.25391,
-        3.25391
-      ]
-    },
-    "fixed": {
       "translation": [
         0,
         -5.25,
@@ -112,12 +74,21 @@
       ],
       "scale": [
         4,
-        3.82422,
-        1
+        4,
+        4
+      ]
+    },
+    "fixed": {
+      "translation": [
+        0,
+        -4.25,
+        -2
+      ],
+      "scale": [
+        4,
+        4,
+        4
       ]
     }
-  },
-  "textures": {
-    "particle": "item/aiden_owc"
   }
 }
