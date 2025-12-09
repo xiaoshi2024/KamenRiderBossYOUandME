@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -27,23 +28,13 @@ public class GhostEyeEntity extends LivingEntity implements GeoEntity {
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlay("fly");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     
-    // 存储控制这个实体的玩家UUID
-    private UUID controllingPlayerId;
-    private Player controllingPlayer;
-    
-    // 获取控制玩家的UUID
-    public UUID getControllingPlayerId() {
-        return controllingPlayerId;
-    }
-    
     public GhostEyeEntity(EntityType<? extends LivingEntity> type, Level world) {
         super(type, world);
         this.noPhysics = false; // 允许物理碰撞
         this.setInvulnerable(false); // 不是无敌的
 
-        // 添加以下设置来隐藏实体ID
+        // 确保实体可见但不显示名称
         this.setCustomNameVisible(false);  // 确保自定义名称不可见
-        this.setCustomName(null);  // 清除自定义名称
     }
 
     public static AttributeSupplier createAttributes() {
@@ -54,13 +45,7 @@ public class GhostEyeEntity extends LivingEntity implements GeoEntity {
                 .build();
     }
 
-    // 设置控制这个实体的玩家
-    public void setControllingPlayer(Player player) {
-        this.controllingPlayerId = player.getUUID();
-        this.controllingPlayer = player;
-        // 同步玩家的生命值到实体
-        this.setHealth(player.getHealth());
-    }
+
     
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
@@ -77,62 +62,12 @@ public class GhostEyeEntity extends LivingEntity implements GeoEntity {
     public void tick() {
         super.tick();
         
-        // 如果是客户端，找到控制这个实体的玩家
-        if (this.level().isClientSide()) {
-            if (this.controllingPlayer == null && this.controllingPlayerId != null) {
-                Entity entity = this.level().getPlayerByUUID(this.controllingPlayerId);
-                if (entity instanceof Player) {
-                    this.controllingPlayer = (Player) entity;
-                }
-            }
-        }
-        
-        // 处理飞行移动
-        if (this.controllingPlayer != null && this.controllingPlayer.isAlive()) {
-            // 同步玩家的生命值变化
-            if (!this.level().isClientSide()) {
-                this.setHealth(this.controllingPlayer.getHealth());
-            }
-            
-            // 飞行移动逻辑
-            if (this.isInWater()) {
-                // 在水中的移动
-                this.setDeltaMovement(this.getDeltaMovement().add(
-                        this.controllingPlayer.xxa * 0.03D, 
-                        this.controllingPlayer.yya * 0.03D, 
-                        this.controllingPlayer.zza * 0.03D));
-            } else {
-                // 在空中的飞行移动
-                this.setDeltaMovement(this.getDeltaMovement().add(
-                        this.controllingPlayer.xxa * 0.03D, 
-                        this.controllingPlayer.yya * 0.03D, 
-                        this.controllingPlayer.zza * 0.03D));
-            }
-            
-            // 限制速度
-            double maxSpeed = this.getAttributeValue(Attributes.FLYING_SPEED);
-            this.setDeltaMovement(
-                    clamp(this.getDeltaMovement().x, -maxSpeed, maxSpeed),
-                    clamp(this.getDeltaMovement().y, -maxSpeed, maxSpeed),
-                    clamp(this.getDeltaMovement().z, -maxSpeed, maxSpeed)
-            );
-            
-            // 应用阻力
-            this.setDeltaMovement(
-                    this.getDeltaMovement().x * 0.95D,
-                    this.getDeltaMovement().y * 0.95D,
-                    this.getDeltaMovement().z * 0.95D
-            );
-            
-            // 同步玩家的旋转
-            this.setYRot(this.controllingPlayer.getYRot());
-            this.yRotO = this.controllingPlayer.getYRot();
-            this.setXRot(this.controllingPlayer.getXRot());
-            this.xRotO = this.controllingPlayer.getXRot();
-        } else if (!this.level().isClientSide()) {
-            // 如果找不到控制玩家，移除实体
-            this.discard();
-        }
+        // 应用阻力
+        this.setDeltaMovement(
+                this.getDeltaMovement().x * 0.95D,
+                this.getDeltaMovement().y * 0.95D,
+                this.getDeltaMovement().z * 0.95D
+        );
     }
     
     // 辅助方法：限制值的范围
@@ -145,20 +80,11 @@ public class GhostEyeEntity extends LivingEntity implements GeoEntity {
         return cache;
     }
 
-    // 实体受到伤害时，将伤害传递给控制玩家
+    // 实体受到伤害的处理
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.controllingPlayer != null && !this.level().isClientSide()) {
-            // 将伤害传递给控制玩家
-            this.controllingPlayer.hurt(source, amount);
-            // 同步玩家的生命值
-            this.setHealth(this.controllingPlayer.getHealth());
-            // 如果玩家死亡，移除实体
-            if (!this.controllingPlayer.isAlive()) {
-                this.discard();
-            }
-        }
-        return false; // 实体本身不会受到伤害
+        // 实体本身处理伤害
+        return super.hurt(source, amount);
     }
 
     @Override
@@ -210,49 +136,23 @@ public class GhostEyeEntity extends LivingEntity implements GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        if (this.controllingPlayerId != null) {
-            compound.putUUID("ControllingPlayer", this.controllingPlayerId);
-        }
     }
     
     // 加载实体数据
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.hasUUID("ControllingPlayer")) {
-            this.controllingPlayerId = compound.getUUID("ControllingPlayer");
-        }
     }
     
     @Override
     public boolean isCustomNameVisible() {
-        return false; // 隐藏实体ID显示
+        return false; // 隐藏实体名称
     }
     
     // 确保实体ID不显示
     @Override
     public boolean shouldShowName() {
         return false;
-    }
-
-    @Override
-    public Component getCustomName() {
-        return null;
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return false;
-    }
-
-    @Override
-    public Component getName() {
-        return Component.empty();
-    }
-
-    @Override
-    public Component getDisplayName() {
-        return Component.empty();
     }
 
 }

@@ -21,11 +21,18 @@ public class EvilBatsAbilityHandler {
 
     /* ---------------- 常驻被动 ---------------- */
 
+    // 飞行时的骑士能量消耗速率（每秒消耗3点能量）
+    private static final double FLIGHT_ENERGY_CONSUMPTION_PER_SECOND = 3.0D;
+    // 每tick消耗的能量（基于20ticks/秒计算）
+    private static final double FLIGHT_ENERGY_CONSUMPTION_PER_TICK = FLIGHT_ENERGY_CONSUMPTION_PER_SECOND / 20.0D;
+
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         Player player = event.player;
         if (player.level().isClientSide()) return;
+
+        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
 
         if (isWearingEvilBatsArmor(player)) {
             // ① 夜视（黑暗视觉）
@@ -42,15 +49,27 @@ public class EvilBatsAbilityHandler {
 
             // ③ 速度提升（黑暗速度） - 只在没有效果或效果等级低于我们提供的等级时添加，避免覆盖原版药水
             addEffectIfBetterOrAbsent(player, MobEffects.MOVEMENT_SPEED, 40, 0);
-            
+
             // ④ 静谧性 - 降低声音和脚步声
             addEffectIfBetterOrAbsent(player, MobEffects.INVISIBILITY, 40, 0);
-            
+
             // ⑤ 隐密行动 - 减少被生物察觉的范围
             addStealthEffect(player);
-            
+
             // ⑥ 飞行能力 - 允许玩家飞行
             enableFlight(player);
+
+            // ⑦ 飞行时消耗骑士能量
+            if (player.getAbilities().flying) {
+                // 持续消耗骑士能量
+                variables.riderEnergy = Math.max(0, variables.riderEnergy - FLIGHT_ENERGY_CONSUMPTION_PER_TICK);
+                variables.syncPlayerVariables(player);
+
+                // 当能量不足时，禁用飞行
+                if (variables.riderEnergy <= 0) {
+                    disableFlight(player, variables);
+                }
+            }
         } else {
             // 当玩家不再穿着盔甲时，保留原版药水的效果
             // 我们不再直接移除效果，而是让它们自然到期
@@ -83,12 +102,12 @@ public class EvilBatsAbilityHandler {
                 player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof EvilBatsArmor ||
                 player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof EvilBatsArmor;
     }
-    
+
     // 启用飞行能力
     private static void enableFlight(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
-            
+
             // 检查是否已经有其他飞行模式在控制
             if (variables.currentFlightController == null || variables.currentFlightController.equals("EvilBats")) {
                 // 设置飞行控制器为EvilBats
@@ -98,6 +117,17 @@ public class EvilBatsAbilityHandler {
                 // 同步飞行状态到客户端
                 serverPlayer.onUpdateAbilities();
                 variables.syncPlayerVariables(serverPlayer);
+            }
+        }
+    }
+
+    // 禁用飞行能力
+    private static void disableFlight(Player player, KRBVariables.PlayerVariables variables) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            // 只有当当前飞行控制器是EvilBats时才禁用飞行
+            if (variables.currentFlightController != null && variables.currentFlightController.equals("EvilBats")) {
+                serverPlayer.getAbilities().flying = false;
+                serverPlayer.onUpdateAbilities();
             }
         }
     }

@@ -242,19 +242,38 @@ public class PlayerAttackHandler {
                 bat -> bat.isTame() && bat.isOwnedBy(attacker));
         
         if (!bats.isEmpty()) {
-            KivatBatTwoNd bat = bats.get(0); // 获取第一只找到的蝙蝠
+            // 1. 获取并处理第一只蝙蝠
+            KivatBatTwoNd bat = bats.get(0);
             
-            // 1. 改变蝙蝠的主人
+            // 改变蝙蝠的主人
             bat.tame(victim);
             
-            // 2. 设置蝙蝠飞向受害者并触发变身
+            // 设置蝙蝠飞向受害者并触发变身
             bat.temptToPlayer(victim);
             bat.pendingTransformPlayer = victim.getUUID();
             
-            // 3. 给受害者一些提示消息
+            // 2. 移除攻击者的其他所有蝙蝠，防止出现多余蝙蝠
+            for (int i = 1; i < bats.size(); i++) {
+                KivatBatTwoNd extraBat = bats.get(i);
+                extraBat.discard(); // 移除多余的蝙蝠实体
+            }
+            
+            // 3. 检查攻击者是否还有其他可能的蝙蝠（全局检查）
+            List<KivatBatTwoNd> allAttackerBats = level.getEntitiesOfClass(KivatBatTwoNd.class,
+                    new AABB(0, 0, 0, 0, 0, 0).inflate(500), // 全局范围检查
+                    kivatBat -> kivatBat.isTame() && kivatBat.isOwnedBy(attacker));
+            
+            // 移除攻击者的所有其他蝙蝠
+            for (KivatBatTwoNd attackerBat : allAttackerBats) {
+                if (attackerBat != bat) { // 保留已经转移的那只蝙蝠
+                    attackerBat.discard();
+                }
+            }
+            
+            // 4. 给受害者一些提示消息
             victim.sendSystemMessage(Component.literal("小丑蝙蝠：现在你获得了黑暗的力量！"));
             
-            // 4. 生成一些视觉效果
+            // 5. 生成一些视觉效果
             spawnEffectParticles(level, victim);
         }
     }

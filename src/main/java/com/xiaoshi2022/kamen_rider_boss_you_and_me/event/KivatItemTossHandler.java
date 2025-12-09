@@ -38,6 +38,15 @@ public class KivatItemTossHandler {
         Player player = e.getPlayer();
         Vec3 pos = player.position().add(player.getLookAngle().scale(1.0));
 
+        // 检查并移除玩家可能已有的其他Kivat蝙蝠，防止出现重复蝙蝠
+        java.util.List<KivatBatTwoNd> existingBats = level.getEntitiesOfClass(KivatBatTwoNd.class,
+                new net.minecraft.world.phys.AABB(player.blockPosition()).inflate(50),
+                b -> b.isTame() && b.isOwnedBy(player));
+        
+        for (KivatBatTwoNd existingBat : existingBats) {
+            existingBat.discard();
+        }
+
         bat.load(tag);
         bat.moveTo(pos.x, pos.y + 0.5, pos.z, player.getYRot(), 0);
         bat.setDeltaMovement(Vec3.ZERO);

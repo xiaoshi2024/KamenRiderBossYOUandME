@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariable
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.NetworkEvent;
 import tocraft.walkers.api.PlayerShape;
 
@@ -35,7 +36,15 @@ public class GhostEyeRevertPacket {
             ServerPlayer player = context.getSender();
             if (player != null) {
                 // 使用PlayerShape API解除变形
-                PlayerShape.updateShapes(player, null);
+                try {
+                    LivingEntity currentShape = PlayerShape.getCurrentShape(player);
+                    if (currentShape != null) {
+                        PlayerShape.updateShapes(player, null);
+                    }
+                } catch (Exception e) {
+                    // 捕获可能的异常，避免服务器崩溃
+                    e.printStackTrace();
+                }
                 
                 // 获取玩家变量
                 KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
