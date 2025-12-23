@@ -20,8 +20,31 @@ import java.util.Optional;
  */
 public abstract class AbstractRiderBelt extends Item implements GeoItem, ICurioItem {
 
+    // 腰带最大耐久值
+    public static final int MAX_DURABILITY = 100;
+
     public AbstractRiderBelt(Properties properties) {
-        super(properties);
+        super(properties.durability(MAX_DURABILITY));
+    }
+
+    /**
+     * 减少腰带耐久度
+     */
+    public boolean damageBelt(ItemStack stack, int amount, Player player) {
+        if (player.isCreative()) {
+            // 创造模式下不减少耐久
+            return false;
+        }
+
+        int newDamage = stack.getDamageValue() + amount;
+        stack.setDamageValue(newDamage);
+
+        // 检查腰带是否损坏
+        if (newDamage >= stack.getMaxDamage()) {
+            // 腰带损坏，返回true表示需要移除
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -67,8 +67,13 @@ public class PlayerDeathHandler {
                 // 5. 清空盔甲
                 clearTransformationArmor(player);
 
-                // 6. 返还腰带
-                returnBelt(player, isBatForm);
+                // 6. 扣除腰带耐久并检查是否损坏
+                boolean beltSurvived = damagePlayerBelts(player, 25);
+                
+                // 7. 只有腰带存活时才返还腰带
+                if (beltSurvived) {
+                    returnBelt(player, isBatForm);
+                }
 
                 // 7. 如果需要，返还眼魂
                 if (shouldReturnEye) {
@@ -411,6 +416,41 @@ public class PlayerDeathHandler {
         
         // 玩家死亡时移除隐身效果
         player.removeEffect(MobEffects.INVISIBILITY);
+    }
+
+    /**
+     * 为玩家装备的所有腰带扣除耐久度
+     * @param player 玩家
+     * @param amount 扣除的耐久度
+     * @return true如果至少有一条腰带存活，false如果所有腰带都被损坏
+     */
+    private static boolean damagePlayerBelts(Player player, int amount) {
+        AtomicBoolean anyBeltSurvived = new AtomicBoolean(false);
+
+        // 找到所有装备的腰带
+        CuriosApi.getCuriosInventory(player).ifPresent(curios -> {
+            curios.findCurios(stack -> stack.getItem() instanceof AbstractRiderBelt)
+                    .forEach(curio -> {
+                        ItemStack beltStack = curio.stack();
+                        AbstractRiderBelt belt = (AbstractRiderBelt) beltStack.getItem();
+
+                        // 扣除耐久度
+                        boolean beltBroken = belt.damageBelt(beltStack, amount, player);
+                        if (beltBroken) {
+                            // 腰带损坏，直接从槽位中移除
+                            if (!player.level().isClientSide) {
+                                curios.getStacksHandler(curio.slotContext().identifier()).ifPresent(handler -> {
+                                    handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY);
+                                    handler.update();
+                                });
+                            }
+                        } else {
+                            anyBeltSurvived.set(true);
+                        }
+                    });
+        });
+
+        return anyBeltSurvived.get();
     }
 
     // 根据玩家装备的盔甲类型确定锁种类型
