@@ -28,8 +28,8 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class DarkKivaAbilityHandler {
 
-    // 修改飞行时间：80秒 = 1600 ticks (20 ticks/秒)
-    private static final int BAT_MODE_DURATION = 1600;
+    // 修改飞行时间：50秒 = 1000 ticks (20 ticks/秒)
+    private static final int BAT_MODE_DURATION = 1000;
     private static final int BLOOD_SUCK_COOLDOWN = 100;
     private static final int SONIC_BLAST_COOLDOWN = 200;
     private static final int BLOOD_STEAL_INTERVAL = 100;

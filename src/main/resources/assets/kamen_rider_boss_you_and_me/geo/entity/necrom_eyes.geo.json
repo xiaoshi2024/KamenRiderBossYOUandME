@@ -629,6 +629,16 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "RightArm",
+					"parent": "Necrom",
+					"pivot": [-0.5, 2.06, -3.275]
+				},
+				{
+					"name": "rightItem",
+					"parent": "RightArm",
+					"pivot": [-0.5, 2.06, -3.275]
 				}
 			]
 		}

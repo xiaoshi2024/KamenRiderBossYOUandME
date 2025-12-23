@@ -11,16 +11,16 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
-import tocraft.walkers.api.PlayerShape;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.NetworkEvent;
+import tocraft.walkers.api.PlayerShape;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 import java.util.function.Supplier;
 
 /**
@@ -33,6 +33,7 @@ public class GhostEyeTransformPacket {
     public static Map<UUID, Integer> playerFlightHeightLimits = new HashMap<>();
     public static Map<UUID, double[]> playerInitialPositions = new HashMap<>(); // 存储玩家的初始X和Z坐标
     public static Map<UUID, Long> playerTransformTimes = new HashMap<>();
+    public static Map<UUID, MobEffectInstance> playerInvisibilityEffects = new HashMap<>(); // 存储玩家的隐身buff信息
     
     // 注册定时任务处理器
     @Mod.EventBusSubscriber
@@ -65,6 +66,12 @@ public class GhostEyeTransformPacket {
                         
                         // 移除所有效果
                         player.removeAllEffects();
+                        
+                        // 恢复之前的隐身buff（如果有的话）
+                        if (playerInvisibilityEffects.containsKey(playerId)) {
+                            player.addEffect(playerInvisibilityEffects.get(playerId));
+                            playerInvisibilityEffects.remove(playerId);
+                        }
                         
                         // 通知玩家
                         player.displayClientMessage(net.minecraft.network.chat.Component.literal("超出最大飞行高度，眼魂变身已解除！"), true);
@@ -103,6 +110,12 @@ public class GhostEyeTransformPacket {
                         
                         // 移除所有效果
                         player.removeAllEffects();
+                        
+                        // 恢复之前的隐身buff（如果有的话）
+                        if (playerInvisibilityEffects.containsKey(playerId)) {
+                            player.addEffect(playerInvisibilityEffects.get(playerId));
+                            playerInvisibilityEffects.remove(playerId);
+                        }
                         
                         // 通知玩家
                         player.displayClientMessage(net.minecraft.network.chat.Component.literal("超出最大飞行范围，眼魂变身已解除！"), true);
@@ -155,6 +168,12 @@ public class GhostEyeTransformPacket {
                         
                         // 移除所有效果
                         player.removeAllEffects();
+                        
+                        // 恢复之前的隐身buff（如果有的话）
+                        if (playerInvisibilityEffects.containsKey(playerId)) {
+                            player.addEffect(playerInvisibilityEffects.get(playerId));
+                            playerInvisibilityEffects.remove(playerId);
+                        }
                         
                         // 通知玩家
                         player.displayClientMessage(net.minecraft.network.chat.Component.literal("眼魂变身时间已结束！"), true);
@@ -225,6 +244,15 @@ public class GhostEyeTransformPacket {
                     if (PlayerShape.updateShapes(player, ghostEyeEntity)) {
                         // 获取玩家变量
                         KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                        
+                        // 保存玩家当前的隐身buff（如果有的话）
+                        MobEffectInstance invisibilityEffect = player.getEffect(MobEffects.INVISIBILITY);
+                        if (invisibilityEffect != null) {
+                            playerInvisibilityEffects.put(player.getUUID(), invisibilityEffect);
+                            player.removeEffect(MobEffects.INVISIBILITY);
+                        } else {
+                            playerInvisibilityEffects.remove(player.getUUID());
+                        }
                         
                         // 设置飞行能力（参照KRB模组的NBT模式）
                         variables.currentFlightController = "GhostEye";

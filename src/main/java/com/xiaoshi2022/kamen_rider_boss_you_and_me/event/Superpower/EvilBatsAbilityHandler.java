@@ -55,6 +55,12 @@ public class EvilBatsAbilityHandler {
 
             // ⑤ 隐密行动 - 减少被生物察觉的范围
             addStealthEffect(player);
+            
+            // 新增：为EvilBatsArmor添加直接的骑士能量恢复机制（每秒恢复1点能量）
+            if (player.tickCount % 20 == 0) { // 每秒执行一次
+                variables.riderEnergy = Math.min(variables.riderEnergy + 1.0D, variables.maxRiderEnergy);
+                variables.syncPlayerVariables(player);
+            }
 
             // ⑥ 飞行能力 - 允许玩家飞行
             enableFlight(player);
