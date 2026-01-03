@@ -325,6 +325,14 @@
   "item.kamen_rider_boss_you_and_me.napoleon_ghost_chestplate": "Napoleon Ghost Chestplate",
   "item.kamen_rider_boss_you_and_me.napoleon_ghost_leggings": "Napoleon Ghost Leggings",
   "item.kamen_rider_boss_you_and_me.napoleon_ghost_boots": "Napoleon Ghost Boots",
-  "tooltip.ghostdriver.mode.napoleon_ghost": "Napoleon Ghost"
+  "tooltip.ghostdriver.mode.napoleon_ghost": "Napoleon Ghost",
+  "item.kamen_rider_boss_you_and_me.brain_driver": "Brain Driver",
+  "item.kamen_rider_boss_you_and_me.brain_driver.tooltip": "[Tip] Equip in belt accessory slot. Press X to transform, C to cancel.",
+  "item.kamen_rider_boss_you_and_me.brain_helmet": "Brain Helmet",
+  "item.kamen_rider_boss_you_and_me.brain_chestplate": "Brain Chestplate",
+  "item.kamen_rider_boss_you_and_me.brain_leggings": "Brain Leggings",
+  "tooltip.braindriver.mode.brain": "Brain Mode",
+  "tooltip.braindriver.mode.normal": "Normal Mode",
+  "tooltip.braindriver.mode": "Mode: %s"
 
 }

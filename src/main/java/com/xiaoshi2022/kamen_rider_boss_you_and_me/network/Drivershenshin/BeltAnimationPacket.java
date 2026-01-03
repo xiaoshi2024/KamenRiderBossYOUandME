@@ -45,6 +45,14 @@ public class BeltAnimationPacket {
         this(entityId, animationName, "mega_uiorder", mode.name()); // 修改这里以匹配 Mega_uiorder
     }
 
+    public BeltAnimationPacket(int entityId, String animationName, BrainDriver.BeltMode mode) {
+        this(entityId, animationName, "braindriver", mode.name());
+    }
+
+    public BeltAnimationPacket(int entityId) {
+        this(entityId, "", "", "");
+    }
+
     public BeltAnimationPacket(int entityId, String animationName, String beltType, String beltMode) {
         this.entityId = entityId;
         this.animationName = animationName;
@@ -78,6 +86,8 @@ public class BeltAnimationPacket {
                 return new BeltAnimationPacket(id, anim, Two_sidriver.DriverType.valueOf(mode));
             case "mega_uiorder":
                 return new BeltAnimationPacket(id, anim, Mega_uiorder.Mode.valueOf(mode)); // 添加对 Mega_uiorder 的处理
+            case "braindriver":
+                return new BeltAnimationPacket(id, anim, BrainDriver.BeltMode.valueOf(mode)); // 添加对 BrainDriver 的处理
             default:
                 return new BeltAnimationPacket(id, anim, beltType, mode);
         }
@@ -108,6 +118,8 @@ public class BeltAnimationPacket {
                             ts.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof Mega_uiorder mu) {
                             mu.triggerAnim(living, "controller", msg.animationName);
+                        } else if (item instanceof BrainDriver brain) {
+                            brain.triggerAnim(living, "controller", msg.animationName);
                         }
                     })
             );

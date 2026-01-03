@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.BatStampItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.Necrom_eye;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BrainDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.GhostDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
@@ -21,6 +22,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostLigh
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTeleportPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.NapoleonGhostTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BrainTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
@@ -94,13 +96,26 @@ public class KeyBinding {
                     PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket());
                 }
             }
+            // 检查是否装备了BrainDriver
+            else if (isBrainDriverEquipped(player)) {
+                // 发送Brain变身请求
+                PacketHandler.sendToServer(new BrainTransformationRequestPacket());
+            }
         }
 
         // 检测解除变身条件
         boolean isNapoleonGhostTransformed = false;
+        boolean isBrainTransformed = false;
         if (RELIEVE_KEY.isDown()) {
             LocalPlayer player = mc.player;
 
+            // 检查是否是Brain形态
+            try {
+                isBrainTransformed = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables()).isBrainTransformed;
+            } catch (Exception e) {
+                // 处理可能的异常
+            }
+            
             // 检查是否装备了魂灵驱动器
             if (isGhostDriverEquipped(player)) {
                 // 检查是否是拿破仑魂形态
@@ -118,6 +133,11 @@ public class KeyBinding {
                     // 发送黑暗Ghost解除变身请求
                     PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket(true));
                 }
+            }
+            // 检查是否是Brain形态
+            else if (isBrainTransformed) {
+                // 发送Brain解除变身请求
+                PacketHandler.sendToServer(new BrainTransformationRequestPacket(true));
             }
         }
 
@@ -473,6 +493,15 @@ public class KeyBinding {
         Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
                 .resolve()
                 .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof GhostDriver));
+
+        return opt.isPresent();
+    }
+
+    // 检测玩家是否装备了BrainDriver
+    private static boolean isBrainDriverEquipped(Player player) {
+        Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof BrainDriver));
 
         return opt.isPresent();
     }

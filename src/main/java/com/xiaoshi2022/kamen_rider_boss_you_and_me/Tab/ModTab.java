@@ -45,6 +45,7 @@ public class ModTab {
                 ItemStack darkOrange = new ItemStack(ORANGEFRUIT.get());
                 darkOrange.getOrCreateTag().putBoolean("isDarkVariant", true);
                 output.accept(darkOrange);
+                output.accept(BRAIN_DRIVER.get());
             })).build());
     public static final RegistryObject<CreativeModeTab> KINDS_TAB = TABS.register("kamen_rider_boss_you_and_me_kinds_tab", () -> CreativeModeTab.builder()
             .icon(() -> INVES_MEAT.get().getDefaultInstance())

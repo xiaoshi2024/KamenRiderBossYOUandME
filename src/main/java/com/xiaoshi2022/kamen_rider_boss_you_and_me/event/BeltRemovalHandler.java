@@ -20,6 +20,7 @@ import java.util.Optional;
 /**
  * 腰带移除检测处理器
  * 当玩家从Curio槽位取下腰带时，记录移除时间，并在3秒后自动解除变身
+ * 新骑士变身失败？这个类有你需要的！
  */
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class BeltRemovalHandler {
@@ -75,8 +76,9 @@ public class BeltRemovalHandler {
             boolean hasSengokuDriver = hasSpecificBelt(player, "sengokudrivers_epmty");
             boolean hasTwoSidriver = hasSpecificBelt(player, "Two_sidriver");
             boolean hasGhostDriver = hasSpecificBelt(player, "GhostDriver");
+            boolean hasBrainDriver = hasSpecificBelt(player, "BrainDriver");
             
-            return hasDrakKivaBelt || hasGenesisDriver || hasMegaUiorder || hasSengokuDriver || hasTwoSidriver || hasGhostDriver;
+            return hasDrakKivaBelt || hasGenesisDriver || hasMegaUiorder || hasSengokuDriver || hasTwoSidriver || hasGhostDriver || hasBrainDriver;
         } catch (Exception e) {
             // 发生异常时返回true，避免错误的解除变身
             return true;
@@ -190,6 +192,12 @@ public class BeltRemovalHandler {
             return;
         }
         
+        // Brain变身检测
+        if (variables.isBrainTransformed) {
+            variables.removedBeltType = "BRAIN";
+            return;
+        }
+        
         // 如果无法确定类型，默认设为BARONS
         variables.removedBeltType = "BARONS";
     }
@@ -258,6 +266,10 @@ public class BeltRemovalHandler {
                 break;
             case "RIDERNECROM":
                 variables.isMegaUiorderTransformed = false;
+                break;
+            case "BRAIN":
+                variables.isBrainTransformed = false;
+                variables.isBrainDriverEquipped = false;
                 break;
         }
     }

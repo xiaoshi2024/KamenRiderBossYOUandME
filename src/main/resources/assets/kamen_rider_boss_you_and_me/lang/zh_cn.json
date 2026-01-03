@@ -293,6 +293,14 @@
   "item.kamen_rider_boss_you_and_me.napoleon_ghost_chestplate": "拿破仑幽灵胸甲",
   "item.kamen_rider_boss_you_and_me.napoleon_ghost_leggings": "拿破仑幽灵护腿",
   "item.kamen_rider_boss_you_and_me.napoleon_ghost_boots": "拿破仑幽灵靴子",
-  "tooltip.ghostdriver.mode.napoleon_ghost": "拿破仑眼魂"
+  "tooltip.ghostdriver.mode.napoleon_ghost": "拿破仑眼魂",
+  "item.kamen_rider_boss_you_and_me.brain_driver": "Brain驱动器",
+  "item.kamen_rider_boss_you_and_me.brain_driver.tooltip": "[提示] 带上腰带饰品槽位，X键变身，C键解除变身。",
+  "item.kamen_rider_boss_you_and_me.brain_helmet": "Brain头盔",
+  "item.kamen_rider_boss_you_and_me.brain_chestplate": "Brain胸甲",
+  "item.kamen_rider_boss_you_and_me.brain_leggings": "Brain护腿",
+  "tooltip.braindriver.mode.brain": "Brain形态",
+  "tooltip.braindriver.mode.normal": "普通形态",
+  "tooltip.braindriver.mode": "形态: %s"
 
 }

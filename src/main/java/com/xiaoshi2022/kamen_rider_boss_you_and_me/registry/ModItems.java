@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DarkRiderGho
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.NapoleonGhost.NapoleonGhostItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.brain.Brain;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
@@ -38,7 +39,6 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, kamen_rider_boss_you_and_me.MODID);
 
     // 武器道具
-    // 假设你已经有 ModItems.ITEMS
     public static final RegistryObject<Globalism> GLOBALISM = ModItems.ITEMS.register(
             "globalism",
             () -> new Globalism(new Item.Properties())
@@ -192,7 +192,9 @@ public class ModItems {
     
     public static final RegistryObject<GhostDriver> GHOST_DRIVER = ITEMS.register("ghost_driver",
             () -> new GhostDriver(new Item.Properties().stacksTo(1)));
-
+    
+    public static final RegistryObject<BrainDriver> BRAIN_DRIVER = ITEMS.register("brain_driver",
+            () -> new BrainDriver(new Item.Properties().stacksTo(1)));
 
 
     public static final RegistryObject<RidernecromItem> RIDERNECROM_HELMET = ITEMS.register("ridernecrom_helmet", () -> new RidernecromItem(ArmorItem.Type.HELMET, new Item.Properties()));
@@ -250,6 +252,11 @@ public class ModItems {
     public static final RegistryObject<NapoleonGhostItem> NAPOLEON_GHOST_HELMET = ITEMS.register("napoleon_ghost_helmet", () -> new NapoleonGhostItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<NapoleonGhostItem> NAPOLEON_GHOST_CHESTPLATE = ITEMS.register("napoleon_ghost_chestplate", () -> new NapoleonGhostItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<NapoleonGhostItem> NAPOLEON_GHOST_LEGGINGS = ITEMS.register("napoleon_ghost_leggings", () -> new NapoleonGhostItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    
+    // Brain骑士装甲
+    public static final RegistryObject<Brain> BRAIN_HELMET = ITEMS.register("brain_helmet", () -> new Brain(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Brain> BRAIN_CHESTPLATE = ITEMS.register("brain_chestplate", () -> new Brain(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Brain> BRAIN_LEGGINGS = ITEMS.register("brain_leggings", () -> new Brain(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
     // 基夫眼珠 - 击败基夫人形后掉落 (Geo物品)
     public static final RegistryObject<GiifuEyeBall> GIIFU_EYEBALL = ITEMS.register("giifu_eyeball",

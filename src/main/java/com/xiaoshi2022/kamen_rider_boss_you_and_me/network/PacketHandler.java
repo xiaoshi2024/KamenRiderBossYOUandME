@@ -68,6 +68,9 @@ public class PacketHandler {
         
         // 注册 NapoleonGhostTransformationRequestPacket
         INSTANCE.registerMessage(index++, NapoleonGhostTransformationRequestPacket.class, NapoleonGhostTransformationRequestPacket::encode, NapoleonGhostTransformationRequestPacket::decode, NapoleonGhostTransformationRequestPacket::handle);
+        
+        // 注册 BrainTransformationRequestPacket
+        INSTANCE.registerMessage(index++, BrainTransformationRequestPacket.class, BrainTransformationRequestPacket::encode, BrainTransformationRequestPacket::decode, BrainTransformationRequestPacket::handle);
 
         INSTANCE.registerMessage(index++, SyncTransformationPacket.class,
                 SyncTransformationPacket::encode,

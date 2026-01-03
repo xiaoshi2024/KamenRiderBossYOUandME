@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DarkRiderGho
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.NapoleonGhost.NapoleonGhostItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.brain.Brain;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
@@ -362,6 +363,7 @@ public class PlayerDeathHandler {
                 ItemStack stack = player.getItemBySlot(slot);
                 if (stack.getItem() instanceof rider_baronsItem ||
                         stack.getItem() instanceof baron_lemonItem ||
+                        stack.getItem() instanceof Brain ||
                         stack.getItem() instanceof Duke ||
                         stack.getItem() instanceof RidernecromItem ||
                         stack.getItem() instanceof ZangetsuShinItem ||
@@ -399,6 +401,7 @@ public class PlayerDeathHandler {
             ItemStack armorStack = player.getInventory().armor.get(i);
             if (armorStack.getItem() instanceof rider_baronsItem ||
                     armorStack.getItem() instanceof baron_lemonItem ||
+                    armorStack.getItem() instanceof Brain ||
                     armorStack.getItem() instanceof Duke ||
                     armorStack.getItem() instanceof RidernecromItem ||
                     armorStack.getItem() instanceof ZangetsuShinItem ||

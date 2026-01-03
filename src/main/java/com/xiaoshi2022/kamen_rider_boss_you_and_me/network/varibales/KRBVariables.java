@@ -117,17 +117,19 @@ public class KRBVariables {
 
 
 			// 新增：重置其他状态变量
-		clone.isDarkKivaBeltEquipped = false;
-		clone.isOverlord = false; // 玩家死亡时重置Overlord状态
-		clone.isGhostEye = false; // 玩家死亡时重置眼魔状态
-		clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
-		clone.isDarkGhostTransformed = false; // 玩家死亡时重置黑暗Ghost变身状态
-		clone.isDarkGhostActive = false; // 玩家死亡时重置黑暗Ghost激活状态
-		clone.isNapoleonGhostTransformed = false; // 玩家死亡时重置拿破仑魂变身状态
-		clone.darkGhostMaxHealth = 50.0D; // 玩家死亡时重置黑暗幽灵骑士最大生命值
-		clone.isNecromStandby = false; // 玩家死亡时重置眼魂待命状态
-		clone.isMegaUiorderTransformed = false; // 玩家死亡时重置手环变身状态
-		clone.isNecromTemporaryRemoved = false; // 玩家死亡时重置眼魂临时移除状态
+	clone.isDarkKivaBeltEquipped = false;
+	clone.isOverlord = false; // 玩家死亡时重置Overlord状态
+	clone.isGhostEye = false; // 玩家死亡时重置眼魔状态
+	clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
+	clone.isDarkGhostTransformed = false; // 玩家死亡时重置黑暗Ghost变身状态
+	clone.isDarkGhostActive = false; // 玩家死亡时重置黑暗Ghost激活状态
+	clone.isNapoleonGhostTransformed = false; // 玩家死亡时重置拿破仑魂变身状态
+	clone.darkGhostMaxHealth = 50.0D; // 玩家死亡时重置黑暗幽灵骑士最大生命值
+	clone.isNecromStandby = false; // 玩家死亡时重置眼魂待命状态
+	clone.isMegaUiorderTransformed = false; // 玩家死亡时重置手环变身状态
+	clone.isNecromTemporaryRemoved = false; // 玩家死亡时重置眼魂临时移除状态
+	clone.isBrainDriverEquipped = false; // 玩家死亡时重置BrainDriver装备状态
+	clone.isBrainTransformed = false; // 玩家死亡时重置Brain变身状态
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
 			// 保留baseMaxHealth值，不再强制重置为默认值，以保留通过命令设置的生命值
@@ -266,6 +268,9 @@ public class KRBVariables {
 	public net.minecraft.nbt.ListTag originalRiderNecromArmor = null;
 	public net.minecraft.nbt.ListTag originalDarkKivaArmor = null;
 	public net.minecraft.nbt.ListTag originalNapoleonGhostArmor = null; // 新增字段：保存玩家原版拿破仑魂盔甲数据
+	public net.minecraft.nbt.ListTag originalBrainArmor = null; // 新增字段：保存玩家原版Brain盔甲数据
+	public boolean isBrainDriverEquipped = false; // 新增字段：记录是否装备了BrainDriver腰带
+	public boolean isBrainTransformed = false; // 新增字段：记录是否变身为Brain形态
 
 	public void syncPlayerVariables(Entity entity) {
 		if (entity instanceof ServerPlayer serverPlayer) {
@@ -389,6 +394,11 @@ public class KRBVariables {
 		if (originalNapoleonGhostArmor != null) {
 			nbt.put("originalNapoleonGhostArmor", originalNapoleonGhostArmor);
 		}
+		if (originalBrainArmor != null) {
+			nbt.put("originalBrainArmor", originalBrainArmor);
+		}
+		nbt.putBoolean("isBrainDriverEquipped", isBrainDriverEquipped);
+		nbt.putBoolean("isBrainTransformed", isBrainTransformed);
 		return nbt;
 	}
 
@@ -498,6 +508,13 @@ public class KRBVariables {
 		} else {
 			originalNapoleonGhostArmor = null;
 		}
+		if (nbt.contains("originalBrainArmor")) {
+			originalBrainArmor = nbt.getList("originalBrainArmor", net.minecraft.nbt.Tag.TAG_COMPOUND);
+		} else {
+			originalBrainArmor = null;
+		}
+		isBrainDriverEquipped = nbt.contains("isBrainDriverEquipped") ? nbt.getBoolean("isBrainDriverEquipped") : false;
+		isBrainTransformed = nbt.contains("isBrainTransformed") ? nbt.getBoolean("isBrainTransformed") : false;
 	}
 	}
 
@@ -593,6 +610,9 @@ public class KRBVariables {
                     variables.originalRiderNecromArmor = message.data.originalRiderNecromArmor;
                     variables.originalDarkKivaArmor = message.data.originalDarkKivaArmor;
                     variables.originalNapoleonGhostArmor = message.data.originalNapoleonGhostArmor;
+                    variables.originalBrainArmor = message.data.originalBrainArmor;
+                    variables.isBrainDriverEquipped = message.data.isBrainDriverEquipped;
+                    variables.isBrainTransformed = message.data.isBrainTransformed;
 				}
 			});
 			context.setPacketHandled(true);

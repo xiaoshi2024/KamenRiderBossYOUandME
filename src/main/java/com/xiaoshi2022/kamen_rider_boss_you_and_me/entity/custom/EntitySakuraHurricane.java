@@ -233,6 +233,9 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
 
                 // 应用移动
                 super.travel(new Vec3(strafe, travelVector.y, forward));
+                
+                // 立即限制速度，防止super.travel产生过高速度
+                this.setDeltaMovement(limitSpeed(this.getDeltaMovement()));
 
                 // 更新轮子旋转（动画用）
                 this.prevWheelRotation = this.wheelRotation;
@@ -377,14 +380,17 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
 
         // 获取当前移动方向来增加跳跃距离
         Vec3 currentMotion = this.getDeltaMovement();
-        double horizontalBoost = this.jumpPower * 0.3; // 水平跳跃助推
+        double horizontalBoost = this.jumpPower * 0.2; // 降低水平跳跃助推从0.3到0.2
 
         // 应用跳跃速度（保持水平动量）
-        this.setDeltaMovement(
+        Vec3 newMotion = new Vec3(
                 currentMotion.x + (this.getLookAngle().x * horizontalBoost),
                 jumpVelocity,
                 currentMotion.z + (this.getLookAngle().z * horizontalBoost)
         );
+        
+        // 立即应用速度限制
+        this.setDeltaMovement(limitSpeed(newMotion));
 
         // 设置空中状态
         this.isInAir = true;
@@ -447,6 +453,23 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
         return super.onGround(); // 使用父类的 onGround() 方法
     }
 
+    // 统一的速度限制方法
+    private Vec3 limitSpeed(Vec3 motion) {
+        double horizontalSpeed = motion.horizontalDistance();
+        double maxHorizontalSpeed = 0.85; // 降低最大水平速度从0.9到0.85，进一步防止移动错误
+        
+        if (horizontalSpeed > maxHorizontalSpeed) {
+            // 保持方向，按比例降低速度
+            double speedRatio = maxHorizontalSpeed / horizontalSpeed;
+            return new Vec3(
+                    motion.x * speedRatio,
+                    motion.y,
+                    motion.z * speedRatio
+            );
+        }
+        return motion;
+    }
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -470,28 +493,19 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
         // 在空中时应用轻微的向前动力（模拟摩托车跳跃时的惯性）
         if (this.isInAir && this.isVehicle()) {
             Vec3 currentMotion = this.getDeltaMovement();
-            Vec3 lookVector = this.getLookAngle().multiply(0.1, 0, 0.1);
-            this.setDeltaMovement(
+            Vec3 lookVector = this.getLookAngle().multiply(0.08, 0, 0.08); // 降低空中向前动力从0.1到0.08
+            Vec3 newMotion = new Vec3(
                     currentMotion.x + lookVector.x,
                     currentMotion.y,
                     currentMotion.z + lookVector.z
             );
+            // 立即应用速度限制
+            this.setDeltaMovement(limitSpeed(newMotion));
         }
         
         // 限制水平速度，防止移动错误警告
         Vec3 motion = this.getDeltaMovement();
-        double horizontalSpeed = motion.horizontalDistance();
-        double maxHorizontalSpeed = 0.9; // 设置一个合理的最大水平速度，高于创飞所需的阈值但低于移动错误的阈值
-        
-        if (horizontalSpeed > maxHorizontalSpeed) {
-            // 保持方向，按比例降低速度
-            double speedRatio = maxHorizontalSpeed / horizontalSpeed;
-            this.setDeltaMovement(
-                    motion.x * speedRatio,
-                    motion.y,
-                    motion.z * speedRatio
-            );
-        }
+        this.setDeltaMovement(limitSpeed(motion));
     }
 
     // 动画控制器

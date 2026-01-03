@@ -74,6 +74,18 @@ public class BeltUtils {
             }
         }
 
+        // 检查Brain驱动器
+        Optional<SlotResult> brainDriver = CuriosApi.getCuriosInventory(player)
+                .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof BrainDriver));
+
+        if (brainDriver.isPresent()) {
+            ItemStack beltStack = brainDriver.get().stack();
+            BrainDriver belt = (BrainDriver) beltStack.getItem();
+            if (belt.getMode(beltStack) != BrainDriver.BeltMode.DEFAULT) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -131,6 +143,16 @@ public class BeltUtils {
             ItemStack beltStack = twoSidriverBelt.get().stack();
             Two_sidriver belt = (Two_sidriver) beltStack.getItem();
             return belt.getDriverType(beltStack).name();
+        }
+
+        // 检查Brain驱动器
+        Optional<SlotResult> brainDriver = CuriosApi.getCuriosInventory(player)
+                .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof BrainDriver));
+
+        if (brainDriver.isPresent()) {
+            ItemStack beltStack = brainDriver.get().stack();
+            BrainDriver belt = (BrainDriver) beltStack.getItem();
+            return belt.getMode(beltStack).name();
         }
 
         return "DEFAULT";
