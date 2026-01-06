@@ -44,6 +44,11 @@ public class ModItems {
             () -> new Globalism(new Item.Properties())
     );
 
+    //特殊道具
+    public static final RegistryObject<BrainEyeglass> BRAIN_EYEGLASS = ModItems.ITEMS.register(
+            "brain_eyeglass",
+            ()-> new BrainEyeglass(new Item.Properties()));
+
     // 双面武器-剑形态
     public static final RegistryObject<TwoWeaponSwordItem> TWO_WEAPON_SWORD = ITEMS.register("two_weapon_sword",
             () -> {

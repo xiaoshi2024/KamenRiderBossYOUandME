@@ -62,6 +62,7 @@ public class ModTab {
                 output.accept(BLOODLINE_FANG.get());
                 output.accept(GAMMA_EYECON.get());
                 output.accept(SAKURAHURRICANE_LOCKSEED.get());
+                output.accept(BRAIN_EYEGLASS.get());
             })).build());
 
     public static final RegistryObject<CreativeModeTab> SPAWN_EGG_TAB = TABS.register("kamen_rider_boss_you_and_me_spawn_egg_tab", () -> CreativeModeTab.builder()

@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.BrainEyeglss.BrainEyeglassRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.braindriver.BrainDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.GhostDriverRenderer;
@@ -353,6 +354,8 @@ public class kamen_rider_boss_you_and_me
                 CuriosRendererRegistry.register(ModItems.TWO_SIDRIVER.get(), ()->new Two_sidriverRenderer());
                 CuriosRendererRegistry.register(ModItems.GHOST_DRIVER.get(),()->new GhostDriverRenderer());
                 CuriosRendererRegistry.register(ModItems.BRAIN_DRIVER.get(),()->new BrainDriverRenderer());
+
+                CuriosRendererRegistry.register(ModItems.BRAIN_EYEGLASS.get(),()->new BrainEyeglassRenderer());
 
                 // 注册Curio菜单屏幕
                 MenuScreens.register(ModMenus.ENTITY_CURIOS_LIST.get(), EntityCuriosListScreen::new);

@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.BrainEyeglss.BrainEyeglassRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.Mega_uiorder_item.Mega_uiorderRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.braindriver.BrainDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
@@ -8,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.Ge
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.GhostDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.sengokudriver.sengokudrivers_epmtysRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.BrainEyeglass;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -19,6 +21,9 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class GenericCurioRenderer implements ICurioRenderer {
+    //饰品道具
+    private final ICurioRenderer braineyeglassRenderer = new BrainEyeglassRenderer();
+    //变身器
     private final ICurioRenderer megaUiorderRenderer = new Mega_uiorderRenderer();
     private final ICurioRenderer sengokuDriverRenderer = new sengokudrivers_epmtysRenderer();
     private final ICurioRenderer genesisDriverRenderer = new GenesisDriverRenderer();
@@ -44,6 +49,10 @@ public class GenericCurioRenderer implements ICurioRenderer {
                 ghost_driverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }else if (stack.getItem() instanceof BrainDriver) {
                 brain_driverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            }
+
+            else if (stack.getItem() instanceof BrainEyeglass) {
+                braineyeglassRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }
         }
     }
