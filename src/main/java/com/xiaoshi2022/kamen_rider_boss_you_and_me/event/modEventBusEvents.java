@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Roidmude.BrainRoidmudeEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.GiifuHumanEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.kivat.KivatBatTwoNd;
@@ -590,6 +591,8 @@ public class modEventBusEvents {
                             .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 40.0D)
                             .build()
             ); // 强化版：大幅提高生命值、防御和韧性
+
+            event.put(ModEntityTypes.BRAIN_ROIDMUDE.get(), BrainRoidmudeEntity.createAttributes());
 
             event.put(ModEntityTypes.SAKURA_HURRICANE.get(), EntitySakuraHurricane.createAttributes());
 

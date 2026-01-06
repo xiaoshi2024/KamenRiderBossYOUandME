@@ -80,6 +80,7 @@ public class ModTab {
                 output.accept(STORIOUS_SPAWN_EGG.get());
                 output.accept(TIME_JACKER_SPAWN_EGG.get());
                 output.accept(GAMMA_S_SPAWN_EGG.get());
+                output.accept(BRAIN_ROIDMUDE_SPAWN_EGG.get());
             })).build());
 
 }

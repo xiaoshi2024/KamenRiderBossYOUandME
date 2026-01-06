@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Inves.ElementaryInvesHelheim;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Roidmude.BrainRoidmudeEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Decade;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
@@ -70,6 +71,10 @@ public class ModEntityTypes {
     
     public static final RegistryObject<EntityType<Another_Decade>> ANOTHER_DECADE = registerMob("another_decade", Another_Decade::new,
             0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
+
+    // 头脑机械变异体实体
+    public static final RegistryObject<EntityType<BrainRoidmudeEntity>> BRAIN_ROIDMUDE = registerMob("brain_roidmude", BrainRoidmudeEntity::new,
+            0.6f, 2.0f, 0x4A0000, 0x800000);
 
     public static final RegistryObject<EntityType<EliteMonsterNpc>> ELITE_MONSTER_NPC =
             ENTITY_TYPES.register("elite_monster_npc",

@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntit
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Den_o;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Zi_o;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Roidmude.BrainRoidmudeEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.VillagerTransformationUtil;
@@ -197,4 +198,54 @@ public class VillagerEvents {
     }
 
     public static boolean shouldPlayRoutAnimation = false; // 全局布尔字段
+    
+    /* ---------- 村民危险时变回Brain Roidmude ---------- */
+    @SubscribeEvent
+    public static void onVillagerHurt(LivingHurtEvent event) {
+        LivingEntity hurtEntity = event.getEntity();
+        if (!(hurtEntity instanceof forge.net.mca.entity.VillagerEntityMCA villager)) return;
+        
+        // 检查村民是否是Brain Roidmude拟态的
+        if (villager.getPersistentData().contains("BrainRoidmudeData")) {
+            // 村民受到伤害，变回Brain Roidmude
+            transformToBrainRoidmude((ServerLevel) villager.level(), villager);
+        }
+    }
+    
+    // 将村民转换回Brain Roidmude实体
+    private static void transformToBrainRoidmude(ServerLevel level, forge.net.mca.entity.VillagerEntityMCA villager) {
+        try {
+            // 获取存储的Brain Roidmude数据
+            CompoundTag brainData = villager.getPersistentData().getCompound("BrainRoidmudeData");
+            
+            // 创建Brain Roidmude实体
+            BrainRoidmudeEntity brainRoidmude = com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes.BRAIN_ROIDMUDE.get().create(level);
+            
+            // 加载Brain Roidmude数据
+            brainRoidmude.load(brainData);
+            brainRoidmude.moveTo(villager.getX(), villager.getY(), villager.getZ(), villager.getYRot(), villager.getXRot());
+            
+            // 播放转换粒子效果
+            for (int i = 0; i < 30; i++) {
+                level.addParticle(
+                        net.minecraft.core.particles.ParticleTypes.SMOKE, 
+                        villager.getX() + (villager.getRandom().nextDouble() - 0.5) * villager.getBbWidth(),
+                        villager.getY() + villager.getRandom().nextDouble() * villager.getBbHeight(),
+                        villager.getZ() + (villager.getRandom().nextDouble() - 0.5) * villager.getBbWidth(),
+                        0.0D, 0.1D, 0.0D
+                );
+            }
+            
+            // 添加Brain Roidmude到世界
+            level.addFreshEntity(brainRoidmude);
+            
+            // 移除村民
+            villager.discard();
+            
+            System.out.println("Villager transformed back to Brain Roidmude due to danger");
+        } catch (Exception e) {
+            System.out.println("Failed to transform villager back to Brain Roidmude: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

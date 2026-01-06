@@ -303,4 +303,8 @@ public class ModItems {
     public static final RegistryObject<ForgeSpawnEggItem> GAMMA_S_SPAWN_EGG = ITEMS.register("gamma_s_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntityTypes.GAMMA_S, 0x00FF00, 0x404040, new Item.Properties()));
 
+    // 头脑机械变异体生成蛋
+    public static final RegistryObject<ForgeSpawnEggItem> BRAIN_ROIDMUDE_SPAWN_EGG = ITEMS.register("brain_roidmude_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntityTypes.BRAIN_ROIDMUDE, 0x4A0000, 0x800000, new Item.Properties()));
+
 }

@@ -11,6 +11,9 @@
   "gui.kamen_rider_boss_you_and_me.entity_curios.belt_slot": "腰带槽位",
   "item.kamen_rider_boss_you_and_me.two_weapon_gun": "双面驱动器-枪",
 
+  "item.kamen_rider_boss_you_and_me.brain_eyeglass": "头脑003眼镜",
+
+
   "item.kamen_rider_boss_you_and_me.aiziowc": "异类表盘",
   "item.kamen_rider_boss_you_and_me.giifusteamp": "基夫始祖印章",
   "item group.kamen_rider_boss_you_and_me_tab": "假面骑士中你与我的反派编年史",
@@ -301,6 +304,10 @@
   "item.kamen_rider_boss_you_and_me.brain_leggings": "Brain护腿",
   "tooltip.braindriver.mode.brain": "Brain形态",
   "tooltip.braindriver.mode.normal": "普通形态",
-  "tooltip.braindriver.mode": "形态: %s"
+  "tooltip.braindriver.mode": "形态: %s",
+  
+  "entity.kamen_rider_boss_you_and_me.brain_roidmude": "头脑机械变异体（003）",
+  "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg": "头脑机械变异体（003） 刷怪蛋",
+  "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg.tooltip": "[提示] 右键点击生成头脑机械变异体（003）。"
 
 }

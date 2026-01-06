@@ -31,6 +31,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.EntityCuriosListScreen;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BrainDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os.Another_Zi_oRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.BrainRoidmude.BrainRoidmudeRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.DarkGhostRider.DarkGhostRiderKickRenerer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.EliteMonster.EliteMonsterRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer;
@@ -319,6 +320,7 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.BAT_STAMP_FINISH.get(), BatStampFinishRenderer::new);
             EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
             EntityRenderers.register(ModEntityTypes.DUKE_KNIGHT.get(), DukeKnightRenderer::new);
+            EntityRenderers.register(ModEntityTypes.BRAIN_ROIDMUDE.get(), BrainRoidmudeRenderer::new);
             EntityRenderers.register(ModEntityTypes.GHOST_EYE_ENTITY.get(), GhostEyeRenderer::new);
             EntityRenderers.register(ModEntityTypes.GAMMA_S.get(), Gamma_sRenderer::new);
             // 眼魔眼魂实体渲染器注册
