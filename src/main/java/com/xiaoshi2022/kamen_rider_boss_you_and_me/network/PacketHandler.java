@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.evil.LeftClickShiftPa
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeRevertPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTransformPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.BrainHeadbuttPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.PlayerAnimationPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -31,6 +32,8 @@ public class PacketHandler {
         int index = 0;
         INSTANCE.registerMessage(index++, PlayerAnimationPacket.class,
                 PlayerAnimationPacket::encode, PlayerAnimationPacket::decode, PlayerAnimationPacket::handle);
+        INSTANCE.registerMessage(index++, BrainHeadbuttPacket.class,
+                BrainHeadbuttPacket::encode, BrainHeadbuttPacket::decode, BrainHeadbuttPacket::handle);
         INSTANCE.registerMessage(index++, SoundStopPacket.class, SoundStopPacket::encode, SoundStopPacket::decode, SoundStopPacket.Handler::handle);
         INSTANCE.registerMessage(index++, InvisibilityPacket.class, InvisibilityPacket::encode, InvisibilityPacket::decode, InvisibilityPacket::handle);
         INSTANCE.registerMessage(index++, RemoveEntityPacket.class, RemoveEntityPacket::toBytes, RemoveEntityPacket::new, RemoveEntityPacket::handle);
@@ -330,6 +333,14 @@ public class PacketHandler {
                 NapoleonGhostRangedDamageReductionPacket::encode,
                 NapoleonGhostRangedDamageReductionPacket::decode,
                 NapoleonGhostRangedDamageReductionPacket::handle);
+        
+        // 注册Roidmude重加速数据包
+        INSTANCE.registerMessage(
+                index++,
+                RoidmudeHeavyAccelerationPacket.class,
+                RoidmudeHeavyAccelerationPacket::toBytes,
+                RoidmudeHeavyAccelerationPacket::new,
+                RoidmudeHeavyAccelerationPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

@@ -92,8 +92,8 @@ public class BrainTransformationRequestPacket {
                     // 创建一个新线程来处理延迟
                     new Thread(() -> {
                         try {
-                            // 休眠12秒，与其他变身保持一致
-                            Thread.sleep(12000);
+                            // 休眠3秒，与其他变身保持一致
+                            Thread.sleep(3000);
                             
                             // 确保在服务器线程上执行盔甲装备
                             server.execute(() -> {

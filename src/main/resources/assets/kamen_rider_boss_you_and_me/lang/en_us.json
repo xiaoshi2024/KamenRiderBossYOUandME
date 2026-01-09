@@ -339,6 +339,9 @@
   
   "entity.kamen_rider_boss_you_and_me.brain_roidmude": "Brain Roidmude (003)",
   "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg": "Brain Roidmude (003) Spawn Egg",
-  "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg.tooltip": "[Tip] Right-click to spawn Brain Roidmude (003)."
+  "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg.tooltip": "[Tip] Right-click to spawn Brain Roidmude (003).",
+
+  "advancement.kamen_rider_boss_you_and_me.become_roidmude.title": "Roidmude Awakening",
+  "advancement.kamen_rider_boss_you_and_me.become_roidmude.description": "Become a Roidmude and obtain the power of Core Form."
 
 }

@@ -25,7 +25,8 @@ public final class KickDamageHelper {
             if (helmet.is(ModItems.RIDERNECROM_HELMET.get()))      return 89F; // 假面骑士幽冥
 
             if (helmet.is(ModItems.EVIL_BATS_HELMET.get()))        return 87F; // 艾比尔
-    
+            if (helmet.is(ModItems.BRAIN_HELMET.get()))            return 85F; // 假面骑士Brain
+
             return 20F; // 默认
         }
         return 0.0f;
@@ -49,6 +50,7 @@ public final class KickDamageHelper {
         if (helmet.is(ModItems.RIDERNECROM_HELMET.get()))      return 5.2F; // 假面骑士幽冥 - 中等爆炸范围
 
         if (helmet.is(ModItems.EVIL_BATS_HELMET.get()))        return 5.4F; // 艾比尔
+        if (helmet.is(ModItems.BRAIN_HELMET.get()))            return 5.0F; // 假面骑士Brain
 
         return 2.0F; // 默认
     }
@@ -71,6 +73,7 @@ public final class KickDamageHelper {
         if (helmet.is(ModItems.RIDERNECROM_HELMET.get()))      return 0.85F; // 超强破坏能力
 
         if (helmet.is(ModItems.EVIL_BATS_HELMET.get()))        return 0.88F; // 极强破坏能力
+        if (helmet.is(ModItems.BRAIN_HELMET.get()))            return 0.85F; // 假面骑士Brain - 超强破坏能力
 
         return 0.3F; // 默认较弱的破坏能力
     }

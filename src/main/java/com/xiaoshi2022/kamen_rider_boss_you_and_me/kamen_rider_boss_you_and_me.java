@@ -125,6 +125,8 @@ public class kamen_rider_boss_you_and_me
     public static final GhostEyeTrigger GHOST_EYE_TRIGGER = CriteriaTriggers.register(GhostEyeTrigger.getInstance());
     // 添加混合种族成就触发器
     public static final MixedRaceTrigger MIXED_RACE_TRIGGER = CriteriaTriggers.register(MixedRaceTrigger.getInstance());
+    // 添加Roidmude成就触发器
+    public static final com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.RoidmudeTrigger ROIDMUDE_TRIGGER = CriteriaTriggers.register(com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.RoidmudeTrigger.getInstance());
 
     public kamen_rider_boss_you_and_me()
     {

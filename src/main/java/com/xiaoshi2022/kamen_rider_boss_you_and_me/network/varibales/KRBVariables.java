@@ -121,6 +121,7 @@ public class KRBVariables {
 	clone.isOverlord = false; // 玩家死亡时重置Overlord状态
 	clone.isGhostEye = false; // 玩家死亡时重置眼魔状态
 	clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
+	clone.isRoidmude = false; // 玩家死亡时重置Roidmude状态
 	clone.isDarkGhostTransformed = false; // 玩家死亡时重置黑暗Ghost变身状态
 	clone.isDarkGhostActive = false; // 玩家死亡时重置黑暗Ghost激活状态
 	clone.isNapoleonGhostTransformed = false; // 玩家死亡时重置拿破仑魂变身状态
@@ -259,6 +260,14 @@ public class KRBVariables {
 	public boolean isGiifu = false;
 	// 玩家是否为牙血鬼血脉状态
 	public boolean isFangBloodline = false;
+	// 玩家是否为机械变异体（Roidmude）状态
+	public boolean isRoidmude = false;
+	// 机械变异体（Roidmude）类型
+	public String roidmudeType = "plain";
+	// 机械变异体（Roidmude）编号
+	public int roidmudeNumber = 0;
+	// 机械变异体（Roidmude）是否已进化
+	public boolean isRoidmudeEvolved = false;
 	// 玩家是否已获得眼魔世界宝箱
 	public boolean hasReceivedGhostEyeLootChest = false;
 	// 巴隆香蕉能量技能冷却时间
@@ -280,6 +289,7 @@ public class KRBVariables {
 			if (isGiifu) activeRaces++;
 			if (isFangBloodline) activeRaces++;
 			if (isGhostEye) activeRaces++;
+			if (isRoidmude) activeRaces++;
 			
 			// 如果混合了超过一个种族，触发成就
 			if (activeRaces > 1) {
@@ -374,6 +384,11 @@ public class KRBVariables {
 		nbt.putBoolean("isGiifu", isGiifu);
 		// 序列化牙血鬼血脉状态
 		nbt.putBoolean("isFangBloodline", isFangBloodline);
+		// 序列化Roidmude状态
+		nbt.putBoolean("isRoidmude", isRoidmude);
+		nbt.putString("roidmudeType", roidmudeType);
+		nbt.putInt("roidmudeNumber", roidmudeNumber);
+		nbt.putBoolean("isRoidmudeEvolved", isRoidmudeEvolved);
 		// 序列化宝箱领取状态
 		nbt.putBoolean("hasReceivedGhostEyeLootChest", hasReceivedGhostEyeLootChest);
 		// 序列化基础最大生命值，确保通过命令设置的生命值能够持久化保存
@@ -482,6 +497,11 @@ public class KRBVariables {
 		isGiifu = nbt.contains("isGiifu") ? nbt.getBoolean("isGiifu") : false;
 		// 反序列化牙血鬼血脉状态
 		isFangBloodline = nbt.contains("isFangBloodline") ? nbt.getBoolean("isFangBloodline") : false;
+		// 反序列化Roidmude状态
+		isRoidmude = nbt.contains("isRoidmude") ? nbt.getBoolean("isRoidmude") : false;
+		roidmudeType = nbt.contains("roidmudeType") ? nbt.getString("roidmudeType") : "plain";
+		roidmudeNumber = nbt.contains("roidmudeNumber") ? nbt.getInt("roidmudeNumber") : 0;
+		isRoidmudeEvolved = nbt.contains("isRoidmudeEvolved") ? nbt.getBoolean("isRoidmudeEvolved") : false;
 		// 反序列化宝箱领取状态
 		hasReceivedGhostEyeLootChest = nbt.contains("hasReceivedGhostEyeLootChest") ? nbt.getBoolean("hasReceivedGhostEyeLootChest") : false;
 		// 反序列化腰带移除相关变量
@@ -600,6 +620,11 @@ public class KRBVariables {
                     variables.isGiifu = message.data.isGiifu;
                     // 同步牙血鬼血脉状态
                     variables.isFangBloodline = message.data.isFangBloodline;
+                    // 同步Roidmude状态
+                    variables.isRoidmude = message.data.isRoidmude;
+                    variables.roidmudeType = message.data.roidmudeType;
+                    variables.roidmudeNumber = message.data.roidmudeNumber;
+                    variables.isRoidmudeEvolved = message.data.isRoidmudeEvolved;
                     // 同步宝箱领取状态
                     variables.hasReceivedGhostEyeLootChest = message.data.hasReceivedGhostEyeLootChest;
                     // 同步腰带移除相关变量

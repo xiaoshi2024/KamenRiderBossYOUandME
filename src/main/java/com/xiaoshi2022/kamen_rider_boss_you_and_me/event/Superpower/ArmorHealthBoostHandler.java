@@ -103,12 +103,13 @@ public class ArmorHealthBoostHandler {
                 // 检查玩家是否是怪人种族或Overlord种族
                 boolean isGiifu = variables.isGiifu;
                 boolean isOverlord = variables.isOverlord;
+                boolean isRoidmude = variables.isRoidmude;
                 boolean isTransformed = hasTransformationArmor(player);
                 
                 // 只有当玩家不是任何特殊种族或已变身后才更新baseMaxHealth
                 // 避免在种族加成状态下错误地将加成后的值作为新基准
                 if ((currentBaseHealth > 20.1D || currentBaseHealth < 19.9D) && 
-                    (!isGiifu && !isOverlord || isTransformed)) {
+                    (!isGiifu && !isOverlord && !isRoidmude || isTransformed)) {
                     variables.baseMaxHealth = currentBaseHealth;
                 }
                 
@@ -200,6 +201,7 @@ public class ArmorHealthBoostHandler {
                     // 检查玩家是否是怪人种族或Overlord种族
                     boolean isGiifu = variables.isGiifu;
                     boolean isOverlord = variables.isOverlord;
+                    boolean isRoidmude = variables.isRoidmude;
                     boolean isTransformed = hasTransformationArmor(player);
                     
                     // 检查当前基础生命值是否与我们记录的baseMaxHealth不同
@@ -207,7 +209,7 @@ public class ArmorHealthBoostHandler {
                     // 重要：只在玩家不是特殊种族或已变身后才更新，避免捕获到包含种族加成的值
                     if (Math.abs(currentBaseValue - variables.baseMaxHealth) > 0.1) {
                         // 只有当玩家没有装备任何自定义盔甲且不是特殊种族或已变身时才更新
-                        if (getCustomArmorCount(player) == 0 && (!isGiifu && !isOverlord || isTransformed)) {
+                        if (getCustomArmorCount(player) == 0 && (!isGiifu && !isOverlord && !isRoidmude || isTransformed)) {
                             variables.baseMaxHealth = currentBaseValue;
                             variables.syncPlayerVariables(player);
                         }

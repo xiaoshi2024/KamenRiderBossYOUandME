@@ -91,6 +91,12 @@ public class GiifuFeatureHandler {
             return;
         }
 
+        // 检查玩家是否同时是Roidmude，如果是则不更新生命值，避免与RoidmudeHandler冲突
+        if (variables.isRoidmude) {
+            giifuHealthApplied.put(playerUUID, true);
+            return;
+        }
+
         // 获取当前的基础生命值（可能已经被命令修改）
         double baseHealth = variables.baseMaxHealth > 0 ? variables.baseMaxHealth : BASE_HEALTH;
         
@@ -106,14 +112,14 @@ public class GiifuFeatureHandler {
             if (player.getHealth() < targetHealth) {
                 float healthToAdd = Math.min(10.0F, (float) (targetHealth - player.getHealth()));
                 player.setHealth(player.getHealth() + healthToAdd);
-                System.out.println("Restored health: " + healthToAdd + ", current health: " + player.getHealth());
+//                System.out.println("Restored health: " + healthToAdd + ", current health: " + player.getHealth());
             }
 
             // 不再更新baseMaxHealth，保持原始基础生命值不变，确保命令设置的值能够保留
             variables.syncPlayerVariables(player);
             giifuHealthApplied.put(playerUUID, true);
 
-            System.out.println("Applied Giifu health bonus: " + currentMaxHealth + " -> " + targetHealth + " for player " + player.getName().getString());
+//            System.out.println("Applied Giifu health bonus: " + currentMaxHealth + " -> " + targetHealth + " for player " + player.getName().getString());
         } else {
             // 确保状态标志正确设置
             giifuHealthApplied.put(playerUUID, true);
@@ -152,6 +158,13 @@ public class GiifuFeatureHandler {
             
             // 检查玩家是否装备了自定义盔甲，如果是则不更新生命值
             if (hasCustomArmor(player)) {
+                // 清理状态但不修改生命值
+                giifuHealthApplied.remove(playerUUID);
+                return;
+            }
+
+            // 检查玩家是否同时是Roidmude，如果是则不更新生命值，避免与RoidmudeHandler冲突
+            if (variables.isRoidmude) {
                 // 清理状态但不修改生命值
                 giifuHealthApplied.remove(playerUUID);
                 return;

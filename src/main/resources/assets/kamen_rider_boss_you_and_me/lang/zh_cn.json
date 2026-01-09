@@ -308,6 +308,9 @@
   
   "entity.kamen_rider_boss_you_and_me.brain_roidmude": "头脑机械变异体（003）",
   "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg": "头脑机械变异体（003） 刷怪蛋",
-  "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg.tooltip": "[提示] 右键点击生成头脑机械变异体（003）。"
+  "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg.tooltip": "[提示] 右键点击生成头脑机械变异体（003）。",
+
+  "advancement.kamen_rider_boss_you_and_me.become_roidmude.title": "机械变异体的觉醒",
+  "advancement.kamen_rider_boss_you_and_me.become_roidmude.description": "成为机械变异体，获得核心形态的力量"
 
 }

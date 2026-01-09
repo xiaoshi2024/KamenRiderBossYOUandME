@@ -253,6 +253,23 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         // 更新玩家变量，标记装备了BrainDriver
         player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
             variables.isBrainDriverEquipped = true;
+            
+            // 检测玩家是否血量低于4颗心（8点生命值），如果低于且不是Roidmude，则转化为Roidmude种族
+            if (!variables.isRoidmude && player.getHealth() < 8.0F) {
+                variables.isRoidmude = true;
+                variables.roidmudeType = "brain";
+                variables.roidmudeNumber = 3;
+                variables.isRoidmudeEvolved = false;
+                
+                // 触发Roidmude成就
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.RoidmudeTrigger.getInstance().trigger(player);
+                
+                // 通知玩家
+                player.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("你的生命垂危，Brain驱动器将你转化为机械变异体（003）以延续生命！")
+                );
+            }
+            
             variables.syncPlayerVariables(player);
         });
 

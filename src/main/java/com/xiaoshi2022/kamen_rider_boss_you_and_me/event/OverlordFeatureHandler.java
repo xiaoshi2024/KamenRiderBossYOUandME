@@ -83,6 +83,12 @@ public class OverlordFeatureHandler {
                 return;
             }
             
+            // 检查玩家是否同时拥有其他怪物种族，如果是则不更新生命值，避免冲突
+            if (variables.isGiifu || variables.isRoidmude || variables.isFangBloodline || variables.isGhostEye) {
+                overlordHealthApplied.put(player.getUUID(), true);
+                return;
+            }
+            
             // 计算目标生命值：当前基础生命值 + Overlord额外生命值
             double targetHealth = currentBaseHealth + OVERLORD_EXTRA_HEALTH;
             
@@ -114,6 +120,13 @@ public class OverlordFeatureHandler {
             if (overlordHealthApplied.getOrDefault(playerUUID, false)) {
                 // 检查玩家是否装备了自定义盔甲，如果是则不更新生命值
                 if (hasCustomArmor(player)) {
+                    // 清理状态但不修改生命值
+                    overlordHealthApplied.remove(playerUUID);
+                    return;
+                }
+                
+                // 检查玩家是否同时拥有其他怪物种族，如果是则不更新生命值，避免冲突
+                if (variables.isGiifu || variables.isRoidmude || variables.isFangBloodline || variables.isGhostEye) {
                     // 清理状态但不修改生命值
                     overlordHealthApplied.remove(playerUUID);
                     return;
@@ -336,6 +349,11 @@ public class OverlordFeatureHandler {
             KRBVariables.PlayerVariables playerVars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY).orElse(new KRBVariables.PlayerVariables());
             boolean isOverlord = playerVars.isOverlord;
             boolean isTransformed = PlayerDeathHandler.hasTransformationArmor(player);
+
+            // 检查玩家是否同时拥有其他怪物种族，如果是则不应用Overlord伤害减免
+            if (playerVars.isGiifu || playerVars.isRoidmude || playerVars.isFangBloodline || playerVars.isGhostEye) {
+                return;
+            }
 
             if (isOverlord && !isTransformed) {
                 // 物理伤害减免（减少50%物理伤害）

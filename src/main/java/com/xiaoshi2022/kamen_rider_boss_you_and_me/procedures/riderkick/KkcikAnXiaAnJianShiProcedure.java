@@ -30,7 +30,8 @@ public class KkcikAnXiaAnJianShiProcedure {
 				helmet.getItem() == ModItems.EVIL_BATS_HELMET.get()||
 				helmet.getItem() == ModItems.RIDERNECROM_HELMET.get() ||
 				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get() ||
-				helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get()) && // 新增：拿破仑头盔
+				helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get() ||
+				helmet.getItem() == ModItems.BRAIN_HELMET.get()) && // 新增：Brain头盔
 				!isKicking(entity) &&
 				!isPlayerControlled(entity)) {
 

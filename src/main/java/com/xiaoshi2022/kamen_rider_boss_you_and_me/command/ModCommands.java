@@ -44,6 +44,9 @@ public class ModCommands {
         // 注册眼魔命令
         GhostEyeCommand.register(dispatcher);
         
+        // 注册Roidmude命令
+        RoidmudeCommand.register(dispatcher);
+        
         // 注册骑士踢方块破坏命令
         KickBlockDamageCommand.register(dispatcher);
     }

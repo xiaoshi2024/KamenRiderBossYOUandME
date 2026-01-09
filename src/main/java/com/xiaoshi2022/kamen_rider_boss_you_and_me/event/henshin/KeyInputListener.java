@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.BrainHeadbuttPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
@@ -26,10 +27,19 @@ public final class KeyInputListener {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
-        if (!KeyBinding.CHANGE_KEY.isDown()) return;
-
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
+
+        // 处理R键触发Brain骑士头部必杀技
+        if (event.getKey() == 82 && event.getAction() == 0) { // 82是R键的键码，0是按下动作
+            ItemStack helmet = player.getInventory().armor.get(3);
+            if (helmet.is(ModItems.BRAIN_HELMET.get())) {
+                PacketHandler.INSTANCE.sendToServer(new BrainHeadbuttPacket(player.getId()));
+                return;
+            }
+        }
+
+        if (!KeyBinding.CHANGE_KEY.isDown()) return;
 
         // 检查是否有创世纪驱动器且处于准备状态（特别是火龙果模式）
         Optional<Genesis_driver> genesisCheck = CurioUtils.findFirstCurio(player,
@@ -197,6 +207,24 @@ public final class KeyInputListener {
                     // 发送变身请求包
                     PacketHandler.INSTANCE.sendToServer(new GhostTransformationRequestPacket(player.getUUID()));
                 }
+            }
+        }
+
+        // 5. Brain驱动器变身检查
+        Optional<BrainDriver> brain = 
+                CurioUtils.findFirstCurio(player,
+                                stack -> stack.getItem() instanceof BrainDriver)
+                        .map(slot -> (BrainDriver) slot.stack().getItem());
+
+        if (brain.isPresent()) {
+            BrainDriver belt = brain.get();
+            ItemStack beltStack = CurioUtils.findFirstCurio(player,
+                    stack -> stack.getItem() instanceof BrainDriver).get().stack();
+            
+            // 检查腰带模式是否为BRAIN形态
+            if (belt.getMode(beltStack) == BrainDriver.BeltMode.BRAIN) {
+                // 已经处于Brain骑士形态，不允许再次按下X键触发变身
+                return;
             }
         }
     }

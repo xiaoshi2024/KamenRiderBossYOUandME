@@ -15,6 +15,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.RoidmudeHeavyAccelerationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeInvisibilityPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeRevertPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTransformPacket;
@@ -98,8 +99,19 @@ public class KeyBinding {
             }
             // 检查是否装备了BrainDriver
             else if (isBrainDriverEquipped(player)) {
-                // 发送Brain变身请求
-                PacketHandler.sendToServer(new BrainTransformationRequestPacket());
+                // 检查玩家是否已经处于Brain形态
+                boolean isBrainTransformed = false;
+                try {
+                    isBrainTransformed = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables()).isBrainTransformed;
+                } catch (Exception e) {
+                    // 处理可能的异常
+                }
+                
+                // 只有当玩家未处于Brain形态时才发送变身请求
+                if (!isBrainTransformed) {
+                    // 发送Brain变身请求
+                    PacketHandler.sendToServer(new BrainTransformationRequestPacket());
+                }
             }
         }
 
@@ -182,6 +194,14 @@ public class KeyBinding {
             if (hasGhostEyeFlag) {
                 isGhostEye = true;
             }
+        } catch (Exception e) {
+            // 处理可能的异常
+        }
+
+        // 检查玩家是否是Roidmude
+        boolean isRoidmude = false;
+        try {
+            isRoidmude = mc.player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables()).isRoidmude;
         } catch (Exception e) {
             // 处理可能的异常
         }
@@ -296,6 +316,12 @@ public class KeyBinding {
         if (isOverlord && hasShiftDown() && KEY_BOOST.consumeClick()) {
             PacketHandler.sendToServer(new BaronRecallInvesPacket());
             return; // 优先处理召回功能，不继续执行其他按键检测
+        }
+
+        // Roidmude重加速能力：按下N键（骑士3键）激活重加速
+        if (isRoidmude && KEY_BOOST.consumeClick()) {
+            PacketHandler.sendToServer(new RoidmudeHeavyAccelerationPacket());
+            return; // 优先处理重加速功能，不继续执行其他按键检测
         }
 
         // Z键：优先检查创世纪驱动器临时取下锁种功能，然后是EvilBats临时取下印章功能，再是临时取下眼魂功能，最后是结界拉扯功能
