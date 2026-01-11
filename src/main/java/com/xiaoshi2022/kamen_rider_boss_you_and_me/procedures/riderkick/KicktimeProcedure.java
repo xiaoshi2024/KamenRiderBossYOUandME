@@ -142,6 +142,16 @@ public class KicktimeProcedure {
 					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: NAPOLEON_GHOST_HELMET detected on player {}", player.getScoreboardName());
 				}
 				handleNapoleonGhostKick(world, entity);
+			} else if (helmet.getItem() == ModItems.BRAIN_HELMET.get()) {
+				// Brain骑士踢：无特效，只有抛物线移动
+				if (DEBUG && !world.isClientSide()) {
+					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: BRAIN_HELMET detected on player {}", player.getScoreboardName());
+				}
+				// 只处理动画和抛物线移动，不添加粒子特效
+				handleAnimation(world, entity);
+				syncAnimation(world, entity);
+				// 使用EVIL_BATS的抛物线移动逻辑，因为它提供了平滑的抛物线效果
+				handleEvilBatsParabolicMovement(world, entity);
 			}
 		} else {
 			// 如果不在踢击状态，清理特效实体
@@ -458,7 +468,8 @@ public class KicktimeProcedure {
 				|| helmet.getItem() == ModItems.DARK_KIVA_HELMET.get()
 				|| helmet.getItem() == ModItems.DARK_RIDER_HELMET.get()
 				|| helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get()
-				|| helmet.getItem() == ModItems.RIDERNECROM_HELMET.get();
+				|| helmet.getItem() == ModItems.RIDERNECROM_HELMET.get()
+				|| helmet.getItem() == ModItems.BRAIN_HELMET.get();
 
 		// 获取玩家的kick状态
 		boolean isKicking = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
@@ -704,7 +715,8 @@ public class KicktimeProcedure {
 				helmet.getItem() == ModItems.DARK_RIDER_HELMET.get()||
 				helmet.getItem() == ModItems.DARK_KIVA_HELMET.get() || // 新增：黑暗Kiva头盔
 				helmet.getItem() == ModItems.RIDERNECROM_HELMET.get() || // 新增：RiderNecrom头盔
-				helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get(); // 新增：拿破仑幽灵头盔
+				helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get() || // 新增：拿破仑幽灵头盔
+				helmet.getItem() == ModItems.BRAIN_HELMET.get(); // 新增：Brain头盔
 	}
 
 	// 处理 NAPOLEON_GHOST_HELMET 的特效和移动

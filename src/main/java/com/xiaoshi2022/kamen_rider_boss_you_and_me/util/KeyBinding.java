@@ -24,6 +24,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTele
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkGhostTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.NapoleonGhostTransformationRequestPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BrainTransformationRequestPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.BrainHeadbuttPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
@@ -430,9 +431,22 @@ public class KeyBinding {
             }
         }
 
-        // 最后检查玩家是否手持蝙蝠印章并按下V键（骑士1键）
-        // 这个检查放在最后，这样当玩家穿着特定盔甲时，优先使用盔甲的技能
-        if (KEY_GUARD.consumeClick()) {
+        // Brain骑士技能处理
+        boolean hasBrainHelmet = mc.player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.BRAIN_HELMET.get());
+        if (isBrainTransformed || hasBrainHelmet) {
+            // V键：头槌技能
+            if (KEY_GUARD.consumeClick()) {
+                // 发送Brain头槌数据包
+                PacketHandler.sendToServer(new BrainHeadbuttPacket(mc.player.getId()));
+            }
+            // B键：骑士剧毒技能（将纸转化为剧毒手帕）
+            else if (KEY_BLAST.consumeClick()) {
+                // 发送Brain骑士剧毒数据包
+                PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.KnightPoisonPacket(mc.player.getId()));
+            }
+        }
+        // 其他情况：检查玩家是否手持蝙蝠印章并按下V键（骑士1键）
+        else if (KEY_GUARD.consumeClick()) {
             if (mc.player.getMainHandItem().getItem() instanceof BatStampItem) {
                 PacketHandler.sendToServer(new BatUltrasonicAttackPacket());
             }

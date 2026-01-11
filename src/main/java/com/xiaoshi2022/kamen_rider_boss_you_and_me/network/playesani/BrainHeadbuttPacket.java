@@ -39,18 +39,16 @@ public class BrainHeadbuttPacket {
                 // 检查是否装备了Brain头盔
                 net.minecraft.world.item.ItemStack helmet = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
                 if (helmet.is(com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.BRAIN_HELMET.get())) {
-                    // 检查冷却时间（使用骑士踢的冷却时间）
+                    // 检查骑士能量
                     com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables.PlayerVariables variables = player.getCapability(com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables.PLAYER_VARIABLES_CAPABILITY).orElse(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables.PlayerVariables());
-                    long currentTime = System.currentTimeMillis();
-                    long timeSinceLastKick = currentTime - variables.lastKickTime;
-                    long cooldownTime = 40000; // 40秒冷却时间
+                    double energyCost = 50.0D; // 头槌消耗50点骑士能量
                     
-                    if (timeSinceLastKick >= cooldownTime) {
+                    if (variables.riderEnergy >= energyCost) {
                         // 处理头部必杀技逻辑
                         executeBrainHeadbutt(player);
                         
-                        // 更新上次踢击时间（复用骑士踢的冷却时间）
-                        variables.lastKickTime = currentTime;
+                        // 消耗骑士能量
+                        variables.riderEnergy -= energyCost;
                         variables.syncPlayerVariables(player);
                     }
                 }

@@ -8,6 +8,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.ghosteye.GhostEyeTran
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.BrainHeadbuttPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.PlayerAnimationPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.KnightPoisonPacket;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -341,6 +342,14 @@ public class PacketHandler {
                 RoidmudeHeavyAccelerationPacket::toBytes,
                 RoidmudeHeavyAccelerationPacket::new,
                 RoidmudeHeavyAccelerationPacket::handle);
+        
+        // 注册Brain骑士剧毒数据包
+        INSTANCE.registerMessage(
+                index++,
+                KnightPoisonPacket.class,
+                KnightPoisonPacket::encode,
+                KnightPoisonPacket::decode,
+                KnightPoisonPacket::handle);
     }
 
     public static void sendToServer(Object packet) {

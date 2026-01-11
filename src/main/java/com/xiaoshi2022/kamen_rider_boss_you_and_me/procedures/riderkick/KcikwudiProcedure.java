@@ -19,11 +19,12 @@ public class KcikwudiProcedure {
 	public static void onEntityAttacked(LivingHurtEvent event) {
 		if (event.getEntity() != null && event.getSource() != null) {
 			handleKickExplosionDamage(event);
+			handleFallDamage(event);
 			execute(event, event.getEntity());
 		}
 	}
 
-	// 处理踢击爆炸伤害排除
+	// 处理踢击爆炸伤害排除和坠落伤害保护
 	private static void handleKickExplosionDamage(LivingHurtEvent event) {
 		Entity entity = event.getEntity();
 		DamageSource damageSource = event.getSource();
@@ -45,6 +46,24 @@ public class KcikwudiProcedure {
 		}
 	}
 
+	// 处理坠落伤害保护
+	private static void handleFallDamage(LivingHurtEvent event) {
+		Entity entity = event.getEntity();
+		DamageSource damageSource = event.getSource();
+
+		// 检查是否是坠落伤害
+		if (damageSource.is(DamageTypes.FALL) && entity instanceof Player player) {
+			// 检查是否是踢击状态或处于无敌状态
+			KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+					.orElse(new KRBVariables.PlayerVariables());
+			
+			// 如果玩家正在踢击或处于无敌状态，取消坠落伤害
+			if (variables.kick || variables.wudi) {
+				event.setCanceled(true);
+			}
+		}
+	}
+
 	public static void execute(Entity entity) {
 		execute(null, entity);
 	}
@@ -53,16 +72,15 @@ public class KcikwudiProcedure {
 		if (entity == null)
 			return;
 
-		// 修改无敌状态处理逻辑：只有在踢击动作期间才真正无敌
-		if (entity instanceof Player player) {
-			KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-					.orElse(new KRBVariables.PlayerVariables());
-			
-			// 只有同时满足wudi为true且kcik为true时才无敌
-			// 这样确保无敌状态只在踢击动作期间有效
-			if (variables.wudi && variables.kick && event != null && event.isCancelable()) {
-				event.setCanceled(true);
-			}
+		// 修改无敌状态处理逻辑：只要wudi为true就无敌
+	if (entity instanceof Player player) {
+		KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+				.orElse(new KRBVariables.PlayerVariables());
+		
+		// 只要wudi为true就无敌，取消所有类型的伤害
+		if (variables.wudi && event instanceof LivingHurtEvent hurtEvent) {
+			hurtEvent.setCanceled(true);
 		}
+	}
 	}
 }

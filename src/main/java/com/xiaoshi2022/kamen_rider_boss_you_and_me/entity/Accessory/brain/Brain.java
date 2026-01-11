@@ -87,12 +87,79 @@ public class Brain extends ArmorItem implements GeoItem, KamenBossArmor, ArmorAn
     public void tick(Player player) {
         // 添加抗性效果
         this.applyResistanceEffect(player);
+        
+        // 添加力量效果
+        this.applyStrengthEffect(player);
+        
+        // 添加速度效果
+        this.applySpeedEffect(player);
+        
+        // 添加夜视效果
+        this.applyNightVisionEffect(player);
+        
+        // 添加生命恢复效果
+        this.applyRegenerationEffect(player);
     }
 
     // 覆写getResistanceLevel方法，设置自定义抗性等级
     @Override
     public int getResistanceLevel() {
-        return 1; //使用抗性1效果
+        return 1; // 使用抗性1效果
+    }
+    
+    // 覆写getStrengthLevel方法，设置自定义力量等级
+    @Override
+    public int getStrengthLevel() {
+        return 2; // 使用力量2效果
+    }
+    
+    // 添加速度效果
+    private void applySpeedEffect(Player player) {
+        if (!player.level().isClientSide()) {
+            MobEffectInstance existing = player.getEffect(MobEffects.MOVEMENT_SPEED);
+            
+            // 添加2级速度效果
+            if (existing == null || existing.getAmplifier() < 1) {
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.MOVEMENT_SPEED,
+                        400,
+                        1, // 2级速度
+                        false,
+                        false // 不显示粒子效果，避免视觉混乱
+                ));
+            }
+        }
+    }
+    
+    // 添加夜视效果
+    private void applyNightVisionEffect(Player player) {
+        if (!player.level().isClientSide()) {
+            // 持续添加夜视效果
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.NIGHT_VISION,
+                    800, // 40秒
+                    0,
+                    false,
+                    false // 不显示粒子效果，避免视觉混乱
+            ));
+        }
+    }
+    
+    // 添加生命恢复效果
+    private void applyRegenerationEffect(Player player) {
+        if (!player.level().isClientSide()) {
+            // 只有当玩家生命值低于最大值的80%时才恢复，保持平衡
+            if (player.getHealth() < player.getMaxHealth() * 0.8) {
+                // 添加1级生命恢复效果，持续时间短，避免过度恢复
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.REGENERATION,
+                        200, // 10秒
+                        0,   // 1级恢复
+                        false,
+                        false // 不显示粒子效果，避免视觉混乱
+                ));
+            }
+        }
     }
 
     // 重写applyResistanceEffect方法，确保不会移除玩家已有的抗性效果

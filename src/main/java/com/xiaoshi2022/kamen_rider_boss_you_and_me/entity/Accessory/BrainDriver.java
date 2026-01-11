@@ -199,9 +199,6 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         setShowing(stack, false);
         setHenshin(stack, false);
 
-        if (!entity.level().isClientSide() && entity instanceof ServerPlayer sp)
-            PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId()), sp);
-
         triggerAnim(entity, "controller", "cancel");
     }
 
@@ -245,11 +242,6 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         setShowing(beltStack, true);
         setActive(beltStack, false);
 
-        // 同步腰带状态到所有跟踪的玩家
-        PacketHandler.sendToAllTracking(
-                new BeltAnimationPacket(player.getId()),
-                player);
-
         // 更新玩家变量，标记装备了BrainDriver
         player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
             variables.isBrainDriverEquipped = true;
@@ -291,11 +283,6 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
     protected void onBeltUnequipped(ServerPlayer player, ItemStack beltStack) {
         setShowing(beltStack, false);
         setRelease(beltStack, false);
-        
-        // 同步腰带状态到所有跟踪的玩家
-        PacketHandler.sendToAllTracking(
-                new BeltAnimationPacket(player.getId()),
-                player);
         
         // 更新玩家变量，标记卸下了BrainDriver
         player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
@@ -361,9 +348,14 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
     /* -------------- 触发工具 -------------- */
     public void triggerAnim(LivingEntity entity, String ctrl, String anim) {
         if (entity == null || entity.level() == null) return;
-        if (!entity.level().isClientSide && entity instanceof ServerPlayer sp) {
+        if (entity instanceof ServerPlayer sp) {
+            // 从Curio槽位获取腰带模式
+            Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(sp).resolve()
+                    .flatMap(curios -> curios.findFirstCurio(item -> item.getItem() instanceof BrainDriver));
+            BrainDriver.BeltMode mode = beltOptional.map(result -> getMode(result.stack())).orElse(BeltMode.DEFAULT);
+
             PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(entity.getId()), entity);
+                    new BeltAnimationPacket(entity.getId(), anim, mode), entity);
         }
     }
 }

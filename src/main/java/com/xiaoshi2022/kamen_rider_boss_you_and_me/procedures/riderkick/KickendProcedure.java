@@ -80,43 +80,53 @@ public class KickendProcedure {
 		variables.needExplode = true;
 		variables.kick = false;
 
+		// 获取头盔
+		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
+		boolean isBrainHelmet = helmet.getItem() == ModItems.BRAIN_HELMET.get();
+
 		// 服务器端处理爆炸效果和伤害
 		if (!world.isClientSide()) {
-			// 播放爆炸音效
-			world.playSound(null, new BlockPos((int) entity.getX(), (int) entity.getY(), (int) entity.getZ()),
-					SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
+			// Brain骑士踢没有特效和音效，只处理伤害
+			if (!isBrainHelmet) {
+				// 播放爆炸音效
+				world.playSound(null, new BlockPos((int) entity.getX(), (int) entity.getY(), (int) entity.getZ()),
+						SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
 
-			// 创建爆炸粒子效果
-			ServerLevel serverLevel = (ServerLevel) world;
-			serverLevel.sendParticles(
-					ParticleTypes.EXPLOSION,
-					entity.getX(),
-					entity.getY(),
-					entity.getZ(),
-					10, 0.5, 0.5, 0.5, 0.1
-			);
-
-			// 处理方块破坏（如果允许的话）
-			if (variables.allowKickBlockDamage) {
-				// 获取爆炸半径和破坏强度
-				float radius = KickDamageHelper.getKickExplosionRadius(entity);
-				float destructionStrength = KickDamageHelper.getKickBlockDestructionStrength(entity);
-
-				// 创建一个不会破坏方块的爆炸，但会对实体造成伤害
-				serverLevel.explode(
-						entity, 
-						entity.getX(), 
-						entity.getY(), 
-						entity.getZ(), 
-						radius, 
-						false, // 是否会引起火灾
-						Level.ExplosionInteraction.NONE // 不破坏方块
+				// 创建爆炸粒子效果
+				ServerLevel serverLevel = (ServerLevel) world;
+				serverLevel.sendParticles(
+						ParticleTypes.EXPLOSION,
+						entity.getX(),
+						entity.getY(),
+						entity.getZ(),
+						10, 0.5, 0.5, 0.5, 0.1
 				);
 
-				// 自定义方块破坏处理（如果允许的话）
-				if (destructionStrength > 0) {
-						performCustomBlockDestruction(serverLevel, entity, radius, destructionStrength);
+				// 处理方块破坏（如果允许的话）
+				if (variables.allowKickBlockDamage) {
+					// 获取爆炸半径和破坏强度
+					float radius = KickDamageHelper.getKickExplosionRadius(entity);
+					float destructionStrength = KickDamageHelper.getKickBlockDestructionStrength(entity);
+
+					// 创建一个不会破坏方块的爆炸，但会对实体造成伤害
+					serverLevel.explode(
+							entity, 
+							entity.getX(), 
+							entity.getY(), 
+							entity.getZ(), 
+							radius, 
+							false, // 是否会引起火灾
+							Level.ExplosionInteraction.NONE // 不破坏方块
+					);
+
+					// 自定义方块破坏处理（如果允许的话）
+					if (destructionStrength > 0) {
+							performCustomBlockDestruction(serverLevel, entity, radius, destructionStrength);
+					}
 				}
+
+				// 清理特效实体
+				cleanupEffectEntity(entity, (ServerLevel) world);
 			}
 
 			// 专门处理基夫石像的伤害
@@ -124,9 +134,6 @@ public class KickendProcedure {
 
 			// 处理普通敌人的伤害
 			handleEnemyDamage(world, entity);
-
-			// 清理特效实体
-			cleanupEffectEntity(entity, serverLevel);
 		}
 
 		// 客户端处理动画
@@ -154,6 +161,7 @@ public class KickendProcedure {
 			helmet.getItem() == ModItems.DARK_RIDER_HELMET.get() ||
 			helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get() ||
 			helmet.getItem() == ModItems.RIDERNECROM_HELMET.get() ||
+			helmet.getItem() == ModItems.BRAIN_HELMET.get() ||
 			isDarkGhostHelmet(helmet);
 	}
 	
@@ -169,8 +177,8 @@ public class KickendProcedure {
 		if (variables.wudi && variables.needExplode) {
 			// 只在服务器端执行延迟任务
 			if (!world.isClientSide() && entity.getServer() != null) {
-				// 创建一个延迟任务来重置无敌状态
-				entity.getServer().execute(() -> {
+				// 创建一个延迟任务来重置无敌状态 - 延迟20tick（1秒）
+				kamen_rider_boss_you_and_me.queueServerWork(20, () -> {
 					KRBVariables.PlayerVariables delayedVariables = entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
 							.orElse(new KRBVariables.PlayerVariables());
 
@@ -271,6 +279,8 @@ public class KickendProcedure {
 			damage = 68.0F;
 		} else if (helmet.getItem() == ModItems.NAPOLEON_GHOST_HELMET.get()) {
 			damage = 75.0F;
+		} else if (helmet.getItem() == ModItems.BRAIN_HELMET.get()) {
+			damage = KickDamageHelper.getKickDamage(entity); // 使用Brain头盔的伤害值
 		} else if (isDarkGhostHelmet(helmet)) {
 			damage = 72.0F; // 黑暗ghost头盔的伤害值
 		}

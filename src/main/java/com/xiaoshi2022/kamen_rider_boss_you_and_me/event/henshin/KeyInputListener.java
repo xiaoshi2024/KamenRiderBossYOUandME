@@ -30,15 +30,6 @@ public final class KeyInputListener {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 
-        // 处理R键触发Brain骑士头部必杀技
-        if (event.getKey() == 82 && event.getAction() == 0) { // 82是R键的键码，0是按下动作
-            ItemStack helmet = player.getInventory().armor.get(3);
-            if (helmet.is(ModItems.BRAIN_HELMET.get())) {
-                PacketHandler.INSTANCE.sendToServer(new BrainHeadbuttPacket(player.getId()));
-                return;
-            }
-        }
-
         if (!KeyBinding.CHANGE_KEY.isDown()) return;
 
         // 检查是否有创世纪驱动器且处于准备状态（特别是火龙果模式）

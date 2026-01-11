@@ -22,6 +22,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -308,6 +309,65 @@ public class PlayerAttackHandler {
         return 0.0f;
     }
 
+    /**
+     * 处理剧毒手帕的攻击效果
+     */
+    @SubscribeEvent
+    public static void onLivingAttack(LivingAttackEvent event) {
+        Entity attacker = event.getSource().getEntity();
+        LivingEntity target = event.getEntity();
+        
+        // 检查攻击者是否为玩家且手持剧毒手帕
+        if (attacker instanceof Player player) {
+            // 检查主手和副手物品
+            ItemStack[] hands = {player.getMainHandItem(), player.getOffhandItem()};
+            
+            for (ItemStack handItem : hands) {
+                // 检查是否是带有剧毒手帕NBT标签的纸
+                if (handItem.getItem() == Items.PAPER && handItem.hasTag() && 
+                    handItem.getTag().getBoolean("IsPoisonHandkerchief")) {
+                    
+                    // 应用中毒效果
+                    target.addEffect(new MobEffectInstance(
+                            MobEffects.POISON,
+                            100, // 5秒
+                            2,   // 2级中毒
+                            false,
+                            false
+                    ));
+                    
+                    // 应用迟缓效果
+                    target.addEffect(new MobEffectInstance(
+                            MobEffects.MOVEMENT_SLOWDOWN,
+                            60,  // 3秒
+                            3,   // 3级迟缓
+                            false,
+                            false
+                    ));
+                    
+                    // 消耗掉一张剧毒手帕
+                    handItem.shrink(1);
+                    
+                    // 生成毒雾粒子效果
+                    if (!player.level().isClientSide && player.level() instanceof ServerLevel serverLevel) {
+                        for (int i = 0; i < 20; i++) {
+                            double x = target.getX() + (player.getRandom().nextDouble() - 0.5) * 2.0;
+                            double y = target.getY() + target.getRandom().nextDouble() * target.getBbHeight();
+                            double z = target.getZ() + (player.getRandom().nextDouble() - 0.5) * 2.0;
+                            serverLevel.sendParticles(
+                                    ParticleTypes.SMOKE,
+                                    x, y, z,
+                                    1, 0.0, 0.1, 0.0, 0.1
+                            );
+                        }
+                    }
+                    
+                    break; // 只处理一个手的物品
+                }
+            }
+        }
+    }
+    
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
