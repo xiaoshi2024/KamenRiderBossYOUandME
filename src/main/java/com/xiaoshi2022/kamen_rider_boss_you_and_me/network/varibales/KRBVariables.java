@@ -131,6 +131,7 @@ public class KRBVariables {
 	clone.isNecromTemporaryRemoved = false; // 玩家死亡时重置眼魂临时移除状态
 	clone.isBrainDriverEquipped = false; // 玩家死亡时重置BrainDriver装备状态
 	clone.isBrainTransformed = false; // 玩家死亡时重置Brain变身状态
+	clone.isKnightInvokerEquipped = false; // 玩家死亡时重置KnightInvokerBuckle装备状态
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
 			// 保留baseMaxHealth值，不再强制重置为默认值，以保留通过命令设置的生命值
@@ -280,6 +281,7 @@ public class KRBVariables {
 	public net.minecraft.nbt.ListTag originalBrainArmor = null; // 新增字段：保存玩家原版Brain盔甲数据
 	public boolean isBrainDriverEquipped = false; // 新增字段：记录是否装备了BrainDriver腰带
 	public boolean isBrainTransformed = false; // 新增字段：记录是否变身为Brain形态
+	public boolean isKnightInvokerEquipped = false; // 新增字段：记录是否装备了KnightInvokerBuckle
 
 	public void syncPlayerVariables(Entity entity) {
 		if (entity instanceof ServerPlayer serverPlayer) {
@@ -413,7 +415,8 @@ public class KRBVariables {
 			nbt.put("originalBrainArmor", originalBrainArmor);
 		}
 		nbt.putBoolean("isBrainDriverEquipped", isBrainDriverEquipped);
-		nbt.putBoolean("isBrainTransformed", isBrainTransformed);
+	nbt.putBoolean("isBrainTransformed", isBrainTransformed);
+	nbt.putBoolean("isKnightInvokerEquipped", isKnightInvokerEquipped);
 		return nbt;
 	}
 
@@ -534,7 +537,8 @@ public class KRBVariables {
 			originalBrainArmor = null;
 		}
 		isBrainDriverEquipped = nbt.contains("isBrainDriverEquipped") ? nbt.getBoolean("isBrainDriverEquipped") : false;
-		isBrainTransformed = nbt.contains("isBrainTransformed") ? nbt.getBoolean("isBrainTransformed") : false;
+	isBrainTransformed = nbt.contains("isBrainTransformed") ? nbt.getBoolean("isBrainTransformed") : false;
+	isKnightInvokerEquipped = nbt.contains("isKnightInvokerEquipped") ? nbt.getBoolean("isKnightInvokerEquipped") : false;
 	}
 	}
 
@@ -636,8 +640,9 @@ public class KRBVariables {
                     variables.originalDarkKivaArmor = message.data.originalDarkKivaArmor;
                     variables.originalNapoleonGhostArmor = message.data.originalNapoleonGhostArmor;
                     variables.originalBrainArmor = message.data.originalBrainArmor;
-                    variables.isBrainDriverEquipped = message.data.isBrainDriverEquipped;
-                    variables.isBrainTransformed = message.data.isBrainTransformed;
+	variables.isBrainDriverEquipped = message.data.isBrainDriverEquipped;
+	variables.isBrainTransformed = message.data.isBrainTransformed;
+	variables.isKnightInvokerEquipped = message.data.isKnightInvokerEquipped;
 				}
 			});
 			context.setPacketHandled(true);

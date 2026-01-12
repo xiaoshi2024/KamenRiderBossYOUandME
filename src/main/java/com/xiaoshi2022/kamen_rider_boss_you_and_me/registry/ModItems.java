@@ -200,6 +200,12 @@ public class ModItems {
     
     public static final RegistryObject<BrainDriver> BRAIN_DRIVER = ITEMS.register("brain_driver",
             () -> new BrainDriver(new Item.Properties().stacksTo(1)));
+    
+    public static final RegistryObject<KnightInvokerBuckle> KNIGHT_INVOKER_BUCKLE = ITEMS.register("knight_invoker",
+            () -> new KnightInvokerBuckle(new Item.Properties().stacksTo(1)));
+    
+    public static final RegistryObject<EraseCapsem> ERASE_CAPSEM = ITEMS.register("erase_capsem",
+            () -> new EraseCapsem(new Item.Properties()));
 
 
     public static final RegistryObject<RidernecromItem> RIDERNECROM_HELMET = ITEMS.register("ridernecrom_helmet", () -> new RidernecromItem(ArmorItem.Type.HELMET, new Item.Properties()));

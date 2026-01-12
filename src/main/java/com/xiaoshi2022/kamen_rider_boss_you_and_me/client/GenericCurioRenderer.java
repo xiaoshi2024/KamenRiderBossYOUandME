@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.braindriver.Brai
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.GhostDriverRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.knightinvoker.KnightInvokerBuckleRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.sengokudriver.sengokudrivers_epmtysRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.BrainEyeglass;
@@ -31,6 +32,8 @@ public class GenericCurioRenderer implements ICurioRenderer {
     private final ICurioRenderer two_sidriverRenderer = new Two_sidriverRenderer();
     private final ICurioRenderer ghost_driverRenderer = new GhostDriverRenderer();
     private final ICurioRenderer brain_driverRenderer = new BrainDriverRenderer();
+    private final ICurioRenderer knightInvokerBuckleRenderer = new KnightInvokerBuckleRenderer();
+
 
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource buffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
@@ -49,6 +52,8 @@ public class GenericCurioRenderer implements ICurioRenderer {
                 ghost_driverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }else if (stack.getItem() instanceof BrainDriver) {
                 brain_driverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            }else if (stack.getItem() instanceof KnightInvokerBuckle) {
+                knightInvokerBuckleRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }
 
             else if (stack.getItem() instanceof BrainEyeglass) {

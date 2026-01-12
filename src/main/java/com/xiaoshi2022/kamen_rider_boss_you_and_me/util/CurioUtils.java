@@ -70,4 +70,31 @@ public class CurioUtils {
             player.getInventory().setItem(player.getInventory().selected, belt);
         }
     }
+    
+    /**
+     * 把物品强制塞进玩家的 back 槽；槽满则塞主手
+     */
+    public static void forceEquipToBack(ServerPlayer player, ItemStack item) {
+        boolean ok = CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .map(inv -> inv.getStacksHandler("back"))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(handler -> {
+                    for (int i = 0; i < handler.getSlots(); i++) {
+                        if (handler.getStacks().getStackInSlot(i).isEmpty()) {
+                            handler.getStacks().setStackInSlot(i, item);
+                            handler.update();
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .orElse(false);
+
+        if (!ok) {
+            // Curios 槽全满：直接塞主手
+            player.getInventory().setItem(player.getInventory().selected, item);
+        }
+    }
 }

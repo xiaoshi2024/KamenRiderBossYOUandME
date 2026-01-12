@@ -337,11 +337,20 @@
   "tooltip.braindriver.mode.normal": "Normal Mode",
   "tooltip.braindriver.mode": "Mode: %s",
   
+  "item.kamen_rider_boss_you_and_me.knight_invoker": "Knight Invoker Buckle",
+  "item.kamen_rider_boss_you_and_me.knight_invoker.tooltip": "[Tip] Equip in the back accessory slot.",
+  "tooltip.knight_invoker.mode.nox": "Nox Knight Mode",
+  "tooltip.knight_invoker.mode.normal": "Normal Mode (Empty)",
+  "tooltip.knight_invoker.mode": "Mode: %s",
+  
   "entity.kamen_rider_boss_you_and_me.brain_roidmude": "Brain Roidmude (003)",
   "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg": "Brain Roidmude (003) Spawn Egg",
   "item.kamen_rider_boss_you_and_me.brain_roidmude_spawn_egg.tooltip": "[Tip] Right-click to spawn Brain Roidmude (003).",
 
   "advancement.kamen_rider_boss_you_and_me.become_roidmude.title": "Roidmude Awakening",
-  "advancement.kamen_rider_boss_you_and_me.become_roidmude.description": "Become a Roidmude and obtain the power of Core Form."
+  "advancement.kamen_rider_boss_you_and_me.become_roidmude.description": "Become a Roidmude and obtain the power of Core Form.",
+  
+  "item.kamen_rider_boss_you_and_me.erase_capsem": "Nightmare Capsule",
+  "item.kamen_rider_boss_you_and_me.erase_capsem.tooltip": "[Tip] Used with Knight Invoker Buckle. Right-click while equipped to switch to Nox Knight Mode."
 
 }

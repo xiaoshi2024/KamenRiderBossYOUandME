@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.BrainEyeglss.Bra
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.braindriver.BrainDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.GhostDriverRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.knightinvoker.KnightInvokerBuckleRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.*;
@@ -358,6 +359,7 @@ public class kamen_rider_boss_you_and_me
                 CuriosRendererRegistry.register(ModItems.TWO_SIDRIVER.get(), ()->new Two_sidriverRenderer());
                 CuriosRendererRegistry.register(ModItems.GHOST_DRIVER.get(),()->new GhostDriverRenderer());
                 CuriosRendererRegistry.register(ModItems.BRAIN_DRIVER.get(),()->new BrainDriverRenderer());
+                CuriosRendererRegistry.register(ModItems.KNIGHT_INVOKER_BUCKLE.get(),()-> new KnightInvokerBuckleRenderer());
 
                 CuriosRendererRegistry.register(ModItems.BRAIN_EYEGLASS.get(),()->new BrainEyeglassRenderer());
 
