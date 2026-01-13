@@ -620,6 +620,9 @@ public class modEventBusEvents {
             
             // 注册时劫者实体属性
             event.put(ModEntityTypes.TIME_JACKER.get(), TimeJackerEntity.createAttributes().build());
+            
+            // 注册NOX特效实体属性
+            event.put(ModEntityTypes.NOX_SPECIAL.get(), NoxSpecialEntity.createAttributes());
 
 //            event.put(ModEntityTypes.KAITO.get(),
 //                    KaitoVillager.createAttributes()

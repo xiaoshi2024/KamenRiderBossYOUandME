@@ -71,6 +71,9 @@ public class KnightInvokerPressPacket {
                     
                     // 手动在服务端设置Press状态为true，确保状态一致
                     belt.setPressState(beltStack, true);
+                    
+                    // 播放玩家动画 - pressone
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KnightInvokerSequence.playPlayerAnimation(player, "pressone");
                 }
             }
         });

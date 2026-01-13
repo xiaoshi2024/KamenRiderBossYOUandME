@@ -56,6 +56,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.Lord
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.melon_energy_slash.MelonEnergySlashRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.necrom_eyex.NecromEyexRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.sakura_hurricane.SakuraHurricaneRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.renderer.NoxSpecialRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.renderer.misc.DimensionalBarrierRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
@@ -346,6 +347,7 @@ public class kamen_rider_boss_you_and_me
             EntityRenderers.register(ModEntityTypes.SAKURA_HURRICANE.get(), SakuraHurricaneRenderer::new);
 
             EntityRenderers.register(ModEntityTypes.ELITE_MONSTER_NPC.get(), EliteMonsterRenderer::new);
+            EntityRenderers.register(ModEntityTypes.NOX_SPECIAL.get(), NoxSpecialRenderer::new);
 
             // 注册动画工厂
             PlayerAnimationSetup.clientInit();

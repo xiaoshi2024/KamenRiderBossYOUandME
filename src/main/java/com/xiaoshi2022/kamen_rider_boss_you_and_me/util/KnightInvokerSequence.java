@@ -1,10 +1,13 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.NoxSpecialEntity;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -56,6 +59,23 @@ public final class KnightInvokerSequence {
                 // 启动变身动画
                 belt.startHenshinAnimation(player, beltStack);
 
+                // 给玩家添加临时隐身效果，持续4秒（80刻），符合NOX剧中设定
+                player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                        net.minecraft.world.effect.MobEffects.INVISIBILITY,
+                        4 * 20, // 4秒
+                        0, false, false, true));
+                
+                // 播放玩家动画 - spintwo
+                playPlayerAnimation(player, "spintwo");
+                
+                // 生成NOX变身特效实体
+                NoxSpecialEntity noxSpecial = ModEntityTypes.NOX_SPECIAL.get().create(player.level());
+                if (noxSpecial != null) {
+                    noxSpecial.setPos(player.getX(), player.getY(), player.getZ());
+                    noxSpecial.setTargetPlayer(player);
+                    player.level().addFreshEntity(noxSpecial);
+                }
+                
                 // 播放nox_c音效 - 变身完成
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                         com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds.NOX_C.get(),
@@ -113,5 +133,17 @@ public final class KnightInvokerSequence {
         } else {
             HENSHIN_COOLDOWN.put(uuid, left);
         }
+    }
+    
+    /* ========== 玩家动画支持 ========== */
+    /* 发送动画到客户端 */
+    public static void playPlayerAnimation(ServerPlayer player, String animationName) {
+        if (player.level().isClientSide()) return;
+
+        PacketHandler.sendAnimationToAll(
+                Component.literal(animationName),
+                player.getId(),
+                false
+        );
     }
 }

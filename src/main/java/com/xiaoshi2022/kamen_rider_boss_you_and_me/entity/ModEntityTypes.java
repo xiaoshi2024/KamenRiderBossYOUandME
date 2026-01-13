@@ -125,7 +125,18 @@ public class ModEntityTypes {
                     .sized(0.6F, 1.9F) // 调整碰撞箱大小，使其更易于观察
                     .clientTrackingRange(8)
                     .build("bat_darks"));
-    
+
+    // NOX变身特效实体
+    public static final RegistryObject<EntityType<NoxSpecialEntity>> NOX_SPECIAL = ENTITY_TYPES.register(
+            "nox_special",
+            () -> EntityType.Builder.of(NoxSpecialEntity::new, MobCategory.MISC)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .setTrackingRange(10)
+                    .setUpdateInterval(Integer.MAX_VALUE) // 尽量少更新，因为是特效
+                    .build("nox_special")
+    );
+
+
     // BatStampFinish 特效实体
     public static final RegistryObject<EntityType<BatStampFinishEntity>> BAT_STAMP_FINISH = ENTITY_TYPES.register("bat_stamp_finish",
             () -> EntityType.Builder.<BatStampFinishEntity>of(BatStampFinishEntity::new, MobCategory.MISC)
