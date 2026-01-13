@@ -48,6 +48,10 @@ public class BeltAnimationPacket {
     public BeltAnimationPacket(int entityId, String animationName, BrainDriver.BeltMode mode) {
         this(entityId, animationName, "braindriver", mode.name());
     }
+    
+    public BeltAnimationPacket(int entityId, String animationName, KnightInvokerBuckle.BeltMode mode) {
+        this(entityId, animationName, "knight_invoker", mode.name());
+    }
 
     public BeltAnimationPacket(int entityId) {
         this(entityId, "", "", "");
@@ -88,6 +92,8 @@ public class BeltAnimationPacket {
                 return new BeltAnimationPacket(id, anim, Mega_uiorder.Mode.valueOf(mode)); // 添加对 Mega_uiorder 的处理
             case "braindriver":
                 return new BeltAnimationPacket(id, anim, BrainDriver.BeltMode.valueOf(mode)); // 添加对 BrainDriver 的处理
+            case "knight_invoker":
+                return new BeltAnimationPacket(id, anim, KnightInvokerBuckle.BeltMode.valueOf(mode)); // 添加对 KnightInvokerBuckle 的处理
             default:
                 return new BeltAnimationPacket(id, anim, beltType, mode);
         }
@@ -101,11 +107,15 @@ public class BeltAnimationPacket {
             Entity e = Minecraft.getInstance().level.getEntity(msg.entityId);
             if (!(e instanceof LivingEntity living)) return;
 
-            living.getCapability(CuriosCapability.INVENTORY).ifPresent(curios ->
-                    curios.findCurio("belt", 0).ifPresent(slot -> {
-                        ItemStack stack = slot.stack();
+            living.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
+                // 遍历所有槽位，找到对应的腰带物品
+                curios.getCurios().forEach((identifier, stacksHandler) -> {
+                    for (int i = 0; i < stacksHandler.getSlots(); i++) {
+                        ItemStack stack = stacksHandler.getStacks().getStackInSlot(i);
+                        if (stack.isEmpty()) continue;
+                        
                         Item item = stack.getItem();
-
+                        
                         if (item instanceof sengokudrivers_epmty s) {
                             s.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof Genesis_driver g) {
@@ -120,9 +130,12 @@ public class BeltAnimationPacket {
                             mu.triggerAnim(living, "controller", msg.animationName);
                         } else if (item instanceof BrainDriver brain) {
                             brain.triggerAnim(living, "controller", msg.animationName);
+                        } else if (item instanceof KnightInvokerBuckle ki) {
+                            ki.triggerAnim(living, "controller", msg.animationName);
                         }
-                    })
-            );
+                    }
+                });
+            });
         });
         ctx.get().setPacketHandled(true);
     }

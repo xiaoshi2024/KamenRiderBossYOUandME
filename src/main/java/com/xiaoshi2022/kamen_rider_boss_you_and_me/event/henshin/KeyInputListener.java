@@ -55,7 +55,27 @@ public final class KeyInputListener {
         if (!hasGenesisReady && tryLoadTwoWeaponOnX(player)) return; // 如果不是火龙果准备状态且成功装载武器，本次 X 键不再往下走变身逻辑
 
 
-        // 1. 创世纪驱动器
+        // 1. 检查是否有KnightInvokerBuckle且处于NOX模式
+        Optional<ItemStack> knightInvokerOpt = CurioUtils.findFirstCurio(player,
+                        stack -> stack.getItem() instanceof KnightInvokerBuckle)
+                .map(slot -> slot.stack());
+
+        if (knightInvokerOpt.isPresent()) {
+            ItemStack beltStack = knightInvokerOpt.get();
+            KnightInvokerBuckle belt = (KnightInvokerBuckle) beltStack.getItem();
+            
+            KnightInvokerBuckle.BeltMode mode = belt.getMode(beltStack);
+            if (mode == KnightInvokerBuckle.BeltMode.NOX) {
+                // 第二次按X键：触发spin动画并变身
+                if (belt.getPressState(beltStack)) {
+                    // 发送变身数据包
+                    PacketHandler.sendToServer(new KnightInvokerHenshinPacket());
+                }
+                return;
+            }
+        }
+        
+        // 2. 创世纪驱动器
         Optional<ItemStack> beltStackOpt = CurioUtils.findFirstCurio(player,
                         stack -> stack.getItem() instanceof Genesis_driver)
                 .map(slot -> slot.stack());

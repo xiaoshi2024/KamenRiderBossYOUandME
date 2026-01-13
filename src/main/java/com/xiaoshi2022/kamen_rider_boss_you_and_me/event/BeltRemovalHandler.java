@@ -77,8 +77,9 @@ public class BeltRemovalHandler {
             boolean hasTwoSidriver = hasSpecificBelt(player, "Two_sidriver");
             boolean hasGhostDriver = hasSpecificBelt(player, "GhostDriver");
             boolean hasBrainDriver = hasSpecificBelt(player, "BrainDriver");
+            boolean hasKnightInvokerBuckle = hasSpecificBelt(player, "KnightInvokerBuckle");
             
-            return hasDrakKivaBelt || hasGenesisDriver || hasMegaUiorder || hasSengokuDriver || hasTwoSidriver || hasGhostDriver || hasBrainDriver;
+            return hasDrakKivaBelt || hasGenesisDriver || hasMegaUiorder || hasSengokuDriver || hasTwoSidriver || hasGhostDriver || hasBrainDriver || hasKnightInvokerBuckle;
         } catch (Exception e) {
             // 发生异常时返回true，避免错误的解除变身
             return true;
@@ -198,6 +199,12 @@ public class BeltRemovalHandler {
             return;
         }
         
+        // KnightInvokerBuckle变身检测
+        if (variables.isKnightInvokerEquipped) {
+            variables.removedBeltType = "KNIGHT_INVOKER";
+            return;
+        }
+        
         // 如果无法确定类型，默认设为BARONS
         variables.removedBeltType = "BARONS";
     }
@@ -270,6 +277,9 @@ public class BeltRemovalHandler {
             case "BRAIN":
                 variables.isBrainTransformed = false;
                 variables.isBrainDriverEquipped = false;
+                break;
+            case "KNIGHT_INVOKER":
+                variables.isKnightInvokerEquipped = false;
                 break;
         }
     }

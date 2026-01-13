@@ -78,6 +78,17 @@ public class ModBossSounds {
  public static final RegistryObject<SoundEvent> BRAINRIDER = REGISTRY.register("brainrider",
          () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "brainrider")));
 
+    public static final RegistryObject<SoundEvent> ERASE = REGISTRY.register("erase",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "erase")));
+    public static final RegistryObject<SoundEvent> NOX_A = REGISTRY.register("nox_a",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "nox_a")));
+    public static final RegistryObject<SoundEvent> NOX_B = REGISTRY.register("nox_b",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "nox_b")));
+    public static final RegistryObject<SoundEvent> NOX_C = REGISTRY.register("nox_c",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "nox_c")));
+
+
+
 
     public static final RegistryObject<SoundEvent> DARK_GHOST = REGISTRY.register("darks_ghost",
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "darks_ghost")));

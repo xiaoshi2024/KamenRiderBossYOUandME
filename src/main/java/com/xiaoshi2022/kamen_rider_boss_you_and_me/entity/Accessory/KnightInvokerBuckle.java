@@ -5,7 +5,9 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.knightinvoker.Kn
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -174,6 +176,14 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
     public void setRelease(ItemStack stack, boolean flag) {
         stack.getOrCreateTag().putBoolean("IsRelease", flag);
     }
+    
+    public boolean getPressState(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IsPressed");
+    }
+    
+    public void setPressState(ItemStack stack, boolean flag) {
+        stack.getOrCreateTag().putBoolean("IsPressed", flag);
+    }
     /* ----------------------------------------------------------- */
     
     @Override
@@ -234,6 +244,22 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
             return PlayState.CONTINUE;
         }
 
+        /* -------- Press动画 -------- */
+        boolean pressed = getPressState(stack);
+        if (pressed) {
+            if (!cur.equals("press")) {
+                // 播放Press动画
+                return state.setAndContinue(PRESS);
+            }
+
+            // 动画播放完毕后不自动重置Press状态，保持为true直到玩家按下X键触发变身
+            if (state.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                // 回到show或idles状态，但保持Press状态为true
+                return show ? state.setAndContinue(SHOW) : state.setAndContinue(IDLES);
+            }
+            return PlayState.CONTINUE;
+        }
+
         /* -------- 展示/待机 -------- */
         if (show) {
             if (!cur.equals("show")) return state.setAndContinue(SHOW);
@@ -249,25 +275,29 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
     public void startHenshinAnimation(LivingEntity entity, ItemStack stack) {
         setHenshin(stack, true);
         setRelease(stack, false);
+        setPressState(stack, false); // 重置Press状态，避免多次按X键导致音效堆叠
+    }
+
+    /**
+     * 播放Press动画和音效
+     */
+    public void startPressAnimation(LivingEntity entity, ItemStack stack) {
+        // 设置Press状态为true，这样动画控制器可以正确响应
+        setPressState(stack, true);
+
+        // 播放Press动画
+        String anim = "press";
 
         BeltMode mode = getMode(stack);
-        String anim = "spin";
 
-        // 服务端：把腰带动画名同步给所有追踪者
-        if (!entity.level().isClientSide && entity instanceof ServerPlayer sp) {
-            PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(sp.getId(), anim, "knight_invoker", mode.name()), sp);
-        }
-
-        // 客户端：本地线程直接播
-        if (entity.level().isClientSide) {
-            triggerAnim(entity, "controller", anim);
-        }
+        // 触发动画
+        this.triggerAnim(entity, "controller", anim);
     }
 
     public void startReleaseAnimation(LivingEntity entity, ItemStack stack) {
         setRelease(stack, true);
         setHenshin(stack, false);
+        setPressState(stack, false);
 
         String anim = "cancel";
 
@@ -334,6 +364,7 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
     protected void onBeltUnequipped(ServerPlayer player, ItemStack beltStack) {
         setShowing(beltStack, false);
         setRelease(beltStack, false);
+        setPressState(beltStack, false); // 重置Press状态，避免下次装备时状态异常
         
         // 更新玩家变量，标记卸下了KnightInvokerBuckle
         player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
@@ -367,6 +398,7 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
         tag.putBoolean("IsActive", getActive(stack));
         tag.putBoolean("IsHenshin", getHenshin(stack));
         tag.putBoolean("IsRelease", getRelease(stack));
+        tag.putBoolean("IsPressed", getPressState(stack)); // 添加IsPressed状态同步
         return tag;
     }
 
@@ -379,6 +411,7 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
         if (nbt.contains("IsActive")) setActive(stack, nbt.getBoolean("IsActive"));
         if (nbt.contains("IsHenshin")) setHenshin(stack, nbt.getBoolean("IsHenshin"));
         if (nbt.contains("IsRelease")) setRelease(stack, nbt.getBoolean("IsRelease"));
+        if (nbt.contains("IsPressed")) setPressState(stack, nbt.getBoolean("IsPressed")); // 添加IsPressed状态同步
     }
 
     /* -------------- 客户端渲染器 -------------- */
@@ -403,6 +436,8 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
     /* -------------- 触发工具 -------------- */
     public void triggerAnim(LivingEntity entity, String ctrl, String anim) {
         if (entity == null || entity.level() == null) return;
+        
+        // 服务端：发送动画数据包给所有追踪者
         if (entity instanceof ServerPlayer sp) {
             // 从Curio槽位获取腰带模式
             Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(sp).resolve()

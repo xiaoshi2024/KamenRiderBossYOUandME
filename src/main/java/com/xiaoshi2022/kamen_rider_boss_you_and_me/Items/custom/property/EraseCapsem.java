@@ -2,9 +2,11 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.EraseCapsem.EraseCapsemRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -66,6 +68,10 @@ public class EraseCapsem extends Item implements GeoItem {
                     if (buckle.getMode(buckleStack) == KnightInvokerBuckle.BeltMode.DEFAULT) {
                         // 设置腰带模式为NOX
                         buckle.setMode(buckleStack, KnightInvokerBuckle.BeltMode.NOX);
+                        
+                        // 播放阶段一待机音
+                        level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                                ModBossSounds.NOX_A.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
                         
                         // 触发动画
                         triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverPlayer.serverLevel()), "capuse", "use");

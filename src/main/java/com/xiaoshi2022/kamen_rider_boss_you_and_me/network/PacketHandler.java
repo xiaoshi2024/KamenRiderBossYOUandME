@@ -350,6 +350,27 @@ public class PacketHandler {
                 KnightPoisonPacket::encode,
                 KnightPoisonPacket::decode,
                 KnightPoisonPacket::handle);
+        
+        // 注册KnightInvoker变身数据包
+        INSTANCE.registerMessage(index++,
+                KnightInvokerHenshinPacket.class,
+                KnightInvokerHenshinPacket::encode,
+                KnightInvokerHenshinPacket::decode,
+                KnightInvokerHenshinPacket::handle);
+        
+        // 注册KnightInvokerPress数据包
+        INSTANCE.registerMessage(index++,
+                KnightInvokerPressPacket.class,
+                KnightInvokerPressPacket::encode,
+                KnightInvokerPressPacket::decode,
+                KnightInvokerPressPacket::handle);
+        
+        // 注册KnightInvokerRelease数据包
+        INSTANCE.registerMessage(index++,
+                KnightInvokerReleasePacket.class,
+                KnightInvokerReleasePacket::toBytes,
+                KnightInvokerReleasePacket::new,
+                KnightInvokerReleasePacket::handle);
     }
 
     public static void sendToServer(Object packet) {

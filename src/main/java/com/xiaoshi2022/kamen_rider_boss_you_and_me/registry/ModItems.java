@@ -16,6 +16,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangel
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.EvilBatsArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.noxknight.NoxKnight;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
@@ -268,6 +269,11 @@ public class ModItems {
     public static final RegistryObject<Brain> BRAIN_HELMET = ITEMS.register("brain_helmet", () -> new Brain(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Brain> BRAIN_CHESTPLATE = ITEMS.register("brain_chestplate", () -> new Brain(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Brain> BRAIN_LEGGINGS = ITEMS.register("brain_leggings", () -> new Brain(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    
+    // Nox Knight装甲
+    public static final RegistryObject<NoxKnight> NOX_KNIGHT_HELMET = ITEMS.register("nox_knight_helmet", () -> new NoxKnight(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<NoxKnight> NOX_KNIGHT_CHESTPLATE = ITEMS.register("nox_knight_chestplate", () -> new NoxKnight(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<NoxKnight> NOX_KNIGHT_LEGGINGS = ITEMS.register("nox_knight_leggings", () -> new NoxKnight(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
     // 基夫眼珠 - 击败基夫人形后掉落 (Geo物品)
     public static final RegistryObject<GiifuEyeBall> GIIFU_EYEBALL = ITEMS.register("giifu_eyeball",

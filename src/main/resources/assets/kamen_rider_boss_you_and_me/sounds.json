@@ -340,5 +340,41 @@
         "stream": false
       }
     ]
+  },
+  "erase": {
+    "subtitle": "Erase",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:erase",
+        "stream": false
+      }
+    ]
+  },
+  "nox_a": {
+    "subtitle": "nox Standby one",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:nox_a",
+        "stream": false
+      }
+    ]
+  },
+  "nox_b": {
+    "subtitle": "nox Standby two",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:nox_b",
+        "stream": false
+      }
+    ]
+  },
+  "nox_c": {
+    "subtitle": "nox Knight",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:nox_c",
+        "stream": false
+      }
+    ]
   }
 }

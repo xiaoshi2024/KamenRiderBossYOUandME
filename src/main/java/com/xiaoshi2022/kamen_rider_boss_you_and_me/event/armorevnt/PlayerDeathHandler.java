@@ -11,6 +11,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangel
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.EvilBatsArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.noxknight.NoxKnight;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
@@ -293,6 +294,28 @@ public class PlayerDeathHandler {
                         vars.isNecromStandby = false;
                     });
                 });
+        
+        // 6. NOX驱动器（KnightInvokerBuckle）-------------------------------------------
+        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof KnightInvokerBuckle)
+                .ifPresent(curio -> {
+                    ItemStack belt = curio.stack().copy();
+                    KnightInvokerBuckle buckle = (KnightInvokerBuckle) belt.getItem();
+                    buckle.setMode(belt, KnightInvokerBuckle.BeltMode.DEFAULT);
+
+                    // 优先放进背包，满了才掉落
+                    if (!player.getInventory().add(belt)) {
+                        player.drop(belt, false);
+                    }
+
+                    // 清槽 - NOX驱动器装备在背部槽位
+                    if (!player.level().isClientSide) {
+                        CuriosApi.getCuriosInventory(player).ifPresent(inv ->
+                                inv.getStacksHandler(curio.slotContext().identifier()).ifPresent(handler ->
+                                        handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY)
+                                )
+                        );
+                    }
+                });
     }
 
     // 新增：返还蝙蝠形态相关的物品
@@ -374,6 +397,7 @@ public class PlayerDeathHandler {
                         stack.getItem() instanceof NapoleonGhostItem ||
                         stack.getItem() instanceof DarkRiderGhostItem ||
                         stack.getItem() instanceof EvilBatsArmor ||
+                        stack.getItem() instanceof NoxKnight ||
                         stack.getItem() instanceof DarkKivaItem
                 ) {
                     return true;
@@ -412,6 +436,7 @@ public class PlayerDeathHandler {
                     armorStack.getItem() instanceof NapoleonGhostItem ||
                     armorStack.getItem() instanceof DarkRiderGhostItem ||
                     armorStack.getItem() instanceof DarkKivaItem ||
+                    armorStack.getItem() instanceof NoxKnight ||
                     armorStack.getItem() instanceof Marika) {
                 player.getInventory().armor.set(i, ItemStack.EMPTY);
             }
@@ -475,6 +500,8 @@ public class PlayerDeathHandler {
             return "MELON";
         } else if (helmet.getItem() == ModItems.TYRANT_HELMET.get()) {
             return "DRAGONFRUIT";
+        } else if (helmet.getItem() == ModItems.NOX_KNIGHT_HELMET.get()) {
+            return "NOX";
         }
 
         // 如果没有匹配的头盔，检查胸甲
@@ -494,6 +521,8 @@ public class PlayerDeathHandler {
             return "MELON";
         } else if (chestplate.getItem() == ModItems.TYRANT_CHESTPLATE.get()) {
             return "DRAGONFRUIT";
+        } else if (chestplate.getItem() == ModItems.NOX_KNIGHT_CHESTPLATE.get()) {
+            return "NOX";
         }
 
         return ""; // 没有找到匹配的盔甲类型
@@ -528,6 +557,10 @@ public class PlayerDeathHandler {
                 break;
             case "MELON":
                 list.add(new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.MELON.get()));
+                break;
+            case "NOX":
+                // 返回暗夜祷告驱动器和Erase胶囊
+                list.add(new ItemStack(ModItems.ERASE_CAPSEM.get()));
                 break;
         }
         return list;

@@ -129,8 +129,22 @@ public class KeyBinding {
                 // 处理可能的异常
             }
             
-            // 检查是否装备了魂灵驱动器
-            if (isGhostDriverEquipped(player)) {
+            // 1. 检查是否穿着NOX骑士盔甲
+            boolean isNoxKnight = player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.NOX_KNIGHT_HELMET.get() &&
+                    player.getItemBySlot(EquipmentSlot.CHEST).getItem() == ModItems.NOX_KNIGHT_CHESTPLATE.get() &&
+                    player.getItemBySlot(EquipmentSlot.LEGS).getItem() == ModItems.NOX_KNIGHT_LEGGINGS.get();
+            
+            // 2. 检查是否装备了KnightInvokerBuckle
+            Optional<ItemStack> knightInvokerOpt = CurioUtils.findFirstCurio(player,
+                            stack -> stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle)
+                    .map(slot -> slot.stack());
+            
+            if (isNoxKnight && knightInvokerOpt.isPresent()) {
+                // 发送NOX解除变身请求
+                PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.KnightInvokerReleasePacket());
+            }
+            // 3. 检查是否装备了魂灵驱动器
+            else if (isGhostDriverEquipped(player)) {
                 // 检查是否是拿破仑魂形态
                 isNapoleonGhostTransformed = false;
                 try {
@@ -147,7 +161,7 @@ public class KeyBinding {
                     PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket(true));
                 }
             }
-            // 检查是否是Brain形态
+            // 4. 检查是否是Brain形态
             else if (isBrainTransformed) {
                 // 发送Brain解除变身请求
                 PacketHandler.sendToServer(new BrainTransformationRequestPacket(true));
@@ -325,9 +339,32 @@ public class KeyBinding {
             return; // 优先处理重加速功能，不继续执行其他按键检测
         }
 
-        // Z键：优先检查创世纪驱动器临时取下锁种功能，然后是EvilBats临时取下印章功能，再是临时取下眼魂功能，最后是结界拉扯功能
+        // Z键：优先检查KnightInvokerBuckle的press动画，然后是创世纪驱动器临时取下锁种功能，然后是EvilBats临时取下印章功能，再是临时取下眼魂功能，最后是结界拉扯功能
         if (KEY_BARRIER_PULL.consumeClick()) {
-            // 检查玩家是否装备了创世纪驱动器
+            // 1. 检查是否有KnightInvokerBuckle且处于NOX模式，用于触发press动画
+            Optional<ItemStack> knightInvokerOpt = CurioUtils.findFirstCurio(mc.player,
+                            stack -> stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle)
+                    .map(slot -> slot.stack());
+
+            if (knightInvokerOpt.isPresent()) {
+                ItemStack beltStack = knightInvokerOpt.get();
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle belt = 
+                        (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle) beltStack.getItem();
+                
+                // 只有处于NOX模式且未按压状态时才触发press动画
+                if (belt.getMode(beltStack) == com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle.BeltMode.NOX && 
+                    !belt.getPressState(beltStack)) {
+                    // 设置按压状态为true
+                    belt.setPressState(beltStack, true);
+                    // 播放press动画
+                    belt.startPressAnimation(mc.player, beltStack);
+                    // 发送press数据包，让服务端播放音效
+                    PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.KnightInvokerPressPacket());
+                    return; // 优先处理KnightInvokerBuckle的press动画
+                }
+            }
+            
+            // 2. 检查玩家是否装备了创世纪驱动器
             boolean hasGenesisDriver = hasGenesisDriver(mc.player);
             if (hasGenesisDriver) {
                 // 发送临时取下锁种的数据包
