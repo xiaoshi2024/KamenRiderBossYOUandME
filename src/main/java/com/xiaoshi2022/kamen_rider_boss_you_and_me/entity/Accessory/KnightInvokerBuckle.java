@@ -448,4 +448,23 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
                     new BeltAnimationPacket(entity.getId(), anim, "knight_invoker", mode.name()), entity);
         }
     }
+
+    /**
+     * 开始Erase动画和音效
+     */
+    public void startEraseAnimation(LivingEntity entity, ItemStack stack) {
+        setHenshin(stack, false);
+        setPressState(stack, true);
+        String anim = "press";
+        // Play erase sound
+        if (!entity.level().isClientSide()) {
+            entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    ModBossSounds.ERASE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
+        // Send animation packet
+        if (!entity.level().isClientSide() && entity instanceof ServerPlayer sp) {
+            PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), anim, "knight_invoker", getMode(stack).name()), sp);
+        }
+        triggerAnim(entity, "controller", anim);
+    }
 }

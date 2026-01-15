@@ -482,6 +482,25 @@ public class KeyBinding {
                 PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Superpower.KnightPoisonPacket(mc.player.getId()));
             }
         }
+        // 检查NOX骑士玩家按下V键的erase能力
+        else if (isNoxKnightArmorEquipped(mc.player) && KEY_GUARD.consumeClick()) {
+            // 检查是否装备了KnightInvokerBuckle
+            Optional<ItemStack> knightInvokerOpt = CurioUtils.findFirstCurio(mc.player,
+                            stack -> stack.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle)
+                    .map(slot -> slot.stack());
+            
+            if (knightInvokerOpt.isPresent()) {
+                ItemStack beltStack = knightInvokerOpt.get();
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle belt = 
+                        (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.KnightInvokerBuckle) beltStack.getItem();
+                
+                // 触发erase动画和音效
+                belt.startEraseAnimation(mc.player, beltStack);
+                
+                // 发送Breakam Cannon攻击数据包（必杀技：释放黑灰色光波擦除敌人）
+                PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.KnightInvokerErasePacket(mc.player.getId()));
+            }
+        }
         // 其他情况：检查玩家是否手持蝙蝠印章并按下V键（骑士1键）
         else if (KEY_GUARD.consumeClick()) {
             if (mc.player.getMainHandItem().getItem() instanceof BatStampItem) {
@@ -563,6 +582,14 @@ public class KeyBinding {
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof EvilBatsArmor &&
                 player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof EvilBatsArmor &&
                 player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof EvilBatsArmor;
+    }
+    
+    // 客户端专用的NOX Knight盔甲检测方法
+    private static boolean isNoxKnightArmorEquipped(LocalPlayer player) {
+        // 检查是否穿着NOX Knight头盔、胸甲和护腿
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.NOX_KNIGHT_HELMET.get() &&
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() == ModItems.NOX_KNIGHT_CHESTPLATE.get() &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() == ModItems.NOX_KNIGHT_LEGGINGS.get();
     }
 
     // 检测玩家是否装备了魂灵驱动器
@@ -737,5 +764,12 @@ public class KeyBinding {
         return player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() &&
                 player.getInventory().armor.get(2).getItem() == ModItems.ZANGETSU_SHIN_CHESTPLATE.get() &&
                 player.getInventory().armor.get(1).getItem() == ModItems.ZANGETSU_SHIN_LEGGINGS.get();
+    }
+
+    // 检测玩家是否穿着全套NOX骑士盔甲
+    private static boolean isNoxKnightArmorEquipped(Player player) {
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.NOX_KNIGHT_HELMET.get() &&
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() == ModItems.NOX_KNIGHT_CHESTPLATE.get() &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() == ModItems.NOX_KNIGHT_LEGGINGS.get();
     }
 }

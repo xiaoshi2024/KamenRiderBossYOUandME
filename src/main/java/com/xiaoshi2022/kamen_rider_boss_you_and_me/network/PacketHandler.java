@@ -371,6 +371,13 @@ public class PacketHandler {
                 KnightInvokerReleasePacket::toBytes,
                 KnightInvokerReleasePacket::new,
                 KnightInvokerReleasePacket::handle);
+        
+        // 注册KnightInvokerErase数据包（必杀技：Breakam Cannon）
+        INSTANCE.registerMessage(index++,
+                KnightInvokerErasePacket.class,
+                KnightInvokerErasePacket::encode,
+                KnightInvokerErasePacket::decode,
+                KnightInvokerErasePacket::handle);
     }
 
     public static void sendToServer(Object packet) {

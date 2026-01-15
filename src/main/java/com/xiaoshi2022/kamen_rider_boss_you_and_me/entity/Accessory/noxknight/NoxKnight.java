@@ -90,6 +90,46 @@ public class NoxKnight extends ArmorItem implements GeoItem, KamenBossArmor, Arm
         
         // 添加生命恢复效果
         this.applyRegenerationEffect(player);
+        
+        // 添加基础buff效果（根据百度百科数据）
+        this.applyBaseBuffs(player);
+    }
+    
+    // 添加基础buff效果
+        private void applyBaseBuffs(Player player) {
+        if (!player.level().isClientSide()) {
+            // 跑速增强：100m/7.5s（原版玩家跑速约100m/20s，需要大幅提升）
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.MOVEMENT_SPEED,
+                    200,
+                    1, // 速度提升1级（+20%）
+                    false, false, true
+            ));
+            
+            // 跳跃力增强：4.8m（原版玩家跳跃力约1.25m，需要大幅提升）
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.JUMP,
+                    200,
+                    3, // 跳跃提升3级
+                    false, false, true
+            ));
+            
+            // 力量增强：拳力4.2t（提升攻击力）
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.DAMAGE_BOOST,
+                    200,
+                    1, // 力量提升1级（+3）
+                    false, false, true
+            ));
+            
+            // 清醒梦的力量：提升所有效果
+            player.addEffect(new MobEffectInstance(
+                    MobEffects.LUCK,
+                    200,
+                    1, // 幸运提升1级
+                    false, false, true
+            ));
+        }
     }
     
     // 覆写getResistanceLevel方法，设置自定义抗性等级
