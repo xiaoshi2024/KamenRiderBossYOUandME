@@ -18,8 +18,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.BeltAn
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.PlayerJoinSyncPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -34,12 +32,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -52,37 +48,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.*;
-
 public class modEventBusEvents {
-    @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", value = Dist.CLIENT)
-    public class ClientEvents {
-        //        @SubscribeEvent
-//        public static void onKeyInput(InputEvent.Key event) {
-//            if (Minecraft.getInstance().screen == null) {
-//                if (CHANGE_KEY.isDown()) {
-//                    // 获取当前玩家
-//                    LocalPlayer player = Minecraft.getInstance().player;
-//                    if (player != null) {
-//                        // 发送网络消息到服务器
-//                        PacketHandler.sendToServer(new PlayerAnimationPacket(player.getId(), STORIOUS_VFX_HEIXIN));
-//                    }
-//                }
-//            }
-//        }
-//    @SubscribeEvent
-//    public static void onKeyInput(InputEvent.Key event) {
-//        if (CHANGE_KEY.consumeClick()) {
-//            // 按键被按下，发送网络包到服务器
-//            if (Minecraft.getInstance().level != null) {
-//                PacketHandler.INSTANCE.sendToServer(new SoundStopPacket(
-//                        Minecraft.getInstance().player.getId(), "kamen_rider_boss_you_and_me:banana_lockonby"));
-//                }
-//            }
-//        }
-        // 在事件处理器类中添加
+    
+    @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID, value = Dist.DEDICATED_SERVER)
+    public static class ServerEvents {
         @SubscribeEvent
-        public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
             if (event.getEntity() instanceof ServerPlayer player) {
                 player.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
                     curios.findCurio("belt", 0).ifPresent(slotResult -> {
@@ -117,33 +88,43 @@ public class modEventBusEvents {
                             PacketHandler.sendToClient(
                                     new BeltAnimationPacket(player.getId(), anim, mode),
                                     player);
-
-                            // 不需要 setTag，只是读取
                         }
                     });
                 });
             }
         }
-
+        
         @SubscribeEvent
-        public static void onClientTick(TickEvent.ClientTickEvent event) {
-            if (event.phase != TickEvent.Phase.END) return;
+        public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+            if (event.getEntity() instanceof ServerPlayer newPlayer) {
+                // ⭐ 给新玩家发送所有已在线玩家的状态
+                for (ServerPlayer onlinePlayer : newPlayer.server.getPlayerList().getPlayers()) {
+                    if (onlinePlayer != newPlayer) {
+                        syncPlayerState(onlinePlayer, newPlayer); // 发送给新玩家
+                    }
+                }
 
-            Player player = Minecraft.getInstance().player;
-            if (player == null) return;
-
-            RiderInvisibilityManager.updateInvisibility(player);
+                // ⭐ 同步自己的状态给所有玩家
+                syncPlayerState(newPlayer, null);
+            }
         }
 
-        /* 装备栏变化时立即刷新（防止延迟） */
-        @SubscribeEvent
-        public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
-            if (!(event.getEntity() instanceof Player player)) return;
-            if (event.getSlot().getType() != EquipmentSlot.Type.ARMOR) return;
-
-            RiderInvisibilityManager.updateInvisibility(player);
+        // 在 modEventBusEvents.onPlayerLoggedIn 中：
+        private static void syncPlayerState(ServerPlayer targetPlayer, ServerPlayer excludePlayer) {
+            CuriosApi.getCuriosInventory(targetPlayer).ifPresent(inv ->
+                    inv.findCurio("belt", 0).ifPresent(slot -> {
+                        ItemStack stack = slot.stack();
+                        if (stack.getItem() instanceof DrakKivaBelt belt && belt.getHenshin(stack)) {
+                            PlayerJoinSyncPacket packet = new PlayerJoinSyncPacket(
+                                    targetPlayer.getId(), "henshin", "drakkiva", "DEFAULT"
+                            );
+                            // 广播给所有追踪者（除了 excludePlayer）
+                            PacketHandler.sendToAllTrackingExcept(packet, targetPlayer, excludePlayer);
+                        }
+                    })
+            );
         }
-
+        
         @SubscribeEvent
         public static void onPlayerChat(ServerChatEvent event) {
             String msg = event.getMessage().getString(); // 获取玩家发送的消息
@@ -225,37 +206,6 @@ public class modEventBusEvents {
                     KivatBatTwoNd.reply(query, kivat, (ServerLevel) level);
                 }
             }
-        }
-
-        @SubscribeEvent
-        public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-            if (event.getEntity() instanceof ServerPlayer newPlayer) {
-                // ⭐ 给新玩家发送所有已在线玩家的状态
-                for (ServerPlayer onlinePlayer : newPlayer.server.getPlayerList().getPlayers()) {
-                    if (onlinePlayer != newPlayer) {
-                        syncPlayerState(onlinePlayer, newPlayer); // 发送给新玩家
-                    }
-                }
-
-                // ⭐ 同步自己的状态给所有玩家
-                syncPlayerState(newPlayer, null);
-            }
-        }
-
-        // 在 modEventBusEvents.onPlayerLoggedIn 中：
-        private void syncPlayerState(ServerPlayer targetPlayer, ServerPlayer excludePlayer) {
-            CuriosApi.getCuriosInventory(targetPlayer).ifPresent(inv ->
-                    inv.findCurio("belt", 0).ifPresent(slot -> {
-                        ItemStack stack = slot.stack();
-                        if (stack.getItem() instanceof DrakKivaBelt belt && belt.getHenshin(stack)) {
-                            PlayerJoinSyncPacket packet = new PlayerJoinSyncPacket(
-                                    targetPlayer.getId(), "henshin", "drakkiva", "DEFAULT"
-                            );
-                            // 广播给所有追踪者（除了 excludePlayer）
-                            PacketHandler.sendToAllTrackingExcept(packet, targetPlayer, excludePlayer);
-                        }
-                    })
-            );
         }
     }
 
@@ -472,7 +422,7 @@ public class modEventBusEvents {
         }
     }
     
-    @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public final class CommonListener {
 
         @SubscribeEvent
@@ -631,18 +581,6 @@ public class modEventBusEvents {
 //                            .add(Attributes.MAX_HEALTH, 40.0D)
 //                            .build()
 //            );
-        }
-
-        @SubscribeEvent
-        public static void onKeyRegister(RegisterKeyMappingsEvent event){
-            event.register(CHANGE_KEY);
-            event.register(CHANGES_KEY);
-            event.register(RELIEVE_KEY);
-            event.register(KEY_GUARD);
-            event.register(KEY_BLAST);
-            event.register(KEY_BOOST);
-            event.register(KEY_FLIGHT);
-            event.register(KEY_BARRIER_PULL);
         }
     }
 }

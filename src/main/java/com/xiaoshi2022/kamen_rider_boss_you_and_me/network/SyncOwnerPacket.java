@@ -27,13 +27,16 @@ public record SyncOwnerPacket(int entityId, @Nullable UUID ownerId) {
 
     public static void handle(SyncOwnerPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ClientLevel level = Minecraft.getInstance().level;
-            if (level != null) {
-                Entity entity = level.getEntity(packet.entityId());
-                if (entity instanceof LordBaronEntity baron) {
-                    Player owner = packet.ownerId() != null ?
-                            level.getPlayerByUUID(packet.ownerId()) : null;
-                    baron.setOwner(owner);
+            // 只在客户端处理
+            if (ctx.get().getDirection().getReceptionSide().isClient()) {
+                ClientLevel level = Minecraft.getInstance().level;
+                if (level != null) {
+                    Entity entity = level.getEntity(packet.entityId());
+                    if (entity instanceof LordBaronEntity baron) {
+                        Player owner = packet.ownerId() != null ?
+                                level.getPlayerByUUID(packet.ownerId()) : null;
+                        baron.setOwner(owner);
+                    }
                 }
             }
         });

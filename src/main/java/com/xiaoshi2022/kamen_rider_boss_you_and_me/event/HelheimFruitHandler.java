@@ -113,10 +113,7 @@ public class HelheimFruitHandler {
                                     .withStyle(ChatFormatting.GOLD),
                             true);
                     playTransformationEffects(level, lordBaron.position());
-                    // 发送网络包到服务器，通知服务器玩家已经变身
-                    PacketHandler.sendToServer(new SyncOwnerPacket(lordBaron.getId(), player.getUUID()));
-
-                    // 如果需要，也可以发送到所有跟踪该实体的客户端
+                    // 只发送到所有跟踪该实体的客户端，不需要发送到服务器
                     PacketHandler.sendToAllTracking(new SyncOwnerPacket(lordBaron.getId(), player.getUUID()), lordBaron);
                 } else {
                     lordBaron.discard();
