@@ -5,6 +5,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 public final class RiderInvisibilityManager {
@@ -28,11 +30,24 @@ public final class RiderInvisibilityManager {
                     OUR_AMPLIFIER, false, false, true));
         } else {
             // 当玩家不再穿着盔甲时，只移除由本模组添加的隐身效果（特殊等级），保留其他来源的效果
+            List<MobEffectInstance> effectsToKeep = new ArrayList<>();
+            boolean foundOurEffect = false;
+            
             for (MobEffectInstance effect : player.getActiveEffects()) {
-                if (effect.getEffect() == MobEffects.INVISIBILITY && 
-                    effect.getAmplifier() == OUR_AMPLIFIER) {
-                    player.removeEffect(MobEffects.INVISIBILITY);
-                    break;
+                if (effect.getEffect() == MobEffects.INVISIBILITY) {
+                    if (effect.getAmplifier() == OUR_AMPLIFIER) {
+                        foundOurEffect = true;
+                    } else {
+                        effectsToKeep.add(effect);
+                    }
+                }
+            }
+            
+            if (foundOurEffect) {
+                player.removeEffect(MobEffects.INVISIBILITY);
+                // 重新添加需要保留的隐身效果
+                for (MobEffectInstance effect : effectsToKeep) {
+                    player.addEffect(effect);
                 }
             }
         }

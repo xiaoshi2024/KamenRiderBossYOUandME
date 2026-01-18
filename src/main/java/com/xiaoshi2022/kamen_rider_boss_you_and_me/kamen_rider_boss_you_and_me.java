@@ -1,61 +1,16 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.BrainEyeglss.BrainEyeglassRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.braindriver.BrainDriverRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.GhostDriverRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.knightinvoker.KnightInvokerBuckleRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
+
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Tab.ModTab;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.*;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Cherryx.cherryxRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Lemonx.LemoxRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.MelonSX.melonsxRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Peachx.PeachxRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.dragon.dragonfruitRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.Giifs.GiifuSleepingStateBlockRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.kivas.thronex.ThroneBlockRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.orange_lemons.OrangelsxRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntityRenderer;
+
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.EliteMonsterCuriosLayer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.VillagerCuriosLayer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.ZombieCuriosLayer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.renderer.entity.AnotherDenlinerRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.ModCommands;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.giifu.ModStructureProcessors;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.EntityCuriosListScreen;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BrainDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os.Another_Zi_oRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.BrainRoidmude.BrainRoidmudeRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.DarkGhostRider.DarkGhostRiderKickRenerer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.EliteMonster.EliteMonsterRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.ElementaryInvesHelheimRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.StoriousRender;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_banana_energy.BaronBananaEnergyRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_lemon_energy.BaronLemonEnergyRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batdrakss.BatDarksRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batstampfinish.BatStampFinishRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.cherry_energy_arrow.CherryEnergyArrowRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.dark_kiva_seal_barrier.DarkKivaSealBarrierRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.duke_knight.DukeKnightRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gamma_eyecon.GammaEyeconRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gamma_s.Gamma_sRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.ghosteye.GhostEyeRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.giifu.GiifuHumanRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.kivat.KivatBatTwoNdRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.knecromghost.KnecromghostRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.LordBaronRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.melon_energy_slash.MelonEnergySlashRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.necrom_eyex.NecromEyexRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.sakura_hurricane.SakuraHurricaneRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.renderer.NoxSpecialRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.renderer.misc.DimensionalBarrierRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
@@ -72,18 +27,11 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.villagers.VillagerRegistry;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.worldgen.dimension.CurseDimensionPlayerTickHandler;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -101,7 +49,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixins;
 import software.bernie.geckolib.GeckoLib;
-import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -113,7 +60,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Mod("kamen_rider_boss_you_and_me")
-@Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class kamen_rider_boss_you_and_me
 {
     public static final String MODID = "kamen_rider_boss_you_and_me";
@@ -153,8 +99,7 @@ public class kamen_rider_boss_you_and_me
 
         MinecraftForge.EVENT_BUS.register(DarkGaimJinbaLemonHandler.class);
 
-        // 注册 KeybindHandler
-        MinecraftForge.EVENT_BUS.register(KeybindHandler.class);
+        
 
         // 注册 CherrySigurdAbilityHandler
         MinecraftForge.EVENT_BUS.register(CherrySigurdAbilityHandler.class);
@@ -237,22 +182,26 @@ public class kamen_rider_boss_you_and_me
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
+        // 导入所有客户端专属类
+        private static final net.minecraft.client.renderer.entity.EntityRenderers EntityRenderers = null;
+        private static final top.theillusivec4.curios.api.client.CuriosRendererRegistry CuriosRendererRegistry = null;
+        private static final net.minecraft.client.gui.screens.MenuScreens MenuScreens = null;
 
         @SubscribeEvent
-        public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
-            event.registerBlockEntityRenderer(ModBlockEntities.BANANAS_ENTITY.get(), BananasRenderer::new);
-            event.registerBlockEntityRenderer(ModBlockEntities.LEMONX_ENTITY.get(), LemoxRenderer::new);
-            event.registerBlockEntityRenderer(ModBlockEntities.MELONSX_ENTITY.get(), melonsxRenderer::new);
-            event.registerBlockEntityRenderer(ModBlockEntities.CHERRYX_ENTITY.get(), cherryxRenderer::new);
-            event.registerBlockEntityRenderer(ModBlockEntities.PEACHX_ENTITY.get(), PeachxRenderer::new);
-            event.registerBlockEntityRenderer(ModBlockEntities.ORANGELSX_ENTITY.get(), OrangelsxRenderer::new);
-            event.registerBlockEntityRenderer(ModBlockEntities.DRAGONFRUITX_ENTITY.get(), dragonfruitRenderer::new);
-            event.registerBlockEntityRenderer(ModBlockEntities.THRONE_ENTITY.get(), ThroneBlockRenderer::new);
-            event.registerBlockEntityRenderer(ModBlockEntities.GIIFU_SLEEPING_STATE_ENTITY.get(), GiifuSleepingStateBlockRenderer::new);
+        public static void registerRenderers(final net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(ModBlockEntities.BANANAS_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Bananas.BananasRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.LEMONX_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Lemonx.LemoxRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.MELONSX_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.MelonSX.melonsxRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.CHERRYX_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Cherryx.cherryxRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.PEACHX_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.Peachx.PeachxRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.ORANGELSX_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.orange_lemons.OrangelsxRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.DRAGONFRUITX_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.dragon.dragonfruitRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.THRONE_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.kivas.thronex.ThroneBlockRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.GIIFU_SLEEPING_STATE_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.client.giifu.Giifs.GiifuSleepingStateBlockRenderer::new);
         }
 
         @SubscribeEvent
-        public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
+        public static void onRegisterParticleProviders(net.minecraftforge.client.event.RegisterParticleProvidersEvent event) {
             event.registerSpriteSet(ParticleTypesRegistry.LEMONSLICE.get(), LemonsliceParticle.Provider::new);
             event.registerSpriteSet(ParticleTypesRegistry.MLONSLICE.get(), LemonsliceParticle.Provider::new);
             event.registerSpriteSet(ParticleTypesRegistry.CHERRYSLICE.get(), LemonsliceParticle.Provider::new);
@@ -263,110 +212,110 @@ public class kamen_rider_boss_you_and_me
         }
 
         @SubscribeEvent
-        public static void addLayers(EntityRenderersEvent.AddLayers event) {
+        public static void addLayers(net.minecraftforge.client.event.EntityRenderersEvent.AddLayers event) {
             // 注册MCA村民渲染层
             // 获取村民渲染器
-            EntityRenderer<? extends LivingEntity> villagerRenderer = event.getRenderer(EntityType.VILLAGER);
-            if (villagerRenderer instanceof LivingEntityRenderer<?, ?>) {
+            net.minecraft.client.renderer.entity.EntityRenderer<? extends LivingEntity> villagerRenderer = event.getRenderer(EntityType.VILLAGER);
+            if (villagerRenderer instanceof net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?>) {
                 @SuppressWarnings("unchecked")
-                LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> castVillager = 
-                        (LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) villagerRenderer;
-                castVillager.addLayer(new VillagerCuriosLayer<>(castVillager));
+                net.minecraft.client.renderer.entity.LivingEntityRenderer<LivingEntity, net.minecraft.client.model.EntityModel<LivingEntity>> castVillager = 
+                        (net.minecraft.client.renderer.entity.LivingEntityRenderer<LivingEntity, net.minecraft.client.model.EntityModel<LivingEntity>>) villagerRenderer;
+                castVillager.addLayer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.VillagerCuriosLayer<>(castVillager));
             }
             //注册怪渲染器
-            EntityRenderer<? extends LivingEntity> EliteMonsterRenderer = event.getRenderer(ModEntityTypes.ELITE_MONSTER_NPC.get());
-            if (EliteMonsterRenderer instanceof LivingEntityRenderer<?, ?>) {
+            net.minecraft.client.renderer.entity.EntityRenderer<? extends LivingEntity> EliteMonsterRenderer = event.getRenderer(ModEntityTypes.ELITE_MONSTER_NPC.get());
+            if (EliteMonsterRenderer instanceof net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?>) {
                 @SuppressWarnings("unchecked")
-                LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> castEmonster =
-                        (LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) EliteMonsterRenderer;
-                castEmonster.addLayer(new EliteMonsterCuriosLayer<>(castEmonster));
+                net.minecraft.client.renderer.entity.LivingEntityRenderer<LivingEntity, net.minecraft.client.model.EntityModel<LivingEntity>> castEmonster =
+                        (net.minecraft.client.renderer.entity.LivingEntityRenderer<LivingEntity, net.minecraft.client.model.EntityModel<LivingEntity>>) EliteMonsterRenderer;
+                castEmonster.addLayer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.EliteMonsterCuriosLayer<>(castEmonster));
             }
             
             // 注册僵尸渲染层
-            EntityRenderer<? extends LivingEntity> zombieRenderer = event.getRenderer(EntityType.ZOMBIE);
-            if (zombieRenderer instanceof LivingEntityRenderer<?, ?>) {
+            net.minecraft.client.renderer.entity.EntityRenderer<? extends LivingEntity> zombieRenderer = event.getRenderer(EntityType.ZOMBIE);
+            if (zombieRenderer instanceof net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?>) {
                 @SuppressWarnings("unchecked")
-                LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> castZombie = 
-                        (LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) zombieRenderer;
-                castZombie.addLayer(new ZombieCuriosLayer<>(castZombie));
+                net.minecraft.client.renderer.entity.LivingEntityRenderer<LivingEntity, net.minecraft.client.model.EntityModel<LivingEntity>> castZombie = 
+                        (net.minecraft.client.renderer.entity.LivingEntityRenderer<LivingEntity, net.minecraft.client.model.EntityModel<LivingEntity>>) zombieRenderer;
+                castZombie.addLayer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.ZombieCuriosLayer<>(castZombie));
             }
             
             // 注册僵尸村民渲染层
-            EntityRenderer<? extends LivingEntity> zombieVillagerRenderer = event.getRenderer(EntityType.ZOMBIE_VILLAGER);
-            if (zombieVillagerRenderer instanceof LivingEntityRenderer<?, ?>) {
+            net.minecraft.client.renderer.entity.EntityRenderer<? extends LivingEntity> zombieVillagerRenderer = event.getRenderer(EntityType.ZOMBIE_VILLAGER);
+            if (zombieVillagerRenderer instanceof net.minecraft.client.renderer.entity.LivingEntityRenderer<?, ?>) {
                 @SuppressWarnings("unchecked")
-                LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> castZombieVillager = 
-                        (LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) zombieVillagerRenderer;
-                castZombieVillager.addLayer(new ZombieCuriosLayer<>(castZombieVillager));
+                net.minecraft.client.renderer.entity.LivingEntityRenderer<LivingEntity, net.minecraft.client.model.EntityModel<LivingEntity>> castZombieVillager = 
+                        (net.minecraft.client.renderer.entity.LivingEntityRenderer<LivingEntity, net.minecraft.client.model.EntityModel<LivingEntity>>) zombieVillagerRenderer;
+                castZombieVillager.addLayer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.client.layer.ZombieCuriosLayer<>(castZombieVillager));
             }
         }
 
         @SubscribeEvent
-    public static void onClientSetup(FMLClientSetupEvent event)
+    public static void onClientSetup(net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent event)
     {
         event.enqueueWork(() -> {
             PacketHandler.registerPackets();  // <-- 加这一行
             System.out.println("Client packets registered");
 
-            EntityRenderers.register(ModEntityTypes.SEAT.get(), SeatEntityRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.SEAT.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.block.kivas.entity.SeatEntityRenderer::new);
 
-            EntityRenderers.register(ModEntityTypes.LORD_BARON.get(), LordBaronRenderer::new);
-            EntityRenderers.register(ModEntityTypes.GIIFUDEMOS_ENTITY.get(), GiifuDemosRenderer::new);
-            EntityRenderers.register(ModEntityTypes.STORIOUS.get(), StoriousRender::new);
-            EntityRenderers.register(ModEntityTypes.GIFFTARIAN.get(), GifftarianRenderer::new);
-            EntityRenderers.register(ModEntityTypes.ANOTHER_ZI_O.get(), Another_Zi_oRenderer::new);
-            EntityRenderers.register(ModEntityTypes.ANOTHER_DEN_O.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Den_os.Another_Den_oRenderer::new);
-            EntityRenderers.register(ModEntityTypes.ANOTHER_DECADE.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Decades.Another_DecadeRenderer::new);
-            EntityRenderers.register(ModEntityTypes.INVES_HEILEHIM.get(), ElementaryInvesHelheimRenderer::new);
-            EntityRenderers.register(ModEntityTypes.KIVAT_BAT_II.get(), KivatBatTwoNdRenderer::new);
-            EntityRenderers.register(ModEntityTypes.GIIFU_HUMAN.get(), GiifuHumanRenderer::new);
-            EntityRenderers.register(ModEntityTypes.BAT_DARKS.get(), BatDarksRenderer::new);
-            EntityRenderers.register(ModEntityTypes.BAT_STAMP_FINISH.get(), BatStampFinishRenderer::new);
-            EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), KnecromghostRenderer::new);
-            EntityRenderers.register(ModEntityTypes.DUKE_KNIGHT.get(), DukeKnightRenderer::new);
-            EntityRenderers.register(ModEntityTypes.BRAIN_ROIDMUDE.get(), BrainRoidmudeRenderer::new);
-            EntityRenderers.register(ModEntityTypes.GHOST_EYE_ENTITY.get(), GhostEyeRenderer::new);
-            EntityRenderers.register(ModEntityTypes.GAMMA_S.get(), Gamma_sRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.LORD_BARON.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.lord_baron.LordBaronRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.GIIFUDEMOS_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.GiifuDems.GiifuDemosRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.STORIOUS.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Storious.StoriousRender::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.GIFFTARIAN.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gifftarian.GifftarianRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.ANOTHER_ZI_O.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Zi_os.Another_Zi_oRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.ANOTHER_DEN_O.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Den_os.Another_Den_oRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.ANOTHER_DECADE.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Another_Decades.Another_DecadeRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.INVES_HEILEHIM.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.Inves.ElementaryInvesHelheimRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.KIVAT_BAT_II.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.kivat.KivatBatTwoNdRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.GIIFU_HUMAN.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.giifu.GiifuHumanRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.BAT_DARKS.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batdrakss.BatDarksRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.BAT_STAMP_FINISH.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.batstampfinish.BatStampFinishRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.KNECROMGHOST.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.knecromghost.KnecromghostRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.DUKE_KNIGHT.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.duke_knight.DukeKnightRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.BRAIN_ROIDMUDE.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.BrainRoidmude.BrainRoidmudeRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.GHOST_EYE_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.ghosteye.GhostEyeRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.GAMMA_S.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gamma_s.Gamma_sRenderer::new);
             // 眼魔眼魂实体渲染器注册
-            EntityRenderers.register(ModEntityTypes.GAMMA_EYECON_ENTITY.get(), GammaEyeconRenderer::new);
-            EntityRenderers.register(ModEntityTypes.NECROM_EYEX.get(), NecromEyexRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.GAMMA_EYECON_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gamma_eyecon.GammaEyeconRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.NECROM_EYEX.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.necrom_eyex.NecromEyexRenderer::new);
             // 注册时劫者实体渲染器
-            EntityRenderers.register(ModEntityTypes.TIME_JACKER.get(), forge.net.mca.client.render.VillagerEntityMCARenderer::new);
-            EntityRenderers.register(ModEntityTypes.TIME_ROYALTY.get(), forge.net.mca.client.render.VillagerEntityMCARenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.TIME_JACKER.get(), forge.net.mca.client.render.VillagerEntityMCARenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.TIME_ROYALTY.get(), forge.net.mca.client.render.VillagerEntityMCARenderer::new);
 
-            EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), BaronBananaEnergyRenderer::new);
-            EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), BaronLemonEnergyRenderer::new);
-            EntityRenderers.register(ModEntityTypes.ANOTHER_DENLINER.get(), AnotherDenlinerRenderer::new);
-            EntityRenderers.register(ModEntityTypes.DARK_KIVA_SEAL_BARRIER.get(), DarkKivaSealBarrierRenderer::new);
-            EntityRenderers.register(ModEntityTypes.CHERRY_ENERGY_ARROW.get(), CherryEnergyArrowRenderer::new);
-            EntityRenderers.register(ModEntityTypes.MELON_ENERGY_SLASH.get(), MelonEnergySlashRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_banana_energy.BaronBananaEnergyRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_lemon_energy.BaronLemonEnergyRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.ANOTHER_DENLINER.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.client.renderer.entity.AnotherDenlinerRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.DARK_KIVA_SEAL_BARRIER.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.dark_kiva_seal_barrier.DarkKivaSealBarrierRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.CHERRY_ENERGY_ARROW.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.cherry_energy_arrow.CherryEnergyArrowRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.MELON_ENERGY_SLASH.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.melon_energy_slash.MelonEnergySlashRenderer::new);
             // 黑暗ghost骑士踢特效实体渲染器注册
-            EntityRenderers.register(ModEntityTypes.DARKGHOST_RIDER_KICK.get(), DarkGhostRiderKickRenerer::new);
-            EntityRenderers.register(ModEntityTypes.DIMENSIONAL_BARRIER.get(), DimensionalBarrierRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.DARKGHOST_RIDER_KICK.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.DarkGhostRider.DarkGhostRiderKickRenerer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.DIMENSIONAL_BARRIER.get(), DimensionalBarrierRenderer::new);
 
-            EntityRenderers.register(ModEntityTypes.SAKURA_HURRICANE.get(), SakuraHurricaneRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.SAKURA_HURRICANE.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.sakura_hurricane.SakuraHurricaneRenderer::new);
 
-            EntityRenderers.register(ModEntityTypes.ELITE_MONSTER_NPC.get(), EliteMonsterRenderer::new);
-            EntityRenderers.register(ModEntityTypes.NOX_SPECIAL.get(), NoxSpecialRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.ELITE_MONSTER_NPC.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.EliteMonster.EliteMonsterRenderer::new);
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.NOX_SPECIAL.get(), NoxSpecialRenderer::new);
 
             // 注册动画工厂
             PlayerAnimationSetup.clientInit();
             // 注册Curios相关内容
             if (ModList.get().isLoaded("curios")) {
                 // 注册Curios饰品渲染器
-                CuriosRendererRegistry.register(ModItems.MEGA_UIORDER_ITEM.get(), () -> new GenericCurioRenderer());
-                CuriosRendererRegistry.register(ModItems.SENGOKUDRIVERS_EPMTY.get(), () -> new GenericCurioRenderer());
-                CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new GenericCurioRenderer());
-                CuriosRendererRegistry.register(ModItems.DRAK_KIVA_BELT.get(), ()->new DrakKivaBeltRenderer());
-                CuriosRendererRegistry.register(ModItems.TWO_SIDRIVER.get(), ()->new Two_sidriverRenderer());
-                CuriosRendererRegistry.register(ModItems.GHOST_DRIVER.get(),()->new GhostDriverRenderer());
-                CuriosRendererRegistry.register(ModItems.BRAIN_DRIVER.get(),()->new BrainDriverRenderer());
-                CuriosRendererRegistry.register(ModItems.KNIGHT_INVOKER_BUCKLE.get(),()-> new KnightInvokerBuckleRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.MEGA_UIORDER_ITEM.get(), () -> new com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.SENGOKUDRIVERS_EPMTY.get(), () -> new com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new com.xiaoshi2022.kamen_rider_boss_you_and_me.client.GenericCurioRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.DRAK_KIVA_BELT.get(), ()->new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.TWO_SIDRIVER.get(), ()->new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.GHOST_DRIVER.get(),()->new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.GhostDriverRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.BRAIN_DRIVER.get(),()->new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.braindriver.BrainDriverRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.KNIGHT_INVOKER_BUCKLE.get(),()-> new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.knightinvoker.KnightInvokerBuckleRenderer());
 
-                CuriosRendererRegistry.register(ModItems.BRAIN_EYEGLASS.get(),()->new BrainEyeglassRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.BRAIN_EYEGLASS.get(),()->new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.BrainEyeglss.BrainEyeglassRenderer());
 
                 // 注册Curio菜单屏幕
-                MenuScreens.register(ModMenus.ENTITY_CURIOS_LIST.get(), EntityCuriosListScreen::new);
+                net.minecraft.client.gui.screens.MenuScreens.register(ModMenus.ENTITY_CURIOS_LIST.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.EntityCuriosListScreen::new);
             }
         });
     }
