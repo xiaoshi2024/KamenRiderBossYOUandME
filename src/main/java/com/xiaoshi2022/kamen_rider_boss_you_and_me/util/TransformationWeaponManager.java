@@ -487,8 +487,8 @@ public class TransformationWeaponManager {
             ItemStack mainHand = player.getMainHandItem();
             // 检查并返回装载的锁种
             returnLoadedLockSeed(player, mainHand);
-            // 清理武器
-            player.setItemInHand(player.getUsedItemHand(), ItemStack.EMPTY);
+            // 清理武器 - 使用明确的主手，而不是getUsedItemHand()
+            player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         }
         
         // 检查副手 - 先检查是否有装载的锁种
@@ -497,7 +497,7 @@ public class TransformationWeaponManager {
             // 检查并返回装载的锁种
             returnLoadedLockSeed(player, offhand);
             // 清理武器
-            player.getInventory().offhand.set(0, ItemStack.EMPTY);
+            player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
         }
         
         // 检查物品栏 - 先检查是否有装载的锁种

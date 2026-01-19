@@ -4,7 +4,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.arm
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -126,14 +125,6 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
                 }
             }
         }
-    }
-    
-    // 添加客户端专用的黑暗Kiva盔甲检测方法
-    private static boolean isDarkKivaArmorEquipped(LocalPlayer player) {
-        // 检查是否穿着黑暗Kiva头盔、胸甲和护腿（不需要鞋子）
-        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof DarkKivaItem &&
-               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof DarkKivaItem &&
-               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof DarkKivaItem;
     }
     
     private void spawnBatParticles(Player player) {

@@ -315,7 +315,9 @@ public class KeybindHandler {
                         switch (mode) {
                             case LEMON -> {
                                 // 先判断是变身还是解除
-                                boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
+                                boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.BARON_LEMON_HELMET.get() || 
+                                                        player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
+                                                        player.getInventory().armor.get(3).getItem() == ModItems.DUKE_HELMET.get();
                                 if (isTransformeds) {
                                     // 先播放动画
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
@@ -513,7 +515,7 @@ public class KeybindHandler {
                 "kamen_rider_boss_you_and_me",
                 "login_by"
         );
-        PacketHandler.sendToAllTracking(
+        PacketHandler.sendToAllTrackingAndSelf(
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
@@ -576,7 +578,7 @@ public class KeybindHandler {
                             "kamen_rider_boss_you_and_me",
                             "login_by"
                     );
-                    PacketHandler.sendToAllTracking(
+                    PacketHandler.sendToAllTrackingAndSelf(
                             new SoundStopPacket(player.getId(), soundLoc),
                             player
                     );
@@ -646,7 +648,7 @@ public class KeybindHandler {
                 "kamen_rider_boss_you_and_me",
                 "evil_by"
         );
-        PacketHandler.sendToAllTracking(
+        PacketHandler.sendToAllTrackingAndSelf(
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
@@ -726,7 +728,7 @@ public class KeybindHandler {
                         "lemon_lockonby"
                 );
                 // 只发送给当前玩家
-                PacketHandler.sendToClient(
+                PacketHandler.sendToAllTrackingAndSelf(
                         new SoundStopPacket(player.getId(), soundLoc),
                         player
                 );
@@ -787,7 +789,7 @@ public class KeybindHandler {
         // 3. 停止待机音效
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
         // 只发送给当前玩家
-        PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
+        PacketHandler.sendToAllTrackingAndSelf(new SoundStopPacket(player.getId(), soundLoc), player);
 
 
         // 4. 卸掉蜜瓜装甲（3 件）
@@ -844,7 +846,7 @@ public class KeybindHandler {
         // 3. 停止待机音效
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
         // 只发送给当前玩家
-        PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
+        PacketHandler.sendToAllTrackingAndSelf(new SoundStopPacket(player.getId(), soundLoc), player);
 
         // 4. 卸掉樱桃装甲
         clearTransformationArmor(player);
@@ -962,7 +964,7 @@ public class KeybindHandler {
         // 3. 停止待机音效
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
         // 只发送给当前玩家
-        PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
+        PacketHandler.sendToAllTrackingAndSelf(new SoundStopPacket(player.getId(), soundLoc), player);
 
         // 4. 卸掉Tyrant装甲
         clearTransformationArmor(player);
@@ -1012,7 +1014,7 @@ public class KeybindHandler {
         // 3. 停止待机音效
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
         // 只发送给当前玩家
-        PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
+        PacketHandler.sendToAllTrackingAndSelf(new SoundStopPacket(player.getId(), soundLoc), player);
 
         // 4. 卸掉Marika装甲
         clearTransformationArmor(player);
@@ -1055,7 +1057,7 @@ public class KeybindHandler {
                         "kamen_rider_boss_you_and_me",
                         "lockonby"
                 );
-                PacketHandler.sendToAllTracking(
+                PacketHandler.sendToAllTrackingAndSelf(
                         new SoundStopPacket(player.getId(), soundLoc),
                         player
                 );

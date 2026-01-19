@@ -559,7 +559,9 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
         }
         
         // 每5秒检查一次饱和效果，如果没有则尝试消耗赫尔海姆果实
-        if (sp.tickCount % 100 == 0) {
+        // 使用NBT存储上次消耗时间，避免同一tick多次消耗
+        int lastConsumeTime = stack.getOrCreateTag().getInt("LastHelheimFruitConsumeTime");
+        if (sp.tickCount - lastConsumeTime >= 100) {
             if (!sp.hasEffect(MobEffects.SATURATION)) {
                 // 尝试消耗背包中的赫尔海姆果实
                 if (consumeHelheimFruit(sp)) {
@@ -568,6 +570,8 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
                     sp.sendSystemMessage(
                             Component.literal("消耗了一颗赫尔海姆果实，获得了5分钟的饱和效果！")
                     );
+                    // 更新上次消耗时间
+                    stack.getOrCreateTag().putInt("LastHelheimFruitConsumeTime", sp.tickCount);
                 } else {
                     // 如果没有果实，发送提示消息（限制频率，避免刷屏）
                     // 提示已移除

@@ -87,17 +87,17 @@ public class DarkOrangeTransformationRequestPacket {
             return;
         }
 
-        // 停止变身状态下的音效
-        ResourceLocation soundLoc = new ResourceLocation(
+        // 停止待机音效
+        ResourceLocation lockonSoundLoc = new ResourceLocation(
                 "kamen_rider_boss_you_and_me",
                 "orangeby"
         );
-        // 使用sendToAllTrackingAndSelf确保玩家自己和所有追踪该玩家的客户端都能接收音效停止指令
         PacketHandler.sendToAllTrackingAndSelf(
-                new SoundStopPacket(player.getId(), soundLoc),
+                new SoundStopPacket(player.getId(), lockonSoundLoc),
                 player
         );
 
+        clearOLEntities(player);
 
         // 播放Dark_orangels变身音效
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -115,8 +115,6 @@ public class DarkOrangeTransformationRequestPacket {
         
         // 给予玩家对应的武器（如果配置启用了武器给予功能）
         TransformationWeaponManager.giveWeaponOnSengokuDriverTransformation(player, sengokudrivers_epmty.BeltMode.ORANGELS);
-
-        clearOLEntities(player);
 
         belt.setModeAndTriggerCut(player, beltStack, sengokudrivers_epmty.BeltMode.ORANGELS);
 

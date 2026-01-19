@@ -2,7 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sengokudrivers_epmty;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.TransformationHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.DarkKivaSequence;
@@ -35,7 +35,7 @@ public class ReleaseBeltPacket {
     public static void handleRelease(ServerPlayer player, String riderType) {
         // 在解除变身时触发对应的粒子效果
         switch (riderType) {
-            case "GENESIS", "GENESIS_LEMON", "GENESIS_CHERRY", "GENESIS_PEACH", "GENESIS_DRAGONFRUIT", "GENESIS_MELON" -> {
+            case "LEMON_ENERGY", "GENESIS", "GENESIS_LEMON", "GENESIS_CHERRY", "GENESIS_PEACH", "GENESIS_DRAGONFRUIT", "GENESIS_MELON" -> {
                 // 根据不同的创世纪骑士类型触发对应的粒子效果
                 // 只调用一次CurioUtils.findFirstCurio确保获取到一致的腰带状态
                 Optional<ItemStack> beltStackOptional = CurioUtils.findFirstCurio(player,
@@ -59,19 +59,21 @@ public class ReleaseBeltPacket {
                     }
                 }
                 
-                KeybindHandler.completeBeltRelease(player, riderType);
+                // 对于LEMON_ENERGY类型，转换为GENESIS_LEMON类型进行处理
+                String actualRiderType = riderType.equals("LEMON_ENERGY") ? "GENESIS_LEMON" : riderType;
+                TransformationHandler.completeBeltRelease(player, actualRiderType);
             }
             case "BARONS" -> {
                 RiderParticleEffect.spawnZangetsuShinReleaseParticles(player);
-                KeybindHandler.completeBeltRelease(player, "BARONS");
+                TransformationHandler.completeBeltRelease(player, "BARONS");
             }
             case "MELON_ENERGY" -> {
                 RiderParticleEffect.spawnDukeReleaseParticles(player);
-                KeybindHandler.completeBeltRelease(player, "MELON_ENERGY");
+                TransformationHandler.completeBeltRelease(player, "MELON_ENERGY");
             }
             case "DUKE" -> {
                 RiderParticleEffect.spawnDukeReleaseParticles(player);
-                KeybindHandler.completeBeltRelease(player, "DUKE");
+                TransformationHandler.completeBeltRelease(player, "DUKE");
             }
             case "DARK_KIVA" -> {
                 // 直接调用 DarkKivaSequence 的解除方法
@@ -79,14 +81,14 @@ public class ReleaseBeltPacket {
             }
             case "EVIL_BATS" -> {
                 // 处理Evil Bats解除变身
-                KeybindHandler.completeBeltRelease(player, "EVIL_BATS");
+                TransformationHandler.completeBeltRelease(player, "EVIL_BATS");
             }
             case "RIDERNECROM" -> {
-                KeybindHandler.completeBeltRelease(player, "RIDERNECROM");
+                TransformationHandler.completeBeltRelease(player, "RIDERNECROM");
             }
             case "DARK_GHOST" -> {
                 // 处理黑暗灵骑解除变身
-                KeybindHandler.completeBeltRelease(player, "DARK_GHOST");
+                TransformationHandler.completeBeltRelease(player, "DARK_GHOST");
             }
         }
     }

@@ -26,7 +26,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import static com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler.clearTransformationArmor;
+import static com.xiaoshi2022.kamen_rider_boss_you_and_me.event.TransformationHandler.clearTransformationArmor;
 
 public class TransformationRequestPacket {
     private final UUID playerId;
@@ -61,6 +61,11 @@ public class TransformationRequestPacket {
 
             if (msg.isRelease) {
                 ReleaseBeltPacket.handleRelease(player, msg.riderType);
+                
+                // 广播解除变身状态 - 关键步骤！
+                PacketHandler.sendToAll(
+                        new SyncTransformationPacket(player.getId(), "NONE", false)
+                );
             } else {
                 switch (msg.riderType) {
                     case RiderTypes.LEMON_ENERGY -> LemonTransformationRequestPacket.handle(
@@ -151,7 +156,7 @@ public class TransformationRequestPacket {
                                     "kamen_rider_boss_you_and_me",
                                     "login_by"
                             );
-                            PacketHandler.sendToAllTracking(
+                            PacketHandler.sendToAllTrackingAndSelf(
                                     new SoundStopPacket(player.getId(), soundLoc),
                                     player
                             );
@@ -164,6 +169,11 @@ public class TransformationRequestPacket {
                                     ghost.discard();
                                 }
                             }
+
+                            // 广播解除变身状态 - 关键步骤！
+                            PacketHandler.sendToAll(
+                                    new SyncTransformationPacket(player.getId(), "NONE", false)
+                            );
 
                         } else {
 
@@ -184,7 +194,7 @@ public class TransformationRequestPacket {
                                     "kamen_rider_boss_you_and_me",
                                     "login_by"
                             );
-                            PacketHandler.sendToAllTracking(
+                            PacketHandler.sendToAllTrackingAndSelf(
                                     new SoundStopPacket(player.getId(), soundLoc),
                                     player
                             );

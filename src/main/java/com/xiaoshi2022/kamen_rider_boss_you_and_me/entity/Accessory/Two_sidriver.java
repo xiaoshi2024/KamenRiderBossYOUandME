@@ -128,7 +128,7 @@ public class Two_sidriver extends AbstractRiderBelt implements GeoItem, ICurioIt
             // 如果玩家装备了EvilBatsArmor但没有腰带，自动解除变身
             if (!hasTwoSidriver) {
                 // 解除EvilBats变身
-                com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler.completeBeltRelease(player, "EVIL_BATS");
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.event.TransformationHandler.completeBeltRelease(player, "EVIL_BATS");
             }
         }
 
