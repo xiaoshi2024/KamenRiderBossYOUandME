@@ -43,17 +43,15 @@ public class KnightInvokerReleasePacket {
                         ItemStack beltStack = slotResult.stack();
                         KnightInvokerBuckle belt = (KnightInvokerBuckle) beltStack.getItem();
                         
-                        // 2. 停止nox_b音效
+                        // 停止nox_b音效
                         ResourceLocation soundLoc = new ResourceLocation(
                                 "kamen_rider_boss_you_and_me",
                                 "nox_b"
                         );
-                        // 只发送给当前玩家
-                        PacketHandler.sendToClient(
+                        PacketHandler.sendToAllTracking(
                                 new SoundStopPacket(player.getId(), soundLoc),
                                 player
                         );
-                        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
 
                         // 3. 播放解除音效

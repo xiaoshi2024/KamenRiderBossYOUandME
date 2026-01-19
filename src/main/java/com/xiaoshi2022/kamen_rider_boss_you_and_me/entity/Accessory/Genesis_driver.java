@@ -1,12 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.henshin.HeartCoreEvent;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.BeltAnimationPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +14,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.constant.DataTickets;
@@ -341,11 +338,11 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
     }
 
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            private GenesisDriverRenderer renderer;
-            @Override public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if (renderer == null) renderer = new GenesisDriverRenderer();
+    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+        consumer.accept(new net.minecraftforge.client.extensions.common.IClientItemExtensions() {
+            private com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer renderer;
+            @Override public net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (renderer == null) renderer = new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer();
                 return renderer;
             }
         });

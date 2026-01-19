@@ -11,8 +11,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.giifu.ModStructureProc
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BrainDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.renderer.NoxSpecialRenderer;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.renderer.misc.DimensionalBarrierRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KivatItemTossHandler;
@@ -291,13 +289,13 @@ public class kamen_rider_boss_you_and_me
             net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.MELON_ENERGY_SLASH.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.melon_energy_slash.MelonEnergySlashRenderer::new);
             // 黑暗ghost骑士踢特效实体渲染器注册
             net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.DARKGHOST_RIDER_KICK.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.DarkGhostRider.DarkGhostRiderKickRenerer::new);
-            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.DIMENSIONAL_BARRIER.get(), DimensionalBarrierRenderer::new);
-
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.NOX_SPECIAL.get(),
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.renderer.NoxSpecialRenderer::new);
             net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.SAKURA_HURRICANE.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.sakura_hurricane.SakuraHurricaneRenderer::new);
 
             net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.ELITE_MONSTER_NPC.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.EliteMonster.EliteMonsterRenderer::new);
-            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.NOX_SPECIAL.get(), NoxSpecialRenderer::new);
-
+            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.DIMENSIONAL_BARRIER.get(),
+                    com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.renderer.misc.DimensionalBarrierRenderer::new);
             // 注册动画工厂
             PlayerAnimationSetup.clientInit();
             // 注册Curios相关内容

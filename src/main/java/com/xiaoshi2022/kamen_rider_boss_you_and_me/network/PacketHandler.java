@@ -35,7 +35,7 @@ public class PacketHandler {
                 PlayerAnimationPacket::encode, PlayerAnimationPacket::decode, PlayerAnimationPacket::handle);
         INSTANCE.registerMessage(index++, BrainHeadbuttPacket.class,
                 BrainHeadbuttPacket::encode, BrainHeadbuttPacket::decode, BrainHeadbuttPacket::handle);
-        INSTANCE.registerMessage(index++, SoundStopPacket.class, SoundStopPacket::encode, SoundStopPacket::decode, SoundStopPacket.Handler::handle);
+        INSTANCE.registerMessage(index++, SoundStopPacket.class, SoundStopPacket::encode, SoundStopPacket::decode, SoundStopPacket.ClientHandler::handle);
         INSTANCE.registerMessage(index++, InvisibilityPacket.class, InvisibilityPacket::encode, InvisibilityPacket::decode, InvisibilityPacket::handle);
         INSTANCE.registerMessage(index++, RemoveEntityPacket.class, RemoveEntityPacket::toBytes, RemoveEntityPacket::new, RemoveEntityPacket::handle);
         INSTANCE.registerMessage(index++, PlayerArmorPacket.class, PlayerArmorPacket::toBytes, PlayerArmorPacket::new, PlayerArmorPacket::handle);

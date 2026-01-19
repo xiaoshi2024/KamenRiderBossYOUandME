@@ -151,14 +151,6 @@ public class DarkGhostTransformationRequestPacket {
                     return;
                 }
 
-                // 停止待机音
-                ResourceLocation soundLoc = new ResourceLocation(
-                        "kamen_rider_boss_you_and_me",
-                        "ghost_idle"); // 假设有这个音效，实际需要根据mod中的音效名称调整
-                PacketHandler.sendToAllTracking(
-                        new SoundStopPacket(player.getId(), soundLoc),
-                        player);
-
                 // 播放解除变身音效
                 player.level().playSound(
                         null,

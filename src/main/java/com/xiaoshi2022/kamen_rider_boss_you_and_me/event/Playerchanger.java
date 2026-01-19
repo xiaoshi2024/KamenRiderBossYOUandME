@@ -8,12 +8,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import tocraft.walkers.api.PlayerShape;
 
-@Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
+@Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", value = Dist.CLIENT)
 public class Playerchanger {
     @SubscribeEvent
     public static void onKeyInput(TickEvent.ClientTickEvent event) {

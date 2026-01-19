@@ -1,10 +1,8 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.armor.DarkOrangelsArmorRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -15,7 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -23,7 +20,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Random;
@@ -68,10 +64,10 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
                 return Ingredient.of(Items.NETHERITE_INGOT, Items.EMERALD);
             }
 
-            // 材质名称
+            // 材质名称 - 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
             @Override
             public String getName() {
-                return "dark_orangels";
+                return "netherite";
             }
 
             // 韧性
@@ -230,14 +226,14 @@ public class Dark_orangels extends ArmorItem implements GeoItem , KamenBossArmor
 
 
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            private GeoArmorRenderer<?> renderer;
+    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+        consumer.accept(new net.minecraftforge.client.extensions.common.IClientItemExtensions() {
+            private software.bernie.geckolib.renderer.GeoArmorRenderer<?> renderer;
 
             @Override
-            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+            public net.minecraft.client.model.HumanoidModel<?> getHumanoidArmorModel(net.minecraft.world.entity.LivingEntity livingEntity, net.minecraft.world.item.ItemStack itemStack, net.minecraft.world.entity.EquipmentSlot equipmentSlot, net.minecraft.client.model.HumanoidModel<?> original) {
                 if (this.renderer == null)
-                    this.renderer = new DarkOrangelsArmorRenderer();
+                    this.renderer = new com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.armor.DarkOrangelsArmorRenderer();
                 this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
                 return this.renderer;
             }

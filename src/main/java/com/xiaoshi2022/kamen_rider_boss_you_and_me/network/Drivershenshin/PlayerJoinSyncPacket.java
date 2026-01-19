@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DrakKivaBelt;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -45,21 +44,24 @@ public class PlayerJoinSyncPacket {
 
     public static void handle(PlayerJoinSyncPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            if (Minecraft.getInstance().level == null) return;
+            // 只在客户端处理，使用完整类名避免服务器导入错误
+            if (ctx.get().getDirection().getReceptionSide().isClient()) {
+                if (net.minecraft.client.Minecraft.getInstance().level == null) return;
 
-            // 这里的关键：根据 targetPlayerId 找到正确的玩家实体
-            Entity targetEntity = Minecraft.getInstance().level.getEntity(msg.targetPlayerId);
-            if (!(targetEntity instanceof LivingEntity targetLiving)) return;
+                // 这里的关键：根据 targetPlayerId 找到正确的玩家实体
+                Entity targetEntity = net.minecraft.client.Minecraft.getInstance().level.getEntity(msg.targetPlayerId);
+                if (!(targetEntity instanceof LivingEntity targetLiving)) return;
 
-            // 只处理目标玩家的腰带
-            targetLiving.getCapability(CuriosCapability.INVENTORY).ifPresent(curios ->
-                    curios.findCurio("belt", 0).ifPresent(slot -> {
-                        ItemStack stack = slot.stack();
-                        if (stack.getItem() instanceof DrakKivaBelt dk) {
-                            dk.triggerAnim(targetLiving, "controller", msg.animationName);
-                        }
-                    })
-            );
+                // 只处理目标玩家的腰带
+                targetLiving.getCapability(CuriosCapability.INVENTORY).ifPresent(curios ->
+                        curios.findCurio("belt", 0).ifPresent(slot -> {
+                            ItemStack stack = slot.stack();
+                            if (stack.getItem() instanceof DrakKivaBelt dk) {
+                                dk.triggerAnim(targetLiving, "controller", msg.animationName);
+                            }
+                        })
+                );
+            }
         });
         ctx.get().setPacketHandled(true);
     }

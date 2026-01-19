@@ -1,9 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.Tyrant.TyrantArmorRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -20,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.constant.DataTickets;
@@ -30,7 +27,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
@@ -80,7 +76,7 @@ public class TyrantItem extends ArmorItem implements GeoItem , KamenBossArmor , 
 
 			@Override
 			public String getName() {
-				return "tyrant";
+				return "netherite"; // 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
 			}
 
 		}, type, properties);
@@ -89,14 +85,14 @@ public class TyrantItem extends ArmorItem implements GeoItem , KamenBossArmor , 
 	}
 
 	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(new IClientItemExtensions() {
-			private GeoArmorRenderer<?> renderer;
+	public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.extensions.common.IClientItemExtensions> consumer) {
+		consumer.accept(new net.minecraftforge.client.extensions.common.IClientItemExtensions() {
+			private software.bernie.geckolib.renderer.GeoArmorRenderer<?> renderer;
 
 			@Override
-			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+			public net.minecraft.client.model.HumanoidModel<?> getHumanoidArmorModel(net.minecraft.world.entity.LivingEntity livingEntity, net.minecraft.world.item.ItemStack itemStack, net.minecraft.world.entity.EquipmentSlot equipmentSlot, net.minecraft.client.model.HumanoidModel<?> original) {
 				if (this.renderer == null)
-					this.renderer = new TyrantArmorRenderer();
+					this.renderer = new com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.Tyrant.TyrantArmorRenderer();
 				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
 				return this.renderer;
 			}

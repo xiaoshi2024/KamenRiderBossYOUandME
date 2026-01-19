@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -117,21 +116,21 @@ public class KRBVariables {
 
 
 			// 新增：重置其他状态变量
-	clone.isDarkKivaBeltEquipped = false;
-	clone.isOverlord = false; // 玩家死亡时重置Overlord状态
-	clone.isGhostEye = false; // 玩家死亡时重置眼魔状态
-	clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
-	clone.isRoidmude = false; // 玩家死亡时重置Roidmude状态
-	clone.isDarkGhostTransformed = false; // 玩家死亡时重置黑暗Ghost变身状态
-	clone.isDarkGhostActive = false; // 玩家死亡时重置黑暗Ghost激活状态
-	clone.isNapoleonGhostTransformed = false; // 玩家死亡时重置拿破仑魂变身状态
-	clone.darkGhostMaxHealth = 50.0D; // 玩家死亡时重置黑暗幽灵骑士最大生命值
-	clone.isNecromStandby = false; // 玩家死亡时重置眼魂待命状态
-	clone.isMegaUiorderTransformed = false; // 玩家死亡时重置手环变身状态
-	clone.isNecromTemporaryRemoved = false; // 玩家死亡时重置眼魂临时移除状态
-	clone.isBrainDriverEquipped = false; // 玩家死亡时重置BrainDriver装备状态
-	clone.isBrainTransformed = false; // 玩家死亡时重置Brain变身状态
-	clone.isKnightInvokerEquipped = false; // 玩家死亡时重置KnightInvokerBuckle装备状态
+		clone.isDarkKivaBeltEquipped = false;
+		clone.isOverlord = false; // 玩家死亡时重置Overlord状态
+		clone.isGhostEye = false; // 玩家死亡时重置眼魔状态
+		clone.isFangBloodline = false; // 玩家死亡时重置牙血鬼血脉状态
+		clone.isRoidmude = false; // 玩家死亡时重置Roidmude状态
+		clone.isDarkGhostTransformed = false; // 玩家死亡时重置黑暗Ghost变身状态
+		clone.isDarkGhostActive = false; // 玩家死亡时重置黑暗Ghost激活状态
+		clone.isNapoleonGhostTransformed = false; // 玩家死亡时重置拿破仑魂变身状态
+		clone.darkGhostMaxHealth = 50.0D; // 玩家死亡时重置黑暗幽灵骑士最大生命值
+		clone.isNecromStandby = false; // 玩家死亡时重置眼魂待命状态
+		clone.isMegaUiorderTransformed = false; // 玩家死亡时重置手环变身状态
+		clone.isNecromTemporaryRemoved = false; // 玩家死亡时重置眼魂临时移除状态
+		clone.isBrainDriverEquipped = false; // 玩家死亡时重置BrainDriver装备状态
+		clone.isBrainTransformed = false; // 玩家死亡时重置Brain变身状态
+		clone.isKnightInvokerEquipped = false; // 玩家死亡时重置KnightInvokerBuckle装备状态
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
 			// 保留baseMaxHealth值，不再强制重置为默认值，以保留通过命令设置的生命值
@@ -415,8 +414,8 @@ public class KRBVariables {
 			nbt.put("originalBrainArmor", originalBrainArmor);
 		}
 		nbt.putBoolean("isBrainDriverEquipped", isBrainDriverEquipped);
-	nbt.putBoolean("isBrainTransformed", isBrainTransformed);
-	nbt.putBoolean("isKnightInvokerEquipped", isKnightInvokerEquipped);
+		nbt.putBoolean("isBrainTransformed", isBrainTransformed);
+		nbt.putBoolean("isKnightInvokerEquipped", isKnightInvokerEquipped);
 		return nbt;
 	}
 
@@ -537,8 +536,8 @@ public class KRBVariables {
 			originalBrainArmor = null;
 		}
 		isBrainDriverEquipped = nbt.contains("isBrainDriverEquipped") ? nbt.getBoolean("isBrainDriverEquipped") : false;
-	isBrainTransformed = nbt.contains("isBrainTransformed") ? nbt.getBoolean("isBrainTransformed") : false;
-	isKnightInvokerEquipped = nbt.contains("isKnightInvokerEquipped") ? nbt.getBoolean("isKnightInvokerEquipped") : false;
+		isBrainTransformed = nbt.contains("isBrainTransformed") ? nbt.getBoolean("isBrainTransformed") : false;
+		isKnightInvokerEquipped = nbt.contains("isKnightInvokerEquipped") ? nbt.getBoolean("isKnightInvokerEquipped") : false;
 	}
 	}
 
@@ -562,27 +561,43 @@ public class KRBVariables {
 			NetworkEvent.Context context = contextSupplier.get();
 			context.enqueueWork(() -> {
 				if (!context.getDirection().getReceptionSide().isServer()) {
-					PlayerVariables variables = ((PlayerVariables) Minecraft.getInstance().player.getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
+					// 使用DistExecutor确保只在客户端执行客户端代码，避免服务器加载客户端类
+					net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn(net.minecraftforge.api.distmarker.Dist.CLIENT, () -> () -> {
+						// 客户端代码，只会在客户端执行，且只在运行时加载
+						ClientHandler.handlePlayerVariablesSync(message);
+					});
+				}
+			});
+			context.setPacketHandled(true);
+		}
+		
+		// 客户端专用处理类，服务器不会加载这个内部类
+		private static class ClientHandler {
+			private static void handlePlayerVariablesSync(PlayerVariablesSyncMessage message) {
+				// 这里可以安全使用客户端专属类，因为整个类只在客户端加载
+				net.minecraft.world.entity.player.Player player = net.minecraft.client.Minecraft.getInstance().player;
+				if (player != null) {
+					PlayerVariables variables = ((PlayerVariables) player.getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
 					variables.kick = message.data.kick;
 					variables.wudi = message.data.wudi;
 					variables.lastKickTime = message.data.lastKickTime;
 					variables.kickStartTime = message.data.kickStartTime;
 					variables.kickStartY = message.data.kickStartY;
-			variables.needExplode = message.data.needExplode;
+					variables.needExplode = message.data.needExplode;
 
-			//眼魂
-			variables.isMegaUiorderTransformed = message.data.isMegaUiorderTransformed; // 新增：同步Mega_uiorder变身状态
-			variables.isNecromStandby = message.data.isNecromStandby;
-			variables.isGhostDriverEquipped = message.data.isGhostDriverEquipped;
+					//眼魂
+					variables.isMegaUiorderTransformed = message.data.isMegaUiorderTransformed;
+					variables.isNecromStandby = message.data.isNecromStandby;
+					variables.isGhostDriverEquipped = message.data.isGhostDriverEquipped;
 
-			// 同步锁种相关变量
-			variables.cherry_ready = message.data.cherry_ready;
-			variables.cherry_ready_time = message.data.cherry_ready_time;
-			variables.lemon_ready = message.data.lemon_ready;
-			variables.lemon_ready_time = message.data.lemon_ready_time;
-			variables.peach_ready = message.data.peach_ready;
-			variables.peach_ready_time = message.data.peach_ready_time;
-			variables.melon_ready = message.data.melon_ready;
+					// 同步锁种相关变量
+					variables.cherry_ready = message.data.cherry_ready;
+					variables.cherry_ready_time = message.data.cherry_ready_time;
+					variables.lemon_ready = message.data.lemon_ready;
+					variables.lemon_ready_time = message.data.lemon_ready_time;
+					variables.peach_ready = message.data.peach_ready;
+					variables.peach_ready_time = message.data.peach_ready_time;
+					variables.melon_ready = message.data.melon_ready;
 					variables.melon_ready_time = message.data.melon_ready_time;
 					variables.banana_ready = message.data.banana_ready;
 					variables.banana_ready_time = message.data.banana_ready_time;
@@ -593,17 +608,17 @@ public class KRBVariables {
 					variables.dragonfruit_ready_time = message.data.dragonfruit_ready_time;
 
 					variables.baseMaxHealth = message.data.baseMaxHealth;
-					variables.lastCustomArmorCount = message.data.lastCustomArmorCount; // 添加这行，同步lastCustomArmorCount
-					variables.isDarkKivaBeltEquipped = message.data.isDarkKivaBeltEquipped; // 添加这行，同步黑暗Kiva腰带状态
-					variables.isGenesisDriverEquipped = message.data.isGenesisDriverEquipped; // 添加这行，同步Genesis驱动器状态
-					variables.isSengokuDriverEmptyEquipped = message.data.isSengokuDriverEmptyEquipped; // 添加这行，同步空的Sengoku驱动器状态
-					variables.isSengokuDriverFilledEquipped = message.data.isSengokuDriverFilledEquipped; // 添加这行，同步有锁种的Sengoku驱动器状态
-					variables.isOrochiDriverEquipped = message.data.isOrochiDriverEquipped; // 添加这行，同步Orochi驱动器状态
-					variables.isEvilBatsTransformed = message.data.isEvilBatsTransformed; // 添加这行，同步EvilBats变身状态
-					variables.isEvilBatsStealthed = message.data.isEvilBatsStealthed; // 添加这行，同步EvilBats隐密模式状态
-					variables.isDarkOrangelsTransformed = message.data.isDarkOrangelsTransformed; // 添加这行，同步Dark_orangels变身状态
-					variables.isDarkGhostActive = message.data.isDarkGhostActive; // 新增：同步Dark Ghost激活状态
-					variables.isNapoleonGhostTransformed = message.data.isNapoleonGhostTransformed; // 添加这行，同步拿破仑魂变身状态
+					variables.lastCustomArmorCount = message.data.lastCustomArmorCount;
+					variables.isDarkKivaBeltEquipped = message.data.isDarkKivaBeltEquipped;
+					variables.isGenesisDriverEquipped = message.data.isGenesisDriverEquipped;
+					variables.isSengokuDriverEmptyEquipped = message.data.isSengokuDriverEmptyEquipped;
+					variables.isSengokuDriverFilledEquipped = message.data.isSengokuDriverFilledEquipped;
+					variables.isOrochiDriverEquipped = message.data.isOrochiDriverEquipped;
+					variables.isEvilBatsTransformed = message.data.isEvilBatsTransformed;
+					variables.isEvilBatsStealthed = message.data.isEvilBatsStealthed;
+					variables.isDarkOrangelsTransformed = message.data.isDarkOrangelsTransformed;
+					variables.isDarkGhostActive = message.data.isDarkGhostActive;
+					variables.isNapoleonGhostTransformed = message.data.isNapoleonGhostTransformed;
 
 					// 同步所有骑士能量相关变量
 					variables.riderEnergy = message.data.riderEnergy;
@@ -615,38 +630,36 @@ public class KRBVariables {
 					// 同步累积攻击力相关变量
 					variables.accumulatedAttackDamage = message.data.accumulatedAttackDamage;
 					variables.accumulatedAttackDamageModifier = message.data.accumulatedAttackDamageModifier;
-                    
-                    // 同步基础巴隆技能相关变量
-                    variables.baron_banana_energy_cooldown = message.data.baron_banana_energy_cooldown;
-                    // 同步Overlord状态
-                    variables.isOverlord = message.data.isOverlord;
-                    // 同步Giifu状态
-                    variables.isGiifu = message.data.isGiifu;
-                    // 同步牙血鬼血脉状态
-                    variables.isFangBloodline = message.data.isFangBloodline;
-                    // 同步Roidmude状态
-                    variables.isRoidmude = message.data.isRoidmude;
-                    variables.roidmudeType = message.data.roidmudeType;
-                    variables.roidmudeNumber = message.data.roidmudeNumber;
-                    variables.isRoidmudeEvolved = message.data.isRoidmudeEvolved;
-                    // 同步宝箱领取状态
-                    variables.hasReceivedGhostEyeLootChest = message.data.hasReceivedGhostEyeLootChest;
-                    // 同步腰带移除相关变量
-                    variables.beltRemovedTime = message.data.beltRemovedTime;
-                    variables.removedBeltType = message.data.removedBeltType;
-                    // 同步保存的玩家原版盔甲数据
-                    variables.originalEvilArmor = message.data.originalEvilArmor;
-                    variables.originalRiderNecromArmor = message.data.originalRiderNecromArmor;
-                    variables.originalDarkKivaArmor = message.data.originalDarkKivaArmor;
-                    variables.originalNapoleonGhostArmor = message.data.originalNapoleonGhostArmor;
-                    variables.originalBrainArmor = message.data.originalBrainArmor;
-	variables.isBrainDriverEquipped = message.data.isBrainDriverEquipped;
-	variables.isBrainTransformed = message.data.isBrainTransformed;
-	variables.isKnightInvokerEquipped = message.data.isKnightInvokerEquipped;
+
+					// 同步基础巴隆技能相关变量
+					variables.baron_banana_energy_cooldown = message.data.baron_banana_energy_cooldown;
+					// 同步Overlord状态
+					variables.isOverlord = message.data.isOverlord;
+					// 同步Giifu状态
+					variables.isGiifu = message.data.isGiifu;
+					// 同步牙血鬼血脉状态
+					variables.isFangBloodline = message.data.isFangBloodline;
+					// 同步Roidmude状态
+					variables.isRoidmude = message.data.isRoidmude;
+					variables.roidmudeType = message.data.roidmudeType;
+					variables.roidmudeNumber = message.data.roidmudeNumber;
+					variables.isRoidmudeEvolved = message.data.isRoidmudeEvolved;
+					// 同步宝箱领取状态
+					variables.hasReceivedGhostEyeLootChest = message.data.hasReceivedGhostEyeLootChest;
+					// 同步腰带移除相关变量
+					variables.beltRemovedTime = message.data.beltRemovedTime;
+					variables.removedBeltType = message.data.removedBeltType;
+					// 同步保存的玩家原版盔甲数据
+					variables.originalEvilArmor = message.data.originalEvilArmor;
+					variables.originalRiderNecromArmor = message.data.originalRiderNecromArmor;
+					variables.originalDarkKivaArmor = message.data.originalDarkKivaArmor;
+					variables.originalNapoleonGhostArmor = message.data.originalNapoleonGhostArmor;
+					variables.originalBrainArmor = message.data.originalBrainArmor;
+					variables.isBrainDriverEquipped = message.data.isBrainDriverEquipped;
+					variables.isBrainTransformed = message.data.isBrainTransformed;
+					variables.isKnightInvokerEquipped = message.data.isKnightInvokerEquipped;
 				}
-			});
-			context.setPacketHandled(true);
+			}
 		}
 	}
 }
-

@@ -181,13 +181,6 @@ public class NapoleonGhostTransformationRequestPacket {
                     return;
                 }
 
-                // 停止待机音
-                ResourceLocation soundLoc = new ResourceLocation(
-                        "kamen_rider_boss_you_and_me",
-                        "ghost_idle");
-                PacketHandler.sendToAllTracking(
-                        new SoundStopPacket(player.getId(), soundLoc),
-                        player);
 
                 // 播放解除变身音效
                 player.level().playSound(

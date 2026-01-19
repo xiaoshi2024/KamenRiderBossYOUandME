@@ -155,7 +155,6 @@ public class TransformationRequestPacket {
                                     new SoundStopPacket(player.getId(), soundLoc),
                                     player
                             );
-                            PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
                             // ✅ 清除玩家相关的KnecromghostEntity实体
                             for (KnecromghostEntity ghost : player.level().getEntitiesOfClass(
@@ -189,7 +188,6 @@ public class TransformationRequestPacket {
                                     new SoundStopPacket(player.getId(), soundLoc),
                                     player
                             );
-                            PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
                             for (KnecromghostEntity ghost : player.level().getEntitiesOfClass(
                                     KnecromghostEntity.class,

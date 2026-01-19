@@ -179,16 +179,19 @@ public class KeybindHandler {
         ItemStack mainHandItem = player.getMainHandItem();
         ItemStack offHandItem = player.getOffhandItem();
 
-        // 获取玩家变身状态
-        KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
-        boolean isTransformed = variables.isEvilBatsTransformed;
+        // 使用AtomicBoolean来包装handled变量，允许在lambda表达式中修改
+        java.util.concurrent.atomic.AtomicBoolean handled = new java.util.concurrent.atomic.AtomicBoolean(false);
+
+        // 获取玩家变量
+        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        boolean isTransformed = vars.isEvilBatsTransformed;
 
         // 检查是否佩戴Two_sidriver腰带
         Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
                 .resolve()
                 .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof Two_sidriver));
 
-        if (opt.isPresent()) {
+        if (!handled.get() && opt.isPresent()) {
             ItemStack belt = opt.get().stack();
             Two_sidriver.DriverType type = Two_sidriver.getDriverType(belt);
             Two_sidriver beltItem = (Two_sidriver) belt.getItem();
@@ -198,30 +201,19 @@ public class KeybindHandler {
                 if (isTransformed) {
                     // 如果玩家已变身，返回蝙蝠印章并解除变身
                     PacketHandler.sendToServer(new ReleaseBeltPacket(true, "EVIL_BATS"));
-
-//                    // 将武器变回普通形态
-//                    if (mainHandItem.getItem() instanceof TwoWeaponItem &&
-//                            ((TwoWeaponItem)mainHandItem.getItem()).getVariant(mainHandItem) == TwoWeaponItem.Variant.BAT) {
-//                        TwoWeaponItem.setVariant(mainHandItem, TwoWeaponItem.Variant.DEFAULT);
-//                    }
-//                    if (offHandItem.getItem() instanceof TwoWeaponItem &&
-//                            ((TwoWeaponItem)offHandItem.getItem()).getVariant(offHandItem) == TwoWeaponItem.Variant.BAT) {
-//                        TwoWeaponItem.setVariant(offHandItem, TwoWeaponItem.Variant.DEFAULT);
-//                    }
-
                     // 发送武器取下数据包
                     PacketHandler.sendToServer(new WeaponRemovePacket(true));
-                    return;
+                    handled.set(true);
                 } else {
                     // 如果玩家未变身，发送武器取下数据包
                     PacketHandler.sendToServer(new WeaponRemovePacket(true));
-                    return;
+                    handled.set(true);
                 }
             }
         }
 
 // 检测主手或副手武器是否为bat形态
-        if ((mainHandItem.getItem() instanceof TwoWeaponItem &&
+        if (!handled.get() && ((mainHandItem.getItem() instanceof TwoWeaponItem &&
                 ((TwoWeaponItem)mainHandItem.getItem()).getVariant(mainHandItem) == TwoWeaponItem.Variant.BAT) ||
                 (offHandItem.getItem() instanceof TwoWeaponItem &&
                         ((TwoWeaponItem)offHandItem.getItem()).getVariant(offHandItem) == TwoWeaponItem.Variant.BAT) ||
@@ -233,17 +225,14 @@ public class KeybindHandler {
                 (mainHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem &&
                         com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(mainHandItem) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT) ||
                 (offHandItem.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.weapon.TwoWeaponGunItem &&
-                        com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(offHandItem) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT)) {
+                        com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.getVariant(offHandItem) == com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem.Variant.BAT))) {
             // 发送解除EvilBats变身请求到服务端
             PacketHandler.sendToServer(new ReleaseBeltPacket(true, "EVIL_BATS"));
-            return; // 处理完EvilBats变身后直接返回
+            handled.set(true);
         }
 
-        // 获取玩家变量
-        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
-        
         // 黑暗灵骑解除变身逻辑
-        if (vars.isDarkGhostTransformed) {
+        if (!handled.get() && vars.isDarkGhostTransformed) {
             // 检查玩家是否装备了魂灵驱动器
             Optional<SlotResult> ghostDriverSlot = findFirstCurio(player,
                     s -> s.getItem() instanceof GhostDriver);
@@ -261,12 +250,12 @@ public class KeybindHandler {
                     delayedBeltStack = beltStack.copy();
                     // 发送解除变身请求
                     PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket(true));
-                    return; // 解除完直接返回
+                    handled.set(true);
                 }
             }
         }
         // 拿破仑魂解除变身逻辑
-        else if (vars.isNapoleonGhostTransformed) {
+        else if (!handled.get() && vars.isNapoleonGhostTransformed) {
             // 检查玩家是否装备了魂灵驱动器
             Optional<SlotResult> ghostDriverSlot = findFirstCurio(player,
                     s -> s.getItem() instanceof GhostDriver);
@@ -284,14 +273,14 @@ public class KeybindHandler {
                     delayedBeltStack = beltStack.copy();
                     // 发送解除变身请求
                     PacketHandler.sendToServer(new NapoleonGhostTransformationRequestPacket(true));
-                    return; // 解除完直接返回
+                    handled.set(true);
                 }
             }
         }
         
         //幽冥逻辑
         // ✅ C 键解除 Necrom 变身
-        if (vars.isMegaUiorderTransformed) {
+        if (!handled.get() && vars.isMegaUiorderTransformed) {
             // 检查玩家是否装备了Mega_uiorder手环
             Optional<SlotResult> megaSlot = findFirstCurio(player,
                     s -> s.getItem() instanceof Mega_uiorder);
@@ -304,10 +293,11 @@ public class KeybindHandler {
                 if (belt.getCurrentMode(beltStack) == Mega_uiorder.Mode.NECROM_EYE) {
                     // 客户端 KeybindHandler.java
                     PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), RiderTypes.RIDERNECROM, true));
-                    return; // 解除完直接返回，不再往下走
+                    handled.set(true);
                 } else {
                     // 手环不是眼魂状态，无法解除变身，给出提示
                     player.displayClientMessage(Component.literal("手环不是眼魂状态，无法解除变身！"), true);
+                    handled.set(true);
                 }
             }
         }
@@ -315,115 +305,136 @@ public class KeybindHandler {
         // 检查玩家是否穿着Necrom盔甲并触发眼魔机制
         checkAndTriggerNecromArmorMechanism(player);
 
-        findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
-                .ifPresent(curio -> {
-                    ItemStack beltStack = curio.stack();
-                    Genesis_driver belt = (Genesis_driver) beltStack.getItem();
-                    Genesis_driver.BeltMode mode = belt.getMode(beltStack);
+        if (!handled.get()) {
+            findFirstCurio(player, stack -> stack.getItem() instanceof Genesis_driver)
+                    .ifPresent(curio -> {
+                        ItemStack beltStack = curio.stack();
+                        Genesis_driver belt = (Genesis_driver) beltStack.getItem();
+                        Genesis_driver.BeltMode mode = belt.getMode(beltStack);
 
-                    switch (mode) {
-                        case LEMON -> {
-                            // 先播放动画
-                            belt.startReleaseWithPlayerAnimation(player, beltStack);
-                            // 设置延时，在动画播放完后再发送解除变身请求
-                            delayTicks = 40;
+                        switch (mode) {
+                            case LEMON -> {
+                                // 先判断是变身还是解除
+                                boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
+                                if (isTransformeds) {
+                                    // 先播放动画
+                                    belt.startReleaseWithPlayerAnimation(player, beltStack);
+                                    // 设置延时，在动画播放完后再发送解除变身请求
+                                    delayTicks = 40;
+                                    delayedBeltStack = beltStack.copy();
+                                    handled.set(true);
+                                }
+                            }
+                            case MELON -> {
+                                // 先判断是变身还是解除
+                                boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
+                                if (isTransformeds) {
+                                    // 先播放动画
+                                    belt.startReleaseWithPlayerAnimation(player, beltStack);
+                                    // 设置延时，在动画播放完后再发送解除变身请求
+                                    delayTicks = 40;
+                                    delayedBeltStack = beltStack.copy();
+                                    handled.set(true);
+                                } else {
+                                    // 变身
+                                    PacketHandler.sendToServer(new MelonTransformationRequestPacket(player.getUUID()));
+                                    handled.set(true);
+                                }
+                            }
+                            case CHERRY -> {
+                                // 先判断是变身还是解除
+                                boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.SIGURD_HELMET.get();
+                                if (isTransformeds) {
+                                    // 先播放动画
+                                    belt.startReleaseWithPlayerAnimation(player, beltStack);
+                                    // 设置延时，在动画播放完后再发送解除变身请求
+                                    delayTicks = 40;
+                                    delayedBeltStack = beltStack.copy();
+                                    handled.set(true);
+                                } else {
+                                    // 变身
+                                    PacketHandler.sendToServer(new CherryTransformationRequestPacket(player.getUUID()));
+                                    handled.set(true);
+                                }
+                            }
+                            case PEACH -> {
+                                // 先判断是变身还是解除
+                                boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.MARIKA_HELMET.get();
+                                if (isTransformeds) {
+                                    // 先播放动画
+                                    belt.startReleaseWithPlayerAnimation(player, beltStack);
+                                    // 设置延时，在动画播放完后再发送解除变身请求
+                                    delayTicks = 40;
+                                    delayedBeltStack = beltStack.copy();
+                                    handled.set(true);
+                                } else {
+                                    // 变身
+                                    PacketHandler.sendToServer(new MarikaTransformationRequestPacket(player.getUUID()));
+                                    handled.set(true);
+                                }
+                            }
+                            case DRAGONFRUIT -> {
+                                // 先判断是变身还是解除
+                                boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.TYRANT_HELMET.get();
+                                if (isTransformeds) {
+                                    // 先播放动画
+                                    belt.startReleaseWithPlayerAnimation(player, beltStack);
+                                    // 设置延时，在动画播放完后再发送解除变身请求
+                                    delayTicks = 40;
+                                    delayedBeltStack = beltStack.copy();
+                                    handled.set(true);
+                                }
+                                // 移除C键触发变身的功能，只保留解除变身功能
+                                // 变身功能应通过X键在KeyInputListener中触发
+                            }
+                            default -> {}
+                        }
+                    });
+        }
+
+        // Dark Kiva 解除变身逻辑
+        if (!handled.get()) {
+            findFirstCurio(player,
+                            stack -> stack.getItem() instanceof DrakKivaBelt)
+                    .ifPresent(curio -> {
+                        ItemStack beltStack = curio.stack();
+                        boolean isDarkKiva = player.getInventory().armor.get(3).getItem() == ModItems.DARK_KIVA_HELMET.get();
+
+                        if (isDarkKiva) {
+                            // 发送解除变身请求
+                            PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "DARK_KIVA", true));
+                            delayTicks = 60;
                             delayedBeltStack = beltStack.copy();
+                            handled.set(true);
                         }
-                        case MELON -> {
-                            // 先判断是变身还是解除
-                            boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get();
-                            if (isTransformeds) {
-                                // 先播放动画
-                                belt.startReleaseWithPlayerAnimation(player, beltStack);
-                                // 设置延时，在动画播放完后再发送解除变身请求
-                                delayTicks = 40;
-                                delayedBeltStack = beltStack.copy();
-                            } else {
-                                // 变身
-                                PacketHandler.sendToServer(new MelonTransformationRequestPacket(player.getUUID()));
-                            }
-                        }
-                        case CHERRY -> {
-                            // 先判断是变身还是解除
-                            boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.SIGURD_HELMET.get();
-                            if (isTransformeds) {
-                                // 先播放动画
-                                belt.startReleaseWithPlayerAnimation(player, beltStack);
-                                // 设置延时，在动画播放完后再发送解除变身请求
-                                delayTicks = 40;
-                                delayedBeltStack = beltStack.copy();
-                            } else {
-                                // 变身
-                                PacketHandler.sendToServer(new CherryTransformationRequestPacket(player.getUUID()));
-                            }
-                        }
-                        case PEACH -> {
-                            // 先判断是变身还是解除
-                            boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.MARIKA_HELMET.get();
-                            if (isTransformeds) {
-                                // 先播放动画
-                                belt.startReleaseWithPlayerAnimation(player, beltStack);
-                                // 设置延时，在动画播放完后再发送解除变身请求
-                                delayTicks = 40;
-                                delayedBeltStack = beltStack.copy();
-                            } else {
-                                // 变身
-                                PacketHandler.sendToServer(new MarikaTransformationRequestPacket(player.getUUID()));
-                            }
-                        }
-                        case DRAGONFRUIT -> {
-                            // 先判断是变身还是解除
-                            boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.TYRANT_HELMET.get();
-                            if (isTransformeds) {
-                                // 先播放动画
-                                belt.startReleaseWithPlayerAnimation(player, beltStack);
-                                // 设置延时，在动画播放完后再发送解除变身请求
-                                delayTicks = 40;
-                                delayedBeltStack = beltStack.copy();
-                            }
-                            // 移除C键触发变身的功能，只保留解除变身功能
-                            // 变身功能应通过X键在KeyInputListener中触发
-                        }
-                        default -> {}
-                    }
-                });
-
-        // 在 handleKeyPress 方法中，找到 Dark Kiva 部分：
-        findFirstCurio(player,
-                        stack -> stack.getItem() instanceof DrakKivaBelt)
-                .ifPresent(curio -> {
-                    ItemStack beltStack = curio.stack();
-                    boolean isDarkKiva = player.getInventory().armor.get(3).getItem() == ModItems.DARK_KIVA_HELMET.get();
-
-                    if (isDarkKiva) {
-                        // 发送解除变身请求
-                        PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "DARK_KIVA", true));
-                        delayTicks = 60;
-                        delayedBeltStack = beltStack.copy();
-                    }
-                });
+                    });
+        }
 
         // 香蕉和DarkOrange逻辑
-        findFirstCurio(player, stack -> stack.getItem() instanceof sengokudrivers_epmty)
-                .ifPresent(curio -> {
-                    ItemStack beltStack = curio.stack();
-                    sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
-                    sengokudrivers_epmty.BeltMode mode = belt.getMode(beltStack);
+        if (!handled.get()) {
+            findFirstCurio(player, stack -> stack.getItem() instanceof sengokudrivers_epmty)
+                    .ifPresent(curio -> {
+                        ItemStack beltStack = curio.stack();
+                        sengokudrivers_epmty belt = (sengokudrivers_epmty) beltStack.getItem();
+                        sengokudrivers_epmty.BeltMode mode = belt.getMode(beltStack);
 
-                    if (mode == sengokudrivers_epmty.BeltMode.BANANA) {
-                        // 发送香蕉解除变身请求
-                        PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "BARONS", true)); // true 表示是解除变身请求
-                        belt.startReleaseAnimation(player,beltStack);
-                        delayTicks = 40;
-                        delayedBeltStack = beltStack.copy();
-                    } else if (mode == sengokudrivers_epmty.BeltMode.ORANGELS) {
-                        // 发送DarkOrange解除变身请求
-                        PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkOrangeReleaseRequestPacket(player.getUUID()));
-                        belt.startReleaseAnimation(player,beltStack);
-                        delayTicks = 40;
-                        delayedBeltStack = beltStack.copy();
-                    }
-                });
+                        if (mode == sengokudrivers_epmty.BeltMode.BANANA) {
+                            // 发送香蕉解除变身请求
+                            PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "BARONS", true)); // true 表示是解除变身请求
+                            belt.startReleaseAnimation(player,beltStack);
+                            delayTicks = 40;
+                            delayedBeltStack = beltStack.copy();
+                            handled.set(true);
+                        } else if (mode == sengokudrivers_epmty.BeltMode.ORANGELS) {
+                            // 发送DarkOrange解除变身请求
+                            PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkOrangeReleaseRequestPacket(player.getUUID()));
+                            belt.startReleaseAnimation(player,beltStack);
+                            delayTicks = 40;
+                            delayedBeltStack = beltStack.copy();
+                            handled.set(true);
+                        }
+                    });
+        }
     }
 
     public static void completeBeltRelease(ServerPlayer player, String beltType) {
@@ -506,7 +517,6 @@ public class KeybindHandler {
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         // 清除玩家相关的KnecromghostEntity实体
         for (KnecromghostEntity ghost : player.level().getEntitiesOfClass(
@@ -570,7 +580,6 @@ public class KeybindHandler {
                             new SoundStopPacket(player.getId(), soundLoc),
                             player
                     );
-                    PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
                     
                     // 重置手环为默认形态
                     belt.switchMode(beltStack, Mega_uiorder.Mode.DEFAULT);
@@ -641,7 +650,6 @@ public class KeybindHandler {
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
 
         // 检查并更新腰带状态
@@ -722,7 +730,6 @@ public class KeybindHandler {
                         new SoundStopPacket(player.getId(), soundLoc),
                         player
                 );
-                PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
                 // 清除变身装甲
                 clearTransformationArmor(player);
@@ -781,7 +788,6 @@ public class KeybindHandler {
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
         // 只发送给当前玩家
         PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
 
         // 4. 卸掉蜜瓜装甲（3 件）
@@ -839,7 +845,6 @@ public class KeybindHandler {
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
         // 只发送给当前玩家
         PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         // 4. 卸掉樱桃装甲
         clearTransformationArmor(player);
@@ -958,7 +963,6 @@ public class KeybindHandler {
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
         // 只发送给当前玩家
         PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         // 4. 卸掉Tyrant装甲
         clearTransformationArmor(player);
@@ -1009,7 +1013,6 @@ public class KeybindHandler {
         ResourceLocation soundLoc = new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_lockonby");
         // 只发送给当前玩家
         PacketHandler.sendToClient(new SoundStopPacket(player.getId(), soundLoc), player);
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         // 4. 卸掉Marika装甲
         clearTransformationArmor(player);
@@ -1047,16 +1050,15 @@ public class KeybindHandler {
                         ModBossSounds.LOCKOFF.get(),
                         SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                // 停止待机音效
+                // 停止音效
                 ResourceLocation soundLoc = new ResourceLocation(
                         "kamen_rider_boss_you_and_me",
-                        "bananaby"
+                        "lockonby"
                 );
                 PacketHandler.sendToAllTracking(
                         new SoundStopPacket(player.getId(), soundLoc),
                         player
                 );
-                PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
                 clearTransformationArmor(player);
                 

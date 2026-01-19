@@ -3,7 +3,6 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,9 +12,7 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class SoundStopPacket {
@@ -27,47 +24,33 @@ public class SoundStopPacket {
         this.soundName = soundName;
     }
 
-    // 编码解码方法保持不变
+    // 编码方法
     public static void encode(SoundStopPacket msg, FriendlyByteBuf buffer) {
         buffer.writeInt(msg.playerId);
         buffer.writeResourceLocation(msg.soundName);
     }
 
+    // 解码方法
     public static SoundStopPacket decode(FriendlyByteBuf buffer) {
         int playerId = buffer.readInt();
         ResourceLocation soundName = buffer.readResourceLocation();
         return new SoundStopPacket(playerId, soundName);
     }
 
+    // 服务器端处理器 - 确保正确发送
     public static class Handler {
         public static void handle(SoundStopPacket msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 if (ctx.get().getDirection().getReceptionSide().isServer()) {
                     ServerPlayer sender = ctx.get().getSender();
 
-                    // 关键修改1：使用TRACKING_ENTITY_AND_SELF确保包括自己在内的所有相关客户端
-                    PacketHandler.INSTANCE.send(
-                            PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> {
-                                if (sender != null) return sender;
-                                // 备用方案：通过ID获取实体（需要level实例）
-                                ServerPlayer player = (ServerPlayer) ctx.get().getSender();
-                                return player != null ? player : null;
-                            }),
-                            new SoundStopPacket(msg.playerId, msg.soundName)
-                    );
-
-                    // 关键修改2：优化命令执行逻辑
                     if (sender != null) {
-                        CommandSourceStack source = sender.createCommandSourceStack()
-                                .withPermission(2)  // 降低所需权限等级
-                                .withSuppressedOutput();
-
-                        // 使用范围参数确保同步
-                        String command = String.format(
-                                "/stopsound @a[distance=..64] player %s",  // 扩大同步范围
-                                msg.soundName.toString()
+                        // 关键：使用传入的msg，不要重新创建
+                        PacketHandler.INSTANCE.send(
+                                PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> sender),
+                                msg  // 直接使用传入的msg，不是new SoundStopPacket(...)
                         );
-                        sender.server.getCommands().performPrefixedCommand(source, command);
+                        System.out.println("[SoundStop] 服务器发送停止音效包: " + msg.soundName + " for player: " + sender.getName().getString());
                     }
                 }
             });
@@ -75,36 +58,128 @@ public class SoundStopPacket {
         }
     }
 
+    // 客户端处理器 - 改进版本
     public static class ClientHandler {
         public static void handle(SoundStopPacket msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().enqueueWork(() -> {
                 Minecraft mc = Minecraft.getInstance();
                 if (mc.level == null || mc.player == null) return;
 
-                // 关键修改3：停止所有匹配音效，不限定特定玩家
+                System.out.println("[SoundStop] 客户端收到停止音效: " + msg.soundName);
+
                 SoundManager soundManager = mc.getSoundManager();
-                for (SoundInstance sound : getPlayingSounds(soundManager)) {
-                    if (sound.getSource() == SoundSource.PLAYERS &&
-                            sound.getLocation().equals(msg.soundName)) {
-                        soundManager.stop(sound);
-                    }
-                }
+                stopSoundByName(soundManager, msg.soundName);
             });
             ctx.get().setPacketHandled(true);
         }
 
-        // 优化的反射方法
-        private static Collection<SoundInstance> getPlayingSounds(SoundManager manager) {
+        // 改进的声音停止方法
+        private static void stopSoundByName(SoundManager manager, ResourceLocation soundName) {
             try {
-                Field field = SoundManager.class.getDeclaredField("instanceToChannel");
-                field.setAccessible(true);
-                return ((Map<SoundInstance, ?>) field.get(manager)).keySet();
+                // 方法1：尝试使用反射获取正在播放的声音
+                Collection<SoundInstance> playingSounds = getPlayingSoundsByReflection(manager);
+                int stoppedCount = 0;
+
+                for (SoundInstance sound : playingSounds) {
+                    if (sound.getLocation().equals(soundName)) {
+                        manager.stop(sound);
+                        stoppedCount++;
+                        System.out.println("[SoundStop] 停止音效: " + soundName);
+                    }
+                }
+
+                if (stoppedCount == 0) {
+                    // 尝试另一种方法：直接停止所有音源类别下的该音效
+                    stopSoundAllSources(manager, soundName);
+                }
+
             } catch (Exception e) {
-                Minecraft.getInstance().player.displayClientMessage(
-                        Component.literal("音效停止错误: " + e.getMessage()),
-                        false
-                );
+                System.err.println("[SoundStop] 停止音效失败: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        // 改进的反射方法
+        private static Collection<SoundInstance> getPlayingSoundsByReflection(SoundManager manager) {
+            try {
+                // 尝试不同的字段名
+                String[] possibleFieldNames = {
+                        "instanceToChannel",
+                        "playingSounds",
+                        "sounds",
+                        "soundSystem"
+                };
+
+                for (String fieldName : possibleFieldNames) {
+                    try {
+                        Field field = SoundManager.class.getDeclaredField(fieldName);
+                        field.setAccessible(true);
+                        Object value = field.get(manager);
+
+                        if (value instanceof Map) {
+                            Map<?, ?> map = (Map<?, ?>) value;
+                            if (!map.isEmpty()) {
+                                Set<SoundInstance> sounds = new HashSet<>();
+                                for (Object key : map.keySet()) {
+                                    if (key instanceof SoundInstance) {
+                                        sounds.add((SoundInstance) key);
+                                    }
+                                }
+                                return sounds;
+                            }
+                        }
+                    } catch (NoSuchFieldException ignored) {
+                        // 继续尝试下一个字段名
+                    }
+                }
+
+                // 如果以上都不行，尝试通过SoundEngine
+                return getSoundsViaSoundEngine(manager);
+
+            } catch (Exception e) {
+                System.err.println("[SoundStop] 反射获取音效失败: " + e.getMessage());
                 return Collections.emptyList();
+            }
+        }
+
+        // 尝试通过SoundEngine获取声音
+        private static Collection<SoundInstance> getSoundsViaSoundEngine(SoundManager manager) {
+            try {
+                // 尝试获取soundEngine字段
+                Field engineField = SoundManager.class.getDeclaredField("soundEngine");
+                engineField.setAccessible(true);
+                Object soundEngine = engineField.get(manager);
+
+                // 尝试获取声音实例
+                Field instancesField = soundEngine.getClass().getDeclaredField("instances");
+                instancesField.setAccessible(true);
+                Map<?, ?> instances = (Map<?, ?>) instancesField.get(soundEngine);
+
+                Set<SoundInstance> sounds = new HashSet<>();
+                for (Object sound : instances.keySet()) {
+                    if (sound instanceof SoundInstance) {
+                        sounds.add((SoundInstance) sound);
+                    }
+                }
+                return sounds;
+
+            } catch (Exception e) {
+                System.err.println("[SoundStop] 通过SoundEngine获取音效失败: " + e.getMessage());
+                return Collections.emptyList();
+            }
+        }
+
+        // 更激进的方法：停止所有音源类别下的指定音效
+        private static void stopSoundAllSources(SoundManager manager, ResourceLocation soundName) {
+            // 遍历所有可能的音源类别
+            for (SoundSource source : SoundSource.values()) {
+                try {
+                    // 尝试停止该音效
+                    manager.stop(soundName, source);
+                    System.out.println("[SoundStop] 尝试停止音效 (source=" + source + "): " + soundName);
+                } catch (Exception e) {
+                    // 忽略错误，继续尝试其他音源
+                }
             }
         }
     }

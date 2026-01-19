@@ -55,11 +55,10 @@ public class KnightInvokerPressPacket {
                             "nox_a"
                     );
                     // 只发送给当前玩家
-                    PacketHandler.sendToClient(
-                            new SoundStopPacket(player.getId(), noxASoundLoc),
-                            player
-                    );
-                    PacketHandler.sendToServer(new SoundStopPacket(player.getId(), noxASoundLoc));
+                PacketHandler.sendToClient(
+                        new SoundStopPacket(player.getId(),noxASoundLoc),
+                        player
+                );
 
                     // 播放erase音效
                     player.level().playSound(null, player.getX(), player.getY(), player.getZ(),

@@ -78,7 +78,7 @@ public class RidernecromItem extends ArmorItem implements GeoItem, KamenBossArmo
 
 			@Override
 			public String getName() {
-				return "ridernecrom";
+				return "netherite"; // 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
 			}
 		}, type, properties);
 	}

@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -36,20 +35,23 @@ public class WeaponSyncPacket {
 
     public static void handle(WeaponSyncPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            if (Minecraft.getInstance().level == null) return;
-            Entity entity = Minecraft.getInstance().level.getEntity(msg.entityId);
-            if (!(entity instanceof Player player)) return;
+            // 只在客户端处理，使用完整类名避免服务器导入错误
+            if (ctx.get().getDirection().getReceptionSide().isClient()) {
+                if (net.minecraft.client.Minecraft.getInstance().level == null) return;
+                Entity entity = net.minecraft.client.Minecraft.getInstance().level.getEntity(msg.entityId);
+                if (!(entity instanceof Player player)) return;
 
-            // 同步主手武器
-            ItemStack mainHand = player.getMainHandItem();
-            if (mainHand.getItem() instanceof TwoWeaponItem) {
-                TwoWeaponItem.setVariant(mainHand, msg.mainHandVariant);
-            }
+                // 同步主手武器
+                ItemStack mainHand = player.getMainHandItem();
+                if (mainHand.getItem() instanceof TwoWeaponItem) {
+                    TwoWeaponItem.setVariant(mainHand, msg.mainHandVariant);
+                }
 
-            // 同步副手武器
-            ItemStack offHand = player.getOffhandItem();
-            if (offHand.getItem() instanceof TwoWeaponItem) {
-                TwoWeaponItem.setVariant(offHand, msg.offHandVariant);
+                // 同步副手武器
+                ItemStack offHand = player.getOffhandItem();
+                if (offHand.getItem() instanceof TwoWeaponItem) {
+                    TwoWeaponItem.setVariant(offHand, msg.offHandVariant);
+                }
             }
         });
         ctx.get().setPacketHandled(true);

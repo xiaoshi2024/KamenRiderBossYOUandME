@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Two_sidriver;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,20 +41,23 @@ public class DriverSyncPacket {
     /* ---------------- 客户端处理 ---------------- */
     public static void handle(DriverSyncPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            if (Minecraft.getInstance().level == null) return;
-            Entity e = Minecraft.getInstance().level.getEntity(msg.entityId);
-            if (!(e instanceof LivingEntity living)) return;
+            // 只在客户端处理，使用完整类名避免服务器导入错误
+            if (ctx.get().getDirection().getReceptionSide().isClient()) {
+                if (net.minecraft.client.Minecraft.getInstance().level == null) return;
+                Entity e = net.minecraft.client.Minecraft.getInstance().level.getEntity(msg.entityId);
+                if (!(e instanceof LivingEntity living)) return;
 
-            CuriosApi.getCuriosInventory(living).ifPresent(inv ->
-                    inv.findFirstCurio(item -> item.getItem() instanceof Two_sidriver)
-                            .ifPresent(slot -> {
-                                ItemStack stack = slot.stack();
+                CuriosApi.getCuriosInventory(living).ifPresent(inv ->
+                        inv.findFirstCurio(item -> item.getItem() instanceof Two_sidriver)
+                                .ifPresent(slot -> {
+                                    ItemStack stack = slot.stack();
 
-                                /* 只要写 NBT，GeckoLib 会自动重建动画实例 */
-                                Two_sidriver.setDriverType(stack, msg.driverType);
-                                Two_sidriver.setWeaponMode(stack, msg.weaponMode);
-                            })
-            );
+                                    /* 只要写 NBT，GeckoLib 会自动重建动画实例 */
+                                    Two_sidriver.setDriverType(stack, msg.driverType);
+                                    Two_sidriver.setWeaponMode(stack, msg.weaponMode);
+                                })
+                );
+            }
         });
         ctx.get().setPacketHandled(true);
     }

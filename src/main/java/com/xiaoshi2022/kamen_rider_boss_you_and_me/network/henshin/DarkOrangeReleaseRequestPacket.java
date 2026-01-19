@@ -97,12 +97,11 @@ public class DarkOrangeReleaseRequestPacket {
                 "kamen_rider_boss_you_and_me",
                 "orangeby"
         );
-        // 使用sendToAll确保所有客户端（包括新加入的玩家）都能接收音效停止指令
-        PacketHandler.sendToAllTracking(
+        // 使用sendToAllTrackingAndSelf确保玩家自己和所有追踪该玩家的客户端都能接收音效停止指令
+        PacketHandler.sendToAllTrackingAndSelf(
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
 
         // 播放解除变身音效

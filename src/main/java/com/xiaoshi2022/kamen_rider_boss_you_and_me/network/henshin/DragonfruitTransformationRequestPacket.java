@@ -107,17 +107,19 @@ public class DragonfruitTransformationRequestPacket {
         }
 
         /* 4. 重复变身判定（可选）*/
-        // TODO: 若有火龙果实装检查，可在此补充
-
+        // 停止待机音效
         ResourceLocation soundLoc = new ResourceLocation(
                 "kamen_rider_boss_you_and_me",
                 "lemon_lockonby"
         );
-        PacketHandler.sendToAllTracking(
+
+        System.out.println("[火龙果变身] 尝试停止音效: " + soundLoc);
+
+        // 发送停止音效数据包
+        PacketHandler.sendToAllTrackingAndSelf(
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         /* 6. 播放变身音效 */
         player.level().playSound(

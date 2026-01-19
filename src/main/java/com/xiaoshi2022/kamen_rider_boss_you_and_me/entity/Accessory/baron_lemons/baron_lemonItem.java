@@ -72,10 +72,10 @@ public class baron_lemonItem extends ArmorItem implements GeoItem , KamenBossArm
                 return Ingredient.of(Items.GOLDEN_APPLE); // 用金苹果象征柠檬能量
             }
 
-            // 材质名称
+            // 材质名称 - 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
             @Override
             public String getName() {
-                return "baron_lemon";
+                return "netherite";
             }
 
         }, type, properties);

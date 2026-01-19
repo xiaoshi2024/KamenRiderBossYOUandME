@@ -136,11 +136,10 @@ public class LemonTransformationRequestPacket {
                 "kamen_rider_boss_you_and_me",
                 "lemon_lockonby"
         );
-        PacketHandler.sendToAllTracking(
+        PacketHandler.sendToAllTrackingAndSelf(
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         // 播放变身动画
 //        belt.startHenshinAnimation(player,beltStack);   // 腰带自身动画

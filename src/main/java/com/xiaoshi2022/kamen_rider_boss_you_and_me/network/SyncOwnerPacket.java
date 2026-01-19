@@ -1,8 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Lord.LordBaronEntity;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -27,9 +25,9 @@ public record SyncOwnerPacket(int entityId, @Nullable UUID ownerId) {
 
     public static void handle(SyncOwnerPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            // 只在客户端处理
+            // 只在客户端处理，使用完整类名避免服务器导入错误
             if (ctx.get().getDirection().getReceptionSide().isClient()) {
-                ClientLevel level = Minecraft.getInstance().level;
+                net.minecraft.client.multiplayer.ClientLevel level = net.minecraft.client.Minecraft.getInstance().level;
                 if (level != null) {
                     Entity entity = level.getEntity(packet.entityId());
                     if (entity instanceof LordBaronEntity baron) {

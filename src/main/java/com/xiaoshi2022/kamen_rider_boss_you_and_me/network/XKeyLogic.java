@@ -106,11 +106,10 @@ public final class XKeyLogic {
                 "kamen_rider_boss_you_and_me",
                 "evil_by"
         );
-        PacketHandler.sendToAllTracking(
+        PacketHandler.sendToAllTrackingAndSelf(
                 new SoundStopPacket(sp.getId(), soundLoc),
                 sp
         );
-        PacketHandler.sendToServer(new SoundStopPacket(sp.getId(), soundLoc));
 
         // 播放新音效
         sp.level().playSound(null, sp.getX(), sp.getY(), sp.getZ(),

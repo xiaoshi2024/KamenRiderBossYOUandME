@@ -110,11 +110,10 @@ public class CherryTransformationRequestPacket {
                 "kamen_rider_boss_you_and_me",
                 "lemon_lockonby"
         );
-        PacketHandler.sendToAllTracking(
+        PacketHandler.sendToAllTrackingAndSelf(
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
 
         /* --------------------------------- 播放腰带动画 --------------------------------- */

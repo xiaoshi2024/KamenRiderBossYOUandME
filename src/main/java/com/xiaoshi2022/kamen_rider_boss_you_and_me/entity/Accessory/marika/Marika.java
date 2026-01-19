@@ -69,10 +69,10 @@ public class Marika extends ArmorItem implements GeoItem , KamenBossArmor, Armor
             public Ingredient getRepairIngredient() {
                 return Ingredient.of(Items.GOLD_INGOT);
             }
-            // 材质名
+            // 材质名 - 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
             @Override
             public String getName() {
-                return "marika";
+                return "netherite";
             }
 
         }, type, properties);

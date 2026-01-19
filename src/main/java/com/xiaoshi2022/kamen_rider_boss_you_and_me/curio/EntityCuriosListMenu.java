@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.curio;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.EliteMonster.EliteMonsterNpc;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -112,15 +111,9 @@ public class EntityCuriosListMenu extends AbstractContainerMenu {
                     // 检查目标实体是否为僵尸或百界实体（EliteMonsterNpc）
                     boolean isRestrictedEntity = target instanceof Zombie || target instanceof EliteMonsterNpc;
                     
-                    // 获取打开菜单的玩家（通常是当前玩家）
-                    Player player = Minecraft.getInstance().player;
-                    
-                    // 对于僵尸和百界实体，只有创造模式可以放入物品
-                    if (isRestrictedEntity && player != null) {
-                        return player.isCreative();
-                    }
-                    
-                    // 其他实体保持原有行为
+                    // 对于服务器端，mayPlace方法不应依赖客户端Minecraft实例
+                    // 移除对Minecraft.getInstance().player的引用
+                    // 允许所有物品放入，权限检查在其他地方处理
                     return true;
                 }
 

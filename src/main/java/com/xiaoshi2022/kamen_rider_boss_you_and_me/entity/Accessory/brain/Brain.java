@@ -63,10 +63,10 @@ public class Brain extends ArmorItem implements GeoItem, KamenBossArmor, ArmorAn
                 return Ingredient.of(Items.EMERALD, Items.GOLD_INGOT); // 钻石和金锭象征高贵
             }
 
-            // 材质名称
+            // 材质名称 - 使用内置的netherite材质，避免Minecraft尝试加载不存在的brain_layer_1.png纹理
             @Override
             public String getName() {
-                return "brain";
+                return "netherite";
             }
 
             // 韧性

@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -448,9 +448,9 @@ public class TyrantAbilityHandler {
         if (isShiftPressed && !wasShiftPressed) {
             // 使用玩家交互来触发服务端的相位穿透
             // 这里设置使用键为按下状态，触发交互事件
-            Minecraft.getInstance().options.keyUse.setDown(true);
+            net.minecraft.client.Minecraft.getInstance().options.keyUse.setDown(true);
             // 立即设置为抬起，以模拟点击效果
-            Minecraft.getInstance().options.keyUse.setDown(false);
+            net.minecraft.client.Minecraft.getInstance().options.keyUse.setDown(false);
         }
 
         // 更新Shift键状态
@@ -802,12 +802,23 @@ public class TyrantAbilityHandler {
         public static void handle(IntangibilitySyncPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
             NetworkEvent.Context context = contextSupplier.get();
             context.enqueueWork(() -> {
-                // 在客户端更新玩家的虚化状态
-                if (Minecraft.getInstance().level != null) {
-                    if (packet.isIntangible) {
-                        INTANGIBLE_PLAYERS.put(packet.playerId, 0);
-                    } else {
-                        INTANGIBLE_PLAYERS.remove(packet.playerId);
+                // 只在客户端处理
+                if (context.getDirection().getReceptionSide().isClient()) {
+                    try {
+                        // 使用完整类名并进行客户端检查
+                        Class<?> minecraftClass = Class.forName("net.minecraft.client.Minecraft");
+                        Object minecraftInstance = minecraftClass.getMethod("getInstance").invoke(null);
+                        Object level = minecraftClass.getMethod("getLevel").invoke(minecraftInstance);
+                        
+                        if (level != null) {
+                            if (packet.isIntangible) {
+                                INTANGIBLE_PLAYERS.put(packet.playerId, 0);
+                            } else {
+                                INTANGIBLE_PLAYERS.remove(packet.playerId);
+                            }
+                        }
+                    } catch (Exception e) {
+                        // 如果在服务端，忽略这个错误
                     }
                 }
             });

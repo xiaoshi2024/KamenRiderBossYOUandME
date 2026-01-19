@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
@@ -61,7 +60,7 @@ public class ParticleEffectPacket {
      * 在客户端生成粒子效果
      */
     private static void spawnParticlesOnClient(ParticleEffectPacket packet) {
-        Minecraft minecraft = Minecraft.getInstance();
+        net.minecraft.client.Minecraft minecraft = net.minecraft.client.Minecraft.getInstance();
         if (minecraft.level == null) return;
         
         DustParticleOptions particleOptions = new DustParticleOptions(new Vector3f(packet.r, packet.g, packet.b), 1.0F);

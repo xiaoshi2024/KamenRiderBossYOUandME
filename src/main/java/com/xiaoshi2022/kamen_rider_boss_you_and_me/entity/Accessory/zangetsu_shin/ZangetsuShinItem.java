@@ -69,10 +69,10 @@ public class ZangetsuShinItem extends ArmorItem implements GeoItem , KamenBossAr
             public Ingredient getRepairIngredient() {
                 return Ingredient.of(Items.CHORUS_FRUIT);
             }
-            // 材质名
+            // 材质名 - 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
             @Override
             public String getName() {
-                return "zangetsu_shin";
+                return "netherite";
             }
 
         }, type, properties);

@@ -75,10 +75,10 @@ public class DarkRiderGhostItem extends ArmorItem implements GeoItem, KamenBossA
                 return Ingredient.of(Items.NETHERITE_INGOT, Items.ENDER_EYE);
             }
 
-            // 材质名称
+            // 材质名称 - 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
             @Override
             public String getName() {
-                return "dark_rider_ghost";
+                return "netherite";
             }
 
         }, type, properties);

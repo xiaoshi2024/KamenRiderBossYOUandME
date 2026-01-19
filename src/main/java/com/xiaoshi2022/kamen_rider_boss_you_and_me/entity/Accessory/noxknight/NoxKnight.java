@@ -63,10 +63,10 @@ public class NoxKnight extends ArmorItem implements GeoItem, KamenBossArmor, Arm
                 return Ingredient.of(Items.EMERALD, Items.GOLD_INGOT);
             }
 
-            // 材质名称
+            // 材质名称 - 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
             @Override
             public String getName() {
-                return "nox_knight";
+                return "netherite";
             }
 
             // 韧性

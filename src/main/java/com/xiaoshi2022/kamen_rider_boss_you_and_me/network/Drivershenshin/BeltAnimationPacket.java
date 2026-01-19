@@ -1,13 +1,15 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.DistExecutor;
 import top.theillusivec4.curios.api.CuriosCapability;
 
 import java.util.function.Supplier;
@@ -103,41 +105,48 @@ public class BeltAnimationPacket {
 
     public static void handle(BeltAnimationPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            if (Minecraft.getInstance().level == null) return;
-            Entity e = Minecraft.getInstance().level.getEntity(msg.entityId);
-            if (!(e instanceof LivingEntity living)) return;
-
-            living.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
-                // 遍历所有槽位，找到对应的腰带物品
-                curios.getCurios().forEach((identifier, stacksHandler) -> {
-                    for (int i = 0; i < stacksHandler.getSlots(); i++) {
-                        ItemStack stack = stacksHandler.getStacks().getStackInSlot(i);
-                        if (stack.isEmpty()) continue;
-                        
-                        Item item = stack.getItem();
-                        
-                        if (item instanceof sengokudrivers_epmty s) {
-                            s.triggerAnim(living, "controller", msg.animationName);
-                        } else if (item instanceof Genesis_driver g) {
-                            g.triggerAnim(living, "controller", msg.animationName);
-                        } else if (item instanceof DrakKivaBelt dk) {
-                            dk.triggerAnim(living, "controller", msg.animationName);
-                        } else if (item instanceof GhostDriver ghost) {
-                            ghost.triggerAnim(living, "controller", msg.animationName);
-                        } else if (item instanceof Two_sidriver ts) {
-                            ts.triggerAnim(living, "controller", msg.animationName);
-                        } else if (item instanceof Mega_uiorder mu) {
-                            mu.triggerAnim(living, "controller", msg.animationName);
-                        } else if (item instanceof BrainDriver brain) {
-                            brain.triggerAnim(living, "controller", msg.animationName);
-                        } else if (item instanceof KnightInvokerBuckle ki) {
-                            ki.triggerAnim(living, "controller", msg.animationName);
-                        }
-                    }
-                });
-            });
+            if (ctx.get().getDirection().getReceptionSide().isClient()) {
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleClient(msg.entityId, msg.animationName));
+            }
         });
         ctx.get().setPacketHandled(true);
+    }
+    
+    @OnlyIn(Dist.CLIENT)
+    private static void handleClient(int entityId, String animationName) {
+        if (net.minecraft.client.Minecraft.getInstance().level == null) return;
+        Entity e = net.minecraft.client.Minecraft.getInstance().level.getEntity(entityId);
+        if (!(e instanceof LivingEntity living)) return;
+
+        living.getCapability(CuriosCapability.INVENTORY).ifPresent(curios -> {
+            // 遍历所有槽位，找到对应的腰带物品
+            curios.getCurios().forEach((identifier, stacksHandler) -> {
+                for (int i = 0; i < stacksHandler.getSlots(); i++) {
+                    ItemStack stack = stacksHandler.getStacks().getStackInSlot(i);
+                    if (stack.isEmpty()) continue;
+                    
+                    Item item = stack.getItem();
+                    
+                    if (item instanceof sengokudrivers_epmty s) {
+                        s.triggerAnim(living, "controller", animationName);
+                    } else if (item instanceof Genesis_driver g) {
+                        g.triggerAnim(living, "controller", animationName);
+                    } else if (item instanceof DrakKivaBelt dk) {
+                        dk.triggerAnim(living, "controller", animationName);
+                    } else if (item instanceof GhostDriver ghost) {
+                        ghost.triggerAnim(living, "controller", animationName);
+                    } else if (item instanceof Two_sidriver ts) {
+                        ts.triggerAnim(living, "controller", animationName);
+                    } else if (item instanceof Mega_uiorder mu) {
+                        mu.triggerAnim(living, "controller", animationName);
+                    } else if (item instanceof BrainDriver brain) {
+                        brain.triggerAnim(living, "controller", animationName);
+                    } else if (item instanceof KnightInvokerBuckle ki) {
+                        ki.triggerAnim(living, "controller", animationName);
+                    }
+                }
+            });
+        });
     }
 
 

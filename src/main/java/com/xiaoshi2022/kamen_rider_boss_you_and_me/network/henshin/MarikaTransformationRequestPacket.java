@@ -113,11 +113,10 @@ public class MarikaTransformationRequestPacket {
                 "kamen_rider_boss_you_and_me",
                 "lemon_lockonby"
         );
-        PacketHandler.sendToAllTracking(
+        PacketHandler.sendToAllTrackingAndSelf(
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         System.out.println(">>>>> 4. will call startHenshinAnimation");
 

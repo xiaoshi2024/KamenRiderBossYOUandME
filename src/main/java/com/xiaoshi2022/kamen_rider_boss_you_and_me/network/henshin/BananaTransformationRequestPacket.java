@@ -80,13 +80,12 @@ public class BananaTransformationRequestPacket {
         // 停止待机音效
         ResourceLocation soundLoc = new ResourceLocation(
                 "kamen_rider_boss_you_and_me",
-                "bananaby"
+                "banana_lockby"
         );
-        PacketHandler.sendToAllTracking(
+        PacketHandler.sendToAllTrackingAndSelf(
                 new SoundStopPacket(player.getId(), soundLoc),
                 player
         );
-        PacketHandler.sendToServer(new SoundStopPacket(player.getId(), soundLoc));
 
         // 广播变身动画
         PacketHandler.sendToAllTracking(

@@ -50,11 +50,10 @@ public final class KnightInvokerSequence {
                         "nox_b"
                 );
                 // 只发送给当前玩家
-                PacketHandler.sendToClient(
+                PacketHandler.sendToAllTrackingAndSelf(
                         new SoundStopPacket(player.getId(), noxBoundLoc),
                         player
                 );
-                PacketHandler.sendToServer(new SoundStopPacket(player.getId(), noxBoundLoc));
 
                 // 启动变身动画
                 belt.startHenshinAnimation(player, beltStack);

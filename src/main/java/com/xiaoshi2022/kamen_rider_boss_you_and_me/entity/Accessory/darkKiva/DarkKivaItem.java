@@ -66,7 +66,7 @@ public class DarkKivaItem extends ArmorItem implements GeoItem, KamenBossArmor, 
 
             @Override
             public String getName() {
-                return "dark_kiva";
+                return "netherite"; // 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
             }
 
             // 盔甲韧性：提高至5.0
