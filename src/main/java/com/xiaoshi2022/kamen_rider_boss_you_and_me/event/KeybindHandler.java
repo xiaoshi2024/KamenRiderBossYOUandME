@@ -421,9 +421,9 @@ public class KeybindHandler {
                         sengokudrivers_epmty.BeltMode mode = belt.getMode(beltStack);
 
                         if (mode == sengokudrivers_epmty.BeltMode.BANANA) {
-                            // 发送香蕉解除变身请求
-                            PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "BARONS", true)); // true 表示是解除变身请求
+                            // 播放解除变身动画
                             belt.startReleaseAnimation(player,beltStack);
+                            // 设置延时，在动画播放完后再发送解除变身请求
                             delayTicks = 40;
                             delayedBeltStack = beltStack.copy();
                             handled.set(true);
@@ -431,8 +431,6 @@ public class KeybindHandler {
                             // 发送DarkOrange解除变身请求
                             PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.DarkOrangeReleaseRequestPacket(player.getUUID()));
                             belt.startReleaseAnimation(player,beltStack);
-                            delayTicks = 40;
-                            delayedBeltStack = beltStack.copy();
                             handled.set(true);
                         }
                     });

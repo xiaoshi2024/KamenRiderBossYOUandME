@@ -205,7 +205,7 @@ public class VillagerEquipDriverHandler {
         // 首先检查物品是否是Genesis_driver类型
         if (!(driverStack.getItem() instanceof Genesis_driver)) {
             // 如果不是Genesis_driver类型，记录警告但不崩溃
-            System.out.println("警告：尝试为非Genesis_driver类型的腰带处理村民变身");
+//            System.out.println("警告：尝试为非Genesis_driver类型的腰带处理村民变身");
             return; // 直接返回，避免类型转换错误
         }
         
