@@ -41,7 +41,10 @@ public class KkcikMessage {
 	public static void handler(KkcikMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
 		NetworkEvent.Context context = contextSupplier.get();
 		context.enqueueWork(() -> {
-			pressAction(context.getSender(), message.type, message.pressedms);
+			Player entity = context.getSender();
+			if (entity != null) {
+				pressAction(entity, message.type, message.pressedms);
+			}
 		});
 		context.setPacketHandled(true);
 	}

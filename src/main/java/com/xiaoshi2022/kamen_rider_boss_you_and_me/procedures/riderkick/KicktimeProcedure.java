@@ -143,16 +143,24 @@ public class KicktimeProcedure {
 				}
 				handleNapoleonGhostKick(world, entity);
 			} else if (helmet.getItem() == ModItems.BRAIN_HELMET.get()) {
-				// Brain骑士踢：无特效，只有抛物线移动
-				if (DEBUG && !world.isClientSide()) {
-					kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: BRAIN_HELMET detected on player {}", player.getScoreboardName());
+					// Brain骑士踢：无特效，只有抛物线移动
+					if (DEBUG && !world.isClientSide()) {
+						kamen_rider_boss_you_and_me.LOGGER.info("KicktimeProcedure: BRAIN_HELMET detected on player {}", player.getScoreboardName());
+					}
+					
+					// 检查玩家是否落地，如果落地则重置踢击状态
+					// 但只有当玩家已经在空中过（有垂直速度）时才重置
+					if (player.onGround() && Math.abs(entity.getDeltaMovement().y) < 0.1) {
+						resetKickStatus(player);
+						return;
+					}
+					
+					// 只处理动画和抛物线移动，不添加粒子特效
+					handleAnimation(world, entity);
+					syncAnimation(world, entity);
+					// 使用EVIL_BATS的抛物线移动逻辑，因为它提供了平滑的抛物线效果
+					handleEvilBatsParabolicMovement(world, entity);
 				}
-				// 只处理动画和抛物线移动，不添加粒子特效
-				handleAnimation(world, entity);
-				syncAnimation(world, entity);
-				// 使用EVIL_BATS的抛物线移动逻辑，因为它提供了平滑的抛物线效果
-				handleEvilBatsParabolicMovement(world, entity);
-			}
 		} else {
 			// 如果不在踢击状态，清理特效实体
 			cleanupEffectEntity(entity);
@@ -162,6 +170,13 @@ public class KicktimeProcedure {
 	// 处理 RIDERNECROM_HELMET 的骑士踢特效
 	private static void handleRidernecromKick(LevelAccessor world, Entity entity) {
 		if (world instanceof ServerLevel serverLevel && entity instanceof Player player) {
+			// 检查玩家是否落地，如果落地则重置踢击状态
+			// 但只有当玩家已经在空中过（有垂直速度）时才重置
+			if (player.onGround() && Math.abs(entity.getDeltaMovement().y) < 0.1) {
+				resetKickStatus(player);
+				return;
+			}
+
 			UUID playerId = player.getUUID();
 
 			// 检查是否已经为该玩家创建了特效实体
@@ -229,6 +244,13 @@ public class KicktimeProcedure {
 	// 处理 EVIL_BATS_HELMET 的骑士踢特效
 	private static void handleEvilBatsKick(LevelAccessor world, Entity entity) {
 		if (world instanceof ServerLevel serverLevel && entity instanceof Player player) {
+			// 检查玩家是否落地，如果落地则重置踢击状态
+			// 但只有当玩家已经在空中过（有垂直速度）时才重置
+			if (player.onGround() && Math.abs(entity.getDeltaMovement().y) < 0.1) {
+				resetKickStatus(player);
+				return;
+			}
+
 			UUID playerId = player.getUUID();
 
 			// 检查是否已经为该玩家创建了特效实体
@@ -296,6 +318,13 @@ public class KicktimeProcedure {
 	// 处理 DARK_RIDER_HELMET 的骑士踢特效
 	private static void handleDarkGhostKick(LevelAccessor world, Entity entity) {
 		if (world instanceof ServerLevel serverLevel && entity instanceof Player player) {
+			// 检查玩家是否落地，如果落地则重置踢击状态
+			// 但只有当玩家已经在空中过（有垂直速度）时才重置
+			if (player.onGround() && Math.abs(entity.getDeltaMovement().y) < 0.1) {
+				resetKickStatus(player);
+				return;
+			}
+
 			UUID playerId = player.getUUID();
 
 			// 检查是否已经为该玩家创建了特效实体
@@ -379,13 +408,15 @@ public class KicktimeProcedure {
 				.orElse(new KRBVariables.PlayerVariables());
 
 		if (variables.kickStartTime == 0L) {
-			// 第一次执行踢击，初始化
-			variables.kickStartTime = System.currentTimeMillis();
-			newY = 0.4; // 初始向上速度
-		} else {
-			// 简单的重力模拟：每tick减少速度
-			newY = currentY - 0.08;
-		}
+				// 第一次执行踢击，初始化
+				variables.kickStartTime = System.currentTimeMillis();
+				// 保持当前的向上速度，不要重置为固定值
+				// 这样就能保留KkcikAnXiaAnJianShiProcedure中设置的较大速度
+				newY = currentY;
+			} else {
+				// 简单的重力模拟：每tick减少速度
+				newY = currentY - 0.08;
+			}
 
 		// 限制最大下落速度
 		if (newY < -1.0) {
@@ -481,8 +512,7 @@ public class KicktimeProcedure {
 	// 检查是否正在踢击
 	private static boolean isKicking(Entity entity) {
 		return (entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-				.orElse(new KRBVariables.PlayerVariables())).kick
-				&& !entity.onGround();
+				.orElse(new KRBVariables.PlayerVariables())).kick;
 	}
 
 	// 获取头盔
@@ -495,6 +525,13 @@ public class KicktimeProcedure {
 
 	// 处理踢击逻辑
 	private static void handleKick(LevelAccessor world, Entity entity, ParticleOptions particleOptions) {
+		// 检查玩家是否落地，如果落地则重置踢击状态
+		// 但只有当玩家已经在空中过（有垂直速度）时才重置
+		if (entity instanceof Player player && player.onGround() && Math.abs(entity.getDeltaMovement().y) < 0.1) {
+			resetKickStatus(player);
+			return;
+		}
+
 		// 设置移动速度 - 更简单的抛物线实现
 		Vec3 look = entity.getLookAngle();
 
@@ -512,13 +549,15 @@ public class KicktimeProcedure {
 				.orElse(new KRBVariables.PlayerVariables());
 
 		if (variables.kickStartTime == 0L) {
-			// 第一次执行踢击，初始化
-			variables.kickStartTime = System.currentTimeMillis();
-			newY = 0.4; // 初始向上速度
-		} else {
-			// 简单的重力模拟：每tick减少速度
-			newY = currentY - 0.08;
-		}
+				// 第一次执行踢击，初始化
+				variables.kickStartTime = System.currentTimeMillis();
+				// 保持当前的向上速度，不要重置为固定值
+				// 这样就能保留KkcikAnXiaAnJianShiProcedure中设置的较大速度
+				newY = currentY;
+			} else {
+				// 简单的重力模拟：每tick减少速度
+				newY = currentY - 0.08;
+			}
 
 		// 限制最大下落速度
 		if (newY < -1.0) {
@@ -722,6 +761,13 @@ public class KicktimeProcedure {
 	// 处理 NAPOLEON_GHOST_HELMET 的特效和移动
 	private static void handleNapoleonGhostKick(LevelAccessor world, Entity entity) {
 		if (world instanceof ServerLevel serverLevel && entity instanceof Player player) {
+			// 检查玩家是否落地，如果落地则重置踢击状态
+			// 但只有当玩家已经在空中过（有垂直速度）时才重置
+			if (player.onGround() && Math.abs(entity.getDeltaMovement().y) < 0.1) {
+				resetKickStatus(player);
+				return;
+			}
+
 			UUID playerId = player.getUUID();
 
 			// 检查是否已经为该玩家创建了特效实体
