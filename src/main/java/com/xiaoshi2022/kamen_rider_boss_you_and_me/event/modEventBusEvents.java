@@ -50,7 +50,7 @@ import java.util.UUID;
 
 public class modEventBusEvents {
     
-    @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID, value = Dist.DEDICATED_SERVER)
+    @Mod.EventBusSubscriber(modid = kamen_rider_boss_you_and_me.MODID)
     public static class ServerEvents {
         @SubscribeEvent
         public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {

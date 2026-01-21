@@ -36,9 +36,10 @@ import static com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils.findFi
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", value = Dist.CLIENT)
 public class KeybindHandler {
-    private static boolean keyCooldown = false;
-    private static int delayTicks = 0;
-    private static ItemStack delayedBeltStack = ItemStack.EMPTY;
+    // 使用ThreadLocal来确保每个玩家有自己的状态，避免影响其他玩家
+    private static final ThreadLocal<Boolean> KEY_COOLDOWN = ThreadLocal.withInitial(() -> false);
+    private static final ThreadLocal<Integer> DELAY_TICKS = ThreadLocal.withInitial(() -> 0);
+    private static final ThreadLocal<ItemStack> DELAYED_BELT_STACK = ThreadLocal.withInitial(() -> ItemStack.EMPTY);
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
@@ -53,26 +54,26 @@ public class KeybindHandler {
             checkPeachLockSeedTimeout(player);
             checkDragonfruitLockSeedTimeout(player);
 
-            if (KeyBinding.RELIEVE_KEY.isDown() && !keyCooldown) {
-                keyCooldown = true;
-                handleKeyPress(player);
-            } else if (!KeyBinding.RELIEVE_KEY.isDown()) {
-                keyCooldown = false;
-            }
-            
-            // Z键临时取下眼魂
-            if (KeyBinding.KEY_BARRIER_PULL.isDown() && !keyCooldown) {
-                keyCooldown = true;
-                handleZKeyPress(player);
-            }
+            if (KeyBinding.RELIEVE_KEY.isDown() && !KEY_COOLDOWN.get()) {
+            KEY_COOLDOWN.set(true);
+            handleKeyPress(player);
+        } else if (!KeyBinding.RELIEVE_KEY.isDown()) {
+            KEY_COOLDOWN.set(false);
+        }
 
-            if (delayTicks > 0) {
-                delayTicks--;
-                if (delayTicks == 0 && !delayedBeltStack.isEmpty()) {
-                    PacketHandler.sendToServer(new ReleaseBeltPacket(true, getBeltType(delayedBeltStack)));
-                    delayedBeltStack = ItemStack.EMPTY;
-                }
+        // Z键临时取下眼魂
+        if (KeyBinding.KEY_BARRIER_PULL.isDown() && !KEY_COOLDOWN.get()) {
+            KEY_COOLDOWN.set(true);
+            handleZKeyPress(player);
+        }
+
+        if (DELAY_TICKS.get() > 0) {
+            DELAY_TICKS.set(DELAY_TICKS.get() - 1);
+            if (DELAY_TICKS.get() == 0 && !DELAYED_BELT_STACK.get().isEmpty()) {
+                PacketHandler.sendToServer(new ReleaseBeltPacket(true, getBeltType(DELAYED_BELT_STACK.get())));
+                DELAYED_BELT_STACK.set(ItemStack.EMPTY);
             }
+        }
         }
     }
 
@@ -100,8 +101,8 @@ public class KeybindHandler {
         // 获取PlayerVariables实例
         KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
 
-        // 如果玩家有樱桃就绪标记且不在冷却中
-        if (variables.cherry_ready && !keyCooldown) {
+        // 如果玩家有樱桃就绪标记
+        if (variables.cherry_ready) {
             long currentTime = player.level().getGameTime();
 
             // 如果超过30秒未变身，清除标记
@@ -236,18 +237,18 @@ public class KeybindHandler {
             // 检查玩家是否装备了魂灵驱动器
             Optional<SlotResult> ghostDriverSlot = findFirstCurio(player,
                     s -> s.getItem() instanceof GhostDriver);
-            
+
             if (ghostDriverSlot.isPresent()) {
                 ItemStack beltStack = ghostDriverSlot.get().stack();
                 GhostDriver belt = (GhostDriver) beltStack.getItem();
-                
+
                 // 检查腰带模式是否为DARK_RIDER_EYE
                 if (belt.getMode(beltStack) == GhostDriver.BeltMode.DARK_RIDER_EYE) {
                     // 播放解除变身动画
                     belt.startReleaseAnimation(player, beltStack);
                     // 设置延时，在动画播放完后再发送解除变身请求
-                    delayTicks = 40;
-                    delayedBeltStack = beltStack.copy();
+                    DELAY_TICKS.set(40);
+                    DELAYED_BELT_STACK.set(beltStack.copy());
                     // 发送解除变身请求
                     PacketHandler.sendToServer(new DarkGhostTransformationRequestPacket(true));
                     handled.set(true);
@@ -259,37 +260,37 @@ public class KeybindHandler {
             // 检查玩家是否装备了魂灵驱动器
             Optional<SlotResult> ghostDriverSlot = findFirstCurio(player,
                     s -> s.getItem() instanceof GhostDriver);
-            
+
             if (ghostDriverSlot.isPresent()) {
                 ItemStack beltStack = ghostDriverSlot.get().stack();
                 GhostDriver belt = (GhostDriver) beltStack.getItem();
-                
+
                 // 检查腰带模式是否为NAPOLEON_GHOST
                 if (belt.getMode(beltStack) == GhostDriver.BeltMode.NAPOLEON_GHOST) {
                     // 播放解除变身动画
                     belt.startReleaseAnimation(player, beltStack);
                     // 设置延时，在动画播放完后再发送解除变身请求
-                    delayTicks = 40;
-                    delayedBeltStack = beltStack.copy();
+                    DELAY_TICKS.set(40);
+                                    DELAYED_BELT_STACK.set(beltStack.copy());
                     // 发送解除变身请求
                     PacketHandler.sendToServer(new NapoleonGhostTransformationRequestPacket(true));
                     handled.set(true);
                 }
             }
         }
-        
+
         //幽冥逻辑
         // ✅ C 键解除 Necrom 变身
         if (!handled.get() && vars.isMegaUiorderTransformed) {
             // 检查玩家是否装备了Mega_uiorder手环
             Optional<SlotResult> megaSlot = findFirstCurio(player,
                     s -> s.getItem() instanceof Mega_uiorder);
-            
+
             // 如果装备了手环，检查是否处于NECROM_EYE模式
             if (megaSlot.isPresent()) {
                 ItemStack beltStack = megaSlot.get().stack();
                 Mega_uiorder belt = (Mega_uiorder) beltStack.getItem();
-                
+
                 if (belt.getCurrentMode(beltStack) == Mega_uiorder.Mode.NECROM_EYE) {
                     // 客户端 KeybindHandler.java
                     PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), RiderTypes.RIDERNECROM, true));
@@ -301,7 +302,7 @@ public class KeybindHandler {
                 }
             }
         }
-        
+
         // 检查玩家是否穿着Necrom盔甲并触发眼魔机制
         checkAndTriggerNecromArmorMechanism(player);
 
@@ -315,15 +316,15 @@ public class KeybindHandler {
                         switch (mode) {
                             case LEMON -> {
                                 // 先判断是变身还是解除
-                                boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.BARON_LEMON_HELMET.get() || 
+                                boolean isTransformeds = player.getInventory().armor.get(3).getItem() == ModItems.BARON_LEMON_HELMET.get() ||
                                                         player.getInventory().armor.get(3).getItem() == ModItems.ZANGETSU_SHIN_HELMET.get() ||
                                                         player.getInventory().armor.get(3).getItem() == ModItems.DUKE_HELMET.get();
                                 if (isTransformeds) {
                                     // 先播放动画
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
-                                    delayTicks = 40;
-                                    delayedBeltStack = beltStack.copy();
+                                    DELAY_TICKS.set(40);
+                                    DELAYED_BELT_STACK.set(beltStack.copy());
                                     handled.set(true);
                                 }
                             }
@@ -334,8 +335,8 @@ public class KeybindHandler {
                                     // 先播放动画
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
-                                    delayTicks = 40;
-                                    delayedBeltStack = beltStack.copy();
+                                    DELAY_TICKS.set(40);
+                                    DELAYED_BELT_STACK.set(beltStack.copy());
                                     handled.set(true);
                                 } else {
                                     // 变身
@@ -350,8 +351,8 @@ public class KeybindHandler {
                                     // 先播放动画
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
-                                    delayTicks = 40;
-                                    delayedBeltStack = beltStack.copy();
+                                    DELAY_TICKS.set(40);
+                                    DELAYED_BELT_STACK.set(beltStack.copy());
                                     handled.set(true);
                                 } else {
                                     // 变身
@@ -366,8 +367,8 @@ public class KeybindHandler {
                                     // 先播放动画
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
-                                    delayTicks = 40;
-                                    delayedBeltStack = beltStack.copy();
+                                    DELAY_TICKS.set(40);
+                                    DELAYED_BELT_STACK.set(beltStack.copy());
                                     handled.set(true);
                                 } else {
                                     // 变身
@@ -382,8 +383,8 @@ public class KeybindHandler {
                                     // 先播放动画
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
-                                    delayTicks = 40;
-                                    delayedBeltStack = beltStack.copy();
+                                    DELAY_TICKS.set(40);
+                                    DELAYED_BELT_STACK.set(beltStack.copy());
                                     handled.set(true);
                                 }
                                 // 移除C键触发变身的功能，只保留解除变身功能
@@ -405,8 +406,8 @@ public class KeybindHandler {
                         if (isDarkKiva) {
                             // 发送解除变身请求
                             PacketHandler.sendToServer(new TransformationRequestPacket(player.getUUID(), "DARK_KIVA", true));
-                            delayTicks = 60;
-                            delayedBeltStack = beltStack.copy();
+                            DELAY_TICKS.set(60);
+                            DELAYED_BELT_STACK.set(beltStack.copy());
                             handled.set(true);
                         }
                     });
@@ -424,8 +425,8 @@ public class KeybindHandler {
                             // 播放解除变身动画
                             belt.startReleaseAnimation(player,beltStack);
                             // 设置延时，在动画播放完后再发送解除变身请求
-                            delayTicks = 40;
-                            delayedBeltStack = beltStack.copy();
+                            DELAY_TICKS.set(40);
+                            DELAYED_BELT_STACK.set(beltStack.copy());
                             handled.set(true);
                         } else if (mode == sengokudrivers_epmty.BeltMode.ORANGELS) {
                             // 发送DarkOrange解除变身请求
@@ -711,6 +712,9 @@ public class KeybindHandler {
                 belt.startReleaseWithPlayerAnimation(player, newStack);
                 
                 belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
+                // 重置腰带状态 - 在newStack上操作
+                belt.setEquipped(newStack, false);
+                belt.setHenshin(newStack, false);
 
                 CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
                         slotResult.slotContext().index(), newStack);
@@ -745,9 +749,7 @@ public class KeybindHandler {
                     System.out.println("柠檬锁种已添加到玩家背包");
                 }
 
-                // 重置腰带状态
-                belt.setEquipped(beltStack, false);
-                belt.setHenshin(beltStack, false);
+                
 
                 // 同步状态
                 player.inventoryMenu.broadcastChanges();
@@ -772,6 +774,10 @@ public class KeybindHandler {
         
         // 1. 重置腰带模式
         belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
+        // 重置腰带状态 - 在newStack上操作
+        belt.setEquipped(newStack, false);
+        belt.setHenshin(newStack, false);
+        
         SlotResult slotResult = curio.get();
         CurioUtils.updateCurioSlot(
                 player,
@@ -800,9 +806,7 @@ public class KeybindHandler {
         ItemStack melonLockSeed = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.MELON.get());
         if (!player.getInventory().add(melonLockSeed)) player.spawnAtLocation(melonLockSeed);
 
-        // 6. 重置腰带状态
-        belt.setEquipped(beltStack, false);
-        belt.setHenshin(beltStack, false);
+        
 
         // 7. 重置火龙果变身时间
         KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());

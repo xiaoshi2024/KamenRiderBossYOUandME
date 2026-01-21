@@ -69,10 +69,14 @@ public class TyrantAbilityHandler {
     private static final float INTANGIBILITY_BREAK_THRESHOLD = 60.0f; // 打破虚化的伤害阈值
     private static final Map<UUID, Integer> INTANGIBLE_PLAYERS = new HashMap<>(); // 存储虚化状态的玩家
     private static final Map<UUID, Integer> INTANGIBILITY_TIMERS = new HashMap<>(); // 存储虚化剩余时间
+    private static final Map<UUID, Double> TAKE_OFF_HEIGHTS = new HashMap<>(); // 存储玩家起飞高度
+    private static final double MAX_FLIGHT_HEIGHT_ABOVE_TAKE_OFF = 8.0; // 最大飞行高度（相对于起飞高度）
 
     // 相位传送相关常量
     private static final int TELEPORT_RANGE = 20; // 最大传送距离
-    private static final int TELEPORT_ENERGY_COST = 10; // 每次传送消耗的能量
+    private static final int TELEPORT_ENERGY_COST = 15; // 每次传送消耗的能量
+    private static final int TELEPORT_COOLDOWN = 100; // 100 tick = 5秒冷却
+    private static final Map<UUID, Long> TELEPORT_COOLDOWNS = new HashMap<>(); // 存储传送冷却时间
 
     /* ---------------- 常驻被动 ---------------- */
 
@@ -158,7 +162,11 @@ public class TyrantAbilityHandler {
     }
 
     // 虚化技能相关常量
-    private static final int ENERGY_COST = 60; // 虚化技能消耗的骑士能量
+    private static final int ENERGY_COST = 80; // 虚化技能消耗的骑士能量
+    private static final int INTANGIBILITY_COOLDOWN = 600; // 虚化技能冷却时间（30秒）
+    private static final int PHASE_PENETRATION_COOLDOWN = 50; // 相位穿透冷却时间（2.5秒）
+    private static final Map<UUID, Long> PHASE_PENETRATION_COOLDOWNS = new HashMap<>(); // 存储相位穿透冷却时间
+    private static final Map<UUID, Long> INTANGIBILITY_COOLDOWNS = new HashMap<>(); // 存储虚化技能冷却时间
 
     // 用于跟踪Shift键状态，防止连续触发
     private static final Map<UUID, Boolean> SHIFT_PRESSED = new HashMap<>();
@@ -170,6 +178,20 @@ public class TyrantAbilityHandler {
      */
     public static void performPhaseTeleport(Player player) {
         if (player.level().isClientSide()) return;
+        UUID playerId = player.getUUID();
+        long currentTime = player.level().getGameTime();
+        
+        // 检查冷却时间
+        if (TELEPORT_COOLDOWNS.containsKey(playerId)) {
+            long lastTeleportTime = TELEPORT_COOLDOWNS.get(playerId);
+            if (currentTime - lastTeleportTime < TELEPORT_COOLDOWN) {
+                if (player instanceof ServerPlayer) {
+                    int remainingTicks = (int) (TELEPORT_COOLDOWN - (currentTime - lastTeleportTime));
+                    player.displayClientMessage(Component.literal("相位传送冷却中，还剩 " + remainingTicks / 20 + " 秒"), true);
+                }
+                return;
+            }
+        }
 
         // 检查骑士能量是否足够
         if (!RiderEnergyHandler.consumeRiderEnergy(player, TELEPORT_ENERGY_COST)) {
@@ -178,6 +200,9 @@ public class TyrantAbilityHandler {
             }
             return;
         }
+        
+        // 更新冷却时间
+        TELEPORT_COOLDOWNS.put(playerId, currentTime);
 
         // 计算视线轨迹
         Vec3 startPos = player.getEyePosition();
@@ -307,6 +332,20 @@ public class TyrantAbilityHandler {
             // 解除虚化状态
             deactivateIntangibility(player);
         } else {
+            long currentTime = player.level().getGameTime();
+            
+            // 检查冷却时间
+            if (INTANGIBILITY_COOLDOWNS.containsKey(playerId)) {
+                long lastUsedTime = INTANGIBILITY_COOLDOWNS.get(playerId);
+                if (currentTime - lastUsedTime < INTANGIBILITY_COOLDOWN) {
+                    if (player instanceof ServerPlayer) {
+                        int remainingTicks = (int) (INTANGIBILITY_COOLDOWN - (currentTime - lastUsedTime));
+                        player.displayClientMessage(Component.literal("虚化技能冷却中，还剩 " + remainingTicks / 20 + " 秒"), true);
+                    }
+                    return;
+                }
+            }
+            
             // 检查骑士能量是否足够激活持续模式
             if (!RiderEnergyHandler.consumeRiderEnergy(player, ENERGY_COST)) {
                 if (player instanceof ServerPlayer) {
@@ -328,6 +367,8 @@ public class TyrantAbilityHandler {
 
         INTANGIBLE_PLAYERS.put(playerId, 0);
         INTANGIBILITY_TIMERS.put(playerId, INTANGIBILITY_MAX_DURATION);
+        // 记录起飞高度
+        TAKE_OFF_HEIGHTS.put(playerId, player.getY());
         player.displayClientMessage(Component.literal("虚化模式已激活 - 持续60秒，获得飞行能力和相位穿透能力"), true);
 
         // 在服务端启用飞行能力
@@ -352,10 +393,16 @@ public class TyrantAbilityHandler {
      */
     private static void deactivateIntangibility(Player player) {
         UUID playerId = player.getUUID();
+        long currentTime = player.level().getGameTime();
 
         INTANGIBLE_PLAYERS.remove(playerId);
         INTANGIBILITY_TIMERS.remove(playerId);
+        TAKE_OFF_HEIGHTS.remove(playerId); // 清理起飞高度记录
         SHIFT_PRESSED.remove(playerId); // 清理Shift状态
+        
+        // 设置虚化技能冷却时间
+        INTANGIBILITY_COOLDOWNS.put(playerId, currentTime);
+        
         player.displayClientMessage(Component.literal("虚化模式已解除"), true);
 
         // 在服务端禁用飞行能力
@@ -399,6 +446,20 @@ public class TyrantAbilityHandler {
                     // 时间到，解除虚化模式
                     deactivateIntangibility(player);
                 } else {
+                    // 检查飞行高度限制
+                    Double takeOffHeight = TAKE_OFF_HEIGHTS.get(playerId);
+                    if (takeOffHeight != null) {
+                        double currentHeight = player.getY();
+                        if (currentHeight - takeOffHeight > MAX_FLIGHT_HEIGHT_ABOVE_TAKE_OFF) {
+                            // 超过高度限制，解除虚化模式
+                            if (player instanceof ServerPlayer serverPlayer) {
+                                serverPlayer.displayClientMessage(Component.literal("飞行高度超过限制，虚化模式已解除"), true);
+                            }
+                            deactivateIntangibility(player);
+                            return;
+                        }
+                    }
+                    
                     INTANGIBILITY_TIMERS.put(playerId, remainingTime);
 
                     // 确保飞行能力持续生效
@@ -479,11 +540,27 @@ public class TyrantAbilityHandler {
      * 执行直接相位穿透（直接穿过前方的方块）
      */
     private static void performDirectPhasePenetration(ServerPlayer player) {
+        UUID playerId = player.getUUID();
+        long currentTime = player.level().getGameTime();
+        
+        // 检查冷却时间
+        if (PHASE_PENETRATION_COOLDOWNS.containsKey(playerId)) {
+            long lastPenetrationTime = PHASE_PENETRATION_COOLDOWNS.get(playerId);
+            if (currentTime - lastPenetrationTime < PHASE_PENETRATION_COOLDOWN) {
+                int remainingTicks = (int) (PHASE_PENETRATION_COOLDOWN - (currentTime - lastPenetrationTime));
+                player.displayClientMessage(Component.literal("相位穿透冷却中，还剩 " + remainingTicks / 20 + " 秒"), true);
+                return;
+            }
+        }
+        
         // 消耗少量能量用于传送
-        if (!RiderEnergyHandler.consumeRiderEnergy(player, 5)) {
-            player.displayClientMessage(Component.literal("骑士能量不足，需要 5 点能量进行相位穿透"), true);
+        if (!RiderEnergyHandler.consumeRiderEnergy(player, 8)) {
+            player.displayClientMessage(Component.literal("骑士能量不足，需要 8 点能量进行相位穿透"), true);
             return;
         }
+        
+        // 更新冷却时间
+        PHASE_PENETRATION_COOLDOWNS.put(playerId, currentTime);
 
         // 沿着视线方向寻找第一个安全的位置
         Vec3 startPos = player.position();

@@ -203,6 +203,8 @@ public class KRBVariables {
 	// 黑暗Kiva相关变量
     public boolean dark_kiva_bat_mode = false;    // 蝙蝠形态
     public long dark_kiva_bat_mode_time = 0L;     // 蝙蝠形态开始时间
+    public double dark_kiva_bat_mode_takeoff_height = 0.0D; // 蝙蝠形态起飞高度
+    public long dark_kiva_bat_mode_cooldown = 0L; // 蝙蝠形态冷却时间
     public boolean dark_kiva_blood_suck_active = false; // 吸血能力激活状态
     public long dark_kiva_blood_suck_cooldown = 0L; // 吸血能力冷却时间
     public boolean dark_kiva_sonic_blast_active = false; // 声波爆破激活状态
@@ -329,6 +331,8 @@ public class KRBVariables {
 		// 序列化黑暗Kiva相关变量
 		nbt.putBoolean("dark_kiva_bat_mode", dark_kiva_bat_mode);
 		nbt.putLong("dark_kiva_bat_mode_time", dark_kiva_bat_mode_time);
+		nbt.putDouble("dark_kiva_bat_mode_takeoff_height", dark_kiva_bat_mode_takeoff_height);
+		nbt.putLong("dark_kiva_bat_mode_cooldown", dark_kiva_bat_mode_cooldown);
 		nbt.putBoolean("dark_kiva_blood_suck_active", dark_kiva_blood_suck_active);
 		nbt.putLong("dark_kiva_fuuin_kekkai_cooldown", dark_kiva_fuuin_kekkai_cooldown);
 		nbt.putBoolean("dark_kiva_fuuin_kekkai_active", dark_kiva_fuuin_kekkai_active);
@@ -448,6 +452,8 @@ public class KRBVariables {
 		// 反序列化黑暗Kiva相关变量
 		dark_kiva_bat_mode = nbt.getBoolean("dark_kiva_bat_mode");
 		dark_kiva_bat_mode_time = nbt.getLong("dark_kiva_bat_mode_time");
+		dark_kiva_bat_mode_takeoff_height = nbt.getDouble("dark_kiva_bat_mode_takeoff_height");
+		dark_kiva_bat_mode_cooldown = nbt.getLong("dark_kiva_bat_mode_cooldown");
 		dark_kiva_blood_suck_active = nbt.getBoolean("dark_kiva_blood_suck_active");
 		dark_kiva_blood_suck_cooldown = nbt.getLong("dark_kiva_blood_suck_cooldown");
 		dark_kiva_sonic_blast_active = nbt.getBoolean("dark_kiva_sonic_blast_active");

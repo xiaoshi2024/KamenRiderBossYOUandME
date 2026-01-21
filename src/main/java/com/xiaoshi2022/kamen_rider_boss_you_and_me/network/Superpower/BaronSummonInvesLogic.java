@@ -74,7 +74,7 @@ public class BaronSummonInvesLogic {
         
         // 1. 播放召唤画
         if (!level.isClientSide()) {
-            PacketHandler.sendAnimationToAll(Component.literal("shows"), player.getId(), false);
+            PacketHandler.sendAnimationToAllTrackingAndSelf(Component.literal("shows"), player.getId(), false, player);
         }
         
         // 创建赫尔海姆裂缝并召唤异域者

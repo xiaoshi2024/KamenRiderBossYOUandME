@@ -32,12 +32,19 @@ import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, ICurioItem {
 
+    /* ----------------- 静态变量 ----------------- */
+    // 玩家级别冷却地图，用于防止多个腰带同时消耗果实
+    private static final Map<UUID, Integer> PLAYER_FRUIT_COOLDOWNS = new HashMap<>();
+    
     /* ----------------- 动画常量 ----------------- */
     private static final RawAnimation IDLES          = RawAnimation.begin().thenPlayAndHold("idles");
     private static final RawAnimation SHOW           = RawAnimation.begin().thenPlayAndHold("show");
@@ -281,18 +288,22 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
         }
 
         // 每5秒检查一次饱和效果，如果没有则尝试消耗赫尔海姆果实
-        if (sp.tickCount % 100 == 0) {
+        // 使用玩家级别冷却，避免多个腰带同时消耗果实
+        UUID playerId = sp.getUUID();
+        int lastConsumeTime = PLAYER_FRUIT_COOLDOWNS.getOrDefault(playerId, 0);
+        if (sp.tickCount - lastConsumeTime >= 100) {
             if (!sp.hasEffect(MobEffects.SATURATION)) {
                 // 尝试消耗背包中的赫尔海姆果实
                 if (consumeHelheimFruit(sp)) {
                     // 给予5分钟的饱和效果
                     sp.addEffect(new MobEffectInstance(MobEffects.SATURATION, 5 * 60 * 20, 0, true, false));
+                    // 同时增加5点饱食度
+                    sp.getFoodData().eat(5, 0.5f);
                     sp.sendSystemMessage(
-                            Component.literal("消耗了一颗赫尔海姆果实，获得了5分钟的饱和效果！")
+                            Component.literal("消耗了一颗赫尔海姆果实，获得了5分钟的饱和效果和5点饱食度！")
                     );
-                } else {
-                    // 如果没有果实，发送提示消息（限制频率，避免刷屏）
-                    // 提示已移除
+                    // 更新玩家级别的冷却时间
+                    PLAYER_FRUIT_COOLDOWNS.put(playerId, sp.tickCount);
                 }
             }
         }
@@ -304,43 +315,45 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
      * @return 是否成功消耗果实
      */
     private boolean consumeHelheimFruit(ServerPlayer player) {
-        // 定义赫尔海姆果实的物品列表（需要根据实际情况修改）
-        // 这里假设有一个通用的赫尔海姆果实物品
-        ItemStack fruitStack = findItemInInventory(player, ModItems.HELHEIMFRUIT.get());
-        
-        if (!fruitStack.isEmpty()) {
-            // 消耗一个果实
-            fruitStack.shrink(1);
-            return true;
+        // 再次检查玩家是否已经有饱和效果，避免多个腰带同时消耗果实
+        if (!player.hasEffect(MobEffects.SATURATION)) {
+            // 查找并消耗赫尔海姆果实
+            return findAndConsumeItem(player, ModItems.HELHEIMFRUIT.get());
         }
         return false;
     }
     
     /**
-     * 在玩家背包中查找指定物品
+     * 在玩家背包中查找并消耗指定物品
      * @param player 玩家
      * @param item 要查找的物品
-     * @return 找到的物品栈，如果没有找到则返回空栈
+     * @return 是否成功消耗
      */
-    private ItemStack findItemInInventory(Player player, Item item) {
+    private boolean findAndConsumeItem(Player player, Item item) {
         // 首先检查主手
         if (player.getMainHandItem().getItem() == item) {
-            return player.getMainHandItem();
+            player.getMainHandItem().shrink(1);
+            return true;
         }
         
         // 检查副手
         if (player.getOffhandItem().getItem() == item) {
-            return player.getOffhandItem();
+            player.getOffhandItem().shrink(1);
+            return true;
         }
         
         // 检查背包
-        for (ItemStack stack : player.getInventory().items) {
+        for (int i = 0; i < player.getInventory().items.size(); i++) {
+            ItemStack stack = player.getInventory().items.get(i);
             if (stack.getItem() == item) {
-                return stack;
+                stack.shrink(1);
+                // 更新玩家背包
+                player.getInventory().items.set(i, stack);
+                return true;
             }
         }
         
-        return ItemStack.EMPTY;
+        return false;
     }
 
     /* -------------- 同步 -------------- */

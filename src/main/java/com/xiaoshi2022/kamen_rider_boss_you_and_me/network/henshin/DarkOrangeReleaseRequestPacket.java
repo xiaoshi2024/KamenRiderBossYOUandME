@@ -48,9 +48,10 @@ public class DarkOrangeReleaseRequestPacket {
 
                 if (success) {
                     // 广播解除变身状态
-                    // 使用sendToAll确保所有客户端（包括新加入的玩家）都能接收解除变身状态同步信息
-                    PacketHandler.sendToAll(
-                            new SyncTransformationPacket(player.getId(), "NONE", false)
+                    // 使用sendToAllTrackingAndSelf确保只有相关玩家能接收解除变身状态同步信息
+                    PacketHandler.sendToAllTrackingAndSelf(
+                            new SyncTransformationPacket(player.getId(), "NONE", false),
+                            player
                     );
                 }
             }
@@ -115,8 +116,8 @@ public class DarkOrangeReleaseRequestPacket {
         // 清除变身装甲
         clearTransformationArmor(player);
 
-        // 更新隐身状态
-        com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager.updateInvisibility(player);
+        // 移除隐身效果，不再使用客户端方法在服务器端调用
+        player.removeEffect(MobEffects.INVISIBILITY);
 
         // 同时返还橘子和柠檬锁种
         belt.setMode(beltStack, sengokudrivers_epmty.BeltMode.DEFAULT);

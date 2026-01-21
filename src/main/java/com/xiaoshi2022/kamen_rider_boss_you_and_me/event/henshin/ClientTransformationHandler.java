@@ -95,7 +95,7 @@ public class ClientTransformationHandler {
 
         switch (soundName) {
             case "dark_orange_henshin":
-                soundEvent = ModBossSounds.ORANGEBY.get();
+                soundEvent = ModBossSounds.JIMBAR_LEMON.get();
                 break;
             case "lock_off":
                 soundEvent = ModBossSounds.LOCKOFF.get();

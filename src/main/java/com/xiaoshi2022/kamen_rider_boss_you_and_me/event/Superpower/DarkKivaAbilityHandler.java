@@ -30,16 +30,18 @@ public final class DarkKivaAbilityHandler {
 
     // 修改飞行时间：50秒 = 1000 ticks (20 ticks/秒)
     private static final int BAT_MODE_DURATION = 1000;
-    private static final int BLOOD_SUCK_COOLDOWN = 100;
-    private static final int SONIC_BLAST_COOLDOWN = 200;
-    private static final int BLOOD_STEAL_INTERVAL = 100;
+    private static final int BLOOD_SUCK_COOLDOWN = 150;
+    private static final int SONIC_BLAST_COOLDOWN = 250;
+    private static final int BLOOD_STEAL_INTERVAL = 150;
     private static final float BLOOD_STEAL_AMOUNT = 2.0f;
-    private static final int FUUIN_KEKKAI_COOLDOWN = 300;
+    private static final int FUUIN_KEKKAI_COOLDOWN = 600;
 
     private static final float BLOOD_SUCK_RANGE = 4.0f;
     private static final float BLOOD_SUCK_AMOUNT = 4.0f;
     private static final float SONIC_BLAST_RANGE = 6.0f;
     private static final float SONIC_BLAST_DAMAGE = 6.0f;
+    private static final double MAX_BAT_MODE_HEIGHT_ABOVE_TAKEOFF = 14.0; // 蝙蝠形态最大飞行高度（相对于起飞高度）
+    private static final int BAT_MODE_COOLDOWN = 600; // 蝙蝠形态冷却时间（30秒）
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent e) {
@@ -94,6 +96,7 @@ public final class DarkKivaAbilityHandler {
         if (!DarkKivaItem.isFullArmorEquipped(sp) || !sp.isAlive() || isPlayerSealBarrierControlled(sp)) return;
 
         KRBVariables.PlayerVariables variables = sp.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+        long currentTime = sp.level().getGameTime();
 
         // 检查是否已经有其他飞行模式在控制
         if (variables.currentFlightController != null && !variables.currentFlightController.equals("DarkKiva") && variables.dark_kiva_bat_mode) {
@@ -101,6 +104,9 @@ public final class DarkKivaAbilityHandler {
             variables.dark_kiva_bat_mode = false;
             sp.removeEffect(MobEffects.MOVEMENT_SPEED);
             variables.currentFlightController = null;
+            
+            // 设置冷却时间
+            variables.dark_kiva_bat_mode_cooldown = currentTime + BAT_MODE_COOLDOWN;
             
             // 恢复飞行能力状态（如果不是创造模式或旁观者模式，取消飞行能力）
             if (!sp.isCreative() && !sp.isSpectator()) {
@@ -116,6 +122,9 @@ public final class DarkKivaAbilityHandler {
             sp.removeEffect(MobEffects.MOVEMENT_SPEED);
             variables.currentFlightController = null;
             
+            // 设置冷却时间
+            variables.dark_kiva_bat_mode_cooldown = currentTime + BAT_MODE_COOLDOWN;
+            
             // 恢复飞行能力状态（如果不是创造模式或旁观者模式，取消飞行能力）
             if (!sp.isCreative() && !sp.isSpectator()) {
                 sp.getAbilities().mayfly = false;
@@ -125,11 +134,19 @@ public final class DarkKivaAbilityHandler {
             
             playSound(sp, SoundEvents.BAT_TAKEOFF, 1.0f, 1.2f);
         } else {
+            // 检查冷却时间
+            if (currentTime < variables.dark_kiva_bat_mode_cooldown) {
+                int remainingTicks = (int) (variables.dark_kiva_bat_mode_cooldown - currentTime);
+                sp.displayClientMessage(net.minecraft.network.chat.Component.literal("蝙蝠形态冷却中，还剩 " + remainingTicks / 20 + " 秒"), true);
+                return;
+            }
+            
             if (!RiderEnergyHandler.consumeRiderEnergy(sp, 20)) return;
 
             // 开启飞行模式
             variables.dark_kiva_bat_mode = true;
-            variables.dark_kiva_bat_mode_time = sp.level().getGameTime();
+            variables.dark_kiva_bat_mode_time = currentTime;
+            variables.dark_kiva_bat_mode_takeoff_height = sp.getY(); // 记录起飞高度
             variables.currentFlightController = "DarkKiva";
             sp.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 9999, 1, false, false));
             
@@ -165,9 +182,38 @@ public final class DarkKivaAbilityHandler {
 
         if (variables.dark_kiva_bat_mode) {
             long currentTime = sp.level().getGameTime();
+            
+            // 检查飞行高度限制
+            double currentHeight = sp.getY();
+            double takeoffHeight = variables.dark_kiva_bat_mode_takeoff_height;
+            if (currentHeight - takeoffHeight > MAX_BAT_MODE_HEIGHT_ABOVE_TAKEOFF) {
+                // 超过高度限制，解除蝙蝠形态
+                variables.dark_kiva_bat_mode = false;
+                sp.removeEffect(MobEffects.MOVEMENT_SPEED);
+                
+                // 设置冷却时间
+                variables.dark_kiva_bat_mode_cooldown = currentTime + BAT_MODE_COOLDOWN;
+                
+                // 恢复飞行能力状态
+                if (!sp.isCreative() && !sp.isSpectator()) {
+                    sp.getAbilities().mayfly = false;
+                    sp.getAbilities().flying = false;
+                }
+                sp.onUpdateAbilities();
+                
+                sp.displayClientMessage(net.minecraft.network.chat.Component.literal("飞行高度超过限制，蝙蝠形态已解除"), true);
+                variables.syncPlayerVariables(sp);
+                playSound(sp, SoundEvents.BAT_TAKEOFF, 1.0f, 1.2f);
+                return;
+            }
+            
+            // 检查持续时间
             if (currentTime - variables.dark_kiva_bat_mode_time > BAT_MODE_DURATION) {
                 variables.dark_kiva_bat_mode = false;
                 sp.removeEffect(MobEffects.MOVEMENT_SPEED);
+                
+                // 设置冷却时间
+                variables.dark_kiva_bat_mode_cooldown = currentTime + BAT_MODE_COOLDOWN;
                 
                 // 恢复飞行能力状态
                 if (!sp.isCreative() && !sp.isSpectator()) {
@@ -197,7 +243,11 @@ public final class DarkKivaAbilityHandler {
         KRBVariables.PlayerVariables variables = sp.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         long currentTime = sp.level().getGameTime();
 
-        if (currentTime < variables.dark_kiva_blood_suck_cooldown) return;
+        if (currentTime < variables.dark_kiva_blood_suck_cooldown) {
+            int remainingTicks = (int) (variables.dark_kiva_blood_suck_cooldown - currentTime);
+            sp.displayClientMessage(net.minecraft.network.chat.Component.literal("吸血技能冷却中，还剩 " + remainingTicks / 20 + " 秒"), true);
+            return;
+        }
 
         Level level = sp.level();
         AABB box = new AABB(sp.blockPosition()).inflate(BLOOD_SUCK_RANGE);
@@ -227,7 +277,11 @@ public final class DarkKivaAbilityHandler {
         KRBVariables.PlayerVariables variables = sp.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         long currentTime = sp.level().getGameTime();
 
-        if (currentTime < variables.dark_kiva_sonic_blast_cooldown) return;
+        if (currentTime < variables.dark_kiva_sonic_blast_cooldown) {
+            int remainingTicks = (int) (variables.dark_kiva_sonic_blast_cooldown - currentTime);
+            sp.displayClientMessage(net.minecraft.network.chat.Component.literal("声波爆破冷却中，还剩 " + remainingTicks / 20 + " 秒"), true);
+            return;
+        }
 
         Level level = sp.level();
         AABB box = new AABB(sp.blockPosition()).inflate(SONIC_BLAST_RANGE);
@@ -254,7 +308,11 @@ public final class DarkKivaAbilityHandler {
         KRBVariables.PlayerVariables variables = sp.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
         long currentTime = sp.level().getGameTime();
 
-        if (currentTime < variables.dark_kiva_fuuin_kekkai_cooldown) return;
+        if (currentTime < variables.dark_kiva_fuuin_kekkai_cooldown) {
+            int remainingTicks = (int) (variables.dark_kiva_fuuin_kekkai_cooldown - currentTime);
+            sp.displayClientMessage(net.minecraft.network.chat.Component.literal("封印结界冷却中，还剩 " + remainingTicks / 20 + " 秒"), true);
+            return;
+        }
         if (!RiderEnergyHandler.consumeRiderEnergy(sp, 30)) return;
 
         Level level = sp.level();

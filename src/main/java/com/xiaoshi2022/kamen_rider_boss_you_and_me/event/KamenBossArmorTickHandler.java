@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.RiderInvisibilityManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +38,9 @@ public class KamenBossArmorTickHandler {
                     }
                 }
             }
+            
+            // 在服务器端更新隐身效果，确保所有玩家看到一致的效果
+            RiderInvisibilityManager.updateInvisibility(player);
         }
     }
 }

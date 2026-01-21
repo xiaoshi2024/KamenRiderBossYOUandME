@@ -63,7 +63,7 @@ public class BrainHeadbuttPacket {
 
         // 播放头部必杀技动画
         net.minecraft.network.chat.Component animation = net.minecraft.network.chat.Component.literal("brain_headbutt");
-        com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler.sendAnimationToAll(animation, player.getId(), true);
+        com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler.sendAnimationToAllTrackingAndSelf(animation, player.getId(), true, player);
 
         // 处理伤害逻辑
         for (net.minecraft.world.entity.Entity entity : player.level().getEntities(player, player.getBoundingBox().inflate(3.0))) {

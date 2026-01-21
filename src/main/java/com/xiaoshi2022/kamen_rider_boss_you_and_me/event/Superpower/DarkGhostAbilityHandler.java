@@ -53,18 +53,17 @@ public class DarkGhostAbilityHandler {
         if (player.level().isClientSide()) return;
 
         if (isWearingDarkGhostArmor(player)) {
-            // 1. 隐身能力 - 符合Ghost系列骑士的幽灵主题
-            addEffectIfBetterOrAbsent(player, MobEffects.INVISIBILITY, INVISIBILITY_DURATION, 0);
+            // 注：隐身能力已由RiderInvisibilityManager提供，此处不再重复添加
             
             // 注：夜视能力已由GhostDriver腰带提供，此处不再重复添加
             
-            // 3. 速度提升 - 模拟幽灵的敏捷性
+            // 1. 速度提升 - 模拟幽灵的敏捷性
             addEffectIfBetterOrAbsent(player, MobEffects.MOVEMENT_SPEED, SPEED_DURATION, 0);
             
-            // 4. 力量提升 - 由于使用初期型Ghost Driver内置输出增幅装置
+            // 2. 力量提升 - 由于使用初期型Ghost Driver内置输出增幅装置
             addEffectIfBetterOrAbsent(player, MobEffects.DAMAGE_BOOST, STRENGTH_DURATION, 0);
             
-            // 5. 生命恢复 - 增强生存能力，但大幅降低恢复速度和频率
+            // 3. 生命恢复 - 增强生存能力，但大幅降低恢复速度和频率
             UUID playerId = player.getUUID();
             int cooldown = regenerationCooldown.getOrDefault(playerId, 0);
             
@@ -79,13 +78,13 @@ public class DarkGhostAbilityHandler {
                 regenerationCooldown.put(playerId, cooldown - 1);
             }
             
-            // 6. 跳跃提升 - 代替飞行的高机动性能力
+            // 4. 跳跃提升 - 代替飞行的高机动性能力
             addEffectIfBetterOrAbsent(player, MobEffects.JUMP, JUMP_BOOST_DURATION, JUMP_BOOST_AMPLIFIER);
             
-            // 7. 缓降效果 - 防止高处坠落伤害
+            // 5. 缓降效果 - 防止高处坠落伤害
             addEffectIfBetterOrAbsent(player, MobEffects.SLOW_FALLING, NIGHT_VISION_DURATION, 0);
             
-            // 8. 生命值提升 - 黑暗灵骑的强大生命力
+            // 6. 生命值提升 - 黑暗灵骑的强大生命力
             applyHealthBoost(player);
             
             // 标记为Dark Ghost状态
@@ -204,7 +203,14 @@ public class DarkGhostAbilityHandler {
     private static void removeDarkGhostEffects(Player player) {
         // 清除所有Dark Ghost提供的效果
         // 注意：不清除夜视效果，因为它由GhostDriver腰带提供
-        player.removeEffect(MobEffects.INVISIBILITY);
+        // 注意：不直接移除所有隐身效果，只移除我们添加的（amplifier为0），保留RiderInvisibilityManager添加的（amplifier为31）
+        if (player.hasEffect(MobEffects.INVISIBILITY)) {
+            MobEffectInstance invisibilityEffect = player.getEffect(MobEffects.INVISIBILITY);
+            // 只移除amplifier为0的隐身效果（我们添加的），保留amplifier为31的（RiderInvisibilityManager添加的）
+            if (invisibilityEffect != null && invisibilityEffect.getAmplifier() == 0) {
+                player.removeEffect(MobEffects.INVISIBILITY);
+            }
+        }
         player.removeEffect(MobEffects.MOVEMENT_SPEED);
         player.removeEffect(MobEffects.DAMAGE_BOOST);
         player.removeEffect(MobEffects.REGENERATION);

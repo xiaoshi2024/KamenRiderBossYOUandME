@@ -41,10 +41,11 @@ public class BaronSummonInvesPacket {
         // 发送动画到客户端
         if (player.level().isClientSide()) return;
 
-        PacketHandler.sendAnimationToAll(
+        PacketHandler.sendAnimationToAllTrackingAndSelf(
                 Component.literal("shows"),
                 player.getId(),
-                false
+                false,
+                player
         );
         // 这里实现召唤异域者的逻辑，参照LordBaronEntity中的方法
         BaronSummonInvesLogic.summonInvesAroundPlayer(player);

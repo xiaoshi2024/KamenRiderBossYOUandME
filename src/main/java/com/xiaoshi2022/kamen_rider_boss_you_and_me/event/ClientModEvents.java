@@ -31,7 +31,12 @@ public class ClientModEvents {
     /* 装备栏变化时立即刷新（防止延迟） */
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
-        if (!(event.getEntity() instanceof Player player)) return;
+        // 只处理当前客户端玩家的装备变化事件
+        Player currentPlayer = Minecraft.getInstance().player;
+        if (currentPlayer == null) return;
+        
+        // 检查事件中的玩家是否是当前客户端玩家
+        if (!(event.getEntity() instanceof Player player) || player != currentPlayer) return;
         if (event.getSlot().getType() != EquipmentSlot.Type.ARMOR) return;
 
         RiderInvisibilityManager.updateInvisibility(player);

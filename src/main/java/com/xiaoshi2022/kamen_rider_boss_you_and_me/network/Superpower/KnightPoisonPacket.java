@@ -87,7 +87,7 @@ public class KnightPoisonPacket {
                             
                             // 播放转化动画
                             net.minecraft.network.chat.Component animation = net.minecraft.network.chat.Component.literal("brain_knight_poison");
-                            com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler.sendAnimationToAll(animation, player.getId(), true);
+                            com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler.sendAnimationToAllTrackingAndSelf(animation, player.getId(), true, player);
                             
                             // 生成毒雾粒子效果
                             for (int i = 0; i < 20; i++) {

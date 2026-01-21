@@ -53,8 +53,9 @@ public class DarkOrangeTransformationRequestPacket {
                     // 广播给所有客户端
                     // 广播给所有客户端
                     // 使用sendToAll确保所有客户端（包括新加入的玩家）都能接收变身状态同步信息
-                PacketHandler.sendToAll(
-                            new SyncTransformationPacket(player.getId(), "DARK_ORANGE", true)
+                PacketHandler.sendToAllTrackingAndSelf(
+                            new SyncTransformationPacket(player.getId(), "DARK_ORANGE", true),
+                            player
                     );
                 }
             }
@@ -105,8 +106,9 @@ public class DarkOrangeTransformationRequestPacket {
                 SoundSource.PLAYERS, 1.0F, 1.0F);
 
         // 播放变身动画
-        PacketHandler.sendToAll(
-                new BeltAnimationPacket(player.getId(), "orange_move", sengokudrivers_epmty.BeltMode.ORANGELS));
+        PacketHandler.sendToAllTrackingAndSelf(
+                new BeltAnimationPacket(player.getId(), "orange_move", sengokudrivers_epmty.BeltMode.ORANGELS),
+                player);
 
         // 设置腰带模式为ORANGELS
         belt.setBeltMode(beltStack, sengokudrivers_epmty.BeltMode.ORANGELS);

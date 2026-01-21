@@ -410,6 +410,11 @@ public class PacketHandler {
         sendToAllTracking(packet, entity);
     }
 
+    public static void sendAnimationToAllTrackingAndSelf(Component animation, int entityId, boolean override, Entity entity) {
+        PlayerAnimationPacket packet = new PlayerAnimationPacket(animation, entityId, override);
+        sendToAllTrackingAndSelf(packet, entity);
+    }
+
     public static void sendToAllTracking(Object packet, Entity entity) {
         if (entity != null && !entity.level().isClientSide()) {
             INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);

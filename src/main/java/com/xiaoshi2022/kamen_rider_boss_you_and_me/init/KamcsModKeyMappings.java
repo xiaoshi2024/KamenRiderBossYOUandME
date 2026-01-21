@@ -30,8 +30,8 @@ public class KamcsModKeyMappings {
 					Class.forName("net.minecraft.client.Minecraft");
 					// 新增：检查是否可以踢击
 					if (KicktimeProcedure.canPerformKick(Minecraft.getInstance().player)) {
+						// 只发送数据包到服务器，不直接在客户端执行
 						kamen_rider_boss_you_and_me.PACKET_HANDLER.sendToServer(new KkcikMessage(0, 0));
-						KkcikMessage.pressAction(Minecraft.getInstance().player, 0, 0);
 					}
 				} catch (ClassNotFoundException e) {
 					// 服务器端，忽略

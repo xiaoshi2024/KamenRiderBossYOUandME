@@ -731,33 +731,8 @@ public class KeyBinding {
         }
     }
 
-    // 处理玩家渲染事件，用于临时关闭幽冥的盔甲渲染
-    @SubscribeEvent
-    public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
-        Player player = event.getEntity();
-        String playerId = player.getStringUUID();
-
-        // 如果是隐身的眼魔玩家，临时关闭盔甲渲染
-        if (invisibleGhostEyePlayers.contains(playerId)) {
-            // 直接设置玩家的盔甲物品为空气，这样就不会渲染盔甲
-            player.setItemSlot(EquipmentSlot.HEAD, net.minecraft.world.item.ItemStack.EMPTY);
-            player.setItemSlot(EquipmentSlot.CHEST, net.minecraft.world.item.ItemStack.EMPTY);
-            player.setItemSlot(EquipmentSlot.LEGS, net.minecraft.world.item.ItemStack.EMPTY);
-        }
-    }
-
-    // 渲染事件后恢复盔甲渲染
-    @SubscribeEvent
-    public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
-        Player player = event.getEntity();
-        String playerId = player.getStringUUID();
-
-        // 如果是隐身的眼魔玩家，恢复盔甲渲染
-        if (invisibleGhostEyePlayers.contains(playerId)) {
-            // 这里不需要恢复，因为我们只是临时修改，不会真正改变玩家的物品栏
-            // Minecraft会在每一帧重新从玩家的实际物品栏获取盔甲信息
-        }
-    }
+    // 移除了直接修改玩家盔甲的渲染逻辑，避免导致所有玩家隐形
+    // 隐身效果现在只通过Minecraft的隐身药水效果实现
 
     // 检查玩家是否穿着哈密瓜装甲
     private static boolean isWearingMelonArmor(Player player) {

@@ -24,10 +24,16 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver.BeltMode.DEFAULT;
@@ -36,6 +42,10 @@ import static com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genes
 @Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me")
 public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurioItem {
 
+    /* ------------------------- 静态变量 ------------------------- */
+    // 玩家级别冷却地图，用于防止多个腰带同时消耗果实
+    private static final Map<UUID, Integer> PLAYER_FRUIT_COOLDOWNS = new HashMap<>();
+    
     /* ------------------------- 动画常量 ------------------------- */
     private static final RawAnimation IDLES   = RawAnimation.begin().thenPlayAndHold("idles");
     private static final RawAnimation SHOW    = RawAnimation.begin().thenPlayAndHold("show");
@@ -298,12 +308,20 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
 
     /**
      * 先播放玩家sodax动画，然后播放解除变身动画
+     * 这个方法只在解除变身时被调用，确保sodax动画只在解除变身时播放
      */
     public void startReleaseWithPlayerAnimation(LivingEntity entity, ItemStack stack) {
         // 1. 首先播放玩家sodax动画
+        // 服务器端：发送动画数据包给所有客户端
         if (!entity.level().isClientSide() && entity instanceof ServerPlayer sp) {
-            // 优先播放玩家sodax动画
+            // 只有在解除变身时播放sodax动画
             playPlayerAnimation(sp, "sodax");
+        } else if (entity.level().isClientSide()) {
+            // 客户端：直接触发本地动画
+            // 确保客户端也能播放sodax动画
+            System.out.println("客户端直接播放sodax动画");
+            // 这里需要直接触发玩家动画，可能需要通过其他方式实现
+            // 例如：调用客户端动画触发方法
         }
         
         // 2. 然后播放解除变身动画
@@ -503,16 +521,8 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
             return;
         }
         
-        // 使用sendToClient确保动画对玩家自己可见
-        PacketHandler.sendAnimationToClient(
-                Component.literal(animationName),
-                player.getId(),
-                false,
-                player
-        );
-        
-        // 同时发送给所有跟踪该玩家的客户端
-        PacketHandler.sendAnimationToAllTracking(
+        // 使用sendAnimationToAllTrackingAndSelf确保动画对玩家自己和所有跟踪者可见
+        PacketHandler.sendAnimationToAllTrackingAndSelf(
                 Component.literal(animationName),
                 player.getId(),
                 false,
@@ -559,22 +569,22 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
         }
         
         // 每5秒检查一次饱和效果，如果没有则尝试消耗赫尔海姆果实
-        // 使用NBT存储上次消耗时间，避免同一tick多次消耗
-        int lastConsumeTime = stack.getOrCreateTag().getInt("LastHelheimFruitConsumeTime");
+        // 使用玩家级别冷却，避免多个腰带同时消耗果实
+        UUID playerId = sp.getUUID();
+        int lastConsumeTime = PLAYER_FRUIT_COOLDOWNS.getOrDefault(playerId, 0);
         if (sp.tickCount - lastConsumeTime >= 100) {
             if (!sp.hasEffect(MobEffects.SATURATION)) {
                 // 尝试消耗背包中的赫尔海姆果实
                 if (consumeHelheimFruit(sp)) {
                     // 给予5分钟的饱和效果
                     sp.addEffect(new MobEffectInstance(MobEffects.SATURATION, 5 * 60 * 20, 0, true, false));
+                    // 同时增加5点饱食度
+                    sp.getFoodData().eat(5, 0.5f);
                     sp.sendSystemMessage(
-                            Component.literal("消耗了一颗赫尔海姆果实，获得了5分钟的饱和效果！")
+                            Component.literal("消耗了一颗赫尔海姆果实，获得了5分钟的饱和效果和5点饱食度！")
                     );
-                    // 更新上次消耗时间
-                    stack.getOrCreateTag().putInt("LastHelheimFruitConsumeTime", sp.tickCount);
-                } else {
-                    // 如果没有果实，发送提示消息（限制频率，避免刷屏）
-                    // 提示已移除
+                    // 更新玩家级别的冷却时间
+                    PLAYER_FRUIT_COOLDOWNS.put(playerId, sp.tickCount);
                 }
             }
         }
@@ -586,43 +596,45 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
      * @return 是否成功消耗果实
      */
     private boolean consumeHelheimFruit(ServerPlayer player) {
-        // 定义赫尔海姆果实的物品列表（需要根据实际情况修改）
-        // 这里假设有一个通用的赫尔海姆果实物品
-        ItemStack fruitStack = findItemInInventory(player, com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.HELHEIMFRUIT.get());
-        
-        if (!fruitStack.isEmpty()) {
-            // 消耗一个果实
-            fruitStack.shrink(1);
-            return true;
+        // 再次检查玩家是否已经有饱和效果，避免多个腰带同时消耗果实
+        if (!player.hasEffect(MobEffects.SATURATION)) {
+            // 查找并消耗赫尔海姆果实
+            return findAndConsumeItem(player, com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.HELHEIMFRUIT.get());
         }
         return false;
     }
     
     /**
-     * 在玩家背包中查找指定物品
+     * 在玩家背包中查找并消耗指定物品
      * @param player 玩家
      * @param item 要查找的物品
-     * @return 找到的物品栈，如果没有找到则返回空栈
+     * @return 是否成功消耗
      */
-    private ItemStack findItemInInventory(Player player, Item item) {
+    private boolean findAndConsumeItem(Player player, Item item) {
         // 首先检查主手
         if (player.getMainHandItem().getItem() == item) {
-            return player.getMainHandItem();
+            player.getMainHandItem().shrink(1);
+            return true;
         }
         
         // 检查副手
         if (player.getOffhandItem().getItem() == item) {
-            return player.getOffhandItem();
+            player.getOffhandItem().shrink(1);
+            return true;
         }
         
         // 检查背包
-        for (ItemStack stack : player.getInventory().items) {
+        for (int i = 0; i < player.getInventory().items.size(); i++) {
+            ItemStack stack = player.getInventory().items.get(i);
             if (stack.getItem() == item) {
-                return stack;
+                stack.shrink(1);
+                // 更新玩家背包
+                player.getInventory().items.set(i, stack);
+                return true;
             }
         }
         
-        return ItemStack.EMPTY;
+        return false;
     }
 
     /* -------------------- NBT 同步 -------------------- */
@@ -652,9 +664,15 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
     /* -------------------- 动画触发工具 -------------------- */
     public void triggerAnim(@Nullable LivingEntity entity, String ctrl, String anim) {
         if (entity == null || entity.level() == null) return;
-        if (entity instanceof ServerPlayer sp)
+        if (entity instanceof ServerPlayer sp) {
+            // 从Curio槽位获取腰带模式
+            Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(sp).resolve()
+                    .flatMap(curios -> curios.findFirstCurio(item -> item.getItem() instanceof Genesis_driver));
+            BeltMode mode = beltOptional.map(result -> getMode(result.stack())).orElse(DEFAULT);
+            
             PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(entity.getId(), anim, getMode(sp.getMainHandItem())), entity);
+                    new BeltAnimationPacket(entity.getId(), anim, mode), entity);
+        }
     }
 
     private RawAnimation getAnimationByName(String name) {

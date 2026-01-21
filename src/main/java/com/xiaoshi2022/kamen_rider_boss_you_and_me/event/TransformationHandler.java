@@ -301,14 +301,26 @@ public class TransformationHandler {
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
             if (belt.getMode(beltStack) == Genesis_driver.BeltMode.LEMON) {
-                // 1. 重置腰带模式
-                belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+                // 创建新的腰带堆栈副本
+                ItemStack newStack = beltStack.copy();
                 
-                // 2. 更新Curios槽位
-                CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
-                        slotResult.slotContext().index(), beltStack);
+                // 1. 播放解除变身动画（包括sodax玩家动画）
+                belt.startReleaseWithPlayerAnimation(player, newStack);
                 
-                // 3. 停止待机音效
+                // 2. 重置腰带模式为默认
+                belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
+                belt.setEquipped(newStack, false);
+                belt.setHenshin(newStack, false);
+                
+                // 3. 更新Curio槽位
+                CurioUtils.updateCurioSlot(
+                        player,
+                        slotResult.slotContext().identifier(),
+                        slotResult.slotContext().index(),
+                        newStack
+                );
+                
+                // 4. 停止待机音效
                 ResourceLocation soundLoc = new ResourceLocation(
                         "kamen_rider_boss_you_and_me",
                         "lemon_lockonby"
@@ -318,21 +330,17 @@ public class TransformationHandler {
                         player
                 );
                 
-                // 4. 清除变身盔甲
+                // 5. 清除变身盔甲
                 clearTransformationArmor(player);
                 
-                // 5. 清理变身武器
+                // 6. 清理变身武器
                 TransformationWeaponManager.clearTransformationWeapons(player);
                 
-                // 6. 返还柠檬锁种
+                // 7. 返还柠檬锁种
                 ItemStack lemonLockSeed = new ItemStack(ModItems.LEMON_ENERGY.get());
                 if (!player.getInventory().add(lemonLockSeed)) {
                     player.spawnAtLocation(lemonLockSeed);
                 }
-                
-                // 7. 重置腰带状态
-                belt.setEquipped(beltStack, false);
-                belt.setHenshin(beltStack, false);
                 
                 // 8. 播放解除音效
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -352,14 +360,26 @@ public class TransformationHandler {
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
             if (belt.getMode(beltStack) == Genesis_driver.BeltMode.MELON) {
-                // 1. 重置腰带模式
-                belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+                // 创建新的腰带堆栈副本
+                ItemStack newStack = beltStack.copy();
                 
-                // 2. 更新Curios槽位
-                CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
-                        slotResult.slotContext().index(), beltStack);
+                // 1. 播放解除变身动画（包括sodax玩家动画）
+                belt.startReleaseWithPlayerAnimation(player, newStack);
                 
-                // 3. 停止待机音效
+                // 2. 重置腰带模式为默认
+                belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
+                belt.setEquipped(newStack, false);
+                belt.setHenshin(newStack, false);
+                
+                // 3. 更新Curio槽位
+                CurioUtils.updateCurioSlot(
+                        player,
+                        slotResult.slotContext().identifier(),
+                        slotResult.slotContext().index(),
+                        newStack
+                );
+                
+                // 4. 停止待机音效
                 ResourceLocation soundLoc = new ResourceLocation(
                         "kamen_rider_boss_you_and_me",
                         "lemon_lockonby"
@@ -369,21 +389,17 @@ public class TransformationHandler {
                         player
                 );
                 
-                // 4. 清除变身盔甲
+                // 5. 清除变身盔甲
                 clearTransformationArmor(player);
                 
-                // 5. 清理变身武器
+                // 6. 清理变身武器
                 TransformationWeaponManager.clearTransformationWeapons(player);
                 
-                // 6. 返还蜜瓜锁种
+                // 7. 返还蜜瓜锁种
                 ItemStack melonLockSeed = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.MELON.get());
                 if (!player.getInventory().add(melonLockSeed)) {
                     player.spawnAtLocation(melonLockSeed);
                 }
-                
-                // 7. 重置腰带状态
-                belt.setEquipped(beltStack, false);
-                belt.setHenshin(beltStack, false);
                 
                 // 8. 播放解除音效
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -403,14 +419,26 @@ public class TransformationHandler {
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
             if (belt.getMode(beltStack) == Genesis_driver.BeltMode.CHERRY) {
-                // 1. 重置腰带模式
-                belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+                // 创建新的腰带堆栈副本
+                ItemStack newStack = beltStack.copy();
                 
-                // 2. 更新Curios槽位
-                CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
-                        slotResult.slotContext().index(), beltStack);
+                // 1. 播放解除变身动画（包括sodax玩家动画）
+                belt.startReleaseWithPlayerAnimation(player, newStack);
                 
-                // 3. 停止待机音效
+                // 2. 重置腰带模式为默认
+                belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
+                belt.setEquipped(newStack, false);
+                belt.setHenshin(newStack, false);
+                
+                // 3. 更新Curio槽位
+                CurioUtils.updateCurioSlot(
+                        player,
+                        slotResult.slotContext().identifier(),
+                        slotResult.slotContext().index(),
+                        newStack
+                );
+                
+                // 4. 停止待机音效
                 ResourceLocation soundLoc = new ResourceLocation(
                         "kamen_rider_boss_you_and_me",
                         "lemon_lockonby"
@@ -420,21 +448,17 @@ public class TransformationHandler {
                         player
                 );
                 
-                // 4. 清除变身盔甲
+                // 5. 清除变身盔甲
                 clearTransformationArmor(player);
                 
-                // 5. 清理变身武器
+                // 6. 清理变身武器
                 TransformationWeaponManager.clearTransformationWeapons(player);
                 
-                // 6. 返还樱桃锁种
+                // 7. 返还樱桃锁种
                 ItemStack cherryLockSeed = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.CHERYY.get());
                 if (!player.getInventory().add(cherryLockSeed)) {
                     player.spawnAtLocation(cherryLockSeed);
                 }
-                
-                // 7. 重置腰带状态
-                belt.setEquipped(beltStack, false);
-                belt.setHenshin(beltStack, false);
                 
                 // 8. 播放解除音效
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -454,14 +478,26 @@ public class TransformationHandler {
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
             if (belt.getMode(beltStack) == Genesis_driver.BeltMode.PEACH) {
-                // 1. 重置腰带模式
-                belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+                // 创建新的腰带堆栈副本
+                ItemStack newStack = beltStack.copy();
                 
-                // 2. 更新Curios槽位
-                CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
-                        slotResult.slotContext().index(), beltStack);
+                // 1. 播放解除变身动画（包括sodax玩家动画）
+                belt.startReleaseWithPlayerAnimation(player, newStack);
                 
-                // 3. 停止待机音效
+                // 2. 重置腰带模式为默认
+                belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
+                belt.setEquipped(newStack, false);
+                belt.setHenshin(newStack, false);
+                
+                // 3. 更新Curio槽位
+                CurioUtils.updateCurioSlot(
+                        player,
+                        slotResult.slotContext().identifier(),
+                        slotResult.slotContext().index(),
+                        newStack
+                );
+                
+                // 4. 停止待机音效
                 ResourceLocation soundLoc = new ResourceLocation(
                         "kamen_rider_boss_you_and_me",
                         "lemon_lockonby"
@@ -471,21 +507,17 @@ public class TransformationHandler {
                         player
                 );
                 
-                // 4. 清除变身盔甲
+                // 5. 清除变身盔甲
                 clearTransformationArmor(player);
                 
-                // 5. 清理变身武器
+                // 6. 清理变身武器
                 TransformationWeaponManager.clearTransformationWeapons(player);
                 
-                // 6. 返还桃子锁种
+                // 7. 返还桃子锁种
                 ItemStack peachLockSeed = new ItemStack(ModItems.PEACH_ENERGY.get());
                 if (!player.getInventory().add(peachLockSeed)) {
                     player.spawnAtLocation(peachLockSeed);
                 }
-                
-                // 7. 重置腰带状态
-                belt.setEquipped(beltStack, false);
-                belt.setHenshin(beltStack, false);
                 
                 // 8. 播放解除音效
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -505,14 +537,26 @@ public class TransformationHandler {
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
             if (belt.getMode(beltStack) == Genesis_driver.BeltMode.DRAGONFRUIT) {
-                // 1. 重置腰带模式
-                belt.setMode(beltStack, Genesis_driver.BeltMode.DEFAULT);
+                // 创建新的腰带堆栈副本
+                ItemStack newStack = beltStack.copy();
                 
-                // 2. 更新Curios槽位
-                CurioUtils.updateCurioSlot(player, slotResult.slotContext().identifier(),
-                        slotResult.slotContext().index(), beltStack);
+                // 1. 播放解除变身动画（包括sodax玩家动画）
+                belt.startReleaseWithPlayerAnimation(player, newStack);
                 
-                // 3. 停止待机音效
+                // 2. 重置腰带模式为默认
+                belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
+                belt.setEquipped(newStack, false);
+                belt.setHenshin(newStack, false);
+                
+                // 3. 更新Curio槽位
+                CurioUtils.updateCurioSlot(
+                        player,
+                        slotResult.slotContext().identifier(),
+                        slotResult.slotContext().index(),
+                        newStack
+                );
+                
+                // 4. 停止待机音效
                 ResourceLocation soundLoc = new ResourceLocation(
                         "kamen_rider_boss_you_and_me",
                         "lemon_lockonby"
@@ -522,21 +566,17 @@ public class TransformationHandler {
                         player
                 );
                 
-                // 4. 清除变身盔甲
+                // 5. 清除变身盔甲
                 clearTransformationArmor(player);
                 
-                // 5. 清理变身武器
+                // 6. 清理变身武器
                 TransformationWeaponManager.clearTransformationWeapons(player);
                 
-                // 6. 返还火龙果锁种
+                // 7. 返还火龙果锁种
                 ItemStack dragonfruitLockSeed = new ItemStack(ModItems.DRAGONFRUIT.get());
                 if (!player.getInventory().add(dragonfruitLockSeed)) {
                     player.spawnAtLocation(dragonfruitLockSeed);
                 }
-                
-                // 7. 重置腰带状态
-                belt.setEquipped(beltStack, false);
-                belt.setHenshin(beltStack, false);
                 
                 // 8. 播放解除音效
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),

@@ -96,9 +96,10 @@ public class KnightInvokerReleasePacket {
             
             // 9. 广播解除变身状态 - 关键步骤！
             if (success) {
-                // 使用sendToAll确保所有客户端（包括新加入的玩家）都能接收解除变身状态同步信息
-                PacketHandler.sendToAll(
-                        new SyncTransformationPacket(player.getId(), "NONE", false)
+                // 使用sendToAllTrackingAndSelf确保只有相关玩家能接收解除变身状态同步信息
+                PacketHandler.sendToAllTrackingAndSelf(
+                        new SyncTransformationPacket(player.getId(), "NONE", false),
+                        player
                 );
             }
         });

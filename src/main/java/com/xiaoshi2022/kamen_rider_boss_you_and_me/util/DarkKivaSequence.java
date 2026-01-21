@@ -218,10 +218,11 @@ public final class DarkKivaSequence {
     public static void playPlayerAnimation(ServerPlayer player, String animationName) {
         if (player.level().isClientSide()) return;
 
-        PacketHandler.sendAnimationToAll(
+        PacketHandler.sendAnimationToAllTrackingAndSelf(
                 Component.literal(animationName),
                 player.getId(),
-                false
+                false,
+                player
         );
     }
 

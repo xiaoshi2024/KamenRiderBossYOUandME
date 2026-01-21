@@ -63,8 +63,9 @@ public class TransformationRequestPacket {
                 ReleaseBeltPacket.handleRelease(player, msg.riderType);
                 
                 // 广播解除变身状态 - 关键步骤！
-                PacketHandler.sendToAll(
-                        new SyncTransformationPacket(player.getId(), "NONE", false)
+                PacketHandler.sendToAllTrackingAndSelf(
+                        new SyncTransformationPacket(player.getId(), "NONE", false),
+                        player
                 );
             } else {
                 switch (msg.riderType) {
@@ -171,8 +172,9 @@ public class TransformationRequestPacket {
                             }
 
                             // 广播解除变身状态 - 关键步骤！
-                            PacketHandler.sendToAll(
-                                    new SyncTransformationPacket(player.getId(), "NONE", false)
+                            PacketHandler.sendToAllTrackingAndSelf(
+                                    new SyncTransformationPacket(player.getId(), "NONE", false),
+                                    player
                             );
 
                         } else {
