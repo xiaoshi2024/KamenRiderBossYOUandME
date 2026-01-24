@@ -51,13 +51,16 @@ public class GhostEyeDimensionHandler {
             // 检查玩家是否已经是眼魔状态
             boolean isGhostEye = isGhostEyePlayer(player);
 
+            // 检查玩家是否在眼魔维度
+            boolean inGhostEyeDimension = player.level().dimension() == GHOST_EYE_DIM;
+
             // 只有当玩家实际持有装备且不是眼魔状态时才记录传送
             if (hasBracelet && !isGhostEye) {
                 // 记录玩家需要在重生时传送
                 playersToTeleportOnRespawn.add(player.getUUID().toString());
 
                 // 设置眼魔世界的重生点
-                if (player.level().dimension() != GHOST_EYE_DIM) {
+                if (!inGhostEyeDimension) {
                     Level ghostEyeLevel = player.server.getLevel(GHOST_EYE_DIM);
                     if (ghostEyeLevel instanceof net.minecraft.server.level.ServerLevel serverLevel) {
                         BlockPos teleportPos = new BlockPos(0, 64, 0);
@@ -65,6 +68,10 @@ public class GhostEyeDimensionHandler {
                         player.setRespawnPosition(GHOST_EYE_DIM, safeTeleportPos, 0.0F, true, false);
                     }
                 }
+            } else if (inGhostEyeDimension) {
+                // 如果玩家在眼魔维度死亡，清除眼魔状态并设置重生点为主世界
+                restoreOriginalRace(player);
+                player.setRespawnPosition(Level.OVERWORLD, null, 0.0F, false, false);
             }
         }
     }

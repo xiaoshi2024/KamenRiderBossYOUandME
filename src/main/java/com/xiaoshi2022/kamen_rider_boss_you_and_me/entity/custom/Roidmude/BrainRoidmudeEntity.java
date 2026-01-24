@@ -454,8 +454,9 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
     private void ultraEvolve() {
         // 实现超进化
         if (!this.level().isClientSide() && canUltraEvolve()) {
-            // 提高属性
-            this.setHealth(this.getMaxHealth());
+            // 提高属性，但不立即回满生命值
+            // 保存当前生命值百分比
+            float healthPercentage = this.getHealth() / this.getMaxHealth();
             
             // 添加力量效果
             this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 2));

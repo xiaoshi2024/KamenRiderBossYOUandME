@@ -90,11 +90,13 @@ public class PlayerDeathHandler {
                     returnNapoleonEyecon(player);
                 }
 
-                // 8. 返还锁种
-                List<ItemStack> lockseeds = getLockseedStacksByType(lockseedType);
-                for (ItemStack stack : lockseeds) {
-                    if (!player.getInventory().add(stack)) {
-                        player.drop(stack, false);
+                // 8. 返还锁种 - 只有当锁种不在音速弓中时才返还
+                if (!hasLockSeedInSonicArrow(player)) {
+                    List<ItemStack> lockseeds = getLockseedStacksByType(lockseedType);
+                    for (ItemStack stack : lockseeds) {
+                        if (!player.getInventory().add(stack)) {
+                            player.drop(stack, false);
+                        }
                     }
                 }
 
@@ -479,6 +481,65 @@ public class PlayerDeathHandler {
         });
 
         return anyBeltSurvived.get();
+    }
+
+    /**
+     * 检查玩家是否有装备了锁种的音速弓
+     * @param player 玩家
+     * @return true如果玩家有装备了锁种的音速弓，false否则
+     */
+    private static boolean hasLockSeedInSonicArrow(Player player) {
+        // 检查主手
+        if (isSonicArrowWithLockSeed(player.getMainHandItem())) {
+            return true;
+        }
+
+        // 检查副手
+        if (isSonicArrowWithLockSeed(player.getOffhandItem())) {
+            return true;
+        }
+
+        // 检查物品栏
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (isSonicArrowWithLockSeed(stack)) {
+                return true;
+            }
+        }
+
+        // 检查饰品槽位
+        AtomicBoolean hasSonicArrowWithLockSeed = new AtomicBoolean(false);
+        CuriosApi.getCuriosInventory(player).ifPresent(curios -> {
+            curios.findCurios(stack -> isSonicArrowWithLockSeed(stack))
+                    .forEach(curio -> {
+                        hasSonicArrowWithLockSeed.set(true);
+                    });
+        });
+
+        return hasSonicArrowWithLockSeed.get();
+    }
+
+    /**
+     * 检查物品是否是装备了锁种的音速弓
+     * @param stack 物品栈
+     * @return true如果物品是装备了锁种的音速弓，false否则
+     */
+    private static boolean isSonicArrowWithLockSeed(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+
+        // 检查是否是音速弓
+        if (!(stack.getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow)) {
+            return false;
+        }
+
+        // 检查是否有Mode标签（表示装备了锁种）
+        if (!stack.hasTag()) {
+            return false;
+        }
+
+        return stack.getTag().contains("Mode");
     }
 
     // 根据玩家装备的盔甲类型确定锁种类型

@@ -227,13 +227,19 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
     /* =========================================================== */
     /* -------------------- 数据读/写 Helper -------------------- */
     public BeltMode getMode(ItemStack stack) {
-        String key = stack.getOrCreateTag().getString("BeltMode");
-        if (key.isEmpty()) return DEFAULT;        // ← 兜底
-        try {
-            return BeltMode.valueOf(key);
-        } catch (IllegalArgumentException ex) {
-            return DEFAULT;                       // ← 防止未来拼写错误
+        net.minecraft.nbt.CompoundTag tag = stack.getOrCreateTag();
+        net.minecraft.nbt.Tag beltModeTag = tag.get("BeltMode");
+        if (beltModeTag instanceof net.minecraft.nbt.StringTag) {
+            String key = beltModeTag.getAsString();
+            if (!key.isEmpty()) {
+                try {
+                    return BeltMode.valueOf(key);
+                } catch (IllegalArgumentException ex) {
+                    return DEFAULT;                       // ← 防止未来拼写错误
+                }
+            }
         }
+        return DEFAULT;        // ← 兜底
     }
 
     public void setMode(ItemStack stack, BeltMode mode) {

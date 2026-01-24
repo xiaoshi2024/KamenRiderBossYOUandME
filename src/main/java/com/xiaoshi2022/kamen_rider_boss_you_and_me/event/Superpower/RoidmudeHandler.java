@@ -211,34 +211,49 @@ public class RoidmudeHandler {
         // 对范围内的生物应用重加速效果
         for (Entity entity : level.getEntitiesOfClass(Entity.class, area)) {
             if (entity != player && entity instanceof LivingEntity livingEntity) {
-                // 应用重加速效果：减慢生物的移动速度
-                // 1. 添加缓慢效果
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 3, true, false, true));
-                // 2. 添加挖掘缓慢效果
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 3, true, false, true));
-                // 3. 添加攻击缓慢效果
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1, true, false, true));
+                // 检查目标是否为机械变异体
+                boolean isTargetRoidmude = false;
                 
-                // 显示重加速粒子效果
-                if (level.random.nextDouble() < 0.6) {
-                    level.addParticle(
-                            ParticleTypes.CLOUD,
-                            entity.getX() + (level.random.nextDouble() - 0.5) * 2,
-                            entity.getY() + level.random.nextDouble() * 2,
-                            entity.getZ() + (level.random.nextDouble() - 0.5) * 2,
-                            0.0D, 0.0D, 0.0D
-                    );
+                // 检查玩家是否为机械变异体
+                if (livingEntity instanceof Player targetPlayer) {
+                    isTargetRoidmude = isRoidmude(targetPlayer);
+                }
+                // 检查实体是否为机械变异体（如Brain Roidmude）
+                else if (entity instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Roidmude.BrainRoidmudeEntity) {
+                    isTargetRoidmude = true;
                 }
                 
-                // 对玩家显示重加速提示
-                if (livingEntity instanceof Player targetPlayer) {
-                    targetPlayer.displayClientMessage(Component.literal("你受到了重加速的影响！"), true);
+                // 只对非机械变异体应用重加速效果
+                if (!isTargetRoidmude) {
+                    // 应用重加速效果：减慢生物的移动速度
+                    // 1. 添加缓慢效果
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 3, true, false, true));
+                    // 2. 添加挖掘缓慢效果
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 3, true, false, true));
+                    // 3. 添加攻击缓慢效果
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1, true, false, true));
+                    
+                    // 显示重加速粒子效果
+                    if (level.random.nextDouble() < 0.6) {
+                        level.addParticle(
+                                ParticleTypes.CLOUD,
+                                entity.getX() + (level.random.nextDouble() - 0.5) * 2,
+                                entity.getY() + level.random.nextDouble() * 2,
+                                entity.getZ() + (level.random.nextDouble() - 0.5) * 2,
+                                0.0D, 0.0D, 0.0D
+                        );
+                    }
+                    
+                    // 对玩家显示重加速提示
+                    if (livingEntity instanceof Player targetPlayer) {
+                        targetPlayer.displayClientMessage(Component.literal("你受到了重加速的影响！"), true);
+                    }
                 }
             }
         }
         
         // 对Roidmude玩家显示重加速激活提示
-        player.displayClientMessage(Component.literal("重加速已激活！周围的生物行动变得缓慢。"), true);
+        player.displayClientMessage(Component.literal("重加速已激活！周围的非机械变异体行动变得缓慢。"), true);
         
         // 播放重加速音效（如果有）
         // 这里可以添加音效播放代码
