@@ -35,8 +35,8 @@ public class AnotherWorldSummon {
     // 初始化默认配置
     static {
         loadDefaultConfig();
-        // 暂时开启调试模式，方便测试
-        DEBUG_MODE = true;
+        // 默认关闭调试模式，只有开启了调试模式的玩家才能看到召唤技能提示
+        DEBUG_MODE = false;
     }
 
     public static boolean canUse(Another_Decade user) {
@@ -332,9 +332,15 @@ public class AnotherWorldSummon {
     }
 
     private static void sendDebugMessage(Another_Decade user, String message) {
-        user.level().players().forEach(player ->
-                player.sendSystemMessage(Component.literal("§d[Another Decade] §7" + message))
-        );
+        if (!DEBUG_MODE) return;
+        
+        // 只发送给附近的玩家，而不是所有玩家
+        double messageRange = 30.0D;
+        user.level().players().forEach(player -> {
+            if (player.distanceToSqr(user) <= messageRange * messageRange) {
+                player.sendSystemMessage(Component.literal("§d[Another Decade] §7" + message));
+            }
+        });
     }
 
     private static int getNearbyHostileCount(Another_Decade user) {

@@ -36,26 +36,43 @@ public class TransformationHandler {
     
     // 处理解除变身的核心方法
     public static void completeBeltRelease(ServerPlayer player, String beltType) {
-        KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
-                .orElse(new KRBVariables.PlayerVariables());
-        
-        // 根据不同的骑士类型执行不同的解除逻辑
-        switch (beltType) {
-            case "GENESIS", "GENESIS_LEMON" -> handleGenesisBeltRelease(player, vars);
-            case "GENESIS_MELON" -> handleMelonRelease(player, vars);
-            case "GENESIS_CHERRY" -> handleCherryRelease(player, vars);
-            case "GENESIS_PEACH" -> handlePeachRelease(player, vars);
-            case "GENESIS_DRAGONFRUIT" -> handleDragonfruitRelease(player, vars);
-            case "BARONS" -> handleBaronsBeltRelease(player, vars);
-            case "DUKE" -> handleDukeBeltRelease(player, vars);
-            case "EVIL_BATS" -> handleEvilBatsRelease(player, vars);
-            case "RIDERNECROM" -> handleNecromRelease(player, vars);
-            case "DARK_GHOST" -> handleDarkGhostRelease(player, vars);
-            case "NAPOLEON_GHOST" -> handleNapoleonGhostRelease(player, vars);
+        try {
+            KRBVariables.PlayerVariables vars = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+                    .orElse(new KRBVariables.PlayerVariables());
+            
+            // 根据不同的骑士类型执行不同的解除逻辑
+            switch (beltType) {
+                case "GENESIS", "GENESIS_LEMON" -> handleGenesisBeltRelease(player, vars);
+                case "GENESIS_MELON" -> handleMelonRelease(player, vars);
+                case "GENESIS_CHERRY" -> handleCherryRelease(player, vars);
+                case "GENESIS_PEACH" -> handlePeachRelease(player, vars);
+                case "GENESIS_DRAGONFRUIT" -> handleDragonfruitRelease(player, vars);
+                case "BARONS" -> handleBaronsBeltRelease(player, vars);
+                case "DUKE" -> handleDukeBeltRelease(player, vars);
+                case "EVIL_BATS" -> handleEvilBatsRelease(player, vars);
+                case "RIDERNECROM" -> handleNecromRelease(player, vars);
+                case "DARK_GHOST" -> handleDarkGhostRelease(player, vars);
+                case "NAPOLEON_GHOST" -> handleNapoleonGhostRelease(player, vars);
+            }
+            
+            // 同步玩家背包变化
+            player.inventoryMenu.broadcastChanges();
+            
+            // 强制同步玩家状态到客户端
+            vars.syncPlayerVariables(player);
+            
+            // 清除所有变身相关的状态标志
+            vars.isDarkGhostTransformed = false;
+            vars.isMegaUiorderTransformed = false;
+            vars.isEvilBatsTransformed = false;
+            vars.syncPlayerVariables(player);
+        } catch (Exception e) {
+            // 记录异常信息，确保解除变身过程不会因异常而中断
+            e.printStackTrace();
+            // 即使发生异常，也要尝试清除盔甲
+            clearTransformationArmor(player);
+            player.inventoryMenu.broadcastChanges();
         }
-        
-        // 同步玩家背包变化
-        player.inventoryMenu.broadcastChanges();
     }
     
     // 黑暗灵骑解除变身

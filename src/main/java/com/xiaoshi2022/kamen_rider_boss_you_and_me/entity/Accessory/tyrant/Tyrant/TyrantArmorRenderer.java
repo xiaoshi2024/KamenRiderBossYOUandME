@@ -37,7 +37,7 @@ public class TyrantArmorRenderer extends GeoArmorRenderer<TyrantItem> {
 	@Override
 	public void prepForRender(@Nullable Entity entity, ItemStack stack, @Nullable EquipmentSlot slot, @Nullable HumanoidModel<?> baseModel) {
 		super.prepForRender(entity, stack, slot, baseModel);
-		this.currentEntity = (LivingEntity) entity;
+		this.currentEntity = entity instanceof LivingEntity ? (LivingEntity) entity : null;
 	}
 
 	@Override

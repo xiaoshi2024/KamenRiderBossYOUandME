@@ -1,71 +1,44 @@
-[1111æœˆ2025 14:53:00.699] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\luozhi\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.3.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, kamen_rider_boss_you_and_me, --all, --output, E:\KamenRiderBossYOUandME\src\generated\resources, --existing, E:\KamenRiderBossYOUandME\src\main\resources, -mixin.config=kamen_rider_boss_you_and_me.mixins.json, --mixin.config, kamen_rider_boss_you_and_me.mixins.json]
-[1111æœˆ2025 14:53:00.709] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.16 by Microsoft; OS Windows 11 arch amd64 version 10.0
-[1111æœˆ2025 14:53:00.866] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[1111æœˆ2025 14:53:00.912] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/luozhi/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
-[1111æœˆ2025 14:53:01.205] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\luozhi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.3.0\d7ebc62120f202109e300e084ca1a31a7b946a62\javafmllanguage-1.20.1-47.3.0.jar is missing mods.toml file
-[1111æœˆ2025 14:53:01.210] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\luozhi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.3.0\1bf3e845ea0ce750096da8c71c8364b188ab74d4\lowcodelanguage-1.20.1-47.3.0.jar is missing mods.toml file
-[1111æœˆ2025 14:53:01.215] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\luozhi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.3.0\6093682e943ddccbabf70539319d7f2fe64db2e7\mclanguage-1.20.1-47.3.0.jar is missing mods.toml file
-[1111æœˆ2025 14:53:01.219] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\luozhi\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.3.0\3b6be96aba3e323f3c918e8ef6a96312d82d76ad\fmlcore-1.20.1-47.3.0.jar is missing mods.toml file
-[1111æœˆ2025 14:53:01.521] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 4 dependencies adding them to mods collection
-[1111æœˆ2025 14:53:04.367] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[1111æœˆ2025 14:53:04.399] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\luozhi\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, kamen_rider_boss_you_and_me, --all, --output, E:\KamenRiderBossYOUandME\src\generated\resources, --existing, E:\KamenRiderBossYOUandME\src\main\resources]
-[1111æœˆ2025 14:53:04.473] [main/INFO] [mixin/]: Attempting to load Fernflower decompiler (Threaded mode)
-[1111æœˆ2025 14:53:04.474] [main/INFO] [mixin/]: Fernflower could not be loaded, exported classes will not be decompiled. NoClassDefFoundError: org/jetbrains/java/decompiler/main/extern/IResultSaver
-[1111æœˆ2025 14:53:04.549] [main/WARN] [mixin/]: Reference map 'kamen_rider_boss_you_and_me.refmap.json' for kamen_rider_boss_you_and_me.mixins.json could not be read. If this is a development environment you can ignore this message
-[1111æœˆ2025 14:53:04.659] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.660] [main/INFO] [mixin/]: Remapping refMap terrablender.refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.661] [main/INFO] [mixin/]: Remapping refMap jade.refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.662] [main/INFO] [mixin/]: Remapping refMap geckolib.refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.665] [main/INFO] [mixin/]: Remapping refMap player-animation-lib-minecraft_common-refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.666] [main/INFO] [mixin/]: Remapping refMap playeranimatorapi-common-1.20.1-common-refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.671] [main/WARN] [mixin/]: Reference map 'zigysmultiloaderutils-common-1.20.1-common-refmap.json' for zigysmultiloaderutils-common.mixins.json could not be read. If this is a development environment you can ignore this message
-[1111æœˆ2025 14:53:04.672] [main/INFO] [mixin/]: Remapping refMap curios.refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.673] [main/INFO] [mixin/]: Remapping refMap patchouli.refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.759] [main/INFO] [mixin/]: Remapping refMap architectury-forge-refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.760] [main/INFO] [mixin/]: Remapping refMap architectury-common-refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.762] [main/INFO] [mixin/]: Remapping refMap forge-minecraft-comes-alive-common-refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.765] [main/WARN] [mixin/]: Reference map 'kamen_rider_weapon_craft.refmap.json' for kamen_rider_weapon_craft.mixins.json could not be read. If this is a development environment you can ignore this message
-[1111æœˆ2025 14:53:04.766] [main/INFO] [mixin/]: Remapping refMap craftedcore-1.20.1_common-refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.768] [main/INFO] [mixin/]: Remapping refMap walkers-1.20.1_common-refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:04.770] [main/INFO] [mixin/]: Remapping refMap remorphed-1.20.1_common-refmap.json using E:\KamenRiderBossYOUandME\build\createSrgToMcp\output.srg
-[1111æœˆ2025 14:53:05.485] [main/WARN] [mixin/]: Error loading class: net/bettercombat/compatibility/CompatibilityFlags (java.lang.ClassNotFoundException: net.bettercombat.compatibility.CompatibilityFlags)
-[1111æœˆ2025 14:53:05.687] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
-[1111æœˆ2025 14:53:06.016] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [kamen_rider_boss_you_and_me]
-[1111æœˆ2025 14:53:10.824] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.3.0, for MC 1.20.1 with MCP 20230612.114412
-[1111æœˆ2025 14:53:10.826] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.3.0 Initialized
-[1111æœˆ2025 14:53:11.012] [modloading-worker-0/WARN] [software.bernie.geckolib.GeckoLib/]: Minecraft.getInstance() was null, could not register reload listeners
-[1111æœˆ2025 14:53:11.132] [modloading-worker-0/INFO] [kamen_rider_boss_you_and_me/]: Registered Time Jacker profession and POI type
-[1111æœˆ2025 14:53:11.406] [modloading-worker-0/INFO] [dev.architectury.networking.forge.NetworkManagerImpl/]: Registering S2C receiver with id architectury:sync_ids
-[1111æœˆ2025 14:53:11.411] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
-[1111æœˆ2025 14:53:11.411] [modloading-worker-0/INFO] [dev.architectury.networking.forge.NetworkManagerImpl/]: Registering C2S receiver with id architectury:sync_ids
-[1111æœˆ2025 14:53:11.479] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 64.46 ms
-[1111æœˆ2025 14:53:11.623] [ForkJoinPool.commonPool-worker-1/ERROR] [tocraft.craftedcore.CraftedCore/]: Couldn't get patreons from https://raw.githubusercontent.com/ToCraft/craftedcore/main/common/src/main/resources/patreons.txt
-javax.net.ssl.SSLHandshakeException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
-	at sun.security.ssl.Alert.createSSLException(Alert.java:131) ~[?:?]
-	at sun.security.ssl.TransportContext.fatal(TransportContext.java:383) ~[?:?]
-	at sun.security.ssl.TransportContext.fatal(TransportContext.java:326) ~[?:?]
-	at sun.security.ssl.TransportContext.fatal(TransportContext.java:321) ~[?:?]
-	at sun.security.ssl.CertificateMessage$T13CertificateConsumer.checkServerCerts(CertificateMessage.java:1360) ~[?:?]
-	at sun.security.ssl.CertificateMessage$T13CertificateConsumer.onConsumeCertificate(CertificateMessage.java:1235) ~[?:?]
-	at sun.security.ssl.CertificateMessage$T13CertificateConsumer.consume(CertificateMessage.java:1178) ~[?:?]
-	at sun.security.ssl.SSLHandshake.consume(SSLHandshake.java:396) ~[?:?]
-	at sun.security.ssl.HandshakeContext.dispatch(HandshakeContext.java:480) ~[?:?]
-	at sun.security.ssl.HandshakeContext.dispatch(HandshakeContext.java:458) ~[?:?]
-	at sun.security.ssl.TransportContext.dispatch(TransportContext.java:206) ~[?:?]
-	at sun.security.ssl.SSLTransport.decode(SSLTransport.java:172) ~[?:?]
-	at sun.security.ssl.SSLSocketImpl.decode(SSLSocketImpl.java:1510) ~[?:?]
-	at sun.security.ssl.SSLSocketImpl.readHandshakeRecord(SSLSocketImpl.java:1425) ~[?:?]
-	at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:455) ~[?:?]
-	at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:426) ~[?:?]
-	at sun.net.www.protocol.https.HttpsClient.afterConnect(HttpsClient.java:589) ~[?:?]
-	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:187) ~[?:?]
-	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1703) ~[?:?]
-	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1627) ~[?:?]
+[231ÔÂ2026 14:41:07.809] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserver, --fml.forgeVersion, 47.4.10, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[231ÔÂ2026 14:41:07.814] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[231ÔÂ2026 14:41:08.000] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserver
+[231ÔÂ2026 14:41:08.046] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/D:/mckamenboss/libraries/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar%2365!/ Service=ModLauncher Env=SERVER
+[231ÔÂ2026 14:41:08.248] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\fmlcore\1.20.1-47.4.10\fmlcore-1.20.1-47.4.10.jar is missing mods.toml file
+[231ÔÂ2026 14:41:08.253] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\javafmllanguage\1.20.1-47.4.10\javafmllanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[231ÔÂ2026 14:41:08.257] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\lowcodelanguage\1.20.1-47.4.10\lowcodelanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[231ÔÂ2026 14:41:08.262] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\mclanguage\1.20.1-47.4.10\mclanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[231ÔÂ2026 14:41:08.406] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 3 dependencies adding them to mods collection
+[231ÔÂ2026 14:41:09.188] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[231ÔÂ2026 14:41:09.202] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserver' with arguments []
+[231ÔÂ2026 14:41:09.293] [main/WARN] [mixin/]: Reference map 'kamen_rider_boss_you_and_me.refmap.json' for kamen_rider_boss_you_and_me.mixins.json could not be read. If this is a development environment you can ignore this message
+[231ÔÂ2026 14:41:09.301] [main/WARN] [mixin/]: Reference map 'kamen_rider_weapon_craft.refmap.json' for kamen_rider_weapon_craft.mixins.json could not be read. If this is a development environment you can ignore this message
+[231ÔÂ2026 14:41:09.958] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.2).
+[231ÔÂ2026 14:41:15.008] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.10, for MC 1.20.1 with MCP 20230612.114412
+[231ÔÂ2026 14:41:15.009] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.10 Initialized
+[231ÔÂ2026 14:41:15.086] [modloading-worker-0/INFO] [kamen_rider_boss_you_and_me/]: Registered Time Jacker profession and POI type
+[231ÔÂ2026 14:41:15.104] [modloading-worker-0/INFO] [dev.architectury.networking.forge.NetworkManagerImpl/]: Registering C2S receiver with id architectury:sync_ids
+[231ÔÂ2026 14:41:15.187] [ForkJoinPool.commonPool-worker-1/ERROR] [tocraft.craftedcore.CraftedCore/]: No internet connection!
+java.net.UnknownHostException: raw.githubusercontent.com
+	at sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:572) ~[?:?]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[?:?]
+	at java.net.Socket.connect(Socket.java:633) ~[?:?]
+	at sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:304) ~[?:?]
+	at sun.security.ssl.BaseSSLSocketImpl.connect(BaseSSLSocketImpl.java:174) ~[?:?]
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:183) ~[?:?]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:534) ~[?:?]
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:639) ~[?:?]
+	at sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:266) ~[?:?]
+	at sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:380) ~[?:?]
+	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:193) ~[?:?]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1241) ~[?:?]
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1127) ~[?:?]
+	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:179) ~[?:?]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1686) ~[?:?]
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1610) ~[?:?]
 	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:224) ~[?:?]
 	at java.net.URL.openStream(URL.java:1161) ~[?:?]
-	at tocraft.craftedcore.VIPs.getUUIDOfPeople(VIPs.java:84) ~[crafted-core-923377-6187026_mapped_official_1.20.1.jar:?]
-	at tocraft.craftedcore.VIPs.getPatreons(VIPs.java:51) ~[crafted-core-923377-6187026_mapped_official_1.20.1.jar:?]
-	at tocraft.craftedcore.VIPs.cachePatreons(VIPs.java:31) ~[crafted-core-923377-6187026_mapped_official_1.20.1.jar:?]
+	at tocraft.craftedcore.VIPs.getUUIDOfPeople(VIPs.java:84) ~[?:?]
+	at tocraft.craftedcore.VIPs.getPatreons(VIPs.java:51) ~[?:?]
+	at tocraft.craftedcore.VIPs.cachePatreons(VIPs.java:31) ~[?:?]
 	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?]
 	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?]
 	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
@@ -73,66 +46,939 @@ javax.net.ssl.SSLHandshakeException: PKIX path building failed: sun.security.pro
 	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
-	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:439) ~[?:?]
-	at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:306) ~[?:?]
-	at sun.security.validator.Validator.validate(Validator.java:264) ~[?:?]
-	at sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:231) ~[?:?]
-	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:132) ~[?:?]
-	at sun.security.ssl.CertificateMessage$T13CertificateConsumer.checkServerCerts(CertificateMessage.java:1344) ~[?:?]
-	... 27 more
-Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
-	at sun.security.provider.certpath.SunCertPathBuilder.build(SunCertPathBuilder.java:148) ~[?:?]
-	at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:129) ~[?:?]
-	at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:297) ~[?:?]
-	at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:434) ~[?:?]
-	at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:306) ~[?:?]
-	at sun.security.validator.Validator.validate(Validator.java:264) ~[?:?]
-	at sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:231) ~[?:?]
-	at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:132) ~[?:?]
-	at sun.security.ssl.CertificateMessage$T13CertificateConsumer.checkServerCerts(CertificateMessage.java:1344) ~[?:?]
-	... 27 more
-[1111æœˆ2025 14:53:13.863] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.864] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.864] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.865] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.865] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.865] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.865] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.865] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[1111æœˆ2025 14:53:13.868] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.868] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.868] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.868] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.868] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.869] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.869] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.869] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.869] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.869] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.869] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.869] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[1111æœˆ2025 14:53:13.869] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.873] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.874] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.877] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.877] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.878] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.878] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.878] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[1111æœˆ2025 14:53:13.883] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.GrimReaperEntity from class forge.net.mca.util.network.datasync.CEnumParameter
-[1111æœˆ2025 14:53:13.948] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/luozhi/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.0_mapped_official_1.20.1/forge-1.20.1-47.3.0_mapped_official_1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[1111æœˆ2025 14:53:13.948] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/luozhi/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.3.0_mapped_official_1.20.1/forge-1.20.1-47.3.0_mapped_official_1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[1111æœˆ2025 14:53:14.113] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:point_of_interest_type mod id kamen_rider_boss_you_and_me
-[1111æœˆ2025 14:53:14.241] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:point_of_interest_type mod id kamen_rider_boss_you_and_me finished after 127 ms
-[1111æœˆ2025 14:53:14.241] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 128 ms
-[1111æœˆ2025 14:53:14.245] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 1, old count: 0, new count: 2, removed stale: 0, written: 1
+[231ÔÂ2026 14:41:15.680] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.682] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.684] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[231ÔÂ2026 14:41:15.685] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.687] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.687] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.687] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.689] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.689] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.689] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[231ÔÂ2026 14:41:15.689] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.692] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[231ÔÂ2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[231ÔÂ2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[231ÔÂ2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.694] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.694] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.697] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.702] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.702] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.702] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.703] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.703] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[231ÔÂ2026 14:41:15.705] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.GrimReaperEntity from class forge.net.mca.util.network.datasync.CEnumParameter
+[231ÔÂ2026 14:41:15.778] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
+[231ÔÂ2026 14:41:16.513] [main/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[231ÔÂ2026 14:41:16.756] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Found status: UP_TO_DATE Current: 47.4.10 Target: null
+[231ÔÂ2026 14:41:16.996] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/mckamenboss/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23123!/assets/.mcassetsroot' uses unexpected schema
+[231ÔÂ2026 14:41:16.996] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/mckamenboss/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23123!/data/.mcassetsroot' uses unexpected schema
+[231ÔÂ2026 14:41:17.833] [Worker-Main-10/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag kamen_rider_boss_you_and_me:helheim_elites as it is missing following references: kamen_rider:lord_baron (from kamen_rider_boss_you_and_me-0.2.7alpha-2.jar), 
+	kamen_rider:lord_another_elite (from kamen_rider_boss_you_and_me-0.2.7alpha-2.jar)
+[231ÔÂ2026 14:41:17.834] [Worker-Main-10/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag kamen_rider_boss_you_and_me:helheim_minions as it is missing following references: kamen_rider:elementary_inves_helheim (from kamen_rider_boss_you_and_me-0.2.7alpha-2.jar), 
+	kamen_rider:advanced_inves (from kamen_rider_boss_you_and_me-0.2.7alpha-2.jar)
+[231ÔÂ2026 14:41:18.037] [Worker-Main-1/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/lockseed_iron_bars
+com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown string 'kamen_rider_weapon_craft:lockseed_iron_bars'
+	at net.minecraft.util.GsonHelper.m_13866_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
+	at net.minecraft.util.GsonHelper.m_13874_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.util.GsonHelper.m_13909_(GsonHelper.java:153) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:40) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:151) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:129) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:86) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:74) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.GsonAdapterFactory$JsonAdapter.deserialize(GsonAdapterFactory.java:102) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
+	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.util.GsonHelper.m_13836_(GsonHelper.java:471) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:192) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:189) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
+	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.util.GsonHelper.m_13845_(GsonHelper.java:481) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:294) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1261) ~[gson-2.10.jar%2372!/:?]
+	at net.minecraftforge.common.ForgeHooks.loadLootTable(ForgeHooks.java:872) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraftforge.common.ForgeHooks.lambda$getLootTableDeserializer$3(ForgeHooks.java:849) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraft.world.level.storage.loot.LootDataType.deserialize(LootDataType.java:45) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootDataManager.lambda$scheduleElementParse$4(LootDataManager.java:56) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.HashMap.forEach(HashMap.java:1421) ~[?:?]
+	at net.minecraft.world.level.storage.loot.LootDataManager.m_278660_(LootDataManager.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?]
+	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+[231ÔÂ2026 14:41:18.078] [Worker-Main-1/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/pine_wall_hanging_sign
+com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown string 'kamen_rider_weapon_craft:pine_hanging_sign'
+	at net.minecraft.util.GsonHelper.m_13866_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
+	at net.minecraft.util.GsonHelper.m_13874_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.util.GsonHelper.m_13909_(GsonHelper.java:153) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:40) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:151) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:129) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:86) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:74) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.GsonAdapterFactory$JsonAdapter.deserialize(GsonAdapterFactory.java:102) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
+	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.util.GsonHelper.m_13836_(GsonHelper.java:471) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:192) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:189) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
+	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.util.GsonHelper.m_13845_(GsonHelper.java:481) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:294) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1261) ~[gson-2.10.jar%2372!/:?]
+	at net.minecraftforge.common.ForgeHooks.loadLootTable(ForgeHooks.java:872) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraftforge.common.ForgeHooks.lambda$getLootTableDeserializer$3(ForgeHooks.java:849) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraft.world.level.storage.loot.LootDataType.deserialize(LootDataType.java:45) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootDataManager.lambda$scheduleElementParse$4(LootDataManager.java:56) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.HashMap.forEach(HashMap.java:1421) ~[?:?]
+	at net.minecraft.world.level.storage.loot.LootDataManager.m_278660_(LootDataManager.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?]
+	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+[231ÔÂ2026 14:41:18.085] [Worker-Main-1/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/pine_hanging_sign
+com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown string 'kamen_rider_weapon_craft:pine_hanging_sign'
+	at net.minecraft.util.GsonHelper.m_13866_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
+	at net.minecraft.util.GsonHelper.m_13874_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.util.GsonHelper.m_13909_(GsonHelper.java:153) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:40) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:151) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:129) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:86) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:74) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.GsonAdapterFactory$JsonAdapter.deserialize(GsonAdapterFactory.java:102) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
+	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.util.GsonHelper.m_13836_(GsonHelper.java:471) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:192) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:189) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
+	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.util.GsonHelper.m_13845_(GsonHelper.java:481) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:294) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
+	at com.google.gson.Gson.fromJson(Gson.java:1261) ~[gson-2.10.jar%2372!/:?]
+	at net.minecraftforge.common.ForgeHooks.loadLootTable(ForgeHooks.java:872) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraftforge.common.ForgeHooks.lambda$getLootTableDeserializer$3(ForgeHooks.java:849) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraft.world.level.storage.loot.LootDataType.deserialize(LootDataType.java:45) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.storage.loot.LootDataManager.lambda$scheduleElementParse$4(LootDataManager.java:56) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.HashMap.forEach(HashMap.java:1421) ~[?:?]
+	at net.minecraft.world.level.storage.loot.LootDataManager.m_278660_(LootDataManager.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?]
+	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+[231ÔÂ2026 14:41:18.110] [main/WARN] [net.minecraft.world.level.storage.loot.LootDataManager/]: Found loot table element validation problem in {loot_tables:kamen_rider_boss_you_and_me:entities/time_jacker}.pools[0].entries[0]: Unreachable entry!
+[231ÔÂ2026 14:41:18.124] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:rider_fusion_recipe_1
+com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'kamen_rider_weapon_craft:rider_fusion_recipe_1'
+	at net.minecraft.world.item.crafting.RecipeManager.m_220253_(RecipeManager.java:170) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
+	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:169) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
+	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
+	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
+[231ÔÂ2026 14:41:18.137] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:helheim_ice_cream
+com.google.gson.JsonSyntaxException: Unknown item 'pamhc2foodcore:mixingbowlitem'
+	at net.minecraft.world.item.crafting.ShapedRecipe.m_151280_(ShapedRecipe.java:292) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
+	at net.minecraft.world.item.crafting.ShapedRecipe.m_151278_(ShapedRecipe.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.Ingredient.m_43919_(Ingredient.java:219) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraftforge.common.crafting.VanillaIngredientSerializer.parse(VanillaIngredientSerializer.java:27) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraftforge.common.crafting.CraftingHelper.getIngredient(CraftingHelper.java:148) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraft.world.item.crafting.Ingredient.m_288218_(Ingredient.java:194) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.ShapedRecipe.m_44210_(ShapedRecipe.java:278) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.ShapedRecipe$Serializer.m_6729_(ShapedRecipe.java:306) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.ShapedRecipe$Serializer.m_6729_(ShapedRecipe.java:301) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraftforge.common.extensions.IForgeRecipeSerializer.fromJson(IForgeRecipeSerializer.java:23) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:171) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
+	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
+	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
+[231ÔÂ2026 14:41:18.139] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:helheim_juice_bottle
+com.google.gson.JsonSyntaxException: Unknown item 'pamhc2foodcore:juiceritem'
+	at net.minecraft.world.item.crafting.ShapedRecipe.m_151280_(ShapedRecipe.java:292) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
+	at net.minecraft.world.item.crafting.ShapedRecipe.m_151278_(ShapedRecipe.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.Ingredient.m_43919_(Ingredient.java:219) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraftforge.common.crafting.VanillaIngredientSerializer.parse(VanillaIngredientSerializer.java:27) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraftforge.common.crafting.CraftingHelper.getIngredient(CraftingHelper.java:148) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraft.world.item.crafting.Ingredient.m_288218_(Ingredient.java:194) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.ShapedRecipe.m_44210_(ShapedRecipe.java:278) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.ShapedRecipe$Serializer.m_6729_(ShapedRecipe.java:306) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.ShapedRecipe$Serializer.m_6729_(ShapedRecipe.java:301) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraftforge.common.extensions.IForgeRecipeSerializer.fromJson(IForgeRecipeSerializer.java:23) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:171) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
+	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
+	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
+[231ÔÂ2026 14:41:18.144] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe create:mixing/helheim_cake_slice
+com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'create:mixing'
+	at net.minecraft.world.item.crafting.RecipeManager.m_220253_(RecipeManager.java:170) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
+	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:169) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
+	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
+	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
+[231ÔÂ2026 14:41:18.146] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:rider_fusion_recipe
+com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'kamen_rider_weapon_craft:rider_fusion_recipe'
+	at net.minecraft.world.item.crafting.RecipeManager.m_220253_(RecipeManager.java:170) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
+	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:169) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
+	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
+	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
+[231ÔÂ2026 14:41:18.149] [main/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[231ÔÂ2026 14:41:18.212] [main/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1513 advancements
+[231ÔÂ2026 14:41:18.273] [main/INFO] [top.theillusivec4.curios.Curios/]: Loaded 11 curio slots
+[231ÔÂ2026 14:41:18.276] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
+[231ÔÂ2026 14:41:18.276] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
+[231ÔÂ2026 14:41:18.276] [main/ERROR] [top.theillusivec4.curios.Curios/]: knight_invoker is not a registered slot type!
+[231ÔÂ2026 14:41:18.276] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
+[231ÔÂ2026 14:41:18.277] [main/INFO] [top.theillusivec4.curios.Curios/]: Loaded 7 curio entities
+[231ÔÂ2026 14:41:18.287] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:snow_golem registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
+[231ÔÂ2026 14:41:18.287] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:bee registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
+[231ÔÂ2026 14:41:18.287] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:goat registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
+[231ÔÂ2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.zombie, entity.minecraft.zombie_villager] registered for [ReinforcementsTrait]
+[231ÔÂ2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.drowned, entity.minecraft.husk, entity.minecraft.piglin, entity.minecraft.piglin_brute, entity.minecraft.skeleton, entity.minecraft.stray, entity.minecraft.wither_skeleton, entity.minecraft.zombie, entity.minecraft.zombie_villager] registered for [HumanoidTrait]
+[231ÔÂ2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.husk] registered for [ReinforcementsTrait]
+[231ÔÂ2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.stray] registered for [RiderTrait]
+[231ÔÂ2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.snow_golem] registered for [UndrownableTrait]
+[231ÔÂ2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.endermite, entity.minecraft.fox, entity.minecraft.silverfish, entity.minecraft.vex, entity.minecraft.wither] registered for [WalkOnPowderSnow]
+[231ÔÂ2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.strider] registered for [RiderTrait]
+[231ÔÂ2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.wolf] registered for [FearedTrait]
+[231ÔÂ2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.chicken, entity.minecraft.rabbit, entity.minecraft.frog] registered for [PreyTrait]
+[231ÔÂ2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.chicken, entity.minecraft.turtle] registered for [PreyTrait]
+[231ÔÂ2026 14:41:18.294] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.drowned] registered for [ReinforcementsTrait]
+[231ÔÂ2026 14:41:19.527] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting minecraft server version 1.20.1
+[231ÔÂ2026 14:41:19.527] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Loading properties
+[231ÔÂ2026 14:41:19.528] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Default game type: SURVIVAL
+[231ÔÂ2026 14:41:19.528] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
+[231ÔÂ2026 14:41:19.581] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting Minecraft server on *:25565
+[231ÔÂ2026 14:41:19.597] [Server thread/INFO] [net.minecraft.server.network.ServerConnectionListener/]: Using default channel type
+[231ÔÂ2026 14:41:19.773] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[231ÔÂ2026 14:41:19.773] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: The server will make no attempt to authenticate usernames. Beware.
+[231ÔÂ2026 14:41:19.775] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[231ÔÂ2026 14:41:19.775] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: To change this, set "online-mode" to "true" in the server.properties file.
+[231ÔÂ2026 14:41:19.829] [Server thread/INFO] [terrablender/]: Registered region minecraft:overworld to index 0 for type OVERWORLD
+[231ÔÂ2026 14:41:19.829] [Server thread/INFO] [terrablender/]: Registered region minecraft:nether to index 0 for type NETHER
+[231ÔÂ2026 14:41:19.899] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:overworld
+[231ÔÂ2026 14:41:19.900] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:the_nether
+[231ÔÂ2026 14:41:19.900] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Preparing level "world"
+[231ÔÂ2026 14:41:21.802] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
+[231ÔÂ2026 14:41:22.784] [Worker-Main-11/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
+[231ÔÂ2026 14:41:22.785] [Worker-Main-10/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
+[231ÔÂ2026 14:41:22.804] [Worker-Main-5/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
+[231ÔÂ2026 14:41:23.303] [Worker-Main-10/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
+[231ÔÂ2026 14:41:23.613] [Netty Server IO #1/INFO] [net.minecraftforge.server.ServerLifecycleHooks/SERVERHOOKS]: Disconnecting Player (server is still starting): literal{Server is still starting! Please wait before reconnecting.}
+[231ÔÂ2026 14:41:23.805] [Worker-Main-1/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 85%
+[231ÔÂ2026 14:41:23.858] [Server thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 2055 ms
+[231ÔÂ2026 14:41:23.859] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Done (4.069s)! For help, type "help"
+[231ÔÂ2026 14:41:23.882] [Server thread/INFO] [net.minecraftforge.server.permission.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
+[231ÔÂ2026 14:41:29.454] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: xi_bao_yaa[/127.0.0.1:60685] logged in with entity id 147 at (5.699999988079071, 83.0, 26.32120383488818)
+[231ÔÂ2026 14:41:29.537] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: xi_bao_yaa joined the game
+[231ÔÂ2026 14:41:29.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: false, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:29.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:29.762] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:29.762] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:29.814] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:29.814] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:29.841] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:29.841] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:29.892] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:29.893] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:29.922] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:29.922] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:29.969] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:29.970] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:29.992] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:29.992] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.021] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.021] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.223] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.223] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.257] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.257] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.278] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.278] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.320] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.320] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.338] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.338] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.368] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.369] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.388] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.388] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.415] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.416] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.432] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.432] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.463] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.463] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.481] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.482] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.510] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.511] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.528] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.528] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.615] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.615] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.687] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.688] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.748] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.748] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.822] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.822] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:30.870] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:30.870] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.062] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.062] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.089] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.091] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.107] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.107] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.134] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.134] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.151] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.151] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.180] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.180] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.199] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.200] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.260] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.260] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.299] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.300] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.362] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.362] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.399] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.463] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.463] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.501] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.503] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.598] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.598] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.658] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.659] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.702] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.702] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.762] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.762] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:31.856] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:31.857] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.024] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.024] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.051] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.051] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.067] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.068] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.165] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.165] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.201] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.201] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.258] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.259] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.362] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.362] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.453] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.454] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.499] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.499] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.661] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.661] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.694] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.694] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.753] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.753] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:32.853] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:32.854] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.017] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.017] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.038] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.038] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.052] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.052] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.076] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.077] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.095] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.095] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.152] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.152] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.194] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.194] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.257] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.257] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.353] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.353] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.399] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.453] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.453] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.558] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.558] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.594] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.594] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.696] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.696] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.760] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.760] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:33.853] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:33.854] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.004] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.004] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.028] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.028] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.043] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.044] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.065] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.065] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.094] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.094] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.159] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.159] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.193] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.195] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.258] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.258] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.296] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.296] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.354] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.355] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.456] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.456] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.498] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.498] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.554] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.554] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.594] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.596] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.652] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.652] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.697] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.698] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.800] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.800] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:34.863] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:34.863] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.029] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.029] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.050] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.050] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.063] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.063] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.092] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.092] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.105] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.105] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.153] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.153] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.194] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.196] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.254] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.254] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.296] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.353] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.353] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.454] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.454] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.553] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.554] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.598] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.660] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.661] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.697] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.697] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.754] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.755] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:35.859] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:35.859] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.032] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.032] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.059] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.059] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.072] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.072] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.095] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.095] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.108] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.108] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.166] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.166] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.198] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.198] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.259] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.261] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.352] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.352] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.455] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.455] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.495] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.558] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.601] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.602] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.660] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.660] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.751] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.751] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.793] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.793] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:36.860] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:36.860] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.078] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.078] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.105] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.105] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.117] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.117] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.140] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.141] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.153] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.155] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.179] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.180] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.195] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.196] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.253] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.254] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.297] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.297] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.352] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.352] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.452] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.452] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.495] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.495] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.694] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.753] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.753] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:37.853] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:37.853] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:38.025] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: xi_bao_yaa lost connection: Disconnected
+[231ÔÂ2026 14:41:38.025] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: xi_bao_yaa left the game
+[231ÔÂ2026 14:41:53.988] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: UFO_by_shi[/[fdfd::1aad:be33]:58141] logged in with entity id 185 at (-22.145554828436925, 72.0, 36.030213426988944)
+[231ÔÂ2026 14:41:54.000] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: UFO_by_shi joined the game
+[231ÔÂ2026 14:41:54.061] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: false, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.061] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.091] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.091] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.109] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.109] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.173] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.173] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.210] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.210] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.270] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.270] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.315] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.315] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.368] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.368] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.464] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.464] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.507] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.507] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.561] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.600] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.600] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.655] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.699] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.699] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.760] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.760] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.795] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.795] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:54.906] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:54.909] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.155] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.155] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.186] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.186] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.200] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.200] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.230] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.231] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.247] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.248] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.279] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.280] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.299] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.330] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.330] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.348] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.348] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.380] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.381] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.459] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.459] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.502] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.503] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.608] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.609] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.666] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.666] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.698] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.698] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:55.865] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:55.865] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.050] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.051] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.079] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.080] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.099] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.100] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.129] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.129] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.147] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.148] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.176] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.177] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.202] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.202] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.262] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.263] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.301] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.301] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.363] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.363] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.456] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.457] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.497] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.497] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.557] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.558] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.597] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.598] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.663] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.663] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.699] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.700] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.759] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.803] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.804] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:56.862] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:56.862] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.068] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.069] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.141] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.142] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.156] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.157] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.187] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.187] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.205] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.206] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.253] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.253] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.359] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.360] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.456] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.457] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.499] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.500] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.596] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.597] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.677] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.678] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.700] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.701] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.764] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.764] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.800] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.800] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:57.865] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:57.865] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.071] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.071] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.099] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.145] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.145] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.161] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.162] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.190] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.191] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.208] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.210] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.272] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.272] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.301] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.301] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.359] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
+[231ÔÂ2026 14:41:58.360] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
+[231ÔÂ2026 14:41:58.398] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: UFO_by_shi lost connection: Disconnected
+[231ÔÂ2026 14:41:58.398] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: UFO_by_shi left the game

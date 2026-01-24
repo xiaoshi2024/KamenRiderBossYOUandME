@@ -42,7 +42,7 @@ public class KicktimeProcedure {
 
 	// 添加一个静态变量来跟踪每个玩家的特效实体
 	private static final Map<UUID, Integer> playerToEffectEntity = new HashMap<>();
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {

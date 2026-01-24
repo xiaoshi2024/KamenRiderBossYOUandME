@@ -38,7 +38,10 @@ import java.util.WeakHashMap;
 public class KickendProcedure {
 
 	private static final Map<UUID, Integer> playerToEffectEntity = new WeakHashMap<>();
-    private static final boolean DEBUG = true;
+	// 添加静态变量来跟踪每个玩家的落地状态和跳跃状态
+	private static final Map<UUID, Boolean> playerLandingState = new WeakHashMap<>();
+	private static final Map<UUID, Boolean> playerJumpingState = new WeakHashMap<>();
+    private static final boolean DEBUG = false;
 
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -58,9 +61,37 @@ public class KickendProcedure {
 
 		// 检查玩家是否处于踢击状态且装备了正确的头盔
 		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-		if (variables.kick && isHelmetValid(helmet) && entity.onGround()) {
+		UUID playerId = entity.getUUID();
+		
+		// 记录上一状态
+		boolean wasOnGround = playerLandingState.getOrDefault(playerId, false);
+		boolean wasJumping = playerJumpingState.getOrDefault(playerId, false);
+		
+		// 更新当前状态
+		boolean isOnGround = entity.onGround();
+		boolean isJumping = variables.kick || entity.getDeltaMovement().y > 0.1;
+		
+		playerLandingState.put(playerId, isOnGround);
+		playerJumpingState.put(playerId, isJumping);
+
+		if (DEBUG && !world.isClientSide()) {
+			kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Player {} - kick: {}, isHelmetValid: {}, onGround: {}, wasOnGround: {}, isJumping: {}, wasJumping: {}", 
+					entity.getScoreboardName(), variables.kick, isHelmetValid(helmet), isOnGround, wasOnGround, isJumping, wasJumping);
+			if (!isHelmetValid(helmet)) {
+				kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Helmet invalid - item: {}", helmet.getItem());
+			}
+		}
+		
+		// 检查传统踢击结束条件
+		if (variables.kick && isHelmetValid(helmet) && isOnGround) {
 			// 玩家落地，处理踢击结束逻辑
 			handleKickEnd(event, world, entity);
+		}
+		
+		// 新增：检测玩家从空中落地的情况，即使kick标志已经被重置
+		if (!wasOnGround && isOnGround && wasJumping && isHelmetValid(helmet)) {
+			// 玩家从空中落地，处理落地伤害逻辑
+			handleLandingDamage(world, entity);
 		}
 
 		// 处理无敌状态的计时和重置
@@ -110,13 +141,13 @@ public class KickendProcedure {
 
 					// 创建一个不会破坏方块的爆炸，但会对实体造成伤害
 					serverLevel.explode(
-							entity, 
-							entity.getX(), 
-							entity.getY(), 
-							entity.getZ(), 
-							radius, 
-							false, // 是否会引起火灾
-							Level.ExplosionInteraction.NONE // 不破坏方块
+						entity, 
+						entity.getX(), 
+						entity.getY(), 
+						entity.getZ(), 
+						radius, 
+						false, // 是否会引起火灾
+						Level.ExplosionInteraction.NONE // 不破坏方块
 					);
 
 					// 自定义方块破坏处理（如果允许的话）
@@ -142,6 +173,63 @@ public class KickendProcedure {
 		}
 
 		// 设置无敌状态
+		variables.wudi = true;
+		variables.syncPlayerVariables(entity);
+	}
+
+	// 新增：直接处理落地伤害逻辑，不依赖kick标志
+	private static void handleLandingDamage(LevelAccessor world, Player entity) {
+		if (DEBUG && !world.isClientSide()) {
+			kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Handling landing damage for player {}", entity.getScoreboardName());
+		}
+
+		// 获取头盔
+		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
+		if (!isHelmetValid(helmet)) {
+			if (DEBUG && !world.isClientSide()) {
+				kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Helmet invalid for landing damage - item: {}", helmet.getItem());
+			}
+			return;
+		}
+
+		// 获取玩家变量
+		KRBVariables.PlayerVariables variables = entity.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null)
+				.orElse(new KRBVariables.PlayerVariables());
+
+		// 服务器端处理爆炸效果和伤害
+		if (!world.isClientSide()) {
+			boolean isBrainHelmet = helmet.getItem() == ModItems.BRAIN_HELMET.get();
+			
+			// Brain骑士踢没有特效和音效，只处理伤害
+			if (!isBrainHelmet) {
+				// 播放爆炸音效
+				world.playSound(null, new BlockPos((int) entity.getX(), (int) entity.getY(), (int) entity.getZ()),
+						SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+				// 创建爆炸粒子效果
+				ServerLevel serverLevel = (ServerLevel) world;
+				serverLevel.sendParticles(
+						ParticleTypes.EXPLOSION,
+						entity.getX(),
+						entity.getY(),
+						entity.getZ(),
+						10, 0.5, 0.5, 0.5, 0.1
+				);
+
+				// 清理特效实体
+				cleanupEffectEntity(entity, (ServerLevel) world);
+			}
+
+			// 专门处理基夫石像的伤害
+			handleGiifuDamage(world, entity);
+
+			// 处理普通敌人的伤害
+			handleEnemyDamage(world, entity);
+		}
+
+		// 重置踢击标志并设置无敌状态
+		variables.kick = false;
+		variables.needExplode = true;
 		variables.wudi = true;
 		variables.syncPlayerVariables(entity);
 	}
@@ -173,8 +261,8 @@ public class KickendProcedure {
 
 	// 处理无敌状态的重置
 	private static void handleInvulnerabilityReset(LevelAccessor world, Player entity, KRBVariables.PlayerVariables variables) {
-		// 如果处于无敌状态且需要爆炸
-		if (variables.wudi && variables.needExplode) {
+		// 如果处于无敌状态
+		if (variables.wudi) {
 			// 只在服务器端执行延迟任务
 			if (!world.isClientSide() && entity.getServer() != null) {
 				// 创建一个延迟任务来重置无敌状态 - 延迟20tick（1秒）
@@ -230,19 +318,39 @@ public class KickendProcedure {
 		// 根据头盔计算伤害
 		float damage = calculateDamage(entity);
 
-		// 找到范围内的敌人
+		// 增加爆炸范围到5x5x5，确保有明显的范围伤害效果
+		double explosionRadius = 5.0;
+
+		// 找到范围内的敌人（包括其他玩家）
 		List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(
 				LivingEntity.class,
 				new AABB(
-						entity.getX() - 3.0, entity.getY() - 3.0, entity.getZ() - 3.0,
-						entity.getX() + 3.0, entity.getY() + 3.0, entity.getZ() + 3.0
+						entity.getX() - explosionRadius, entity.getY() - explosionRadius, entity.getZ() - explosionRadius,
+						entity.getX() + explosionRadius, entity.getY() + explosionRadius, entity.getZ() + explosionRadius
 				),
-				e -> e != entity && !e.isAlliedTo(entity)
-		);
+				e -> e != entity // 只排除自己，不排除其他玩家
+			);
+
+		// 调试信息：打印找到的实体数量和类型
+		if (DEBUG && !world.isClientSide()) {
+			kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Found {} nearby entities for player {}", 
+					nearbyEntities.size(), entity.getScoreboardName());
+			for (LivingEntity enemy : nearbyEntities) {
+				kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Nearby entity: {} (type: {}, isPlayer: {})", 
+						enemy.getName().getString(), enemy.getType().getDescriptionId(), enemy instanceof Player);
+			}
+		}
 
 		// 对每个敌人造成伤害
 		for (LivingEntity enemy : nearbyEntities) {
-			damageEnemy(enemy, entity, damage);
+			// 计算敌人到爆炸中心的距离
+			double distance = enemy.distanceTo(entity);
+			// 根据距离计算伤害衰减，距离越远伤害越小
+			float distanceFactor = 1.0F - (float) (distance / explosionRadius);
+			distanceFactor = Math.max(0.3F, distanceFactor); // 最小保留30%伤害
+			float finalDamage = damage * distanceFactor;
+			
+			damageEnemy(enemy, entity, finalDamage);
 		}
 	}
 
@@ -290,12 +398,12 @@ public class KickendProcedure {
 
 	// 对敌人造成伤害
 	private static void damageEnemy(LivingEntity enemy, Player attacker, float damage) {
-		if (!enemy.isInvulnerableTo(attacker.damageSources().playerAttack(attacker))) {
-			enemy.hurt(attacker.damageSources().playerAttack(attacker), damage);
-			if (DEBUG) {
-				kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Damaged entity {} with {} damage",
-						enemy.getName().getString(), damage);
-			}
+		// 直接对敌人造成伤害，不检查免疫状态
+		// 这样可以确保在多人游戏中骑士踢也能对其他玩家造成伤害
+		enemy.hurt(attacker.damageSources().playerAttack(attacker), damage);
+		if (DEBUG) {
+			kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Damaged entity {} with {} damage",
+				enemy.getName().getString(), damage);
 		}
 	}
 

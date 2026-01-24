@@ -25,7 +25,10 @@ public class RemoveEntityPacket {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
             if (player != null) {
-                player.level().getEntity(entityId).discard();
+                net.minecraft.world.entity.Entity entity = player.level().getEntity(entityId);
+                if (entity != null) {
+                    entity.discard();
+                }
             }
         });
         ctx.get().setPacketHandled(true);

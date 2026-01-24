@@ -424,6 +424,9 @@ public class KRBVariables {
 	}
 
 	public void readNBT(Tag tag) {
+		if (tag == null) {
+			return;
+		}
 		CompoundTag nbt = (CompoundTag) tag;
 		kick = nbt.getBoolean("kick");
 		wudi = nbt.getBoolean("wudi");

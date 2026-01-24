@@ -19,18 +19,33 @@ public class CurioUtils {
      * @return true 如果更新成功，false 如果更新失败
      */
     public static boolean updateCurioSlot(Player player, String slotId, int index, ItemStack stack) {
-        return CuriosApi.getCuriosInventory(player).map(inv ->
-                inv.getStacksHandler(slotId).map(h -> {
-                    if (index >= 0 && index < h.getSlots()) {
-                        h.getStacks().setStackInSlot(index, stack);
-                        h.getCosmeticStacks().setStackInSlot(index, ItemStack.EMPTY);
-                        h.update();
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }).orElse(false)
-        ).orElse(false);
+        try {
+            return CuriosApi.getCuriosInventory(player).map(inv ->
+                    inv.getStacksHandler(slotId).map(h -> {
+                        if (index >= 0 && index < h.getSlots()) {
+                            // 确保在服务器端执行
+                            if (!player.level().isClientSide()) {
+                                h.getStacks().setStackInSlot(index, stack);
+                                h.getCosmeticStacks().setStackInSlot(index, ItemStack.EMPTY);
+                                h.update();
+                                // 强制同步到所有客户端
+                                if (player instanceof ServerPlayer serverPlayer) {
+                                    serverPlayer.inventoryMenu.broadcastChanges();
+                                }
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
+                    }).orElse(false)
+            ).orElse(false);
+        } catch (Exception e) {
+            // 记录异常信息，确保更新过程不会因异常而中断
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**

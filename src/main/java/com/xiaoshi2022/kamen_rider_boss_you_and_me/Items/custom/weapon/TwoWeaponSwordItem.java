@@ -177,10 +177,14 @@ public class TwoWeaponSwordItem extends TwoWeaponItem {
             if (tgt.invulnerableTime <= 0) {
                 // 造成更高伤害
                 tgt.hurt(player.damageSources().playerAttack(player), SWORD_MODE_DAMAGE);
-                // 增强击退效果
-                tgt.knockback(SWEEP_KNOCKBACK,
+                // 调整击退效果，确保玩家能正常下落
+                tgt.knockback(SWEEP_KNOCKBACK * 0.7,
                         player.getX() - tgt.getX(),
                         player.getZ() - tgt.getZ());
+                // 确保Y轴速度不会过高，防止玩家无法下落
+                if (tgt.getDeltaMovement().y > 0.5) {
+                    tgt.setDeltaMovement(tgt.getDeltaMovement().x, 0.5, tgt.getDeltaMovement().z);
+                }
 
                 // 对击中的实体造成额外效果
                 if (tgt.getHealth() <= SWEEP_DAMAGE) {

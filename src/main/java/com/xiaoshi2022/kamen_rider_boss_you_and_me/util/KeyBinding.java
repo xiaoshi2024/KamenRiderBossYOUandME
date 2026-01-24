@@ -47,6 +47,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class KeyBinding {
@@ -69,10 +70,10 @@ public class KeyBinding {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, KEY_CATEGORY_kamen_rider_boss_you_and_me);
 
     // 存储正在隐身的眼魔玩家
-    private static final java.util.Set<String> invisibleGhostEyePlayers = new java.util.HashSet<>();
+    private static final java.util.Set<UUID> invisibleGhostEyePlayers = new java.util.HashSet<>();
 
     // 存储玩家的维度传送冷却时间
-    private static final java.util.Map<String, Integer> teleportCooldowns = new java.util.HashMap<>();
+    private static final java.util.Map<UUID, Integer> teleportCooldowns = new java.util.HashMap<>();
     private static final int TELEPORT_COOLDOWN_TICKS = 20 * 5; // 5秒冷却时间（20刻/秒）
 
     @SubscribeEvent
@@ -235,7 +236,7 @@ public class KeyBinding {
         // 检查玩家是否手持眼魂并按下Shift+V键（优先处理维度传送功能）
         if (hasShiftDown() && KEY_GUARD.isDown() && isHoldingGhostEye(mc.player)) {
             if (KEY_GUARD.consumeClick()) {
-                String playerId = mc.player.getStringUUID();
+                UUID playerId = mc.player.getUUID();
                 // 检查冷却时间
                 if (!isTeleportOnCooldown(playerId)) {
                     // 发送数据包到服务器执行维度传送，isTeleport=true
@@ -662,13 +663,13 @@ public class KeyBinding {
     }
 
     // 检查玩家是否处于传送冷却中
-    private static boolean isTeleportOnCooldown(String playerId) {
+    private static boolean isTeleportOnCooldown(UUID playerId) {
         Integer cooldown = teleportCooldowns.get(playerId);
         return cooldown != null && cooldown > 0;
     }
 
     // 设置玩家的传送冷却时间
-    private static void setTeleportCooldown(String playerId, int ticks) {
+    private static void setTeleportCooldown(UUID playerId, int ticks) {
         teleportCooldowns.put(playerId, ticks);
     }
 
@@ -677,9 +678,9 @@ public class KeyBinding {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END && Minecraft.getInstance().player != null) {
             // 减少所有玩家的冷却时间
-            java.util.Iterator<java.util.Map.Entry<String, Integer>> iterator = teleportCooldowns.entrySet().iterator();
+            java.util.Iterator<java.util.Map.Entry<UUID, Integer>> iterator = teleportCooldowns.entrySet().iterator();
             while (iterator.hasNext()) {
-                java.util.Map.Entry<String, Integer> entry = iterator.next();
+                java.util.Map.Entry<UUID, Integer> entry = iterator.next();
                 int remainingCooldown = entry.getValue() - 1;
                 if (remainingCooldown <= 0) {
                     iterator.remove();
@@ -715,7 +716,7 @@ public class KeyBinding {
 
     // 切换眼魔玩家的隐身状态
     private static void toggleGhostEyeInvisibility(LocalPlayer player) {
-        String playerId = player.getStringUUID();
+        UUID playerId = player.getUUID();
         boolean isCurrentlyInvisible = invisibleGhostEyePlayers.contains(playerId);
 
         if (isCurrentlyInvisible) {

@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.procedures.riderkick;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import net.minecraft.world.damagesource.DamageSource;
+
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -78,8 +79,17 @@ public class KcikwudiProcedure {
 				.orElse(new KRBVariables.PlayerVariables());
 		
 		// 只要wudi为true就无敌，取消所有类型的伤害
+		// 但不会取消kill命令造成的伤害，也不会取消骑士踢造成的伤害
 		if (variables.wudi && event instanceof LivingHurtEvent hurtEvent) {
-			hurtEvent.setCanceled(true);
+			// 检查伤害来源是否为kill命令
+			if (!hurtEvent.getSource().getMsgId().equals("outOfWorld")) {
+				// 检查伤害来源是否为玩家攻击（骑士踢）
+				// 如果是玩家攻击，则不取消伤害，确保骑士踢可以对其他玩家造成伤害
+				// 使用更可靠的方式来判断是否是玩家攻击
+				if (!(hurtEvent.getSource().getDirectEntity() instanceof Player)) {
+					hurtEvent.setCanceled(true);
+				}
+			}
 		}
 	}
 	}

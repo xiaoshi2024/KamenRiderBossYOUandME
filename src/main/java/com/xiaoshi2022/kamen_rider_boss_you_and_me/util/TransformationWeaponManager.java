@@ -482,32 +482,33 @@ public class TransformationWeaponManager {
      * 在解除变身后调用此方法
      */
     public static void clearTransformationWeapons(ServerPlayer player) {
-        // 检查主手 - 先检查是否有装载的锁种
+        // 检查主手
         if (isTransformationWeapon(player.getMainHandItem())) {
-            ItemStack mainHand = player.getMainHandItem();
-            // 检查并返回装载的锁种
-            returnLoadedLockSeed(player, mainHand);
-            // 清理武器 - 使用明确的主手，而不是getUsedItemHand()
+            ItemStack mainHand = player.getMainHandItem().copy();
+            // 先清理武器 - 使用明确的主手，而不是getUsedItemHand()
             player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            // 再检查并返回装载的锁种
+            returnLoadedLockSeed(player, mainHand);
         }
         
-        // 检查副手 - 先检查是否有装载的锁种
+        // 检查副手
         if (isTransformationWeapon(player.getOffhandItem())) {
-            ItemStack offhand = player.getOffhandItem();
-            // 检查并返回装载的锁种
-            returnLoadedLockSeed(player, offhand);
-            // 清理武器
+            ItemStack offhand = player.getOffhandItem().copy();
+            // 先清理武器
             player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
+            // 再检查并返回装载的锁种
+            returnLoadedLockSeed(player, offhand);
         }
         
-        // 检查物品栏 - 先检查是否有装载的锁种
+        // 检查物品栏
         for (int i = 0; i < player.getInventory().items.size(); i++) {
             ItemStack stack = player.getInventory().items.get(i);
             if (isTransformationWeapon(stack)) {
-                // 检查并返回装载的锁种
-                returnLoadedLockSeed(player, stack);
-                // 清理武器
+                ItemStack copyStack = stack.copy();
+                // 先清理武器
                 player.getInventory().items.set(i, ItemStack.EMPTY);
+                // 再检查并返回装载的锁种
+                returnLoadedLockSeed(player, copyStack);
             }
         }
         
@@ -593,15 +594,8 @@ public class TransformationWeaponManager {
                     // 处理可能的异常，但不显示错误消息
                 }
                 
-                // 从武器的NBT标签中移除锁种信息，防止重复返回
-                if (tag != null) {
-                    tag.remove("LoadedLockSeed");
-                    tag.remove("LockSeedCount");
-                    tag.remove("lock_seed");
-                    tag.remove("lock_seed_count");
-                    tag.remove("LockSeed");
-                    tag.remove("Count");
-                }
+                // 不再修改武器的NBT标签，避免ConcurrentModificationException
+                // 由于武器已经被从玩家物品栏中移除，不会有重复返回的问题
             } else {
                 // 如果没有找到锁种信息，记录详细的调试信息
                 if (tag != null) {
@@ -633,7 +627,11 @@ public class TransformationWeaponManager {
                 for (int i = 0; i < stacks.getSlots(); i++) {
                     ItemStack stack = stacks.getStackInSlot(i);
                     if (isTransformationWeapon(stack)) {
+                        ItemStack copyStack = stack.copy();
+                        // 先清理武器
                         stacks.setStackInSlot(i, ItemStack.EMPTY);
+                        // 再检查并返回装载的锁种
+                        returnLoadedLockSeed(player, copyStack);
                     }
                 }
             });
