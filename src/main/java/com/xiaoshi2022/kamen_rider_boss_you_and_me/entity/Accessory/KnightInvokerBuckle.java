@@ -53,10 +53,16 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public boolean getEquipped(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsEquipped");
     }
 
     public void setEquipped(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsEquipped", flag);
     }
 
@@ -124,6 +130,9 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
 
     /* -------------------- 数据读/写 Helper -------------------- */
     public BeltMode getMode(ItemStack stack) {
+        if (stack == null) {
+            return BeltMode.DEFAULT;
+        }
         String key = stack.getOrCreateTag().getString("BeltMode");
         if (key.isEmpty()) return BeltMode.DEFAULT;
         try {
@@ -134,6 +143,9 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
     }
 
     public void setMode(ItemStack stack, BeltMode mode) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putString("BeltMode", mode.name());
         
         // 更新物品显示名称
@@ -146,42 +158,72 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
     }
 
     public boolean getShowing(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsShowing");
     }
 
     public void setShowing(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsShowing", flag);
     }
 
     public boolean getActive(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsActive");
     }
 
     public void setActive(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsActive", flag);
     }
 
     public boolean getHenshin(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsHenshin");
     }
 
     public void setHenshin(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsHenshin", flag);
     }
 
     public boolean getRelease(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsRelease");
     }
 
     public void setRelease(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsRelease", flag);
     }
     
     public boolean getPressState(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsPressed");
     }
     
     public void setPressState(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsPressed", flag);
     }
     /* ----------------------------------------------------------- */
@@ -335,6 +377,10 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
      */
     @Override
     protected void onBeltEquipped(ServerPlayer player, ItemStack beltStack) {
+        if (player == null || beltStack == null) {
+            return;
+        }
+        
         setHenshin(beltStack, false);
         setRelease(beltStack, false);
         setShowing(beltStack, true);
@@ -352,6 +398,10 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
 
     @Override
     public void onUnequip(SlotContext ctx, ItemStack prev, ItemStack stack) {
+        if (ctx == null || ctx.entity() == null || stack == null) {
+            return;
+        }
+        
         super.onUnequip(ctx, prev, stack);
         if (ctx.entity() instanceof ServerPlayer player) {
             onBeltUnequipped(player, stack);
@@ -362,6 +412,10 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
      * 实现基类的腰带卸下逻辑
      */
     protected void onBeltUnequipped(ServerPlayer player, ItemStack beltStack) {
+        if (player == null || beltStack == null) {
+            return;
+        }
+        
         setShowing(beltStack, false);
         setRelease(beltStack, false);
         setPressState(beltStack, false); // 重置Press状态，避免下次装备时状态异常
@@ -378,8 +432,17 @@ public class KnightInvokerBuckle extends AbstractRiderBelt implements GeoItem, I
 
     @Override
     public void curioTick(SlotContext ctx, ItemStack stack) {
-        if (ctx.entity().level().isClientSide()) return;
-        if (!(ctx.entity() instanceof ServerPlayer sp)) return;
+        if (ctx == null || ctx.entity() == null || stack == null) {
+            return;
+        }
+        
+        if (ctx.entity().level() == null || ctx.entity().level().isClientSide()) {
+            return;
+        }
+        
+        if (!(ctx.entity() instanceof ServerPlayer sp)) {
+            return;
+        }
 
         // 每 5 秒同步一次，避免频繁刷新
         if (sp.tickCount % 100 == 0) {

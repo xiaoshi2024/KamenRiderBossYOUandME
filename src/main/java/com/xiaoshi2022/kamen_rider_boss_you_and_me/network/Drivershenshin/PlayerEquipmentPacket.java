@@ -21,37 +21,45 @@ public class PlayerEquipmentPacket {
         this.bracelet = bracelet;
     }
 
-    public PlayerEquipmentPacket(FriendlyByteBuf buf) {
-        this.entityId = buf.readInt();
-        this.armor = new ItemStack[4];
+    public static void encode(PlayerEquipmentPacket packet, FriendlyByteBuf buffer) {
+        buffer.writeInt(packet.entityId);
+        for (ItemStack stack : packet.armor) {
+            buffer.writeItem(stack);
+        }
+        buffer.writeItem(packet.bracelet);
+    }
+
+    public static PlayerEquipmentPacket decode(FriendlyByteBuf buffer) {
+        int entityId = buffer.readInt();
+        ItemStack[] armor = new ItemStack[4];
         for (int i = 0; i < 4; i++) {
-            this.armor[i] = buf.readItem();
+            armor[i] = buffer.readItem();
         }
-        this.bracelet = buf.readItem();
+        ItemStack bracelet = buffer.readItem();
+        return new PlayerEquipmentPacket(entityId, armor, bracelet);
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
-        buf.writeInt(entityId);
-        for (ItemStack stack : armor) {
-            buf.writeItem(stack);
-        }
-        buf.writeItem(bracelet);
-    }
-
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(PlayerEquipmentPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player != null) {
-                Player targetPlayer = player.level().getPlayerByUUID(player.getUUID());
-                if (targetPlayer != null) {
-                    for (int i = 0; i < 4; i++) {
-                        targetPlayer.setItemSlot(EquipmentSlot.byName(String.valueOf(i)), armor[i]);
-                    }
-                    CuriosApi.getCuriosInventory(targetPlayer).ifPresent(curiosInventory -> {
-                        curiosInventory.getStacksHandler("bracelet").ifPresent(slotInventory -> {
-                            slotInventory.getStacks().setStackInSlot(0, bracelet);
+            NetworkEvent.Context context = ctx.get();
+            // 确保只处理来自服务器的数据包
+            if (context.getDirection().getReceptionSide().isClient() && context.getDirection().getOriginationSide().isServer()) {
+                net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+                if (mc.level != null) {
+                    Player targetPlayer = (Player) mc.level.getEntity(packet.entityId);
+                    if (targetPlayer != null) {
+                        // 使用正确的装备槽枚举值，对应关系：armor[0] = 头盔, armor[1] = 胸甲, armor[2] = 护腿, armor[3] = 靴子
+                        EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+                        for (int i = 0; i < 4; i++) {
+                            targetPlayer.setItemSlot(slots[i], packet.armor[i]);
+                        }
+                        // 处理bracelet装备
+                        CuriosApi.getCuriosInventory(targetPlayer).ifPresent(curiosInventory -> {
+                            curiosInventory.getStacksHandler("bracelet").ifPresent(slotInventory -> {
+                                slotInventory.getStacks().setStackInSlot(0, packet.bracelet);
+                            });
                         });
-                    });
+                    }
                 }
             }
         });

@@ -53,12 +53,18 @@ public class Mega_uiorder extends Item implements GeoItem, ICurioItem {
     }
 
     public void switchMode(ItemStack stack, Mode mode) {
+        if (stack == null) {
+            return;
+        }
         CompoundTag tag = stack.getOrCreateTag();
         tag.putString("Mode", mode.name());
         stack.setTag(tag);
     }
 
     public Mode  getCurrentMode(ItemStack stack) {
+        if (stack == null) {
+            return Mode.DEFAULT;
+        }
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains("Mode")) {
             return Mode.valueOf(tag.getString("Mode"));
@@ -89,8 +95,18 @@ public class Mega_uiorder extends Item implements GeoItem, ICurioItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (level == null || player == null || hand == null) {
+            return InteractionResultHolder.pass(ItemStack.EMPTY);
+        }
+        
         ItemStack stack = player.getItemInHand(hand);
-        if (level.isClientSide) return super.use(level, player, hand);
+        if (stack == null || stack.isEmpty()) {
+            return InteractionResultHolder.pass(ItemStack.EMPTY);
+        }
+        
+        if (level.isClientSide) {
+            return super.use(level, player, hand);
+        }
 
         // 检查玩家是否持有 Necrom_eye
         boolean hasNecromEye = player.getInventory().contains(new ItemStack(ModItems.NECROM_EYE.get()));

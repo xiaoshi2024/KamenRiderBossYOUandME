@@ -57,14 +57,23 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public void setEquipped(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsEquipped", flag);
     }
 
     public void setHenshin(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsHenshin", flag);
     }
 
     public void setBeltMode(ItemStack beltStack, BeltMode beltMode) {
+        if (beltStack == null) {
+            return;
+        }
         beltStack.getOrCreateTag().putString("BeltMode", beltMode.name());
     }
 
@@ -92,7 +101,7 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
 
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {
         ItemStack stack = state.getData(DataTickets.ITEMSTACK);
-        if (!(state.getAnimatable() instanceof sengokudrivers_epmty)) return PlayState.STOP;
+        if (!(state.getAnimatable() instanceof sengokudrivers_epmty) || stack == null) return PlayState.STOP;
 
         BeltMode mode   = getMode(stack);
         boolean show    = getShowing(stack);
@@ -150,11 +159,17 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
     }
 
     public boolean getHenshin(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsHenshin");
     }
 
     /* -------------- NBT 工具 -------------- */
     public BeltMode getMode(ItemStack stack) {
+        if (stack == null) {
+            return BeltMode.DEFAULT;
+        }
         try {
             return BeltMode.valueOf(stack.getOrCreateTag().getString("BeltMode"));
         } catch (IllegalArgumentException e) {
@@ -173,20 +188,35 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
     }
 
     public void setMode(ItemStack stack, BeltMode mode) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putString("BeltMode", mode.name());
     }
 
     public boolean getShowing(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsShowing");
     }
     public void setShowing(ItemStack stack, boolean v) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsShowing", v);
     }
 
     public boolean getRelease(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsRelease");
     }
     public void setRelease(ItemStack stack, boolean v) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsRelease", v);
     }
 
@@ -232,6 +262,10 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
      */
     @Override
     protected void onBeltEquipped(ServerPlayer player, ItemStack beltStack) {
+        if (player == null || beltStack == null) {
+            return;
+        }
+        
         setHenshin(beltStack, false);
         setRelease(beltStack, false);
         setShowing(beltStack, true);
@@ -262,12 +296,19 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
 
     @Override
     public void onUnequip(SlotContext ctx, ItemStack newStack, ItemStack stack) {
-        if (!(ctx.entity() instanceof LivingEntity)) return;
+        if (ctx == null || ctx.entity() == null || stack == null) {
+            return;
+        }
+        
+        if (!(ctx.entity() instanceof LivingEntity)) {
+            return;
+        }
+        
         LivingEntity le = (LivingEntity) ctx.entity();
         setShowing(stack, false);
         setRelease(stack, false);
 
-        if (!le.level().isClientSide() && le instanceof ServerPlayer sp) {
+        if (le.level() != null && !le.level().isClientSide() && le instanceof ServerPlayer sp) {
             PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "idles", getMode(stack)), sp);
             // 移除玩家的饱和效果
             sp.removeEffect(MobEffects.SATURATION);
@@ -278,8 +319,17 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
 
     @Override
     public void curioTick(SlotContext ctx, ItemStack stack) {
-        if (ctx.entity().level().isClientSide()) return;
-        if (!(ctx.entity() instanceof ServerPlayer sp)) return;
+        if (ctx == null || ctx.entity() == null || stack == null) {
+            return;
+        }
+        
+        if (ctx.entity().level() == null || ctx.entity().level().isClientSide()) {
+            return;
+        }
+        
+        if (!(ctx.entity() instanceof ServerPlayer sp)) {
+            return;
+        }
 
         // 1 秒同步一次
         if (sp.tickCount % 20 == 0) {
@@ -315,6 +365,10 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
      * @return 是否成功消耗果实
      */
     private boolean consumeHelheimFruit(ServerPlayer player) {
+        if (player == null) {
+            return false;
+        }
+        
         // 再次检查玩家是否已经有饱和效果，避免多个腰带同时消耗果实
         if (!player.hasEffect(MobEffects.SATURATION)) {
             // 查找并消耗赫尔海姆果实
@@ -330,26 +384,34 @@ public class sengokudrivers_epmty extends AbstractRiderBelt implements GeoItem, 
      * @return 是否成功消耗
      */
     private boolean findAndConsumeItem(Player player, Item item) {
+        if (player == null || item == null) {
+            return false;
+        }
+        
         // 首先检查主手
-        if (player.getMainHandItem().getItem() == item) {
-            player.getMainHandItem().shrink(1);
+        ItemStack mainHandStack = player.getMainHandItem();
+        if (mainHandStack != null && mainHandStack.getItem() == item) {
+            mainHandStack.shrink(1);
             return true;
         }
         
         // 检查副手
-        if (player.getOffhandItem().getItem() == item) {
-            player.getOffhandItem().shrink(1);
+        ItemStack offhandStack = player.getOffhandItem();
+        if (offhandStack != null && offhandStack.getItem() == item) {
+            offhandStack.shrink(1);
             return true;
         }
         
         // 检查背包
-        for (int i = 0; i < player.getInventory().items.size(); i++) {
-            ItemStack stack = player.getInventory().items.get(i);
-            if (stack.getItem() == item) {
-                stack.shrink(1);
-                // 更新玩家背包
-                player.getInventory().items.set(i, stack);
-                return true;
+        if (player.getInventory() != null) {
+            for (int i = 0; i < player.getInventory().items.size(); i++) {
+                ItemStack stack = player.getInventory().items.get(i);
+                if (stack != null && stack.getItem() == item) {
+                    stack.shrink(1);
+                    // 更新玩家背包
+                    player.getInventory().items.set(i, stack);
+                    return true;
+                }
             }
         }
         

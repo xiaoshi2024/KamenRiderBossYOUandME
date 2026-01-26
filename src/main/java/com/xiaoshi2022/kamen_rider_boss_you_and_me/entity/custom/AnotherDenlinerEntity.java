@@ -405,7 +405,7 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
                 
                 // 根据保存的类型重新生成实体
                 if (entityTypeStr.contains("time_jacker")) {
-                    TimeJackerEntity timeJacker = ModEntityTypes.TIME_JACKER.get().create(serverLevel);
+                    TimeJackerEntity timeJacker = (TimeJackerEntity) ModEntityTypes.TIME_JACKER.get().create(serverLevel);
                     if (timeJacker != null) {
                         // 设置位置和健康值
                         timeJacker.setPos(player.getX() + 1, player.getY(), player.getZ());
@@ -456,7 +456,7 @@ public class AnotherDenlinerEntity extends Entity implements GeoAnimatable {
                 
                 // 根据保存的类型重新生成实体
                 if (entityTypeStr.contains("time_jacker")) {
-                    TimeJackerEntity timeJacker = ModEntityTypes.TIME_JACKER.get().create(serverLevel);
+                    TimeJackerEntity timeJacker = (TimeJackerEntity) ModEntityTypes.TIME_JACKER.get().create(serverLevel);
                     if (timeJacker != null) {
                         // 设置位置和健康值 - 使用电班列的位置作为参考
                         timeJacker.setPos(this.getX() + 1, this.getY(), this.getZ());

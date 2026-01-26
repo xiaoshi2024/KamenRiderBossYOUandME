@@ -87,27 +87,25 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
         this.goalSelector.addGoal(0, new FloatGoal(this)); // 只保留浮水
     }
 
-    // 音效 - 使用更合适的音效
+    // 音效 - 禁用所有音效
     @Override
     protected SoundEvent getAmbientSound() {
-        return this.isVehicle() ? SoundEvents.MINECART_INSIDE : null;
+        return null;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.IRON_GOLEM_HURT;
+        return null;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.IRON_GOLEM_DEATH;
+        return null;
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        if (this.isVehicle() && this.isMoving()) {
-            this.playSound(SoundEvents.MINECART_RIDING, 0.5F, 1.0F);
-        }
+        // 禁用脚步声
     }
 
     // 交互逻辑 - 摩托车专用
@@ -123,8 +121,7 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
         if (itemstack.isEmpty()) {
             if (!this.isVehicle()) {
                 player.startRiding(this);
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                        SoundEvents.ENDER_DRAGON_FLAP, SoundSource.NEUTRAL, 1.0F, 0.8F);
+                // 禁用骑乘音效
                 return InteractionResult.SUCCESS;
             }
         }
@@ -135,8 +132,7 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
                 if (!player.getAbilities().instabuild) {
                     itemstack.shrink(1);
                 }
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                        SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 0.5F, 1.0F);
+                // 禁用燃料音效
                 return InteractionResult.SUCCESS;
             }
         }
@@ -246,11 +242,11 @@ public class EntitySakuraHurricane extends Animal implements GeoEntity {
                 // 更新动画状态
                 this.updateAnimationState();
 
-                // 播放引擎音效
-                if (!this.level().isClientSide && this.tickCount % 40 == 0 && this.isMoving() && hasFuel) {
+                // 播放引擎音效 - 已禁用
+                /*if (!this.level().isClientSide && this.tickCount % 40 == 0 && this.isMoving() && hasFuel) {
                     this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
                         SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL, 0.2F, 2.0F);
-                }
+                }*/
 
                 return;
             }

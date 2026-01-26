@@ -30,7 +30,7 @@ public record SyncOwnerPacket(int entityId, @Nullable UUID ownerId) {
                 net.minecraft.client.multiplayer.ClientLevel level = net.minecraft.client.Minecraft.getInstance().level;
                 if (level != null) {
                     Entity entity = level.getEntity(packet.entityId());
-                    if (entity instanceof LordBaronEntity baron) {
+                    if (entity != null && entity instanceof LordBaronEntity baron) {
                         Player owner = packet.ownerId() != null ?
                                 level.getPlayerByUUID(packet.ownerId()) : null;
                         baron.setOwner(owner);

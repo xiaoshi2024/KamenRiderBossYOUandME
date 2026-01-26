@@ -31,6 +31,9 @@ public abstract class AbstractRiderBelt extends Item implements GeoItem, ICurioI
      * 减少腰带耐久度
      */
     public boolean damageBelt(ItemStack stack, int amount, Player player) {
+        if (stack == null || player == null) {
+            return false;
+        }
         if (player.isCreative()) {
             // 创造模式下不减少耐久
             return false;
@@ -52,20 +55,29 @@ public abstract class AbstractRiderBelt extends Item implements GeoItem, ICurioI
      */
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (level == null || player == null || hand == null) {
+            return InteractionResultHolder.pass(ItemStack.EMPTY);
+        }
+        
+        ItemStack originalStack = player.getItemInHand(hand);
+        if (originalStack == null || originalStack.isEmpty()) {
+            return InteractionResultHolder.pass(ItemStack.EMPTY);
+        }
+
         if (level.isClientSide) {
             // 在客户端不执行实际装备逻辑
-            return InteractionResultHolder.success(player.getItemInHand(hand));
+            return InteractionResultHolder.success(originalStack);
         }
 
         if (!(player instanceof ServerPlayer serverPlayer)) {
-            return InteractionResultHolder.pass(player.getItemInHand(hand));
+            return InteractionResultHolder.pass(originalStack);
         }
 
-        ItemStack beltStack = player.getItemInHand(hand).copy();
+        ItemStack beltStack = originalStack.copy();
 
         // 检查玩家是否已经装备了腰带
         Optional<SlotResult> existingBeltOpt = CurioUtils.findFirstCurio(serverPlayer, 
-                stack -> stack.getItem() instanceof AbstractRiderBelt);
+                stack -> stack != null && stack.getItem() instanceof AbstractRiderBelt);
 
         // 如果已有腰带，将其替换回背包
         if (existingBeltOpt.isPresent()) {
@@ -73,9 +85,11 @@ public abstract class AbstractRiderBelt extends Item implements GeoItem, ICurioI
             ItemStack existingBelt = slotResult.stack();
             
             // 尝试将原有腰带添加到玩家背包
-            if (!serverPlayer.getInventory().add(existingBelt)) {
-                // 如果背包满了，将腰带掉落在地上
-                serverPlayer.drop(existingBelt, false);
+            if (existingBelt != null && !existingBelt.isEmpty()) {
+                if (!serverPlayer.getInventory().add(existingBelt)) {
+                    // 如果背包满了，将腰带掉落在地上
+                    serverPlayer.drop(existingBelt, false);
+                }
             }
             
             // 清空原有腰带槽位
@@ -92,13 +106,13 @@ public abstract class AbstractRiderBelt extends Item implements GeoItem, ICurioI
         
         // 从玩家手中移除腰带
         if (!player.isCreative()) {
-            player.getItemInHand(hand).shrink(1);
+            originalStack.shrink(1);
         }
         
         // 触发腰带装备后的自定义逻辑
         onBeltEquipped(serverPlayer, beltStack);
         
-        return InteractionResultHolder.success(player.getItemInHand(hand));
+        return InteractionResultHolder.success(originalStack);
     }
 
     /**

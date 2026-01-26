@@ -51,6 +51,22 @@ public class ModArmorsRenderProcedure {
     public static void renderPlayerPreEvent(RenderPlayerEvent.Pre event) {
         if (event.getEntity() == null) return;
         Player player = event.getEntity();
+        
+        // 检查玩家是否处于PlayerShape变身状态
+        // 如果玩家已经变身为其他实体，应该让PlayerShape系统处理渲染，不干扰它
+        try {
+            Class<?> playerShapeClass = Class.forName("tocraft.walkers.api.PlayerShape");
+            java.lang.reflect.Method getCurrentShapeMethod = playerShapeClass.getMethod("getCurrentShape", Player.class);
+            Object currentShape = getCurrentShapeMethod.invoke(null, player);
+            if (currentShape != null) {
+                // 玩家处于变身状态，取消默认渲染，让PlayerShape系统处理
+                event.setCanceled(true);
+                return;
+            }
+        } catch (Exception e) {
+            // PlayerShape类不存在或方法调用失败，继续执行默认逻辑
+        }
+        
         PlayerRenderer renderer = event.getRenderer();
         PlayerModel<AbstractClientPlayer> playerModel = renderer.getModel();
 
@@ -171,7 +187,7 @@ public class ModArmorsRenderProcedure {
             float swingProgress = event.getSwingProgress();
 
             poseStack.pushPose();
-            renderPlayerArm(poseStack, buffSource, packedLight, equipProgress, swingProgress, player.getMainArm());
+            renderPlayerArm(poseStack, buffSource, packedLight, equipProgress, swingProgress, player.getMainArm(), player);
             poseStack.popPose();
         }
     }
@@ -211,7 +227,7 @@ public class ModArmorsRenderProcedure {
 
     // 渲染原生玩家手臂（内部工具方法）
     public static void renderPlayerArm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
-                                       float equipProgress, float swingProgress, HumanoidArm arm) {
+                                       float equipProgress, float swingProgress, HumanoidArm arm, AbstractClientPlayer player) {
         boolean isRightArm = arm != HumanoidArm.LEFT;
         float sideOffset = isRightArm ? 1.0F : -1.0F;
 
@@ -231,8 +247,7 @@ public class ModArmorsRenderProcedure {
         poseStack.mulPose(Axis.ZP.rotationDegrees(sideOffset * swingX1 * -20.0F));
 
         // 绑定玩家皮肤纹理并渲染手臂
-        AbstractClientPlayer clientPlayer = Minecraft.getInstance().player;
-        RenderSystem.setShaderTexture(0, clientPlayer.getSkinTextureLocation());
+        RenderSystem.setShaderTexture(0, player.getSkinTextureLocation());
 
         poseStack.translate(sideOffset * -1.0F, 3.6F, 3.5F);
         poseStack.mulPose(Axis.ZP.rotationDegrees(sideOffset * 120.0F));
@@ -240,11 +255,11 @@ public class ModArmorsRenderProcedure {
         poseStack.mulPose(Axis.YP.rotationDegrees(sideOffset * -135.0F));
         poseStack.translate(sideOffset * 5.6F, 0.0F, 0.0F);
 
-        PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(clientPlayer);
+        PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
         if (isRightArm) {
-            playerRenderer.renderRightHand(poseStack, bufferSource, packedLight, clientPlayer);
+            playerRenderer.renderRightHand(poseStack, bufferSource, packedLight, player);
         } else {
-            playerRenderer.renderLeftHand(poseStack, bufferSource, packedLight, clientPlayer);
+            playerRenderer.renderLeftHand(poseStack, bufferSource, packedLight, player);
         }
     }
 }

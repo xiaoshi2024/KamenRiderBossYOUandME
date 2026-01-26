@@ -243,7 +243,7 @@ public class DesertOfTimeEntityHandler {
         // 恢复时劫者实体
         if (player.getPersistentData().contains(SAVED_TIME_JACKER_DATA) && existingTimeJackerCount < 2) {
             CompoundTag timeJackerData = player.getPersistentData().getCompound(SAVED_TIME_JACKER_DATA);
-            TimeJackerEntity timeJacker = ModEntityTypes.TIME_JACKER.get().create(level);
+            TimeJackerEntity timeJacker = (TimeJackerEntity) ModEntityTypes.TIME_JACKER.get().create(level);
             
             if (timeJacker != null) {
                 // 设置时劫者位置，在玩家周围随机位置
@@ -315,7 +315,7 @@ public class DesertOfTimeEntityHandler {
             
             // 生成时劫者实体
             if (hasAttackedTimeJacker && existingTimeJackerCount < 2) {
-                TimeJackerEntity timeJacker = ModEntityTypes.TIME_JACKER.get().create(level);
+                TimeJackerEntity timeJacker = (TimeJackerEntity) ModEntityTypes.TIME_JACKER.get().create(level);
                 if (timeJacker != null) {
                     double x = player.getX() + (random.nextDouble() - 0.5) * 10.0;
                     double z = player.getZ() + (random.nextDouble() - 0.5) * 10.0;

@@ -73,6 +73,9 @@ public class Two_sidriver extends AbstractRiderBelt implements GeoItem, ICurioIt
 
     private <E extends GeoItem> PlayState predicate(AnimationState<E> state) {
         ItemStack stack = state.getData(DataTickets.ITEMSTACK);
+        if (stack == null) {
+            return state.setAndContinue(IDLE);
+        }
         WeaponMode mode = getWeaponMode(stack);
         return switch (mode) {
             case BLADE -> state.setAndContinue(BLADE);
@@ -137,15 +140,27 @@ public class Two_sidriver extends AbstractRiderBelt implements GeoItem, ICurioIt
     }
     /* =============== 工具 =============== */
     public static DriverType getDriverType(ItemStack stack) {
+        if (stack == null) {
+            return DriverType.DEFAULT;
+        }
         return DriverType.values()[stack.getOrCreateTag().getInt(KEY_TYPE) % 3];
     }
     public static void setDriverType(ItemStack stack, DriverType type) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putInt(KEY_TYPE, type.ordinal());
     }
     public static WeaponMode getWeaponMode(ItemStack stack) {
+        if (stack == null) {
+            return WeaponMode.IDLE;
+        }
         return WeaponMode.values()[stack.getOrCreateTag().getInt(KEY_WEAPON) % 3];
     }
     public static void setWeaponMode(ItemStack stack, WeaponMode mode) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putInt(KEY_WEAPON, mode.ordinal());
     }
 

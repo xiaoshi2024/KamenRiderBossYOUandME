@@ -3,7 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.BeltCurioIntegration;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
-import forge.net.mca.entity.VillagerEntityMCA;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,17 +39,17 @@ public class VillagerTransformationStateHandler {
     @SubscribeEvent
     public static void onVillagerHurt(LivingDamageEvent event) {
         LivingEntity entity = event.getEntity();
-        if (entity instanceof VillagerEntityMCA villager) {
+        if (MCAUtil.isVillagerEntityMCA(entity)) {
             // 从Curio槽位或主手获取腰带
-            BeltCurioIntegration.getBeltFromEntity(villager).ifPresent(beltStack -> {
+            BeltCurioIntegration.getBeltFromEntity(entity).ifPresent(beltStack -> {
                 // 检查是否已经变身
-                boolean isTransformed = !villager.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-                boolean isAlreadyMarked = villager.getPersistentData().getBoolean("is_transformed_ridder");
+                boolean isTransformed = !entity.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
+                boolean isAlreadyMarked = entity.getPersistentData().getBoolean("is_transformed_ridder");
                 
                 // 只有在未变身后才触发变身逻辑
                 if (!isTransformed || !isAlreadyMarked) {
                     // 危险时自动变身
-                    handleVillagerWithDriver(villager, beltStack);
+                    handleVillagerWithDriver(entity, beltStack);
                 }
             });
         }
@@ -59,36 +59,36 @@ public class VillagerTransformationStateHandler {
     @SubscribeEvent
     public static void onVillagerTick(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
-        if (entity instanceof VillagerEntityMCA villager && !entity.level().isClientSide) {
+        if (MCAUtil.isVillagerEntityMCA(entity) && !entity.level().isClientSide) {
             // 检查村民是否手持腰带，如果是则尝试装备
-            ItemStack mainHandStack = villager.getMainHandItem();
-            if (mainHandStack.getItem() instanceof Genesis_driver && !BeltCurioIntegration.hasBeltInCurioSlot(villager)) {
-                BeltCurioIntegration.tryEquipBeltToCurioSlot(villager, mainHandStack);
+            ItemStack mainHandStack = entity.getMainHandItem();
+            if (mainHandStack.getItem() instanceof Genesis_driver && !BeltCurioIntegration.hasBeltInCurioSlot(entity)) {
+                BeltCurioIntegration.tryEquipBeltToCurioSlot(entity, mainHandStack);
             }
             
             // 处理腰带逻辑
-            if (BeltCurioIntegration.hasBeltInCurioSlot(villager)) {
-                BeltCurioIntegration.getBeltFromEntity(villager).ifPresent(beltStack -> {
+            if (BeltCurioIntegration.hasBeltInCurioSlot(entity)) {
+                BeltCurioIntegration.getBeltFromEntity(entity).ifPresent(beltStack -> {
                     // 检查是否处于危险状态
-                    boolean isInDanger = isInDanger(villager);
+                    boolean isInDanger = isInDanger(entity);
                     // 检查是否已经变身
-                    boolean isTransformed = !villager.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-                    boolean isAlreadyMarked = villager.getPersistentData().getBoolean("is_transformed_ridder");
+                    boolean isTransformed = !entity.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
+                    boolean isAlreadyMarked = entity.getPersistentData().getBoolean("is_transformed_ridder");
                     
                     // 只有在危险状态且未变身后才触发变身逻辑
                     if (isInDanger && (!isTransformed || !isAlreadyMarked)) {
-                        handleVillagerWithDriver(villager, beltStack);
+                        handleVillagerWithDriver(entity, beltStack);
                     }
                     
                     // 检查并处理闲置状态
-                    checkAndHandleIdleState(villager, beltStack);
+                    checkAndHandleIdleState(entity, beltStack);
                 });
             }
         }
     }
     
     // 使用Curio槽位的腰带检查并处理变身状态
-    private static void checkAndHandleTransformationStateWithBelt(VillagerEntityMCA villager, ItemStack beltStack) {
+    private static void checkAndHandleTransformationStateWithBelt(LivingEntity villager, ItemStack beltStack) {
         if (!(beltStack.getItem() instanceof Genesis_driver)) {
             return;
         }
@@ -109,7 +109,7 @@ public class VillagerTransformationStateHandler {
     }
 
     // 检查并处理村民的变身状态
-    private static void checkAndHandleTransformationState(VillagerEntityMCA villager) {
+    private static void checkAndHandleTransformationState(LivingEntity villager) {
         // 检查村民是否手持腰带
         ItemStack mainHandStack = villager.getMainHandItem();
         if (!(mainHandStack.getItem() instanceof Genesis_driver)) {
@@ -132,7 +132,7 @@ public class VillagerTransformationStateHandler {
     }
 
     // 检查村民是否处于危险状态
-    private static boolean isInDanger(VillagerEntityMCA villager) {
+    private static boolean isInDanger(LivingEntity villager) {
         // 检查附近是否有敌对生物
         AABB searchBox = new AABB(
             villager.getX() - DANGER_CHECK_RADIUS,
@@ -155,7 +155,6 @@ public class VillagerTransformationStateHandler {
         }
 
         // 检查村民是否正在被追击或处于战斗状态
-        GoalSelector goalSelector = villager.goalSelector;
         // 检查村民是否有活跃的攻击目标或正在逃跑
         if (villager.getLastHurtByMob() != null || villager.getLastHurtMob() != null) {
             return true;
@@ -165,7 +164,7 @@ public class VillagerTransformationStateHandler {
     }
 
     // 检查并处理村民的闲置状态，当闲置时间过长时自动解除变身
-    private static void checkAndHandleIdleState(VillagerEntityMCA villager, ItemStack beltStack) {
+    private static void checkAndHandleIdleState(LivingEntity villager, ItemStack beltStack) {
         // 只在每CHECK_INTERVAL个tick检查一次
         if (villager.tickCount % CHECK_INTERVAL != 0) {
             return;
@@ -200,7 +199,7 @@ public class VillagerTransformationStateHandler {
     /**
      * 判断村民是否处于活动状态
      */
-    private static boolean isVillagerActive(VillagerEntityMCA villager) {
+    private static boolean isVillagerActive(LivingEntity villager) {
         // 检查是否正在移动
         if (villager.getDeltaMovement().x() != 0 || villager.getDeltaMovement().z() != 0) {
             return true;
@@ -226,7 +225,7 @@ public class VillagerTransformationStateHandler {
     }
     
     // 解除变身方法，同时恢复村民的本体模型
-    private static void revertTransformation(VillagerEntityMCA villager) {
+    private static void revertTransformation(LivingEntity villager) {
         // 播放解除变身音效
         villager.level().playSound(
             null,

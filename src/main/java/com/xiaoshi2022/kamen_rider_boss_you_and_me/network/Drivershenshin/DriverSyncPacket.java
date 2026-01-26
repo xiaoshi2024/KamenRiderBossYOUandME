@@ -45,7 +45,7 @@ public class DriverSyncPacket {
             if (ctx.get().getDirection().getReceptionSide().isClient()) {
                 if (net.minecraft.client.Minecraft.getInstance().level == null) return;
                 Entity e = net.minecraft.client.Minecraft.getInstance().level.getEntity(msg.entityId);
-                if (!(e instanceof LivingEntity living)) return;
+                if (e == null || !(e instanceof LivingEntity living)) return;
 
                 CuriosApi.getCuriosInventory(living).ifPresent(inv ->
                         inv.findFirstCurio(item -> item.getItem() instanceof Two_sidriver)

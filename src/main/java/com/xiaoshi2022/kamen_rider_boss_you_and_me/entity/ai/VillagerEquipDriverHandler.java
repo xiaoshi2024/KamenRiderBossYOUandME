@@ -4,12 +4,13 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.BeltCurioIntegration;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
-import forge.net.mca.entity.VillagerEntityMCA;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,8 +36,8 @@ public class VillagerEquipDriverHandler {
     @SubscribeEvent
     public static void onLivingEquipmentChange(LivingEquipmentChangeEvent event) {
         LivingEntity entity = event.getEntity();
-        // 检查是否是MCA村民
-        if (entity instanceof VillagerEntityMCA) {
+        // 检查是否是MCA村民或普通村民
+        if (MCAUtil.isVillagerEntityMCA(entity) || entity instanceof net.minecraft.world.entity.npc.Villager) {
             // 检查主手是否持有Genesis_driver
             ItemStack mainHandStack = entity.getMainHandItem();
             if (mainHandStack.getItem() instanceof Genesis_driver) {
@@ -81,8 +82,8 @@ public class VillagerEquipDriverHandler {
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
         
-        // 检查是否是MCA村民实体
-        if (entity instanceof VillagerEntityMCA && !entity.level().isClientSide) {
+        // 检查是否是MCA村民或普通村民实体
+        if ((MCAUtil.isVillagerEntityMCA(entity) || entity instanceof net.minecraft.world.entity.npc.Villager) && !entity.level().isClientSide) {
             // 每20tick（1秒）检查一次，避免过于频繁
             if (entity.tickCount % 20 == 0) {
                 // 检查村民是否手持腰带或在Curio槽装备了腰带
@@ -125,10 +126,10 @@ public class VillagerEquipDriverHandler {
         entity.getPersistentData().putBoolean("is_transformed_ridder", true);
     }
     
-    // 为MCA村民装备音速弓
+    // 为MCA村民或普通村民装备音速弓
     private static void giveSonicBowToTransformedEntity(LivingEntity entity) {
-        // 确保这是一个MCA村民
-        if (!(entity instanceof VillagerEntityMCA)) {
+        // 确保这是一个MCA村民或普通村民
+        if (!(MCAUtil.isVillagerEntityMCA(entity) || entity instanceof net.minecraft.world.entity.npc.Villager)) {
             return;
         }
         
@@ -389,8 +390,8 @@ public class VillagerEquipDriverHandler {
     public static void onVillagerIdle(LivingEvent.LivingTickEvent event) {
         LivingEntity entity = event.getEntity();
         
-        // 只处理MCA村民
-        if (!(entity instanceof VillagerEntityMCA)) {
+        // 只处理MCA村民或普通村民
+        if (!(MCAUtil.isVillagerEntityMCA(entity) || entity instanceof net.minecraft.world.entity.npc.Villager)) {
             return;
         }
         

@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.goal;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
-import forge.net.mca.entity.VillagerEntityMCA;
+
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -22,13 +22,13 @@ import java.util.Optional;
 // }
 
 public class PickUpDriverGoal extends Goal {
-    private final VillagerEntityMCA villager;
+    private final net.minecraft.world.entity.Mob villager;
     private final Level level;
     private ItemEntity targetItem;
     private int cooldown = 0;
     private static final int COOLDOWN_TICKS = 20 * 5; // 5秒冷却时间
 
-    public PickUpDriverGoal(VillagerEntityMCA villager) {
+    public PickUpDriverGoal(net.minecraft.world.entity.Mob villager) {
         this.villager = villager;
         this.level = villager.level();
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));

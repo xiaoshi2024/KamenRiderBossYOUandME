@@ -12,8 +12,8 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.A
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.Roidmude.BrainRoidmudeEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.giifu.Gifftarian;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.VillagerTransformationUtil;
-import forge.net.mca.entity.VillagerEntityMCA;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -48,11 +48,13 @@ public class VillagerEvents {
 
         if (player.isShiftKeyDown()) {
             ItemStack stack = player.getMainHandItem();
-            if (!(event.getTarget() instanceof VillagerEntityMCA villager)) return;
+            if (!MCAUtil.isVillagerEntityMCA(event.getTarget())) return;
+
+            Entity target = event.getTarget();
 
             if (stack.getItem() instanceof aiziowc) {
-                Vec3 center = villager.position()
-                        .add(0, villager.getBbHeight() * 0.55, 0);   // 腰部
+                Vec3 center = target.position()
+                        .add(0, target.getBbHeight() * 0.55, 0);   // 腰部
                 ParticleTicker.add(level, center);
             }
 
@@ -82,14 +84,22 @@ public class VillagerEvents {
                     // 生成异类时王、保存村民数据等...
                     int remain = aiziowc.MAX_DAMAGE - used - 1;
                     CompoundTag villagerTag = new CompoundTag();
-                    villager.save(villagerTag);
+                    
+                    // 使用反射调用save方法
+                    try {
+                        java.lang.reflect.Method saveMethod = target.getClass().getMethod("save", CompoundTag.class);
+                        saveMethod.invoke(target, villagerTag);
+                    } catch (Exception e) {
+                        // 如果反射失败，使用默认的save方法
+                        ((LivingEntity) target).save(villagerTag);
+                    }
 
                     Another_Zi_o another = ModEntityTypes.ANOTHER_ZI_O.get().create(level);
-                    another.moveTo(villager.getX(), villager.getY(), villager.getZ(), villager.getYRot(), 0);
+                    another.moveTo(target.getX(), target.getY(), target.getZ(), target.getYRot(), 0);
                     another.getPersistentData().put("StoredVillager", villagerTag);
                     another.getPersistentData().putInt("DropDamage", remain);
                     level.addFreshEntity(another);
-                    villager.discard();
+                    target.discard();
 
                     return;
                 }
@@ -114,14 +124,22 @@ public class VillagerEvents {
                     // 生成异类电王、保存村民数据等...
                     int remain = aiziowc.MAX_DAMAGE - used - 1;
                     CompoundTag villagerTag = new CompoundTag();
-                    villager.save(villagerTag);
+                    
+                    // 使用反射调用save方法
+                    try {
+                        java.lang.reflect.Method saveMethod = target.getClass().getMethod("save", CompoundTag.class);
+                        saveMethod.invoke(target, villagerTag);
+                    } catch (Exception e) {
+                        // 如果反射失败，使用默认的save方法
+                        ((LivingEntity) target).save(villagerTag);
+                    }
 
                     Another_Den_o anotherDenO = ModEntityTypes.ANOTHER_DEN_O.get().create(level);
-                    anotherDenO.moveTo(villager.getX(), villager.getY(), villager.getZ(), villager.getYRot(), 0);
+                    anotherDenO.moveTo(target.getX(), target.getY(), target.getZ(), target.getYRot(), 0);
                     anotherDenO.getPersistentData().put("StoredVillager", villagerTag);
                     anotherDenO.getPersistentData().putInt("DropDamage", remain);
                     level.addFreshEntity(anotherDenO);
-                    villager.discard();
+                    target.discard();
 
                     return;
                 }
@@ -137,9 +155,29 @@ public class VillagerEvents {
 
             /* 原有逻辑 */
             if (stack.getItem() instanceof giifusteamp) {
-                VillagerTransformationUtil.transformToGiifuDemos(level, villager, stack.getTag());
+                try {
+                    // 使用反射调用transformToGiifuDemos方法
+                    java.lang.reflect.Method transformMethod = VillagerTransformationUtil.class.getMethod("transformToGiifuDemos", ServerLevel.class, Entity.class, CompoundTag.class);
+                    transformMethod.invoke(null, level, target, stack.getTag());
+                } catch (Exception e) {
+                    // 如果反射失败，使用默认的方式
+                    GiifuDemosEntity giifu = new GiifuDemosEntity(ModEntityTypes.GIIFUDEMOS_ENTITY.get(), level);
+                    giifu.setPos(target.getX(), target.getY(), target.getZ());
+                    level.addFreshEntity(giifu);
+                    target.discard();
+                }
             } else if (stack.getItem() instanceof StoriousMonsterBook) {
-                VillagerTransformationUtil.transformToStorious(level, villager, stack.getTag());
+                try {
+                    // 使用反射调用transformToStorious方法
+                    java.lang.reflect.Method transformMethod = VillagerTransformationUtil.class.getMethod("transformToStorious", ServerLevel.class, Entity.class, CompoundTag.class);
+                    transformMethod.invoke(null, level, target, stack.getTag());
+                } catch (Exception e) {
+                    // 如果反射失败，使用默认的方式
+                    StoriousEntity storious = new StoriousEntity(ModEntityTypes.STORIOUS.get(), level);
+                    storious.setPos(target.getX(), target.getY(), target.getZ());
+                    level.addFreshEntity(storious);
+                    target.discard();
+                }
             }
         }
     }
@@ -168,22 +206,22 @@ public class VillagerEvents {
             }
         }
         // 新增逻辑：当玩家使用基夫印章攻击村民时，模拟被恶魔吞噬
-        if (hurtEntity instanceof VillagerEntityMCA villager) {
+        if (MCAUtil.isVillagerEntityMCA(hurtEntity)) {
             if (event.getSource().getDirectEntity() instanceof Player attackingPlayer) {
                 ItemStack itemInHand = player.getMainHandItem();
                 if (itemInHand.getItem() instanceof giifusteamp giifusteamp) {
                     // 播放音效
                     if (player.level() instanceof ServerLevel serverLevel) {
-                        serverLevel.playSound(null, villager.getX(), villager.getY(), villager.getZ(),
+                        serverLevel.playSound(null, hurtEntity.getX(), hurtEntity.getY(), hurtEntity.getZ(),
                                 ModBossSounds.SEAL.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
                     }
                     // 播放吞噬动画并移除村民
-                    villager.remove(Entity.RemovalReason.KILLED);
+                    hurtEntity.remove(Entity.RemovalReason.KILLED);
 
                     // 生成一个基夫门徒实体
-                    Gifftarian giifuEntity = new Gifftarian(ModEntityTypes.GIFFTARIAN.get(), villager.level());
-                    giifuEntity.setPos(villager.getX(), villager.getY(), villager.getZ());
-                    villager.level().addFreshEntity(giifuEntity);
+                    Gifftarian giifuEntity = new Gifftarian(ModEntityTypes.GIFFTARIAN.get(), hurtEntity.level());
+                    giifuEntity.setPos(hurtEntity.getX(), hurtEntity.getY(), hurtEntity.getZ());
+                    hurtEntity.level().addFreshEntity(giifuEntity);
 
                     // 触发动画（通过标志位或其他方式）
                     shouldPlayRoutAnimation = true;
@@ -203,20 +241,28 @@ public class VillagerEvents {
     @SubscribeEvent
     public static void onVillagerHurt(LivingHurtEvent event) {
         LivingEntity hurtEntity = event.getEntity();
-        if (!(hurtEntity instanceof forge.net.mca.entity.VillagerEntityMCA villager)) return;
+        if (!MCAUtil.isVillagerEntityMCA(hurtEntity)) return;
         
-        // 检查村民是否是Brain Roidmude拟态的
-        if (villager.getPersistentData().contains("BrainRoidmudeData")) {
-            // 村民受到伤害，变回Brain Roidmude
-            transformToBrainRoidmude((ServerLevel) villager.level(), villager);
+        try {
+            // 使用反射获取persistentData
+            java.lang.reflect.Method getPersistentDataMethod = hurtEntity.getClass().getMethod("getPersistentData");
+            net.minecraft.nbt.CompoundTag persistentData = (net.minecraft.nbt.CompoundTag) getPersistentDataMethod.invoke(hurtEntity);
+            
+            // 检查村民是否是Brain Roidmude拟态的
+            if (persistentData.contains("BrainRoidmudeData")) {
+                // 村民受到伤害，变回Brain Roidmude
+                transformToBrainRoidmude((ServerLevel) hurtEntity.level(), hurtEntity, persistentData);
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to check Brain Roidmude data: " + e.getMessage());
         }
     }
     
     // 将村民转换回Brain Roidmude实体
-    private static void transformToBrainRoidmude(ServerLevel level, forge.net.mca.entity.VillagerEntityMCA villager) {
+    private static void transformToBrainRoidmude(ServerLevel level, LivingEntity villager, CompoundTag persistentData) {
         try {
             // 获取存储的Brain Roidmude数据
-            CompoundTag brainData = villager.getPersistentData().getCompound("BrainRoidmudeData");
+            CompoundTag brainData = persistentData.getCompound("BrainRoidmudeData");
             
             // 创建Brain Roidmude实体
             BrainRoidmudeEntity brainRoidmude = com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes.BRAIN_ROIDMUDE.get().create(level);

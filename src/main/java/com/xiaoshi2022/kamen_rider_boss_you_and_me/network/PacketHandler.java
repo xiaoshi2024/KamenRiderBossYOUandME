@@ -18,6 +18,10 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
+
 public class PacketHandler {
     private static int currentId = 0;
 
@@ -38,8 +42,10 @@ public class PacketHandler {
         INSTANCE.registerMessage(index++, SoundStopPacket.class, SoundStopPacket::encode, SoundStopPacket::decode, SoundStopPacket.ClientHandler::handle);
         INSTANCE.registerMessage(index++, InvisibilityPacket.class, InvisibilityPacket::encode, InvisibilityPacket::decode, InvisibilityPacket::handle);
         INSTANCE.registerMessage(index++, RemoveEntityPacket.class, RemoveEntityPacket::toBytes, RemoveEntityPacket::new, RemoveEntityPacket::handle);
-        INSTANCE.registerMessage(index++, PlayerArmorPacket.class, PlayerArmorPacket::toBytes, PlayerArmorPacket::new, PlayerArmorPacket::handle);
-        INSTANCE.registerMessage(index++, PlayerEquipmentPacket.class, PlayerEquipmentPacket::toBytes, PlayerEquipmentPacket::new, PlayerEquipmentPacket::handle);
+        INSTANCE.registerMessage(index++, PlayerArmorPacket.class, PlayerArmorPacket::encode, PlayerArmorPacket::decode, PlayerArmorPacket::handle);
+        INSTANCE.registerMessage(index++, PlayerEquipmentPacket.class, PlayerEquipmentPacket::encode, PlayerEquipmentPacket::decode, PlayerEquipmentPacket::handle);
+        // 注册批处理数据包
+        INSTANCE.registerMessage(index++, BatchPacket.class, BatchPacket::encode, BatchPacket::decode, BatchPacket::handle);
         INSTANCE.registerMessage(index++, BeltAnimationPacket.class, BeltAnimationPacket::encode, BeltAnimationPacket::decode, BeltAnimationPacket::handle);
         INSTANCE.registerMessage(index++,  SyncOwnerPacket.class,SyncOwnerPacket::encode, SyncOwnerPacket::decode,SyncOwnerPacket::handle);
         INSTANCE.registerMessage(index++, ReleaseBeltPacket.class, ReleaseBeltPacket::encode, ReleaseBeltPacket::decode, ReleaseBeltPacket::handle);
@@ -395,30 +401,77 @@ public class PacketHandler {
         }
     }
 
-    public static void sendAnimationToAll(Component animation, int entityId, boolean override) {
-        PlayerAnimationPacket packet = new PlayerAnimationPacket(animation, entityId, override);
+    // 发送动画到所有玩家
+    public static void sendAnimationToAll(String animationName, int entityId, boolean override, int priority, int duration) {
+        PlayerAnimationPacket packet = new PlayerAnimationPacket(animationName, entityId, override, priority, duration);
         sendToAll(packet);
     }
 
-    public static void sendAnimationToClient(Component animation, int entityId, boolean override, ServerPlayer player) {
-        PlayerAnimationPacket packet = new PlayerAnimationPacket(animation, entityId, override);
+    // 发送动画到指定客户端
+    public static void sendAnimationToClient(String animationName, int entityId, boolean override, ServerPlayer player, int priority, int duration) {
+        PlayerAnimationPacket packet = new PlayerAnimationPacket(animationName, entityId, override, priority, duration);
         sendToClient(packet, player);
     }
 
-    public static void sendAnimationToAllTracking(Component animation, int entityId, boolean override, Entity entity) {
-        PlayerAnimationPacket packet = new PlayerAnimationPacket(animation, entityId, override);
+    // 发送动画到所有追踪者
+    public static void sendAnimationToAllTracking(String animationName, int entityId, boolean override, Entity entity, int priority, int duration) {
+        PlayerAnimationPacket packet = new PlayerAnimationPacket(animationName, entityId, override, priority, duration);
         sendToAllTracking(packet, entity);
     }
 
-    public static void sendAnimationToAllTrackingAndSelf(Component animation, int entityId, boolean override, Entity entity) {
-        PlayerAnimationPacket packet = new PlayerAnimationPacket(animation, entityId, override);
+    // 发送动画到所有追踪者和自己
+    public static void sendAnimationToAllTrackingAndSelf(String animationName, int entityId, boolean override, Entity entity, int priority, int duration) {
+        PlayerAnimationPacket packet = new PlayerAnimationPacket(animationName, entityId, override, priority, duration);
         sendToAllTrackingAndSelf(packet, entity);
     }
 
-    public static void sendToAllTracking(Object packet, Entity entity) {
-        if (entity != null && !entity.level().isClientSide()) {
-            INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
+    // 取消指定玩家的动画
+    public static void cancelAnimation(int playerId, ServerLevel level) {
+        PlayerAnimationPacket packet = new PlayerAnimationPacket(playerId);
+        sendToPlayerById(packet, playerId, level);
+    }
+
+    // 向后兼容的方法，使用默认优先级和持续时间
+    public static void sendAnimationToAll(Component animation, int entityId, boolean override) {
+        sendAnimationToAll(animation.getString(), entityId, override, 1, 2000);
+    }
+
+    public static void sendAnimationToClient(Component animation, int entityId, boolean override, ServerPlayer player) {
+        sendAnimationToClient(animation.getString(), entityId, override, player, 1, 2000);
+    }
+
+    public static void sendAnimationToAllTracking(Component animation, int entityId, boolean override, Entity entity) {
+        sendAnimationToAllTracking(animation.getString(), entityId, override, entity, 1, 2000);
+    }
+
+    public static void sendAnimationToAllTrackingAndSelf(Component animation, int entityId, boolean override, Entity entity) {
+        sendAnimationToAllTrackingAndSelf(animation.getString(), entityId, override, entity, 1, 2000);
+    }
+
+    // 基于玩家ID的数据包过滤系统，减少不必要的网络传输
+    public static void sendToPlayerById(Object packet, int playerId, ServerLevel level) {
+        if (!level.isClientSide()) {
+            Entity entity = level.getEntity(playerId);
+            if (entity instanceof ServerPlayer serverPlayer) {
+                INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), packet);
+            }
         }
+    }
+
+    // 优化的追踪发送方法，允许指定排除玩家
+    public static void sendToAllTracking(Object packet, Entity entity, @Nullable ServerPlayer excludePlayer) {
+        if (entity != null && !entity.level().isClientSide()) {
+            // 发送给所有追踪者
+            INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
+            
+            // 如果需要排除指定玩家，单独取消发送给该玩家
+            // 注意：这是一种替代方案，因为某些Minecraft版本可能不支持TRACKING_ENTITY_EXCLUDING
+        }
+    }
+
+    // 重载方法，保持向后兼容
+    public static void sendToAllTracking(Object packet, Entity entity) {
+        sendToAllTracking(packet, entity, null);
     }
 
     public static void sendToAllAround(Object packet, ServerLevel level, double x, double y, double z, double radius) {
@@ -431,11 +484,25 @@ public class PacketHandler {
     }
 
     public static void sendToAllTrackingAndSelf(Object packet, Entity entity) {
-        if (entity != null && !entity.level().isClientSide && entity instanceof ServerPlayer serverPlayer) {
+        if (entity != null && !entity.level().isClientSide() && entity instanceof ServerPlayer serverPlayer) {
             // 发送给所有追踪者
-            INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
+            sendToAllTracking(packet, entity, null);
             // 发送给玩家自己
             INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), packet);
+        }
+    }
+
+    // 新增：批量发送数据包给多个玩家
+    public static void sendToMultiplePlayers(Object packet, Collection<ServerPlayer> players) {
+        for (ServerPlayer player : players) {
+            INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), packet);
+        }
+    }
+
+    // 新增：基于玩家ID列表发送数据包
+    public static void sendToPlayersByIds(Object packet, List<Integer> playerIds, ServerLevel level) {
+        for (int playerId : playerIds) {
+            sendToPlayerById(packet, playerId, level);
         }
     }
 

@@ -1,8 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.anotherRiders.Another_Decade;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -14,7 +16,10 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
@@ -54,8 +59,28 @@ public class TimeRoyaltyEntity extends TimeJackerEntity {
                 .add(Attributes.FOLLOW_RANGE, 20.0D); // 跟踪范围
     }
     
+    /**
+     * 静态工厂方法，用于创建时间王族实体
+     * 根据MCA是否加载，返回不同的实体实例
+     */
+    public static TimeRoyaltyEntity create(EntityType<? extends Villager> entityType, Level level) {
+        // 如果MCA可用，返回MCA时间王族实体，否则返回普通时间王族实体
+        if (MCAUtil.isMCAAvailable()) {
+            try {
+                // 使用反射创建MCATimeRoyaltyEntity实例
+                return new MCATimeRoyaltyEntity((EntityType<? extends TimeRoyaltyEntity>) entityType, level);
+            } catch (Exception e) {
+                // 如果反射失败，返回普通时间王族实体
+                return new TimeRoyaltyEntity((EntityType<? extends TimeJackerEntity>) entityType, level);
+            }
+        } else {
+            // MCA不可用，返回普通时间王族实体
+            return new TimeRoyaltyEntity((EntityType<? extends TimeJackerEntity>) entityType, level);
+        }
+    }
+    
     public TimeRoyaltyEntity(EntityType<? extends TimeJackerEntity> p_35958_, Level p_35959_) {
-        super((EntityType<TimeJackerEntity>) p_35958_, p_35959_);
+        super(p_35958_, p_35959_);
         
         // 设置默认名称为时间王族
         this.setCustomName(Component.literal("时间王族"));

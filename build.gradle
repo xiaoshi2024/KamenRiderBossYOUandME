@@ -228,13 +228,13 @@ dependencies {
     implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.20")
 
     // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+//    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+//    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+//    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+//    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
 
-    implementation fg.deobf("curse.maven:minecraft-comes-alive-reborn-535291:6805928")
+//    implementation fg.deobf("curse.maven:minecraft-comes-alive-reborn-535291:6805928")
     implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.4.9')
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:[1.20.1-81-FORGE]:api")

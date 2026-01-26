@@ -5,8 +5,6 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.goal.TimeJackerAnotherRiderGoal;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
-import forge.net.mca.entity.VillagerEntityMCA;
-import forge.net.mca.entity.ai.relationship.Gender;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
@@ -16,6 +14,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
@@ -26,12 +25,16 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TimeJackerEntity extends VillagerEntityMCA {
+// MCA软依赖工具类
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil;
+
+public class TimeJackerEntity extends Villager {
     // 标记是否已经使用过异类表盘
     private boolean hasUsedAnotherWatch = false;
     
@@ -44,9 +47,29 @@ public class TimeJackerEntity extends VillagerEntityMCA {
                 .add(Attributes.FOLLOW_RANGE, 16.0D);
     }
     
-    public TimeJackerEntity(EntityType<? extends VillagerEntityMCA> p_35958_, Level p_35959_) {
-        // 根据VillagerEntityMCA的构造函数要求，必须传递Gender参数
-        super((EntityType<VillagerEntityMCA>) p_35958_, p_35959_, Gender.MALE);
+    /**
+     * 静态工厂方法，用于创建时劫者实体
+     * 根据MCA是否加载，返回不同的实体实例
+     */
+    public static TimeJackerEntity create(EntityType<? extends Villager> entityType, Level level) {
+        // 如果MCA可用，返回MCA时劫者实体，否则返回普通时劫者实体
+        if (MCAUtil.isMCAAvailable()) {
+            try {
+                // 使用反射创建MCATimeJackerEntity实例
+                return new MCATimeJackerEntity((EntityType<? extends TimeJackerEntity>) entityType, level);
+            } catch (Exception e) {
+                // 如果反射失败，返回普通时劫者实体
+                return new TimeJackerEntity(entityType, level);
+            }
+        } else {
+            // MCA不可用，返回普通时劫者实体
+            return new TimeJackerEntity(entityType, level);
+        }
+    }
+    
+    public TimeJackerEntity(EntityType<? extends Villager> p_35958_, Level p_35959_) {
+        // 使用默认构造
+        super(p_35958_, p_35959_);
         
         // 设置默认名称为时劫者
         this.setCustomName(Component.literal("时劫者"));
@@ -58,6 +81,11 @@ public class TimeJackerEntity extends VillagerEntityMCA {
         this.setHealth(30.0F);
         
         // 为了保持代码简洁，不在构造函数中直接设置物品，通过其他方法或事件设置
+    }
+    
+    public boolean isVillagerMCA() {
+        // 检查是否是MCA村民实例
+        return MCAUtil.isVillagerEntityMCA(this);
     }
     
     @Override
@@ -423,8 +451,8 @@ public class TimeJackerEntity extends VillagerEntityMCA {
     
     // 时劫者特有方法：可以创建或控制异类骑士
     public void createAnotherRider(LivingEntity target) {
-        // 检查是否已经使用过表盘，并且目标必须是MCA村民
-        if (target == null || !target.isAlive() || hasUsedAnotherWatch() || !(target instanceof VillagerEntityMCA)) {
+        // 检查是否已经使用过表盘
+        if (target == null || !target.isAlive() || hasUsedAnotherWatch()) {
             return;
         }
         
@@ -433,9 +461,23 @@ public class TimeJackerEntity extends VillagerEntityMCA {
             int randomType = this.random.nextInt(2); // 暂时支持两种异类骑士
             Entity anotherRider = null;
             
-            // 创建时劫者时保存的村民数据
+            // 创建村民数据
             CompoundTag villagerTag = new CompoundTag();
-            ((VillagerEntityMCA) target).save(villagerTag);
+            // 使用反射检查目标是否是MCA村民
+            boolean isMCAVillager = false;
+            try {
+                // 尝试获取MCA VillagerEntityMCA类
+                Class<?> mcaVillagerClass = Class.forName("mca.entity.VillagerEntityMCA");
+                if (mcaVillagerClass.isInstance(target)) {
+                    // 如果是MCA村民，使用反射调用save方法
+                    java.lang.reflect.Method saveMethod = mcaVillagerClass.getMethod("save", CompoundTag.class);
+                    saveMethod.invoke(target, villagerTag);
+                    isMCAVillager = true;
+                }
+            } catch (ClassNotFoundException e) {
+                // 没有安装MCA，使用普通村民的save方法
+                target.save(villagerTag);
+            }
             
             // 根据随机类型创建不同的异类骑士
             if (randomType == 0 && ModEntityTypes.ANOTHER_ZI_O.isPresent()) {
@@ -443,12 +485,16 @@ public class TimeJackerEntity extends VillagerEntityMCA {
                 if (anotherRider != null) {
                     // 保存村民数据到异类骑士
                     ((Mob) anotherRider).getPersistentData().put("StoredVillager", villagerTag);
+                    // 标记是否是MCA村民
+                    ((Mob) anotherRider).getPersistentData().putBoolean("IsMCAVillager", isMCAVillager);
                 }
             } else if (randomType == 1 && ModEntityTypes.ANOTHER_DEN_O.isPresent()) {
                 anotherRider = ModEntityTypes.ANOTHER_DEN_O.get().create(this.level());
                 if (anotherRider != null) {
                     // 保存村民数据到异类骑士
                     ((Mob) anotherRider).getPersistentData().put("StoredVillager", villagerTag);
+                    // 标记是否是MCA村民
+                    ((Mob) anotherRider).getPersistentData().putBoolean("IsMCAVillager", isMCAVillager);
                 }
             }
             

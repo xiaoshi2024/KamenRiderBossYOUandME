@@ -6,13 +6,13 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.*;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.BloodlineManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.bloodline.effects.ModEffects;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.renderer.MCARendererFactory;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.command.ModCommands;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.common.giifu.ModStructureProcessors;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BrainDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.HelheimVineHandler;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KeybindHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.KivatItemTossHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.CherrySigurdAbilityHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.DarkGaimJinbaLemonHandler;
@@ -25,6 +25,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.villagers.VillagerRegistry;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.worldgen.dimension.CurseDimensionPlayerTickHandler;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -37,7 +38,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkEvent;
@@ -56,6 +56,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+// MCA软依赖工具类
+
 
 @Mod("kamen_rider_boss_you_and_me")
 public class kamen_rider_boss_you_and_me
@@ -277,10 +280,27 @@ public class kamen_rider_boss_you_and_me
             // 眼魔眼魂实体渲染器注册
             net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.GAMMA_EYECON_ENTITY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.gamma_eyecon.GammaEyeconRenderer::new);
             net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.NECROM_EYEX.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.necrom_eyex.NecromEyexRenderer::new);
-            // 注册时劫者实体渲染器
-            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.TIME_JACKER.get(), forge.net.mca.client.render.VillagerEntityMCARenderer::new);
-            net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.TIME_ROYALTY.get(), forge.net.mca.client.render.VillagerEntityMCARenderer::new);
+            // 注册时劫者和时间王族实体渲染器 - 使用软依赖方案
+            net.minecraft.client.renderer.entity.EntityRenderers.register(
+                    ModEntityTypes.TIME_JACKER.get(),
+                    MCARendererFactory.createTimeJackerRenderer()
+            );
 
+            net.minecraft.client.renderer.entity.EntityRenderers.register(
+                    ModEntityTypes.TIME_ROYALTY.get(),
+                    MCARendererFactory.createTimeRoyaltyRenderer()
+            );
+            
+            // 注册MCA时劫者和MCA时间王族实体渲染器 - 使用软依赖方案
+            net.minecraft.client.renderer.entity.EntityRenderers.register(
+                    ModEntityTypes.MCA_TIME_JACKER.get(),
+                    MCARendererFactory.createTimeJackerRenderer()
+            );
+
+            net.minecraft.client.renderer.entity.EntityRenderers.register(
+                    ModEntityTypes.MCA_TIME_ROYALTY.get(),
+                    MCARendererFactory.createTimeRoyaltyRenderer()
+            );
             net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.BARON_BANANA_ENERGY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_banana_energy.BaronBananaEnergyRenderer::new);
             net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.BARON_LEMON_ENERGY.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.client.baron_lemon_energy.BaronLemonEnergyRenderer::new);
             net.minecraft.client.renderer.entity.EntityRenderers.register(ModEntityTypes.ANOTHER_DENLINER.get(), com.xiaoshi2022.kamen_rider_boss_you_and_me.client.renderer.entity.AnotherDenlinerRenderer::new);

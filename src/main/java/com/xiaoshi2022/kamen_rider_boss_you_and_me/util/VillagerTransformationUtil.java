@@ -3,8 +3,6 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.GiifuDemosEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.StoriousEntity;
-import forge.net.mca.entity.EntitiesMCA;
-import forge.net.mca.entity.VillagerEntityMCA;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +13,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
@@ -26,9 +25,12 @@ public class VillagerTransformationUtil {
     private static final HashMap<UUID, CompoundTag> villagerRecord = new HashMap<>();
 
     // 人类 -> 怪人
-    public static void transformToGiifuDemos(ServerLevel level, VillagerEntityMCA mcaVillager, CompoundTag tag) {
+    public static void transformToGiifuDemos(ServerLevel level, Object villagerEntity, CompoundTag tag) {
+        // 检查是否是MCA村民或普通村民
+        boolean isMCAVillager = MCAUtil.isVillagerEntityMCA((Entity) villagerEntity);
+        
         // 获取目标实体的位置
-        BlockPos spawnPos = BlockPos.containing(mcaVillager.position());
+        BlockPos spawnPos = BlockPos.containing(((Entity) villagerEntity).position());
 
         // 尝试生成新的自定义实体
         GiifuDemosEntity spawnedEntity = (GiifuDemosEntity) ModEntityTypes.GIIFUDEMOS_ENTITY.get().spawn(level, spawnPos, MobSpawnType.MOB_SUMMONED);
@@ -43,31 +45,55 @@ public class VillagerTransformationUtil {
             spawnedEntity.setUUID(UUID.randomUUID());
 
             // 继承交易系统
-            spawnedEntity.setVillagerData(mcaVillager.getVillagerData());
-            spawnedEntity.setVillagerXp(mcaVillager.getVillagerXp());
-            spawnedEntity.setTradeOffers(mcaVillager.getOffers());
+            if (isMCAVillager) {
+                // 使用MCAUtil获取MCA村民数据
+                Object villagerData = MCAUtil.getVillagerData(villagerEntity);
+                if (villagerData instanceof VillagerData) {
+                    spawnedEntity.setVillagerData((VillagerData) villagerData);
+                }
+                int villagerXp = MCAUtil.getVillagerXp(villagerEntity);
+                spawnedEntity.setVillagerXp(villagerXp);
+                Object offers = MCAUtil.getOffers(villagerEntity);
+                if (offers != null) {
+                    try {
+                        // 使用反射设置交易列表
+                        java.lang.reflect.Method setTradeOffersMethod = spawnedEntity.getClass().getMethod("setTradeOffers", offers.getClass());
+                        setTradeOffersMethod.invoke(spawnedEntity, offers);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (villagerEntity instanceof Villager vanillaVillager) {
+                // 处理普通村民
+                spawnedEntity.setVillagerData(vanillaVillager.getVillagerData());
+                spawnedEntity.setVillagerXp(vanillaVillager.getVillagerXp());
+                spawnedEntity.setTradeOffers(vanillaVillager.getOffers());
+            }
 
             // 设置生成位置为人类的当前位置
-            spawnedEntity.setPos(mcaVillager.getX(), mcaVillager.getY(), mcaVillager.getZ());
+            spawnedEntity.setPos(((Entity) villagerEntity).getX(), ((Entity) villagerEntity).getY(), ((Entity) villagerEntity).getZ());
 
             // 记录人类的NBT数据和UUID
             CompoundTag villagerNBT = new CompoundTag();
-            mcaVillager.save(villagerNBT);
+            ((Entity) villagerEntity).save(villagerNBT);
             villagerRecord.put(spawnedEntity.getUUID(), villagerNBT);
 
-            // 移除原始的 VillagerEntityMCA
-            mcaVillager.remove(Entity.RemovalReason.DISCARDED);
+            // 移除原始实体
+            ((Entity) villagerEntity).remove(Entity.RemovalReason.DISCARDED);
 
-            System.out.println("VillagerEntityMCA has been successfully transformed into GiifuDemosEntity.");
+            System.out.println("Villager has been successfully transformed into GiifuDemosEntity.");
         } else {
             System.out.println("Failed to spawn GiifuDemosEntity.");
         }
     }
 
     // 人类 -> 怪人
-    public static void transformToStorious(ServerLevel level, VillagerEntityMCA mcaVillager, CompoundTag tag) {
+    public static void transformToStorious(ServerLevel level, Object villagerEntity, CompoundTag tag) {
+        // 检查是否是MCA村民或普通村民
+        boolean isMCAVillager = MCAUtil.isVillagerEntityMCA((Entity) villagerEntity);
+        
         // 获取目标实体的位置
-        BlockPos spawnPos = BlockPos.containing(mcaVillager.position());
+        BlockPos spawnPos = BlockPos.containing(((Entity) villagerEntity).position());
 
         // 尝试生成新的自定义实体
         StoriousEntity spawnedEntity = (StoriousEntity) ModEntityTypes.STORIOUS.get().spawn(level, spawnPos, MobSpawnType.MOB_SUMMONED);
@@ -82,22 +108,43 @@ public class VillagerTransformationUtil {
             spawnedEntity.setUUID(UUID.randomUUID());
 
             // 继承交易系统
-            spawnedEntity.setVillagerData(mcaVillager.getVillagerData());
-            spawnedEntity.setVillagerXp(mcaVillager.getVillagerXp());
-            spawnedEntity.setTradeOffers(mcaVillager.getOffers());
+            if (isMCAVillager) {
+                // 使用MCAUtil获取MCA村民数据
+                Object villagerData = MCAUtil.getVillagerData(villagerEntity);
+                if (villagerData instanceof VillagerData) {
+                    spawnedEntity.setVillagerData((VillagerData) villagerData);
+                }
+                int villagerXp = MCAUtil.getVillagerXp(villagerEntity);
+                spawnedEntity.setVillagerXp(villagerXp);
+                Object offers = MCAUtil.getOffers(villagerEntity);
+                if (offers != null) {
+                    try {
+                        // 使用反射设置交易列表
+                        java.lang.reflect.Method setTradeOffersMethod = spawnedEntity.getClass().getMethod("setTradeOffers", offers.getClass());
+                        setTradeOffersMethod.invoke(spawnedEntity, offers);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (villagerEntity instanceof Villager vanillaVillager) {
+                // 处理普通村民
+                spawnedEntity.setVillagerData(vanillaVillager.getVillagerData());
+                spawnedEntity.setVillagerXp(vanillaVillager.getVillagerXp());
+                spawnedEntity.setTradeOffers(vanillaVillager.getOffers());
+            }
 
             // 设置生成位置为人类的当前位置
-            spawnedEntity.setPos(mcaVillager.getX(), mcaVillager.getY(), mcaVillager.getZ());
+            spawnedEntity.setPos(((Entity) villagerEntity).getX(), ((Entity) villagerEntity).getY(), ((Entity) villagerEntity).getZ());
 
             // 记录人类的NBT数据和UUID
             CompoundTag villagerNBT = new CompoundTag();
-            mcaVillager.save(villagerNBT);
+            ((Entity) villagerEntity).save(villagerNBT);
             villagerRecord.put(spawnedEntity.getUUID(), villagerNBT);
 
-            // 移除原始的 VillagerEntityMCA
-            mcaVillager.remove(Entity.RemovalReason.DISCARDED);
+            // 移除原始实体
+            ((Entity) villagerEntity).remove(Entity.RemovalReason.DISCARDED);
 
-            System.out.println("VillagerEntityMCA has been successfully transformed into StoriousEntity.");
+            System.out.println("Villager has been successfully transformed into StoriousEntity.");
         } else {
             System.out.println("Failed to spawn StoriousEntity.");
         }
@@ -109,9 +156,25 @@ public class VillagerTransformationUtil {
         UUID giifuDemosUUID = giifuDemosEntity.getUUID();
         if (villagerRecord.containsKey(giifuDemosUUID)) {
             CompoundTag recordedNBT = villagerRecord.get(giifuDemosUUID);
+            BlockPos spawnPos = BlockPos.containing(giifuDemosEntity.position());
 
-            // 创建新的 VillagerEntityMCA
-            VillagerEntityMCA newVillager = EntitiesMCA.MALE_VILLAGER.get().spawn(serverLevel, BlockPos.containing(giifuDemosEntity.position()), MobSpawnType.MOB_SUMMONED);
+            Villager newVillager = null;
+            
+            // 尝试生成MCA村民（如果MCA可用）
+            if (MCAUtil.isMCAAvailable()) {
+                newVillager = MCAUtil.spawnMCAVillager(serverLevel, spawnPos, MobSpawnType.MOB_SUMMONED);
+            }
+            
+            // 如果MCA不可用或生成失败，生成普通村民
+            if (newVillager == null) {
+                // 获取村庄类型
+                VillagerType villagerType = BuiltInRegistries.VILLAGER_TYPE.get(new ResourceLocation("plains"));
+                // 创建普通村民
+                newVillager = new Villager(net.minecraft.world.entity.EntityType.VILLAGER, serverLevel);
+                newVillager.setVillagerData(new VillagerData(villagerType, VillagerProfession.NONE, 1));
+                newVillager.setPos(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+                serverLevel.addFreshEntity(newVillager);
+            }
 
             if (newVillager != null) {
                 newVillager.load(recordedNBT);
@@ -132,9 +195,9 @@ public class VillagerTransformationUtil {
                 // 移除原始 GiifuDemosEntity
                 giifuDemosEntity.remove(Entity.RemovalReason.DISCARDED);
 
-                System.out.println("GiifuDemosEntity has been successfully transformed into VillagerEntityMCA.");
+                System.out.println("GiifuDemosEntity has been successfully transformed into Villager.");
             } else {
-                System.out.println("Failed to spawn VillagerEntityMCA.");
+                System.out.println("Failed to spawn Villager.");
             }
 
             // 清除记录
@@ -148,9 +211,25 @@ public class VillagerTransformationUtil {
         UUID giifuDemosUUID = storiousEntity.getUUID();
         if (villagerRecord.containsKey(giifuDemosUUID)) {
             CompoundTag recordedNBT = villagerRecord.get(giifuDemosUUID);
+            BlockPos spawnPos = BlockPos.containing(storiousEntity.position());
 
-            // 创建新的 VillagerEntityMCA
-            VillagerEntityMCA newVillager = EntitiesMCA.MALE_VILLAGER.get().spawn(serverLevel, BlockPos.containing(storiousEntity.position()), MobSpawnType.MOB_SUMMONED);
+            Villager newVillager = null;
+            
+            // 尝试生成MCA村民（如果MCA可用）
+            if (MCAUtil.isMCAAvailable()) {
+                newVillager = MCAUtil.spawnMCAVillager(serverLevel, spawnPos, MobSpawnType.MOB_SUMMONED);
+            }
+            
+            // 如果MCA不可用或生成失败，生成普通村民
+            if (newVillager == null) {
+                // 获取村庄类型
+                VillagerType villagerType = BuiltInRegistries.VILLAGER_TYPE.get(new ResourceLocation("plains"));
+                // 创建普通村民
+                newVillager = new Villager(net.minecraft.world.entity.EntityType.VILLAGER, serverLevel);
+                newVillager.setVillagerData(new VillagerData(villagerType, VillagerProfession.NONE, 1));
+                newVillager.setPos(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+                serverLevel.addFreshEntity(newVillager);
+            }
 
             if (newVillager != null) {
                 newVillager.load(recordedNBT);
@@ -171,15 +250,15 @@ public class VillagerTransformationUtil {
                 // 移除原始 storiousEntity
                 storiousEntity.remove(Entity.RemovalReason.DISCARDED);
 
-                System.out.println("GiifuDemosEntity has been successfully transformed into VillagerEntityMCA.");
+                System.out.println("StoriousEntity has been successfully transformed into Villager.");
             } else {
-                System.out.println("Failed to spawn VillagerEntityMCA.");
+                System.out.println("Failed to spawn Villager.");
             }
 
             // 清除记录
             villagerRecord.remove(giifuDemosUUID);
         } else {
-            System.out.println("No recorded data found for this GiifuDemosEntity.");
+            System.out.println("No recorded data found for this StoriousEntity.");
         }
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -232,9 +233,17 @@ public class DarkKivaSealBarrierEntity extends LivingEntity implements GeoEntity
             return false;
         }
 
-        // 不 trapping 创造模式的玩家
+        // 不 trapping 创造模式的玩家或Kiva骑士
         if (entity instanceof Player player) {
-            return !player.getAbilities().instabuild;
+            if (player.getAbilities().instabuild) {
+                return false;
+            }
+            // 检查是否是ServerPlayer且装备了全套Kiva盔甲
+            if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                return !DarkKivaItem.isFullArmorEquipped(serverPlayer);
+            }
+            // 客户端玩家不 trapping
+            return false;
         }
 
         return true;

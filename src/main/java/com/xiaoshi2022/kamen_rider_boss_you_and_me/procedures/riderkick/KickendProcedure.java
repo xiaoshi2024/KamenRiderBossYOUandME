@@ -110,7 +110,8 @@ public class KickendProcedure {
 
 		variables.needExplode = true;
 		variables.kick = false;
-
+// 立即同步变量，确保网络延迟不会影响伤害逻辑
+		variables.syncPlayerVariables(entity);
 		// 获取头盔
 		ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
 		boolean isBrainHelmet = helmet.getItem() == ModItems.BRAIN_HELMET.get();

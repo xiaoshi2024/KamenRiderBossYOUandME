@@ -287,11 +287,11 @@ public class KeyBinding {
                 // 检查是否按下Shift键
                 if (hasShiftDown() && mc.player.hasEffect(MobEffects.INVISIBILITY)) {
                     // Shift+B键：解除隐身效果
-                    PacketHandler.sendToServer(new GhostEyeInvisibilityPacket(false));
+                    PacketHandler.sendToServer(new GhostEyeInvisibilityPacket(mc.player.getId(), false));
                     mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal("隐身效果已解除！"), true);
                 } else if (!mc.player.hasEffect(MobEffects.INVISIBILITY)) {
                     // B键：添加隐身效果
-                    PacketHandler.sendToServer(new GhostEyeInvisibilityPacket(true));
+                    PacketHandler.sendToServer(new GhostEyeInvisibilityPacket(mc.player.getId(), true));
                     mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal("获得隐身效果！"), true);
                 }
                 return; // 优先处理眼魂隐身功能，不继续执行其他按键检测

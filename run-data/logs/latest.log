@@ -1,22 +1,22 @@
-[231月2026 14:41:07.809] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserver, --fml.forgeVersion, 47.4.10, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
-[231月2026 14:41:07.814] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
-[231月2026 14:41:08.000] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserver
-[231月2026 14:41:08.046] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/D:/mckamenboss/libraries/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar%2365!/ Service=ModLauncher Env=SERVER
-[231月2026 14:41:08.248] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\fmlcore\1.20.1-47.4.10\fmlcore-1.20.1-47.4.10.jar is missing mods.toml file
-[231月2026 14:41:08.253] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\javafmllanguage\1.20.1-47.4.10\javafmllanguage-1.20.1-47.4.10.jar is missing mods.toml file
-[231月2026 14:41:08.257] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\lowcodelanguage\1.20.1-47.4.10\lowcodelanguage-1.20.1-47.4.10.jar is missing mods.toml file
-[231月2026 14:41:08.262] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\mclanguage\1.20.1-47.4.10\mclanguage-1.20.1-47.4.10.jar is missing mods.toml file
-[231月2026 14:41:08.406] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 3 dependencies adding them to mods collection
-[231月2026 14:41:09.188] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[231月2026 14:41:09.202] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserver' with arguments []
-[231月2026 14:41:09.293] [main/WARN] [mixin/]: Reference map 'kamen_rider_boss_you_and_me.refmap.json' for kamen_rider_boss_you_and_me.mixins.json could not be read. If this is a development environment you can ignore this message
-[231月2026 14:41:09.301] [main/WARN] [mixin/]: Reference map 'kamen_rider_weapon_craft.refmap.json' for kamen_rider_weapon_craft.mixins.json could not be read. If this is a development environment you can ignore this message
-[231月2026 14:41:09.958] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.2).
-[231月2026 14:41:15.008] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.10, for MC 1.20.1 with MCP 20230612.114412
-[231月2026 14:41:15.009] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.10 Initialized
-[231月2026 14:41:15.086] [modloading-worker-0/INFO] [kamen_rider_boss_you_and_me/]: Registered Time Jacker profession and POI type
-[231月2026 14:41:15.104] [modloading-worker-0/INFO] [dev.architectury.networking.forge.NetworkManagerImpl/]: Registering C2S receiver with id architectury:sync_ids
-[231月2026 14:41:15.187] [ForkJoinPool.commonPool-worker-1/ERROR] [tocraft.craftedcore.CraftedCore/]: No internet connection!
+[261月2026 13:21:27.695] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserver, --fml.forgeVersion, 47.4.10, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[261月2026 13:21:27.701] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[261月2026 13:21:27.979] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserver
+[261月2026 13:21:28.043] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/D:/mckamenboss/libraries/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar%2365!/ Service=ModLauncher Env=SERVER
+[261月2026 13:21:28.328] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\fmlcore\1.20.1-47.4.10\fmlcore-1.20.1-47.4.10.jar is missing mods.toml file
+[261月2026 13:21:28.335] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\javafmllanguage\1.20.1-47.4.10\javafmllanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[261月2026 13:21:28.340] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\lowcodelanguage\1.20.1-47.4.10\lowcodelanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[261月2026 13:21:28.346] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\mclanguage\1.20.1-47.4.10\mclanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[261月2026 13:21:28.561] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 3 dependencies adding them to mods collection
+[261月2026 13:21:29.725] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[261月2026 13:21:29.749] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserver' with arguments []
+[261月2026 13:21:29.863] [main/WARN] [mixin/]: Reference map 'kamen_rider_boss_you_and_me.refmap.json' for kamen_rider_boss_you_and_me.mixins.json could not be read. If this is a development environment you can ignore this message
+[261月2026 13:21:29.875] [main/WARN] [mixin/]: Reference map 'kamen_rider_weapon_craft.refmap.json' for kamen_rider_weapon_craft.mixins.json could not be read. If this is a development environment you can ignore this message
+[261月2026 13:21:30.705] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.2).
+[261月2026 13:21:37.054] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.10, for MC 1.20.1 with MCP 20230612.114412
+[261月2026 13:21:37.055] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.10 Initialized
+[261月2026 13:21:37.133] [modloading-worker-0/INFO] [kamen_rider_boss_you_and_me/]: Registered Time Jacker profession and POI type
+[261月2026 13:21:37.145] [modloading-worker-0/INFO] [dev.architectury.networking.forge.NetworkManagerImpl/]: Registering C2S receiver with id architectury:sync_ids
+[261月2026 13:21:37.263] [ForkJoinPool.commonPool-worker-1/ERROR] [tocraft.craftedcore.CraftedCore/]: No internet connection!
 java.net.UnknownHostException: raw.githubusercontent.com
 	at sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:572) ~[?:?]
 	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[?:?]
@@ -46,54 +46,170 @@ java.net.UnknownHostException: raw.githubusercontent.com
 	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-[231月2026 14:41:15.680] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.682] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.683] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.684] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[231月2026 14:41:15.685] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.687] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.687] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.687] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.688] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.689] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.689] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.689] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[231月2026 14:41:15.689] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.692] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[231月2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[231月2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[231月2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.693] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.694] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.694] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.697] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.702] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.702] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.702] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.703] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.703] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[231月2026 14:41:15.705] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.GrimReaperEntity from class forge.net.mca.util.network.datasync.CEnumParameter
-[231月2026 14:41:15.778] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
-[231月2026 14:41:16.513] [main/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
-[231月2026 14:41:16.756] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Found status: UP_TO_DATE Current: 47.4.10 Target: null
-[231月2026 14:41:16.996] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/mckamenboss/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23123!/assets/.mcassetsroot' uses unexpected schema
-[231月2026 14:41:16.996] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/mckamenboss/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23123!/data/.mcassetsroot' uses unexpected schema
-[231月2026 14:41:17.833] [Worker-Main-10/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag kamen_rider_boss_you_and_me:helheim_elites as it is missing following references: kamen_rider:lord_baron (from kamen_rider_boss_you_and_me-0.2.7alpha-2.jar), 
-	kamen_rider:lord_another_elite (from kamen_rider_boss_you_and_me-0.2.7alpha-2.jar)
-[231月2026 14:41:17.834] [Worker-Main-10/ERROR] [net.minecraft.tags.TagLoader/]: Couldn't load tag kamen_rider_boss_you_and_me:helheim_minions as it is missing following references: kamen_rider:elementary_inves_helheim (from kamen_rider_boss_you_and_me-0.2.7alpha-2.jar), 
-	kamen_rider:advanced_inves (from kamen_rider_boss_you_and_me-0.2.7alpha-2.jar)
-[231月2026 14:41:18.037] [Worker-Main-1/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/lockseed_iron_bars
+[261月2026 13:21:37.895] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.896] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.896] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.896] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.896] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.897] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.897] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.897] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[261月2026 13:21:37.899] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.899] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.899] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.900] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.900] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.900] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.900] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.906] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.906] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[261月2026 13:21:37.906] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.906] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
+[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.909] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.915] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.915] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.915] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.916] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.916] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
+[261月2026 13:21:37.917] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.GrimReaperEntity from class forge.net.mca.util.network.datasync.CEnumParameter
+[261月2026 13:21:37.997] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
+[261月2026 13:21:38.056] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.057] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.057] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.057] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.057] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.058] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.058] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.058] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.058] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:38.933] [main/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
+[261月2026 13:21:39.034] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.091] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.091] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
+[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
+[261月2026 13:21:39.253] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Found status: UP_TO_DATE Current: 47.4.10 Target: null
+[261月2026 13:21:39.591] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/mckamenboss/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23123!/assets/.mcassetsroot' uses unexpected schema
+[261月2026 13:21:39.591] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/mckamenboss/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23123!/data/.mcassetsroot' uses unexpected schema
+[261月2026 13:21:40.987] [Worker-Main-7/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/lockseed_iron_bars
 com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown string 'kamen_rider_weapon_craft:lockseed_iron_bars'
 	at net.minecraft.util.GsonHelper.m_13866_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
 	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
@@ -145,7 +261,7 @@ com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown st
 	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-[231月2026 14:41:18.078] [Worker-Main-1/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/pine_wall_hanging_sign
+[261月2026 13:21:41.070] [Worker-Main-7/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/pine_wall_hanging_sign
 com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown string 'kamen_rider_weapon_craft:pine_hanging_sign'
 	at net.minecraft.util.GsonHelper.m_13866_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
 	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
@@ -197,7 +313,7 @@ com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown st
 	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-[231月2026 14:41:18.085] [Worker-Main-1/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/pine_hanging_sign
+[261月2026 13:21:41.081] [Worker-Main-7/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/pine_hanging_sign
 com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown string 'kamen_rider_weapon_craft:pine_hanging_sign'
 	at net.minecraft.util.GsonHelper.m_13866_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
 	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
@@ -249,8 +365,8 @@ com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown st
 	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-[231月2026 14:41:18.110] [main/WARN] [net.minecraft.world.level.storage.loot.LootDataManager/]: Found loot table element validation problem in {loot_tables:kamen_rider_boss_you_and_me:entities/time_jacker}.pools[0].entries[0]: Unreachable entry!
-[231月2026 14:41:18.124] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:rider_fusion_recipe_1
+[261月2026 13:21:41.116] [main/WARN] [net.minecraft.world.level.storage.loot.LootDataManager/]: Found loot table element validation problem in {loot_tables:kamen_rider_boss_you_and_me:entities/time_jacker}.pools[0].entries[0]: Unreachable entry!
+[261月2026 13:21:41.140] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:rider_fusion_recipe_1
 com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'kamen_rider_weapon_craft:rider_fusion_recipe_1'
 	at net.minecraft.world.item.crafting.RecipeManager.m_220253_(RecipeManager.java:170) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
 	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
@@ -279,7 +395,7 @@ com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'kamen_r
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[231月2026 14:41:18.137] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:helheim_ice_cream
+[261月2026 13:21:41.157] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:helheim_ice_cream
 com.google.gson.JsonSyntaxException: Unknown item 'pamhc2foodcore:mixingbowlitem'
 	at net.minecraft.world.item.crafting.ShapedRecipe.m_151280_(ShapedRecipe.java:292) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
 	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
@@ -317,7 +433,7 @@ com.google.gson.JsonSyntaxException: Unknown item 'pamhc2foodcore:mixingbowlitem
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[231月2026 14:41:18.139] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:helheim_juice_bottle
+[261月2026 13:21:41.160] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:helheim_juice_bottle
 com.google.gson.JsonSyntaxException: Unknown item 'pamhc2foodcore:juiceritem'
 	at net.minecraft.world.item.crafting.ShapedRecipe.m_151280_(ShapedRecipe.java:292) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
 	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
@@ -355,7 +471,7 @@ com.google.gson.JsonSyntaxException: Unknown item 'pamhc2foodcore:juiceritem'
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[231月2026 14:41:18.144] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe create:mixing/helheim_cake_slice
+[261月2026 13:21:41.167] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe create:mixing/helheim_cake_slice
 com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'create:mixing'
 	at net.minecraft.world.item.crafting.RecipeManager.m_220253_(RecipeManager.java:170) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
 	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
@@ -384,7 +500,7 @@ com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'create:
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[231月2026 14:41:18.146] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:rider_fusion_recipe
+[261月2026 13:21:41.168] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:rider_fusion_recipe
 com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'kamen_rider_weapon_craft:rider_fusion_recipe'
 	at net.minecraft.world.item.crafting.RecipeManager.m_220253_(RecipeManager.java:170) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
 	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
@@ -413,572 +529,411 @@ com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'kamen_r
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[231月2026 14:41:18.149] [main/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
-[231月2026 14:41:18.212] [main/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1513 advancements
-[231月2026 14:41:18.273] [main/INFO] [top.theillusivec4.curios.Curios/]: Loaded 11 curio slots
-[231月2026 14:41:18.276] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
-[231月2026 14:41:18.276] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
-[231月2026 14:41:18.276] [main/ERROR] [top.theillusivec4.curios.Curios/]: knight_invoker is not a registered slot type!
-[231月2026 14:41:18.276] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
-[231月2026 14:41:18.277] [main/INFO] [top.theillusivec4.curios.Curios/]: Loaded 7 curio entities
-[231月2026 14:41:18.287] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:snow_golem registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
-[231月2026 14:41:18.287] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:bee registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
-[231月2026 14:41:18.287] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:goat registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
-[231月2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.zombie, entity.minecraft.zombie_villager] registered for [ReinforcementsTrait]
-[231月2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.drowned, entity.minecraft.husk, entity.minecraft.piglin, entity.minecraft.piglin_brute, entity.minecraft.skeleton, entity.minecraft.stray, entity.minecraft.wither_skeleton, entity.minecraft.zombie, entity.minecraft.zombie_villager] registered for [HumanoidTrait]
-[231月2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.husk] registered for [ReinforcementsTrait]
-[231月2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.stray] registered for [RiderTrait]
-[231月2026 14:41:18.291] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.snow_golem] registered for [UndrownableTrait]
-[231月2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.endermite, entity.minecraft.fox, entity.minecraft.silverfish, entity.minecraft.vex, entity.minecraft.wither] registered for [WalkOnPowderSnow]
-[231月2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.strider] registered for [RiderTrait]
-[231月2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.wolf] registered for [FearedTrait]
-[231月2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.chicken, entity.minecraft.rabbit, entity.minecraft.frog] registered for [PreyTrait]
-[231月2026 14:41:18.293] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.chicken, entity.minecraft.turtle] registered for [PreyTrait]
-[231月2026 14:41:18.294] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.drowned] registered for [ReinforcementsTrait]
-[231月2026 14:41:19.527] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting minecraft server version 1.20.1
-[231月2026 14:41:19.527] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Loading properties
-[231月2026 14:41:19.528] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Default game type: SURVIVAL
-[231月2026 14:41:19.528] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
-[231月2026 14:41:19.581] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting Minecraft server on *:25565
-[231月2026 14:41:19.597] [Server thread/INFO] [net.minecraft.server.network.ServerConnectionListener/]: Using default channel type
-[231月2026 14:41:19.773] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
-[231月2026 14:41:19.773] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: The server will make no attempt to authenticate usernames. Beware.
-[231月2026 14:41:19.775] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
-[231月2026 14:41:19.775] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: To change this, set "online-mode" to "true" in the server.properties file.
-[231月2026 14:41:19.829] [Server thread/INFO] [terrablender/]: Registered region minecraft:overworld to index 0 for type OVERWORLD
-[231月2026 14:41:19.829] [Server thread/INFO] [terrablender/]: Registered region minecraft:nether to index 0 for type NETHER
-[231月2026 14:41:19.899] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:overworld
-[231月2026 14:41:19.900] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:the_nether
-[231月2026 14:41:19.900] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Preparing level "world"
-[231月2026 14:41:21.802] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
-[231月2026 14:41:22.784] [Worker-Main-11/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
-[231月2026 14:41:22.785] [Worker-Main-10/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
-[231月2026 14:41:22.804] [Worker-Main-5/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
-[231月2026 14:41:23.303] [Worker-Main-10/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
-[231月2026 14:41:23.613] [Netty Server IO #1/INFO] [net.minecraftforge.server.ServerLifecycleHooks/SERVERHOOKS]: Disconnecting Player (server is still starting): literal{Server is still starting! Please wait before reconnecting.}
-[231月2026 14:41:23.805] [Worker-Main-1/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 85%
-[231月2026 14:41:23.858] [Server thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 2055 ms
-[231月2026 14:41:23.859] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Done (4.069s)! For help, type "help"
-[231月2026 14:41:23.882] [Server thread/INFO] [net.minecraftforge.server.permission.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
-[231月2026 14:41:29.454] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: xi_bao_yaa[/127.0.0.1:60685] logged in with entity id 147 at (5.699999988079071, 83.0, 26.32120383488818)
-[231月2026 14:41:29.537] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: xi_bao_yaa joined the game
-[231月2026 14:41:29.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: false, isJumping: false, wasJumping: false
-[231月2026 14:41:29.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:29.762] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:29.762] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:29.814] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:29.814] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:29.841] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:29.841] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:29.892] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:29.893] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:29.922] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:29.922] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:29.969] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:29.970] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:29.992] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:29.992] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.021] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.021] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.223] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.223] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.257] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.257] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.278] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.278] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.320] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.320] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.338] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.338] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.368] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.369] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.388] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.388] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.415] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.416] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.432] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.432] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.463] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.463] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.481] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.482] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.510] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.511] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.528] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.528] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.615] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.615] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.687] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.688] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.748] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.748] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.822] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.822] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:30.870] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:30.870] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.062] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.062] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.089] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.091] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.107] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.107] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.134] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.134] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.151] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.151] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.180] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.180] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.199] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.200] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.260] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.260] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.299] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.300] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.362] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.362] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.399] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.463] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.463] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.501] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.503] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.598] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.598] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.658] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.659] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.702] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.702] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.762] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.762] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:31.856] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:31.857] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.024] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.024] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.051] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.051] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.067] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.068] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.165] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.165] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.201] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.201] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.258] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.259] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.362] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.362] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.453] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.454] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.499] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.499] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.661] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.661] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.694] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.694] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.753] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.753] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:32.853] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:32.854] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.017] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.017] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.038] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.038] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.052] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.052] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.076] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.077] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.095] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.095] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.152] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.152] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.194] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.194] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.257] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.257] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.353] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.353] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.399] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.453] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.453] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.558] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.558] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.594] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.594] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.696] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.696] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.760] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.760] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:33.853] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:33.854] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.004] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.004] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.028] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.028] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.043] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.044] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.065] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.065] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.094] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.094] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.159] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.159] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.193] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.195] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.258] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.258] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.296] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.296] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.354] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.355] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.456] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.456] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.498] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.498] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.554] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.554] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.594] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.596] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.652] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.652] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.697] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.698] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.800] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.800] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:34.863] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:34.863] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.029] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.029] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.050] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.050] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.063] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.063] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.092] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.092] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.105] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.105] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.153] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.153] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.194] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.196] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.254] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.254] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.295] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.296] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.353] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.353] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.454] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.454] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.553] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.554] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.598] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.660] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.661] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.697] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.697] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.754] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.755] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:35.859] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:35.859] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.032] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.032] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.059] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.059] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.072] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.072] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.095] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.095] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.108] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.108] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.166] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.166] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.198] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.198] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.259] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.261] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.352] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.352] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.455] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.455] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.495] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.496] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.558] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.601] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.602] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.660] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.660] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.751] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.751] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.793] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.793] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:36.860] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:36.860] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.078] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.078] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.105] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.105] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.117] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.117] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.140] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.141] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.153] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.155] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.179] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.180] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.195] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.196] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.253] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.254] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.297] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.297] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.352] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.352] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.452] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.452] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.495] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.495] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.599] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.694] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.695] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.753] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.753] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.797] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:37.853] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player xi_bao_yaa - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:37.853] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:38.025] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: xi_bao_yaa lost connection: Disconnected
-[231月2026 14:41:38.025] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: xi_bao_yaa left the game
-[231月2026 14:41:53.988] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: UFO_by_shi[/[fdfd::1aad:be33]:58141] logged in with entity id 185 at (-22.145554828436925, 72.0, 36.030213426988944)
-[231月2026 14:41:54.000] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: UFO_by_shi joined the game
-[231月2026 14:41:54.061] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: false, isJumping: false, wasJumping: false
-[231月2026 14:41:54.061] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.091] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.091] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.109] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.109] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.173] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.173] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.210] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.210] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.270] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.270] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.315] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.315] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.368] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.368] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.464] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.464] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.507] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.507] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.561] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.600] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.600] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.653] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.655] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.699] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.699] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.760] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.760] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.795] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.795] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:54.906] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:54.909] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.155] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.155] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.186] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.186] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.200] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.200] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.230] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.231] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.247] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.248] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.279] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.280] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.299] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.330] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.330] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.348] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.348] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.380] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.381] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.459] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.459] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.502] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.503] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.560] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.608] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.609] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.666] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.666] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.698] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.698] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.798] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:55.865] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:55.865] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.050] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.051] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.079] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.080] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.099] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.100] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.129] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.129] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.147] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.148] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.176] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.177] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.202] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.202] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.262] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.263] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.301] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.301] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.363] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.363] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.403] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.456] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.457] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.497] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.497] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.557] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.558] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.597] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.598] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.663] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.663] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.699] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.700] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.758] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.759] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.803] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.804] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:56.862] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:56.862] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.068] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.069] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.141] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.142] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.156] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.157] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.187] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.187] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.205] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.206] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.253] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.253] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.298] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.359] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.360] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.397] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.398] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.456] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.457] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.499] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.500] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.559] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.596] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.597] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.677] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.678] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.700] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.701] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.764] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.764] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.800] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.800] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:57.865] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:57.865] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.071] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.071] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.098] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.099] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.114] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.145] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.145] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.161] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.162] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.190] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.191] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.208] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.210] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.272] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.272] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.301] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.301] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.359] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Player UFO_by_shi - kick: false, isHelmetValid: false, onGround: true, wasOnGround: true, isJumping: false, wasJumping: false
-[231月2026 14:41:58.360] [Server thread/INFO] [kamen_rider_boss_you_and_me/]: KickendProcedure: Helmet invalid - item: air
-[231月2026 14:41:58.398] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: UFO_by_shi lost connection: Disconnected
-[231月2026 14:41:58.398] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: UFO_by_shi left the game
+[261月2026 13:21:41.173] [main/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
+[261月2026 13:21:41.270] [main/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1513 advancements
+[261月2026 13:21:41.355] [main/INFO] [top.theillusivec4.curios.Curios/]: Loaded 11 curio slots
+[261月2026 13:21:41.359] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
+[261月2026 13:21:41.359] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
+[261月2026 13:21:41.359] [main/ERROR] [top.theillusivec4.curios.Curios/]: knight_invoker is not a registered slot type!
+[261月2026 13:21:41.359] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
+[261月2026 13:21:41.360] [main/INFO] [top.theillusivec4.curios.Curios/]: Loaded 7 curio entities
+[261月2026 13:21:41.375] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:snow_golem registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
+[261月2026 13:21:41.376] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:bee registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
+[261月2026 13:21:41.376] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:goat registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
+[261月2026 13:21:41.381] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.zombie, entity.minecraft.zombie_villager] registered for [ReinforcementsTrait]
+[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.drowned, entity.minecraft.husk, entity.minecraft.piglin, entity.minecraft.piglin_brute, entity.minecraft.skeleton, entity.minecraft.stray, entity.minecraft.wither_skeleton, entity.minecraft.zombie, entity.minecraft.zombie_villager] registered for [HumanoidTrait]
+[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.husk] registered for [ReinforcementsTrait]
+[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.stray] registered for [RiderTrait]
+[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.snow_golem] registered for [UndrownableTrait]
+[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.endermite, entity.minecraft.fox, entity.minecraft.silverfish, entity.minecraft.vex, entity.minecraft.wither] registered for [WalkOnPowderSnow]
+[261月2026 13:21:41.384] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.strider] registered for [RiderTrait]
+[261月2026 13:21:41.384] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.wolf] registered for [FearedTrait]
+[261月2026 13:21:41.385] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.chicken, entity.minecraft.rabbit, entity.minecraft.frog] registered for [PreyTrait]
+[261月2026 13:21:41.385] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.chicken, entity.minecraft.turtle] registered for [PreyTrait]
+[261月2026 13:21:41.385] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.drowned] registered for [ReinforcementsTrait]
+[261月2026 13:21:42.879] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting minecraft server version 1.20.1
+[261月2026 13:21:42.879] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Loading properties
+[261月2026 13:21:42.881] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Default game type: SURVIVAL
+[261月2026 13:21:42.881] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
+[261月2026 13:21:42.965] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting Minecraft server on *:25565
+[261月2026 13:21:42.982] [Server thread/INFO] [net.minecraft.server.network.ServerConnectionListener/]: Using default channel type
+[261月2026 13:21:43.215] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[261月2026 13:21:43.216] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: The server will make no attempt to authenticate usernames. Beware.
+[261月2026 13:21:43.216] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[261月2026 13:21:43.216] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: To change this, set "online-mode" to "true" in the server.properties file.
+[261月2026 13:21:43.282] [Server thread/INFO] [terrablender/]: Registered region minecraft:overworld to index 0 for type OVERWORLD
+[261月2026 13:21:43.282] [Server thread/INFO] [terrablender/]: Registered region minecraft:nether to index 0 for type NETHER
+[261月2026 13:21:43.288] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:the_nether
+[261月2026 13:21:43.382] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:overworld
+[261月2026 13:21:43.382] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Preparing level "world"
+[261月2026 13:21:46.142] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
+[261月2026 13:21:47.532] [Worker-Main-6/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
+[261月2026 13:21:47.533] [Worker-Main-4/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
+[261月2026 13:21:47.537] [Worker-Main-9/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
+[261月2026 13:21:47.646] [Worker-Main-7/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
+[261月2026 13:21:48.144] [Worker-Main-1/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 21%
+[261月2026 13:21:48.372] [Server thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 2229 ms
+[261月2026 13:21:48.372] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Done (5.137s)! For help, type "help"
+[261月2026 13:21:48.391] [Server thread/INFO] [net.minecraftforge.server.permission.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
+[261月2026 13:21:48.392] [Server thread/INFO] [patchouli/]: Sending reload packet to clients
+[261月2026 13:21:48.457] [Server thread/ERROR] [net.minecraftforge.eventbus.EventSubclassTransformer/EVENTBUS]: Could not find parent net/minecraft/client/renderer/entity/HumanoidMobRenderer for class forge/net/mca/client/render/VillagerLikeEntityMCARenderer in classloader cpw.mods.modlauncher.TransformingClassLoader@6015a4a5 on thread Thread[Server thread,8,SERVER]
+[261月2026 13:21:48.457] [Server thread/ERROR] [net.minecraftforge.eventbus.EventSubclassTransformer/EVENTBUS]: An error occurred building event handler
+java.lang.ClassNotFoundException: net.minecraft.client.renderer.entity.HumanoidMobRenderer
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:141) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
+	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
+	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at java.lang.Class.forName0(Native Method) ~[?:?]
+	at java.lang.Class.forName(Class.java:375) ~[?:?]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
+	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.lang.Thread.run(Thread.java:842) ~[?:?]
+[261月2026 13:21:48.462] [Server thread/ERROR] [net.minecraftforge.eventbus.EventBus/EVENTBUS]: Exception caught during firing event: net/minecraft/client/renderer/entity/HumanoidMobRenderer
+	Index: 11
+	Listeners:
+		0: HIGHEST
+		1: ASM: net.minecraftforge.common.ForgeInternalHandler@47c6de05 builtinMobSpawnBlocker(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		2: HIGH
+		3: ASM: class dev.architectury.event.forge.EventHandlerImplCommon event(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		4: ASM: net.minecraftforge.common.ForgeInternalHandler@47c6de05 onEntityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		5: NORMAL
+		6: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.WitherSpawnHandler onWitherSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		7: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.ZombieHeiseiswordEventHandler onEntitySpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		8: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.KabutoProjectileHandler onProjectileSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		9: ASM: class forge.net.mca.forge.ForgeBusEvents OnEntityJoinWorldEvent(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		10: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.zombie.ZombieSonicArrowEventHandler onZombieSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		11: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister onVillagerJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		12: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.event.TimeJackerEventHandler onEntityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		13: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.ZombieAIModifier onEntityJoinLevel(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		14: ASM: top.theillusivec4.curios.common.event.CuriosEventHandler@27cb03e2 entityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+java.lang.NoClassDefFoundError: net/minecraft/client/renderer/entity/HumanoidMobRenderer
+	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1017)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:375)
+	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38)
+	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17)
+	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:315)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:296)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.ClassNotFoundException: net.minecraft.client.renderer.entity.HumanoidMobRenderer
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:141)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
+	... 42 more
+
+[261月2026 13:21:48.555] [Server thread/ERROR] [net.minecraft.server.MinecraftServer/]: Encountered an unexpected exception
+net.minecraft.ReportedException: Exception ticking world
+	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:897) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.lang.Thread.run(Thread.java:842) ~[?:?]
+Caused by: java.lang.NoClassDefFoundError: net/minecraft/client/renderer/entity/HumanoidMobRenderer
+	at java.lang.ClassLoader.defineClass1(Native Method) ~[?:?]
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:1017) ~[?:?]
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
+	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at java.lang.Class.forName0(Native Method) ~[?:?]
+	at java.lang.Class.forName(Class.java:375) ~[?:?]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
+	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	... 5 more
+Caused by: java.lang.ClassNotFoundException: net.minecraft.client.renderer.entity.HumanoidMobRenderer
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:141) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at java.lang.ClassLoader.defineClass1(Native Method) ~[?:?]
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:1017) ~[?:?]
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
+	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at java.lang.Class.forName0(Native Method) ~[?:?]
+	at java.lang.Class.forName(Class.java:375) ~[?:?]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
+	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	... 5 more
+[261月2026 13:21:48.581] [Server thread/FATAL] [net.minecraftforge.common.ForgeMod/]: Preparing crash report with UUID d3181c60-b45d-4663-8360-af12b9595ff8
+[261月2026 13:21:48.582] [Server thread/ERROR] [net.minecraft.server.MinecraftServer/]: This crash report has been saved to: D:\mckamenboss\.\crash-reports\crash-2026-01-26_13.21.48-server.txt
+[261月2026 13:21:48.582] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[261月2026 13:21:48.583] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[261月2026 13:21:48.583] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[261月2026 13:21:49.468] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[261月2026 13:21:49.844] [Server thread/ERROR] [net.minecraftforge.eventbus.EventBus/EVENTBUS]: Exception caught during firing event: Could not initialize class com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil
+	Index: 11
+	Listeners:
+		0: HIGHEST
+		1: ASM: net.minecraftforge.common.ForgeInternalHandler@47c6de05 builtinMobSpawnBlocker(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		2: HIGH
+		3: ASM: class dev.architectury.event.forge.EventHandlerImplCommon event(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		4: ASM: net.minecraftforge.common.ForgeInternalHandler@47c6de05 onEntityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		5: NORMAL
+		6: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.WitherSpawnHandler onWitherSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		7: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.ZombieHeiseiswordEventHandler onEntitySpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		8: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.KabutoProjectileHandler onProjectileSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		9: ASM: class forge.net.mca.forge.ForgeBusEvents OnEntityJoinWorldEvent(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		10: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.zombie.ZombieSonicArrowEventHandler onZombieSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		11: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister onVillagerJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		12: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.event.TimeJackerEventHandler onEntityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		13: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.ZombieAIModifier onEntityJoinLevel(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+		14: ASM: top.theillusivec4.curios.common.event.CuriosEventHandler@27cb03e2 entityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
+java.lang.NoClassDefFoundError: Could not initialize class com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil
+	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17)
+	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:315)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:296)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260)
+	at java.base/java.util.Collections$2.tryAdvance(Collections.java:4853)
+	at java.base/java.util.Collections$2.forEachRemaining(Collections.java:4861)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157561_(PersistentEntitySectionManager.java:303)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.level.ServerLevel.m_8643_(ServerLevel.java:745)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_129885_(MinecraftServer.java:507)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_7041_(MinecraftServer.java:584)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.dedicated.DedicatedServer.m_7041_(DedicatedServer.java:510)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:689)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251)
+	at java.base/java.lang.Thread.run(Thread.java:842)
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.NoClassDefFoundError: net/minecraft/client/renderer/entity/HumanoidMobRenderer [in thread "Server thread"]
+	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
+	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1017)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
+	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:375)
+	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38)
+	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17)
+	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:315)
+	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:296)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814)
+	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661)
+	... 2 more
+
+[261月2026 13:21:49.845] [Server thread/ERROR] [net.minecraft.server.MinecraftServer/]: Exception stopping the server
+java.lang.NoClassDefFoundError: Could not initialize class com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Collections$2.tryAdvance(Collections.java:4853) ~[?:?]
+	at java.util.Collections$2.forEachRemaining(Collections.java:4861) ~[?:?]
+	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157561_(PersistentEntitySectionManager.java:303) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.level.ServerLevel.m_8643_(ServerLevel.java:745) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_129885_(MinecraftServer.java:507) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_7041_(MinecraftServer.java:584) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.dedicated.DedicatedServer.m_7041_(DedicatedServer.java:510) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:689) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.lang.Thread.run(Thread.java:842) ~[?:?]
+Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.NoClassDefFoundError: net/minecraft/client/renderer/entity/HumanoidMobRenderer [in thread "Server thread"]
+	at java.lang.ClassLoader.defineClass1(Native Method) ~[?:?]
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:1017) ~[?:?]
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
+	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	at java.lang.Class.forName0(Native Method) ~[?:?]
+	at java.lang.Class.forName(Class.java:375) ~[?:?]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
+	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
+	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+	... 2 more
+[261月2026 13:22:49.477] [Server Watchdog/ERROR] [net.minecraft.server.dedicated.ServerWatchdog/FATAL]: A single server tick took 60.01 seconds (should be max 0.05)
+[261月2026 13:22:49.478] [Server Watchdog/ERROR] [net.minecraft.server.dedicated.ServerWatchdog/FATAL]: Considering it to be crashed, server will forcibly shutdown.
+[261月2026 13:22:49.695] [Server Watchdog/FATAL] [net.minecraftforge.common.ForgeMod/]: Preparing crash report with UUID 617c5258-e51a-40b8-8b4c-6eef8ca8313e
+[261月2026 13:22:49.695] [Server Watchdog/FATAL] [net.minecraftforge.common.ForgeMod/]: Preparing crash report with UUID 66ff47ea-c6f1-4bf1-9441-b543bceabe0c
+[261月2026 13:22:49.695] [Server Watchdog/ERROR] [net.minecraft.server.dedicated.ServerWatchdog/]: This crash report has been saved to: D:\mckamenboss\.\crash-reports\crash-2026-01-26_13.22.49-server.txt

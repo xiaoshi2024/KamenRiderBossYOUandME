@@ -50,7 +50,7 @@ public class PlayerJoinSyncPacket {
 
                 // 这里的关键：根据 targetPlayerId 找到正确的玩家实体
                 Entity targetEntity = net.minecraft.client.Minecraft.getInstance().level.getEntity(msg.targetPlayerId);
-                if (!(targetEntity instanceof LivingEntity targetLiving)) return;
+                if (targetEntity == null || !(targetEntity instanceof LivingEntity targetLiving)) return;
 
                 // 只处理目标玩家的腰带
                 targetLiving.getCapability(CuriosCapability.INVENTORY).ifPresent(curios ->

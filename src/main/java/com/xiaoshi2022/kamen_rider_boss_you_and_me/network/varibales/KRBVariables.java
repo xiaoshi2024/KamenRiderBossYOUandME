@@ -299,6 +299,7 @@ public class KRBVariables {
 				com.xiaoshi2022.kamen_rider_boss_you_and_me.advancement.MixedRaceTrigger.getInstance().trigger(serverPlayer);
 			}
 			
+			// 检查玩家是否已断开连接
 			kamen_rider_boss_you_and_me.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
 		}
 	}

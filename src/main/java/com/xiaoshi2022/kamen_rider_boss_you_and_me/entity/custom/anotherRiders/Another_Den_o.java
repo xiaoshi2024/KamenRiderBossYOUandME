@@ -4,8 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.AnotherDenlinerEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
-import forge.net.mca.entity.EntitiesMCA;
-import forge.net.mca.entity.VillagerEntityMCA;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -557,12 +556,21 @@ public class Another_Den_o extends Monster implements GeoEntity {
         CompoundTag villagerTag = this.getPersistentData().getCompound("StoredVillager");
         String entityId = villagerTag.getString("id");
         EntityType<?> originalType = EntityType.byString(entityId)
-                .orElse(EntitiesMCA.MALE_VILLAGER.get());
-        VillagerEntityMCA restored = (VillagerEntityMCA) originalType.create((ServerLevel) this.level());
-        restored.load(villagerTag);
-        restored.setPos(this.getX(), this.getY(), this.getZ());
-        restored.setHealth(restored.getMaxHealth());
-        ((ServerLevel) this.level()).addFreshEntity(restored);
+                .orElse(net.minecraft.world.entity.EntityType.VILLAGER);
+        
+        if (MCAUtil.isMCAAvailable()) {
+            // 如果MCA可用，使用MCAUtil来处理
+            MCAUtil.restoreMCAVillager((ServerLevel) this.level(), villagerTag, this.getX(), this.getY(), this.getZ());
+        } else {
+            // 如果MCA不可用，使用普通村民
+            net.minecraft.world.entity.npc.Villager restored = (net.minecraft.world.entity.npc.Villager) originalType.create((ServerLevel) this.level());
+            if (restored != null) {
+                restored.load(villagerTag);
+                restored.setPos(this.getX(), this.getY(), this.getZ());
+                restored.setHealth(restored.getMaxHealth());
+                ((ServerLevel) this.level()).addFreshEntity(restored);
+            }
+        }
     }
     @Override
     public boolean isCustomNameVisible() {

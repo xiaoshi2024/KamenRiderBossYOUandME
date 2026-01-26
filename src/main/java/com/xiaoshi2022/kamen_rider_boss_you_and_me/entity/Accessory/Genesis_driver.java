@@ -135,7 +135,8 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
     /* 读取实时 NBT 状态，不再使用任何字段 */
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {
         ItemStack stack = state.getData(DataTickets.ITEMSTACK);
-        if (!(state.getAnimatable() instanceof Genesis_driver))
+        // 添加null检查
+        if (stack == null || !(state.getAnimatable() instanceof Genesis_driver))
             return PlayState.STOP;
 
         BeltMode mode   = getMode(stack);
@@ -227,6 +228,9 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
     /* =========================================================== */
     /* -------------------- 数据读/写 Helper -------------------- */
     public BeltMode getMode(ItemStack stack) {
+        if (stack == null) {
+            return DEFAULT;
+        }
         net.minecraft.nbt.CompoundTag tag = stack.getOrCreateTag();
         net.minecraft.nbt.Tag beltModeTag = tag.get("BeltMode");
         if (beltModeTag instanceof net.minecraft.nbt.StringTag) {
@@ -243,38 +247,69 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
     }
 
     public void setMode(ItemStack stack, BeltMode mode) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putString("BeltMode", mode.name());
     }
 
     public boolean getShowing(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsShowing");
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsShowing") ? tag.getBoolean("IsShowing") : false;
     }
 
     public void setShowing(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsShowing", flag);
     }
 
     public boolean getActive(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsActive");
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsActive") ? tag.getBoolean("IsActive") : false;
     }
 
     public void setActive(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsActive", flag);
     }
 
     public boolean getHenshin(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsHenshin");
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsHenshin") ? tag.getBoolean("IsHenshin") : false;
     }
 
     public void setHenshin(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsHenshin", flag);
     }
 
     public boolean getRelease(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsRelease");
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsRelease") ? tag.getBoolean("IsRelease") : false;
     }
 
     public void setRelease(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsRelease", flag);
     }
 
@@ -386,6 +421,10 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
      */
     @Override
     protected void onBeltEquipped(ServerPlayer player, ItemStack beltStack) {
+        if (player == null || beltStack == null) {
+            return;
+        }
+        
         setShowing(beltStack, true);
         setActive(beltStack, false);
         setHenshin(beltStack, false);
@@ -551,22 +590,40 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
 
     @Override
     public void onUnequip(SlotContext ctx, ItemStack newStack, ItemStack stack) {
-        if (!(ctx.entity() instanceof LivingEntity)) return;
+        if (ctx == null || ctx.entity() == null || stack == null) {
+            return;
+        }
+        
+        if (!(ctx.entity() instanceof LivingEntity)) {
+            return;
+        }
+        
         LivingEntity le = (LivingEntity) ctx.entity();
         setShowing(stack, false);
         setActive(stack, false);
-        if (!le.level().isClientSide() && le instanceof ServerPlayer sp) {
+        
+        if (le.level() != null && !le.level().isClientSide() && le instanceof ServerPlayer sp) {
             PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "idles", getMode(stack)), sp);
             // 移除玩家的饱和效果
             sp.removeEffect(MobEffects.SATURATION);
         }
+        
         triggerAnim(le, "controller", "idles");
     }
 
     @Override
     public void curioTick(SlotContext ctx, ItemStack stack) {
-        if (ctx.entity().level().isClientSide()) return;
-        if (!(ctx.entity() instanceof ServerPlayer sp)) return;
+        if (ctx == null || ctx.entity() == null || stack == null) {
+            return;
+        }
+        
+        if (ctx.entity().level() == null || ctx.entity().level().isClientSide()) {
+            return;
+        }
+        
+        if (!(ctx.entity() instanceof ServerPlayer sp)) {
+            return;
+        }
 
         // 每 5 秒同步一次，避免频繁刷新
         if (sp.tickCount % 100 == 0) {

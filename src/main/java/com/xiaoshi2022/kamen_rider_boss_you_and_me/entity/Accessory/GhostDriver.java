@@ -66,6 +66,9 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
      * 获取腰带的模式
      */
     public BeltMode getMode(ItemStack stack) {
+        if (stack == null) {
+            return BeltMode.DEFAULT;
+        }
         CompoundTag tag = stack.getOrCreateTag();
         String modeName = tag.getString("BeltMode");
         if (modeName.isEmpty()) {
@@ -79,34 +82,62 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
     }
 
     public boolean getShowing(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsShowing");
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsShowing") ? tag.getBoolean("IsShowing") : false;
     }
 
     public void setShowing(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsShowing", flag);
     }
 
     public boolean getActive(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsActive");
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsActive") ? tag.getBoolean("IsActive") : false;
     }
 
     public void setActive(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsActive", flag);
     }
 
     public boolean getHenshin(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsHenshin");
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsHenshin") ? tag.getBoolean("IsHenshin") : false;
     }
 
     public void setHenshin(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsHenshin", flag);
     }
 
     public boolean getRelease(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IsRelease");
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsRelease") ? tag.getBoolean("IsRelease") : false;
     }
 
     public void setRelease(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsRelease", flag);
     }
     /* ----------------------------------------------------------- */
@@ -131,7 +162,8 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {
         ItemStack stack = state.getData(DataTickets.ITEMSTACK);
-        if (!(state.getAnimatable() instanceof GhostDriver)) return PlayState.STOP;
+        // 添加null检查
+        if (stack == null || !(state.getAnimatable() instanceof GhostDriver)) return PlayState.STOP;
 
         BeltMode mode = getMode(stack);
         boolean show = getShowing(stack);
@@ -246,6 +278,10 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
      */
     @Override
     protected void onBeltEquipped(ServerPlayer player, ItemStack beltStack) {
+        if (player == null || beltStack == null) {
+            return;
+        }
+        
         setHenshin(beltStack, false);
         setRelease(beltStack, false);
         setShowing(beltStack, true);
@@ -270,6 +306,10 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
     }
 
     public void onUnequip(SlotContext ctx, ItemStack prev, ItemStack stack) {
+        if (ctx == null || ctx.entity() == null || stack == null) {
+            return;
+        }
+        
         if (ctx.entity() instanceof ServerPlayer player) {
             onBeltUnequipped(player, stack);
         }
@@ -279,6 +319,10 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
      * 实现基类的腰带卸下逻辑
      */
     protected void onBeltUnequipped(ServerPlayer player, ItemStack beltStack) {
+        if (player == null || beltStack == null) {
+            return;
+        }
+        
         setShowing(beltStack, false);
         setRelease(beltStack, false);
         
@@ -302,8 +346,17 @@ public class GhostDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
     @Override
     public void curioTick(SlotContext ctx, ItemStack stack) {
-        if (ctx.entity().level().isClientSide()) return;
-        if (!(ctx.entity() instanceof ServerPlayer sp)) return;
+        if (ctx == null || ctx.entity() == null || stack == null) {
+            return;
+        }
+        
+        if (ctx.entity().level() == null || ctx.entity().level().isClientSide()) {
+            return;
+        }
+        
+        if (!(ctx.entity() instanceof ServerPlayer sp)) {
+            return;
+        }
 
         // 1 秒同步一次
         if (sp.tickCount % 20 == 0) {

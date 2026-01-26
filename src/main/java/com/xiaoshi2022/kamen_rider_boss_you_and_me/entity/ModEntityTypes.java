@@ -41,17 +41,29 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<StoriousEntity>> STORIOUS = registerMob("storious", StoriousEntity::new,
                 0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
                 
-    // 时劫者实体 - 使用特殊注册方式以兼容MCA村民
+    // 时劫者实体 - 动态选择MCA村民或默认村民
     public static final RegistryObject<EntityType<TimeJackerEntity>> TIME_JACKER = ENTITY_TYPES.register("time_jacker",
-            () -> EntityType.Builder.of(TimeJackerEntity::new, MobCategory.CREATURE)
+            () -> EntityType.Builder.of(TimeJackerEntity::create, MobCategory.CREATURE)
                     .sized(0.6f, 1.95f)
                     .build(new ResourceLocation(MODID, "time_jacker").toString()));
                     
-    // 时间王族实体 - 使用特殊注册方式以兼容MCA村民
+    // 时间王族实体 - 动态选择MCA村民或默认村民
     public static final RegistryObject<EntityType<TimeRoyaltyEntity>> TIME_ROYALTY = ENTITY_TYPES.register("time_royalty",
-            () -> EntityType.Builder.of(TimeRoyaltyEntity::new, MobCategory.CREATURE)
+            () -> EntityType.Builder.of(TimeRoyaltyEntity::create, MobCategory.CREATURE)
                     .sized(0.6f, 1.95f)
                     .build(new ResourceLocation(MODID, "time_royalty").toString()));
+
+    // 注册MCA时劫者实体 - 供MCA模组使用
+    public static final RegistryObject<EntityType<MCATimeJackerEntity>> MCA_TIME_JACKER = ENTITY_TYPES.register("mca_time_jacker",
+            () -> EntityType.Builder.of(MCATimeJackerEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(new ResourceLocation(MODID, "mca_time_jacker").toString()));
+
+    // 注册MCA时间王族实体 - 供MCA模组使用
+    public static final RegistryObject<EntityType<MCATimeRoyaltyEntity>> MCA_TIME_ROYALTY = ENTITY_TYPES.register("mca_time_royalty",
+            () -> EntityType.Builder.of(MCATimeRoyaltyEntity::new, MobCategory.CREATURE)
+                    .sized(0.6f, 1.95f)
+                    .build(new ResourceLocation(MODID, "mca_time_royalty").toString()));
     public static final RegistryObject<EntityType<Gifftarian>> GIFFTARIAN = registerMob("gifftarian", Gifftarian::new,
                 0.6f, 1.9f, 0x1F1F1F, 0x0D0D0D);
     public static final RegistryObject<EntityType<ElementaryInvesHelheim>> INVES_HEILEHIM = registerMob("inves_heilehim", ElementaryInvesHelheim::new,

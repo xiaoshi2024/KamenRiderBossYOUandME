@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.curio.BeltCurioIntegration;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -96,12 +97,7 @@ public class VillagerBeltCurioHandler {
     
     // 检查实体是否是MCA村民
     private static boolean isMCAVillager(Entity entity) {
-        if (!(entity instanceof LivingEntity)) return false;
-        
-        // 通过类名检查是否是MCA村民
-        String className = entity.getClass().getName();
-        return className.contains("VillagerEntityMCA") || 
-               className.contains("mca") && className.contains("villager");
+        return entity instanceof LivingEntity && MCAUtil.isVillagerEntityMCA((LivingEntity) entity);
     }
     
     // 移除实体的所有盔甲

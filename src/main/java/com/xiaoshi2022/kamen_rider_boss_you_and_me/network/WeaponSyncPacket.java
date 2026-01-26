@@ -39,7 +39,7 @@ public class WeaponSyncPacket {
             if (ctx.get().getDirection().getReceptionSide().isClient()) {
                 if (net.minecraft.client.Minecraft.getInstance().level == null) return;
                 Entity entity = net.minecraft.client.Minecraft.getInstance().level.getEntity(msg.entityId);
-                if (!(entity instanceof Player player)) return;
+                if (entity == null || !(entity instanceof Player player)) return;
 
                 // 同步主手武器
                 ItemStack mainHand = player.getMainHandItem();

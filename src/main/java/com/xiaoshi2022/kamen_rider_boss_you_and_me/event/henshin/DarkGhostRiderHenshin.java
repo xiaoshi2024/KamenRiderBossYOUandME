@@ -30,12 +30,8 @@ public final class DarkGhostRiderHenshin {
         
         // 播放玩家动画
         if (player instanceof ServerPlayer serverPlayer) {
-            // 同时发送给玩家自己和所有跟踪该玩家的客户端
-            PlayerAnimationPacket packet = new PlayerAnimationPacket(Component.literal("ghost"), player.getId(), true);
-            // 发送给玩家自己
-            PacketHandler.sendToClient(packet, serverPlayer);
-            // 发送给所有跟踪该玩家的客户端
-            PacketHandler.sendToAllTracking(packet, serverPlayer);
+            // 使用PacketHandler提供的方法发送动画，避免直接使用构造器
+            PacketHandler.sendAnimationToAllTrackingAndSelf(Component.literal("ghost"), player.getId(), true, serverPlayer);
         }
     }
 

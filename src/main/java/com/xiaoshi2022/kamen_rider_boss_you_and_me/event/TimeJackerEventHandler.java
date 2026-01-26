@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity;
-import forge.net.mca.entity.VillagerEntityMCA;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,7 +24,7 @@ public class TimeJackerEventHandler {
             // 例如设置特定的属性、行为或者给予特殊物品
         }
         // 也可以处理MCA村民与时间劫者的互动
-        else if (event.getEntity() instanceof VillagerEntityMCA villager) {
+        else if (MCAUtil.isVillagerEntityMCA(event.getEntity())) {
             // 可以在这里添加村民对时劫者的特殊反应逻辑
         }
     }

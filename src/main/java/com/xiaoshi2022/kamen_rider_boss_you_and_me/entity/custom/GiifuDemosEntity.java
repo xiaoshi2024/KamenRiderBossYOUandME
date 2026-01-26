@@ -1,16 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.core.ModAttributes;
-import forge.net.mca.entity.VillagerEntityMCA;
-import forge.net.mca.entity.VillagerLike;
-import forge.net.mca.entity.ai.BreedableRelationship;
-import forge.net.mca.entity.ai.Genetics;
-import forge.net.mca.entity.ai.Traits;
-import forge.net.mca.entity.ai.brain.VillagerBrain;
-import forge.net.mca.entity.ai.relationship.CompassionateEntity;
-import forge.net.mca.entity.ai.relationship.Gender;
-import forge.net.mca.entity.interaction.VillagerCommandHandler;
-import forge.net.mca.util.network.datasync.CDataManager;
+// 移除直接的MCA类导入，改为使用软依赖方式
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -48,27 +39,18 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLike<VillagerEntityMCA>, MenuProvider, CompassionateEntity<BreedableRelationship>, CrossbowAttackMob {
+public class GiifuDemosEntity extends Villager implements GeoEntity, MenuProvider, CrossbowAttackMob {
     protected static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     protected static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     protected static final RawAnimation SWEEP = RawAnimation.begin().thenLoop("sweep");
     protected static final RawAnimation MUTATION = RawAnimation.begin().thenPlayAndHold("mutation");
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    //mca
-    private final VillagerEntityMCA villagerComponent;
-    private final VillagerBrain<VillagerEntityMCA> mcaBrain;
-    private final VillagerCommandHandler interactions;
-
 
     // 德莫斯相关
     private boolean hasPlayedMutation = false; // 标志字段
 
-
     public GiifuDemosEntity(EntityType<? extends Villager> entityType, Level level) {
         super(entityType, level);
-        this.villagerComponent = new VillagerEntityMCA((EntityType<VillagerEntityMCA>) entityType, level, Gender.MALE);
-        this.mcaBrain = new VillagerBrain<>(this.villagerComponent);
-        this.interactions = new VillagerCommandHandler(this.villagerComponent);
         // 设置默认名称为“基夫德莫斯”
         this.setCustomName(Component.literal("基夫德莫斯"));
         this.setVillagerData(new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1)); // 设置村民数据
@@ -79,11 +61,6 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
         return Villager.createAttributes()
                 .add(ModAttributes.CUSTOM_ATTACK_DAMAGE.get(), 20.0D)  // 攻击力从5.0D提高到20.0D
                 .add(Attributes.MAX_HEALTH, 100.0D);
-    }
-
-    // 使用 VillagerEntityMCA 的功能
-    public VillagerCommandHandler getInteractions() {
-        return villagerComponent.getInteractions();
     }
 
     @Override
@@ -178,23 +155,22 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
 
     @Override
     public Component getDisplayName() {
-        return this.villagerComponent.getDisplayName(); // 使用 VillagerEntityMCA 的显示名称
+        return this.getCustomName() != null ? this.getCustomName() : Component.literal("基夫德莫斯");
     }
 
     @Override
     public void handleEntityEvent(byte p_35391_) {
-        this.villagerComponent.handleEntityEvent(p_35391_); // 使用 VillagerEntityMCA 的实体事件处理
+        super.handleEntityEvent(p_35391_);
     }
-
 
     @Override
     public void setCustomName(@Nullable Component p_20053_) {
-        this.villagerComponent.setCustomName(p_20053_); // 使用 VillagerEntityMCA 的自定义名称
+        super.setCustomName(p_20053_);
     }
 
     @Override
     public void setAge(int p_146763_) {
-        this.villagerComponent.setAge(p_146763_); // 使用 VillagerEntityMCA 的年龄设置
+        super.setAge(p_146763_);
     }
 
     @Override
@@ -255,46 +231,6 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
     }
 
     @Override
-    public Genetics getGenetics() {
-        return this.villagerComponent.getGenetics();
-    }
-
-    @Override
-    public Traits getTraits() {
-        return this.villagerComponent.getTraits();
-    }
-
-    @Override
-    public VillagerBrain<VillagerEntityMCA> getVillagerBrain() {
-        return this.mcaBrain;
-    }
-
-    @Override
-    public boolean isBurned() {
-        return false;
-    }
-
-    @Override
-    public float getInfectionProgress() {
-        return 0; // 如果不需要感染逻辑，可以返回 0
-    }
-
-    @Override
-    public void setInfectionProgress(float progress) {
-        // 如果需要感染逻辑，可以在这里添加实现
-    }
-
-    @Override
-    public BreedableRelationship getRelationships() {
-        return null; // 如果不需要繁殖关系逻辑，可以返回 null
-    }
-
-    @Override
-    public CDataManager<VillagerEntityMCA> getTypeDataManager() {
-        return this.villagerComponent.getTypeDataManager();
-    }
-
-    @Override
     public void performCrossbowAttack(LivingEntity target, float pullProgress) {
         // 如果需要弩攻击逻辑，可以在这里实现
     }
@@ -321,11 +257,11 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, VillagerLik
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player) {
-        return this.villagerComponent.createMenu(windowId, playerInventory,player);
+        return null;
     }
 
     public void setTradeOffers(MerchantOffers offers) {
-        this.villagerComponent.setOffers(offers); // 使用 VillagerEntityMCA 的交易逻辑
+        // 移除MCA相关的交易逻辑
     }
     
     @Override

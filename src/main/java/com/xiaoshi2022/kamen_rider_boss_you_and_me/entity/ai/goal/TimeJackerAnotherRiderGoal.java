@@ -1,9 +1,10 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.goal;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity;
-import forge.net.mca.entity.VillagerEntityMCA;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.phys.AABB;
 
 import java.util.EnumSet;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public class TimeJackerAnotherRiderGoal extends Goal {
     private final TimeJackerEntity timeJacker;
-    private VillagerEntityMCA targetVillager;
+    private LivingEntity targetVillager;
     private int cooldown = 0;
     private static final int CHECK_COOLDOWN = 20; // 每秒检查一次
     private static final double SEARCH_RADIUS = 10.0D; // 搜索半径
@@ -41,7 +42,7 @@ public class TimeJackerAnotherRiderGoal extends Goal {
         // 重置冷却
         cooldown = CHECK_COOLDOWN;
         
-        // 寻找附近的MCA村民
+        // 寻找附近的村民（普通村民或MCA村民）
         this.findNearbyVillager();
         return this.targetVillager != null;
     }
@@ -105,21 +106,34 @@ public class TimeJackerAnotherRiderGoal extends Goal {
     private void findNearbyVillager() {
         AABB boundingBox = this.timeJacker.getBoundingBox().inflate(SEARCH_RADIUS, SEARCH_RADIUS, SEARCH_RADIUS);
         
-        // 获取附近的所有MCA村民
-        List<VillagerEntityMCA> nearbyVillagers = this.timeJacker.level().getEntitiesOfClass(
-                VillagerEntityMCA.class,
-                boundingBox,
-                villager -> villager.isAlive() && 
-                           villager != this.timeJacker &&
-                           !(villager instanceof TimeJackerEntity) // 排除其他时劫者
+        // 获取附近的所有LivingEntity
+        List<LivingEntity> nearbyEntities = this.timeJacker.level().getEntitiesOfClass(
+                LivingEntity.class,
+                boundingBox
         );
         
-        // 如果找到了村民，选择第一个作为目标
-        if (!nearbyVillagers.isEmpty()) {
-            this.targetVillager = nearbyVillagers.get(0);
-        } else {
-            this.targetVillager = null;
+        // 遍历所有LivingEntity，寻找合适的村民目标
+        for (LivingEntity entity : nearbyEntities) {
+            // 跳过自己和其他时劫者
+            if (entity == this.timeJacker || entity instanceof TimeJackerEntity) {
+                continue;
+            }
+            
+            // 如果是普通村民，直接作为目标
+            if (entity instanceof Villager) {
+                this.targetVillager = entity;
+                return;
+            }
+            
+            // 如果不是普通村民，检查是否是MCA村民（使用MCAUtil工具类）
+            if (com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.isVillagerEntityMCA(entity) && entity.isAlive()) {
+                this.targetVillager = entity;
+                return;
+            }
         }
+        
+        // 没有找到合适的目标
+        this.targetVillager = null;
     }
 
     private void transformVillager() {

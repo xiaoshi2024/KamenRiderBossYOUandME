@@ -144,7 +144,7 @@ public class TimeRealmPlayerTickHandler {
         if (y > 0) {
             BlockPos spawnPos = new BlockPos(x, y, z);
             com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity jacker =
-                    ModEntityTypes.TIME_JACKER.get().spawn(level, spawnPos, MobSpawnType.NATURAL);
+                    (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeJackerEntity) ModEntityTypes.TIME_JACKER.get().spawn(level, spawnPos, MobSpawnType.NATURAL);
 
             if (jacker != null) {
                 jacker.setPersistenceRequired(); // 设置为持久化实体，不会因为距离过远而消失
@@ -166,7 +166,7 @@ public class TimeRealmPlayerTickHandler {
         if (y > 0) {
             BlockPos spawnPos = new BlockPos(x, y, z);
             com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity royalty =
-                    ModEntityTypes.TIME_ROYALTY.get().spawn(level, spawnPos, MobSpawnType.NATURAL);
+                    (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.TimeRoyaltyEntity) ModEntityTypes.TIME_ROYALTY.get().spawn(level, spawnPos, MobSpawnType.NATURAL);
 
             if (royalty != null) {
                 royalty.setPersistenceRequired(); // 设置为持久化实体

@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Genesis_driver;
-import forge.net.mca.entity.VillagerEntityMCA;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +18,7 @@ public class VillagerDropHandler {
         LivingEntity entity = event.getEntity();
         
         // 检查是否是MCA村民
-        if (entity instanceof VillagerEntityMCA) {
+        if (MCAUtil.isVillagerEntityMCA(entity)) {
             // 获取村民主手物品
             ItemStack mainHandStack = entity.getMainHandItem();
             

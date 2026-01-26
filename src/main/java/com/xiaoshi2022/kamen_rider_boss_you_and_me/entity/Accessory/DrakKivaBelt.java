@@ -68,7 +68,8 @@ public class DrakKivaBelt extends AbstractRiderBelt implements GeoItem, ICurioIt
 
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {
         ItemStack stack = state.getData(DataTickets.ITEMSTACK);
-        if (!(state.getAnimatable() instanceof DrakKivaBelt)) return PlayState.STOP;
+        // 添加null检查
+        if (stack == null || !(state.getAnimatable() instanceof DrakKivaBelt)) return PlayState.STOP;
 
         boolean henshin = getHenshin(stack);
         boolean disassembly = getDisassembly(stack);
@@ -105,32 +106,52 @@ public class DrakKivaBelt extends AbstractRiderBelt implements GeoItem, ICurioIt
     }
 
     public boolean getHenshin(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsHenshin");
     }
 
     public static void setHenshin(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsHenshin", flag);
     }
 
     public boolean getDisassembly(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         return stack.getOrCreateTag().getBoolean("IsDisassembly");
     }
 
     public static void setDisassembly(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
         stack.getOrCreateTag().putBoolean("IsDisassembly", flag);
     }
 
 
     // 修改 inventoryTick 方法
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity,
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, 
                               int slot, boolean selected) {
-        if (level.isClientSide || !(entity instanceof ServerPlayer sp)) return;
+        if (stack == null || level == null || entity == null) {
+            return;
+        }
+        
+        if (level.isClientSide || !(entity instanceof ServerPlayer sp)) {
+            return;
+        }
 
         CompoundTag tag = stack.getOrCreateTag();
 
         // 跳过标记检查
-        if (tag.getBoolean("SkipInventoryTick")) return;
+        if (tag.getBoolean("SkipInventoryTick")) {
+            return;
+        }
 
         /* 1. 首次变身处理 */
         if (getHenshin(stack) && !tag.getBoolean("HenshinHandled")) {
@@ -146,17 +167,19 @@ public class DrakKivaBelt extends AbstractRiderBelt implements GeoItem, ICurioIt
             setDisassembly(stack, false);
 
             // 延迟启动解除序列
-            level.getServer().tell(new net.minecraft.server.TickTask(
-                    level.getServer().getTickCount() + 5,
-                    () -> DarkKivaSequence.startDisassembly(sp)
-            ));
+            if (level.getServer() != null) {
+                level.getServer().tell(new net.minecraft.server.TickTask(
+                        level.getServer().getTickCount() + 5,
+                        () -> DarkKivaSequence.startDisassembly(sp)
+                ));
+            }
             return;
         }
 
         /* 3. 手动取下腰带处理 */
         boolean stillEquipped = CuriosApi.getCuriosInventory(sp)
                 .resolve()
-                .flatMap(inv -> inv.findFirstCurio(s -> s == stack))
+                .flatMap(inv -> inv.findFirstCurio(s -> s != null && s == stack))
                 .isPresent();
 
         if (!stillEquipped) {
@@ -178,6 +201,10 @@ public class DrakKivaBelt extends AbstractRiderBelt implements GeoItem, ICurioIt
      */
     @Override
     protected void onBeltEquipped(ServerPlayer player, ItemStack beltStack) {
+        if (player == null || beltStack == null) {
+            return;
+        }
+        
         setHenshin(beltStack, false);
         setDisassembly(beltStack, false);
         
@@ -198,7 +225,13 @@ public class DrakKivaBelt extends AbstractRiderBelt implements GeoItem, ICurioIt
 
     @Override
     public void onUnequip(SlotContext ctx, ItemStack newStack, ItemStack stack) {
-        if (!(ctx.entity() instanceof ServerPlayer player)) return;
+        if (ctx == null || ctx.entity() == null || stack == null) {
+            return;
+        }
+        
+        if (!(ctx.entity() instanceof ServerPlayer player)) {
+            return;
+        }
 
         if (getHenshin(stack)) {
             DarkKivaSequence.doFullDisassembly(player, stack);

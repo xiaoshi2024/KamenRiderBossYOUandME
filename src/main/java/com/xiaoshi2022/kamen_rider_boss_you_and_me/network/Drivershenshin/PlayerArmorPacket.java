@@ -18,29 +18,36 @@ public class PlayerArmorPacket {
         this.armor = armor;
     }
 
-    public PlayerArmorPacket(FriendlyByteBuf buf) {
-        this.entityId = buf.readInt();
-        this.armor = new ItemStack[4];
+    public static void encode(PlayerArmorPacket packet, FriendlyByteBuf buffer) {
+        buffer.writeInt(packet.entityId);
+        for (ItemStack stack : packet.armor) {
+            buffer.writeItem(stack);
+        }
+    }
+
+    public static PlayerArmorPacket decode(FriendlyByteBuf buffer) {
+        int entityId = buffer.readInt();
+        ItemStack[] armor = new ItemStack[4];
         for (int i = 0; i < 4; i++) {
-            this.armor[i] = buf.readItem();
+            armor[i] = buffer.readItem();
         }
+        return new PlayerArmorPacket(entityId, armor);
     }
 
-    public void toBytes(FriendlyByteBuf buf) {
-        buf.writeInt(entityId);
-        for (ItemStack stack : armor) {
-            buf.writeItem(stack);
-        }
-    }
-
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(PlayerArmorPacket packet, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player != null) {
-                Player targetPlayer = player.level().getPlayerByUUID(player.getUUID());
-                if (targetPlayer != null) {
-                    for (int i = 0; i < 4; i++) {
-                        targetPlayer.setItemSlot(EquipmentSlot.byName(String.valueOf(i)), armor[i]);
+            NetworkEvent.Context context = ctx.get();
+            // 确保只处理来自服务器的数据包
+            if (context.getDirection().getReceptionSide().isClient() && context.getDirection().getOriginationSide().isServer()) {
+                net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+                if (mc.level != null) {
+                    Player targetPlayer = (Player) mc.level.getEntity(packet.entityId);
+                    if (targetPlayer != null) {
+                        // 使用正确的装备槽枚举值
+                        EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+                        for (int i = 0; i < 4; i++) {
+                            targetPlayer.setItemSlot(slots[i], packet.armor[i]);
+                        }
                     }
                 }
             }
