@@ -219,7 +219,7 @@ public class KickendProcedure {
 				);
 
 				// 清理特效实体
-				cleanupEffectEntity(entity, (ServerLevel) world);
+				cleanupEffectEntity(entity, serverLevel);
 			}
 
 			// 专门处理基夫石像的伤害
@@ -317,6 +317,11 @@ public class KickendProcedure {
 
 	// 处理普通敌人的伤害
 	private static void handleEnemyDamage(LevelAccessor world, Player entity) {
+		// 确保只在服务器端执行伤害逻辑
+		if (world.isClientSide()) {
+			return;
+		}
+		
 		// 根据头盔计算伤害
 		float damage = calculateDamage(entity);
 
@@ -330,11 +335,11 @@ public class KickendProcedure {
 						entity.getX() - explosionRadius, entity.getY() - explosionRadius, entity.getZ() - explosionRadius,
 						entity.getX() + explosionRadius, entity.getY() + explosionRadius, entity.getZ() + explosionRadius
 				),
-				e -> e != entity // 只排除自己，不排除其他玩家
+				e -> e != null && e != entity // 只排除自己，不排除其他玩家
 			);
 
 		// 调试信息：打印找到的实体数量和类型
-		if (DEBUG && !world.isClientSide()) {
+		if (DEBUG) {
 			kamen_rider_boss_you_and_me.LOGGER.info("KickendProcedure: Found {} nearby entities for player {}", 
 					nearbyEntities.size(), entity.getScoreboardName());
 			for (LivingEntity enemy : nearbyEntities) {
