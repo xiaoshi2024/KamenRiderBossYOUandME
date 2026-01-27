@@ -87,12 +87,6 @@ public class GhostEyeDimensionTeleportPacket {
             return;
         }
 
-        // 检查玩家是否已经是眼魔状态
-        if (GhostEyeManager.isGhostEye(player)) {
-            player.displayClientMessage(Component.literal("你已经处于眼魔状态！"), true);
-            return;
-        }
-
         ServerLevel ghostEyeLevel = player.server.getLevel(GHOST_EYE_DIM);
         if (ghostEyeLevel == null) return;
 

@@ -9,11 +9,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
@@ -21,9 +23,6 @@ import java.util.UUID;
 
 
 public class VillagerTransformationUtil {
-    // 全局存储：记录人类的NBT数据和UUID
-    private static final HashMap<UUID, CompoundTag> villagerRecord = new HashMap<>();
-
     // 人类 -> 怪人
     public static void transformToGiifuDemos(ServerLevel level, Object villagerEntity, CompoundTag tag) {
         // 检查是否是MCA村民或普通村民
@@ -73,17 +72,19 @@ public class VillagerTransformationUtil {
             // 设置生成位置为人类的当前位置
             spawnedEntity.setPos(((Entity) villagerEntity).getX(), ((Entity) villagerEntity).getY(), ((Entity) villagerEntity).getZ());
 
-            // 记录人类的NBT数据和UUID
+            // 保存原始村民数据到实体的persistentData中，而不是静态映射
             CompoundTag villagerNBT = new CompoundTag();
             ((Entity) villagerEntity).save(villagerNBT);
-            villagerRecord.put(spawnedEntity.getUUID(), villagerNBT);
+            spawnedEntity.getPersistentData().put(GiifuDemosEntity.ORIGINAL_VILLAGER_TAG, villagerNBT);
+            
+            // System.out.println("Stored villager data in GiifuDemosEntity: " + spawnedEntity.getPersistentData().contains(GiifuDemosEntity.ORIGINAL_VILLAGER_TAG));
 
             // 移除原始实体
             ((Entity) villagerEntity).remove(Entity.RemovalReason.DISCARDED);
 
-            System.out.println("Villager has been successfully transformed into GiifuDemosEntity.");
+            // System.out.println("Villager has been successfully transformed into GiifuDemosEntity.");
         } else {
-            System.out.println("Failed to spawn GiifuDemosEntity.");
+            // System.out.println("Failed to spawn GiifuDemosEntity.");
         }
     }
 
@@ -136,28 +137,67 @@ public class VillagerTransformationUtil {
             // 设置生成位置为人类的当前位置
             spawnedEntity.setPos(((Entity) villagerEntity).getX(), ((Entity) villagerEntity).getY(), ((Entity) villagerEntity).getZ());
 
-            // 记录人类的NBT数据和UUID
+            // 保存原始村民数据到实体的persistentData中
             CompoundTag villagerNBT = new CompoundTag();
             ((Entity) villagerEntity).save(villagerNBT);
-            villagerRecord.put(spawnedEntity.getUUID(), villagerNBT);
+            spawnedEntity.getPersistentData().put(StoriousEntity.ORIGINAL_VILLAGER_TAG, villagerNBT);
 
             // 移除原始实体
             ((Entity) villagerEntity).remove(Entity.RemovalReason.DISCARDED);
 
-            System.out.println("Villager has been successfully transformed into StoriousEntity.");
+            // System.out.println("Villager has been successfully transformed into StoriousEntity.");
+            // System.out.println("Stored villager data in StoriousEntity: " + spawnedEntity.getPersistentData().contains(StoriousEntity.ORIGINAL_VILLAGER_TAG));
         } else {
-            System.out.println("Failed to spawn StoriousEntity.");
+            // System.out.println("Failed to spawn StoriousEntity.");
         }
     }
 
 
     // 怪人 -> 人类（从恶魔
     public static void transformToVillager(ServerLevel serverLevel, GiifuDemosEntity giifuDemosEntity, CompoundTag tag) {
-        UUID giifuDemosUUID = giifuDemosEntity.getUUID();
-        if (villagerRecord.containsKey(giifuDemosUUID)) {
-            CompoundTag recordedNBT = villagerRecord.get(giifuDemosUUID);
+        // 首先尝试从道具的NBT中获取原始村民数据，如果没有再从实体的persistentData中获取
+        CompoundTag recordedNBT = null;
+        
+        // 检查道具tag中是否有存储的村民数据
+        if (tag != null && tag.contains("StoredVillagerData")) {
+            recordedNBT = tag.getCompound("StoredVillagerData");
+            // System.out.println("Reading villager data from item tag");
+        } 
+        // 检查实体的persistentData中是否有存储的村民数据
+        else if (giifuDemosEntity.getPersistentData().contains(GiifuDemosEntity.ORIGINAL_VILLAGER_TAG)) {
+            recordedNBT = giifuDemosEntity.getPersistentData().getCompound(GiifuDemosEntity.ORIGINAL_VILLAGER_TAG);
+            // System.out.println("Reading villager data from entity persistentData");
+        }
+        
+        if (recordedNBT != null) {
             BlockPos spawnPos = BlockPos.containing(giifuDemosEntity.position());
 
+            // 直接从NBT数据恢复实体，支持MCA村民和原版村民
+            Entity restoredEntity = EntityType.loadEntityRecursive(
+                recordedNBT, serverLevel, 
+                entity -> {
+                    entity.setPos(giifuDemosEntity.getX(), giifuDemosEntity.getY(), giifuDemosEntity.getZ());
+                    return entity;
+                }
+            );
+
+            if (restoredEntity != null) {
+                // 设置最大生命值
+                if (restoredEntity instanceof LivingEntity livingEntity) {
+                    livingEntity.setHealth(livingEntity.getMaxHealth());
+                }
+                
+                // 添加到世界
+                serverLevel.addFreshEntity(restoredEntity);
+                
+                // 移除原始 GiifuDemosEntity
+                giifuDemosEntity.remove(Entity.RemovalReason.DISCARDED);
+
+                // System.out.println("GiifuDemosEntity has been successfully transformed into original villager.");
+                return;
+            }
+            
+            // 如果直接从NBT恢复失败，尝试生成新村民
             Villager newVillager = null;
             
             // 尝试生成MCA村民（如果MCA可用）
@@ -195,24 +235,59 @@ public class VillagerTransformationUtil {
                 // 移除原始 GiifuDemosEntity
                 giifuDemosEntity.remove(Entity.RemovalReason.DISCARDED);
 
-                System.out.println("GiifuDemosEntity has been successfully transformed into Villager.");
+                // System.out.println("GiifuDemosEntity has been successfully transformed into Villager.");
             } else {
-                System.out.println("Failed to spawn Villager.");
+                // System.out.println("Failed to spawn Villager.");
             }
-
-            // 清除记录
-            villagerRecord.remove(giifuDemosUUID);
         } else {
-            System.out.println("No recorded data found for this GiifuDemosEntity.");
+            // System.out.println("No recorded data found for this GiifuDemosEntity.");
         }
     }
     // 怪人 -> 人类(从书
     public static void transformToBookVillager(ServerLevel serverLevel, StoriousEntity storiousEntity, CompoundTag tag) {
-        UUID giifuDemosUUID = storiousEntity.getUUID();
-        if (villagerRecord.containsKey(giifuDemosUUID)) {
-            CompoundTag recordedNBT = villagerRecord.get(giifuDemosUUID);
+        // 首先尝试从道具的NBT中获取原始村民数据，如果没有再从实体的persistentData中获取
+        CompoundTag recordedNBT = null;
+        
+        // 检查道具tag中是否有存储的村民数据
+        if (tag != null && tag.contains("StoredVillagerData")) {
+            recordedNBT = tag.getCompound("StoredVillagerData");
+            // System.out.println("Reading villager data from item tag");
+        } 
+        // 检查实体的persistentData中是否有存储的村民数据
+        else if (storiousEntity.getPersistentData().contains(StoriousEntity.ORIGINAL_VILLAGER_TAG)) {
+            recordedNBT = storiousEntity.getPersistentData().getCompound(StoriousEntity.ORIGINAL_VILLAGER_TAG);
+            // System.out.println("Reading villager data from entity persistentData");
+        }
+        
+        if (recordedNBT != null) {
             BlockPos spawnPos = BlockPos.containing(storiousEntity.position());
 
+            // 直接从NBT数据恢复实体，支持MCA村民和原版村民
+            Entity restoredEntity = EntityType.loadEntityRecursive(
+                recordedNBT, serverLevel, 
+                entity -> {
+                    entity.setPos(storiousEntity.getX(), storiousEntity.getY(), storiousEntity.getZ());
+                    return entity;
+                }
+            );
+
+            if (restoredEntity != null) {
+                // 设置最大生命值
+                if (restoredEntity instanceof LivingEntity livingEntity) {
+                    livingEntity.setHealth(livingEntity.getMaxHealth());
+                }
+                
+                // 添加到世界
+                serverLevel.addFreshEntity(restoredEntity);
+                
+                // 移除原始 StoriousEntity
+                storiousEntity.remove(Entity.RemovalReason.DISCARDED);
+
+                // System.out.println("StoriousEntity has been successfully transformed into original villager.");
+                return;
+            }
+            
+            // 如果直接从NBT恢复失败，尝试生成新村民
             Villager newVillager = null;
             
             // 尝试生成MCA村民（如果MCA可用）
@@ -250,15 +325,12 @@ public class VillagerTransformationUtil {
                 // 移除原始 storiousEntity
                 storiousEntity.remove(Entity.RemovalReason.DISCARDED);
 
-                System.out.println("StoriousEntity has been successfully transformed into Villager.");
+                // System.out.println("StoriousEntity has been successfully transformed into Villager.");
             } else {
-                System.out.println("Failed to spawn Villager.");
+                // System.out.println("Failed to spawn Villager.");
             }
-
-            // 清除记录
-            villagerRecord.remove(giifuDemosUUID);
         } else {
-            System.out.println("No recorded data found for this StoriousEntity.");
+            // System.out.println("No recorded data found for this StoriousEntity.");
         }
     }
 }

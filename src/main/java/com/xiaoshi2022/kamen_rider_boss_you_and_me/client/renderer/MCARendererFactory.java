@@ -39,35 +39,8 @@ public class MCARendererFactory {
     @SuppressWarnings("unchecked")
     private static <T extends net.minecraft.world.entity.npc.Villager> EntityRendererProvider<T> createRenderer() {
         return context -> {
-            // 如果MCA已加载，尝试使用MCA渲染器
-            if (MCA_LOADED) {
-                try {
-                    Class<?> mcaRendererClass = Class.forName(MCA_RENDERER_CLASS);
-                    Constructor<?> constructor = mcaRendererClass.getConstructor(EntityRendererProvider.Context.class);
-                    
-                    // 创建MCA渲染器实例
-                    Object mcaRendererObj = constructor.newInstance(context);
-                    
-                    // 检查是否是VillagerRenderer的实例
-                    if (mcaRendererObj instanceof VillagerRenderer) {
-                        VillagerRenderer mcaRenderer = (VillagerRenderer) mcaRendererObj;
-                        
-                        // 使用TimeEntityRendererWrapper包装MCA渲染器，以避免ClassCastException
-                        return (net.minecraft.client.renderer.entity.EntityRenderer<T>) new TimeEntityRendererWrapper(mcaRenderer, context);
-                    } else {
-                        LOGGER.warn("MCA renderer is not a VillagerRenderer: {}", mcaRendererObj.getClass().getName());
-                    }
-                } catch (ClassNotFoundException e) {
-                    LOGGER.warn("MCA renderer class not found: {}", MCA_RENDERER_CLASS);
-                } catch (NoSuchMethodException e) {
-                    LOGGER.warn("MCA renderer constructor not found", e);
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    LOGGER.error("Failed to instantiate MCA renderer", e);
-                }
-            }
-
-            // 回退到原版村民渲染器
-            LOGGER.debug("Using fallback VillagerRenderer");
+            // 回退到原版村民渲染器，避免MCA的casting issues
+            LOGGER.debug("Using vanilla VillagerRenderer to avoid MCA casting issues");
             return (net.minecraft.client.renderer.entity.EntityRenderer<T>) new VillagerRenderer(context);
         };
     }

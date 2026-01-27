@@ -69,7 +69,8 @@ public class KickendProcedure {
 		
 		// 更新当前状态
 		boolean isOnGround = entity.onGround();
-		boolean isJumping = variables.kick || entity.getDeltaMovement().y > 0.1;
+		// 只在kick标志为true时才视为骑士踢跳跃，避免正常跳跃触发
+		boolean isJumping = variables.kick;
 		
 		playerLandingState.put(playerId, isOnGround);
 		playerJumpingState.put(playerId, isJumping);

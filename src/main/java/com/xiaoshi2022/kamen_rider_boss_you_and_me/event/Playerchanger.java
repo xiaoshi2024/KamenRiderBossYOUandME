@@ -1,3 +1,5 @@
+// 已禁用：玩家拿着 StoriousMonsterBook 时按 R 键变异的功能
+/*
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.event;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
@@ -61,3 +63,4 @@ public class Playerchanger {
         }
     }
 }
+*/

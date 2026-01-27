@@ -219,30 +219,30 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
     private void tryMimicVillager() {
         // 只有在没有存储的村民数据时才尝试拟态新的村民
         if (!this.getPersistentData().contains("StoredVillager")) {
-            // 查找附近的村民，使用MCAUtil来判断是否是MCA村民
+            // 查找附近的村民，包括原版和MCA村民
             java.util.List<net.minecraft.world.entity.npc.Villager> villagers = this.level().getEntitiesOfClass(
                     net.minecraft.world.entity.npc.Villager.class, 
                     this.getBoundingBox().inflate(32.0D)
             );
             
             if (!villagers.isEmpty()) {
-                // 找到最近的MCA村民
+                // 找到最近的村民，优先选择MCA村民
                 net.minecraft.world.entity.npc.Villager nearestVillager = null;
                 double nearestDistance = Double.MAX_VALUE;
                 
                 for (net.minecraft.world.entity.npc.Villager villager : villagers) {
-                    // 使用MCAUtil检查是否是MCA村民
-                    if (com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.isVillagerEntityMCA(villager)) {
-                        double distance = this.distanceToSqr(villager);
-                        if (distance < nearestDistance) {
-                            nearestDistance = distance;
-                            nearestVillager = villager;
-                        }
+                    double distance = this.distanceToSqr(villager);
+                    // 优先选择MCA村民，如果没有MCA村民则选择原版村民
+                    if ((nearestVillager == null || distance < nearestDistance) && 
+                        (com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.isVillagerEntityMCA(villager) || 
+                         villager instanceof net.minecraft.world.entity.npc.Villager)) {
+                        nearestDistance = distance;
+                        nearestVillager = villager;
                     }
                 }
                 
                 if (nearestVillager != null) {
-                    // 拟态MCA村民
+                    // 拟态村民（原版或MCA）
                     this.mimicVillager(nearestVillager);
                 }
             }
@@ -284,13 +284,13 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
             
             // 添加调试信息
             if (!this.level().isClientSide()) {
-                System.out.println("Brain Roidmude: Successfully mimicked villager - " + villagerType);
+                // System.out.println("Brain Roidmude: Successfully mimicked villager - " + villagerType);
                 // 立即转换为村民形态
                 this.transformToVillager();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Brain Roidmude: Failed to mimic villager - Error: " + e.getMessage());
+            // e.printStackTrace();
+            // System.out.println("Brain Roidmude: Failed to mimic villager - Error: " + e.getMessage());
         }
     }
     
@@ -354,7 +354,8 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
                     );
                 }
                 
-                System.out.println("Brain Roidmude: Entering danger mode, reverting to monster form");
+                // System.out.println("Brain Roidmude: Entering danger mode, reverting to monster form");
+
             }
         } else {
             // 无威胁，增加安全计时器
@@ -374,12 +375,12 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
         
         // 添加调试信息
         if (this.tickCount % 100 == 0) {
-            System.out.println("Brain Roidmude: Safety timer - " + safetyTimer + ", Is in danger - " + isInDanger + ", Is mimicking - " + this.isMimicking());
-            if (this.getPersistentData().contains("StoredVillager")) {
-                System.out.println("Brain Roidmude: Has stored villager data");
-            } else {
-                System.out.println("Brain Roidmude: No stored villager data");
-            }
+            // System.out.println("Brain Roidmude: Safety timer - " + safetyTimer + ", Is in danger - " + isInDanger + ", Is mimicking - " + this.isMimicking());
+            // if (this.getPersistentData().contains("StoredVillager")) {
+            //     System.out.println("Brain Roidmude: Has stored villager data");
+            // } else {
+            //     System.out.println("Brain Roidmude: No stored villager data");
+            // }
         }
     }
     
@@ -622,7 +623,7 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
                         mob.teleportCooldown = TELEPORT_COOLDOWN;
                         
                         // 输出调试信息
-                        System.out.println("Brain Roidmude: Teleported to escape danger!");
+                        // System.out.println("Brain Roidmude: Teleported to escape danger!");
                         
                         break;
                     }
@@ -643,10 +644,12 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
             );
             
             if (!villagers.isEmpty()) {
-                // 找到最近的MCA村民
+                // 找到最近的村民，优先选择MCA村民
                 net.minecraft.world.entity.npc.Villager nearestVillager = null;
                 double nearestDistance = Double.MAX_VALUE;
+                boolean isMCA = false;
                 
+                // 先查找MCA村民
                 for (net.minecraft.world.entity.npc.Villager villager : villagers) {
                     // 使用MCAUtil检查是否是MCA村民
                     if (com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.isVillagerEntityMCA(villager)) {
@@ -654,12 +657,25 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
                         if (distance < nearestDistance) {
                             nearestDistance = distance;
                             nearestVillager = villager;
+                            isMCA = true;
+                        }
+                    }
+                }
+                
+                // 如果没有找到MCA村民，查找原版村民
+                if (nearestVillager == null) {
+                    for (net.minecraft.world.entity.npc.Villager villager : villagers) {
+                        double distance = this.distanceToSqr(villager);
+                        if (distance < nearestDistance) {
+                            nearestDistance = distance;
+                            nearestVillager = villager;
+                            isMCA = false;
                         }
                     }
                 }
                 
                 if (nearestVillager != null) {
-                    System.out.println("Brain Roidmude: Found nearest MCA villager, creating new villager");
+                    // System.out.println("Brain Roidmude: Found nearest villager, creating new villager (MCA: " + isMCA + ")");
                     
                     // 获取村民的NBT数据
                     CompoundTag villagerTag = new CompoundTag();
@@ -695,79 +711,79 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
                     net.minecraft.world.entity.Entity newVillager = null;
                     
                     // 打印村民类型信息
-                    System.out.println("Brain Roidmude: Nearest villager type - " + nearestVillager.getType().toString());
-                    System.out.println("Brain Roidmude: Nearest villager class - " + nearestVillager.getClass().getName());
+                    // System.out.println("Brain Roidmude: Nearest villager type - " + nearestVillager.getType().toString());
+                    // System.out.println("Brain Roidmude: Nearest villager class - " + nearestVillager.getClass().getName());
                     
                     // 尝试1: 直接使用最近村民的类型创建
                     try {
                         net.minecraft.world.entity.EntityType<?> entityType = nearestVillager.getType();
-                        System.out.println("Brain Roidmude: Trying to create villager using entityType: " + entityType);
+                        // System.out.println("Brain Roidmude: Trying to create villager using entityType: " + entityType);
                         
                         newVillager = entityType.create(this.level());
                         if (newVillager != null) {
-                            System.out.println("Brain Roidmude: Successfully created villager using entityType");
+                            // System.out.println("Brain Roidmude: Successfully created villager using entityType");
                         }
                     } catch (Exception e) {
-                        System.out.println("Brain Roidmude: Failed to create villager using entityType: " + e.getMessage());
-                        e.printStackTrace();
+                        // System.out.println("Brain Roidmude: Failed to create villager using entityType: " + e.getMessage());
+                        // e.printStackTrace();
                     }
                     
                     // 尝试2: 通过字符串获取实体类型
                     if (newVillager == null) {
                         try {
                             String typeString = nearestVillager.getType().toString();
-                            System.out.println("Brain Roidmude: Trying to create villager using type string: " + typeString);
+                            // System.out.println("Brain Roidmude: Trying to create villager using type string: " + typeString);
                             
                             net.minecraft.world.entity.EntityType<?> entityType = net.minecraft.world.entity.EntityType.byString(typeString).orElse(null);
-                            System.out.println("Brain Roidmude: Entity type found: " + (entityType != null));
+                            // System.out.println("Brain Roidmude: Entity type found: " + (entityType != null));
                             
                             if (entityType != null) {
-                                System.out.println("Brain Roidmude: Entity type base class: " + entityType.getBaseClass().getName());
+                                // System.out.println("Brain Roidmude: Entity type base class: " + entityType.getBaseClass().getName());
                                 // 使用字符串检查代替直接类型检查
                                 if (entityType.getBaseClass().getName().contains("VillagerEntityMCA")) {
-                                    System.out.println("Brain Roidmude: Entity type is assignable to VillagerEntityMCA");
+                                    // System.out.println("Brain Roidmude: Entity type is assignable to VillagerEntityMCA");
                                     newVillager = entityType.create(this.level());
                                     if (newVillager != null) {
-                                        System.out.println("Brain Roidmude: Successfully created villager using type string");
+                                        // System.out.println("Brain Roidmude: Successfully created villager using type string");
                                     }
                                 }
                             }
                         } catch (Exception e) {
-                            System.out.println("Brain Roidmude: Failed to create MCA villager using type string: " + e.getMessage());
-                            e.printStackTrace();
+                            // System.out.println("Brain Roidmude: Failed to create MCA villager using type string: " + e.getMessage());
+                            // e.printStackTrace();
                         }
                     }
                     
                     // 尝试3: 使用默认的MCA村民类型
                     if (newVillager == null) {
                         try {
-                            System.out.println("Brain Roidmude: Trying to create default MCA villager");
+                            // System.out.println("Brain Roidmude: Trying to create default MCA villager");
                             
                             // 尝试获取所有已注册的实体类型
                             for (net.minecraft.world.entity.EntityType<?> registeredType : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.stream().toList()) {
                                 if (registeredType.getBaseClass().getName().contains("VillagerEntityMCA")) {
-                                    System.out.println("Brain Roidmude: Found MCA villager entity type: " + registeredType.toString());
+                                    // System.out.println("Brain Roidmude: Found MCA villager entity type: " + registeredType.toString());
                                     try {
                                         newVillager = registeredType.create(this.level());
                                         if (newVillager != null) {
-                                            System.out.println("Brain Roidmude: Successfully created villager from registered type");
+                                            // System.out.println("Brain Roidmude: Successfully created villager from registered type");
                                             break;
                                         }
                                     } catch (Exception e) {
-                                        System.out.println("Brain Roidmude: Failed to create villager from registered type: " + e.getMessage());
+                                        // System.out.println("Brain Roidmude: Failed to create villager from registered type: " + e.getMessage());
                                     }
                                 }
                             }
                         } catch (Exception e) {
-                            System.out.println("Brain Roidmude: Failed to find registered MCA villager types: " + e.getMessage());
-                            e.printStackTrace();
+                            // System.out.println("Brain Roidmude: Failed to find registered MCA villager types: " + e.getMessage());
+                            // e.printStackTrace();
                         }
                     }
                     
                     // 尝试4: 直接使用构造函数创建
                     if (newVillager == null) {
                         try {
-                            System.out.println("Brain Roidmude: Trying to create villager using constructor");
+                            // System.out.println("Brain Roidmude: Trying to create villager using constructor");
                             
                             // 尝试使用反射创建实例
                             Class<?>[] paramTypes = {net.minecraft.world.entity.EntityType.class, Level.class};
@@ -777,11 +793,11 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
                             newVillager = (net.minecraft.world.entity.Entity) constructor.newInstance(entityType, this.level());
                             
                             if (newVillager != null) {
-                                System.out.println("Brain Roidmude: Successfully created villager using constructor");
+                                // System.out.println("Brain Roidmude: Successfully created villager using constructor");
                             }
                         } catch (Exception e) {
-                            System.out.println("Brain Roidmude: Failed to create villager using constructor: " + e.getMessage());
-                            e.printStackTrace();
+                            // System.out.println("Brain Roidmude: Failed to create villager using constructor: " + e.getMessage());
+                            // e.printStackTrace();
                         }
                     }
                     
@@ -793,8 +809,23 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
                         // 保存Brain Roidmude的数据到新村民实体
                         CompoundTag brainData = new CompoundTag();
                         this.save(brainData);
-                        newVillager.getPersistentData().put("BrainRoidmudeData", brainData);
-                        newVillager.getPersistentData().putBoolean("IsMimicking", true);
+                        
+                        // 根据实体类型设置BrainRoidmudeData
+                        if (isMCA) {
+                            // 使用反射获取MCA村民的persistentData
+                            try {
+                                java.lang.reflect.Method getPersistentDataMethod = newVillager.getClass().getMethod("getPersistentData");
+                                net.minecraft.nbt.CompoundTag persistentData = (net.minecraft.nbt.CompoundTag) getPersistentDataMethod.invoke(newVillager);
+                                persistentData.put("BrainRoidmudeData", brainData);
+                                persistentData.putBoolean("IsMimicking", true);
+                            } catch (Exception e) {
+                                // System.out.println("Brain Roidmude: Failed to set MCA villager persistent data: " + e.getMessage());
+                            }
+                        } else {
+                            // 直接设置原版村民的persistentData
+                            newVillager.getPersistentData().put("BrainRoidmudeData", brainData);
+                            newVillager.getPersistentData().putBoolean("IsMimicking", true);
+                        }
                         
                         // 保存村民数据以供后续使用
                         CompoundTag storedData = new CompoundTag();
@@ -819,17 +850,17 @@ public class BrainRoidmudeEntity extends PathfinderMob implements GeoAnimatable 
                         // 移除原来的Brain Roidmude
                         this.discard();
                         
-                        System.out.println("Brain Roidmude: Successfully created new MCA villager with Brain Roidmude data");
+                        // System.out.println("Brain Roidmude: Successfully created new " + (isMCA ? "MCA" : "vanilla") + " villager with Brain Roidmude data");
                     } else {
-                        System.out.println("Brain Roidmude: Failed to create MCA villager entity");
+                        // System.out.println("Brain Roidmude: Failed to create " + (isMCA ? "MCA" : "vanilla") + " villager entity");
                     }
                 }
             } else {
-                System.out.println("Brain Roidmude: No MCA villagers found nearby");
+                // System.out.println("Brain Roidmude: No villagers found nearby");
             }
         } catch (Exception e) {
-            System.out.println("Brain Roidmude: Failed to create MCA villager: " + e.getMessage());
-            e.printStackTrace();
+            // System.out.println("Brain Roidmude: Failed to create villager: " + e.getMessage());
+            // e.printStackTrace();
         }
     }
 }

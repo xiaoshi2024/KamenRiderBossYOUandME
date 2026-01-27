@@ -45,6 +45,9 @@ public class StoriousEntity extends Villager implements GeoEntity, MenuProvider,
     protected static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("attack");
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
+    // 存储原始村民数据的NBT标签键
+    public static final String ORIGINAL_VILLAGER_TAG = "OriginalVillagerData";
+    
     public StoriousEntity(EntityType<? extends Villager> entityType, Level level) {
         super(entityType, level);
         // 设置默认名称为“Storious”

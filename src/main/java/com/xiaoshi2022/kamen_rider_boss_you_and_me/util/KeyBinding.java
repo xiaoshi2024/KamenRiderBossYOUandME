@@ -233,22 +233,29 @@ public class KeyBinding {
         // 检查玩家是否变身为DarkGhost形态
         boolean isDarkGhostTransformed = isDarkGhostTransformed(mc.player);
 
-        // 检查玩家是否手持眼魂并按下Shift+V键（优先处理维度传送功能）
+        // 检查玩家是否手持眼魂并按下Shift+V键对着方块（优先处理维度传送功能）
         if (hasShiftDown() && KEY_GUARD.isDown() && isHoldingGhostEye(mc.player)) {
-            if (KEY_GUARD.consumeClick()) {
-                UUID playerId = mc.player.getUUID();
-                // 检查冷却时间
-                if (!isTeleportOnCooldown(playerId)) {
-                    // 发送数据包到服务器执行维度传送，isTeleport=true
-                    PacketHandler.sendToServer(new GhostEyeDimensionTeleportPacket(true));
-                    // 设置冷却时间
-                    setTeleportCooldown(playerId, TELEPORT_COOLDOWN_TICKS);
-                    return; // 优先处理维度传送功能，不继续执行其他按键检测
-                } else {
-                    // 显示冷却提示
-                    int remainingSeconds = teleportCooldowns.getOrDefault(playerId, 0) / 20;
-                    mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal("传送冷却中，还剩 " + remainingSeconds + " 秒"), true);
+            // 检查玩家是否对着方块
+            net.minecraft.world.phys.HitResult hitResult = Minecraft.getInstance().hitResult;
+            if (hitResult != null && hitResult.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK) {
+                if (KEY_GUARD.consumeClick()) {
+                    UUID playerId = mc.player.getUUID();
+                    // 检查冷却时间
+                    if (!isTeleportOnCooldown(playerId)) {
+                        // 发送数据包到服务器执行维度传送，isTeleport=true
+                        PacketHandler.sendToServer(new GhostEyeDimensionTeleportPacket(true));
+                        // 设置冷却时间
+                        setTeleportCooldown(playerId, TELEPORT_COOLDOWN_TICKS);
+                        return; // 优先处理维度传送功能，不继续执行其他按键检测
+                    } else {
+                        // 显示冷却提示
+                        int remainingSeconds = teleportCooldowns.getOrDefault(playerId, 0) / 20;
+                        mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal("传送冷却中，还剩 " + remainingSeconds + " 秒"), true);
+                    }
                 }
+            } else {
+                // 显示需要对着方块的提示
+                mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal("请对着方块使用维度传送功能"), true);
             }
         }
 
@@ -281,25 +288,8 @@ public class KeyBinding {
             }
         }
 
-        // 手持眼魂或变身为幽冥时按B键隐身功能
-        if ((isHoldingGhostEye(mc.player) || isNecromTransformed) && KEY_BLAST.isDown()) {
-            if (KEY_BLAST.consumeClick()) {
-                // 检查是否按下Shift键
-                if (hasShiftDown() && mc.player.hasEffect(MobEffects.INVISIBILITY)) {
-                    // Shift+B键：解除隐身效果
-                    PacketHandler.sendToServer(new GhostEyeInvisibilityPacket(mc.player.getId(), false));
-                    mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal("隐身效果已解除！"), true);
-                } else if (!mc.player.hasEffect(MobEffects.INVISIBILITY)) {
-                    // B键：添加隐身效果
-                    PacketHandler.sendToServer(new GhostEyeInvisibilityPacket(mc.player.getId(), true));
-                    mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal("获得隐身效果！"), true);
-                }
-                return; // 优先处理眼魂隐身功能，不继续执行其他按键检测
-            }
-        }
-
         // 眼魔玩家或幽冥玩家专属功能：按下B键变身为眼魂实体，按下Shift+B键变回到人形
-        if ((isDarkGhostTransformed || isNecromTransformed)) {
+        if ((isDarkGhostTransformed || isNecromTransformed || isGhostEye)) {
             if (KEY_BLAST.consumeClick()) {
                 if (hasShiftDown()) {
                     // Shift+B键：变回到人形

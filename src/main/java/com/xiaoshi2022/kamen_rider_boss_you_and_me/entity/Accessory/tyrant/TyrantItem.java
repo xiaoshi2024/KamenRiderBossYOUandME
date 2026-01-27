@@ -76,7 +76,7 @@ public class TyrantItem extends ArmorItem implements GeoItem , KamenBossArmor , 
 
 			@Override
 			public String getName() {
-				return "netherite"; // 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
+				return "tyrant"; // 使用内置的netherite材质，避免Minecraft尝试加载不存在的纹理
 			}
 
 		}, type, properties);

@@ -232,7 +232,7 @@ public class GhostEyeTransformPacket {
                     return;
                 }
                 
-                // 创建眼魂实体实例，但不添加到世界
+                // 创建眼魂实体实例
                 GhostEyeEntity ghostEyeEntity = ModEntityTypes.GHOST_EYE_ENTITY.get().create(level);
                 if (ghostEyeEntity != null) {
                     // 设置眼魂实体的位置和旋转为玩家的位置和旋转

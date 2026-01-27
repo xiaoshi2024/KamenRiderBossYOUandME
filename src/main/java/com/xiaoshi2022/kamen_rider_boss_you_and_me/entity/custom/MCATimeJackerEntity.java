@@ -20,28 +20,29 @@ public class MCATimeJackerEntity extends TimeJackerEntity {
         // 设置时劫者特有的属性
         this.setHealth(30.0F);
 
-        // 如果MCA可用，使用反射获取MCA村民的属性
+        // 如果MCA可用，使用MCAUtil类来获取和设置MCA村民的属性
         if (MCAUtil.isMCAAvailable()) {
             try {
-                // 使用反射获取MCA村民类
-                Class<?> mcaVillagerClass = Class.forName("forge.net.mca.entity.VillagerEntityMCA");
-
-                // 使用反射复制MCA村民的属性到当前实体
-                // 复制所有字段值
-                for (java.lang.reflect.Field field : mcaVillagerClass.getDeclaredFields()) {
-                    field.setAccessible(true);
-                    try {
-                        // 尝试获取并设置字段值
-                        Object value = field.get(this);
-                        java.lang.reflect.Field currentField = this.getClass().getSuperclass().getSuperclass().getDeclaredField(field.getName());
-                        currentField.setAccessible(true);
-                        currentField.set(this, value);
-                    } catch (NoSuchFieldException e) {
-                        // 如果当前实体没有对应的字段，跳过
-                        continue;
-                    } catch (IllegalAccessException | IllegalArgumentException e) {
-                        // 访问权限或类型不匹配，跳过
-                        continue;
+                // 获取MCA村民类
+                Class<?> mcaVillagerClass = MCAUtil.getVillagerEntityMCAClass();
+                if (mcaVillagerClass != null) {
+                    // 使用反射复制MCA村民的属性到当前实体
+                    // 复制所有字段值
+                    for (java.lang.reflect.Field field : mcaVillagerClass.getDeclaredFields()) {
+                        field.setAccessible(true);
+                        try {
+                            // 尝试获取并设置字段值
+                            Object value = field.get(this);
+                            java.lang.reflect.Field currentField = this.getClass().getSuperclass().getSuperclass().getDeclaredField(field.getName());
+                            currentField.setAccessible(true);
+                            currentField.set(this, value);
+                        } catch (NoSuchFieldException e) {
+                            // 如果当前实体没有对应的字段，跳过
+                            continue;
+                        } catch (IllegalAccessException | IllegalArgumentException e) {
+                            // 访问权限或类型不匹配，跳过
+                            continue;
+                        }
                     }
                 }
             } catch (Exception e) {

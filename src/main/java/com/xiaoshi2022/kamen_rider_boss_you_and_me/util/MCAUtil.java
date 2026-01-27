@@ -30,6 +30,7 @@ public class MCAUtil {
     
     // 检查MCA是否已安装
     private static Boolean isMCAAvailable = null;
+    private static Boolean isMCAClientAvailable = null;
     
     /**
      * 检查MCA是否可用，仅检查服务器端可用的类
@@ -46,6 +47,22 @@ public class MCAUtil {
             }
         }
         return isMCAAvailable;
+    }
+    
+    /**
+     * 检查MCA客户端渲染类是否可用
+     */
+    private static synchronized boolean checkMCAClientAvailability() {
+        if (isMCAClientAvailable == null) {
+            try {
+                // 只检查客户端渲染类
+                villagerEntityMCARendererClass = Class.forName(VILLAGER_ENTITY_MCA_RENDERER);
+                isMCAClientAvailable = true;
+            } catch (ClassNotFoundException | NoClassDefFoundError e) {
+                isMCAClientAvailable = false;
+            }
+        }
+        return isMCAClientAvailable;
     }
 
     // 在MCAUtil.java中添加
@@ -240,7 +257,7 @@ public class MCAUtil {
      */
     @Nullable
     public static Object createMCARendererInstance(EntityRendererProvider.Context context) {
-        if (!isMCAAvailable()) {
+        if (!checkMCAClientAvailability()) {
             return null;
         }
         
@@ -260,7 +277,7 @@ public class MCAUtil {
      */
     @Nullable
     public static Class<?> getVillagerEntityMCARendererClass() {
-        if (!isMCAAvailable()) {
+        if (!checkMCAClientAvailability()) {
             return null;
         }
         
@@ -289,14 +306,44 @@ public class MCAUtil {
      */
     public static void restoreMCAVillager(net.minecraft.server.level.ServerLevel serverLevel, net.minecraft.nbt.CompoundTag villagerTag, double x, double y, double z) {
         if (!isMCAAvailable()) {
+            // 如果MCA不可用，直接创建普通村民
+            try {
+                net.minecraft.world.entity.npc.Villager restored = (net.minecraft.world.entity.npc.Villager) net.minecraft.world.entity.EntityType.VILLAGER.create(serverLevel);
+                if (restored != null) {
+                    restored.load(villagerTag);
+                    restored.setPos(x, y, z);
+                    restored.setHealth(restored.getMaxHealth());
+                    serverLevel.addFreshEntity(restored);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             return;
         }
         
         try {
-            // 获取实体类型
-            net.minecraft.world.entity.EntityType<?> originalType = net.minecraft.world.entity.EntityType.VILLAGER;
+            // 直接使用MCA实体类型从NBT创建实体
+            net.minecraft.world.entity.Entity restoredEntity = net.minecraft.world.entity.EntityType.loadEntityRecursive(
+                villagerTag, serverLevel, 
+                entity -> {
+                    entity.setPos(x, y, z);
+                    return entity;
+                }
+            );
             
-            // 使用MCAUtil.createMCAVillager()方法创建MCA村民实例
+            if (restoredEntity != null) {
+                // 设置最大生命值
+                if (restoredEntity instanceof net.minecraft.world.entity.LivingEntity livingEntity) {
+                    livingEntity.setHealth(livingEntity.getMaxHealth());
+                }
+                
+                // 添加到世界
+                serverLevel.addFreshEntity(restoredEntity);
+                return;
+            }
+            
+            // 如果直接从NBT创建失败，尝试使用MCAUtil.createMCAVillager()方法
+            net.minecraft.world.entity.EntityType<?> originalType = net.minecraft.world.entity.EntityType.VILLAGER;
             Villager restored = createMCAVillager((EntityType<? extends Villager>) originalType, serverLevel);
             if (restored == null) {
                 // 如果创建失败，尝试备用方案

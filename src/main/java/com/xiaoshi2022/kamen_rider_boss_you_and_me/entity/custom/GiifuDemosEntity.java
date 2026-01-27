@@ -49,6 +49,9 @@ public class GiifuDemosEntity extends Villager implements GeoEntity, MenuProvide
     // 德莫斯相关
     private boolean hasPlayedMutation = false; // 标志字段
 
+    // 存储原始村民数据的NBT标签键
+    public static final String ORIGINAL_VILLAGER_TAG = "OriginalVillagerData";
+    
     public GiifuDemosEntity(EntityType<? extends Villager> entityType, Level level) {
         super(entityType, level);
         // 设置默认名称为“基夫德莫斯”
