@@ -357,12 +357,6 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
         if (!entity.level().isClientSide() && entity instanceof ServerPlayer sp) {
             // 只有在解除变身时播放sodax动画
             playPlayerAnimation(sp, "sodax");
-        } else if (entity.level().isClientSide()) {
-            // 客户端：直接触发本地动画
-            // 确保客户端也能播放sodax动画
-            System.out.println("客户端直接播放sodax动画");
-            // 这里需要直接触发玩家动画，可能需要通过其他方式实现
-            // 例如：调用客户端动画触发方法
         }
         
         // 2. 然后播放解除变身动画

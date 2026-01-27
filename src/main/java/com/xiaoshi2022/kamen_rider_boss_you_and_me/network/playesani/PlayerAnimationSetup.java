@@ -38,7 +38,9 @@ public class PlayerAnimationSetup {
             @SuppressWarnings("unchecked")
             ModifierLayer<IAnimation> animationLayer = (ModifierLayer<IAnimation>) layer;
 
-            if (override || !animationLayer.isActive()) {
+            // 对于变身和解除变身动画，总是允许播放，不管当前动画层是否活跃
+            // 这样可以确保动画能够连续播放，不会因为前一个动画未完成而被阻塞
+            if (override || !animationLayer.isActive() || animationName.equals("sodax") || animationName.equals("sodas")) {
                 var animation = PlayerAnimationRegistry.getAnimation(
                         new ResourceLocation("kamen_rider_boss_you_and_me", animationName));
                 if (animation != null) {

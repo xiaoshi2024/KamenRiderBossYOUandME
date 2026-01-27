@@ -313,6 +313,9 @@ public class KeybindHandler {
                         Genesis_driver belt = (Genesis_driver) beltStack.getItem();
                         Genesis_driver.BeltMode mode = belt.getMode(beltStack);
 
+                        // 保存当前腰带模式，用于后续发送解除变身请求
+                        final Genesis_driver.BeltMode currentMode = mode;
+
                         switch (mode) {
                             case LEMON -> {
                                 // 先判断是变身还是解除
@@ -324,7 +327,11 @@ public class KeybindHandler {
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
                                     DELAY_TICKS.set(40);
-                                    DELAYED_BELT_STACK.set(beltStack.copy());
+                                    // 创建一个新的腰带堆栈，保持当前模式
+                                    ItemStack delayedStack = beltStack.copy();
+                                    // 确保腰带模式保持不变，直到解除变身请求发送
+                                    belt.setMode(delayedStack, currentMode);
+                                    DELAYED_BELT_STACK.set(delayedStack);
                                     handled.set(true);
                                 }
                             }
@@ -336,7 +343,11 @@ public class KeybindHandler {
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
                                     DELAY_TICKS.set(40);
-                                    DELAYED_BELT_STACK.set(beltStack.copy());
+                                    // 创建一个新的腰带堆栈，保持当前模式
+                                    ItemStack delayedStack = beltStack.copy();
+                                    // 确保腰带模式保持不变，直到解除变身请求发送
+                                    belt.setMode(delayedStack, currentMode);
+                                    DELAYED_BELT_STACK.set(delayedStack);
                                     handled.set(true);
                                 } else {
                                     // 变身
@@ -352,7 +363,11 @@ public class KeybindHandler {
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
                                     DELAY_TICKS.set(40);
-                                    DELAYED_BELT_STACK.set(beltStack.copy());
+                                    // 创建一个新的腰带堆栈，保持当前模式
+                                    ItemStack delayedStack = beltStack.copy();
+                                    // 确保腰带模式保持不变，直到解除变身请求发送
+                                    belt.setMode(delayedStack, currentMode);
+                                    DELAYED_BELT_STACK.set(delayedStack);
                                     handled.set(true);
                                 } else {
                                     // 变身
@@ -368,7 +383,11 @@ public class KeybindHandler {
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
                                     DELAY_TICKS.set(40);
-                                    DELAYED_BELT_STACK.set(beltStack.copy());
+                                    // 创建一个新的腰带堆栈，保持当前模式
+                                    ItemStack delayedStack = beltStack.copy();
+                                    // 确保腰带模式保持不变，直到解除变身请求发送
+                                    belt.setMode(delayedStack, currentMode);
+                                    DELAYED_BELT_STACK.set(delayedStack);
                                     handled.set(true);
                                 } else {
                                     // 变身
@@ -384,7 +403,11 @@ public class KeybindHandler {
                                     belt.startReleaseWithPlayerAnimation(player, beltStack);
                                     // 设置延时，在动画播放完后再发送解除变身请求
                                     DELAY_TICKS.set(40);
-                                    DELAYED_BELT_STACK.set(beltStack.copy());
+                                    // 创建一个新的腰带堆栈，保持当前模式
+                                    ItemStack delayedStack = beltStack.copy();
+                                    // 确保腰带模式保持不变，直到解除变身请求发送
+                                    belt.setMode(delayedStack, currentMode);
+                                    DELAYED_BELT_STACK.set(delayedStack);
                                     handled.set(true);
                                 }
                                 // 移除C键触发变身的功能，只保留解除变身功能

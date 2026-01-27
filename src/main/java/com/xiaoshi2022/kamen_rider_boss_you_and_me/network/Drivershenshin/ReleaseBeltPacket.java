@@ -119,6 +119,7 @@ public class ReleaseBeltPacket {
                     // 处理Evil Bats解除变身
                     handleRelease(player, beltType);
                 } else {
+                    // 处理创世纪驱动器解除变身，确保传递正确的腰带类型
                     handleRelease(player, beltType);
                 }
             } else if (triggerAnimation) {
@@ -126,7 +127,8 @@ public class ReleaseBeltPacket {
                     CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof Genesis_driver)
                             .ifPresent(curio -> {
                                 Genesis_driver belt = (Genesis_driver) curio.stack().getItem();
-                                belt.startHenshinAnimation(player, curio.stack());
+                                // 播放解除变身动画，而不是变身动画
+                                belt.startReleaseWithPlayerAnimation(player, curio.stack());
                             });
                 } else {
                     handleBaronsAnimation(player);

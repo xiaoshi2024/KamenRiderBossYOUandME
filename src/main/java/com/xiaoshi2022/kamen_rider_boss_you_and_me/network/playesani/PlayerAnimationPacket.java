@@ -100,6 +100,12 @@ public class PlayerAnimationPacket {
 
     // 检查是否应该播放动画（基于优先级和当前状态）
     private static boolean shouldPlayAnimation(PlayerAnimationPacket packet) {
+        // 对于变身和解除变身动画，总是允许播放，不管当前动画的优先级如何
+        // 这样可以确保动画能够连续播放，不会因为前一个动画未完成而被阻塞
+        if (packet.animationName.equals("sodax") || packet.animationName.equals("sodas")) {
+            return true;
+        }
+        
         ClientAnimationState currentState = clientAnimationStates.get(packet.targetId);
         if (currentState == null) {
             return true; // 没有当前动画，直接播放
@@ -111,11 +117,32 @@ public class PlayerAnimationPacket {
 
     // 更新客户端动画状态
     private static void updateClientAnimationState(PlayerAnimationPacket packet) {
+        // 对于变身和解除变身动画，设置较短的持续时间，确保动画状态能够快速清理
+        // 这样后续的动画才能正常播放
+        int adjustedDuration = packet.animationName.equals("sodax") || packet.animationName.equals("sodas") ? 2000 : packet.duration;
+        
         clientAnimationStates.put(packet.targetId, new ClientAnimationState(
                 packet.animationName,
                 packet.priority,
-                System.currentTimeMillis() + packet.duration
+                System.currentTimeMillis() + adjustedDuration
         ));
+        
+        // 启动一个线程，在动画播放完成后清理动画状态
+        // 这样可以确保动画状态不会长时间占用，影响后续动画的播放
+        new Thread(() -> {
+            try {
+                Thread.sleep(adjustedDuration);
+                if (clientAnimationStates.containsKey(packet.targetId)) {
+                    ClientAnimationState state = clientAnimationStates.get(packet.targetId);
+                    // 添加null检查，确保state不为null
+                    if (state != null && state.animationName.equals(packet.animationName)) {
+                        clientAnimationStates.remove(packet.targetId);
+                    }
+                }
+            } catch (InterruptedException e) {
+                // 忽略中断异常
+            }
+        }).start();
     }
 
     // 取消指定玩家的动画

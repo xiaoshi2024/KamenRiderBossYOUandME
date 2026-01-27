@@ -317,7 +317,9 @@ public class TransformationHandler {
             ItemStack beltStack = slotResult.stack();
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
-            if (belt.getMode(beltStack) == Genesis_driver.BeltMode.LEMON) {
+            // 无论当前腰带模式是什么，只要是GENESIS类型的解除变身请求，都处理
+            Genesis_driver.BeltMode currentMode = belt.getMode(beltStack);
+            if (currentMode == Genesis_driver.BeltMode.LEMON) {
                 // 创建新的腰带堆栈副本
                 ItemStack newStack = beltStack.copy();
                 
@@ -328,6 +330,7 @@ public class TransformationHandler {
                 belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
                 belt.setEquipped(newStack, false);
                 belt.setHenshin(newStack, false);
+                belt.setRelease(newStack, false);
                 
                 // 3. 更新Curio槽位
                 CurioUtils.updateCurioSlot(
@@ -376,7 +379,9 @@ public class TransformationHandler {
             ItemStack beltStack = slotResult.stack();
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
-            if (belt.getMode(beltStack) == Genesis_driver.BeltMode.MELON) {
+            // 无论当前腰带模式是什么，只要是GENESIS_MELON类型的解除变身请求，都处理
+            Genesis_driver.BeltMode currentMode = belt.getMode(beltStack);
+            if (currentMode == Genesis_driver.BeltMode.MELON) {
                 // 创建新的腰带堆栈副本
                 ItemStack newStack = beltStack.copy();
                 
@@ -387,6 +392,7 @@ public class TransformationHandler {
                 belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
                 belt.setEquipped(newStack, false);
                 belt.setHenshin(newStack, false);
+                belt.setRelease(newStack, false);
                 
                 // 3. 更新Curio槽位
                 CurioUtils.updateCurioSlot(
@@ -435,7 +441,9 @@ public class TransformationHandler {
             ItemStack beltStack = slotResult.stack();
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
-            if (belt.getMode(beltStack) == Genesis_driver.BeltMode.CHERRY) {
+            // 无论当前腰带模式是什么，只要是GENESIS_CHERRY类型的解除变身请求，都处理
+            Genesis_driver.BeltMode currentMode = belt.getMode(beltStack);
+            if (currentMode == Genesis_driver.BeltMode.CHERRY) {
                 // 创建新的腰带堆栈副本
                 ItemStack newStack = beltStack.copy();
                 
@@ -446,6 +454,7 @@ public class TransformationHandler {
                 belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
                 belt.setEquipped(newStack, false);
                 belt.setHenshin(newStack, false);
+                belt.setRelease(newStack, false);
                 
                 // 3. 更新Curio槽位
                 CurioUtils.updateCurioSlot(
@@ -494,7 +503,9 @@ public class TransformationHandler {
             ItemStack beltStack = slotResult.stack();
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
-            if (belt.getMode(beltStack) == Genesis_driver.BeltMode.PEACH) {
+            // 无论当前腰带模式是什么，只要是GENESIS_PEACH类型的解除变身请求，都处理
+            Genesis_driver.BeltMode currentMode = belt.getMode(beltStack);
+            if (currentMode == Genesis_driver.BeltMode.PEACH) {
                 // 创建新的腰带堆栈副本
                 ItemStack newStack = beltStack.copy();
                 
@@ -505,6 +516,7 @@ public class TransformationHandler {
                 belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
                 belt.setEquipped(newStack, false);
                 belt.setHenshin(newStack, false);
+                belt.setRelease(newStack, false);
                 
                 // 3. 更新Curio槽位
                 CurioUtils.updateCurioSlot(
@@ -553,7 +565,9 @@ public class TransformationHandler {
             ItemStack beltStack = slotResult.stack();
             Genesis_driver belt = (Genesis_driver) beltStack.getItem();
             
-            if (belt.getMode(beltStack) == Genesis_driver.BeltMode.DRAGONFRUIT) {
+            // 无论当前腰带模式是什么，只要是GENESIS_DRAGONFRUIT类型的解除变身请求，都处理
+            Genesis_driver.BeltMode currentMode = belt.getMode(beltStack);
+            if (currentMode == Genesis_driver.BeltMode.DRAGONFRUIT) {
                 // 创建新的腰带堆栈副本
                 ItemStack newStack = beltStack.copy();
                 
@@ -564,6 +578,7 @@ public class TransformationHandler {
                 belt.setMode(newStack, Genesis_driver.BeltMode.DEFAULT);
                 belt.setEquipped(newStack, false);
                 belt.setHenshin(newStack, false);
+                belt.setRelease(newStack, false);
                 
                 // 3. 更新Curio槽位
                 CurioUtils.updateCurioSlot(
