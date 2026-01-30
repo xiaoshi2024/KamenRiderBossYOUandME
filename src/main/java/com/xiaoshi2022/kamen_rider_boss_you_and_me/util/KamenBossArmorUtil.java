@@ -56,7 +56,8 @@ public class KamenBossArmorUtil {
                         stack.getItem() instanceof GhostDriver ||
                         stack.getItem() instanceof sengokudrivers_epmty ||
                         stack.getItem() instanceof BrainDriver ||
-                        stack.getItem() instanceof KnightInvokerBuckle
+                        stack.getItem() instanceof KnightInvokerBuckle ||
+                        stack.getItem() instanceof WeekEndriver
                     )
                 )
                 .isPresent(); // 如果找到任何一种腰带，返回true
@@ -86,7 +87,8 @@ public class KamenBossArmorUtil {
                         stack.getItem() instanceof GhostDriver ||
                         stack.getItem() instanceof sengokudrivers_epmty ||
                         stack.getItem() instanceof BrainDriver ||
-                        stack.getItem() instanceof KnightInvokerBuckle
+                        stack.getItem() instanceof KnightInvokerBuckle ||
+                        stack.getItem() instanceof WeekEndriver
                     )
                 )
                 .isPresent(); // 如果找到任何一种腰带，返回true

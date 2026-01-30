@@ -88,6 +88,14 @@ public class ModBossSounds {
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "nox_c")));
 
 
+    public static final RegistryObject<SoundEvent> QUEENBE_COM = REGISTRY.register("queenbe_com",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "queenbe_com")));
+    public static final RegistryObject<SoundEvent> QUEENBE_BY = REGISTRY.register("queenbe_by",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "queenbe_by")));
+    public static final RegistryObject<SoundEvent> QUNEN_BEE = REGISTRY.register("qunen_bee",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "qunen_bee")));
+
+
 
 
     public static final RegistryObject<SoundEvent> DARK_GHOST = REGISTRY.register("darks_ghost",

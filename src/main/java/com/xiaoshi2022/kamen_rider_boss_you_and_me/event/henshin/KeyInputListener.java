@@ -238,6 +238,30 @@ public final class KeyInputListener {
                 return;
             }
         }
+
+        // 6. WeekEndriver腰带女王蜂变身检查
+        Optional<WeekEndriver> weekendriver = 
+                CurioUtils.findFirstCurio(player,
+                                stack -> stack.getItem() instanceof WeekEndriver)
+                        .map(slot -> (WeekEndriver) slot.stack().getItem());
+
+        if (weekendriver.isPresent()) {
+            WeekEndriver belt = weekendriver.get();
+            ItemStack beltStack = CurioUtils.findFirstCurio(player,
+                    stack -> stack.getItem() instanceof WeekEndriver).get().stack();
+            
+            // 检查腰带模式是否为女王蜂
+            if (belt.getMode(beltStack) == WeekEndriver.BeltMode.QUEEN_BEE) {
+                // 获取玩家变量
+                KRBVariables.PlayerVariables variables = player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new KRBVariables.PlayerVariables());
+                
+                // 检查是否处于准备状态
+                if (variables.queenBee_ready) {
+                    // 发送女王蜂变身请求包
+                    PacketHandler.INSTANCE.sendToServer(new QueenBeeTransformationRequestPacket(player.getUUID()));
+                }
+            }
+        }
     }
     private static boolean tryLoadTwoWeaponOnX(LocalPlayer player) {
         Optional<SlotResult> opt = CuriosApi.getCuriosInventory(player)
@@ -359,6 +383,10 @@ public final class KeyInputListener {
                     player.getInventory().armor.get(3).is(ModItems.TYRANT_HELMET.get()) &&
                     player.getInventory().armor.get(2).is(ModItems.TYRANT_CHESTPLATE.get()) &&
                     player.getInventory().armor.get(1).is(ModItems.TYRANT_LEGGINGS.get());
+            case "QUEEN_BEE" ->
+                    player.getInventory().armor.get(3).is(ModItems.QUINBEE_HELMET.get()) &&
+                    player.getInventory().armor.get(2).is(ModItems.QUINBEE_CHESTPLATE.get()) &&
+                    player.getInventory().armor.get(1).is(ModItems.QUINBEE_LEGGINGS.get());
 
             default -> false;
         };

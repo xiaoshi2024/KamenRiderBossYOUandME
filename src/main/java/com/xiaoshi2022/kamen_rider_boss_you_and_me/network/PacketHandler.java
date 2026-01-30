@@ -81,6 +81,9 @@ public class PacketHandler {
         
         // 注册 BrainTransformationRequestPacket
         INSTANCE.registerMessage(index++, BrainTransformationRequestPacket.class, BrainTransformationRequestPacket::encode, BrainTransformationRequestPacket::decode, BrainTransformationRequestPacket::handle);
+        
+        // 注册 QueenBeeTransformationRequestPacket
+        INSTANCE.registerMessage(index++, QueenBeeTransformationRequestPacket.class, QueenBeeTransformationRequestPacket::encode, QueenBeeTransformationRequestPacket::decode, QueenBeeTransformationRequestPacket::handle);
 
         INSTANCE.registerMessage(index++, SyncTransformationPacket.class,
                 SyncTransformationPacket::encode,

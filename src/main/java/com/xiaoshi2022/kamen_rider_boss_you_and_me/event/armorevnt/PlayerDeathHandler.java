@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.event.armorevnt;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.TwoWeaponItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.DarkRiderGhost.DarkRiderGhostItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.WeekEndriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.NapoleonGhost.NapoleonGhostItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.brain.Brain;
@@ -12,6 +13,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.evilbats.EvilBatsArmor;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.marika.Marika;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.noxknight.NoxKnight;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.quinbee.QuinbeeItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_barons.rider_baronsItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
@@ -318,6 +320,28 @@ public class PlayerDeathHandler {
                         );
                     }
                 });
+        
+        // 7. WeekEndriver腰带（新增）-------------------------------------------
+        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof WeekEndriver)
+                .ifPresent(curio -> {
+                    ItemStack belt = curio.stack().copy();
+                    WeekEndriver weekEndriver = (WeekEndriver) belt.getItem();
+                    weekEndriver.setMode(belt, WeekEndriver.BeltMode.DEFAULT);
+
+                    // 优先放进背包，满了才掉落
+                    if (!player.getInventory().add(belt)) {
+                        player.drop(belt, false);
+                    }
+
+                    // 清槽
+                    if (!player.level().isClientSide) {
+                        CuriosApi.getCuriosInventory(player).ifPresent(inv ->
+                                inv.getStacksHandler(curio.slotContext().identifier()).ifPresent(handler ->
+                                        handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY)
+                                )
+                        );
+                    }
+                });
     }
 
     // 新增：返还蝙蝠形态相关的物品
@@ -400,7 +424,8 @@ public class PlayerDeathHandler {
                         stack.getItem() instanceof DarkRiderGhostItem ||
                         stack.getItem() instanceof EvilBatsArmor ||
                         stack.getItem() instanceof NoxKnight ||
-                        stack.getItem() instanceof DarkKivaItem
+                        stack.getItem() instanceof DarkKivaItem ||
+                        stack.getItem() instanceof QuinbeeItem
                 ) {
                     return true;
                 }
@@ -439,7 +464,8 @@ public class PlayerDeathHandler {
                     armorStack.getItem() instanceof DarkRiderGhostItem ||
                     armorStack.getItem() instanceof DarkKivaItem ||
                     armorStack.getItem() instanceof NoxKnight ||
-                    armorStack.getItem() instanceof Marika) {
+                    armorStack.getItem() instanceof Marika ||
+                    armorStack.getItem() instanceof QuinbeeItem) {
                 player.getInventory().armor.set(i, ItemStack.EMPTY);
             }
         }
@@ -622,6 +648,10 @@ public class PlayerDeathHandler {
             case "NOX":
                 // 返回暗夜祷告驱动器和Erase胶囊
                 list.add(new ItemStack(ModItems.ERASE_CAPSEM.get()));
+                break;
+            case "QUEEN_BEE":
+                // 返回女王蜂印章
+                list.add(new ItemStack(ModItems.QUEEN_BEE_STAMP.get()));
                 break;
         }
         return list;

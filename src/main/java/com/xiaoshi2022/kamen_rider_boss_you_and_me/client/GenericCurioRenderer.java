@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.Ghos
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.knightinvoker.KnightInvokerBuckleRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.sengokudriver.sengokudrivers_epmtysRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.two_sidriver.Two_sidriverRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.weekendriver.WeekEndriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.BrainEyeglass;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import net.minecraft.client.model.EntityModel;
@@ -33,6 +34,7 @@ public class GenericCurioRenderer implements ICurioRenderer {
     private final ICurioRenderer ghost_driverRenderer = new GhostDriverRenderer();
     private final ICurioRenderer brain_driverRenderer = new BrainDriverRenderer();
     private final ICurioRenderer knightInvokerBuckleRenderer = new KnightInvokerBuckleRenderer();
+    private final ICurioRenderer weekendriverRenderer = new WeekEndriverRenderer();
 
 
     @Override
@@ -54,6 +56,8 @@ public class GenericCurioRenderer implements ICurioRenderer {
                 brain_driverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }else if (stack.getItem() instanceof KnightInvokerBuckle) {
                 knightInvokerBuckleRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            }else if (stack.getItem() instanceof WeekEndriver) {
+                weekendriverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }
 
             else if (stack.getItem() instanceof BrainEyeglass) {

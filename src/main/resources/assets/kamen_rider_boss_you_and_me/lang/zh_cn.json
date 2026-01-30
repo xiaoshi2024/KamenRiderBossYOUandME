@@ -320,6 +320,11 @@
   "advancement.kamen_rider_boss_you_and_me.become_roidmude.description": "成为机械变异体，获得核心形态的力量",
   
   "item.kamen_rider_boss_you_and_me.erase_capsem": "梦魇胶囊",
-  "item.kamen_rider_boss_you_and_me.erase_capsem.tooltip": "[提示] 用于暗夜祷告驱动器，装备后右键使用可切换为Nox Knight形态。"
+  "item.kamen_rider_boss_you_and_me.erase_capsem.tooltip": "[提示] 用于暗夜祷告驱动器，装备后右键使用可切换为Nox Knight形态。",
+
+  "item.kamen_rider_boss_you_and_me.week_endriver": "Week Endriver腰带",
+  "item.kamen_rider_boss_you_and_me.week_endriver.tooltip": "[提示] 带上腰带饰品槽位，可与女王蜂印章联动变身。",
+  "item.kamen_rider_boss_you_and_me.quinbee_stamp": "女王蜂印章",
+  "item.kamen_rider_boss_you_and_me.quinbee_stamp.tooltip": "[提示] 与Week Endriver腰带联动，右键两次后按下X键变身。"
 
 }

@@ -22,6 +22,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigurd;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.quinbee.QuinbeeItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.world.entity.player.Player;
@@ -182,6 +183,9 @@ public class ModItems {
     public static final RegistryObject<NapoleonEyecon> NAPOLEON_EYECON = ITEMS.register("nb_eye",
             () -> new NapoleonEyecon(new Item.Properties()));
 
+    public static final RegistryObject<QueenBeeStamp> QUEEN_BEE_STAMP = ITEMS.register("quinbee_stamp",
+            () -> new QueenBeeStamp(new Item.Properties()));
+
     public static final RegistryObject<Mega_uiorder> MEGA_UIORDER_ITEM = ITEMS.register("mega_uiorder_item",
             () -> new Mega_uiorder(new Item.Properties().stacksTo(1)));
 
@@ -201,6 +205,9 @@ public class ModItems {
     
     public static final RegistryObject<BrainDriver> BRAIN_DRIVER = ITEMS.register("brain_driver",
             () -> new BrainDriver(new Item.Properties().stacksTo(1)));
+    
+    public static final RegistryObject<WeekEndriver> WEEK_ENDRIVER = ITEMS.register("week_endriver",
+            () -> new WeekEndriver(new Item.Properties().stacksTo(1)));
     
     public static final RegistryObject<KnightInvokerBuckle> KNIGHT_INVOKER_BUCKLE = ITEMS.register("knight_invoker",
             () -> new KnightInvokerBuckle(new Item.Properties().stacksTo(1)));
@@ -274,6 +281,11 @@ public class ModItems {
     public static final RegistryObject<NoxKnight> NOX_KNIGHT_HELMET = ITEMS.register("nox_knight_helmet", () -> new NoxKnight(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<NoxKnight> NOX_KNIGHT_CHESTPLATE = ITEMS.register("nox_knight_chestplate", () -> new NoxKnight(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<NoxKnight> NOX_KNIGHT_LEGGINGS = ITEMS.register("nox_knight_leggings", () -> new NoxKnight(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    
+    // Queen Bee装甲
+    public static final RegistryObject<QuinbeeItem> QUINBEE_HELMET = ITEMS.register("quinbee_helmet", () -> new QuinbeeItem(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<QuinbeeItem> QUINBEE_CHESTPLATE = ITEMS.register("quinbee_chestplate", () -> new QuinbeeItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<QuinbeeItem> QUINBEE_LEGGINGS = ITEMS.register("quinbee_leggings", () -> new QuinbeeItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
     // 基夫眼珠 - 击败基夫人形后掉落 (Geo物品)
     public static final RegistryObject<GiifuEyeBall> GIIFU_EYEBALL = ITEMS.register("giifu_eyeball",

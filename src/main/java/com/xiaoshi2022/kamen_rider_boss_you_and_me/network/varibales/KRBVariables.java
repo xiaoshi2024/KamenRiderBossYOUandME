@@ -129,8 +129,11 @@ public class KRBVariables {
 		clone.isMegaUiorderTransformed = false; // 玩家死亡时重置手环变身状态
 		clone.isNecromTemporaryRemoved = false; // 玩家死亡时重置眼魂临时移除状态
 		clone.isBrainDriverEquipped = false; // 玩家死亡时重置BrainDriver装备状态
-		clone.isBrainTransformed = false; // 玩家死亡时重置Brain变身状态
-		clone.isKnightInvokerEquipped = false; // 玩家死亡时重置KnightInvokerBuckle装备状态
+			clone.isBrainTransformed = false; // 玩家死亡时重置Brain变身状态
+			clone.isKnightInvokerEquipped = false; // 玩家死亡时重置KnightInvokerBuckle装备状态
+			clone.isWeekEndriverEquipped = false; // 玩家死亡时重置WeekEndriver装备状态
+			clone.queenBee_ready = false; // 玩家死亡时重置Queen Bee准备状态
+			clone.queenBee_ready_time = 0L; // 玩家死亡时重置Queen Bee准备时间
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
 			// 保留baseMaxHealth值，不再强制重置为默认值，以保留通过命令设置的生命值
@@ -274,6 +277,10 @@ public class KRBVariables {
 	public boolean hasReceivedGhostEyeLootChest = false;
 	// 巴隆香蕉能量技能冷却时间
 	public long baron_banana_energy_cooldown = 0L;
+	// Queen Bee技能相关变量
+	public long quinbee_flight_cooldown = 0L; // 飞行技能冷却时间
+	public long quinbee_flight_end_time = 0L; // 飞行结束时间
+	public long quinbee_needle_kunai_cooldown = 0L; // 针刺苦无冷却时间
 	// 保存的玩家原版盔甲数据
 	public net.minecraft.nbt.ListTag originalEvilArmor = null;
 	public net.minecraft.nbt.ListTag originalRiderNecromArmor = null;
@@ -283,6 +290,9 @@ public class KRBVariables {
 	public boolean isBrainDriverEquipped = false; // 新增字段：记录是否装备了BrainDriver腰带
 	public boolean isBrainTransformed = false; // 新增字段：记录是否变身为Brain形态
 	public boolean isKnightInvokerEquipped = false; // 新增字段：记录是否装备了KnightInvokerBuckle
+	public boolean isWeekEndriverEquipped = false; // 新增字段：记录是否装备了WeekEndriver腰带
+	public boolean queenBee_ready = false; // 新增字段：记录是否准备好变身为Queen Bee形态
+	public long queenBee_ready_time = 0L; // 新增字段：记录Queen Bee准备时间
 
 	public void syncPlayerVariables(Entity entity) {
 		if (entity instanceof ServerPlayer serverPlayer) {
@@ -384,6 +394,10 @@ public class KRBVariables {
         
 		// 序列化基础巴隆技能相关变量
 		nbt.putLong("baron_banana_energy_cooldown", baron_banana_energy_cooldown);
+		// 序列化Queen Bee技能相关变量
+		nbt.putLong("quinbee_flight_cooldown", quinbee_flight_cooldown);
+		nbt.putLong("quinbee_flight_end_time", quinbee_flight_end_time);
+		nbt.putLong("quinbee_needle_kunai_cooldown", quinbee_needle_kunai_cooldown);
 		// 序列化Overlord状态
 		nbt.putBoolean("isOverlord", isOverlord);
 		// 序列化Giifu状态
@@ -419,8 +433,11 @@ public class KRBVariables {
 			nbt.put("originalBrainArmor", originalBrainArmor);
 		}
 		nbt.putBoolean("isBrainDriverEquipped", isBrainDriverEquipped);
-		nbt.putBoolean("isBrainTransformed", isBrainTransformed);
-		nbt.putBoolean("isKnightInvokerEquipped", isKnightInvokerEquipped);
+	nbt.putBoolean("isBrainTransformed", isBrainTransformed);
+	nbt.putBoolean("isKnightInvokerEquipped", isKnightInvokerEquipped);
+	nbt.putBoolean("isWeekEndriverEquipped", isWeekEndriverEquipped);
+	nbt.putBoolean("queenBee_ready", queenBee_ready);
+	nbt.putLong("queenBee_ready_time", queenBee_ready_time);
 		return nbt;
 	}
 
@@ -503,6 +520,10 @@ public class KRBVariables {
         
 		// 反序列化基础巴隆技能相关变量
 		baron_banana_energy_cooldown = nbt.contains("baron_banana_energy_cooldown") ? nbt.getLong("baron_banana_energy_cooldown") : 0L;
+		// 反序列化Queen Bee技能相关变量
+		quinbee_flight_cooldown = nbt.contains("quinbee_flight_cooldown") ? nbt.getLong("quinbee_flight_cooldown") : 0L;
+		quinbee_flight_end_time = nbt.contains("quinbee_flight_end_time") ? nbt.getLong("quinbee_flight_end_time") : 0L;
+		quinbee_needle_kunai_cooldown = nbt.contains("quinbee_needle_kunai_cooldown") ? nbt.getLong("quinbee_needle_kunai_cooldown") : 0L;
 		// 反序列化Overlord状态
 		isOverlord = nbt.contains("isOverlord") ? nbt.getBoolean("isOverlord") : false;
 		// 反序列化Giifu状态
@@ -546,8 +567,11 @@ public class KRBVariables {
 			originalBrainArmor = null;
 		}
 		isBrainDriverEquipped = nbt.contains("isBrainDriverEquipped") ? nbt.getBoolean("isBrainDriverEquipped") : false;
-		isBrainTransformed = nbt.contains("isBrainTransformed") ? nbt.getBoolean("isBrainTransformed") : false;
-		isKnightInvokerEquipped = nbt.contains("isKnightInvokerEquipped") ? nbt.getBoolean("isKnightInvokerEquipped") : false;
+	isBrainTransformed = nbt.contains("isBrainTransformed") ? nbt.getBoolean("isBrainTransformed") : false;
+	isKnightInvokerEquipped = nbt.contains("isKnightInvokerEquipped") ? nbt.getBoolean("isKnightInvokerEquipped") : false;
+	isWeekEndriverEquipped = nbt.contains("isWeekEndriverEquipped") ? nbt.getBoolean("isWeekEndriverEquipped") : false;
+	queenBee_ready = nbt.contains("queenBee_ready") ? nbt.getBoolean("queenBee_ready") : false;
+	queenBee_ready_time = nbt.contains("queenBee_ready_time") ? nbt.getLong("queenBee_ready_time") : 0L;
 	}
 	}
 
@@ -642,32 +666,39 @@ public class KRBVariables {
 					variables.accumulatedAttackDamageModifier = message.data.accumulatedAttackDamageModifier;
 
 					// 同步基础巴隆技能相关变量
-					variables.baron_banana_energy_cooldown = message.data.baron_banana_energy_cooldown;
-					// 同步Overlord状态
-					variables.isOverlord = message.data.isOverlord;
-					// 同步Giifu状态
-					variables.isGiifu = message.data.isGiifu;
-					// 同步牙血鬼血脉状态
-					variables.isFangBloodline = message.data.isFangBloodline;
-					// 同步Roidmude状态
-					variables.isRoidmude = message.data.isRoidmude;
-					variables.roidmudeType = message.data.roidmudeType;
-					variables.roidmudeNumber = message.data.roidmudeNumber;
-					variables.isRoidmudeEvolved = message.data.isRoidmudeEvolved;
-					// 同步宝箱领取状态
-					variables.hasReceivedGhostEyeLootChest = message.data.hasReceivedGhostEyeLootChest;
-					// 同步腰带移除相关变量
-					variables.beltRemovedTime = message.data.beltRemovedTime;
-					variables.removedBeltType = message.data.removedBeltType;
-					// 同步保存的玩家原版盔甲数据
-					variables.originalEvilArmor = message.data.originalEvilArmor;
-					variables.originalRiderNecromArmor = message.data.originalRiderNecromArmor;
-					variables.originalDarkKivaArmor = message.data.originalDarkKivaArmor;
-					variables.originalNapoleonGhostArmor = message.data.originalNapoleonGhostArmor;
-					variables.originalBrainArmor = message.data.originalBrainArmor;
-					variables.isBrainDriverEquipped = message.data.isBrainDriverEquipped;
-					variables.isBrainTransformed = message.data.isBrainTransformed;
-					variables.isKnightInvokerEquipped = message.data.isKnightInvokerEquipped;
+									variables.baron_banana_energy_cooldown = message.data.baron_banana_energy_cooldown;
+									// 同步Queen Bee技能相关变量
+									variables.quinbee_flight_cooldown = message.data.quinbee_flight_cooldown;
+									variables.quinbee_flight_end_time = message.data.quinbee_flight_end_time;
+									variables.quinbee_needle_kunai_cooldown = message.data.quinbee_needle_kunai_cooldown;
+									// 同步Overlord状态
+									variables.isOverlord = message.data.isOverlord;
+									// 同步Giifu状态
+									variables.isGiifu = message.data.isGiifu;
+									// 同步牙血鬼血脉状态
+									variables.isFangBloodline = message.data.isFangBloodline;
+									// 同步Roidmude状态
+									variables.isRoidmude = message.data.isRoidmude;
+									variables.roidmudeType = message.data.roidmudeType;
+									variables.roidmudeNumber = message.data.roidmudeNumber;
+									variables.isRoidmudeEvolved = message.data.isRoidmudeEvolved;
+									// 同步宝箱领取状态
+									variables.hasReceivedGhostEyeLootChest = message.data.hasReceivedGhostEyeLootChest;
+									// 同步腰带移除相关变量
+									variables.beltRemovedTime = message.data.beltRemovedTime;
+									variables.removedBeltType = message.data.removedBeltType;
+									// 同步保存的玩家原版盔甲数据
+									variables.originalEvilArmor = message.data.originalEvilArmor;
+									variables.originalRiderNecromArmor = message.data.originalRiderNecromArmor;
+									variables.originalDarkKivaArmor = message.data.originalDarkKivaArmor;
+									variables.originalNapoleonGhostArmor = message.data.originalNapoleonGhostArmor;
+						variables.originalBrainArmor = message.data.originalBrainArmor;
+						variables.isBrainDriverEquipped = message.data.isBrainDriverEquipped;
+						variables.isBrainTransformed = message.data.isBrainTransformed;
+						variables.isKnightInvokerEquipped = message.data.isKnightInvokerEquipped;
+						variables.isWeekEndriverEquipped = message.data.isWeekEndriverEquipped;
+						variables.queenBee_ready = message.data.queenBee_ready;
+						variables.queenBee_ready_time = message.data.queenBee_ready_time;
 				}
 			}
 		}

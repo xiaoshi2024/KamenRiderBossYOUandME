@@ -351,6 +351,11 @@
   "advancement.kamen_rider_boss_you_and_me.become_roidmude.description": "Become a Roidmude and obtain the power of Core Form.",
   
   "item.kamen_rider_boss_you_and_me.erase_capsem": "Nightmare Capsule",
-  "item.kamen_rider_boss_you_and_me.erase_capsem.tooltip": "[Tip] Used with Knight Invoker Buckle. Right-click while equipped to switch to Nox Knight Mode."
+  "item.kamen_rider_boss_you_and_me.erase_capsem.tooltip": "[Tip] Used with Knight Invoker Buckle. Right-click while equipped to switch to Nox Knight Mode.",
+
+  "item.kamen_rider_boss_you_and_me.week_endriver": "Week Endriver",
+  "item.kamen_rider_boss_you_and_me.week_endriver.tooltip": "[Tip] Equip in belt accessory slot. Can be used with Queen Bee Stamp for transformation.",
+  "item.kamen_rider_boss_you_and_me.quinbee_stamp": "Queen Bee Stamp",
+  "item.kamen_rider_boss_you_and_me.quinbee_stamp.tooltip": "[Tip] Used with Week Endriver. Right-click twice, then press X to transform."
 
 }

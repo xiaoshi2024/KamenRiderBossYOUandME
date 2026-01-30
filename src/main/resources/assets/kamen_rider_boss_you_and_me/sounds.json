@@ -376,5 +376,32 @@
         "stream": false
       }
     ]
+  },
+  "qunen_bee": {
+    "subtitle": "Queen Bee",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:qunen_bee",
+        "stream": false
+      }
+    ]
+  },
+  "queenbe_by": {
+    "subtitle": "QUeen bee By",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:queenbe_by",
+        "stream": false
+      }
+    ]
+  },
+  "queenbe_com": {
+    "subtitle": "Queenbe Complete",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:queenbe_com",
+        "stream": false
+      }
+    ]
   }
 }

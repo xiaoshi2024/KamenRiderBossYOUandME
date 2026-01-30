@@ -53,14 +53,14 @@ public class ModArmorsRenderProcedure {
         Player player = event.getEntity();
         
         // 检查玩家是否处于PlayerShape变身状态
-        // 如果玩家已经变身为其他实体，应该让PlayerShape系统处理渲染，不干扰它
+        // 不再取消默认渲染，而是让默认渲染继续执行
         try {
             Class<?> playerShapeClass = Class.forName("tocraft.walkers.api.PlayerShape");
             java.lang.reflect.Method getCurrentShapeMethod = playerShapeClass.getMethod("getCurrentShape", Player.class);
             Object currentShape = getCurrentShapeMethod.invoke(null, player);
             if (currentShape != null) {
-                // 玩家处于变身状态，取消默认渲染，让PlayerShape系统处理
-                event.setCanceled(true);
+                // 玩家处于变身状态，不再取消默认渲染
+                // 让默认渲染继续执行，确保模型能够正常显示
                 return;
             }
         } catch (Exception e) {
