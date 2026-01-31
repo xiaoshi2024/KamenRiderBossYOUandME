@@ -384,6 +384,7 @@ public class PlayerDeathHandler {
         AtomicBoolean hasEvilBatsTransformation = new AtomicBoolean(false);
         AtomicBoolean hasNecromTransformation = new AtomicBoolean(false);
         AtomicBoolean hasDarkKivaTransformation = new AtomicBoolean(false);
+        AtomicBoolean hasQueenBeeTransformation = new AtomicBoolean(false);
         
         // 获取玩家变量
         if (player instanceof ServerPlayer) {
@@ -394,6 +395,7 @@ public class PlayerDeathHandler {
                 hasEvilBatsTransformation.set(variables.isEvilBatsTransformed);
                 hasNecromTransformation.set(variables.isMegaUiorderTransformed);
                 hasDarkKivaTransformation.set(variables.isDarkKivaBeltEquipped);
+                hasQueenBeeTransformation.set(variables.isQueenBeeTransformed);
             });
         } else {
             // 客户端也需要检查这些状态（通过本地变量）
@@ -402,7 +404,8 @@ public class PlayerDeathHandler {
         
         // 如果任何变身状态变量为true，直接返回true
         if (hasDarkGhostTransformation.get() || hasDarkOrangelsTransformation.get() ||
-                hasEvilBatsTransformation.get() || hasNecromTransformation.get() || hasDarkKivaTransformation.get()) {
+                hasEvilBatsTransformation.get() || hasNecromTransformation.get() || 
+                hasDarkKivaTransformation.get() || hasQueenBeeTransformation.get()) {
             return true;
         }
         
@@ -589,6 +592,8 @@ public class PlayerDeathHandler {
             return "DRAGONFRUIT";
         } else if (helmet.getItem() == ModItems.NOX_KNIGHT_HELMET.get()) {
             return "NOX";
+        } else if (helmet.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.quinbee.QuinbeeItem) {
+            return "QUEEN_BEE";
         }
 
         // 如果没有匹配的头盔，检查胸甲
@@ -610,6 +615,8 @@ public class PlayerDeathHandler {
             return "DRAGONFRUIT";
         } else if (chestplate.getItem() == ModItems.NOX_KNIGHT_CHESTPLATE.get()) {
             return "NOX";
+        } else if (chestplate.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.quinbee.QuinbeeItem) {
+            return "QUEEN_BEE";
         }
 
         return ""; // 没有找到匹配的盔甲类型

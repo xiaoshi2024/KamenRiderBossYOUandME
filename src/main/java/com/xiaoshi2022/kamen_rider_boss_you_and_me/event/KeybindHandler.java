@@ -459,6 +459,29 @@ public class KeybindHandler {
                         }
                     });
         }
+
+        // Queen Bee（阿吉雷亚）解除变身逻辑
+        if (!handled.get()) {
+            findFirstCurio(player, stack -> stack.getItem() instanceof WeekEndriver)
+                    .ifPresent(curio -> {
+                        ItemStack beltStack = curio.stack();
+                        WeekEndriver belt = (WeekEndriver) beltStack.getItem();
+
+                        // 检查腰带模式是否为女王蜂
+                        if (belt.getMode(beltStack) == WeekEndriver.BeltMode.QUEEN_BEE) {
+                            // 检查玩家是否穿着女王蜂盔甲
+                            boolean isQueenBeeArmor = player.getInventory().armor.get(3).is(ModItems.QUINBEE_HELMET.get()) &&
+                                    player.getInventory().armor.get(2).is(ModItems.QUINBEE_CHESTPLATE.get()) &&
+                                    player.getInventory().armor.get(1).is(ModItems.QUINBEE_LEGGINGS.get());
+
+                            if (isQueenBeeArmor) {
+                                // 发送解除变身请求
+                                PacketHandler.sendToServer(new ReleaseBeltPacket(true, "QUEEN_BEE"));
+                                handled.set(true);
+                            }
+                        }
+                    });
+        }
     }
 
     public static void completeBeltRelease(ServerPlayer player, String beltType) {
@@ -474,6 +497,7 @@ public class KeybindHandler {
             case "RIDERNECROM"      -> handleNecromRelease(player);      // Rider Necrom
             case "DARK_GHOST"      -> handleDarkGhostRelease(player);    // 黑暗灵骑
             case "NAPOLEON_GHOST"  -> handleNapoleonGhostRelease(player); // 拿破仑魂
+            case "QUEEN_BEE"       -> TransformationHandler.completeBeltRelease(player, "QUEEN_BEE"); // 女王蜂（阿吉雷亚）
         }
     }
     

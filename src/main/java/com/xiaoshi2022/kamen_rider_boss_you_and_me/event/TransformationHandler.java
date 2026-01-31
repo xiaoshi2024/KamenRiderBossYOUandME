@@ -53,6 +53,7 @@ public class TransformationHandler {
                 case "RIDERNECROM" -> handleNecromRelease(player, vars);
                 case "DARK_GHOST" -> handleDarkGhostRelease(player, vars);
                 case "NAPOLEON_GHOST" -> handleNapoleonGhostRelease(player, vars);
+                case "QUEEN_BEE" -> handleQueenBeeRelease(player, vars);
             }
             
             // 同步玩家背包变化
@@ -609,6 +610,63 @@ public class TransformationHandler {
                 if (!player.getInventory().add(dragonfruitLockSeed)) {
                     player.spawnAtLocation(dragonfruitLockSeed);
                 }
+                
+                // 8. 播放解除音效
+                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                        ModBossSounds.LOCKOFF.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            }
+        }
+    }
+    
+    // 女王蜂（阿吉雷亚）解除变身
+    private static void handleQueenBeeRelease(ServerPlayer player, KRBVariables.PlayerVariables vars) {
+        Optional<SlotResult> curio = CuriosApi.getCuriosInventory(player)
+                .resolve().flatMap(inv -> inv.findFirstCurio(stack -> stack.getItem() instanceof WeekEndriver));
+        
+        if (curio.isPresent()) {
+            SlotResult slotResult = curio.get();
+            ItemStack beltStack = slotResult.stack();
+            WeekEndriver belt = (WeekEndriver) beltStack.getItem();
+            
+            // 检查腰带当前模式是否为女王蜂
+            if (belt.getMode(beltStack) == WeekEndriver.BeltMode.QUEEN_BEE) {
+                // 1. 清除玩家的变身盔甲
+                clearTransformationArmor(player);
+                
+                // 2. 重置腰带模式为默认
+                belt.setMode(beltStack, WeekEndriver.BeltMode.DEFAULT);
+                
+                // 3. 更新Curio槽位
+                CurioUtils.updateCurioSlot(
+                        player,
+                        slotResult.slotContext().identifier(),
+                        slotResult.slotContext().index(),
+                        beltStack
+                );
+                
+                // 4. 停止待机音效
+                ResourceLocation soundLoc = new ResourceLocation(
+                        "kamen_rider_boss_you_and_me",
+                        "queenbe_by"
+                );
+                PacketHandler.sendToAllTrackingAndSelf(
+                        new SoundStopPacket(player.getId(), soundLoc),
+                        player
+                );
+                
+                // 5. 清理变身武器
+                TransformationWeaponManager.clearTransformationWeapons(player);
+                
+                // 6. 返还女王蜂印章
+                ItemStack queenBeeStamp = new ItemStack(ModItems.QUEEN_BEE_STAMP.get());
+                if (!player.getInventory().add(queenBeeStamp)) {
+                    player.spawnAtLocation(queenBeeStamp);
+                }
+                
+                // 7. 重置女王蜂状态
+                vars.queenBee_ready = false;
+                vars.isQueenBeeTransformed = false;
+                vars.syncPlayerVariables(player);
                 
                 // 8. 播放解除音效
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),

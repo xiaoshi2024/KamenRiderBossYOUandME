@@ -360,6 +360,22 @@ public class PacketHandler {
                 KnightPoisonPacket::decode,
                 KnightPoisonPacket::handle);
         
+        // 注册Aguilera骑士飞行能力数据包
+        INSTANCE.registerMessage(
+                index++,
+                QuinbeeFlightPacket.class,
+                QuinbeeFlightPacket::toBytes,
+                QuinbeeFlightPacket::new,
+                QuinbeeFlightPacket::handle);
+        
+        // 注册Aguilera骑士针刺苦无攻击数据包
+        INSTANCE.registerMessage(
+                index++,
+                QuinbeeNeedleKunaiPacket.class,
+                QuinbeeNeedleKunaiPacket::toBytes,
+                QuinbeeNeedleKunaiPacket::new,
+                QuinbeeNeedleKunaiPacket::handle);
+        
         // 注册KnightInvoker变身数据包
         INSTANCE.registerMessage(index++,
                 KnightInvokerHenshinPacket.class,

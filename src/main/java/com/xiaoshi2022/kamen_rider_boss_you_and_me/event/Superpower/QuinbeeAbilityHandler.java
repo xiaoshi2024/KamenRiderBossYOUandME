@@ -143,6 +143,9 @@ public final class QuinbeeAbilityHandler {
                 variables.quinbee_flight_end_time = 0;
                 variables.syncPlayerVariables(sp);
             }
+            
+            // 添加Aguilera骑士的初始buff效果
+            applyAguileraBuffs(sp);
         } else {
             // 未穿着Queen Bee盔甲，重置飞行状态
             if (variables.quinbee_flight_end_time > 0) {
@@ -151,6 +154,47 @@ public final class QuinbeeAbilityHandler {
                 sp.onUpdateAbilities();
                 variables.quinbee_flight_end_time = 0;
                 variables.syncPlayerVariables(sp);
+            }
+        }
+    }
+    
+    // 应用Aguilera骑士的初始buff效果
+    private static void applyAguileraBuffs(ServerPlayer player) {
+        if (!player.level().isClientSide()) {
+            // 添加跳跃提升效果（与飞行能力相关）
+            MobEffectInstance jumpEffect = player.getEffect(MobEffects.JUMP);
+            if (jumpEffect == null || jumpEffect.getAmplifier() < 1) {
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.JUMP,
+                        400,
+                        1,
+                        false,
+                        false
+                ));
+            }
+            
+            // 添加攻击力提升效果
+            MobEffectInstance strengthEffect = player.getEffect(MobEffects.DAMAGE_BOOST);
+            if (strengthEffect == null || strengthEffect.getAmplifier() < 0) {
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.DAMAGE_BOOST,
+                        400,
+                        0,
+                        false,
+                        false
+                ));
+            }
+            
+            // 添加生命恢复效果（体现赎罪意志）
+            MobEffectInstance regenerationEffect = player.getEffect(MobEffects.REGENERATION);
+            if (regenerationEffect == null || regenerationEffect.getAmplifier() < 0) {
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.REGENERATION,
+                        400,
+                        0,
+                        false,
+                        false
+                ));
             }
         }
     }

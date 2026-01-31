@@ -90,6 +90,9 @@ public class ReleaseBeltPacket {
                 // 处理黑暗灵骑解除变身
                 TransformationHandler.completeBeltRelease(player, "DARK_GHOST");
             }
+            case "QUEEN_BEE" -> {
+                TransformationHandler.completeBeltRelease(player, "QUEEN_BEE");
+            }
         }
     }
 

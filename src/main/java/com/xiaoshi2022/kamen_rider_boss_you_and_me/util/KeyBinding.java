@@ -288,8 +288,11 @@ public class KeyBinding {
             }
         }
 
+        // 检测玩家是否穿着斩月盔甲
+        boolean isZangetsuShinArmorEquipped = isZangetsuShinArmorEquipped(mc.player);
+        
         // 眼魔玩家或幽冥玩家专属功能：按下B键变身为眼魂实体，按下Shift+B键变回到人形
-        if ((isDarkGhostTransformed || isNecromTransformed || isGhostEye)) {
+        if ((isDarkGhostTransformed || isNecromTransformed || isGhostEye) && !isZangetsuShinArmorEquipped) {
             if (KEY_BLAST.consumeClick()) {
                 if (hasShiftDown()) {
                     // Shift+B键：变回到人形
@@ -451,6 +454,13 @@ public class KeyBinding {
             if (KEY_BLAST.consumeClick()) {
                 PacketHandler.sendToServer(new TyrantIntangibilityTogglePacket());
             }
+        } else if (isZangetsuShinArmorEquipped) {
+            // 斩月盔甲使用B键触发技能
+            if (KEY_BLAST.consumeClick()) {
+                // 这里可以添加斩月的B键技能逻辑
+                // 例如：PacketHandler.sendToServer(new ZangetsuShinSkillPacket());
+                mc.player.displayClientMessage(net.minecraft.network.chat.Component.literal("斩月技能触发！"), true);
+            }
         } else {
             // 基础形态下的技能已被移除
             // 但是如果玩家拥有Overlord标签，允许按下技能3键召唤异域者
@@ -490,6 +500,22 @@ public class KeyBinding {
                 
                 // 发送Breakam Cannon攻击数据包（必杀技：释放黑灰色光波擦除敌人）
                 PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.KnightInvokerErasePacket(mc.player.getId()));
+            }
+        }
+        // 检查玩家是否穿着Aguilera骑士盔甲
+        boolean isQuinbeeArmorEquipped = isQuinbeeArmorEquipped(mc.player);
+        
+        // 处理Aguilera骑士技能
+        if (isQuinbeeArmorEquipped) {
+            // V键：触发飞行能力
+            if (KEY_GUARD.consumeClick()) {
+                PacketHandler.sendToServer(new QuinbeeFlightPacket());
+                return;
+            }
+            // B键：触发针刺苦无攻击
+            if (KEY_BLAST.consumeClick()) {
+                PacketHandler.sendToServer(new QuinbeeNeedleKunaiPacket());
+                return;
             }
         }
         // 其他情况：检查玩家是否手持蝙蝠印章并按下V键（骑士1键）
@@ -737,5 +763,21 @@ public class KeyBinding {
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.NOX_KNIGHT_HELMET.get() &&
                 player.getItemBySlot(EquipmentSlot.CHEST).getItem() == ModItems.NOX_KNIGHT_CHESTPLATE.get() &&
                 player.getItemBySlot(EquipmentSlot.LEGS).getItem() == ModItems.NOX_KNIGHT_LEGGINGS.get();
+    }
+    
+    // 检测玩家是否穿着Aguilera骑士盔甲
+    private static boolean isQuinbeeArmorEquipped(LocalPlayer player) {
+        // 检查是否穿着Aguilera骑士头盔、胸甲和护腿
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.quinbee.QuinbeeItem &&
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.quinbee.QuinbeeItem &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.quinbee.QuinbeeItem;
+    }
+    
+    // 检测玩家是否穿着斩月盔甲
+    private static boolean isZangetsuShinArmorEquipped(LocalPlayer player) {
+        // 检查是否穿着斩月头盔、胸甲和护腿
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem &&
+                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem &&
+                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
     }
 }

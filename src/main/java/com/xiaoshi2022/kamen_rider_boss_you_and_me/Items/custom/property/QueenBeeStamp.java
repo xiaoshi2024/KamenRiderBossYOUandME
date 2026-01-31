@@ -131,6 +131,17 @@ public class QueenBeeStamp extends Item implements GeoItem {
                     // 触发WeekEndriver的henshin-a动画
                     // 这里需要直接调用startHenshinAnimation方法，而不是triggerAnim
                     beltx.startHenshinAnimation(player, beltStack);
+                    
+                    // 播放玩家动画queenbeea
+                    if (player instanceof ServerPlayer sp) {
+                        PacketHandler.sendAnimationToAllTrackingAndSelf(
+                                Component.literal("queenbeea"),
+                                player.getId(),
+                                true,
+                                sp
+                        );
+                    }
+                    
                     // 发送客户端提示消息
                     player.sendSystemMessage(Component.literal("女王蜂印章已装载！按变身键变身"));
                 }
