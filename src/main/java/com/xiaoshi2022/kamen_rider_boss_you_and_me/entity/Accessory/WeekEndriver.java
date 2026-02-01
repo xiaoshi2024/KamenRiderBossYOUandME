@@ -483,8 +483,10 @@ public class WeekEndriver extends AbstractRiderBelt implements GeoItem, ICurioIt
     /* -------------------- 动画触发工具 -------------------- */
     public void triggerAnim(@Nullable LivingEntity entity, String ctrl, String anim) {
         if (entity == null || entity.level() == null) return;
-        if (entity instanceof ServerPlayer sp) {
-            Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(sp).resolve()
+        
+        // 服务端处理：发送动画包到所有跟踪者
+        if (!entity.level().isClientSide) {
+            Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(entity).resolve()
                     .flatMap(curios -> curios.findFirstCurio(item -> item.getItem() instanceof WeekEndriver));
             BeltMode mode = beltOptional.map(result -> getMode(result.stack())).orElse(DEFAULT);
             

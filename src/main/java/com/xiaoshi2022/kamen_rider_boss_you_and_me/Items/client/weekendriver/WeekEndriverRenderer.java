@@ -22,6 +22,7 @@ public class WeekEndriverRenderer extends GeoItemRenderer<WeekEndriver> implemen
     /* ---------- 形态模型 ---------- */
     private final WeekEndriverModel defaultModel = new WeekEndriverModel(WeekEndriver.BeltMode.DEFAULT);
     private final WeekEndriverModel queenBeeModel = new WeekEndriverModel(WeekEndriver.BeltMode.QUEEN_BEE);
+    private final WeekEndriverModel queenBeeEffectModel = new WeekEndriverModel(WeekEndriver.BeltMode.QUEEN_BEE, true);
 
     // 保存当前被渲染的物品栈
     private ItemStack currentItemStack;
@@ -30,14 +31,21 @@ public class WeekEndriverRenderer extends GeoItemRenderer<WeekEndriver> implemen
         super(new WeekEndriverModel());
     }
 
-    /* ---------- 根据腰带模式返回对应模型 ---------- */
+    /* ---------- 根据腰带模式和状态返回对应模型 ---------- */
     @Override
     public GeoModel<WeekEndriver> getGeoModel() {
         if (currentItemStack != null && currentItemStack.getItem() instanceof WeekEndriver belt) {
-            return switch (belt.getMode(currentItemStack)) {
-                case QUEEN_BEE -> queenBeeModel;
-                default        -> defaultModel;
-            };
+            WeekEndriver.BeltMode mode = belt.getMode(currentItemStack);
+            if (mode == WeekEndriver.BeltMode.QUEEN_BEE) {
+                // 检查是否正在变身过程中（henshin状态），如果是则使用特效模型
+                boolean isHenshin = belt.getHenshin(currentItemStack);
+                boolean shouldPlayHenshinB = belt.getShouldPlayHenshinB(currentItemStack);
+                if (isHenshin || shouldPlayHenshinB) {
+                    return queenBeeEffectModel;
+                }
+                return queenBeeModel;
+            }
+            return defaultModel;
         }
         return super.getGeoModel();
     }
