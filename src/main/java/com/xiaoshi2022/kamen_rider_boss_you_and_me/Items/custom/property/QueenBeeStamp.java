@@ -117,9 +117,10 @@ public class QueenBeeStamp extends Item implements GeoItem {
                 beltx.setShowing(beltStack, false);     // 不显示show动画
                 beltx.setActive(beltStack, true);       // 设置激活状态
 
-                // 播放腰带变身待机音（在客户端播放）
-                if (level.isClientSide) {
-                    player.playSound(ModBossSounds.QUEENBE_BY.get(), 1.0F, 1.0F);
+                // 播放腰带变身待机音（在服务器端播放，让所有玩家都能听到）
+                if (!level.isClientSide) {
+                    player.level().playSound(null, player.getX(), player.getY(), player.getZ(), 
+                            ModBossSounds.QUEENBE_BY.get(), net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
 
                 // 获取PlayerVariables实例并设置状态

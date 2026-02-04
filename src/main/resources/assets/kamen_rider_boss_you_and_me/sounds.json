@@ -403,5 +403,59 @@
         "stream": false
       }
     ]
+  },
+  "build_hazard": {
+    "subtitle": "Hazard on",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:build_hazard",
+        "stream": false
+      }
+    ]
+  },
+  "hazard_henshin": {
+    "subtitle": "失控开关！兔子和坦克~超级危险~",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:hazard_henshin",
+        "stream": false
+      }
+    ]
+  },
+  "rabbit": {
+    "subtitle": "Rabbit!",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:rabbit",
+        "stream": false
+      }
+    ]
+  },
+  "tank": {
+    "subtitle": "Tank!",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:tank",
+        "stream": false
+      }
+    ]
+  },
+  "super_best_match": {
+    "subtitle": "Super Best Match!",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:super_best_match",
+        "stream": false
+      }
+    ]
+  },
+  "rt_by": {
+    "subtitle": "跳 坦 坦克 坦!",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:rt_by",
+        "stream": false
+      }
+    ]
   }
 }

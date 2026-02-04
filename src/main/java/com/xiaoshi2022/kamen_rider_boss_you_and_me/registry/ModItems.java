@@ -23,6 +23,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.sigurd.Sigur
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.TyrantItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.quinbee.QuinbeeItem;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.blackbuild.BlackBuild;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.world.entity.player.Player;
@@ -50,6 +51,18 @@ public class ModItems {
     public static final RegistryObject<BrainEyeglass> BRAIN_EYEGLASS = ModItems.ITEMS.register(
             "brain_eyeglass",
             ()-> new BrainEyeglass(new Item.Properties()));
+
+    // 危险扳机 - 创骑驱动器的危险模式触发器
+    public static final RegistryObject<HazardTrigger> HAZARD_TRIGGER = ITEMS.register("hazard_trigger",
+            () -> new HazardTrigger(new Item.Properties()));
+
+    // 兔子瓶 - 创骑驱动器的兔子满装瓶
+    public static final RegistryObject<RabbitItem> RABBIT_ITEM = ITEMS.register("rabbit",
+            () -> new RabbitItem(new Item.Properties()));
+
+    // 坦克瓶 - 创骑驱动器的坦克满装瓶
+    public static final RegistryObject<TankItem> TANK_ITEM = ITEMS.register("tank",
+            () -> new TankItem(new Item.Properties()));
 
     // 双面武器-剑形态
     public static final RegistryObject<TwoWeaponSwordItem> TWO_WEAPON_SWORD = ITEMS.register("two_weapon_sword",
@@ -215,6 +228,9 @@ public class ModItems {
     public static final RegistryObject<EraseCapsem> ERASE_CAPSEM = ITEMS.register("erase_capsem",
             () -> new EraseCapsem(new Item.Properties()));
 
+    public static final RegistryObject<BuildDriver> BUILD_DRIVER = ITEMS.register("build_driver",
+            () -> new BuildDriver(new Item.Properties().stacksTo(1)));
+
 
     public static final RegistryObject<RidernecromItem> RIDERNECROM_HELMET = ITEMS.register("ridernecrom_helmet", () -> new RidernecromItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<RidernecromItem> RIDERNECROM_CHESTPLATE = ITEMS.register("ridernecrom_chestplate", () -> new RidernecromItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
@@ -286,6 +302,10 @@ public class ModItems {
     public static final RegistryObject<QuinbeeItem> QUINBEE_HELMET = ITEMS.register("quinbee_helmet", () -> new QuinbeeItem(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<QuinbeeItem> QUINBEE_CHESTPLATE = ITEMS.register("quinbee_chestplate", () -> new QuinbeeItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<QuinbeeItem> QUINBEE_LEGGINGS = ITEMS.register("quinbee_leggings", () -> new QuinbeeItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    public static final RegistryObject<BlackBuild> BLACK_BUILD_HELMET = ITEMS.register("black_build_helmet", () -> new BlackBuild(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<BlackBuild> BLACK_BUILD_CHESTPLATE = ITEMS.register("black_build_chestplate", () -> new BlackBuild(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<BlackBuild> BLACK_BUILD_LEGGINGS = ITEMS.register("black_build_leggings", () -> new BlackBuild(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
     // 基夫眼珠 - 击败基夫人形后掉落 (Geo物品)
     public static final RegistryObject<GiifuEyeBall> GIIFU_EYEBALL = ITEMS.register("giifu_eyeball",

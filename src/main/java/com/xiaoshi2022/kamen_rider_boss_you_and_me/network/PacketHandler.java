@@ -84,6 +84,9 @@ public class PacketHandler {
         
         // 注册 QueenBeeTransformationRequestPacket
         INSTANCE.registerMessage(index++, QueenBeeTransformationRequestPacket.class, QueenBeeTransformationRequestPacket::encode, QueenBeeTransformationRequestPacket::decode, QueenBeeTransformationRequestPacket::handle);
+        
+        // 注册 BlackBuildTransformationRequestPacket
+        INSTANCE.registerMessage(index++, BlackBuildTransformationRequestPacket.class, BlackBuildTransformationRequestPacket::encode, BlackBuildTransformationRequestPacket::decode, BlackBuildTransformationRequestPacket::handle);
 
         INSTANCE.registerMessage(index++, SyncTransformationPacket.class,
                 SyncTransformationPacket::encode,

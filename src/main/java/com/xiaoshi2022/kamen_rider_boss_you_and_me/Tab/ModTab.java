@@ -50,6 +50,10 @@ public class ModTab {
                 output.accept(KNIGHT_INVOKER_BUCKLE.get());
                 output.accept(WEEK_ENDRIVER.get());
                 output.accept(QUEEN_BEE_STAMP.get());
+                output.accept(BUILD_DRIVER.get());
+                output.accept(HAZARD_TRIGGER.get());
+                output.accept(TANK_ITEM.get());
+                output.accept(RABBIT_ITEM.get());
             })).build());
     public static final RegistryObject<CreativeModeTab> KINDS_TAB = TABS.register("kamen_rider_boss_you_and_me_kinds_tab", () -> CreativeModeTab.builder()
             .icon(() -> INVES_MEAT.get().getDefaultInstance())

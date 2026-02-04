@@ -59,6 +59,10 @@ public class BeltAnimationPacket {
         this(entityId, animationName, "weekendriver", mode.name());
     }
 
+    public BeltAnimationPacket(int entityId, String animationName, BuildDriver.BeltMode mode) {
+        this(entityId, animationName, "builddriver", mode.name());
+    }
+
     public BeltAnimationPacket(int entityId) {
         this(entityId, "", "", "");
     }
@@ -102,6 +106,8 @@ public class BeltAnimationPacket {
                 return new BeltAnimationPacket(id, anim, KnightInvokerBuckle.BeltMode.valueOf(mode)); // 添加对 KnightInvokerBuckle 的处理
             case "weekendriver":
                 return new BeltAnimationPacket(id, anim, WeekEndriver.BeltMode.valueOf(mode)); // 添加对 WeekEndriver 的处理
+            case "builddriver":
+                return new BeltAnimationPacket(id, anim, BuildDriver.BeltMode.valueOf(mode)); // 添加对 BuildDriver 的处理
             default:
                 return new BeltAnimationPacket(id, anim, beltType, mode);
         }
@@ -151,6 +157,8 @@ public class BeltAnimationPacket {
                         ki.triggerAnim(living, "controller", animationName);
                     } else if (item instanceof WeekEndriver weekEndriver) {
                         weekEndriver.triggerAnim(living, "controller", animationName);
+                    } else if (item instanceof BuildDriver buildDriver) {
+                        buildDriver.triggerAnim(living, "controller", animationName);
                     }
                 }
             });

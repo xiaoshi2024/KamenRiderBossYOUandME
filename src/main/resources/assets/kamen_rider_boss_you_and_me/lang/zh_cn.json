@@ -325,6 +325,23 @@
   "item.kamen_rider_boss_you_and_me.week_endriver": "Week Endriver腰带",
   "item.kamen_rider_boss_you_and_me.week_endriver.tooltip": "[提示] 带上腰带饰品槽位，可与女王蜂印章联动变身。",
   "item.kamen_rider_boss_you_and_me.quinbee_stamp": "女王蜂印章",
-  "item.kamen_rider_boss_you_and_me.quinbee_stamp.tooltip": "[提示] 与Week Endriver腰带联动，右键两次后按下X键变身。"
+  "item.kamen_rider_boss_you_and_me.quinbee_stamp.tooltip": "[提示] 与Week Endriver腰带联动，右键两次后按下X键变身。",
+
+  "item.kamen_rider_boss_you_and_me.build_driver": "创骑驱动器",
+  "item.kamen_rider_boss_you_and_me.build_driver.tooltip": "[提示] 带上腰带饰品槽位，可进行创骑变身。",
+  "item.kamen_rider_boss_you_and_me.hazard_trigger": "危险扳机",
+  "item.kamen_rider_boss_you_and_me.hazard_trigger.tooltip": "[提示] 创骑驱动器的危险模式触发器，持有后自动激活危险模式。",
+
+  "item.kamen_rider_boss_you_and_me.rabbit": "兔子满装瓶",
+  "item.kamen_rider_boss_you_and_me.rabbit.tooltip": "[提示] 创骑驱动器的兔子满装瓶，用于创骑变身。",
+  "item.kamen_rider_boss_you_and_me.tank": "坦克满装瓶",
+  "item.kamen_rider_boss_you_and_me.tank.tooltip": "[提示] 创骑驱动器的坦克满装瓶，用于创骑变身。",
+
+  "item.kamen_rider_boss_you_and_me.black_build_helmet": "危险兔坦头盔",
+  "item.kamen_rider_boss_you_and_me.black_build_chestplate": "危险兔坦胸甲",
+  "item.kamen_rider_boss_you_and_me.black_build_leggings": "危险兔坦护腿",
+  "item.kamen_rider_boss_you_and_me.black_build_helmet.tooltip": "[提示] 危险兔坦头盔。",
+  "item.kamen_rider_boss_you_and_me.black_build_chestplate.tooltip": "[提示] 危险兔坦胸甲。",
+  "item.kamen_rider_boss_you_and_me.black_build_leggings.tooltip": "[提示] 危险兔坦护腿。"
 
 }

@@ -118,4 +118,20 @@ public static final RegistryObject<SoundEvent> AIDEN_OWC = REGISTRY.register("ai
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "dragonfruit_energy")));
     public static final RegistryObject<SoundEvent> DRAGONFRUIT_ARMS = REGISTRY.register("dragonfruit_arms",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "dragonfruit_arms")));
+    
+    // Build音效
+    public static final RegistryObject<SoundEvent> HAZARD_HENSHIN = REGISTRY.register("hazard_henshin",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "hazard_henshin")));
+    public static final RegistryObject<SoundEvent> SUPER_BEST_MATCH = REGISTRY.register("super_best_match",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "super_best_match")));
+    public static final RegistryObject<SoundEvent> RABBIT = REGISTRY.register("rabbit",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "rabbit")));
+    public static final RegistryObject<SoundEvent> TANK = REGISTRY.register("tank",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "tank")));
+    public static final RegistryObject<SoundEvent> RT_BY = REGISTRY.register("rt_by",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "rt_by")));
+
+
+    public static final RegistryObject<SoundEvent> BUILD_HAZARD = REGISTRY.register("build_hazard",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "build_hazard")));
 }

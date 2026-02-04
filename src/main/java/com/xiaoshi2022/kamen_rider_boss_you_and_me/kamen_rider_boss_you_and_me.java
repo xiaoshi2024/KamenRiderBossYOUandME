@@ -330,6 +330,7 @@ public class kamen_rider_boss_you_and_me
                 top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.BRAIN_DRIVER.get(),()->new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.braindriver.BrainDriverRenderer());
                 top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.KNIGHT_INVOKER_BUCKLE.get(),()-> new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.knightinvoker.KnightInvokerBuckleRenderer());
                 top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.WEEK_ENDRIVER.get(),()-> new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.weekendriver.WeekEndriverRenderer());
+                top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.BUILD_DRIVER.get(),()-> new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.builddriver.BuildDriverRenderer());
 
                 top.theillusivec4.curios.api.client.CuriosRendererRegistry.register(ModItems.BRAIN_EYEGLASS.get(),()->new com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.BrainEyeglss.BrainEyeglassRenderer());
 

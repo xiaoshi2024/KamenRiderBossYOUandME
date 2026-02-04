@@ -129,12 +129,14 @@ public class KRBVariables {
 		clone.isMegaUiorderTransformed = false; // 玩家死亡时重置手环变身状态
 		clone.isNecromTemporaryRemoved = false; // 玩家死亡时重置眼魂临时移除状态
 		clone.isBrainDriverEquipped = false; // 玩家死亡时重置BrainDriver装备状态
-			clone.isBrainTransformed = false; // 玩家死亡时重置Brain变身状态
-			clone.isKnightInvokerEquipped = false; // 玩家死亡时重置KnightInvokerBuckle装备状态
-			clone.isWeekEndriverEquipped = false; // 玩家死亡时重置WeekEndriver装备状态
-			clone.queenBee_ready = false; // 玩家死亡时重置Queen Bee准备状态
-			clone.queenBee_ready_time = 0L; // 玩家死亡时重置Queen Bee准备时间
-			clone.isQueenBeeTransformed = false; // 玩家死亡时重置Queen Bee变身状态
+						clone.isBrainTransformed = false; // 玩家死亡时重置Brain变身状态
+						clone.isKnightInvokerEquipped = false; // 玩家死亡时重置KnightInvokerBuckle装备状态
+						clone.isWeekEndriverEquipped = false; // 玩家死亡时重置WeekEndriver装备状态
+						clone.isBuildDriverEquipped = false; // 玩家死亡时重置BuildDriver装备状态
+						clone.queenBee_ready = false; // 玩家死亡时重置Queen Bee准备状态
+						clone.queenBee_ready_time = 0L; // 玩家死亡时重置Queen Bee准备时间
+						clone.isQueenBeeTransformed = false; // 玩家死亡时重置Queen Bee变身状态
+						clone.isBlackBuildTransformed = false; // 玩家死亡时重置BlackBuild变身状态
 			// 修改：玩家死亡后恢复为人类
 			clone.isGiifu = false;
 			// 保留baseMaxHealth值，不再强制重置为默认值，以保留通过命令设置的生命值
@@ -292,9 +294,11 @@ public class KRBVariables {
 	public boolean isBrainTransformed = false; // 新增字段：记录是否变身为Brain形态
 	public boolean isKnightInvokerEquipped = false; // 新增字段：记录是否装备了KnightInvokerBuckle
 	public boolean isWeekEndriverEquipped = false; // 新增字段：记录是否装备了WeekEndriver腰带
+	public boolean isBuildDriverEquipped = false; // 新增字段：记录是否装备了BuildDriver腰带
 public boolean queenBee_ready = false; // 新增字段：记录是否准备好变身为Queen Bee形态
 public long queenBee_ready_time = 0L; // 新增字段：记录Queen Bee准备时间
 public boolean isQueenBeeTransformed = false; // 新增字段：记录是否变身为Queen Bee形态
+public boolean isBlackBuildTransformed = false; // 新增字段：记录是否变身为BlackBuild形态
 
 	public void syncPlayerVariables(Entity entity) {
 		if (entity instanceof ServerPlayer serverPlayer) {
@@ -436,11 +440,13 @@ public boolean isQueenBeeTransformed = false; // 新增字段：记录是否变�
 		}
 		nbt.putBoolean("isBrainDriverEquipped", isBrainDriverEquipped);
 	nbt.putBoolean("isBrainTransformed", isBrainTransformed);
-nbt.putBoolean("isKnightInvokerEquipped", isKnightInvokerEquipped);
-nbt.putBoolean("isWeekEndriverEquipped", isWeekEndriverEquipped);
-nbt.putBoolean("queenBee_ready", queenBee_ready);
-nbt.putLong("queenBee_ready_time", queenBee_ready_time);
-nbt.putBoolean("isQueenBeeTransformed", isQueenBeeTransformed);
+	nbt.putBoolean("isKnightInvokerEquipped", isKnightInvokerEquipped);
+	nbt.putBoolean("isWeekEndriverEquipped", isWeekEndriverEquipped);
+	nbt.putBoolean("isBuildDriverEquipped", isBuildDriverEquipped);
+	nbt.putBoolean("queenBee_ready", queenBee_ready);
+	nbt.putLong("queenBee_ready_time", queenBee_ready_time);
+	nbt.putBoolean("isQueenBeeTransformed", isQueenBeeTransformed);
+	nbt.putBoolean("isBlackBuildTransformed", isBlackBuildTransformed);
 		return nbt;
 	}
 
@@ -571,11 +577,13 @@ nbt.putBoolean("isQueenBeeTransformed", isQueenBeeTransformed);
 		}
 		isBrainDriverEquipped = nbt.contains("isBrainDriverEquipped") ? nbt.getBoolean("isBrainDriverEquipped") : false;
 	isBrainTransformed = nbt.contains("isBrainTransformed") ? nbt.getBoolean("isBrainTransformed") : false;
-isKnightInvokerEquipped = nbt.contains("isKnightInvokerEquipped") ? nbt.getBoolean("isKnightInvokerEquipped") : false;
-isWeekEndriverEquipped = nbt.contains("isWeekEndriverEquipped") ? nbt.getBoolean("isWeekEndriverEquipped") : false;
-queenBee_ready = nbt.contains("queenBee_ready") ? nbt.getBoolean("queenBee_ready") : false;
-queenBee_ready_time = nbt.contains("queenBee_ready_time") ? nbt.getLong("queenBee_ready_time") : 0L;
-isQueenBeeTransformed = nbt.contains("isQueenBeeTransformed") ? nbt.getBoolean("isQueenBeeTransformed") : false;
+	isKnightInvokerEquipped = nbt.contains("isKnightInvokerEquipped") ? nbt.getBoolean("isKnightInvokerEquipped") : false;
+	isWeekEndriverEquipped = nbt.contains("isWeekEndriverEquipped") ? nbt.getBoolean("isWeekEndriverEquipped") : false;
+	isBuildDriverEquipped = nbt.contains("isBuildDriverEquipped") ? nbt.getBoolean("isBuildDriverEquipped") : false;
+	queenBee_ready = nbt.contains("queenBee_ready") ? nbt.getBoolean("queenBee_ready") : false;
+	queenBee_ready_time = nbt.contains("queenBee_ready_time") ? nbt.getLong("queenBee_ready_time") : 0L;
+	isQueenBeeTransformed = nbt.contains("isQueenBeeTransformed") ? nbt.getBoolean("isQueenBeeTransformed") : false;
+	isBlackBuildTransformed = nbt.contains("isBlackBuildTransformed") ? nbt.getBoolean("isBlackBuildTransformed") : false;
 	}
 	}
 
@@ -699,11 +707,13 @@ isQueenBeeTransformed = nbt.contains("isQueenBeeTransformed") ? nbt.getBoolean("
 						variables.originalBrainArmor = message.data.originalBrainArmor;
 						variables.isBrainDriverEquipped = message.data.isBrainDriverEquipped;
 						variables.isBrainTransformed = message.data.isBrainTransformed;
-variables.isKnightInvokerEquipped = message.data.isKnightInvokerEquipped;
-variables.isWeekEndriverEquipped = message.data.isWeekEndriverEquipped;
-variables.queenBee_ready = message.data.queenBee_ready;
-variables.queenBee_ready_time = message.data.queenBee_ready_time;
-variables.isQueenBeeTransformed = message.data.isQueenBeeTransformed;
+					variables.isKnightInvokerEquipped = message.data.isKnightInvokerEquipped;
+					variables.isWeekEndriverEquipped = message.data.isWeekEndriverEquipped;
+					variables.isBuildDriverEquipped = message.data.isBuildDriverEquipped;
+					variables.queenBee_ready = message.data.queenBee_ready;
+					variables.queenBee_ready_time = message.data.queenBee_ready_time;
+					variables.isQueenBeeTransformed = message.data.isQueenBeeTransformed;
+					variables.isBlackBuildTransformed = message.data.isBlackBuildTransformed;
 				}
 			}
 		}

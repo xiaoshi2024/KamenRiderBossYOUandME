@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.BrainEyeglss.BrainEyeglassRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.Mega_uiorder_item.Mega_uiorderRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.braindriver.BrainDriverRenderer;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.builddriver.BuildDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.drakkivabelt.DrakKivaBeltRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.genesisdriver.GenesisDriverRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.ghostdriver.GhostDriverRenderer;
@@ -35,6 +36,7 @@ public class GenericCurioRenderer implements ICurioRenderer {
     private final ICurioRenderer brain_driverRenderer = new BrainDriverRenderer();
     private final ICurioRenderer knightInvokerBuckleRenderer = new KnightInvokerBuckleRenderer();
     private final ICurioRenderer weekendriverRenderer = new WeekEndriverRenderer();
+    private final ICurioRenderer buildriverRenderer = new BuildDriverRenderer();
 
 
     @Override
@@ -58,6 +60,8 @@ public class GenericCurioRenderer implements ICurioRenderer {
                 knightInvokerBuckleRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }else if (stack.getItem() instanceof WeekEndriver) {
                 weekendriverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            }else if (stack.getItem() instanceof BuildDriver) {
+                buildriverRenderer.render(stack, slotContext, matrixStack, renderLayerParent, buffer, light, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
             }
 
             else if (stack.getItem() instanceof BrainEyeglass) {

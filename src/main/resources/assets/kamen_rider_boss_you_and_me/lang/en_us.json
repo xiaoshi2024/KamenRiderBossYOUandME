@@ -356,6 +356,23 @@
   "item.kamen_rider_boss_you_and_me.week_endriver": "Week Endriver",
   "item.kamen_rider_boss_you_and_me.week_endriver.tooltip": "[Tip] Equip in belt accessory slot. Can be used with Queen Bee Stamp for transformation.",
   "item.kamen_rider_boss_you_and_me.quinbee_stamp": "Queen Bee Stamp",
-  "item.kamen_rider_boss_you_and_me.quinbee_stamp.tooltip": "[Tip] Used with Week Endriver. Right-click twice, then press X to transform."
+  "item.kamen_rider_boss_you_and_me.quinbee_stamp.tooltip": "[Tip] Used with Week Endriver. Right-click twice, then press X to transform.",
+
+  "item.kamen_rider_boss_you_and_me.build_driver": "Build Driver",
+  "item.kamen_rider_boss_you_and_me.build_driver.tooltip": "[Tip] Equip in belt accessory slot. Can be used for Build transformation.",
+  "item.kamen_rider_boss_you_and_me.hazard_trigger": "Hazard Trigger",
+  "item.kamen_rider_boss_you_and_me.hazard_trigger.tooltip": "[Tip] Hazard Mode trigger for Build Driver, automatically activates Hazard Mode when held.",
+
+  "item.kamen_rider_boss_you_and_me.rabbit": "Rabbit Full Bottle",
+  "item.kamen_rider_boss_you_and_me.rabbit.tooltip": "[Tip] Rabbit Full Bottle for Build Driver, used for Build transformation.",
+  "item.kamen_rider_boss_you_and_me.tank": "Tank Full Bottle",
+  "item.kamen_rider_boss_you_and_me.tank.tooltip": "[Tip] Tank Full Bottle for Build Driver, used for Build transformation.",
+
+  "item.kamen_rider_boss_you_and_me.black_build_helmet": "Black Build Helmet",
+  "item.kamen_rider_boss_you_and_me.black_build_chestplate": "Black Build Chestplate",
+  "item.kamen_rider_boss_you_and_me.black_build_leggings": "Black Build Leggings",
+  "item.kamen_rider_boss_you_and_me.black_build_helmet.tooltip": "[Tooltip] Black Build Helmet.",
+  "item.kamen_rider_boss_you_and_me.black_build_chestplate.tooltip": "[Tooltip] Black Build Chestplate.",
+  "item.kamen_rider_boss_you_and_me.black_build_leggings.tooltip": "[Tooltip] Black Build Leggings."
 
 }

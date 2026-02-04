@@ -79,8 +79,9 @@ public class BeltRemovalHandler {
             boolean hasBrainDriver = hasSpecificBelt(player, "BrainDriver");
             boolean hasKnightInvokerBuckle = hasSpecificBelt(player, "KnightInvokerBuckle");
             boolean hasWeekEndriver = hasSpecificBelt(player, "WeekEndriver");
+            boolean hasBuildDriver = hasSpecificBelt(player, "BuildDriver");
             
-            return hasDrakKivaBelt || hasGenesisDriver || hasMegaUiorder || hasSengokuDriver || hasTwoSidriver || hasGhostDriver || hasBrainDriver || hasKnightInvokerBuckle || hasWeekEndriver;
+            return hasDrakKivaBelt || hasGenesisDriver || hasMegaUiorder || hasSengokuDriver || hasTwoSidriver || hasGhostDriver || hasBrainDriver || hasKnightInvokerBuckle || hasWeekEndriver || hasBuildDriver;
         } catch (Exception e) {
             // 发生异常时返回true，避免错误的解除变身
             return true;
@@ -207,8 +208,14 @@ public class BeltRemovalHandler {
         }
         
         // WeekEndriver变身检测
-        if (variables.queenBee_ready) {
+        if (variables.queenBee_ready || variables.isQueenBeeTransformed) {
             variables.removedBeltType = "QUEEN_BEE";
+            return;
+        }
+        
+        // BuildDriver变身检测
+        if (variables.isBuildDriverEquipped || variables.isBlackBuildTransformed) {
+            variables.removedBeltType = "BUILD";
             return;
         }
         
@@ -290,6 +297,11 @@ public class BeltRemovalHandler {
                 break;
             case "QUEEN_BEE":
                 variables.queenBee_ready = false;
+                variables.isQueenBeeTransformed = false;
+                break;
+            case "BUILD":
+                variables.isBuildDriverEquipped = false;
+                variables.isBlackBuildTransformed = false;
                 break;
         }
     }
