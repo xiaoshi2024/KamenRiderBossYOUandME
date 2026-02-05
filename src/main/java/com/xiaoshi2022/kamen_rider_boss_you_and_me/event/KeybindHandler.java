@@ -5,10 +5,12 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.*;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.rider_necrom.RidernecromItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.custom.KnecromghostEntity;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.ReleaseBeltPacket;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.WeaponRemovePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.*;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BuildDriverReleasePacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.varibales.KRBVariables;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
@@ -479,6 +481,24 @@ public class KeybindHandler {
                                 PacketHandler.sendToServer(new ReleaseBeltPacket(true, "QUEEN_BEE"));
                                 handled.set(true);
                             }
+                        }
+                    });
+        }
+
+        // BuildDriver 解除变身逻辑
+        if (!handled.get()) {
+            findFirstCurio(player, stack -> stack.getItem() instanceof BuildDriver)
+                    .ifPresent(curio -> {
+                        ItemStack beltStack = curio.stack();
+                        BuildDriver belt = (BuildDriver) beltStack.getItem();
+
+                        // 检查玩家是否穿着 Black Build 盔甲
+                        boolean isBlackBuildArmor = player.getInventory().armor.get(3).getItem() == ModItems.BLACK_BUILD_HELMET.get();
+
+                        if (isBlackBuildArmor) {
+                            // 发送 BuildDriver 解除变身请求
+                            PacketHandler.sendToServer(new BuildDriverReleasePacket(player.getUUID()));
+                            handled.set(true);
                         }
                     });
         }

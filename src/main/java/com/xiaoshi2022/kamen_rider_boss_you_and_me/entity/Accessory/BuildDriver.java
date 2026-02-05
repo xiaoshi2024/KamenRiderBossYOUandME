@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.common.Mod;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.RabbitItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.TankItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.HazardTrigger;
@@ -228,23 +229,29 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         if (entity == null || stack == null || entity.level() == null) {
             return;
         }
-        
+
         setRelease(stack, true);
 
         BeltMode mode = getMode(stack);
-        String anim = "cancel";
+        String anim1 = "cancel";
+        String anim2 = "cancel_s";
 
-        System.out.println(">>> Server send packet: " + anim);
+        System.out.println(">>> Server send packet: " + anim1 + " and " + anim2);
 
         // 1. 服务端：把腰带动画名同步给所有追踪者
         if (!entity.level().isClientSide && entity instanceof ServerPlayer sp) {
+            // 发送 cancel 动画
             PacketHandler.sendToAllTracking(
-                    new BeltAnimationPacket(sp.getId(), anim, mode), sp);
+                    new BeltAnimationPacket(sp.getId(), anim1, mode), sp);
+            // 发送 cancel_s 动画
+            PacketHandler.sendToAllTracking(
+                    new BeltAnimationPacket(sp.getId(), anim2, mode), sp);
         }
 
         // 2. 客户端：本地线程直接播，不再发包
         if (entity.level().isClientSide) {
-            triggerAnim(entity, "controller", anim);
+            triggerAnim(entity, "controller", anim1);
+            triggerAnim(entity, "controller", anim2);
         }
     }
 
@@ -253,7 +260,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
      */
     public boolean hasHazardTrigger(LivingEntity entity) {
         if (entity == null || !(entity instanceof net.minecraft.world.entity.player.Player)) return false;
-        
+
         net.minecraft.world.entity.player.Player player = (net.minecraft.world.entity.player.Player) entity;
         // 检查玩家物品栏
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
@@ -270,7 +277,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
      */
     public boolean hasRabbitItem(LivingEntity entity) {
         if (entity == null || !(entity instanceof net.minecraft.world.entity.player.Player)) return false;
-        
+
         net.minecraft.world.entity.player.Player player = (net.minecraft.world.entity.player.Player) entity;
         // 检查玩家物品栏
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
@@ -287,7 +294,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
      */
     public boolean hasTankItem(LivingEntity entity) {
         if (entity == null || !(entity instanceof net.minecraft.world.entity.player.Player)) return false;
-        
+
         net.minecraft.world.entity.player.Player player = (net.minecraft.world.entity.player.Player) entity;
         // 检查玩家物品栏
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
@@ -304,10 +311,10 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
      */
     public void activateHazardMode(LivingEntity entity, ItemStack beltStack) {
         if (entity == null || beltStack == null) return;
-        
+
         BeltMode currentMode = getMode(beltStack);
         BeltMode newMode;
-        
+
         // 根据当前模式切换到对应的危险模式
         switch (currentMode) {
             case DEFAULT:
@@ -315,6 +322,17 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                 break;
             case RT:
                 newMode = BeltMode.HAZARD_RT;
+                // 延迟2秒播放Super Best Match音效
+                // 无论客户端还是服务器端都播放音效
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(2000); // 2秒延迟
+                        // 直接播放音效
+                        entity.playSound(ModBossSounds.SUPER_BEST_MATCH.get(), 1.0F, 1.0F);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
                 break;
             case R:
                 newMode = BeltMode.HAZARD_R;
@@ -326,9 +344,9 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                 newMode = BeltMode.HAZARD_EMPTY;
                 break;
         }
-        
+
         setMode(beltStack, newMode);
-        
+
         // 同步模式变更
         if (!entity.level().isClientSide && entity instanceof ServerPlayer sp) {
             PacketHandler.sendToAllTracking(
@@ -341,10 +359,10 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
      */
     public void deactivateHazardMode(LivingEntity entity, ItemStack beltStack) {
         if (entity == null || beltStack == null) return;
-        
+
         BeltMode currentMode = getMode(beltStack);
         BeltMode newMode;
-        
+
         // 根据当前危险模式切换回对应的普通模式
         switch (currentMode) {
             case HAZARD_RT:
@@ -360,9 +378,9 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                 newMode = BeltMode.DEFAULT;
                 break;
         }
-        
+
         setMode(beltStack, newMode);
-        
+
         // 同步模式变更
         if (!entity.level().isClientSide && entity instanceof ServerPlayer sp) {
             PacketHandler.sendToAllTracking(
@@ -398,7 +416,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             onBeltEquipped(player, stack);
         }
     }
-    
+
     /**
      * 实现基类的腰带装备逻辑
      */
@@ -407,7 +425,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         if (player == null || beltStack == null) {
             return;
         }
-        
+
         setShowing(beltStack, true);
         setActive(beltStack, false);
         setRelease(beltStack, false);
@@ -416,7 +434,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         PacketHandler.sendToAllTracking(
                 new BeltAnimationPacket(player.getId(), "show", DEFAULT),
                 player);
-        
+
         // 更新玩家变量
         player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
             variables.isBuildDriverEquipped = true;
@@ -432,21 +450,21 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         if (ctx == null || ctx.entity() == null || stack == null) {
             return;
         }
-        
+
         if (!(ctx.entity() instanceof LivingEntity)) {
             return;
         }
-        
+
         LivingEntity le = (LivingEntity) ctx.entity();
         setShowing(stack, false);
         setActive(stack, false);
-        
+
         if (le.level() != null && !le.level().isClientSide && le instanceof ServerPlayer sp) {
             PacketHandler.sendToAllTracking(new BeltAnimationPacket(sp.getId(), "idles", getMode(stack)), sp);
         }
-        
+
         triggerAnim(le, "controller", "idles");
-        
+
         // 更新玩家变量
         if (le instanceof ServerPlayer player) {
             player.getCapability(KRBVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> {
@@ -474,7 +492,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                     new BeltAnimationPacket(sp.getId(), "sync_state", getMode(stack)), sp);
         }
     }
-    
+
     /**
      * 处理玩家右键点击腰带的逻辑
      * 用于移除物品
@@ -483,28 +501,28 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         if (ctx == null || ctx.entity() == null || stack == null) {
             return false;
         }
-        
+
         if (!(ctx.entity() instanceof ServerPlayer sp)) {
             return false;
         }
-        
+
         ItemStack heldItem = sp.getMainHandItem();
-        
+
         // 检查是否持有满瓶或危险扳机
-        boolean isHoldingBottleOrTrigger = heldItem.getItem() instanceof RabbitItem || 
-                                          heldItem.getItem() instanceof TankItem || 
+        boolean isHoldingBottleOrTrigger = heldItem.getItem() instanceof RabbitItem ||
+                                          heldItem.getItem() instanceof TankItem ||
                                           heldItem.getItem() instanceof HazardTrigger;
-        
+
         // 空手持或持有满瓶/危险扳机时处理移除逻辑
         if (heldItem.isEmpty() || isHoldingBottleOrTrigger) {
             BeltMode currentMode = getMode(stack);
             boolean isHazardMode = currentMode.toString().startsWith("HAZARD_");
-            
+
             // 如果持有物品，移除玩家手中的道具
             if (isHoldingBottleOrTrigger) {
                 sp.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             }
-            
+
             // 根据当前模式移除对应物品
             switch (currentMode) {
                 case RT:
@@ -529,17 +547,17 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                 default:
                     return false;
             }
-            
+
             // 触发动画
             triggerAnim(sp, "controller", "cancel");
-            
+
             // 同步腰带状态
             PacketHandler.sendToAllTracking(
                     new BeltAnimationPacket(sp.getId(), "cancel", getMode(stack)), sp);
-            
+
             return true;
         }
-        
+
         return false;
     }
 
@@ -570,15 +588,48 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
     /* -------------------- 动画触发工具 -------------------- */
     public void triggerAnim(@Nullable LivingEntity entity, String ctrl, String anim) {
         if (entity == null || entity.level() == null) return;
-        
+
         // 服务端处理：发送动画包到所有跟踪者
         if (!entity.level().isClientSide) {
             Optional<SlotResult> beltOptional = CuriosApi.getCuriosInventory(entity).resolve()
                     .flatMap(curios -> curios.findFirstCurio(item -> item.getItem() instanceof BuildDriver));
             BeltMode mode = beltOptional.map(result -> getMode(result.stack())).orElse(DEFAULT);
-            
+
             PacketHandler.sendToAllTracking(
                     new BeltAnimationPacket(entity.getId(), anim, mode), entity);
+        }
+    }
+
+    /**
+     * 触发玩家作动动画
+     */
+    public void triggerPlayerAnim(@Nullable LivingEntity entity, String anim) {
+        if (entity == null || entity.level() == null) return;
+
+        if (entity.level().isClientSide) {
+            // 客户端处理：发送数据包到服务器
+            PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.PlayerAnimationPacket(anim, entity.getId(), true, 5, 2000));
+        } else {
+            // 服务端处理：发送玩家动画包到所有跟踪者和自己
+            PacketHandler.sendAnimationToAllTrackingAndSelf(anim, entity.getId(), true, entity, 5, 2000);
+        }
+    }
+
+    /**
+     * 取消玩家作动动画
+     */
+    public void cancelPlayerAnim(@Nullable LivingEntity entity) {
+        if (entity == null || entity.level() == null) return;
+
+        if (entity.level().isClientSide) {
+            // 客户端处理：发送取消动画数据包到服务器
+            PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.PlayerAnimationPacket(entity.getId()));
+        } else {
+            // 服务端处理：发送取消动画包到所有跟踪者和自己
+            if (entity instanceof net.minecraft.server.level.ServerPlayer sp) {
+                net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) entity.level();
+                PacketHandler.cancelAnimation(entity.getId(), level);
+            }
         }
     }
 }

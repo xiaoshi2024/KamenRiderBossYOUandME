@@ -68,6 +68,9 @@ public class PlayerDeathHandler {
                 
                 // 检查是否穿着拿破仑幽灵盔甲
                 boolean isWearingNapoleonGhostArmor = isWearingNapoleonGhostArmor(player);
+                
+                // 检查是否穿着Build盔甲
+                boolean isWearingBuildArmor = isWearingBuildArmor(player);
 
                 // 5. 清空盔甲
                 clearTransformationArmor(player);
@@ -93,7 +96,12 @@ public class PlayerDeathHandler {
                     returnNapoleonEyecon(player);
                 }
 
-                // 8. 返还锁种 - 只有当锁种不在音速弓中时才返还
+                // 9. 检查是否穿着Build盔甲，返还危险扳机和兔子坦克瓶
+                if (isWearingBuildArmor) {
+                    returnBuildItems(player);
+                }
+
+                // 10. 返还锁种 - 只有当锁种不在音速弓中时才返还
                 if (!hasLockSeedInSonicArrow(player)) {
                     List<ItemStack> lockseeds = getLockseedStacksByType(lockseedType);
                     for (ItemStack stack : lockseeds) {
@@ -173,6 +181,35 @@ public class PlayerDeathHandler {
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof NapoleonGhostItem &&
                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof NapoleonGhostItem &&
                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof NapoleonGhostItem;
+    }
+    
+    // 检查玩家是否穿着Build盔甲
+    private static boolean isWearingBuildArmor(Player player) {
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BlackBuild ||
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof BlackBuild ||
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof BlackBuild ||
+               player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof BlackBuild;
+    }
+    
+    // 返还Build相关物品（危险扳机和兔子坦克瓶）
+    private static void returnBuildItems(Player player) {
+        // 返还危险扳机
+        ItemStack hazardTrigger = new ItemStack(ModItems.HAZARD_TRIGGER.get());
+        if (!player.getInventory().add(hazardTrigger)) {
+            player.drop(hazardTrigger, false);
+        }
+        
+        // 返还兔子瓶
+        ItemStack rabbitBottle = new ItemStack(ModItems.RABBIT_ITEM.get());
+        if (!player.getInventory().add(rabbitBottle)) {
+            player.drop(rabbitBottle, false);
+        }
+        
+        // 返还坦克瓶
+        ItemStack tankBottle = new ItemStack(ModItems.TANK_ITEM.get());
+        if (!player.getInventory().add(tankBottle)) {
+            player.drop(tankBottle, false);
+        }
     }
     
     // 返还拿破仑眼魂并重置腰带
@@ -328,6 +365,28 @@ public class PlayerDeathHandler {
                     ItemStack belt = curio.stack().copy();
                     WeekEndriver weekEndriver = (WeekEndriver) belt.getItem();
                     weekEndriver.setMode(belt, WeekEndriver.BeltMode.DEFAULT);
+
+                    // 优先放进背包，满了才掉落
+                    if (!player.getInventory().add(belt)) {
+                        player.drop(belt, false);
+                    }
+
+                    // 清槽
+                    if (!player.level().isClientSide) {
+                        CuriosApi.getCuriosInventory(player).ifPresent(inv ->
+                                inv.getStacksHandler(curio.slotContext().identifier()).ifPresent(handler ->
+                                        handler.getStacks().setStackInSlot(curio.slotContext().index(), ItemStack.EMPTY)
+                                )
+                        );
+                    }
+                });
+
+        // 8. BuildDriver腰带（新增）-------------------------------------------
+        CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof BuildDriver)
+                .ifPresent(curio -> {
+                    ItemStack belt = curio.stack().copy();
+                    BuildDriver buildDriver = (BuildDriver) belt.getItem();
+                    buildDriver.setMode(belt, BuildDriver.BeltMode.DEFAULT);
 
                     // 优先放进背包，满了才掉落
                     if (!player.getInventory().add(belt)) {

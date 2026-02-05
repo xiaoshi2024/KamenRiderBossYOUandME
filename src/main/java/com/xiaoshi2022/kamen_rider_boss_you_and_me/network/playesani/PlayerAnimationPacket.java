@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
@@ -69,12 +70,32 @@ public class PlayerAnimationPacket {
     public static void handle(PlayerAnimationPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {
-            // 只处理来自服务器端的数据包，避免处理客户端发送的数据包
+            // 处理来自服务器端的数据包（客户端播放动画）
             if (context.getDirection().getReceptionSide().isClient() && context.getDirection().getOriginationSide().isServer()) {
                 handleClientAnimation(packet);
+            } 
+            // 处理来自客户端的数据包（服务器转发动画）
+            else if (context.getDirection().getReceptionSide().isServer() && context.getDirection().getOriginationSide().isClient()) {
+                handleServerAnimation(packet, context);
             }
         });
         context.setPacketHandled(true);
+    }
+    
+    // 处理服务器端收到的动画数据包（从客户端发送）
+    private static void handleServerAnimation(PlayerAnimationPacket packet, NetworkEvent.Context context) {
+        // 获取发送数据包的玩家
+        net.minecraft.server.level.ServerPlayer sender = context.getSender();
+        if (sender != null && !packet.cancel && !packet.animationName.isEmpty()) {
+            // 验证发送者是否有权限播放此动画（确保动画ID与发送者ID匹配）
+            if (packet.targetId == sender.getId()) {
+                // 转发动画到所有跟踪者和自己
+                net.minecraft.world.entity.Entity entity = sender.level().getEntity(packet.targetId);
+                if (entity != null) {
+                    PacketHandler.sendAnimationToAllTrackingAndSelf(packet.animationName, packet.targetId, packet.override, entity, packet.priority, packet.duration);
+                }
+            }
+        }
     }
 
     private static void handleClientAnimation(PlayerAnimationPacket packet) {

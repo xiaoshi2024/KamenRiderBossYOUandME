@@ -84,6 +84,16 @@ public class BlackBuildTransformationRequestPacket {
                 ModBossSounds.HAZARD_HENSHIN.get(),
                 SoundSource.PLAYERS, 1.0F, 1.0F);
 
+        // 触发玩家作动动画
+        PacketHandler.sendAnimationToAllTrackingAndSelf(
+                "build_up",
+                player.getId(),
+                true,
+                player,
+                5,
+                2000
+        );
+
         // 装备BlackBuild盔甲
         equipBlackBuildArmor(player);
 

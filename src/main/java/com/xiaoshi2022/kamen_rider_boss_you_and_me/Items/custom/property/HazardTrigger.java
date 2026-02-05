@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.hazardtrigger.HazardTriggerRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -95,6 +96,9 @@ public class HazardTrigger extends Item implements GeoItem {
 
                 // 激活危险模式
                 belt.activateHazardMode(player, beltStack);
+
+                // 播放危险扳机音效
+                player.playSound(ModBossSounds.BUILD_HAZARD.get(), 1.0F, 1.0F);
 
                 // 同步模式变更
                 if (!level.isClientSide && player instanceof ServerPlayer sp) {

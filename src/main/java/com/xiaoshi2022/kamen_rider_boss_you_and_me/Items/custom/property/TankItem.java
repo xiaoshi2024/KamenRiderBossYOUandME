@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.client.property.TankItemRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModBossSounds;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.CurioUtils;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
@@ -101,6 +102,9 @@ public class TankItem extends Item implements GeoItem {
                 }
 
                 belt.setMode(beltStack, newMode);
+
+                // 播放坦克瓶音效
+                player.playSound(ModBossSounds.TANK.get(), 1.0F, 1.0F);
 
                 // 插入腰带后移除玩家手中的坦克瓶
                 player.setItemInHand(hand, ItemStack.EMPTY);

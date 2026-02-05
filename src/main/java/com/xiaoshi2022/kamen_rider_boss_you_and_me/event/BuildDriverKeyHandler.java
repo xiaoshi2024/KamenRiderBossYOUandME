@@ -62,6 +62,9 @@ public class BuildDriverKeyHandler {
 
                 // 开始播放turn动画
                 belt.triggerAnim(player, "controller", "turn");
+
+                // 触发玩家作动动画
+                belt.triggerPlayerAnim(player, "turn");
             }
         }
     }
@@ -89,6 +92,9 @@ public class BuildDriverKeyHandler {
 
                     // 停止turn动画，切换到idle动画
                     belt.triggerAnim(player, "controller", "idle");
+
+                    // 取消玩家作动动画
+                    belt.cancelPlayerAnim(player);
 
                     // 触发变身，装备BlackBuild盔甲
                     equipBlackBuildArmor(player);
