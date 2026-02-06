@@ -30,14 +30,7 @@ public class BuildDriverRenderer extends GeoItemRenderer<BuildDriver> implements
     private final BuildDriverModel hazardRtMouldModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_RT_MOULD, true);
     
     /* ---------- 变身模型 ---------- */
-    private final BuildDriverModel defaultTransformModel = new BuildDriverModel(BuildDriver.BeltMode.DEFAULT, true);
-    private final BuildDriverModel rtTransformModel = new BuildDriverModel(BuildDriver.BeltMode.RT, true);
-    private final BuildDriverModel rTransformModel = new BuildDriverModel(BuildDriver.BeltMode.R, true);
-    private final BuildDriverModel tTransformModel = new BuildDriverModel(BuildDriver.BeltMode.T, true);
-    private final BuildDriverModel hazardEmptyTransformModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_EMPTY, true);
     private final BuildDriverModel hazardRtTransformModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_RT, true);
-    private final BuildDriverModel hazardRTransformModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_R, true);
-    private final BuildDriverModel hazardTTransformModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_T, true);
 
     // 保存当前被渲染的物品栈
     private ItemStack currentItemStack;
@@ -56,23 +49,23 @@ public class BuildDriverRenderer extends GeoItemRenderer<BuildDriver> implements
             // 根据模式和变身状态返回对应模型
             switch (mode) {
                 case RT:
-                    return isTransforming ? rtTransformModel : rtModel;
+                    return rtModel;
                 case R:
-                    return isTransforming ? rTransformModel : rModel;
+                    return rModel;
                 case T:
-                    return isTransforming ? tTransformModel : tModel;
+                    return tModel;
                 case HAZARD_EMPTY:
-                    return isTransforming ? hazardEmptyTransformModel : hazardEmptyModel;
+                    return hazardEmptyModel;
                 case HAZARD_RT:
                     return isTransforming ? hazardRtTransformModel : hazardRtModel;
                 case HAZARD_R:
-                    return isTransforming ? hazardRTransformModel : hazardRModel;
+                    return hazardRModel;
                 case HAZARD_T:
-                    return isTransforming ? hazardTTransformModel : hazardTModel;
+                    return hazardTModel;
                 case HAZARD_RT_MOULD:
                     return hazardRtMouldModel;
                 default:
-                    return isTransforming ? defaultTransformModel : defaultModel;
+                    return defaultModel;
             }
         }
         return super.getGeoModel();

@@ -131,8 +131,7 @@ public class BuildDriverKeyHandler {
                     belt.setIsPlayingMouldB(beltStack, true);
                     belt.setIsPlayingMould(beltStack, false);
                     //播放音效应该调用腰带里的音效类！
-                    player.level().playSound(player, player.blockPosition(), ModBossSounds.HAZARD_HENSHIN.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-
+                    belt.playHazardHenshinSound(player);
                     // 触发mould_b动画，展示变身完成特效
                     belt.triggerAnim(player, "controller", "mould_b");
 

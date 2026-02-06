@@ -26,8 +26,8 @@ public class BuildDriverModel extends GeoModel<BuildDriver> {
 
     @Override
     public ResourceLocation getModelResource(BuildDriver object) {
-        // 如果是变身状态或HAZARD_RT_MOULD模式，使用变身模型
-        if (isTransforming || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
+        // 只有 HAZARD_RT 模式在变身状态或 HAZARD_RT_MOULD 模式时使用变身模型
+        if ((isTransforming && mode == BuildDriver.BeltMode.HAZARD_RT) || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
             return new ResourceLocation("kamen_rider_boss_you_and_me", "geo/item/build_driver_mould.geo.json");
         }
         
@@ -54,8 +54,8 @@ public class BuildDriverModel extends GeoModel<BuildDriver> {
 
     @Override
     public ResourceLocation getTextureResource(BuildDriver object) {
-        // 如果是变身状态或HAZARD_RT_MOULD模式，使用变身纹理
-        if (isTransforming || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
+        // 只有 HAZARD_RT 模式在变身状态或 HAZARD_RT_MOULD 模式时使用变身纹理
+        if ((isTransforming && mode == BuildDriver.BeltMode.HAZARD_RT) || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
             return new ResourceLocation("kamen_rider_boss_you_and_me", "textures/item/build_driver_mould.png");
         }
         
@@ -65,8 +65,8 @@ public class BuildDriverModel extends GeoModel<BuildDriver> {
 
     @Override
     public ResourceLocation getAnimationResource(BuildDriver animatable) {
-        // 如果是变身状态或HAZARD_RT_MOULD模式，使用变身动画
-        if (isTransforming || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
+        // 只有 HAZARD_RT 模式在变身状态或 HAZARD_RT_MOULD 模式时使用变身动画
+        if ((isTransforming && mode == BuildDriver.BeltMode.HAZARD_RT) || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
             return new ResourceLocation("kamen_rider_boss_you_and_me", "animations/item/build_driver_mould.animation.json");
         }
         

@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -721,5 +723,28 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                 PacketHandler.cancelAnimation(entity.getId(), level);
             }
         }
+    }
+
+    /**
+     * 播放Hazard变身音效（仅服务端调用）
+     */
+    /**
+ * 播放Hazard变身音效
+ */
+    public void playHazardHenshinSound(@Nullable LivingEntity entity) {
+    if (entity == null || entity.level() == null) return;
+    
+    // 获取音效事件
+    SoundEvent soundEvent = ModBossSounds.HAZARD_HENSHIN.get();
+    if (soundEvent == null) return;
+    
+    // 在客户端和服务端都播放音效
+    if (entity.level().isClientSide) {
+        // 客户端播放音效
+        entity.playSound(soundEvent, 1.0F, 1.0F);
+    } else {
+        // 服务端播放音效并广播给所有玩家
+        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), soundEvent, SoundSource.PLAYERS, 1.0F, 1.0F);
+    }
     }
 }
