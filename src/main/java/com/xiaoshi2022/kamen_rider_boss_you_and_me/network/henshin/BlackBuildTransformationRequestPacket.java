@@ -79,20 +79,7 @@ public class BlackBuildTransformationRequestPacket {
             return;
         }
 
-        // 播放变身音效
-        player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
-                ModBossSounds.HAZARD_HENSHIN.get(),
-                SoundSource.PLAYERS, 1.0F, 1.0F);
-
-        // 触发玩家作动动画
-        PacketHandler.sendAnimationToAllTrackingAndSelf(
-                "build_up",
-                player.getId(),
-                true,
-                player,
-                5,
-                2000
-        );
+        // 动作已在客户端松开X键时触发，此处不再重复执行
 
         // 装备BlackBuild盔甲
         equipBlackBuildArmor(player);

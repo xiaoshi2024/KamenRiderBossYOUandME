@@ -6,19 +6,31 @@ import software.bernie.geckolib.model.GeoModel;
 
 public class BuildDriverModel extends GeoModel<BuildDriver> {
     private final BuildDriver.BeltMode mode;
+    private final boolean isTransforming;
 
     // 默认构造函数，使用DEFAULT模式
     public BuildDriverModel() {
-        this(BuildDriver.BeltMode.DEFAULT);
+        this(BuildDriver.BeltMode.DEFAULT, false);
     }
 
     // 带模式参数的构造函数
     public BuildDriverModel(BuildDriver.BeltMode mode) {
+        this(mode, false);
+    }
+
+    // 带模式和变身状态参数的构造函数
+    public BuildDriverModel(BuildDriver.BeltMode mode, boolean isTransforming) {
         this.mode = mode;
+        this.isTransforming = isTransforming;
     }
 
     @Override
     public ResourceLocation getModelResource(BuildDriver object) {
+        // 如果是变身状态或HAZARD_RT_MOULD模式，使用变身模型
+        if (isTransforming || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
+            return new ResourceLocation("kamen_rider_boss_you_and_me", "geo/item/build_driver_mould.geo.json");
+        }
+        
         // 根据模型实例的模式返回不同的模型
         switch (mode) {
             case RT:
@@ -42,13 +54,23 @@ public class BuildDriverModel extends GeoModel<BuildDriver> {
 
     @Override
     public ResourceLocation getTextureResource(BuildDriver object) {
-        // 暂时使用同一个纹理，后续可以根据需要添加不同纹理
+        // 如果是变身状态或HAZARD_RT_MOULD模式，使用变身纹理
+        if (isTransforming || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
+            return new ResourceLocation("kamen_rider_boss_you_and_me", "textures/item/build_driver_mould.png");
+        }
+        
+        // 否则使用默认纹理
         return new ResourceLocation("kamen_rider_boss_you_and_me", "textures/item/build_driver.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(BuildDriver animatable) {
-        // 使用同一个动画文件
+        // 如果是变身状态或HAZARD_RT_MOULD模式，使用变身动画
+        if (isTransforming || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
+            return new ResourceLocation("kamen_rider_boss_you_and_me", "animations/item/build_driver_mould.animation.json");
+        }
+        
+        // 否则使用默认动画
         return new ResourceLocation("kamen_rider_boss_you_and_me", "animations/item/build_driver.animation.json");
     }
 }

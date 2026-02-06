@@ -49,17 +49,19 @@ import static com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.Build
 public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioItem {
 
     /* ------------------------- 动画常量 ------------------------- */
-    private static final RawAnimation IDLES   = RawAnimation.begin().thenPlayAndHold("idles");
-    private static final RawAnimation SHOW    = RawAnimation.begin().thenPlayAndHold("show");
-    private static final RawAnimation CANCEL  = RawAnimation.begin().thenPlayAndHold("cancel");
-    private static final RawAnimation CANCEL_S = RawAnimation.begin().thenPlayAndHold("cancel_s");
-    private static final RawAnimation TURN    = RawAnimation.begin().thenLoop("turn");
-    private static final RawAnimation IDLE    = RawAnimation.begin().thenPlayAndHold("idle");
+    private static final RawAnimation IDLES   = RawAnimation.begin().thenPlay("idles");
+    private static final RawAnimation SHOW    = RawAnimation.begin().thenPlay("show");
+    private static final RawAnimation CANCEL  = RawAnimation.begin().thenPlay("cancel");
+    private static final RawAnimation CANCEL_S = RawAnimation.begin().thenPlay("cancel_s");
+    private static final RawAnimation TURN    = RawAnimation.begin().thenPlay("turn");
+    private static final RawAnimation IDLE    = RawAnimation.begin().thenPlay("idle");
+    private static final RawAnimation MOULD   = RawAnimation.begin().thenPlay("mould");
+    private static final RawAnimation MOULD_B = RawAnimation.begin().thenPlay("mould_b");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public enum BeltMode {
-        DEFAULT, RT, R, T, HAZARD_EMPTY, HAZARD_RT, HAZARD_R, HAZARD_T
+        DEFAULT, RT, R, T, HAZARD_EMPTY, HAZARD_RT, HAZARD_R, HAZARD_T, HAZARD_RT_MOULD
     }
 
     public BuildDriver(Properties properties) {
@@ -76,7 +78,8 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                 .triggerableAnim("cancel_s", CANCEL_S)
                 .triggerableAnim("turn", TURN)
                 .triggerableAnim("idle", IDLE)
-                .setSoundKeyframeHandler(state -> {
+                .triggerableAnim("mould", MOULD)
+                .triggerableAnim("mould_b", MOULD_B) .setSoundKeyframeHandler(state -> {
                     Player player = ClientUtils.getClientPlayer();
                     if (player != null) {
                         player.playSound(ModBossSounds.RT_BY.get(), 1.0F, 1.0F);
@@ -94,6 +97,9 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         boolean active = getActive(stack);
         boolean rel = getRelease(stack);
         boolean isTurning = getIsTurning(stack);
+        boolean isTransforming = getIsTransforming(stack);
+        boolean isPlayingMould = getIsPlayingMould(stack);
+        boolean isPlayingMouldB = getIsPlayingMouldB(stack);
 
         String current = state.getController().getCurrentAnimation() == null
                 ? "" : state.getController().getCurrentAnimation().animation().name();
@@ -114,8 +120,39 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
         /* -------- 转动动画 -------- */
         if (isTurning) {
-            if (!current.equals("turn"))
-                return state.setAndContinue(TURN);
+            // 无论当前动画是什么，都播放turn动画，确保持续播放
+            return state.setAndContinue(TURN);
+        }
+
+        /* -------- HAZARD_RT_MOULD模式动画 -------- */
+        if (mode == BeltMode.HAZARD_RT_MOULD) {
+            // 处理mould动画（按下X键）
+            if (isPlayingMould) {
+                if (!current.equals("mould")) {
+                    return state.setAndContinue(MOULD);
+                }
+                // 当mould动画播放完成后，重置状态
+                if (current.equals("mould") && state.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                    setIsPlayingMould(stack, false);
+                    return PlayState.CONTINUE;
+                }
+                return PlayState.CONTINUE;
+            }
+            
+            // 处理mould_b动画（松开X键）
+            if (isPlayingMouldB) {
+                if (!current.equals("mould_b")) {
+                    return state.setAndContinue(MOULD_B);
+                }
+                // 当mould_b动画播放完成后，重置状态
+                if (current.equals("mould_b") && state.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                    setIsPlayingMouldB(stack, false);
+                    return PlayState.CONTINUE;
+                }
+                return PlayState.CONTINUE;
+            }
+            
+            // 默认返回CONTINUE
             return PlayState.CONTINUE;
         }
 
@@ -220,6 +257,51 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             return;
         }
         stack.getOrCreateTag().putBoolean("IsTurning", flag);
+    }
+
+    public boolean getIsTransforming(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsTransforming") ? tag.getBoolean("IsTransforming") : false;
+    }
+
+    public void setIsTransforming(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
+        stack.getOrCreateTag().putBoolean("IsTransforming", flag);
+    }
+
+    public boolean getIsPlayingMould(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsPlayingMould") ? tag.getBoolean("IsPlayingMould") : false;
+    }
+
+    public void setIsPlayingMould(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
+        stack.getOrCreateTag().putBoolean("IsPlayingMould", flag);
+    }
+
+    public boolean getIsPlayingMouldB(ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
+        CompoundTag tag = stack.getOrCreateTag();
+        return tag.contains("IsPlayingMouldB") ? tag.getBoolean("IsPlayingMouldB") : false;
+    }
+
+    public void setIsPlayingMouldB(ItemStack stack, boolean flag) {
+        if (stack == null) {
+            return;
+        }
+        stack.getOrCreateTag().putBoolean("IsPlayingMouldB", flag);
     }
 
     /* ----------------------------------------------------------- */
@@ -571,6 +653,9 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         tag.putBoolean("IsActive", getActive(stack));
         tag.putBoolean("IsRelease", getRelease(stack));
         tag.putBoolean("IsTurning", getIsTurning(stack));
+        tag.putBoolean("IsTransforming", getIsTransforming(stack));
+        tag.putBoolean("IsPlayingMould", getIsPlayingMould(stack));
+        tag.putBoolean("IsPlayingMouldB", getIsPlayingMouldB(stack));
         return tag;
     }
 
@@ -583,6 +668,9 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         if (nbt.contains("IsActive")) setActive(stack, nbt.getBoolean("IsActive"));
         if (nbt.contains("IsRelease")) setRelease(stack, nbt.getBoolean("IsRelease"));
         if (nbt.contains("IsTurning")) setIsTurning(stack, nbt.getBoolean("IsTurning"));
+        if (nbt.contains("IsTransforming")) setIsTransforming(stack, nbt.getBoolean("IsTransforming"));
+        if (nbt.contains("IsPlayingMould")) setIsPlayingMould(stack, nbt.getBoolean("IsPlayingMould"));
+        if (nbt.contains("IsPlayingMouldB")) setIsPlayingMouldB(stack, nbt.getBoolean("IsPlayingMouldB"));
     }
 
     /* -------------------- 动画触发工具 -------------------- */
@@ -599,6 +687,8 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                     new BeltAnimationPacket(entity.getId(), anim, mode), entity);
         }
     }
+
+
 
     /**
      * 触发玩家作动动画
