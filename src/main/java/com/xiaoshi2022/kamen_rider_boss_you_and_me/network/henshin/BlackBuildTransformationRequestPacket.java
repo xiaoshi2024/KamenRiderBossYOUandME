@@ -73,8 +73,9 @@ public class BlackBuildTransformationRequestPacket {
             return;
         }
 
-        // 检查腰带模式是否为HAZARD_RT
-        if (belt.getMode(beltStack) != BuildDriver.BeltMode.HAZARD_RT) {
+        // 检查腰带模式是否为HAZARD_RT或HAZARD_RT_MOULD
+        BuildDriver.BeltMode currentMode = belt.getMode(beltStack);
+        if (currentMode != BuildDriver.BeltMode.HAZARD_RT && currentMode != BuildDriver.BeltMode.HAZARD_RT_MOULD) {
             player.sendSystemMessage(Component.literal("腰带未设置为HAZARD_RT模式！"));
             return;
         }

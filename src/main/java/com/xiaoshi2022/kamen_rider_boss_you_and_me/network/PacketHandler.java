@@ -87,6 +87,8 @@ public class PacketHandler {
         
         // 注册 BlackBuildTransformationRequestPacket
         INSTANCE.registerMessage(index++, BlackBuildTransformationRequestPacket.class, BlackBuildTransformationRequestPacket::encode, BlackBuildTransformationRequestPacket::decode, BlackBuildTransformationRequestPacket::handle);
+        // 注册 BuildTransformationRequestPacket
+        INSTANCE.registerMessage(index++, BuildTransformationRequestPacket.class, BuildTransformationRequestPacket::encode, BuildTransformationRequestPacket::decode, BuildTransformationRequestPacket::handle);
         // 注册 BuildDriverReleasePacket
         INSTANCE.registerMessage(index++, BuildDriverReleasePacket.class, BuildDriverReleasePacket::encode, BuildDriverReleasePacket::decode, BuildDriverReleasePacket::handle);
 

@@ -1,22 +1,26 @@
-[261月2026 13:21:27.695] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserver, --fml.forgeVersion, 47.4.10, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
-[261月2026 13:21:27.701] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
-[261月2026 13:21:27.979] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserver
-[261月2026 13:21:28.043] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/D:/mckamenboss/libraries/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar%2365!/ Service=ModLauncher Env=SERVER
-[261月2026 13:21:28.328] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\fmlcore\1.20.1-47.4.10\fmlcore-1.20.1-47.4.10.jar is missing mods.toml file
-[261月2026 13:21:28.335] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\javafmllanguage\1.20.1-47.4.10\javafmllanguage-1.20.1-47.4.10.jar is missing mods.toml file
-[261月2026 13:21:28.340] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\lowcodelanguage\1.20.1-47.4.10\lowcodelanguage-1.20.1-47.4.10.jar is missing mods.toml file
-[261月2026 13:21:28.346] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\mclanguage\1.20.1-47.4.10\mclanguage-1.20.1-47.4.10.jar is missing mods.toml file
-[261月2026 13:21:28.561] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 3 dependencies adding them to mods collection
-[261月2026 13:21:29.725] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[261月2026 13:21:29.749] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserver' with arguments []
-[261月2026 13:21:29.863] [main/WARN] [mixin/]: Reference map 'kamen_rider_boss_you_and_me.refmap.json' for kamen_rider_boss_you_and_me.mixins.json could not be read. If this is a development environment you can ignore this message
-[261月2026 13:21:29.875] [main/WARN] [mixin/]: Reference map 'kamen_rider_weapon_craft.refmap.json' for kamen_rider_weapon_craft.mixins.json could not be read. If this is a development environment you can ignore this message
-[261月2026 13:21:30.705] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.2).
-[261月2026 13:21:37.054] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.10, for MC 1.20.1 with MCP 20230612.114412
-[261月2026 13:21:37.055] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.10 Initialized
-[261月2026 13:21:37.133] [modloading-worker-0/INFO] [kamen_rider_boss_you_and_me/]: Registered Time Jacker profession and POI type
-[261月2026 13:21:37.145] [modloading-worker-0/INFO] [dev.architectury.networking.forge.NetworkManagerImpl/]: Registering C2S receiver with id architectury:sync_ids
-[261月2026 13:21:37.263] [ForkJoinPool.commonPool-worker-1/ERROR] [tocraft.craftedcore.CraftedCore/]: No internet connection!
+[072月2026 13:03:07.874] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserver, --fml.forgeVersion, 47.4.10, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412]
+[072月2026 13:03:07.878] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[072月2026 13:03:08.205] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserver
+[072月2026 13:03:08.246] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/D:/mckamenboss/libraries/org/spongepowered/mixin/0.8.5/mixin-0.8.5.jar%2365!/ Service=ModLauncher Env=SERVER
+[072月2026 13:03:08.524] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\fmlcore\1.20.1-47.4.10\fmlcore-1.20.1-47.4.10.jar is missing mods.toml file
+[072月2026 13:03:08.527] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\javafmllanguage\1.20.1-47.4.10\javafmllanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[072月2026 13:03:08.530] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\lowcodelanguage\1.20.1-47.4.10\lowcodelanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[072月2026 13:03:08.534] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file D:\mckamenboss\libraries\net\minecraftforge\mclanguage\1.20.1-47.4.10\mclanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[072月2026 13:03:08.688] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 8 dependencies adding them to mods collection
+[072月2026 13:03:09.588] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[072月2026 13:03:09.620] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserver' with arguments []
+[072月2026 13:03:09.709] [main/WARN] [mixin/]: Reference map 'kamen_rider_boss_you_and_me.refmap.json' for kamen_rider_boss_you_and_me.mixins.json could not be read. If this is a development environment you can ignore this message
+[072月2026 13:03:09.727] [main/WARN] [mixin/]: Reference map 'kamen_rider_weapon_craft.refmap.json' for kamen_rider_weapon_craft.mixins.json could not be read. If this is a development environment you can ignore this message
+[072月2026 13:03:10.013] [main/WARN] [mixin/]: Error loading class: dev/latvian/mods/kubejs/recipe/RecipesEventJS (java.lang.ClassNotFoundException: dev.latvian.mods.kubejs.recipe.RecipesEventJS)
+[072月2026 13:03:10.014] [main/WARN] [mixin/]: @Mixin target dev.latvian.mods.kubejs.recipe.RecipesEventJS was not found mixins.hammerlib.json:bs.kubejs.RecipeEventJSMixin
+[072月2026 13:03:10.306] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.5.2).
+[072月2026 13:03:10.716] [main/WARN] [oshi.driver.windows.perfmon.PerfmonDisabled/]: Invalid registry value type detected for PerfOS counters. Should be REG_DWORD. Ignoring: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PerfOS\Performance\Disable Performance Counters.
+[072月2026 13:03:14.665] [modloading-worker-0/INFO] [kamen_rider_boss_you_and_me/]: Registered Time Jacker profession and POI type
+[072月2026 13:03:14.838] [modloading-worker-0/INFO] [dev.architectury.networking.forge.NetworkManagerImpl/]: Registering C2S receiver with id architectury:sync_ids
+[072月2026 13:03:14.855] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.10, for MC 1.20.1 with MCP 20230612.114412
+[072月2026 13:03:14.856] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.10 Initialized
+[072月2026 13:03:14.877] [modloading-worker-0/INFO] [net.blay09.mods.balm.forge.config.ForgeBalmConfig/]: Registering config for waystones:common (COMMON) with 46 properties.
+[072月2026 13:03:14.970] [ForkJoinPool.commonPool-worker-1/ERROR] [tocraft.craftedcore.CraftedCore/]: No internet connection!
 java.net.UnknownHostException: raw.githubusercontent.com
 	at sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:572) ~[?:?]
 	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[?:?]
@@ -46,214 +50,18 @@ java.net.UnknownHostException: raw.githubusercontent.com
 	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-[261月2026 13:21:37.895] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.896] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.896] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.896] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.896] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.897] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.897] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.897] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[261月2026 13:21:37.899] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.899] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.899] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.900] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.900] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.900] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.900] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[261月2026 13:21:37.901] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.906] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.906] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[261月2026 13:21:37.906] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.906] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CEnumParameter
-[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.907] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.909] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.915] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.915] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.915] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.916] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.916] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.VillagerEntityMCA from class forge.net.mca.util.network.datasync.CDataParameter
-[261月2026 13:21:37.917] [main/WARN] [net.minecraft.network.syncher.SynchedEntityData/]: defineId called for: class forge.net.mca.entity.GrimReaperEntity from class forge.net.mca.util.network.datasync.CEnumParameter
-[261月2026 13:21:37.997] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Starting version check at https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json
-[261月2026 13:21:38.056] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.057] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.057] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.057] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.057] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.058] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.058] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.058] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.058] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.059] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.060] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.061] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:38.062] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:38.933] [main/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: authHost='https://authserver.mojang.com', accountsHost='https://api.mojang.com', sessionHost='https://sessionserver.mojang.com', servicesHost='https://api.minecraftservices.com', name='PROD'
-[261月2026 13:21:39.034] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.035] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.036] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.037] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.038] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.039] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.091] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.091] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.092] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.094] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.095] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_jacker has no attributes
-[261月2026 13:21:39.096] [main/ERROR] [net.minecraft.Util/]: Entity kamen_rider_boss_you_and_me:mca_time_royalty has no attributes
-[261月2026 13:21:39.253] [Forge Version Check/INFO] [net.minecraftforge.fml.VersionChecker/]: [forge] Found status: UP_TO_DATE Current: 47.4.10 Target: null
-[261月2026 13:21:39.591] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/mckamenboss/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23123!/assets/.mcassetsroot' uses unexpected schema
-[261月2026 13:21:39.591] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/mckamenboss/libraries/net/minecraft/server/1.20.1-20230612.114412/server-1.20.1-20230612.114412-srg.jar%23123!/data/.mcassetsroot' uses unexpected schema
-[261月2026 13:21:40.987] [Worker-Main-7/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/lockseed_iron_bars
-com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown string 'kamen_rider_weapon_craft:lockseed_iron_bars'
-	at net.minecraft.util.GsonHelper.m_13866_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
-	at net.minecraft.util.GsonHelper.m_13874_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.util.GsonHelper.m_13909_(GsonHelper.java:153) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:40) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:151) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:129) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:86) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:74) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.GsonAdapterFactory$JsonAdapter.deserialize(GsonAdapterFactory.java:102) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
-	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.util.GsonHelper.m_13836_(GsonHelper.java:471) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:192) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:189) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
-	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.util.GsonHelper.m_13845_(GsonHelper.java:481) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:294) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1261) ~[gson-2.10.jar%2372!/:?]
-	at net.minecraftforge.common.ForgeHooks.loadLootTable(ForgeHooks.java:872) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraftforge.common.ForgeHooks.lambda$getLootTableDeserializer$3(ForgeHooks.java:849) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraft.world.level.storage.loot.LootDataType.deserialize(LootDataType.java:45) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootDataManager.lambda$scheduleElementParse$4(LootDataManager.java:56) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.HashMap.forEach(HashMap.java:1421) ~[?:?]
-	at net.minecraft.world.level.storage.loot.LootDataManager.m_278660_(LootDataManager.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+[072月2026 13:03:15.034] [modloading-worker-0/ERROR] [net.minecraftforge.fml.loading.RuntimeDistCleaner/DISTXFORM]: Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist DEDICATED_SERVER
+[072月2026 13:03:15.034] [modloading-worker-0/ERROR] [net.minecraftforge.fml.javafmlmod.FMLModContainer/LOADING]: Failed to create mod instance. ModID: kamen_rider_boss_you_and_me, class com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me
+java.lang.BootstrapMethodError: java.lang.RuntimeException: Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist DEDICATED_SERVER
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler.registerPackets(PacketHandler.java:43) ~[kamen_rider_boss_you_and_me-0.2.7alpha-3.jar%23160!/:0.2.7alpha-3]
+	at com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me.<init>(kamen_rider_boss_you_and_me.java:131) ~[kamen_rider_boss_you_and_me-0.2.7alpha-3.jar%23160!/:0.2.7alpha-3]
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?]
+	at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77) ~[?:?]
+	at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+	at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[?:?]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[?:?]
+	at net.minecraftforge.fml.javafmlmod.FMLModContainer.constructMod(FMLModContainer.java:77) ~[javafmllanguage-1.20.1-47.4.10.jar%23173!/:?]
+	at net.minecraftforge.fml.ModContainer.lambda$buildTransitionHandler$5(ModContainer.java:126) ~[fmlcore-1.20.1-47.4.10.jar%23172!/:?]
 	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?]
 	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?]
 	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
@@ -261,125 +69,59 @@ com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown st
 	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
 	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
 	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-[261月2026 13:21:41.070] [Worker-Main-7/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/pine_wall_hanging_sign
-com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown string 'kamen_rider_weapon_craft:pine_hanging_sign'
-	at net.minecraft.util.GsonHelper.m_13866_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
-	at net.minecraft.util.GsonHelper.m_13874_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.util.GsonHelper.m_13909_(GsonHelper.java:153) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:40) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:151) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:129) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:86) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:74) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.GsonAdapterFactory$JsonAdapter.deserialize(GsonAdapterFactory.java:102) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
-	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.util.GsonHelper.m_13836_(GsonHelper.java:471) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:192) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:189) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
-	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.util.GsonHelper.m_13845_(GsonHelper.java:481) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:294) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1261) ~[gson-2.10.jar%2372!/:?]
-	at net.minecraftforge.common.ForgeHooks.loadLootTable(ForgeHooks.java:872) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraftforge.common.ForgeHooks.lambda$getLootTableDeserializer$3(ForgeHooks.java:849) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraft.world.level.storage.loot.LootDataType.deserialize(LootDataType.java:45) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootDataManager.lambda$scheduleElementParse$4(LootDataManager.java:56) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.HashMap.forEach(HashMap.java:1421) ~[?:?]
-	at net.minecraft.world.level.storage.loot.LootDataManager.m_278660_(LootDataManager.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?]
-	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?]
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
-	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
-	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
-	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
-	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-[261月2026 13:21:41.081] [Worker-Main-7/ERROR] [net.minecraftforge.common.ForgeHooks/]: Couldn't parse element loot_tables:kamen_rider_weapon_craft:blocks/pine_hanging_sign
-com.google.gson.JsonSyntaxException: Expected name to be an item, was unknown string 'kamen_rider_weapon_craft:pine_hanging_sign'
-	at net.minecraft.util.GsonHelper.m_13866_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
-	at net.minecraft.util.GsonHelper.m_13874_(GsonHelper.java:145) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.util.GsonHelper.m_13909_(GsonHelper.java:153) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootItem$Serializer.m_7267_(LootItem.java:40) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:151) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer$Serializer.m_5921_(LootPoolSingletonContainer.java:129) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:86) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer$Serializer.m_7561_(LootPoolEntryContainer.java:74) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.GsonAdapterFactory$JsonAdapter.deserialize(GsonAdapterFactory.java:102) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
-	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.util.GsonHelper.m_13836_(GsonHelper.java:471) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:192) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootPool$Serializer.deserialize(LootPool.java:189) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TypeAdapterRuntimeTypeWrapper.read(TypeAdapterRuntimeTypeWrapper.java:40) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.ArrayTypeAdapter.read(ArrayTypeAdapter.java:72) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1290) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter$GsonContextImpl.deserialize(TreeTypeAdapter.java:179) ~[gson-2.10.jar%2372!/:?]
-	at net.minecraft.util.GsonHelper.m_13808_(GsonHelper.java:463) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.util.GsonHelper.m_13845_(GsonHelper.java:481) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:294) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootTable$Serializer.deserialize(LootTable.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at com.google.gson.internal.bind.TreeTypeAdapter.read(TreeTypeAdapter.java:76) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1214) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1319) ~[gson-2.10.jar%2372!/:?]
-	at com.google.gson.Gson.fromJson(Gson.java:1261) ~[gson-2.10.jar%2372!/:?]
-	at net.minecraftforge.common.ForgeHooks.loadLootTable(ForgeHooks.java:872) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraftforge.common.ForgeHooks.lambda$getLootTableDeserializer$3(ForgeHooks.java:849) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraft.world.level.storage.loot.LootDataType.deserialize(LootDataType.java:45) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.storage.loot.LootDataManager.lambda$scheduleElementParse$4(LootDataManager.java:56) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.HashMap.forEach(HashMap.java:1421) ~[?:?]
-	at net.minecraft.world.level.storage.loot.LootDataManager.m_278660_(LootDataManager.java:55) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?]
-	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796) ~[?:?]
-	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
-	at java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
-	at java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
-	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
-	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-[261月2026 13:21:41.116] [main/WARN] [net.minecraft.world.level.storage.loot.LootDataManager/]: Found loot table element validation problem in {loot_tables:kamen_rider_boss_you_and_me:entities/time_jacker}.pools[0].entries[0]: Unreachable entry!
-[261月2026 13:21:41.140] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:rider_fusion_recipe_1
-com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'kamen_rider_weapon_craft:rider_fusion_recipe_1'
-	at net.minecraft.world.item.crafting.RecipeManager.m_220253_(RecipeManager.java:170) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
-	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:169) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
-	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
-	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
+Caused by: java.lang.RuntimeException: Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist DEDICATED_SERVER
+	at net.minecraftforge.fml.loading.RuntimeDistCleaner.processClassWithFlags(RuntimeDistCleaner.java:57) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:1.0]
+	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
+	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
+	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
+	... 16 more
+[072月2026 13:03:16.976] [modloading-worker-0/INFO] [HammerAnimations/]: HammerAnimations is constructing.
+[072月2026 13:03:17.001] [modloading-worker-0/INFO] [HammerAnimations/]: JS Converter org.zeith.hammeranims.core.js.converters.fb.CastingFallbackJsConverter@387fec07 has passed!
+[072月2026 13:03:17.002] [modloading-worker-0/INFO] [HammerAnimations/]: Using org.zeith.hammeranims.core.js.parsers.OpenJDKParser@49883a23 JS parser with org.zeith.hammeranims.core.js.converters.fb.CastingFallbackJsConverter@387fec07 converter.
+[072月2026 13:03:17.019] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammeranims/core/init/ParticleComponentsHA; from hammeranims to register it's stuff.
+[072月2026 13:03:17.019] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammeranims/core/init/DefaultsHA; from hammeranims to register it's stuff.
+[072月2026 13:03:17.019] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammeranims/core/init/ContainersHA; from hammeranims to register it's stuff.
+[072月2026 13:03:17.022] [modloading-worker-0/INFO] [HammerLib/]: Registered charge handler for type org.zeith.hammerlib.util.charging.fluid.FluidCharge - org.zeith.hammerlib.util.charging.impl.FluidChargeHandler@21f8c80
+[072月2026 13:03:17.022] [modloading-worker-0/INFO] [HammerLib/]: Registered charge handler for type org.zeith.hammerlib.util.charging.fe.FECharge - org.zeith.hammerlib.util.charging.impl.FEChargeHandler@6792b700
+[072月2026 13:03:17.023] [modloading-worker-0/INFO] [HammerLib/]: Registered inventory lister org.zeith.hammerlib.util.charging.impl.VanillaPlayerInvLister
+[072月2026 13:03:17.031] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/test/machine/TileTestMachine; from hammerlib to register it's stuff.
+[072月2026 13:03:17.031] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/test/machine/RecipeTestMachine; from hammerlib to register it's stuff.
+[072月2026 13:03:17.031] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/test/machine/BlockTestMachine; from hammerlib to register it's stuff.
+[072月2026 13:03:17.031] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/recipes/replacers/WaterBottleReplacer; from hammerlib to register it's stuff.
+[072月2026 13:03:17.031] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/recipes/replacers/RemainingReplacerRegistrar; from hammerlib to register it's stuff.
+[072月2026 13:03:17.031] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/init/SourceTypesHL; from hammerlib to register it's stuff.
+[072月2026 13:03:17.033] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/init/RecipesHL; from hammerlib to register it's stuff.
+[072月2026 13:03:17.033] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/init/LevelActionTypesHL; from hammerlib to register it's stuff.
+[072月2026 13:03:17.033] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/init/ItemsHL; from hammerlib to register it's stuff.
+[072月2026 13:03:17.033] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/core/init/GearsHL; from hammerlib to register it's stuff.
+[072月2026 13:03:17.033] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lorg/zeith/hammerlib/api/forge/ContainerAPI; from hammerlib to register it's stuff.
+[072月2026 13:03:17.033] [modloading-worker-0/INFO] [HammerLib/]: Injecting setup into org.zeith.hammerlib.net.Network
+[072月2026 13:03:17.065] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lcom/storyteam/carmod/init/STCarModels; from stdrive to register it's stuff.
+[072月2026 13:03:17.066] [modloading-worker-0/INFO] [HammerLib/]: Hooked Lcom/storyteam/carmod/init/STCarAnimations; from stdrive to register it's stuff.
+[072月2026 13:03:17.091] [main/FATAL] [net.minecraftforge.fml.ModLoader/LOADING]: Failed to complete lifecycle event CONSTRUCT, 1 errors found
+[072月2026 13:03:17.209] [main/FATAL] [net.minecraftforge.common.ForgeMod/]: Preparing crash report with UUID 055f0481-5195-4225-b20b-adfed3adfb76
+[072月2026 13:03:17.210] [main/FATAL] [net.minecraftforge.server.loading.ServerModLoader/]: Crash report saved to .\crash-reports\crash-2026-02-07_13.03.17-fml.txt
+[072月2026 13:03:17.214] [main/FATAL] [net.minecraftforge.common.ForgeMod/]: Preparing crash report with UUID 8215e121-5d57-4c0b-94df-9b06076e17f5
+[072月2026 13:03:17.215] [main/ERROR] [net.minecraft.server.Main/FATAL]: Failed to start the minecraft server
+net.minecraftforge.fml.LoadingFailedException: Loading errors encountered: [
+	KamenRiderBossYOUandME (kamen_rider_boss_you_and_me) has failed to load correctly
+§7java.lang.BootstrapMethodError: java.lang.RuntimeException: Attempted to load class net/minecraft/client/player/LocalPlayer for invalid dist DEDICATED_SERVER
+]
+	at net.minecraftforge.fml.ModLoader.waitForTransition(ModLoader.java:246) ~[fmlcore-1.20.1-47.4.10.jar%23172!/:?]
+	at net.minecraftforge.fml.ModLoader.lambda$dispatchAndHandleError$20(ModLoader.java:210) ~[fmlcore-1.20.1-47.4.10.jar%23172!/:?]
+	at java.util.Optional.ifPresent(Optional.java:178) ~[?:?]
+	at net.minecraftforge.fml.ModLoader.dispatchAndHandleError(ModLoader.java:210) ~[fmlcore-1.20.1-47.4.10.jar%23172!/:?]
+	at net.minecraftforge.fml.ModLoader.lambda$gatherAndInitializeMods$13(ModLoader.java:183) ~[fmlcore-1.20.1-47.4.10.jar%23172!/:?]
+	at java.lang.Iterable.forEach(Iterable.java:75) ~[?:?]
+	at net.minecraftforge.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:183) ~[fmlcore-1.20.1-47.4.10.jar%23172!/:?]
+	at net.minecraftforge.server.loading.ServerModLoader.load(ServerModLoader.java:30) ~[forge-1.20.1-47.4.10-universal.jar%23176!/:?]
+	at net.minecraft.server.Main.main(Main.java:125) ~[server-1.20.1-20230612.114412-srg.jar%23171!/:?]
 	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
 	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
 	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
@@ -395,545 +137,3 @@ com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'kamen_r
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
 	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[261月2026 13:21:41.157] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:helheim_ice_cream
-com.google.gson.JsonSyntaxException: Unknown item 'pamhc2foodcore:mixingbowlitem'
-	at net.minecraft.world.item.crafting.ShapedRecipe.m_151280_(ShapedRecipe.java:292) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
-	at net.minecraft.world.item.crafting.ShapedRecipe.m_151278_(ShapedRecipe.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.Ingredient.m_43919_(Ingredient.java:219) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraftforge.common.crafting.VanillaIngredientSerializer.parse(VanillaIngredientSerializer.java:27) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraftforge.common.crafting.CraftingHelper.getIngredient(CraftingHelper.java:148) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraft.world.item.crafting.Ingredient.m_288218_(Ingredient.java:194) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.ShapedRecipe.m_44210_(ShapedRecipe.java:278) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.ShapedRecipe$Serializer.m_6729_(ShapedRecipe.java:306) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.ShapedRecipe$Serializer.m_6729_(ShapedRecipe.java:301) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraftforge.common.extensions.IForgeRecipeSerializer.fromJson(IForgeRecipeSerializer.java:23) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:171) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
-	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
-	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
-	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
-	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
-	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[261月2026 13:21:41.160] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:helheim_juice_bottle
-com.google.gson.JsonSyntaxException: Unknown item 'pamhc2foodcore:juiceritem'
-	at net.minecraft.world.item.crafting.ShapedRecipe.m_151280_(ShapedRecipe.java:292) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
-	at net.minecraft.world.item.crafting.ShapedRecipe.m_151278_(ShapedRecipe.java:291) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.Ingredient.m_43919_(Ingredient.java:219) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraftforge.common.crafting.VanillaIngredientSerializer.parse(VanillaIngredientSerializer.java:27) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraftforge.common.crafting.CraftingHelper.getIngredient(CraftingHelper.java:148) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraft.world.item.crafting.Ingredient.m_288218_(Ingredient.java:194) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.ShapedRecipe.m_44210_(ShapedRecipe.java:278) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.ShapedRecipe$Serializer.m_6729_(ShapedRecipe.java:306) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.ShapedRecipe$Serializer.m_6729_(ShapedRecipe.java:301) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraftforge.common.extensions.IForgeRecipeSerializer.fromJson(IForgeRecipeSerializer.java:23) ~[forge-1.20.1-47.4.10-universal.jar%23128!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:171) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
-	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
-	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
-	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
-	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
-	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[261月2026 13:21:41.167] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe create:mixing/helheim_cake_slice
-com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'create:mixing'
-	at net.minecraft.world.item.crafting.RecipeManager.m_220253_(RecipeManager.java:170) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
-	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:169) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
-	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
-	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
-	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
-	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
-	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[261月2026 13:21:41.168] [main/ERROR] [net.minecraft.world.item.crafting.RecipeManager/]: Parsing error loading recipe kamen_rider_weapon_craft:rider_fusion_recipe
-com.google.gson.JsonSyntaxException: Invalid or unsupported recipe type 'kamen_rider_weapon_craft:rider_fusion_recipe'
-	at net.minecraft.world.item.crafting.RecipeManager.m_220253_(RecipeManager.java:170) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Optional.orElseThrow(Optional.java:403) ~[?:?]
-	at net.minecraft.world.item.crafting.RecipeManager.fromJson(RecipeManager.java:169) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:67) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.item.crafting.RecipeManager.m_5787_(RecipeManager.java:34) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.packs.resources.SimplePreparableReloadListener.m_10789_(SimplePreparableReloadListener.java:13) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
-	at java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
-	at net.minecraft.server.packs.resources.SimpleReloadInstance.m_143940_(SimpleReloadInstance.java:69) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214652_(Util.java:783) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.Util.m_214679_(Util.java:772) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.Main.main(Main.java:166) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
-	at jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
-	at jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
-	at java.lang.reflect.Method.invoke(Method.java:568) ~[?:?]
-	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:111) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at net.minecraftforge.fml.loading.targets.CommonLaunchHandler.serverService(CommonLaunchHandler.java:103) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at net.minecraftforge.fml.loading.targets.CommonServerLaunchHandler.lambda$makeService$0(CommonServerLaunchHandler.java:27) ~[fmlloader-1.20.1-47.4.10.jar%2369!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.Launcher.run(Launcher.java:108) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.Launcher.main(Launcher.java:78) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:141) ~[bootstraplauncher-1.1.2.jar:?]
-[261月2026 13:21:41.173] [main/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 8 recipes
-[261月2026 13:21:41.270] [main/INFO] [net.minecraft.advancements.AdvancementList/]: Loaded 1513 advancements
-[261月2026 13:21:41.355] [main/INFO] [top.theillusivec4.curios.Curios/]: Loaded 11 curio slots
-[261月2026 13:21:41.359] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
-[261月2026 13:21:41.359] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
-[261月2026 13:21:41.359] [main/ERROR] [top.theillusivec4.curios.Curios/]: knight_invoker is not a registered slot type!
-[261月2026 13:21:41.359] [main/ERROR] [top.theillusivec4.curios.Curios/]: belt_slot is not a registered slot type!
-[261月2026 13:21:41.360] [main/INFO] [top.theillusivec4.curios.Curios/]: Loaded 7 curio entities
-[261月2026 13:21:41.375] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:snow_golem registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
-[261月2026 13:21:41.376] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:bee registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
-[261月2026 13:21:41.376] [main/INFO] [tocraft.walkers.Walkers/]: TypeProviderDataManager: minecraft:goat registered for class tocraft.walkers.api.data.variants.NBTTypeProvider
-[261月2026 13:21:41.381] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.zombie, entity.minecraft.zombie_villager] registered for [ReinforcementsTrait]
-[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.drowned, entity.minecraft.husk, entity.minecraft.piglin, entity.minecraft.piglin_brute, entity.minecraft.skeleton, entity.minecraft.stray, entity.minecraft.wither_skeleton, entity.minecraft.zombie, entity.minecraft.zombie_villager] registered for [HumanoidTrait]
-[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.husk] registered for [ReinforcementsTrait]
-[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.stray] registered for [RiderTrait]
-[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.snow_golem] registered for [UndrownableTrait]
-[261月2026 13:21:41.382] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.endermite, entity.minecraft.fox, entity.minecraft.silverfish, entity.minecraft.vex, entity.minecraft.wither] registered for [WalkOnPowderSnow]
-[261月2026 13:21:41.384] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.strider] registered for [RiderTrait]
-[261月2026 13:21:41.384] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.wolf] registered for [FearedTrait]
-[261月2026 13:21:41.385] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.chicken, entity.minecraft.rabbit, entity.minecraft.frog] registered for [PreyTrait]
-[261月2026 13:21:41.385] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.chicken, entity.minecraft.turtle] registered for [PreyTrait]
-[261月2026 13:21:41.385] [main/INFO] [tocraft.walkers.Walkers/]: TraitDataManager: [entity.minecraft.drowned] registered for [ReinforcementsTrait]
-[261月2026 13:21:42.879] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting minecraft server version 1.20.1
-[261月2026 13:21:42.879] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Loading properties
-[261月2026 13:21:42.881] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Default game type: SURVIVAL
-[261月2026 13:21:42.881] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
-[261月2026 13:21:42.965] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting Minecraft server on *:25565
-[261月2026 13:21:42.982] [Server thread/INFO] [net.minecraft.server.network.ServerConnectionListener/]: Using default channel type
-[261月2026 13:21:43.215] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
-[261月2026 13:21:43.216] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: The server will make no attempt to authenticate usernames. Beware.
-[261月2026 13:21:43.216] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
-[261月2026 13:21:43.216] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: To change this, set "online-mode" to "true" in the server.properties file.
-[261月2026 13:21:43.282] [Server thread/INFO] [terrablender/]: Registered region minecraft:overworld to index 0 for type OVERWORLD
-[261月2026 13:21:43.282] [Server thread/INFO] [terrablender/]: Registered region minecraft:nether to index 0 for type NETHER
-[261月2026 13:21:43.288] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:the_nether
-[261月2026 13:21:43.382] [Server thread/INFO] [terrablender/]: Initialized TerraBlender biomes for level stem minecraft:overworld
-[261月2026 13:21:43.382] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Preparing level "world"
-[261月2026 13:21:46.142] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
-[261月2026 13:21:47.532] [Worker-Main-6/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
-[261月2026 13:21:47.533] [Worker-Main-4/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
-[261月2026 13:21:47.537] [Worker-Main-9/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
-[261月2026 13:21:47.646] [Worker-Main-7/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
-[261月2026 13:21:48.144] [Worker-Main-1/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 21%
-[261月2026 13:21:48.372] [Server thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 2229 ms
-[261月2026 13:21:48.372] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Done (5.137s)! For help, type "help"
-[261月2026 13:21:48.391] [Server thread/INFO] [net.minecraftforge.server.permission.PermissionAPI/]: Successfully initialized permission handler forge:default_handler
-[261月2026 13:21:48.392] [Server thread/INFO] [patchouli/]: Sending reload packet to clients
-[261月2026 13:21:48.457] [Server thread/ERROR] [net.minecraftforge.eventbus.EventSubclassTransformer/EVENTBUS]: Could not find parent net/minecraft/client/renderer/entity/HumanoidMobRenderer for class forge/net/mca/client/render/VillagerLikeEntityMCARenderer in classloader cpw.mods.modlauncher.TransformingClassLoader@6015a4a5 on thread Thread[Server thread,8,SERVER]
-[261月2026 13:21:48.457] [Server thread/ERROR] [net.minecraftforge.eventbus.EventSubclassTransformer/EVENTBUS]: An error occurred building event handler
-java.lang.ClassNotFoundException: net.minecraft.client.renderer.entity.HumanoidMobRenderer
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:141) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
-	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
-	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at java.lang.Class.forName0(Native Method) ~[?:?]
-	at java.lang.Class.forName(Class.java:375) ~[?:?]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
-	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.lang.Thread.run(Thread.java:842) ~[?:?]
-[261月2026 13:21:48.462] [Server thread/ERROR] [net.minecraftforge.eventbus.EventBus/EVENTBUS]: Exception caught during firing event: net/minecraft/client/renderer/entity/HumanoidMobRenderer
-	Index: 11
-	Listeners:
-		0: HIGHEST
-		1: ASM: net.minecraftforge.common.ForgeInternalHandler@47c6de05 builtinMobSpawnBlocker(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		2: HIGH
-		3: ASM: class dev.architectury.event.forge.EventHandlerImplCommon event(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		4: ASM: net.minecraftforge.common.ForgeInternalHandler@47c6de05 onEntityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		5: NORMAL
-		6: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.WitherSpawnHandler onWitherSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		7: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.ZombieHeiseiswordEventHandler onEntitySpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		8: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.KabutoProjectileHandler onProjectileSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		9: ASM: class forge.net.mca.forge.ForgeBusEvents OnEntityJoinWorldEvent(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		10: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.zombie.ZombieSonicArrowEventHandler onZombieSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		11: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister onVillagerJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		12: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.event.TimeJackerEventHandler onEntityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		13: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.ZombieAIModifier onEntityJoinLevel(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		14: ASM: top.theillusivec4.curios.common.event.CuriosEventHandler@27cb03e2 entityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-java.lang.NoClassDefFoundError: net/minecraft/client/renderer/entity/HumanoidMobRenderer
-	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
-	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1017)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
-	at java.base/java.lang.Class.forName0(Native Method)
-	at java.base/java.lang.Class.forName(Class.java:375)
-	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38)
-	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17)
-	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:315)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:296)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260)
-	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992)
-	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: java.lang.ClassNotFoundException: net.minecraft.client.renderer.entity.HumanoidMobRenderer
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:141)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
-	... 42 more
-
-[261月2026 13:21:48.555] [Server thread/ERROR] [net.minecraft.server.MinecraftServer/]: Encountered an unexpected exception
-net.minecraft.ReportedException: Exception ticking world
-	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:897) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.lang.Thread.run(Thread.java:842) ~[?:?]
-Caused by: java.lang.NoClassDefFoundError: net/minecraft/client/renderer/entity/HumanoidMobRenderer
-	at java.lang.ClassLoader.defineClass1(Native Method) ~[?:?]
-	at java.lang.ClassLoader.defineClass(ClassLoader.java:1017) ~[?:?]
-	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
-	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at java.lang.Class.forName0(Native Method) ~[?:?]
-	at java.lang.Class.forName(Class.java:375) ~[?:?]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
-	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	... 5 more
-Caused by: java.lang.ClassNotFoundException: net.minecraft.client.renderer.entity.HumanoidMobRenderer
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:141) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at java.lang.ClassLoader.defineClass1(Native Method) ~[?:?]
-	at java.lang.ClassLoader.defineClass(ClassLoader.java:1017) ~[?:?]
-	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
-	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at java.lang.Class.forName0(Native Method) ~[?:?]
-	at java.lang.Class.forName(Class.java:375) ~[?:?]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
-	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	... 5 more
-[261月2026 13:21:48.581] [Server thread/FATAL] [net.minecraftforge.common.ForgeMod/]: Preparing crash report with UUID d3181c60-b45d-4663-8360-af12b9595ff8
-[261月2026 13:21:48.582] [Server thread/ERROR] [net.minecraft.server.MinecraftServer/]: This crash report has been saved to: D:\mckamenboss\.\crash-reports\crash-2026-01-26_13.21.48-server.txt
-[261月2026 13:21:48.582] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
-[261月2026 13:21:48.583] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
-[261月2026 13:21:48.583] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
-[261月2026 13:21:49.468] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
-[261月2026 13:21:49.844] [Server thread/ERROR] [net.minecraftforge.eventbus.EventBus/EVENTBUS]: Exception caught during firing event: Could not initialize class com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil
-	Index: 11
-	Listeners:
-		0: HIGHEST
-		1: ASM: net.minecraftforge.common.ForgeInternalHandler@47c6de05 builtinMobSpawnBlocker(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		2: HIGH
-		3: ASM: class dev.architectury.event.forge.EventHandlerImplCommon event(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		4: ASM: net.minecraftforge.common.ForgeInternalHandler@47c6de05 onEntityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		5: NORMAL
-		6: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.WitherSpawnHandler onWitherSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		7: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.ZombieHeiseiswordEventHandler onEntitySpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		8: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.event.KabutoProjectileHandler onProjectileSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		9: ASM: class forge.net.mca.forge.ForgeBusEvents OnEntityJoinWorldEvent(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		10: ASM: class com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.zombie.ZombieSonicArrowEventHandler onZombieSpawn(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		11: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister onVillagerJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		12: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.event.TimeJackerEventHandler onEntityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		13: ASM: class com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ai.ZombieAIModifier onEntityJoinLevel(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-		14: ASM: top.theillusivec4.curios.common.event.CuriosEventHandler@27cb03e2 entityJoinWorld(Lnet/minecraftforge/event/entity/EntityJoinLevelEvent;)V
-java.lang.NoClassDefFoundError: Could not initialize class com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil
-	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17)
-	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:315)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:296)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260)
-	at java.base/java.util.Collections$2.tryAdvance(Collections.java:4853)
-	at java.base/java.util.Collections$2.forEachRemaining(Collections.java:4861)
-	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157561_(PersistentEntitySectionManager.java:303)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.level.ServerLevel.m_8643_(ServerLevel.java:745)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_129885_(MinecraftServer.java:507)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_7041_(MinecraftServer.java:584)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.dedicated.DedicatedServer.m_7041_(DedicatedServer.java:510)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:689)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251)
-	at java.base/java.lang.Thread.run(Thread.java:842)
-Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.NoClassDefFoundError: net/minecraft/client/renderer/entity/HumanoidMobRenderer [in thread "Server thread"]
-	at java.base/java.lang.ClassLoader.defineClass1(Native Method)
-	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1017)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120)
-	at MC-BOOTSTRAP/cpw.mods.modlauncher@10.0.9/cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219)
-	at cpw.mods.securejarhandler/cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
-	at java.base/java.lang.Class.forName0(Native Method)
-	at java.base/java.lang.Class.forName(Class.java:375)
-	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38)
-	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17)
-	at TRANSFORMER/kamen_rider_boss_you_and_me@0.2.7alpha-2/com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:315)
-	at MC-BOOTSTRAP/net.minecraftforge.eventbus/net.minecraftforge.eventbus.EventBus.post(EventBus.java:296)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260)
-	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992)
-	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814)
-	at TRANSFORMER/minecraft@1.20.1/net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661)
-	... 2 more
-
-[261月2026 13:21:49.845] [Server thread/ERROR] [net.minecraft.server.MinecraftServer/]: Exception stopping the server
-java.lang.NoClassDefFoundError: Could not initialize class com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Collections$2.tryAdvance(Collections.java:4853) ~[?:?]
-	at java.util.Collections$2.forEachRemaining(Collections.java:4861) ~[?:?]
-	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157561_(PersistentEntitySectionManager.java:303) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.level.ServerLevel.m_8643_(ServerLevel.java:745) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_129885_(MinecraftServer.java:507) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_7041_(MinecraftServer.java:584) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.dedicated.DedicatedServer.m_7041_(DedicatedServer.java:510) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:689) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_206580_(MinecraftServer.java:251) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.lang.Thread.run(Thread.java:842) ~[?:?]
-Caused by: java.lang.ExceptionInInitializerError: Exception java.lang.NoClassDefFoundError: net/minecraft/client/renderer/entity/HumanoidMobRenderer [in thread "Server thread"]
-	at java.lang.ClassLoader.defineClass1(Native Method) ~[?:?]
-	at java.lang.ClassLoader.defineClass(ClassLoader.java:1017) ~[?:?]
-	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:119) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.buildEvents(EventSubclassTransformer.java:97) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventSubclassTransformer.transform(EventSubclassTransformer.java:48) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBusEngine.processClass(EventBusEngine.java:26) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.service.ModLauncherService.processClassWithFlags(ModLauncherService.java:32) ~[eventbus-6.0.5.jar%2352!/:6.0.5+6.0.5+master.eb8e549b]
-	at cpw.mods.modlauncher.LaunchPluginHandler.offerClassNodeToPlugins(LaunchPluginHandler.java:88) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.ClassTransformer.transform(ClassTransformer.java:120) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.modlauncher.TransformingClassLoader.maybeTransformClassBytes(TransformingClassLoader.java:50) ~[modlauncher-10.0.9.jar%2355!/:?]
-	at cpw.mods.cl.ModuleClassLoader.readerToClass(ModuleClassLoader.java:113) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.lambda$findClass$15(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadFromModule(ModuleClassLoader.java:229) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.findClass(ModuleClassLoader.java:219) ~[securejarhandler-2.1.10.jar:?]
-	at cpw.mods.cl.ModuleClassLoader.loadClass(ModuleClassLoader.java:135) ~[securejarhandler-2.1.10.jar:?]
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[?:?]
-	at java.lang.Class.forName0(Native Method) ~[?:?]
-	at java.lang.Class.forName(Class.java:375) ~[?:?]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.util.MCAUtil.<clinit>(MCAUtil.java:38) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.VillagerAIGoalRegister.onVillagerJoinWorld(VillagerAIGoalRegister.java:17) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at com.xiaoshi2022.kamen_rider_boss_you_and_me.event.__VillagerAIGoalRegister_onVillagerJoinWorld_EntityJoinLevelEvent.invoke(.dynamic) ~[kamen_rider_boss_you_and_me-0.2.7alpha-2.jar%23116!/:0.2.7alpha-2]
-	at net.minecraftforge.eventbus.ASMEventHandler.invoke(ASMEventHandler.java:73) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:315) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraftforge.eventbus.EventBus.post(EventBus.java:296) ~[eventbus-6.0.5.jar%2352!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157538_(PersistentEntitySectionManager.java:79) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157592_(PersistentEntitySectionManager.java:260) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
-	at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[?:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157582_(PersistentEntitySectionManager.java:259) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.world.level.entity.PersistentEntitySectionManager.m_157506_(PersistentEntitySectionManager.java:269) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.level.ServerLevel.m_8793_(ServerLevel.java:355) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_5703_(MinecraftServer.java:893) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.dedicated.DedicatedServer.m_5703_(DedicatedServer.java:283) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_5705_(MinecraftServer.java:814) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	at net.minecraft.server.MinecraftServer.m_130011_(MinecraftServer.java:661) ~[server-1.20.1-20230612.114412-srg.jar%23123!/:?]
-	... 2 more
-[261月2026 13:22:49.477] [Server Watchdog/ERROR] [net.minecraft.server.dedicated.ServerWatchdog/FATAL]: A single server tick took 60.01 seconds (should be max 0.05)
-[261月2026 13:22:49.478] [Server Watchdog/ERROR] [net.minecraft.server.dedicated.ServerWatchdog/FATAL]: Considering it to be crashed, server will forcibly shutdown.
-[261月2026 13:22:49.695] [Server Watchdog/FATAL] [net.minecraftforge.common.ForgeMod/]: Preparing crash report with UUID 617c5258-e51a-40b8-8b4c-6eef8ca8313e
-[261月2026 13:22:49.695] [Server Watchdog/FATAL] [net.minecraftforge.common.ForgeMod/]: Preparing crash report with UUID 66ff47ea-c6f1-4bf1-9441-b543bceabe0c
-[261月2026 13:22:49.695] [Server Watchdog/ERROR] [net.minecraft.server.dedicated.ServerWatchdog/]: This crash report has been saved to: D:\mckamenboss\.\crash-reports\crash-2026-01-26_13.22.49-server.txt

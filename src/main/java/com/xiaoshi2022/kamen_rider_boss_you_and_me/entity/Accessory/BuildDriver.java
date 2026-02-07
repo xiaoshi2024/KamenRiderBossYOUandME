@@ -706,45 +706,4 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             PacketHandler.sendAnimationToAllTrackingAndSelf(anim, entity.getId(), true, entity, 5, 2000);
         }
     }
-
-    /**
-     * 取消玩家作动动画
-     */
-    public void cancelPlayerAnim(@Nullable LivingEntity entity) {
-        if (entity == null || entity.level() == null) return;
-
-        if (entity.level().isClientSide) {
-            // 客户端处理：发送取消动画数据包到服务器
-            PacketHandler.sendToServer(new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.playesani.PlayerAnimationPacket(entity.getId()));
-        } else {
-            // 服务端处理：发送取消动画包到所有跟踪者和自己
-            if (entity instanceof net.minecraft.server.level.ServerPlayer sp) {
-                net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) entity.level();
-                PacketHandler.cancelAnimation(entity.getId(), level);
-            }
-        }
-    }
-
-    /**
-     * 播放Hazard变身音效（仅服务端调用）
-     */
-    /**
- * 播放Hazard变身音效
- */
-    public void playHazardHenshinSound(@Nullable LivingEntity entity) {
-    if (entity == null || entity.level() == null) return;
-    
-    // 获取音效事件
-    SoundEvent soundEvent = ModBossSounds.HAZARD_HENSHIN.get();
-    if (soundEvent == null) return;
-    
-    // 在客户端和服务端都播放音效
-    if (entity.level().isClientSide) {
-        // 客户端播放音效
-        entity.playSound(soundEvent, 1.0F, 1.0F);
-    } else {
-        // 服务端播放音效并广播给所有玩家
-        entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), soundEvent, SoundSource.PLAYERS, 1.0F, 1.0F);
-    }
-    }
 }
