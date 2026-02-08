@@ -21,13 +21,15 @@ public class BerserkMovementInput extends Input {
     }
     
     @Override
-    public void tick(boolean p_225607_1_, float f) {
+    public void tick(boolean slowDown, float f) {
+        this.forwardImpulse = Math.abs(targetForwardImpulse);
+        this.leftImpulse = Math.abs(targetLeftImpulse);
+        this.jumping = targetJumping;
+        
         this.up = targetForwardImpulse > 0;
         this.down = targetForwardImpulse < 0;
         this.left = targetLeftImpulse > 0;
         this.right = targetLeftImpulse < 0;
-        this.forwardImpulse = Math.abs(targetForwardImpulse);
-        this.leftImpulse = Math.abs(targetLeftImpulse);
-        this.jumping = targetJumping;
+        this.shiftKeyDown = false;
     }
 }

@@ -2,13 +2,13 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.util;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.BerserkMovementInput;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.ClientBerserkState;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = "kamen_rider_boss_you_and_me", bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class PlayerInputHandler {
     
     @SubscribeEvent
@@ -39,19 +39,6 @@ public class PlayerInputHandler {
                 event.getInput().right = false;
                 event.getInput().jumping = false;
                 event.getInput().shiftKeyDown = false;
-            }
-        }
-    }
-    
-    @SubscribeEvent
-    public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
-        if (event.getEntity() instanceof net.minecraft.server.level.ServerPlayer player) {
-            if (BerserkModeManager.isBerserk(player)) {
-                event.getEntity().setDeltaMovement(
-                    event.getEntity().getDeltaMovement().x,
-                    0,
-                    event.getEntity().getDeltaMovement().z
-                );
             }
         }
     }
