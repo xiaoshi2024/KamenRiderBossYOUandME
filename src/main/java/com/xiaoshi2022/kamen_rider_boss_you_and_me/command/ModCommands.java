@@ -49,6 +49,9 @@ public class ModCommands {
         
         // 注册骑士踢方块破坏命令
         KickBlockDamageCommand.register(dispatcher);
+        
+        // 注册暴走命令
+        BerserkCommand.register(dispatcher);
     }
 
     private static int showAltarStructureCommand(CommandContext<CommandSourceStack> context) {

@@ -132,6 +132,18 @@ public class PacketHandler {
                 WeaponSyncPacket::encode,
                 WeaponSyncPacket::decode,
                 WeaponSyncPacket::handle);
+        INSTANCE.registerMessage(index++, BerserkSyncPacket.class,
+                BerserkSyncPacket::encode,
+                BerserkSyncPacket::decode,
+                BerserkSyncPacket::handle);
+        INSTANCE.registerMessage(index++, BerserkMovementPacket.class,
+                BerserkMovementPacket::encode,
+                BerserkMovementPacket::decode,
+                BerserkMovementPacket::handle);
+        INSTANCE.registerMessage(index++, BerserkAttackPacket.class,
+                BerserkAttackPacket::encode,
+                BerserkAttackPacket::decode,
+                BerserkAttackPacket::handle);
         // 在 PacketHandler 的 register 方法中添加
         INSTANCE.registerMessage(
                 index++,

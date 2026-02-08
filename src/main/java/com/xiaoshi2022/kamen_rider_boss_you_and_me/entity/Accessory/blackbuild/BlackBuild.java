@@ -1,7 +1,9 @@
 package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.blackbuild;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.client.ClientBerserkState;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.blackbuild.builds.BlackBuildArmorRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.BerserkModeManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,6 +27,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class BlackBuild extends ArmorItem implements GeoItem, KamenBossArmor, ArmorAnimationFactory.AnimatableAccessor {
@@ -77,11 +80,63 @@ public class BlackBuild extends ArmorItem implements GeoItem, KamenBossArmor, Ar
 
     @Override
     public void tick(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            handleBerserkMode(serverPlayer);
+        }
+        
         this.applyResistanceEffect(player);
         this.applyStrengthEffect(player);
         this.applySpeedEffect(player);
         this.applyNightVisionEffect(player);
         this.applyRegenerationEffect(player);
+        
+        this.applyBerserkEffects(player);
+    }
+    
+    private void applyBerserkEffects(Player player) {
+        if (player.level().isClientSide()) {
+            if (ClientBerserkState.isBerserk()) {
+                for (int i = 0; i < 5; i++) {
+                    double offsetX = (Math.random() - 0.5) * 1.0;
+                    double offsetY = Math.random() * 1.5;
+                    double offsetZ = (Math.random() - 0.5) * 1.0;
+                    player.level().addParticle(
+                        net.minecraft.core.particles.ParticleTypes.DRAGON_BREATH,
+                        player.getX() + offsetX,
+                        player.getY() + offsetY,
+                        player.getZ() + offsetZ,
+                        0, 0.1, 0
+                    );
+                }
+            }
+        } else if (player instanceof ServerPlayer serverPlayer) {
+            if (BerserkModeManager.isBerserk(serverPlayer)) {
+                com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler.sendToClient(
+                    new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BerserkSyncPacket(true),
+                    serverPlayer
+                );
+            }
+        }
+    }
+    
+    private void applyScreenShake(Player player) {
+    }
+    
+    private void applyRedOverlay(Player player) {
+    }
+    
+    private void handleBerserkMode(ServerPlayer player) {
+        UUID playerUUID = player.getUUID();
+        
+        if (isFullArmorEquipped(player)) {
+            if (!BerserkModeManager.isBerserk(player)) {
+                BerserkModeManager.startBerserkMode(player);
+            }
+        } else {
+            if (BerserkModeManager.isBerserk(player)) {
+                BerserkModeManager.stopBerserkMode(player);
+            }
+        }
     }
 
     @Override
