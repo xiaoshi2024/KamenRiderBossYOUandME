@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.brain;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.brain.brains.BrainArmorRenderer;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.init.ArmorAnimationFactory;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.BerserkModeManager;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KamenBossArmor;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.server.level.ServerPlayer;
@@ -85,6 +86,10 @@ public class Brain extends ArmorItem implements GeoItem, KamenBossArmor, ArmorAn
 
     @Override
     public void tick(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            handleBerserkMode(serverPlayer);
+        }
+        
         // 添加抗性效果
         this.applyResistanceEffect(player);
         
@@ -201,6 +206,19 @@ public class Brain extends ArmorItem implements GeoItem, KamenBossArmor, ArmorAn
         return player.getInventory().armor.get(3).getItem() instanceof Brain &&
                player.getInventory().armor.get(2).getItem() instanceof Brain &&
                player.getInventory().armor.get(1).getItem() instanceof Brain;
+    }
+    
+    // 处理暴走模式
+    private void handleBerserkMode(ServerPlayer player) {
+        if (isFullArmorEquipped(player)) {
+            if (!BerserkModeManager.isBerserk(player)) {
+                BerserkModeManager.startBerserkMode(player);
+            }
+        } else {
+            if (BerserkModeManager.isBerserk(player)) {
+                BerserkModeManager.stopBerserkMode(player);
+            }
+        }
     }
 
     @Override

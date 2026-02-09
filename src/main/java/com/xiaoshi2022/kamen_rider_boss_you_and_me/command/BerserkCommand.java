@@ -4,7 +4,6 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.network.BerserkSyncPacket;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.util.BerserkModeManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
