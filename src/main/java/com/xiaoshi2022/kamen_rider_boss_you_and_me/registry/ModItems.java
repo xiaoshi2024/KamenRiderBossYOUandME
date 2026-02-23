@@ -24,6 +24,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.tyrant.Tyran
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.zangetsu_shin.ZangetsuShinItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.quinbee.QuinbeeItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.blackbuild.BlackBuild;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.blackbuild.BlackBuildKr;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.kamen_rider_boss_you_and_me;
 import net.minecraft.world.entity.player.Player;
@@ -63,6 +64,14 @@ public class ModItems {
     // 坦克瓶 - 创骑驱动器的坦克满装瓶
     public static final RegistryObject<TankItem> TANK_ITEM = ITEMS.register("tank",
             () -> new TankItem(new Item.Properties()));
+
+    // 海贼满瓶 - 创骑驱动器的海贼满装瓶
+    public static final RegistryObject<KaizokuItem> KAIZOKU_ITEM = ITEMS.register("kaizoku",
+            () -> new KaizokuItem(new Item.Properties()));
+
+    // 列车满瓶 - 创骑驱动器的列车满装瓶
+    public static final RegistryObject<RessyaItem> RESSYA_ITEM = ITEMS.register("ressya",
+            () -> new RessyaItem(new Item.Properties()));
 
     // 双面武器-剑形态
     public static final RegistryObject<TwoWeaponSwordItem> TWO_WEAPON_SWORD = ITEMS.register("two_weapon_sword",
@@ -306,6 +315,10 @@ public class ModItems {
     public static final RegistryObject<BlackBuild> BLACK_BUILD_HELMET = ITEMS.register("black_build_helmet", () -> new BlackBuild(ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<BlackBuild> BLACK_BUILD_CHESTPLATE = ITEMS.register("black_build_chestplate", () -> new BlackBuild(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<BlackBuild> BLACK_BUILD_LEGGINGS = ITEMS.register("black_build_leggings", () -> new BlackBuild(ArmorItem.Type.LEGGINGS, new Item.Properties()));
+
+    public static final RegistryObject<BlackBuildKr> BLACK_BUILD_KR_HELMET = ITEMS.register("black_build_kr_helmet", () -> new BlackBuildKr(ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<BlackBuildKr> BLACK_BUILD_KR_CHESTPLATE = ITEMS.register("black_build_kr_chestplate", () -> new BlackBuildKr(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<BlackBuildKr> BLACK_BUILD_KR_LEGGINGS = ITEMS.register("black_build_kr_leggings", () -> new BlackBuildKr(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 
     // 基夫眼珠 - 击败基夫人形后掉落 (Geo物品)
     public static final RegistryObject<GiifuEyeBall> GIIFU_EYEBALL = ITEMS.register("giifu_eyeball",

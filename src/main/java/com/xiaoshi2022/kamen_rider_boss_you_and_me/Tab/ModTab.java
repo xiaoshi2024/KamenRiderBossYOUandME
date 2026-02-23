@@ -54,6 +54,8 @@ public class ModTab {
                 output.accept(HAZARD_TRIGGER.get());
                 output.accept(TANK_ITEM.get());
                 output.accept(RABBIT_ITEM.get());
+                output.accept(RESSYA_ITEM.get());
+                output.accept(KAIZOKU_ITEM.get());
             })).build());
     public static final RegistryObject<CreativeModeTab> KINDS_TAB = TABS.register("kamen_rider_boss_you_and_me_kinds_tab", () -> CreativeModeTab.builder()
             .icon(() -> INVES_MEAT.get().getDefaultInstance())

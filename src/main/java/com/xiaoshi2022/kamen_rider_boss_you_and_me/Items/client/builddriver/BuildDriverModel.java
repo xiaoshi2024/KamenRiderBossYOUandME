@@ -47,6 +47,12 @@ public class BuildDriverModel extends GeoModel<BuildDriver> {
                 return new ResourceLocation("kamen_rider_boss_you_and_me", "geo/item/build_driver_hazard_r.geo.json");
             case HAZARD_T:
                 return new ResourceLocation("kamen_rider_boss_you_and_me", "geo/item/build_driver_hazard_t.geo.json");
+            case HAZARD_K:
+                return new ResourceLocation("kamen_rider_boss_you_and_me", "geo/item/build_driver_hazard_k.geo.json");
+            case HAZARD_KR:
+                return new ResourceLocation("kamen_rider_boss_you_and_me", "geo/item/build_driver_hazard_kr.geo.json");
+            case HAZARD_RESSYA:
+                return new ResourceLocation("kamen_rider_boss_you_and_me", "geo/item/build_driver_hazard_ressya.geo.json");
             default:
                 return new ResourceLocation("kamen_rider_boss_you_and_me", "geo/item/build_driver.geo.json");
         }
@@ -57,6 +63,11 @@ public class BuildDriverModel extends GeoModel<BuildDriver> {
         // 只有 HAZARD_RT 模式在变身状态或 HAZARD_RT_MOULD 模式时使用变身纹理
         if ((isTransforming && mode == BuildDriver.BeltMode.HAZARD_RT) || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
             return new ResourceLocation("kamen_rider_boss_you_and_me", "textures/item/build_driver_mould.png");
+        }
+        
+        // 海贼或列车形态使用专用纹理
+        if (mode == BuildDriver.BeltMode.HAZARD_K || mode == BuildDriver.BeltMode.HAZARD_KR || mode == BuildDriver.BeltMode.HAZARD_RESSYA) {
+            return new ResourceLocation("kamen_rider_boss_you_and_me", "textures/item/build_driver_hazard_kr.png");
         }
         
         // 否则使用默认纹理

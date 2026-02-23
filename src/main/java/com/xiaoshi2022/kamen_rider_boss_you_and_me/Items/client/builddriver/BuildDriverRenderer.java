@@ -27,6 +27,9 @@ public class BuildDriverRenderer extends GeoItemRenderer<BuildDriver> implements
     private final BuildDriverModel hazardRtModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_RT);
     private final BuildDriverModel hazardRModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_R);
     private final BuildDriverModel hazardTModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_T);
+    private final BuildDriverModel hazardKModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_K);
+    private final BuildDriverModel hazardKrModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_KR);
+    private final BuildDriverModel hazardRessyaModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_RESSYA);
     private final BuildDriverModel hazardRtMouldModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_RT_MOULD, true);
     
     /* ---------- 变身模型 ---------- */
@@ -62,6 +65,12 @@ public class BuildDriverRenderer extends GeoItemRenderer<BuildDriver> implements
                     return hazardRModel;
                 case HAZARD_T:
                     return hazardTModel;
+                case HAZARD_K:
+                    return hazardKModel;
+                case HAZARD_KR:
+                    return hazardKrModel;
+                case HAZARD_RESSYA:
+                    return hazardRessyaModel;
                 case HAZARD_RT_MOULD:
                     return hazardRtMouldModel;
                 default:

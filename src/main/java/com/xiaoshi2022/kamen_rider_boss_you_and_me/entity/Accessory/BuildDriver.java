@@ -63,7 +63,8 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public enum BeltMode {
-        DEFAULT, RT, R, T, HAZARD_EMPTY, HAZARD_RT, HAZARD_R, HAZARD_T, HAZARD_RT_MOULD
+        DEFAULT, RT, R, T, 
+        HAZARD_EMPTY, HAZARD_RT, HAZARD_R, HAZARD_T, HAZARD_K, HAZARD_KR, HAZARD_RESSYA, HAZARD_RT_MOULD
     }
 
     public BuildDriver(Properties properties) {
@@ -623,6 +624,18 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                 case HAZARD_T:
                     // 移除坦克瓶，切换到默认模式
                     setMode(stack, isHazardMode ? BeltMode.HAZARD_EMPTY : BeltMode.DEFAULT);
+                    break;
+                case HAZARD_KR:
+                    // 移除海贼或列车，切换到其中一个单形态
+                    setMode(stack, BeltMode.HAZARD_K);
+                    break;
+                case HAZARD_K:
+                    // 移除海贼，切换到危险空
+                    setMode(stack, BeltMode.HAZARD_EMPTY);
+                    break;
+                case HAZARD_RESSYA:
+                    // 移除列车，切换到危险空
+                    setMode(stack, BeltMode.HAZARD_EMPTY);
                     break;
                 case HAZARD_EMPTY:
                     // 移除危险扳机，切换到默认模式
