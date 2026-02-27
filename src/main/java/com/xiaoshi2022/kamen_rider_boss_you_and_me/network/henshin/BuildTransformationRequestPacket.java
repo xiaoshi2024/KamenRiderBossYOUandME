@@ -27,6 +27,8 @@ public class BuildTransformationRequestPacket {
 
     // 存储玩家的音效任务
     private static final Map<ServerPlayer, ScheduledFuture<?>> playerSoundTasks = new HashMap<>();
+    // 存储玩家的变身状态，防止重复触发
+    private static final Map<ServerPlayer, Boolean> transformationInProgress = new HashMap<>();
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 
     public BuildTransformationRequestPacket(boolean isPressing) {
@@ -61,45 +63,64 @@ public class BuildTransformationRequestPacket {
     private static void handleXKeyPress(ServerPlayer player) {
         System.out.println("[BuildTrans] X键按下，玩家: " + player.getName().getString());
 
-        // 检查玩家是否装备了BuildDriver腰带
+        // 检查是否正在变身中
+        if (transformationInProgress.getOrDefault(player, false)) {
+            System.out.println("[BuildTrans] 正在变身中，忽略X键按下");
+            return;
+        }
+
+        // 检查玩家是否装备了BuildDriver腰带，获取当前模式
         Optional<SlotResult> beltOpt = CurioUtils.findFirstCurio(player,
                 item -> item != null && item.getItem() instanceof BuildDriver);
+        
+        if (beltOpt.isPresent()) {
+            ItemStack beltStack = beltOpt.get().stack();
+            BuildDriver belt = (BuildDriver) beltStack.getItem();
+            BuildDriver.BeltMode currentMode = belt.getMode(beltStack);
+            
+            // 检查玩家当前穿戴的盔甲
+            boolean isWearingBlackBuildArmor = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.BLACK_BUILD_HELMET.get();
+            boolean isWearingBlackBuildKrArmor = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.BLACK_BUILD_KR_HELMET.get();
+            
+            // 根据腰带模式检查对应的盔甲
+            if ((currentMode == BuildDriver.BeltMode.HAZARD_RT || currentMode == BuildDriver.BeltMode.HAZARD_RT_MOULD) && isWearingBlackBuildArmor) {
+                System.out.println("[BuildTrans] 已经装备了BlackBuild盔甲，忽略X键按下");
+                return;
+            } else if (currentMode == BuildDriver.BeltMode.HAZARD_KR && isWearingBlackBuildKrArmor) {
+                System.out.println("[BuildTrans] 已经装备了BlackBuildKr盔甲，忽略X键按下");
+                return;
+            }
+        }
+
+        // 检查玩家是否装备了BuildDriver腰带（已在上面检查过，直接使用之前的beltOpt）
 
         if (beltOpt.isPresent()) {
             ItemStack beltStack = beltOpt.get().stack();
             BuildDriver belt = (BuildDriver) beltStack.getItem();
             BuildDriver.BeltMode currentMode = belt.getMode(beltStack);
 
-            // 检查当前模式是否为HAZARD_RT或HAZARD_KR模式
-            if (currentMode == BuildDriver.BeltMode.HAZARD_RT || currentMode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
-                System.out.println("[BuildTrans] 进入危险RT模式，开始变身流程");
+            // 检查当前模式是否为HAZARD_RT、HAZARD_RT_MOULD或HAZARD_KR模式
+            if (currentMode == BuildDriver.BeltMode.HAZARD_RT || currentMode == BuildDriver.BeltMode.HAZARD_RT_MOULD || currentMode == BuildDriver.BeltMode.HAZARD_KR) {
+                // 根据当前模式确定要切换的模式
+                BuildDriver.BeltMode targetMode = currentMode;
+                if (currentMode == BuildDriver.BeltMode.HAZARD_RT) {
+                    targetMode = BuildDriver.BeltMode.HAZARD_RT_MOULD;
+                    System.out.println("[BuildTrans] 进入危险RT模式，开始变身流程");
+                } else if (currentMode == BuildDriver.BeltMode.HAZARD_KR) {
+                    // 保持HAZARD_KR模式
+                    System.out.println("[BuildTrans] 进入危险KR模式，开始变身流程");
+                } else {
+                    // HAZARD_RT_MOULD模式
+                    System.out.println("[BuildTrans] 进入危险RT_MOULD模式，开始变身流程");
+                }
 
-                // 1. 切换到HAZARD_RT_MOULD模式
-                belt.setMode(beltStack, BuildDriver.BeltMode.HAZARD_RT_MOULD);
+                // 设置变身状态为进行中
+                transformationInProgress.put(player, true);
 
-                // 2. 设置播放mould动画状态
-                belt.setIsPlayingMould(beltStack, true);
-                belt.setIsPlayingMouldB(beltStack, false);
-                belt.setIsTurning(beltStack, true);
-
-                // 3. 同步模式变更到所有玩家
-                PacketHandler.sendToAllTracking(
-                        new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.BeltAnimationPacket(
-                                player.getId(), "mould", BuildDriver.BeltMode.HAZARD_RT_MOULD), player);
-
-                // 4. 触发mould动画
-                belt.triggerAnim(player, "controller", "mould");
-
-                // 5. 触发玩家turn动画
-                belt.triggerPlayerAnim(player, "turn");
-
-                // 6. 延迟3秒后停止SUPER_BEST_MATCH音效并持续播放turn动画
-                scheduleDelayedActions(player, belt, beltStack);
-            } else if (currentMode == BuildDriver.BeltMode.HAZARD_KR) {
-                System.out.println("[BuildTrans] 进入危险KR模式，开始变身流程");
-
-                // 1. 保持HAZARD_KR模式
-                // 不需要切换模式，保持当前的HAZARD_KR模式
+                // 1. 切换到目标模式（如果需要）
+                if (currentMode != targetMode) {
+                    belt.setMode(beltStack, targetMode);
+                }
 
                 // 2. 设置播放mould动画状态
                 belt.setIsPlayingMould(beltStack, true);
@@ -109,7 +130,7 @@ public class BuildTransformationRequestPacket {
                 // 3. 同步模式变更到所有玩家
                 PacketHandler.sendToAllTracking(
                         new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.Drivershenshin.BeltAnimationPacket(
-                                player.getId(), "mould", BuildDriver.BeltMode.HAZARD_KR), player);
+                                player.getId(), "mould", targetMode), player);
 
                 // 4. 触发mould动画
                 belt.triggerAnim(player, "controller", "mould");
@@ -120,7 +141,7 @@ public class BuildTransformationRequestPacket {
                 // 6. 延迟3秒后停止SUPER_BEST_MATCH音效并持续播放turn动画
                 scheduleDelayedActions(player, belt, beltStack);
             } else {
-                System.out.println("[BuildTrans] 当前模式不是HAZARD_RT或HAZARD_KR: " + currentMode);
+                System.out.println("[BuildTrans] 当前模式不是HAZARD_RT、HAZARD_RT_MOULD或HAZARD_KR: " + currentMode);
             }
         } else {
             System.out.println("[BuildTrans] 未找到BuildDriver腰带");
@@ -174,6 +195,12 @@ public class BuildTransformationRequestPacket {
      */
     private static void handleXKeyRelease(ServerPlayer player) {
         System.out.println("[BuildTrans] X键释放，玩家: " + player.getName().getString());
+
+        // 检查是否正在变身中，如果不在变身中则直接返回
+        if (!transformationInProgress.getOrDefault(player, false)) {
+            System.out.println("[BuildTrans] 不在变身中，忽略X键释放");
+            return;
+        }
 
         // 1. 停止所有任务
         cancelPlayerTasks(player);
@@ -230,19 +257,33 @@ public class BuildTransformationRequestPacket {
                                 BuildDriver.BeltMode beltMode = belt2.getMode(beltStack2);
                                 if (beltMode == BuildDriver.BeltMode.HAZARD_KR) {
                                     System.out.println("[BuildTrans] 装备BlackBuildKr盔甲");
-                                    // 发送BlackBuildKr变身请求
-                                    com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler.sendToServer(
-                                            new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BlackBuildKrTransformationRequestPacket(player.getUUID())
-                                    );
+                                    // 直接调用BlackBuildKr变身处理方法
+                                    BlackBuildKrTransformationRequestPacket.equipBlackBuildKrArmor(player);
                                 } else {
                                     System.out.println("[BuildTrans] 装备BlackBuild盔甲");
                                     // 装备BlackBuild盔甲
                                     equipBlackBuildArmor(player);
                                 }
                             }
+                            // 重置变身状态，允许再次触发
+                            transformationInProgress.remove(player);
+                            // 发送变身完成数据包到客户端，通知客户端重置状态
+                            com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler.sendToClient(
+                                    new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BuildTransformationCompletePacket(),
+                                    player
+                            );
+                            System.out.println("[BuildTrans] 变身完成，重置状态并通知客户端");
                         } catch (Exception e) {
                             System.err.println("[BuildTrans] 装备盔甲错误: " + e.getMessage());
                             e.printStackTrace();
+                            // 即使出错也重置状态
+                            transformationInProgress.remove(player);
+                            // 发送变身完成数据包到客户端，通知客户端重置状态
+                            com.xiaoshi2022.kamen_rider_boss_you_and_me.network.PacketHandler.sendToClient(
+                                    new com.xiaoshi2022.kamen_rider_boss_you_and_me.network.henshin.BuildTransformationCompletePacket(),
+                                    player
+                            );
+                            System.out.println("[BuildTrans] 装备盔甲出错，重置状态并通知客户端");
                         }
                     }, 8, TimeUnit.SECONDS);
                 } else {
@@ -268,6 +309,7 @@ public class BuildTransformationRequestPacket {
      */
     public static void cleanupPlayer(ServerPlayer player) {
         cancelPlayerTasks(player);
+        transformationInProgress.remove(player);
         System.out.println("[BuildTrans] 清理玩家数据: " + player.getName().getString());
     }
 

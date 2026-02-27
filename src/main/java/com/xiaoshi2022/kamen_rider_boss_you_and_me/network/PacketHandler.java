@@ -308,6 +308,13 @@ public class PacketHandler {
                 TempRemoveBuildBottlePacket::encode,
                 TempRemoveBuildBottlePacket::decode,
                 TempRemoveBuildBottlePacket::handle);
+        
+        // 注册Build变身完成数据包
+        INSTANCE.registerMessage(index++,
+                BuildTransformationCompletePacket.class,
+                BuildTransformationCompletePacket::encode,
+                BuildTransformationCompletePacket::decode,
+                BuildTransformationCompletePacket::handle);
                 
         // 注册Overlord藤蔓技能数据包
         INSTANCE.registerMessage(

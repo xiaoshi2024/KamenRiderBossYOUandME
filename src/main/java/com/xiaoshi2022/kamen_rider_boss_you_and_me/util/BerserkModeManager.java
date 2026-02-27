@@ -100,8 +100,8 @@ public class BerserkModeManager {
         ServerPlayer player = (ServerPlayer) event.player;
         UUID uuid = player.getUUID();
         
-        // 检查玩家是否装备了全套BlackBuild盔甲
-        boolean hasFullArmor = BlackBuild.isFullArmorEquipped(player);
+        // 检查玩家是否装备了全套BlackBuild或BlackBuildKr盔甲
+        boolean hasFullArmor = BlackBuild.isFullArmorEquipped(player) || com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.blackbuild.BlackBuildKr.isFullArmorEquipped(player);
         
         if (hasFullArmor) {
                 BerserkState state = BERSERK_STATES.get(uuid);

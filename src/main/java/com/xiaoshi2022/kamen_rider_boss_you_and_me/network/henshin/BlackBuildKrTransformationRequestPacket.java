@@ -49,7 +49,7 @@ public class BlackBuildKrTransformationRequestPacket {
     /**
      * 装备BlackBuildKr盔甲
      */
-    private static void equipBlackBuildKrArmor(ServerPlayer player) {
+    public static void equipBlackBuildKrArmor(ServerPlayer player) {
         // 装备头盔
         ItemStack helmet = new ItemStack(ModItems.BLACK_BUILD_KR_HELMET.get());
         player.setItemSlot(EquipmentSlot.HEAD, helmet);

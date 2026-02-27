@@ -81,6 +81,19 @@ public class KeyBinding {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
+        // 检查是否装备了BuildDriver，如果是则完全跳过X键事件处理
+        boolean hasBuildDriver = CuriosApi.getCuriosInventory(mc.player)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver))
+                .isPresent();
+
+        if (hasBuildDriver) {
+            // BuildDriver的变身逻辑由BuildDriverKeyHandler处理，这里完全跳过X键事件
+            if (event.getKey() == CHANGE_KEY.getKey().getValue()) {
+                return;
+            }
+        }
+
         // 检测变身条件
         if (CHANGE_KEY.isDown()) {
             LocalPlayer player = mc.player;
