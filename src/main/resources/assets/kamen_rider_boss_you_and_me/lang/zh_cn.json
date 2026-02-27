@@ -342,6 +342,11 @@
   "item.kamen_rider_boss_you_and_me.black_build_leggings": "危险兔坦护腿",
   "item.kamen_rider_boss_you_and_me.black_build_helmet.tooltip": "[提示] 危险兔坦头盔。",
   "item.kamen_rider_boss_you_and_me.black_build_chestplate.tooltip": "[提示] 危险兔坦胸甲。",
-  "item.kamen_rider_boss_you_and_me.black_build_leggings.tooltip": "[提示] 危险兔坦护腿。"
+  "item.kamen_rider_boss_you_and_me.black_build_leggings.tooltip": "[提示] 危险兔坦护腿。",
+
+  "item.kamen_rider_boss_you_and_me.kaizoku": "海贼满装瓶",
+  "item.kamen_rider_boss_you_and_me.kaizoku.tooltip": "[提示] 创骑驱动器的海贼满装瓶，用于创骑危险模式变身。",
+  "item.kamen_rider_boss_you_and_me.ressya": "列车满装瓶",
+  "item.kamen_rider_boss_you_and_me.ressya.tooltip": "[提示] 创骑驱动器的列车满装瓶，用于创骑危险模式变身。"
 
 }

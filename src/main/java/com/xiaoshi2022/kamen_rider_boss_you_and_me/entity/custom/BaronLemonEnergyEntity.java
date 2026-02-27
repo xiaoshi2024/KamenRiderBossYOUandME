@@ -88,32 +88,29 @@ public class BaronLemonEnergyEntity extends LivingEntity implements GeoEntity {
                     
                     // 如果不是释放者本人且不是盟友，则施加效果
                     if (!isOwnerPlayer && !isAllied) {
-                        // 给敌人添加定身效果（高等级缓慢，使其完全无法移动）
-                        livingEntity.addEffect(new MobEffectInstance(
-                                MobEffects.MOVEMENT_SLOWDOWN,
-                                100, // 5秒持续时间
-                                255, // 最高等级（完全无法移动）
-                                false, 
-                                true // 显示粒子效果
-                        ));
+                        // 检查是否已经有缓慢效果，避免重复添加
+                        if (!livingEntity.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) {
+                            // 给敌人添加定身效果（高等级缓慢，使其完全无法移动）
+                            livingEntity.addEffect(new MobEffectInstance(
+                                    MobEffects.MOVEMENT_SLOWDOWN,
+                                    20, // 1秒持续时间，每次tick刷新
+                                    3, // 等级3（足够定身）
+                                    false, 
+                                    true // 显示粒子效果
+                            ));
+                        }
                         
-                        // 添加跳跃抑制效果（大幅降低跳跃高度）
-                        livingEntity.addEffect(new MobEffectInstance(
-                                MobEffects.JUMP,
-                                100, // 5秒持续时间
-                                -3, // 负等级大幅降低跳跃高度，避免使用极端值导致暴毙
-                                false,
-                                true
-                        ));
-                        
-                        // 添加挖掘减速效果（防止破坏方块）
-                        livingEntity.addEffect(new MobEffectInstance(
-                                MobEffects.DIG_SLOWDOWN,
-                                100, // 5秒持续时间
-                                255, // 最高等级
-                                false,
-                                true
-                        ));
+                        // 检查是否已经有挖掘减速效果，避免重复添加
+                        if (!livingEntity.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+                            // 添加挖掘减速效果（防止破坏方块）
+                            livingEntity.addEffect(new MobEffectInstance(
+                                    MobEffects.DIG_SLOWDOWN,
+                                    20, // 1秒持续时间，每次tick刷新
+                                    3, // 等级3
+                                    false,
+                                    true
+                            ));
+                        }
                         
                         // 添加柠檬能量的特殊粒子效果（可以在客户端处理）
                         spawnLemonParticles(livingEntity);

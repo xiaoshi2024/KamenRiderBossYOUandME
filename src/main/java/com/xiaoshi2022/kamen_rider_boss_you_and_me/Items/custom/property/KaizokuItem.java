@@ -86,7 +86,7 @@ public class KaizokuItem extends Item implements GeoItem {
 
                 belt.setMode(beltStack, newMode);
 
-                player.playSound(ModBossSounds.RABBIT.get(), 1.0F, 1.0F);
+                player.playSound(ModBossSounds.KAIZOKU.get(), 1.0F, 1.0F);
 
                 player.setItemInHand(hand, ItemStack.EMPTY);
 

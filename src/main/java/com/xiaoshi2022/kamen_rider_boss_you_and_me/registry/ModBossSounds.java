@@ -131,6 +131,11 @@ public static final RegistryObject<SoundEvent> AIDEN_OWC = REGISTRY.register("ai
     public static final RegistryObject<SoundEvent> RT_BY = REGISTRY.register("rt_by",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "rt_by")));
 
+    public static final RegistryObject<SoundEvent> RESSYA = REGISTRY.register("ressya",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "ressya")));
+    public static final RegistryObject<SoundEvent> KAIZOKU = REGISTRY.register("kaizoku",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "kaizoku")));
+
 
     public static final RegistryObject<SoundEvent> BUILD_HAZARD = REGISTRY.register("build_hazard",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_boss_you_and_me", "build_hazard")));

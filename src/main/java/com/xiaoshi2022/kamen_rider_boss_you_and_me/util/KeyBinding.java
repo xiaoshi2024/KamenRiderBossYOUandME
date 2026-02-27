@@ -360,9 +360,16 @@ public class KeyBinding {
             
             // 2. 检查玩家是否装备了创世纪驱动器
             boolean hasGenesisDriver = hasGenesisDriver(mc.player);
+            // 检查玩家是否穿着BlackBuild或BlackBuildKr盔甲
+            boolean isBlackBuildArmor = mc.player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.BLACK_BUILD_HELMET.get();
+            boolean isBlackBuildKrArmor = mc.player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.BLACK_BUILD_KR_HELMET.get();
+            
             if (hasGenesisDriver) {
                 // 发送临时取下锁种的数据包
                 PacketHandler.sendToServer(new TempRemoveLockSeedPacket());
+            } else if (isBlackBuildArmor || isBlackBuildKrArmor) {
+                // 发送临时取下满瓶的数据包
+                PacketHandler.sendToServer(new TempRemoveBuildBottlePacket());
             } else if (isEvilBats) {
                 // 发送临时取下蝙蝠印章的数据包
                 PacketHandler.sendToServer(new TempRemoveBatStampPacket());

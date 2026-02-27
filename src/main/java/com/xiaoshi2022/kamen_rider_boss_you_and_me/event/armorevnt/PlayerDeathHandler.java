@@ -8,6 +8,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.NapoleonGhos
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.baron_lemons.baron_lemonItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.brain.Brain;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.blackbuild.BlackBuild;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.blackbuild.BlackBuildKr;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.darkKiva.DarkKivaItem;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.dark_orangels.Dark_orangels;
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.duke.Duke;
@@ -96,9 +97,11 @@ public class PlayerDeathHandler {
                     returnNapoleonEyecon(player);
                 }
 
-                // 9. 检查是否穿着Build盔甲，返还危险扳机和兔子坦克瓶
+                // 9. 检查是否穿着Build盔甲，返还危险扳机和对应满瓶
                 if (isWearingBuildArmor) {
-                    returnBuildItems(player);
+                    // 检查是否穿着BlackBuildKr盔甲
+                    boolean isWearingBlackBuildKr = isWearingBlackBuildKrArmor(player);
+                    returnBuildItems(player, isWearingBlackBuildKr);
                 }
 
                 // 10. 返还锁种 - 只有当锁种不在音速弓中时才返还
@@ -188,27 +191,53 @@ public class PlayerDeathHandler {
         return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BlackBuild ||
                player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof BlackBuild ||
                player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof BlackBuild ||
-               player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof BlackBuild;
+               player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof BlackBuild ||
+               player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BlackBuildKr ||
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof BlackBuildKr ||
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof BlackBuildKr ||
+               player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof BlackBuildKr;
     }
     
-    // 返还Build相关物品（危险扳机和兔子坦克瓶）
-    private static void returnBuildItems(Player player) {
+    // 检查玩家是否穿着BlackBuildKr盔甲
+    private static boolean isWearingBlackBuildKrArmor(Player player) {
+        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof BlackBuildKr ||
+               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof BlackBuildKr ||
+               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof BlackBuildKr ||
+               player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof BlackBuildKr;
+    }
+    
+    // 返还Build相关物品（危险扳机和对应满瓶）
+    private static void returnBuildItems(Player player, boolean isBlackBuildKr) {
         // 返还危险扳机
         ItemStack hazardTrigger = new ItemStack(ModItems.HAZARD_TRIGGER.get());
         if (!player.getInventory().add(hazardTrigger)) {
             player.drop(hazardTrigger, false);
         }
         
-        // 返还兔子瓶
-        ItemStack rabbitBottle = new ItemStack(ModItems.RABBIT_ITEM.get());
-        if (!player.getInventory().add(rabbitBottle)) {
-            player.drop(rabbitBottle, false);
-        }
-        
-        // 返还坦克瓶
-        ItemStack tankBottle = new ItemStack(ModItems.TANK_ITEM.get());
-        if (!player.getInventory().add(tankBottle)) {
-            player.drop(tankBottle, false);
+        if (isBlackBuildKr) {
+            // 返还海贼瓶
+            ItemStack kaizokuBottle = new ItemStack(ModItems.KAIZOKU_ITEM.get());
+            if (!player.getInventory().add(kaizokuBottle)) {
+                player.drop(kaizokuBottle, false);
+            }
+            
+            // 返还列车瓶
+            ItemStack ressyaBottle = new ItemStack(ModItems.RESSYA_ITEM.get());
+            if (!player.getInventory().add(ressyaBottle)) {
+                player.drop(ressyaBottle, false);
+            }
+        } else {
+            // 返还兔子瓶
+            ItemStack rabbitBottle = new ItemStack(ModItems.RABBIT_ITEM.get());
+            if (!player.getInventory().add(rabbitBottle)) {
+                player.drop(rabbitBottle, false);
+            }
+            
+            // 返还坦克瓶
+            ItemStack tankBottle = new ItemStack(ModItems.TANK_ITEM.get());
+            if (!player.getInventory().add(tankBottle)) {
+                player.drop(tankBottle, false);
+            }
         }
     }
     
@@ -477,6 +506,7 @@ public class PlayerDeathHandler {
                         stack.getItem() instanceof baron_lemonItem ||
                         stack.getItem() instanceof Brain ||
                         stack.getItem() instanceof BlackBuild ||
+                        stack.getItem() instanceof BlackBuildKr ||
                         stack.getItem() instanceof Duke ||
                         stack.getItem() instanceof RidernecromItem ||
                         stack.getItem() instanceof ZangetsuShinItem ||
@@ -518,6 +548,7 @@ public class PlayerDeathHandler {
                     armorStack.getItem() instanceof baron_lemonItem ||
                     armorStack.getItem() instanceof Brain ||
                     armorStack.getItem() instanceof BlackBuild ||
+                    armorStack.getItem() instanceof BlackBuildKr ||
                     armorStack.getItem() instanceof Duke ||
                     armorStack.getItem() instanceof RidernecromItem ||
                     armorStack.getItem() instanceof ZangetsuShinItem ||

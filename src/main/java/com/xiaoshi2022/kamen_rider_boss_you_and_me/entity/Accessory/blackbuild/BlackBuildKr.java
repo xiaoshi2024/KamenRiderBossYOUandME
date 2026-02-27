@@ -80,6 +80,10 @@ public class BlackBuildKr extends ArmorItem implements GeoItem, KamenBossArmor, 
 
     @Override
     public void tick(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            handleBerserkMode(serverPlayer);
+        }
+        
         this.applyResistanceEffect(player);
         this.applyStrengthEffect(player);
         this.applySpeedEffect(player);

@@ -70,8 +70,19 @@ public class BuildDriverReleasePacket {
 
         // 给予玩家物品奖励
         player.getInventory().add(new ItemStack(ModItems.HAZARD_TRIGGER.get()));
-        player.getInventory().add(new ItemStack(ModItems.RABBIT_ITEM.get()));
-        player.getInventory().add(new ItemStack(ModItems.TANK_ITEM.get()));
+        
+        // 检查腰带模式
+        BuildDriver.BeltMode currentMode = belt.getMode(beltStack);
+        
+        if (currentMode == BuildDriver.BeltMode.HAZARD_KR) {
+            // 给予海贼瓶和列车瓶
+            player.getInventory().add(new ItemStack(ModItems.KAIZOKU_ITEM.get()));
+            player.getInventory().add(new ItemStack(ModItems.RESSYA_ITEM.get()));
+        } else {
+            // 给予兔子瓶和坦克瓶
+            player.getInventory().add(new ItemStack(ModItems.RABBIT_ITEM.get()));
+            player.getInventory().add(new ItemStack(ModItems.TANK_ITEM.get()));
+        }
 
         // 重置变身状态
         belt.setRelease(beltStack, false);

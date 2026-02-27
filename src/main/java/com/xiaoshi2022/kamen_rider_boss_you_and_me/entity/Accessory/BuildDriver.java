@@ -123,8 +123,16 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
         /* -------- 转动动画 -------- */
         if (isTurning) {
-            // 无论当前动画是什么，都播放turn动画，确保持续播放
-            return state.setAndContinue(TURN);
+            // 播放turn动画
+            if (!current.equals("turn")) {
+                return state.setAndContinue(TURN);
+            }
+            // 当turn动画播放完成后，重置状态
+            if (state.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                setIsTurning(stack, false);
+                return PlayState.CONTINUE;
+            }
+            return PlayState.CONTINUE;
         }
 
         /* -------- HAZARD_RT_MOULD模式动画 -------- */

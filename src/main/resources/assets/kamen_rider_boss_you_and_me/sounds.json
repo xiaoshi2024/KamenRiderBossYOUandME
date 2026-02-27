@@ -457,5 +457,23 @@
         "stream": false
       }
     ]
+  },
+  "kaizoku": {
+    "subtitle": "海贼!",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:kaizoku",
+        "stream": false
+      }
+    ]
+  },
+  "ressya": {
+    "subtitle": "列车!",
+    "sounds": [
+      {
+        "name": "kamen_rider_boss_you_and_me:ressya",
+        "stream": false
+      }
+    ]
   }
 }

@@ -86,7 +86,7 @@ public class RessyaItem extends Item implements GeoItem {
 
                 belt.setMode(beltStack, newMode);
 
-                player.playSound(ModBossSounds.TANK.get(), 1.0F, 1.0F);
+                player.playSound(ModBossSounds.RESSYA.get(), 1.0F, 1.0F);
 
                 player.setItemInHand(hand, ItemStack.EMPTY);
 

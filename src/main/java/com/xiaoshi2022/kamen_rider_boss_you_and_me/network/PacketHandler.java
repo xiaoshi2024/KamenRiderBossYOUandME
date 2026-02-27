@@ -87,6 +87,8 @@ public class PacketHandler {
         
         // 注册 BlackBuildTransformationRequestPacket
         INSTANCE.registerMessage(index++, BlackBuildTransformationRequestPacket.class, BlackBuildTransformationRequestPacket::encode, BlackBuildTransformationRequestPacket::decode, BlackBuildTransformationRequestPacket::handle);
+        // 注册 BlackBuildKrTransformationRequestPacket
+        INSTANCE.registerMessage(index++, BlackBuildKrTransformationRequestPacket.class, BlackBuildKrTransformationRequestPacket::encode, BlackBuildKrTransformationRequestPacket::decode, BlackBuildKrTransformationRequestPacket::handle);
         // 注册 BuildTransformationRequestPacket
         INSTANCE.registerMessage(index++, BuildTransformationRequestPacket.class, BuildTransformationRequestPacket::encode, BuildTransformationRequestPacket::decode, BuildTransformationRequestPacket::handle);
         // 注册 BuildDriverReleasePacket
@@ -298,6 +300,14 @@ public class PacketHandler {
                 TempRemoveNecromEyePacket::encode,
                 TempRemoveNecromEyePacket::decode,
                 TempRemoveNecromEyePacket::handle);
+                
+        // 注册BuildDriver临时取下满瓶数据包
+        INSTANCE.registerMessage(
+                index++,
+                TempRemoveBuildBottlePacket.class,
+                TempRemoveBuildBottlePacket::encode,
+                TempRemoveBuildBottlePacket::decode,
+                TempRemoveBuildBottlePacket::handle);
                 
         // 注册Overlord藤蔓技能数据包
         INSTANCE.registerMessage(

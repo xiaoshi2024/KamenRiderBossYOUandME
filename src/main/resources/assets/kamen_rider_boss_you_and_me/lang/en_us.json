@@ -373,6 +373,11 @@
   "item.kamen_rider_boss_you_and_me.black_build_leggings": "Black Build Leggings",
   "item.kamen_rider_boss_you_and_me.black_build_helmet.tooltip": "[Tooltip] Black Build Helmet.",
   "item.kamen_rider_boss_you_and_me.black_build_chestplate.tooltip": "[Tooltip] Black Build Chestplate.",
-  "item.kamen_rider_boss_you_and_me.black_build_leggings.tooltip": "[Tooltip] Black Build Leggings."
+  "item.kamen_rider_boss_you_and_me.black_build_leggings.tooltip": "[Tooltip] Black Build Leggings.",
+
+  "item.kamen_rider_boss_you_and_me.kaizoku": "Kaizoku Full Bottle",
+  "item.kamen_rider_boss_you_and_me.kaizoku.tooltip": "[Tip] Kaizoku Full Bottle for Build Driver, used for Build Hazard Mode transformation.",
+  "item.kamen_rider_boss_you_and_me.ressya": "Ressya Full Bottle",
+  "item.kamen_rider_boss_you_and_me.ressya.tooltip": "[Tip] Ressya Full Bottle for Build Driver, used for Build Hazard Mode transformation."
 
 }
