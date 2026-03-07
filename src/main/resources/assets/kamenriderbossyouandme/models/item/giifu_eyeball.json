@@ -1,0 +1,93 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        75.33,
+        -79.5,
+        -19.35
+      ],
+      "translation": [
+        0,
+        -1.25,
+        -1
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -55.75,
+        -14.5
+      ],
+      "translation": [
+        0,
+        2.5,
+        1.5
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        -177.96,
+        -54.18,
+        -149.6
+      ],
+      "translation": [
+        0,
+        1.5,
+        0
+      ],
+      "scale": [
+        1.0293,
+        1.0293,
+        0.73242
+      ]
+    },
+    "ground": {
+      "scale": [
+        1.21094,
+        1.21094,
+        1.21094
+      ]
+    },
+    "gui": {
+      "translation": [
+        1.5,
+        1.25,
+        0
+      ],
+      "scale": [
+        2.04492,
+        2.04492,
+        2.04492
+      ]
+    },
+    "head": {
+      "rotation": [
+        82.51,
+        -42.5,
+        84.95
+      ],
+      "translation": [
+        0,
+        7.25,
+        -4
+      ]
+    },
+    "fixed": {
+      "translation": [
+        1.5,
+        1,
+        0
+      ],
+      "scale": [
+        1.56836,
+        1.56836,
+        1.56836
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/giifu_eyeball"
+  }
+}

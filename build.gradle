@@ -17,8 +17,41 @@ tasks.named('wrapper', Wrapper).configure {
 version = mod_version
 group = mod_group_id
 
+
+repositories.clear()
+
 repositories {
-    // Add here additional repositories if required by some of the dependencies below.
+
+    maven {
+        url "https://cursemaven.com"
+    }
+
+    maven {
+
+        url = "https://libraries.minecraft.net/"
+
+    }
+
+    maven {
+
+        url = "https://neoforged.forgecdn.net/releases"
+
+    }
+
+    maven {
+
+        url = "https://neoforged.forgecdn.net/mojang-meta"
+
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+    }
+
+    maven {
+        name = "Curios"
+        url = uri("https://maven.theillusivec4.top/")
+    }
 }
 
 base {
@@ -112,6 +145,16 @@ configurations {
 }
 
 dependencies {
+
+    implementation "curse.maven:playeranimator-658587:7389814"
+
+
+    implementation "maven.modrinth:geckolib:lWsXauBN"
+    implementation "maven.modrinth:ridebattlelib:1.0.9"
+
+    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"

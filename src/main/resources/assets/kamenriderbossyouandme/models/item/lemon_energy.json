@@ -1,0 +1,109 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    128,
+    128
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        -1.75,
+        0
+      ],
+      "scale": [
+        1.396484375,
+        1.396484375,
+        1.396484375
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        -2.25,
+        0
+      ],
+      "scale": [
+        1.240234375,
+        1.240234375,
+        1.240234375
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        10,
+        76.5,
+        0
+      ],
+      "scale": [
+        1.83484375,
+        2.291875,
+        1.5575
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        68,
+        0
+      ],
+      "scale": [
+        2.046875,
+        2.12890625,
+        1.263671875
+      ]
+    },
+    "ground": {
+      "scale": [
+        1.40039375,
+        1.40039375,
+        1.40039375
+      ]
+    },
+    "gui": {
+      "rotation": [
+        0,
+        -180,
+        0
+      ],
+      "translation": [
+        0,
+        -0.75,
+        0
+      ],
+      "scale": [
+        1.96875,
+        1.96875,
+        1.96875
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        -4.75,
+        -7
+      ],
+      "scale": [
+        1.33203125,
+        1.33203125,
+        1.33203125
+      ]
+    },
+    "fixed": {
+      "translation": [
+        -0.75,
+        -2,
+        0
+      ],
+      "scale": [
+        2.521484375,
+        2.521484375,
+        2.521484375
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/lemo_energy"
+  }
+}

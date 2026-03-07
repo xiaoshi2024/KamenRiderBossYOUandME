@@ -1,0 +1,16 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"animation_length": 0.0833,
+			"bones": {
+				"Halfa": {
+					"scale": {
+						"vector": [1.31, 1.44, 1]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

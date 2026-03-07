@@ -1,13 +1,5 @@
 {
-  "itemGroup.kamenriderbossyouandme": "Example Mod Tab",
-  "block.kamenriderbossyouandme.example_block": "Example Block",
-  "item.kamenriderbossyouandme.example_item": "Example Item",
-
-  "kamenriderbossyouandme.configuration.title": "KamenRiderBossYOUandME Configs",
-  "kamenriderbossyouandme.configuration.section.kamenriderbossyouandme.common.toml": "KamenRiderBossYOUandME Configs",
-  "kamenriderbossyouandme.configuration.section.kamenriderbossyouandme.common.toml.title": "KamenRiderBossYOUandME Configs",
-  "kamenriderbossyouandme.configuration.items": "Item List",
-  "kamenriderbossyouandme.configuration.logDirtBlock": "Log Dirt Block",
-  "kamenriderbossyouandme.configuration.magicNumberIntroduction": "Magic Number Text",
-  "kamenriderbossyouandme.configuration.magicNumber": "Magic Number"
+  "itemGroup.kamenriderbossyouandme.henshin": "henshin System",
+  "item.kamenriderbossyouandme.genesis_driver": "Genesis Driver",
+  "item.kamenriderbossyouandme.genesis_driver.desc": "■ Kamen Rider Genesis Driver\n■ Can use various lockseeds to transform\n■ Press X to transform"
 }

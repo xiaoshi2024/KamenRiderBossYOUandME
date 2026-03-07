@@ -1,0 +1,68 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"skick": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"batStampFinish": {
+					"rotation": {
+						"0.0": {
+							"vector": [-85.83235, 28.81792, 56.41427]
+						},
+						"0.25": {
+							"vector": [67.51578, 62.21295, -12.06795],
+							"easing": "easeOutSine"
+						},
+						"0.625": {
+							"vector": [-76.5498, 45.79262, 80.95893]
+						},
+						"0.875": {
+							"vector": [-85.392, 42.47715, 85.08757]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [6, 30, 7]
+						},
+						"0.0417": {
+							"vector": [18, 24.82, -1.02]
+						},
+						"0.25": {
+							"vector": [6, 10, -24],
+							"easing": "easeOutSine"
+						},
+						"0.375": {
+							"vector": [-4.57, 8.29, -15.86]
+						},
+						"0.5417": {
+							"vector": [0, 6, -5]
+						},
+						"0.6667": {
+							"vector": [-3, -3, -3]
+						},
+						"0.875": {
+							"vector": [0, -6.2, -15.4]
+						}
+					}
+				}
+			}
+		},
+		"idle": {
+			"animation_length": 0.25,
+			"bones": {
+				"batStampFinish": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.0833": {
+							"vector": [0, 5, 0]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

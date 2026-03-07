@@ -1,0 +1,104 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    128,
+    128
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        -15.75,
+        3
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        -15.5,
+        3.25
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        66,
+        0
+      ],
+      "translation": [
+        0,
+        -8.5,
+        5.75
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        68,
+        0
+      ],
+      "translation": [
+        0.25,
+        -6.25,
+        7
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        -14,
+        0
+      ],
+      "scale": [
+        1.310546875,
+        1.310546875,
+        1.310546875
+      ]
+    },
+    "gui": {
+      "rotation": [
+        0,
+        -180,
+        0
+      ],
+      "translation": [
+        0.25,
+        -23.5,
+        0
+      ],
+      "scale": [
+        1.705078125,
+        1.705078125,
+        1.705078125
+      ]
+    },
+    "head": {
+      "translation": [
+        -1,
+        -31.75,
+        0.25
+      ],
+      "scale": [
+        2.55,
+        2.55,
+        2.55
+      ]
+    },
+    "fixed": {
+      "translation": [
+        -0.25,
+        -26.75,
+        5.25
+      ],
+      "scale": [
+        1.982421875,
+        1.982421875,
+        1.982421875
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/genesis_driver_cherry"
+  }
+}

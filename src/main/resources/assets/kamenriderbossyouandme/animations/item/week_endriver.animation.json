@@ -1,0 +1,163 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"show": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.5,
+			"bones": {
+				"l": {
+					"position": {
+						"0.0": {
+							"vector": [-0.75, 0, -1]
+						},
+						"0.5": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0.5, 1, 0.3]
+						},
+						"0.5": {
+							"vector": [1, 1, 1]
+						}
+					}
+				},
+				"r": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 0.2]
+						},
+						"0.5": {
+							"vector": [1, 1, 1]
+						}
+					}
+				}
+			}
+		},
+		"idles": {
+			"animation_length": 0.0417,
+			"bones": {
+				"l": {
+					"position": {
+						"vector": [-0.6, 0, -0.1]
+					},
+					"scale": {
+						"vector": [1, 1, 0.28]
+					}
+				},
+				"r": {
+					"position": {
+						"vector": [0.6, 0, -0.3]
+					},
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"idle": {
+			"animation_length": 0.2917
+		},
+		"henshin-a": {
+			"animation_length": 1,
+			"bones": {
+				"quinbee": {
+					"position": {
+						"0.0": {
+							"vector": [0, 1, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"henshin-b": {
+			"animation_length": 1,
+			"bones": {
+				"pivot": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [0, 0, 90]
+						}
+					}
+				},
+				"pivots": {
+					"rotation": {
+						"0.5": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [0, -175, 0]
+						}
+					}
+				},
+				"display": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [0, 0, -0.2]
+						}
+					}
+				}
+			}
+		},
+		"cancel": {
+			"animation_length": 1.25,
+			"bones": {
+				"pivot": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 90]
+						},
+						"0.8333": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"pivots": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -175, 0]
+						},
+						"0.875": {
+							"vector": [0, -175, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"display": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, -0.2]
+						},
+						"0.75": {
+							"vector": [0, 0, -0.2]
+						},
+						"0.875": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

@@ -1,0 +1,86 @@
+package com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.genesisdriver;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import com.xiaoshi2022.kamenriderbossyouandme.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamenriderbossyouandme.client.model.item.genesisdriver.GenesisDriverModel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.client.ICurioRenderer;
+
+public class GenesisDriverRenderer extends GeoItemRenderer<Genesis_driver> implements ICurioRenderer {
+    // 保存当前被渲染的物品栈
+    private ItemStack currentItemStack;
+    
+    public GenesisDriverRenderer() {
+        super(new GenesisDriverModel<>());
+    }
+
+    @Override
+    public void renderByItem(ItemStack stack, 
+                             ItemDisplayContext transformType, 
+                             PoseStack poseStack, 
+                             MultiBufferSource buffer, 
+                             int packedLight, 
+                             int packedOverlay) {
+        // 保存当前物品栈
+        this.currentItemStack = stack;
+        // 设置Genesis_driver的currentStack
+        if (stack.getItem() instanceof Genesis_driver genesisDriver) {
+            genesisDriver.setCurrentStack(stack);
+        }
+        super.renderByItem(stack, transformType, poseStack, buffer, packedLight, packedOverlay);
+    }
+
+    @Override
+    public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack itemStack, SlotContext slotContext, PoseStack poseStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource multiBufferSource, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        // 保存当前物品栈
+        this.currentItemStack = itemStack;
+        // 设置Genesis_driver的currentStack
+        if (itemStack.getItem() instanceof Genesis_driver genesisDriver) {
+            genesisDriver.setCurrentStack(itemStack);
+        }
+        
+        poseStack.pushPose();
+        if (renderLayerParent.getModel() instanceof HumanoidModel) {
+            @SuppressWarnings("unchecked")
+            HumanoidModel<T> model = (HumanoidModel<T>) renderLayerParent.getModel();
+
+            // 将模型移动到身体位置（胸甲位置）
+            model.body.translateAndRotate(poseStack);
+
+            // 调整位置和旋转，使其看起来像胸甲
+            poseStack.scale(0.4F, 0.5F, 0.4F); // 可以根据需要调整缩放
+            poseStack.translate(0.0F, 1.2, -0.4); // 微调位置使其居中
+
+            // 旋转物品
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+
+            // 渲染物品
+            ItemInHandRenderer renderer = new ItemInHandRenderer(
+                    Minecraft.getInstance(),
+                    Minecraft.getInstance().getEntityRenderDispatcher(),
+                    Minecraft.getInstance().getItemRenderer()
+            );
+            renderer.renderItem(
+                    slotContext.entity(),
+                    itemStack,
+                    ItemDisplayContext.FIXED,
+                    false,
+                    poseStack,
+                    multiBufferSource,
+                    light
+            );
+        }
+        poseStack.popPose();
+    }
+}

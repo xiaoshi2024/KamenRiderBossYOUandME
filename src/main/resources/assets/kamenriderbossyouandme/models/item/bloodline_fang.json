@@ -1,0 +1,11 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kamenriderbossyouandme:item/bloodline_fang"
+  },
+  "display": {
+    "gui": {
+      "translation": [0, 2, 0]
+    }
+  }
+}

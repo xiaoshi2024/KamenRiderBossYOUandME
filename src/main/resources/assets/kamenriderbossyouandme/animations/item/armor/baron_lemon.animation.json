@@ -1,0 +1,91 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"animation_length": 0.0417,
+			"bones": {
+				"lemons": {
+					"position": {
+						"vector": [0, 0, 0]
+					},
+					"scale": {
+						"vector": [1.125, 1.2, 1]
+					}
+				},
+				"Foredeck": {
+					"position": {
+						"vector": [0, 0, 0.6]
+					},
+					"scale": {
+						"vector": [1.02, 1.04, 1.22]
+					}
+				},
+				"Halfa": {
+					"position": {
+						"vector": [1, 0, 0]
+					},
+					"scale": {
+						"vector": [1.08, 1, 1.3]
+					}
+				},
+				"backs": {
+					"position": {
+						"vector": [0, 0, 1.3]
+					},
+					"scale": {
+						"vector": [1, 1.1, 0.58]
+					}
+				},
+				"a": {
+					"rotation": {
+						"vector": [12.2127, 2.68507, -37.2127]
+					}
+				},
+				"a2": {
+					"rotation": {
+						"vector": [10.47479, 17.22575, 23.13388]
+					}
+				},
+				"Capesx": {
+					"position": {
+						"vector": [0, 0, 0.4]
+					},
+					"scale": {
+						"vector": [1.075, 1, 1]
+					}
+				}
+			}
+		},
+		"cloak": {
+			"loop": true,
+			"animation_length": 3.3333,
+			"bones": {
+				"Capesx": {
+					"rotation": {
+						"0.0": {
+							"vector": [7.5, 0, 0]
+						},
+						"0.7917": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						},
+						"1.5": {
+							"vector": [7.5, 0, 0]
+						},
+						"2.2917": {
+							"vector": [0, 0, 0],
+							"easing": "easeInSine"
+						},
+						"3.3333": {
+							"vector": [7.5, 0, 0]
+						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kamenriderbossyouandme:textures/item/armor/marika.png"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "kamenriderbossyouandme:item/marika_helmet"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "kamenriderbossyouandme:item/marika_chestplate"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "kamenriderbossyouandme:item/marika_leggings"
+    }
+  ]
+}
