@@ -1,5 +1,0 @@
-{
-  "entities": ["minecraft:player"],
-  "slots": ["belt_slot"],
-  "replace": false
-}

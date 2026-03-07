@@ -1,4 +1,0 @@
-{
-  "entities": ["player", "minecraft:zombie"],
-  "slots": ["head", "back"]
-}
