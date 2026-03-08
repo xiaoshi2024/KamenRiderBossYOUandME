@@ -13,7 +13,6 @@ import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.Properties;
 import java.util.function.Consumer;
 
 public class RiderNecrom extends ArmorItem implements GeoItem {

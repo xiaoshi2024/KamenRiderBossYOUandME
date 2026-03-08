@@ -17,7 +17,7 @@ public class ModCreativeModeTabs {
             .displayItems((parameters, output) -> {
                 // 添加创世纪驱动器
                 output.accept(ModItems.GENESIS_DRIVER.get());
-                // 添加其他变身相关物品
+                output.accept(ModItems.BRAIN_DRIVER.get());
             })
             .build();
 

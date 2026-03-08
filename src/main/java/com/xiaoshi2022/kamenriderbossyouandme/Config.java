@@ -6,31 +6,28 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Neo's config APIs
 public class Config {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-    public static final ModConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
-            .comment("Whether to log the dirt block on common setup")
-            .define("logDirtBlock", true);
+    public static final ModConfigSpec.BooleanValue SKILL_EXPLODE_GRIEF;
+    public static final ModConfigSpec.IntValue SKILL_TOLERANCE_TIME;
+    public static final ModConfigSpec.IntValue RIDER_SOUNDS_VOLUME;
+    public static final ModConfigSpec.BooleanValue DEBUG_MODE;
 
-    public static final ModConfigSpec.IntValue MAGIC_NUMBER = BUILDER
-            .comment("A magic number")
-            .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
-
-    public static final ModConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
-            .comment("What you want the introduction message to be for the magic number")
-            .define("magicNumberIntroduction", "The magic number is... ");
-
-    // a list of strings that are treated as resource locations for items
-    public static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
-            .comment("A list of items to log on common setup.")
-            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), () -> "", Config::validateItemName);
+    static {
+        SKILL_EXPLODE_GRIEF = BUILDER
+                .comment("技能（如骑士踢）爆炸是否摧毁方块")
+                .define("skillExplosionGrief", false);
+        SKILL_TOLERANCE_TIME = BUILDER
+                .comment("技能额外容错（释放后额外有效/实际持续）时间（秒）")
+                .defineInRange("skillToleranceTime", 1, 0, 2);
+        RIDER_SOUNDS_VOLUME = BUILDER
+                .comment("变身时音量大小")
+                .defineInRange("riderSoundsVolume", 100, 1, 100);
+        DEBUG_MODE = BUILDER
+                .comment("开发者向Debug模式")
+                .define("debugMode", false);
+    }
 
     static final ModConfigSpec SPEC = BUILDER.build();
-
-    private static boolean validateItemName(final Object obj) {
-        return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
-    }
 }

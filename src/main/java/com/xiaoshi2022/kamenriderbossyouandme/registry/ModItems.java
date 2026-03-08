@@ -1,17 +1,18 @@
 package com.xiaoshi2022.kamenriderbossyouandme.registry;
 
+import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BrainDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
+import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.DarkRiderGhost.DarkRiderGhost;
+import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.NapoleonGhost.NapoleonGhost;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.baron_lemon.BaronLemon;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.blackbuild.BlackBuild;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.brain.Brain;
-import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.dark_orangels.DarkOrangels;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.darkKiva.DarkKiva;
-import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.DarkRiderGhost.DarkRiderGhost;
+import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.dark_orangels.DarkOrangels;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.duke.Duke;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.evilbats.EvilBats;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.marika.Marika;
-import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.NapoleonGhost.NapoleonGhost;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.noxknight.NoxKnight;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.quinbee.Quinbee;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.rider_barons.RiderBarons;
@@ -28,9 +29,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(KamenRiderBossYOUandME.MODID);
 
+    // 脑机
+    public static final DeferredItem<Item> BRAIN_DRIVER = ITEMS.register("brain_driver",
+                () -> new BrainDriver(new Item.Properties().stacksTo(1)));
+
     // 创世纪驱动器
     public static final DeferredItem<Item> GENESIS_DRIVER = ITEMS.register("genesis_driver",
             () -> new Genesis_driver(new Item.Properties().stacksTo(1)));
+
 
     // 装甲物品 - 使用原版的 ArmorMaterials
     // Baron Lemon

@@ -1,479 +1,320 @@
 {
   "seal": {
-    "subtitle": "subtitles.seal",
+    "subtitle": "sounds.kamenriderbossyouandme.seal",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:seal",
-        "stream": false
-      }
+      "kamenriderbossyouandme:seal"
     ]
   },
   "stand_by_necrom": {
-    "subtitle": "subtitles.stand_by_necrom",
+    "subtitle": "sounds.kamenriderbossyouandme.stand_by_necrom",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:stand_by_necrom",
-        "stream": false
-      }
+      "kamenriderbossyouandme:stand_by_necrom"
     ]
   },
   "loading_eye": {
-    "subtitle": "subtitles.loading_eye",
+    "subtitle": "sounds.kamenriderbossyouandme.loading_eye",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:loading_eye",
-        "stream": false
-      }
+      "kamenriderbossyouandme:loading_eye"
     ]
   },
   "destroy_eye": {
-    "subtitle": "subtitles.destroy_eye",
+    "subtitle": "sounds.kamenriderbossyouandme.destroy_eye",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:destroy_eye",
-        "stream": false
-      }
+      "kamenriderbossyouandme:destroy_eye"
     ]
   },
   "login_by": {
-    "subtitle": "subtitles.login_by",
+    "subtitle": "sounds.kamenriderbossyouandme.login_by",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:login_by",
-        "stream": false
-      }
+      "kamenriderbossyouandme:login_by"
     ]
   },
   "yes_sir": {
-    "subtitle": "subtitles.yes_sir",
+    "subtitle": "sounds.kamenriderbossyouandme.yes_sir",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:yes_sir",
-        "stream": false
-      }
+      "kamenriderbossyouandme:yes_sir"
     ]
   },
   "split": {
-    "subtitle": "subtitles.split",
+    "subtitle": "sounds.kamenriderbossyouandme.split",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:split",
-        "stream": false
-      }
+      "kamenriderbossyouandme:split"
     ]
   },
   "eye_drop": {
-    "subtitle": "subtitles.eye_drop",
+    "subtitle": "sounds.kamenriderbossyouandme.eye_drop",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:eye_drop",
-        "stream": false
-      }
+      "kamenriderbossyouandme:eye_drop"
     ]
   },
   "another_zi_o_click": {
-    "subtitle": "subtitles.another_zi_o_click",
+    "subtitle": "sounds.kamenriderbossyouandme.another_zi_o_click",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:another_zi_o_click",
-        "stream": false
-      }
+      "kamenriderbossyouandme:another_zi_o_click"
     ]
   },
   "bananafruit_energy": {
-    "subtitle": "subtitles.bananafruit_energy",
+    "subtitle": "sounds.kamenriderbossyouandme.bananafruit_energy",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:bananafruit_energy",
-        "stream": false
-      }
+      "kamenriderbossyouandme:bananafruit_energy"
     ]
   },
   "lockoff": {
-    "subtitle": "lockoff",
+    "subtitle": "sounds.kamenriderbossyouandme.lockoff",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:lockoff",
-        "stream": false
-      }
+      "kamenriderbossyouandme:lockoff"
     ]
   },
   "bananaby": {
-    "subtitle": "bananaby",
+    "subtitle": "sounds.kamenriderbossyouandme.bananaby",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:bananaby",
-        "stream": false
-      }
+      "kamenriderbossyouandme:bananaby"
     ]
   },
   "bananaarms": {
-    "subtitle": "bananaarms",
+    "subtitle": "sounds.kamenriderbossyouandme.bananaarms",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:bananaarms",
-        "stream": false
-      }
+      "kamenriderbossyouandme:bananaarms"
     ]
   },
   "lockons": {
-    "subtitle": "lockons",
+    "subtitle": "sounds.kamenriderbossyouandme.lockons",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:lockons",
-        "stream": false
-      }
+      "kamenriderbossyouandme:lockons"
     ]
   },
   "lemon_lockonby": {
-    "subtitle": "lemon_lockon__by",
+    "subtitle": "sounds.kamenriderbossyouandme.lemon_lockonby",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:lemon_lockonby",
-        "stream": false
-      }
+      "kamenriderbossyouandme:lemon_lockonby"
     ]
   },
   "lemon_energy": {
-    "subtitle": "lemon_energy",
+    "subtitle": "sounds.kamenriderbossyouandme.lemon_energy",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:lemon_energy",
-        "stream": false
-      }
+      "kamenriderbossyouandme:lemon_energy"
     ]
   },
   "lemon_baron": {
-    "subtitle": "soda! fight",
+    "subtitle": "sounds.kamenriderbossyouandme.lemon_baron",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:lemon_baron",
-        "stream": false
-      }
+      "kamenriderbossyouandme:lemon_baron"
     ]
   },
   "xiujc": {
-    "subtitle": "xiu ~~",
+    "subtitle": "sounds.kamenriderbossyouandme.xiujc",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:xiujc",
-        "stream": false
-      }
+      "kamenriderbossyouandme:xiujc"
     ]
   },
   "lemon_tick": {
-    "subtitle": "lemon energy sparking ~~",
+    "subtitle": "sounds.kamenriderbossyouandme.lemon_tick",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:lemon_tick",
-        "stream": false
-      }
+      "kamenriderbossyouandme:lemon_tick"
     ]
   },
   "melonx_arms": {
-    "subtitle": "melon energy arms~~",
+    "subtitle": "sounds.kamenriderbossyouandme.melonx_arms",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:melonx_arms",
-        "stream": false
-      }
+      "kamenriderbossyouandme:melonx_arms"
     ]
   },
   "cherry_amrs": {
-    "subtitle": "Cherry energy arms~~",
+    "subtitle": "sounds.kamenriderbossyouandme.cherry_amrs",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:cherry_amrs",
-        "stream": false
-      }
+      "kamenriderbossyouandme:cherry_amrs"
     ]
   },
   "peach_arms": {
-    "subtitle": "Peach energy arms~~",
+    "subtitle": "sounds.kamenriderbossyouandme.peach_arms",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:peach_arms",
-        "stream": false
-      }
+      "kamenriderbossyouandme:peach_arms"
     ]
   },
   "peach_energy": {
-    "subtitle": "Peach energy~~",
+    "subtitle": "sounds.kamenriderbossyouandme.peach_energy",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:peach_energy",
-        "stream": false
-      }
+      "kamenriderbossyouandme:peach_energy"
     ]
   },
   "jimbar_lemon": {
-    "subtitle": "jimbar_lemon~~",
+    "subtitle": "sounds.kamenriderbossyouandme.jimbar_lemon",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:jimbar_lemon",
-        "stream": false
-      }
+      "kamenriderbossyouandme:jimbar_lemon"
     ]
   },
   "orange": {
-    "subtitle": "orange~ ~",
+    "subtitle": "sounds.kamenriderbossyouandme.orange",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:orange",
-        "stream": false
-      }
+      "kamenriderbossyouandme:orange"
     ]
   },
   "orangeby": {
-    "subtitle": "orangeby~ ~",
+    "subtitle": "sounds.kamenriderbossyouandme.orangeby",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:orangeby",
-        "stream": false
-      }
+      "kamenriderbossyouandme:orangeby"
     ]
   },
   "dragonfruit_energy": {
-    "subtitle": "dragonfruit Energy~ ~",
+    "subtitle": "sounds.kamenriderbossyouandme.dragonfruit_energy",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:dragonfruit_energy",
-        "stream": false
-      }
+      "kamenriderbossyouandme:dragonfruit_energy"
     ]
   },
   "dragonfruit_arms": {
-    "subtitle": "dragonfruit arms~ ~",
+    "subtitle": "sounds.kamenriderbossyouandme.dragonfruit_arms",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:dragonfruit_arms",
-        "stream": false
-      }
+      "kamenriderbossyouandme:dragonfruit_arms"
     ]
   },
   "dark_kivas": {
-    "subtitle": "gavv l~ ~",
+    "subtitle": "sounds.kamenriderbossyouandme.dark_kivas",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:dark_kivas",
-        "stream": false
-      }
+      "kamenriderbossyouandme:dark_kivas"
     ]
   },
   "drak_kiva_disassembly": {
-    "subtitle": "drak_kiva_ disassembly",
+    "subtitle": "sounds.kamenriderbossyouandme.drak_kiva_disassembly",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:drak_kiva_disassembly",
-        "stream": false
-      }
+      "kamenriderbossyouandme:drak_kiva_disassembly"
     ]
   },
   "bat": {
-    "subtitle": "bat",
+    "subtitle": "sounds.kamenriderbossyouandme.bat",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:bat",
-        "stream": false
-      }
+      "kamenriderbossyouandme:bat"
     ]
   },
   "evilr": {
-    "subtitle": "Versus up！Madness！Hopeless！Darkness！Bat！ ",
+    "subtitle": "sounds.kamenriderbossyouandme.evilr",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:evilr",
-        "stream": false
-      }
+      "kamenriderbossyouandme:evilr"
     ]
   },
   "evil_by": {
-    "subtitle": "Eeny，meeny，miny，moe×N",
+    "subtitle": "sounds.kamenriderbossyouandme.evil_by",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:evil_by",
-        "stream": false
-      }
+      "kamenriderbossyouandme:evil_by"
     ]
   },
   "aiden_owc": {
-    "subtitle": "aiden_owc",
+    "subtitle": "sounds.kamenriderbossyouandme.aiden_owc",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:aiden_owc",
-        "stream": false
-      }
+      "kamenriderbossyouandme:aiden_owc"
     ]
   },
   "darks_ghost": {
-    "subtitle": "dark ghost",
+    "subtitle": "sounds.kamenriderbossyouandme.darks_ghost",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:darks_ghost",
-        "stream": false
-      }
+      "kamenriderbossyouandme:darks_ghost"
     ]
   },
   "napoleon_ghost": {
-    "subtitle": "subtitles.napoleon_ghost",
+    "subtitle": "sounds.kamenriderbossyouandme.napoleon_ghost",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:napoleon_ghost",
-        "stream": false
-      }
+      "kamenriderbossyouandme:napoleon_ghost"
     ]
   },
   "aidcds": {
-    "subtitle": "another DCD",
+    "subtitle": "sounds.kamenriderbossyouandme.aidcds",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:aidcds",
-        "stream": false
-      }
+      "kamenriderbossyouandme:aidcds"
     ]
   },
   "brainrider": {
-    "subtitle": "brain The rider",
+    "subtitle": "sounds.kamenriderbossyouandme.brainrider",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:brainrider",
-        "stream": false
-      }
+      "kamenriderbossyouandme:brainrider"
     ]
   },
   "erase": {
-    "subtitle": "Erase",
+    "subtitle": "sounds.kamenriderbossyouandme.erase",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:erase",
-        "stream": false
-      }
+      "kamenriderbossyouandme:erase"
     ]
   },
   "nox_a": {
-    "subtitle": "nox Standby one",
+    "subtitle": "sounds.kamenriderbossyouandme.nox_a",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:nox_a",
-        "stream": false
-      }
+      "kamenriderbossyouandme:nox_a"
     ]
   },
   "nox_b": {
-    "subtitle": "nox Standby two",
+    "subtitle": "sounds.kamenriderbossyouandme.nox_b",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:nox_b",
-        "stream": false
-      }
+      "kamenriderbossyouandme:nox_b"
     ]
   },
   "nox_c": {
-    "subtitle": "nox Knight",
+    "subtitle": "sounds.kamenriderbossyouandme.nox_c",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:nox_c",
-        "stream": false
-      }
+      "kamenriderbossyouandme:nox_c"
     ]
   },
   "qunen_bee": {
-    "subtitle": "Queen Bee",
+    "subtitle": "sounds.kamenriderbossyouandme.qunen_bee",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:qunen_bee",
-        "stream": false
-      }
+      "kamenriderbossyouandme:qunen_bee"
     ]
   },
   "queenbe_by": {
-    "subtitle": "QUeen bee By",
+    "subtitle": "sounds.kamenriderbossyouandme.queenbe_by",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:queenbe_by",
-        "stream": false
-      }
+      "kamenriderbossyouandme:queenbe_by"
     ]
   },
   "queenbe_com": {
-    "subtitle": "Queenbe Complete",
+    "subtitle": "sounds.kamenriderbossyouandme.queenbe_com",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:queenbe_com",
-        "stream": false
-      }
+      "kamenriderbossyouandme:queenbe_com"
     ]
   },
   "build_hazard": {
-    "subtitle": "Hazard on",
+    "subtitle": "sounds.kamenriderbossyouandme.build_hazard",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:build_hazard",
-        "stream": false
-      }
+      "kamenriderbossyouandme:build_hazard"
     ]
   },
   "hazard_henshin": {
-    "subtitle": "失控开关！兔子和坦克~超级危险~",
+    "subtitle": "sounds.kamenriderbossyouandme.hazard_henshin",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:hazard_henshin",
-        "stream": false
-      }
+      "kamenriderbossyouandme:hazard_henshin"
     ]
   },
   "rabbit": {
-    "subtitle": "Rabbit!",
+    "subtitle": "sounds.kamenriderbossyouandme.rabbit",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:rabbit",
-        "stream": false
-      }
+      "kamenriderbossyouandme:rabbit"
     ]
   },
   "tank": {
-    "subtitle": "Tank!",
+    "subtitle": "sounds.kamenriderbossyouandme.tank",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:tank",
-        "stream": false
-      }
+      "kamenriderbossyouandme:tank"
     ]
   },
   "super_best_match": {
-    "subtitle": "Super Best Match!",
+    "subtitle": "sounds.kamenriderbossyouandme.super_best_match",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:super_best_match",
-        "stream": false
-      }
+      "kamenriderbossyouandme:super_best_match"
     ]
   },
   "rt_by": {
-    "subtitle": "跳 坦 坦克 坦!",
+    "subtitle": "sounds.kamenriderbossyouandme.rt_by",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:rt_by",
-        "stream": false
-      }
+      "kamenriderbossyouandme:rt_by"
     ]
   },
   "kaizoku": {
-    "subtitle": "海贼!",
+    "subtitle": "sounds.kamenriderbossyouandme.kaizoku",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:kaizoku",
-        "stream": false
-      }
+      "kamenriderbossyouandme:kaizoku"
     ]
   },
   "ressya": {
-    "subtitle": "列车!",
+    "subtitle": "sounds.kamenriderbossyouandme.ressya",
     "sounds": [
-      {
-        "name": "kamen_rider_boss_you_and_me:ressya",
-        "stream": false
-      }
+      "kamenriderbossyouandme:ressya"
     ]
   }
 }
