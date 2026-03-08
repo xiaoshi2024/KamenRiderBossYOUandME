@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamenriderbossyouandme;
 
 import com.mojang.logging.LogUtils;
+import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModCreativeModeTabs;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
@@ -44,6 +45,9 @@ public class KamenRiderBossYOUandME {
         NeoForge.EVENT_BUS.register(this);
 
         ModBossSounds.register(modEventBus);
+
+        modEventBus.addListener(PacketHandler::register);
+
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);

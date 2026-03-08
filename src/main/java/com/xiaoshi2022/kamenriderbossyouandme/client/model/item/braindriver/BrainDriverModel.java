@@ -9,24 +9,14 @@ public class BrainDriverModel<T extends BrainDriver> extends GeoModel<T> {
 
     @Override
     public ResourceLocation getModelResource(T t) {
-        // 根据不同的腰带模式返回不同的模型
-        switch (t.getCurrentMode()) {
-            case BRAIN:
-                return getBrainModelResource();
-            default:
-                return getDefaultModelResource();
-        }
+        // 所有模式使用相同的模型
+        return getDefaultModelResource();
     }
 
     @Override
     public ResourceLocation getTextureResource(T t) {
-        // 根据不同的腰带模式返回不同的纹理
-        switch (t.getCurrentMode()) {
-            case BRAIN:
-                return getBrainTextureResource();
-            default:
-                return getDefaultTextureResource();
-        }
+        // 所有模式使用相同的纹理
+        return getDefaultTextureResource();
     }
 
     @Override
@@ -48,15 +38,5 @@ public class BrainDriverModel<T extends BrainDriver> extends GeoModel<T> {
     // 默认动画资源
     public ResourceLocation getDefaultAnimationResource() {
         return ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "animations/item/brain_driver.animation.json");
-    }
-
-    // Brain模式模型资源
-    public ResourceLocation getBrainModelResource() {
-        return ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "geo/item/brain_driver_brain.geo.json");
-    }
-
-    // Brain模式纹理资源
-    public ResourceLocation getBrainTextureResource() {
-        return ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "textures/item/brain_driver_brain.png");
     }
 }
