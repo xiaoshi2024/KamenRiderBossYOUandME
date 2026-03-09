@@ -13,17 +13,38 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class BrainDriverRenderer extends GeoItemRenderer<BrainDriver> implements ICurioRenderer {
+    /* ---------- 模式模型 ---------- */
+    private final BrainDriverModel defaultModel = new BrainDriverModel(BrainDriver.BeltMode.DEFAULT);
+    private final BrainDriverModel brainModel = new BrainDriverModel(BrainDriver.BeltMode.BRAIN);
+    
     // 保存当前被渲染的物品栈
     private ItemStack currentItemStack;
     
     public BrainDriverRenderer() {
-        super(new BrainDriverModel<>());
+        super(new BrainDriverModel());
     }
+    
+    /* ---------- 根据腰带模式返回对应模型 ---------- */
+    @Override
+    public GeoModel<BrainDriver> getGeoModel() {
+        if (currentItemStack != null && currentItemStack.getItem() instanceof BrainDriver belt) {
+            BrainDriver.BeltMode mode = belt.getCurrentMode(currentItemStack);
+            
+            // 根据模式返回对应模型
+            if (mode == BrainDriver.BeltMode.BRAIN) {
+                return brainModel;
+            }
+            return defaultModel;
+        }
+        return super.getGeoModel();
+    }
+    
     @Override
     public void renderByItem(ItemStack stack, 
                              ItemDisplayContext transformType, 
