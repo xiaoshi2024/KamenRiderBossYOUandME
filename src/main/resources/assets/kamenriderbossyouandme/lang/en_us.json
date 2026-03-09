@@ -8,6 +8,9 @@
   "tooltip.braindriver.mode.normal": "Normal Mode",
   "tooltip.braindriver.mode.brain": "Brain Rider Mode",
 
+  "message.belt.damage": "%s took damage! Remaining durability: %s times",
+  "message.belt.destroyed": "%s has been destroyed!",
+
   "skill.kamenriderbossyouandme.rider_kick": "Rider Kick",
   "skill.kamenriderbossyouandme.rider_kick.display": "§6§lRider Kick",
   "skill.kamenriderbossyouandme.rider_headbutt": "Headbutt",

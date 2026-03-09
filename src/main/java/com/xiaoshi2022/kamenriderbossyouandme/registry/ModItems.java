@@ -57,11 +57,13 @@ public class ModItems {
 
     // Brain
     public static final DeferredItem<Item> BRAIN_HELMET = ITEMS.register("brain_helmet",
-            () -> new Brain(ArmorMaterials.IRON, ArmorItem.Type.HELMET, new Item.Properties()));
+            () -> new Brain(ModArmorMaterials.BRAIN, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final DeferredItem<Item> BRAIN_CHESTPLATE = ITEMS.register("brain_chestplate",
-            () -> new Brain(ArmorMaterials.IRON, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+            () -> new Brain(ModArmorMaterials.BRAIN, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final DeferredItem<Item> BRAIN_LEGGINGS = ITEMS.register("brain_leggings",
-            () -> new Brain(ArmorMaterials.IRON, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+            () -> new Brain(ModArmorMaterials.BRAIN, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final DeferredItem<Item> BRAIN_BOOTS = ITEMS.register("brain_boots",
+            () -> new Brain(ModArmorMaterials.BRAIN, ArmorItem.Type.BOOTS, new Item.Properties()));
 
     // Dark Orangels
     public static final DeferredItem<Item> DARK_ORANGELS_HELMET = ITEMS.register("dark_orangels_helmet",

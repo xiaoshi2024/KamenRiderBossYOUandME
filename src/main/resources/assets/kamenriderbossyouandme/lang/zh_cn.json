@@ -8,6 +8,9 @@
   "tooltip.braindriver.mode.normal": "普通形态",
   "tooltip.braindriver.mode.brain": "Brain骑士形态",
 
+  "message.belt.damage": "%s 受到损伤！剩余可使用次数：%s 次",
+  "message.belt.destroyed": "%s 已损坏消失！",
+
   "skill.kamenriderbossyouandme.rider_kick": "骑士踢",
   "skill.kamenriderbossyouandme.rider_kick.display": "§6§l骑士踢",
   "skill.kamenriderbossyouandme.rider_headbutt": "头槌",

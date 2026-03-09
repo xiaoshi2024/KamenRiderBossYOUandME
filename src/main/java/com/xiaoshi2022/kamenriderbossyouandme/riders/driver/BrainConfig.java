@@ -14,7 +14,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 
 public class BrainConfig {
     public static final ResourceLocation BRAIN_BASE_ID = RiderIds.fromString("brain_base");
-    
+
+    //等待杰瑞更新，以防止鞋子bug
     public static final RiderConfig BRAIN = new CuriosRiderConfig(RiderIds.BRAIN_ID)
             .setMainDriverItem(ModItems.BRAIN_DRIVER.get(), EquipmentSlot.FEET);
     
