@@ -1,10 +1,28 @@
 {
-  "itemGroup.kamenriderbossyouandme.henshin": "henshin System",
+  "itemGroup.kamenriderbossyouandme.henshin": "Henshin System",
   "item.kamenriderbossyouandme.genesis_driver": "Genesis Driver",
   "item.kamenriderbossyouandme.genesis_driver.desc": "■ Kamen Rider Genesis Driver\n■ Can use various lockseeds to transform\n■ Press X to transform",
   "item.kamenriderbossyouandme.brain_driver": "Brain Driver",
   "item.kamenriderbossyouandme.brain_driver.desc": "■ Kamen Rider Brain Driver\n■ Can transform into Brain Rider\n■ Will transform you into a Roidmude when your life is in danger",
   "tooltip.braindriver.mode": "Current Mode: %s",
   "tooltip.braindriver.mode.normal": "Normal Mode",
-  "tooltip.braindriver.mode.brain": "Brain Rider Mode"
+  "tooltip.braindriver.mode.brain": "Brain Rider Mode",
+
+  "skill.kamenriderbossyouandme.rider_kick": "Rider Kick",
+  "skill.kamenriderbossyouandme.rider_kick.display": "§6§lRider Kick",
+  "skill.kamenriderbossyouandme.rider_headbutt": "Headbutt",
+  "skill.kamenriderbossyouandme.rider_headbutt.display": "§c§lHeadbutt",
+  "skill.kamenriderbossyouandme.rider_punch": "Rider Punch",
+  "skill.kamenriderbossyouandme.rider_punch.display": "§f§lRider Punch",
+  "skill.kamenriderbossyouandme.rider_slash": "Rider Slash",
+  "skill.kamenriderbossyouandme.rider_slash.display": "§b§lRider Slash",
+  "skill.kamenriderbossyouandme.rider_blast": "Rider Blast",
+  "skill.kamenriderbossyouandme.rider_blast.display": "§d§l§oRider Blast",
+
+  "skill.kamenriderbossyouandme.brain_headbutt": "Brain Headbutt",
+  "skill.kamenriderbossyouandme.brain_headbutt.display": "§c§lBrain Headbutt",
+  "skill.kamenriderbossyouandme.brain_poison": "Brain Poison",
+  "skill.kamenriderbossyouandme.brain_poison.display": "§5§lBrain Poison",
+  "skill.kamenriderbossyouandme.brain_kick": "Brain Rider Kick",
+  "skill.kamenriderbossyouandme.brain_kick.display": "§6§lBrain Rider Kick"
 }

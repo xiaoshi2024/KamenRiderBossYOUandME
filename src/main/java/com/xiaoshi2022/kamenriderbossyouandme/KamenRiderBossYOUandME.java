@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModCreativeModeTabs;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
+import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderSkills;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
@@ -17,50 +18,44 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(KamenRiderBossYOUandME.MODID)
 public class KamenRiderBossYOUandME {
-    // Define mod id in a common place for everything to reference
     public static final String MODID = "kamenriderbossyouandme";
-    // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-
-
-
-    // The constructor for the mod class is the first code that is run when your mod is loaded.
-    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public KamenRiderBossYOUandME(IEventBus modEventBus, ModContainer modContainer) {
-        // Register the commonSetup method for modloading
+        // 注册commonSetup方法
         modEventBus.addListener(this::commonSetup);
 
-        // Register the Deferred Register to the mod event bus so tabs get registered
+        // 注册创造模式标签页
         ModCreativeModeTabs.CREATIVE_MODE_TABS.register(modEventBus);
-        // Register the Deferred Register to the mod event bus so items get registered
+        // 注册物品
         ModItems.ITEMS.register(modEventBus);
-
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (KamenRiderBossYOUandME) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
-        NeoForge.EVENT_BUS.register(this);
-
+        // 注册声音
         ModBossSounds.register(modEventBus);
 
+        // 注册网络包
         modEventBus.addListener(PacketHandler::register);
 
+        // 注册Forge事件总线
+        NeoForge.EVENT_BUS.register(this);
 
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
+        // 注册配置
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        LOGGER.info("KamenRiderBossYOUandME 模组初始化完成");
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-
+        // 在CommonSetup中注册技能
+        event.enqueueWork(() -> {
+            RiderSkills.registerSkills();
+            LOGGER.info("骑士技能注册完成");
+        });
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+        LOGGER.info("KamenRiderBossYOUandME 服务器启动");
     }
 }

@@ -1,5 +1,7 @@
 package com.xiaoshi2022.kamenriderbossyouandme.Accessory;
 
+import com.jpigeon.ridebattlelib.api.RiderManager;
+import com.jpigeon.ridebattlelib.core.system.network.packet.UnhenshinPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.braindriver.BrainDriverRenderer;
 import net.minecraft.core.component.DataComponents;
@@ -12,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
@@ -359,6 +362,8 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         setShowing(beltStack, false);
         setRelease(beltStack, false);
         setEquipped(beltStack, false);
+        //这里调用解除变身的功能
+        PacketDistributor.sendToServer(new UnhenshinPacket(player.getUUID()));
     }
 
     /* -------------- 客户端渲染器 -------------- */

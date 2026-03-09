@@ -6,5 +6,23 @@
   "item.kamenriderbossyouandme.brain_driver.desc": "■ 假面骑士Brain驱动器\n■ 可以变身为Brain骑士\n■ 生命垂危时会将你转化为机械变异体",
   "tooltip.braindriver.mode": "当前模式: %s",
   "tooltip.braindriver.mode.normal": "普通形态",
-  "tooltip.braindriver.mode.brain": "Brain骑士形态"
+  "tooltip.braindriver.mode.brain": "Brain骑士形态",
+
+  "skill.kamenriderbossyouandme.rider_kick": "骑士踢",
+  "skill.kamenriderbossyouandme.rider_kick.display": "§6§l骑士踢",
+  "skill.kamenriderbossyouandme.rider_headbutt": "头槌",
+  "skill.kamenriderbossyouandme.rider_headbutt.display": "§c§l头槌",
+  "skill.kamenriderbossyouandme.rider_punch": "骑士拳",
+  "skill.kamenriderbossyouandme.rider_punch.display": "§f§l骑士拳",
+  "skill.kamenriderbossyouandme.rider_slash": "骑士斩",
+  "skill.kamenriderbossyouandme.rider_slash.display": "§b§l骑士斩",
+  "skill.kamenriderbossyouandme.rider_blast": "骑士爆破",
+  "skill.kamenriderbossyouandme.rider_blast.display": "§d§l§o骑士爆破",
+
+  "skill.kamenriderbossyouandme.brain_headbutt": "Brain头槌",
+  "skill.kamenriderbossyouandme.brain_headbutt.display": "§c§lBrain头槌",
+  "skill.kamenriderbossyouandme.brain_poison": "Brain毒手",
+  "skill.kamenriderbossyouandme.brain_poison.display": "§5§lBrain毒手",
+  "skill.kamenriderbossyouandme.brain_kick": "Brain骑士踢",
+  "skill.kamenriderbossyouandme.brain_kick.display": "§6§lBrain骑士踢"
 }
