@@ -506,12 +506,12 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
         if (player.level().isClientSide()) {
             // 在客户端，我们需要直接触发本地动画
             // 但由于Minecraft的限制，我们可能需要通过其他方式实现
-            System.out.println("尝试在客户端播放玩家动画: " + animationName);
+
             return;
         }
         
         // 简化实现，仅打印日志
-        System.out.println("播放玩家动画: " + animationName + " 对于玩家: " + player.getName().getString());
+
     }
 
     @Override
@@ -630,7 +630,7 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
         // 简化实现，仅在客户端触发本地动画
         if (entity.level().isClientSide()) {
             // 这里可以添加客户端动画触发逻辑
-            System.out.println("触发动画: " + anim + " 对于实体: " + entity.getName().getString());
+
         }
     }
 

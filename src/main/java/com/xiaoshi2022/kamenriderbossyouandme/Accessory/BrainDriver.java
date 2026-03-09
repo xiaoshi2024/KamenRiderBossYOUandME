@@ -183,7 +183,7 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             // 触发动画
             this.triggerAnim(entity, id, "controller", "henshin");
 
-            System.out.println("触发变身动画 - 玩家: " + entity.getName().getString() + ", ID: " + id);
+
 
             // 添加动画完成后的延迟重置
             serverLevel.getServer().execute(() -> {
@@ -194,7 +194,7 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                         // 动画完成后重置状态，进入待机显示
                         setHenshin(stack, false);
                         setShowing(stack, true);
-                        System.out.println("变身动画完成，切换到待机显示");
+
 
                         // 重新触发待机显示动画
                         if (entity instanceof ServerPlayer serverPlayer) {
@@ -222,7 +222,7 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             long id = GeoItem.getOrAssignId(stack, serverLevel);
             this.triggerAnim(entity, id, "controller", "cancel");
 
-            System.out.println("触发解除动画 - 玩家: " + entity.getName().getString() + ", ID: " + id);
+
         }
     }
 
@@ -242,13 +242,13 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                 controller.getCurrentAnimation().animation().name() : "none";
 
         // 打印调试信息
-        // System.out.println("动画控制器 - 当前状态: hen=" + hen + ", release=" + release + ", show=" + show + ", 动画=" + currentAnim);
+
 
         // 变身动画 - 最高优先级
         if (hen) {
             // 如果当前不是变身动画，或者变身动画已结束，才重新触发
             if (!"henshin".equals(currentAnim) || controller.hasAnimationFinished()) {
-                System.out.println("动画控制器: 开始播放变身动画 (大效果)");
+
                 return state.setAndContinue(HENSHIN);
             }
             return PlayState.CONTINUE;
@@ -257,7 +257,7 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         // 解除动画
         if (release) {
             if (!"cancel".equals(currentAnim) || controller.hasAnimationFinished()) {
-                System.out.println("动画控制器: 开始播放解除动画");
+
                 return state.setAndContinue(CANCEL);
             }
             return PlayState.CONTINUE;
@@ -266,7 +266,7 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         // 展示动画
         if (show) {
             if (!"show".equals(currentAnim) || controller.hasAnimationFinished()) {
-                System.out.println("动画控制器: 开始播放展示动画");
+
                 return state.setAndContinue(SHOW);
             }
             return PlayState.CONTINUE;
@@ -274,7 +274,7 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
         // 待机动画
         if (!"idles".equals(currentAnim)) {
-            System.out.println("动画控制器: 切换到待机动画");
+
             return state.setAndContinue(IDLES);
         }
 
@@ -301,7 +301,7 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         if (entity.level().isClientSide()) {
             // 动画控制器会根据状态自动切换到正确的动画
             // 这里不需要额外触发，只需要确保状态正确即可
-            System.out.println("客户端: 动画状态已同步，动画控制器将自动切换到 " + animName);
+
         }
     }
 

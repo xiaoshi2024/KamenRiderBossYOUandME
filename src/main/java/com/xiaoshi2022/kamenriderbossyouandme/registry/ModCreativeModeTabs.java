@@ -13,7 +13,7 @@ public class ModCreativeModeTabs {
     // 创建变身系统选项卡
     public static final CreativeModeTab HENSHIN_TAB = CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.kamenriderbossyouandme.henshin"))
-            .icon(() -> ModItems.GENESIS_DRIVER.get().getDefaultInstance())
+            .icon(() -> ModItems.BRAIN_DRIVER.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 // 添加创世纪驱动器
                 output.accept(ModItems.GENESIS_DRIVER.get());
