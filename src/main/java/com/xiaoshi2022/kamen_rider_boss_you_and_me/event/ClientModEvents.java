@@ -41,16 +41,4 @@ public class ClientModEvents {
 
         RiderInvisibilityManager.updateInvisibility(player);
     }
-    
-    @SubscribeEvent
-    public static void onKeyRegister(RegisterKeyMappingsEvent event){
-        event.register(CHANGE_KEY);
-        event.register(CHANGES_KEY);
-        event.register(RELIEVE_KEY);
-        event.register(KEY_GUARD);
-        event.register(KEY_BLAST);
-        event.register(KEY_BOOST);
-        event.register(KEY_FLIGHT);
-        event.register(KEY_BARRIER_PULL);
-    }
 }

@@ -62,28 +62,32 @@ public class BuildDriverKeyHandler {
                 .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver))
                 .isPresent();
         
-        if (hasBuildDriver) {
-            Optional<SlotResult> beltOpt = CuriosApi.getCuriosInventory(player)
-                    .resolve()
-                    .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver));
+        // 如果没有装备BuildDriver腰带，直接返回，不设置变身状态
+        if (!hasBuildDriver) {
+            System.out.println("[BuildDriverKeyHandler] 未装备BuildDriver腰带，忽略X键按下");
+            return;
+        }
+        
+        Optional<SlotResult> beltOpt = CuriosApi.getCuriosInventory(player)
+                .resolve()
+                .flatMap(inv -> inv.findFirstCurio(s -> s.getItem() instanceof com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver));
+        
+        if (beltOpt.isPresent()) {
+            ItemStack beltStack = beltOpt.get().stack();
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver belt = (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver) beltStack.getItem();
+            com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver.BeltMode currentMode = belt.getMode(beltStack);
             
-            if (beltOpt.isPresent()) {
-                ItemStack beltStack = beltOpt.get().stack();
-                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver belt = (com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver) beltStack.getItem();
-                com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver.BeltMode currentMode = belt.getMode(beltStack);
-                
-                // 检查玩家当前穿戴的盔甲
-                boolean isWearingBlackBuildArmor = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.BLACK_BUILD_HELMET.get();
-                boolean isWearingBlackBuildKrArmor = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.BLACK_BUILD_KR_HELMET.get();
-                
-                // 根据腰带模式检查对应的盔甲
-                if ((currentMode == com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver.BeltMode.HAZARD_RT || currentMode == com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver.BeltMode.HAZARD_RT_MOULD) && isWearingBlackBuildArmor) {
-                    System.out.println("[BuildDriverKeyHandler] 已经装备了BlackBuild盔甲，忽略X键按下");
-                    return;
-                } else if (currentMode == com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver.BeltMode.HAZARD_KR && isWearingBlackBuildKrArmor) {
-                    System.out.println("[BuildDriverKeyHandler] 已经装备了BlackBuildKr盔甲，忽略X键按下");
-                    return;
-                }
+            // 检查玩家当前穿戴的盔甲
+            boolean isWearingBlackBuildArmor = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.BLACK_BUILD_HELMET.get();
+            boolean isWearingBlackBuildKrArmor = player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.BLACK_BUILD_KR_HELMET.get();
+            
+            // 根据腰带模式检查对应的盔甲
+            if ((currentMode == com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver.BeltMode.HAZARD_RT || currentMode == com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver.BeltMode.HAZARD_RT_MOULD) && isWearingBlackBuildArmor) {
+                System.out.println("[BuildDriverKeyHandler] 已经装备了BlackBuild盔甲，忽略X键按下");
+                return;
+            } else if (currentMode == com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.Accessory.BuildDriver.BeltMode.HAZARD_KR && isWearingBlackBuildKrArmor) {
+                System.out.println("[BuildDriverKeyHandler] 已经装备了BlackBuildKr盔甲，忽略X键按下");
+                return;
             }
         }
         

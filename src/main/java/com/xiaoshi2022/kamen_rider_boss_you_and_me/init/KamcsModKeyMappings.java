@@ -44,6 +44,15 @@ public class KamcsModKeyMappings {
 	@SubscribeEvent
 	public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
 		event.register(KKCIK);
+		// 注册其他按键
+		event.register(com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.CHANGE_KEY);
+		event.register(com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.CHANGES_KEY);
+		event.register(com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.RELIEVE_KEY);
+		event.register(com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.KEY_GUARD);
+		event.register(com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.KEY_BLAST);
+		event.register(com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.KEY_BOOST);
+		event.register(com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.KEY_FLIGHT);
+		event.register(com.xiaoshi2022.kamen_rider_boss_you_and_me.util.KeyBinding.KEY_BARRIER_PULL);
 	}
 
 	@Mod.EventBusSubscriber({Dist.CLIENT})
