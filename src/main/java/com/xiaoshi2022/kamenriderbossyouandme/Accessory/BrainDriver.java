@@ -1,8 +1,7 @@
 package com.xiaoshi2022.kamenriderbossyouandme.Accessory;
 
-import com.jpigeon.ridebattlelib.api.RiderManager;
-import com.jpigeon.ridebattlelib.core.system.network.packet.UnhenshinPacket;
-import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
+import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
+import com.jpigeon.ridebattlelib.common.network.packet.UnhenshinPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.braindriver.BrainDriverRenderer;
 import com.xiaoshi2022.kamenriderbossyouandme.event.UnhenshinDelayHandler;
 import net.minecraft.core.component.DataComponents;
@@ -10,7 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -364,12 +362,13 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         setRelease(beltStack, false);
         setEquipped(beltStack, false);
 
+        // ✅ 修复：在服务端直接执行解除变身逻辑，而不是发送 packet
         // 检查是否有待处理的解除变身
         if (!UnhenshinDelayHandler.hasPendingUnhenshin(player.getUUID())) {
-            // 如果没有待处理的解除，才立即发送包
-            PacketDistributor.sendToServer(new UnhenshinPacket(player.getUUID()));
+            // 直接取消变身，而不是发送包
+            RideBattleAPI.unTransform(player);
         }
-        // 如果有待处理的解除，不发送包，让延迟处理器处理
+        // 如果有待处理的解除，让延迟处理器处理
     }
 
     /* -------------- 客户端渲染器 -------------- */

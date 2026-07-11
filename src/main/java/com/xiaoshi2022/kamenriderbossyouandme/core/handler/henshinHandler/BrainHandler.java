@@ -1,13 +1,10 @@
 package com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler;
 
-import com.jpigeon.ridebattlelib.api.RiderManager;
-import com.jpigeon.ridebattlelib.core.system.event.HenshinEvent;
-import com.jpigeon.ridebattlelib.core.system.event.UnhenshinEvent;
+import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
+import com.jpigeon.ridebattlelib.common.event.HenshinEvent;
+import com.jpigeon.ridebattlelib.common.event.UnhenshinEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BrainDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Config;
-import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
-import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.BeltAnimationPacket;
-import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.DriverSyncPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderIds;
 import com.xiaoshi2022.kamenriderbossyouandme.util.CurioUtils;
@@ -57,34 +54,11 @@ public class BrainHandler {
             belt.setShowing(beltStack, false);
             belt.setActive(beltStack, true);
 
-            // 3. 最后设置变身状态并触发动画
             if (player instanceof ServerPlayer serverPlayer) {
-                // 这个方法内部会设置henshin状态并触发动画
                 belt.triggerHenshinAnimation(serverPlayer, beltStack);
             }
 
-            // 发送网络包同步状态
-            PacketHandler.sendToTrackingAndSelf(
-                    (ServerPlayer) player,
-                    new BeltAnimationPacket(
-                            player.getId(),
-                            "henshin",
-                            BrainDriver.BeltMode.BRAIN
-                    )
-            );
-
-            PacketHandler.sendToTrackingAndSelf(
-                    (ServerPlayer) player,
-                    new DriverSyncPacket(
-                            player.getId(),
-                            BrainDriver.BeltMode.BRAIN
-                    )
-            );
-
-            // 延迟完成变身 - 增加时间以确保动画播放完成
-            RiderManager.scheduleTicks(40, () -> {
-                RiderManager.completeHenshin(player);
-            });
+            RideBattleAPI.completeIn(40, player);
         });
     }
 
@@ -101,32 +75,13 @@ public class BrainHandler {
             // 2. 设置其他状态
             belt.setActive(beltStack, false);
 
-            // 3. 触发解除动画（这个方法内部会设置release状态）
             if (player instanceof ServerPlayer serverPlayer) {
                 belt.triggerCancelAnimation(serverPlayer, beltStack);
             }
-
-            // 发送网络包同步状态
-            PacketHandler.sendToTrackingAndSelf(
-                    (ServerPlayer) player,
-                    new BeltAnimationPacket(
-                            player.getId(),
-                            "cancel",
-                            BrainDriver.BeltMode.DEFAULT
-                    )
-            );
-
-            PacketHandler.sendToTrackingAndSelf(
-                    (ServerPlayer) player,
-                    new DriverSyncPacket(
-                            player.getId(),
-                            BrainDriver.BeltMode.DEFAULT
-                    )
-            );
         });
     }
 
     public static void playSound(Player player, SoundEvent soundEvent) {
-        RiderManager.playPublicSound(player, soundEvent, ((float) Config.RIDER_SOUNDS_VOLUME.get() / 100));
+        RideBattleAPI.playPublicSound(player, soundEvent, ((float) Config.RIDER_SOUNDS_VOLUME.get() / 100));
     }
 }

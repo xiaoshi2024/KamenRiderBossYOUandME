@@ -1,8 +1,8 @@
 package com.xiaoshi2022.kamenriderbossyouandme.Accessory;
 
-import com.jpigeon.ridebattlelib.api.RiderManager;
-import com.jpigeon.ridebattlelib.core.system.event.HenshinEvent;
-import com.jpigeon.ridebattlelib.core.system.event.UnhenshinEvent;
+import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
+import com.jpigeon.ridebattlelib.common.event.HenshinEvent;
+import com.jpigeon.ridebattlelib.common.event.UnhenshinEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.genesisdriver.GenesisDriverRenderer;
 import net.minecraft.core.component.DataComponents;
@@ -76,7 +76,7 @@ public class Genesis_driver extends AbstractRiderBelt implements GeoItem, ICurio
             belt.startHenshinAnimation(sp, beltStack);
             
             // 完成变身
-            RiderManager.completeIn(60, sp);
+            RideBattleAPI.completeIn(60, sp);
         }
     }
 

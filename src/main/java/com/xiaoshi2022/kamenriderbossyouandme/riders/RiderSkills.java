@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamenriderbossyouandme.riders;
 
-import com.jpigeon.ridebattlelib.core.system.skill.SkillSystem;
+import com.jpigeon.ridebattlelib.server.system.SkillSystem;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

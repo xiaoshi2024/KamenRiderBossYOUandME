@@ -1,14 +1,14 @@
 package com.xiaoshi2022.kamenriderbossyouandme.core.handler.skills;
 
-import com.jpigeon.ridebattlelib.api.RiderManager;
-import com.jpigeon.ridebattlelib.core.system.event.SkillEvent;
+import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
+import com.jpigeon.ridebattlelib.common.event.SkillEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.network.packet.BYAnimationPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderSkills;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.driver.BrainConfig;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import com.xiaoshi2022.kamenriderbossyouandme.network.packet.PlayerMovementPacket;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
@@ -128,7 +128,7 @@ public class BrainSkillHandler {
         playAnimation(player, "brain_headbutt", 2);
 
         // 定时移除标签
-        RiderManager.scheduleTicks(duration, () -> removeTag(player, "skill_brain_headbutt"));
+        RideBattleAPI.scheduleTicks(duration, () -> removeTag(player, "skill_brain_headbutt"));
     }
 
     private static void executeBrainPoison(Player player) {
@@ -161,7 +161,7 @@ public class BrainSkillHandler {
                     30, 2.0, 1.0, 2.0, 0.1);
 
             // 延迟产生毒雾效果
-            RiderManager.scheduleTicks(5, () -> {
+            RideBattleAPI.scheduleTicks(5, () -> {
                 AABB area = player.getBoundingBox().inflate(5.0);
                 List<LivingEntity> targets = serverLevel.getEntitiesOfClass(
                         LivingEntity.class, area,
@@ -210,7 +210,7 @@ public class BrainSkillHandler {
         playAnimation(player, "kick", 2);
 
         // 定时移除标签
-        RiderManager.scheduleTicks(duration, () -> {
+        RideBattleAPI.scheduleTicks(duration, () -> {
             removeTag(player, "skill_brain_kick");
             removeTag(player, "rider_kicking");
         });
@@ -322,23 +322,20 @@ public class BrainSkillHandler {
     // ==================== 辅助方法 ====================
 
     private static void kickSequence(Player player, int ticks) {
-        RiderManager.scheduleTicks(10, () -> addTag(player, "rider_kicking"));
-        RiderManager.scheduleTicks(ticks, () -> removeTag(player, "rider_kicking"));
+        RideBattleAPI.scheduleTicks(10, () -> addTag(player, "rider_kicking"));
+        RideBattleAPI.scheduleTicks(ticks, () -> removeTag(player, "rider_kicking"));
     }
 
     private static void headbuttSequence(Player player, int ticks) {
-        RiderManager.scheduleTicks(5, () -> addTag(player, "rider_headbutting"));
-        RiderManager.scheduleTicks(ticks, () -> removeTag(player, "rider_headbutting"));
+        RideBattleAPI.scheduleTicks(5, () -> addTag(player, "rider_headbutting"));
+        RideBattleAPI.scheduleTicks(ticks, () -> removeTag(player, "rider_headbutting"));
     }
 
     private static int calculateTolerance(int origin) {
         return origin; // 可以添加配置
     }
 
-    private static LocalPlayer getLocalPlayer(Player player) {
-        Minecraft mc = Minecraft.getInstance();
-        return mc.player != null && mc.player.getUUID().equals(player.getUUID()) ? mc.player : null;
-    }
+    
 
     public static void addResistance(Player player, int duration) {
         addEffect(player, MobEffects.DAMAGE_RESISTANCE, duration, 4);
@@ -348,46 +345,70 @@ public class BrainSkillHandler {
         player.addEffect(new MobEffectInstance(effect, duration, level, true, false));
     }
 
-    private static void riderKickJump(Player serverPlayer, double jumpHeight) {
-        LocalPlayer localPlayer = getLocalPlayer(serverPlayer);
-        if (localPlayer == null) return;
-        Vec3 currentMovement = localPlayer.getKnownMovement();
-        localPlayer.setDeltaMovement(new Vec3(currentMovement.x, jumpHeight, currentMovement.z));
+    private static void riderKickJump(Player player, double jumpHeight) {
+        if (player == null) return;
+        Vec3 currentMovement = player.getDeltaMovement();
+        Vec3 jump = new Vec3(currentMovement.x, currentMovement.y + jumpHeight, currentMovement.z);
+        addDeltaMovement(player, jump);
     }
 
-    private static void riderKickForward(Player serverPlayer, double norm, int ticks) {
-        LocalPlayer localPlayer = getLocalPlayer(serverPlayer);
-        if (localPlayer == null) return;
-        RiderManager.scheduleTicks(ticks, () -> {
-            Vec3 lookVec = localPlayer.getLookAngle();
-            Vec3 movement = localPlayer.getDeltaMovement();
-            localPlayer.addDeltaMovement(new Vec3(
+    private static void riderKickForward(Player player, double norm, int ticks) {
+        if (player == null) return;
+        RideBattleAPI.scheduleTicks(ticks, () -> {
+            Vec3 lookVec = player.getLookAngle();
+            Vec3 movement = player.getDeltaMovement();
+            Vec3 kick = new Vec3(
                     movement.x + lookVec.x * norm * 1.5,
                     movement.y + lookVec.y * norm,
                     movement.z + lookVec.z * norm * 1.5
-            ));
+            );
+            addDeltaMovement(player, kick);
         });
     }
 
-    private static void riderJump(Player serverPlayer, double jumpHeight) {
-        LocalPlayer localPlayer = getLocalPlayer(serverPlayer);
-        if (localPlayer == null) return;
-        Vec3 currentMovement = localPlayer.getKnownMovement();
-        localPlayer.setDeltaMovement(new Vec3(currentMovement.x, jumpHeight, currentMovement.z));
+    private static void riderJump(Player player, double jumpHeight) {
+        if (player == null) return;
+        Vec3 currentMovement = player.getDeltaMovement();
+        Vec3 jump = new Vec3(currentMovement.x, currentMovement.y + jumpHeight, currentMovement.z);
+        addDeltaMovement(player, jump);
     }
 
-    private static void riderForward(Player serverPlayer, double norm, int ticks) {
-        LocalPlayer localPlayer = getLocalPlayer(serverPlayer);
-        if (localPlayer == null) return;
-        RiderManager.scheduleTicks(ticks, () -> {
-            Vec3 lookVec = localPlayer.getLookAngle();
-            Vec3 movement = localPlayer.getDeltaMovement();
-            localPlayer.addDeltaMovement(new Vec3(
+    private static void riderForward(Player player, double norm, int ticks) {
+        if (player == null) return;
+        RideBattleAPI.scheduleTicks(ticks, () -> {
+            Vec3 lookVec = player.getLookAngle();
+            Vec3 movement = player.getDeltaMovement();
+            Vec3 forward = new Vec3(
                     movement.x + lookVec.x * norm,
                     movement.y + lookVec.y * norm * 0.5,
                     movement.z + lookVec.z * norm
-            ));
+            );
+            addDeltaMovement(player, forward);
         });
+    }
+
+    // ✅ 修复：1.21.1 中 addDeltaMovement 只接受 Vec3
+    private static void addDeltaMovement(Player player, double x, double y, double z) {
+        player.addDeltaMovement(new Vec3(x, y, z));
+        if (player instanceof ServerPlayer serverPlayer) {
+            PacketDistributor.sendToPlayer(serverPlayer, new PlayerMovementPacket(player.getUUID(), x, y, z, "add"));
+        }
+    }
+
+    private static void addDeltaMovement(Player player, Vec3 movement) {
+        addDeltaMovement(player, movement.x(), movement.y(), movement.z());
+    }
+
+    // ✅ 修复：1.21.1 中 setDeltaMovement 只接受 Vec3
+    private static void setDeltaMovement(Player player, double x, double y, double z) {
+        player.setDeltaMovement(new Vec3(x, y, z));  // ✅ 使用 Vec3
+        if (player instanceof ServerPlayer serverPlayer) {
+            PacketDistributor.sendToPlayer(serverPlayer, new PlayerMovementPacket(player.getUUID(), x, y, z, "set"));
+        }
+    }
+
+    private static void setDeltaMovement(Player player, Vec3 movement) {
+        setDeltaMovement(player, movement.x(), movement.y(), movement.z());
     }
 
     private static void createExplosion(Player player, double x, double y, double z, float damage) {
@@ -410,21 +431,17 @@ public class BrainSkillHandler {
         BlockPos pos = entity.getOnPos();
         createExplosion(player, pos.getX(), pos.getY() + 1.5, pos.getZ(), damage);
 
-        // 造成伤害
         hurt(player, entity, damage);
 
-        LocalPlayer localPlayer = getLocalPlayer(player);
-        if (localPlayer != null) {
-            Vec3 angle = localPlayer.getLookAngle();
-            Vec3 current = localPlayer.getKnownMovement();
-            Vec3 back = new Vec3(-(angle.x * current.x), 0.5, -(angle.z * current.z));
-            localPlayer.setDeltaMovement(0, 0, 0);
-            localPlayer.addDeltaMovement(back);
-        }
+        Vec3 angle = player.getLookAngle();
+        Vec3 current = player.getKnownMovement();
+        Vec3 back = new Vec3(-(angle.x * current.x), 0.5, -(angle.z * current.z));
+        setDeltaMovement(player, 0, 0, 0);
+        addDeltaMovement(player, back);
     }
 
     private static void handleDamageEntity(Player player, LivingEntity living) {
-        if (RiderManager.isSpecificForm(player, BrainConfig.BRAIN_BASE_ID)) {
+        if (RideBattleAPI.isSpecificForm(player, BrainConfig.BRAIN_BASE_ID)) {
             // 可以添加特殊效果
         }
     }

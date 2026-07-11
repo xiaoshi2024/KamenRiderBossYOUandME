@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModCreativeModeTabs;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderSkills;
+import com.xiaoshi2022.kamenriderbossyouandme.riders.driver.BrainConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
@@ -47,10 +48,12 @@ public class KamenRiderBossYOUandME {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
-        // 在CommonSetup中注册技能
         event.enqueueWork(() -> {
             RiderSkills.registerSkills();
             LOGGER.info("骑士技能注册完成");
+
+            BrainConfig.init();
+            LOGGER.info("Brain骑士配置注册完成");
         });
     }
 

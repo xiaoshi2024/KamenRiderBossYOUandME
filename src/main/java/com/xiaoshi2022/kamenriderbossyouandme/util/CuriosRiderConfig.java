@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamenriderbossyouandme.util;
 
-import com.jpigeon.ridebattlelib.core.system.henshin.RiderConfig;
+import com.jpigeon.ridebattlelib.common.config.RiderConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;

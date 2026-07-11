@@ -1,9 +1,9 @@
 package com.xiaoshi2022.kamenriderbossyouandme.riders.driver;
 
-import com.jpigeon.ridebattlelib.core.system.form.FormConfig;
-import com.jpigeon.ridebattlelib.core.system.henshin.RiderConfig;
-import com.jpigeon.ridebattlelib.core.system.henshin.RiderRegistry;
-import com.jpigeon.ridebattlelib.core.system.henshin.helper.TriggerType;
+import com.jpigeon.ridebattlelib.common.config.FormConfig;
+import com.jpigeon.ridebattlelib.common.config.RiderConfig;
+import com.jpigeon.ridebattlelib.common.config.TriggerType;
+import com.jpigeon.ridebattlelib.common.registry.RiderRegistry;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderIds;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderSkills;

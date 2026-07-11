@@ -29,7 +29,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(KamenRiderBossYOUandME.MODID);
 
-    // 脑机
+    // 脑骑
     public static final DeferredItem<Item> BRAIN_DRIVER = ITEMS.register("brain_driver",
                 () -> new BrainDriver(new Item.Properties().stacksTo(1)));
 

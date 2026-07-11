@@ -2,7 +2,6 @@ package com.xiaoshi2022.kamenriderbossyouandme;
 
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.BYCurioRenderer;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
-import com.xiaoshi2022.kamenriderbossyouandme.riders.driver.BrainConfig;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -28,9 +27,6 @@ public class KamenRiderBossYOUandMEClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-
-        BrainConfig.init();
-
         // 注册Curios相关内容
         CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new BYCurioRenderer());
         CuriosRendererRegistry.register(ModItems.BRAIN_DRIVER.get(), () -> new BYCurioRenderer());

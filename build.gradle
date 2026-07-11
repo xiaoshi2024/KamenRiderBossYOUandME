@@ -150,7 +150,8 @@ dependencies {
 
 
     implementation "maven.modrinth:geckolib:lWsXauBN"
-    implementation "maven.modrinth:ridebattlelib:1.0.9"
+    //骑战lib 1.2.3
+    implementation "maven.modrinth:JdVx3cgu:etfFl6iO"
 
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
