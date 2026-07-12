@@ -1,6 +1,8 @@
 package com.xiaoshi2022.kamenriderbossyouandme;
 
 import com.mojang.logging.LogUtils;
+import com.jpigeon.ridebattlelib.server.system.HenshinSystem;
+import com.xiaoshi2022.kamenriderbossyouandme.core.manager.BrainHenshinSystem;
 import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModCreativeModeTabs;
@@ -44,6 +46,9 @@ public class KamenRiderBossYOUandME {
         // 注册配置
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
+        // ✅ 替换 HenshinSystem 为 BrainHenshinSystem
+        replaceHenshinSystem();
+
         LOGGER.info("KamenRiderBossYOUandME 模组初始化完成");
     }
 
@@ -55,6 +60,35 @@ public class KamenRiderBossYOUandME {
             BrainConfig.init();
             LOGGER.info("Brain骑士配置注册完成");
         });
+    }
+
+    /**
+     * 使用反射替换 HenshinSystem 单例为 BrainHenshinSystem
+     */
+    private void replaceHenshinSystem() {
+        try {
+            // 获取 HenshinSystem 类的 INSTANCE 字段
+            java.lang.reflect.Field instanceField = HenshinSystem.class.getDeclaredField("INSTANCE");
+            instanceField.setAccessible(true);
+
+            // 将 INSTANCE 替换为 BrainHenshinSystem 的实例
+            instanceField.set(null, BrainHenshinSystem.getInstance());
+
+            LOGGER.info("✅ 成功替换 HenshinSystem 为 BrainHenshinSystem");
+        } catch (NoSuchFieldException e) {
+            LOGGER.error("❌ 找不到 HenshinSystem.INSTANCE 字段，可能API版本不同", e);
+            // 尝试使用其他字段名
+            try {
+                java.lang.reflect.Field instanceField = HenshinSystem.class.getDeclaredField("instance");
+                instanceField.setAccessible(true);
+                instanceField.set(null, BrainHenshinSystem.getInstance());
+                LOGGER.info("✅ 成功替换 HenshinSystem 为 BrainHenshinSystem (使用字段名 'instance')");
+            } catch (Exception ex) {
+                LOGGER.error("❌ 替换 HenshinSystem 失败", ex);
+            }
+        } catch (Exception e) {
+            LOGGER.error("❌ 替换 HenshinSystem 失败", e);
+        }
     }
 
     @SubscribeEvent

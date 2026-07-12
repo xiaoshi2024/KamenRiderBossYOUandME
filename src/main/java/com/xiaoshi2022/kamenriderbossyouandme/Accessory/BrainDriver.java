@@ -26,6 +26,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioItem {
@@ -169,8 +170,6 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
     }
 
     /* -------------- 动画触发方法 -------------- */
-// 服务端触发变身动画
-    // 服务端触发变身动画
     public void triggerHenshinAnimation(LivingEntity entity, ItemStack stack) {
         if (entity == null || stack == null || stack.isEmpty()) return;
 
@@ -180,37 +179,31 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         // 设置变身状态
         setHenshin(stack, true);
 
-        if (entity.level() instanceof ServerLevel serverLevel) {
-            long id = GeoItem.getOrAssignId(stack, serverLevel);
-            // 触发动画
-            this.triggerAnim(entity, id, "controller", "henshin");
+        if (entity instanceof ServerPlayer serverPlayer) {
+            // 使用自定义网络包同步动画到客户端，避免 GeckoLib triggerAnim 的方向错误问题
+            com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler.sendToTrackingAndSelf(
+                    serverPlayer,
+                    new com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.BeltAnimationPacket(
+                            serverPlayer.getId(),
+                            "henshin",
+                            getMode(stack)
+                    )
+            );
 
-
-
-            // 添加动画完成后的延迟重置
-            serverLevel.getServer().execute(() -> {
-                try {
-                    // 等待动画播放完成 (1.0833秒 ≈ 1083ms)
-                    Thread.sleep(1200);
-                    serverLevel.getServer().execute(() -> {
-                        // 动画完成后重置状态，进入待机显示
-                        setHenshin(stack, false);
-                        setShowing(stack, true);
-
-
-                        // 重新触发待机显示动画
-                        if (entity instanceof ServerPlayer serverPlayer) {
-                            this.triggerShowAnimation(serverPlayer, stack);
-                        }
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            // 使用 ServerScheduleUtils 延迟执行，避免 Thread.sleep 阻塞服务器线程
+            UUID playerUUID = serverPlayer.getUUID();
+            
+            com.xiaoshi2022.kamenriderbossyouandme.util.ServerScheduleUtils.scheduleSeconds(1.2f, () -> {
+                ServerPlayer player = serverPlayer.getServer().getPlayerList().getPlayer(playerUUID);
+                if (player != null) {
+                    setHenshin(stack, false);
+                    setShowing(stack, true);
+                    this.triggerShowAnimation(player, stack);
                 }
             });
         }
     }
 
-    // 服务端触发解除变身动画
     public void triggerCancelAnimation(LivingEntity entity, ItemStack stack) {
         if (entity == null || stack == null || stack.isEmpty()) return;
 
@@ -220,11 +213,16 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         // 最后设置解除状态
         setRelease(stack, true);
 
-        if (entity.level() instanceof ServerLevel serverLevel) {
-            long id = GeoItem.getOrAssignId(stack, serverLevel);
-            this.triggerAnim(entity, id, "controller", "cancel");
-
-
+        if (entity instanceof ServerPlayer serverPlayer) {
+            // 使用自定义网络包同步动画到客户端，避免 GeckoLib triggerAnim 的方向错误问题
+            com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler.sendToTrackingAndSelf(
+                    serverPlayer,
+                    new com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.BeltAnimationPacket(
+                            serverPlayer.getId(),
+                            "cancel",
+                            getMode(stack)
+                    )
+            );
         }
     }
 
@@ -283,15 +281,21 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         return PlayState.CONTINUE;
     }
 
-    // 服务端触发展示动画
     public void triggerShowAnimation(LivingEntity entity, ItemStack stack) {
         if (entity == null || stack == null || stack.isEmpty()) return;
 
         setShowing(stack, true);
 
-        if (entity.level() instanceof ServerLevel serverLevel) {
-            long id = GeoItem.getOrAssignId(stack, serverLevel);
-            this.triggerAnim(entity, id, "controller", "show");
+        if (entity instanceof ServerPlayer serverPlayer) {
+            // 使用自定义网络包同步动画到客户端，避免 GeckoLib triggerAnim 的方向错误问题
+            com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler.sendToTrackingAndSelf(
+                    serverPlayer,
+                    new com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.BeltAnimationPacket(
+                            serverPlayer.getId(),
+                            "show",
+                            getMode(stack)
+                    )
+            );
         }
     }
 

@@ -46,7 +46,7 @@ public class BrainSkillHandler {
     private static final float BRAIN_PUNCH_DAMAGE = 17.5f;      // 拳力 17.5t
     private static final float BRAIN_KICK_DAMAGE = 25.1f;      // 踢力 25.1t
     private static final float BRAIN_HEADBUTT_DAMAGE = 33.3f;  // 头槌力 33.3t
-    private static final float BRAIN_JUMP_POWER = 2.5f;        // 跳跃力 42.0m (游戏内换算)
+    private static final float BRAIN_JUMP_POWER = 1.9f;        // 跳跃力
     private static final float BRAIN_SPEED = 1.8f;             // 跑速 100m/3.0s
 
     static {
