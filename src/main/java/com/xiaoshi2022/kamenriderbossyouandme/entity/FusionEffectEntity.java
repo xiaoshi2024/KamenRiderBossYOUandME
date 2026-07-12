@@ -1,6 +1,7 @@
 // entity/FusionEffectEntity.java
 package com.xiaoshi2022.kamenriderbossyouandme.entity;
 
+import com.xiaoshi2022.kamenriderbossyouandme.client.skin.CombinedSkinBuilder;
 import com.xiaoshi2022.kamenriderbossyouandme.client.skin.SkinCache;
 import com.xiaoshi2022.kamenriderbossyouandme.client.skin.SkinLoader;
 import com.xiaoshi2022.kamenriderbossyouandme.client.skin.SkinState;
@@ -12,6 +13,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animation.*;
 
@@ -47,7 +50,7 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         super(entityType, level, "fusion", "effect");
         for (int i = 0; i < 3; i++) {
             playerSkins[i] = DEFAULT_SKIN;
-            skinStates[i] = SkinState.LOADED;
+            skinStates[i] = SkinState.NOT_LOADED;
         }
     }
 
@@ -108,7 +111,7 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
             return;
         }
 
-        // 使用完整版本，传入 entity 和 index
+        skinStates[index] = SkinState.LOADING;
         SkinLoader.loadSkinAsync(this, name, index);
     }
 
@@ -161,6 +164,9 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         if (index >= 0 && index < 3) {
             this.playerSkins[index] = texture != null ? texture : DEFAULT_SKIN;
             this.skinStates[index] = texture != null ? SkinState.LOADED : SkinState.FAILED;
+            
+            String cacheKey = getPlayerName(0) + "_" + getPlayerName(1) + "_" + getPlayerName(2);
+            CombinedSkinBuilder.invalidateCache(cacheKey);
         }
     }
 
@@ -237,6 +243,37 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         if (!this.level().isClientSide && getAnimationState() == AnimationState.FINISH) {
             if (finishController != null && finishController.getAnimationState() == AnimationController.State.STOPPED) {
                 this.discard();
+            }
+        }
+        
+        if (this.level().isClientSide) {
+            tickClient();
+        }
+    }
+
+    private int skinRetryCounter = 0;
+
+    @OnlyIn(Dist.CLIENT)
+    private void tickClient() {
+        skinRetryCounter++;
+        
+        for (int i = 0; i < 3; i++) {
+            String name = getPlayerName(i);
+            SkinState state = getSkinState(i);
+            
+            if (name != null && !name.isEmpty()) {
+                if (state == SkinState.NOT_LOADED) {
+                    ResourceLocation cached = SkinCache.get(name);
+                    if (cached != null) {
+                        setPlayerSkin(i, cached);
+                    } else {
+                        skinStates[i] = SkinState.LOADING;
+                        SkinLoader.loadSkinAsync(this, name, i);
+                    }
+                } else if (state == SkinState.FAILED && skinRetryCounter % 200 == 0) {
+                    skinStates[i] = SkinState.LOADING;
+                    SkinLoader.loadSkinAsync(this, name, i);
+                }
             }
         }
     }

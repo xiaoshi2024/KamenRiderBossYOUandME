@@ -13,13 +13,16 @@ import net.neoforged.fml.ModList;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME.MODID;
 
 public class SkinIntegration {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static boolean cslLoaded = false;
+    private static final Map<String, Path> SKIN_FILE_PATHS = new ConcurrentHashMap<>();
 
     static {
         try {
@@ -67,7 +70,6 @@ public class SkinIntegration {
                     .hashUnencodedChars(texture.getHash() != null ? texture.getHash() : username)
                     .toString();
 
-            // 使用自己的 MODID
             ResourceLocation location = ResourceLocation.fromNamespaceAndPath(
                     MODID,
                     "skins/" + hash
@@ -79,6 +81,8 @@ public class SkinIntegration {
 
             Path skinPath = skinRoot.resolve(hash.length() > 2 ? hash.substring(0, 2) : "xx").resolve(hash);
             skinPath.toFile().getParentFile().mkdirs();
+
+            SKIN_FILE_PATHS.put(location.toString(), skinPath);
 
             HttpTexture httpTexture = new HttpTexture(
                     skinPath.toFile(),
@@ -100,5 +104,9 @@ public class SkinIntegration {
 
     public static boolean isCslAvailable() {
         return cslLoaded;
+    }
+
+    public static Path getSkinFilePath(ResourceLocation skinLocation) {
+        return SKIN_FILE_PATHS.get(skinLocation.toString());
     }
 }

@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamenriderbossyouandme.client.skin;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.HttpTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -11,6 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -129,18 +133,14 @@ public class CombinedSkinBuilder {
                                          ResourceLocation skin, int index) {
         int offsetX = index * SKIN_SIZE;
         try {
-            var resource = resourceManager.getResource(skin);
-            if (resource.isPresent()) {
-                try (var input = resource.get().open()) {
-                    NativeImage skinImage = NativeImage.read(input);
-                    copySkinToRegion(combined, skinImage, offsetX);
-                    skinImage.close();
-                    LOGGER.debug("✅ 皮肤 {} -> 区域 {}", skin, index);
-                    return;
-                }
+            NativeImage skinImage = loadSkinImage(skin, resourceManager);
+            if (skinImage != null) {
+                copySkinToRegion(combined, skinImage, offsetX);
+                skinImage.close();
+                LOGGER.debug("✅ 皮肤 {} -> 区域 {}", skin, index);
+                return;
             }
 
-            // 如果找不到，尝试使用史蒂夫皮肤
             LOGGER.warn("⚠️ 找不到皮肤: {}, 使用史蒂夫替代", skin);
             loadSteveSkinToRegion(combined, resourceManager, offsetX);
 
@@ -148,6 +148,94 @@ public class CombinedSkinBuilder {
             LOGGER.warn("⚠️ 加载皮肤失败: {}, 使用史蒂夫替代", skin, e);
             loadSteveSkinToRegion(combined, resourceManager, offsetX);
         }
+    }
+
+    private static NativeImage loadSkinImage(ResourceLocation skin, net.minecraft.server.packs.resources.ResourceManager resourceManager) {
+        try {
+            var resource = resourceManager.getResource(skin);
+            if (resource.isPresent()) {
+                try (var input = resource.get().open()) {
+                    return NativeImage.read(input);
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.debug("资源管理器找不到皮肤 {}, 尝试从缓存路径获取", skin);
+        }
+
+        Path cachedPath = SkinIntegration.getSkinFilePath(skin);
+        if (cachedPath != null && Files.exists(cachedPath)) {
+            try (InputStream input = Files.newInputStream(cachedPath)) {
+                NativeImage image = NativeImage.read(input);
+                LOGGER.debug("✅ 从缓存路径加载皮肤: {}", skin);
+                return image;
+            } catch (Exception e) {
+                LOGGER.debug("从缓存路径加载皮肤失败: {}", e.getMessage());
+            }
+        }
+
+        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+        Object texture = textureManager.getTexture(skin);
+        
+        if (texture != null) {
+            try {
+                java.lang.reflect.Method loadMethod = texture.getClass().getMethod("load", TextureManager.class, ResourceLocation.class);
+                loadMethod.setAccessible(true);
+                loadMethod.invoke(texture, textureManager, skin);
+            } catch (Exception e) {
+                LOGGER.debug("调用纹理load方法失败: {}", e.getMessage());
+            }
+        }
+
+        if (texture instanceof HttpTexture httpTexture) {
+            try {
+                java.lang.reflect.Field textureDataField = HttpTexture.class.getDeclaredField("textureData");
+                textureDataField.setAccessible(true);
+                Object textureData = textureDataField.get(httpTexture);
+                
+                if (textureData != null) {
+                    java.lang.reflect.Method getDataMethod = textureData.getClass().getMethod("getData");
+                    getDataMethod.setAccessible(true);
+                    NativeImage data = (NativeImage) getDataMethod.invoke(textureData);
+                    if (data != null) {
+                        NativeImage copy = new NativeImage(data.getWidth(), data.getHeight(), true);
+                        copy.copyFrom(data);
+                        return copy;
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.debug("从 HttpTexture 获取textureData失败: {}", e.getMessage());
+            }
+            
+            try {
+                java.lang.reflect.Field fileField = HttpTexture.class.getDeclaredField("file");
+                fileField.setAccessible(true);
+                java.io.File file = (java.io.File) fileField.get(httpTexture);
+                if (file != null && file.exists()) {
+                    try (InputStream input = Files.newInputStream(file.toPath())) {
+                        return NativeImage.read(input);
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.debug("从 HttpTexture 获取文件失败: {}", e.getMessage());
+            }
+        }
+
+        if (texture instanceof DynamicTexture dynamicTexture) {
+            try {
+                java.lang.reflect.Field pixelsField = DynamicTexture.class.getDeclaredField("pixels");
+                pixelsField.setAccessible(true);
+                NativeImage pixels = (NativeImage) pixelsField.get(dynamicTexture);
+                if (pixels != null) {
+                    NativeImage copy = new NativeImage(pixels.getWidth(), pixels.getHeight(), true);
+                    copy.copyFrom(pixels);
+                    return copy;
+                }
+            } catch (Exception e) {
+                LOGGER.debug("从 DynamicTexture 获取皮肤失败: {}", e.getMessage());
+            }
+        }
+
+        return null;
     }
 
     private static void copySkinToRegion(NativeImage combined, NativeImage skinImage, int offsetX) {
@@ -210,6 +298,12 @@ public class CombinedSkinBuilder {
         CACHE.clear();
         defaultCombined = null;
         LOGGER.info("🧹 已清除组合纹理缓存");
+    }
+
+    public static void invalidateCache(String key) {
+        if (key != null && CACHE.remove(key) != null) {
+            LOGGER.debug("🗑️ 组合纹理缓存已失效: {}", key);
+        }
     }
 
     public static int getCacheSize() {

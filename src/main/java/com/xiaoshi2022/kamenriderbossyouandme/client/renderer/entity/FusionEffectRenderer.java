@@ -47,21 +47,21 @@ public class FusionEffectRenderer extends RiderEffectRenderer<FusionEffectEntity
                            RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer,
                            float partialTick, int packedLight, int packedOverlay) {
 
-            // 获取三个玩家的皮肤
+            if (!animatable.areAllSkinsLoaded()) {
+                return;
+            }
+
             ResourceLocation[] skins = new ResourceLocation[3];
             for (int i = 0; i < 3; i++) {
                 ResourceLocation skin = animatable.getPlayerSkin(i);
                 skins[i] = (skin != null) ? skin : DEFAULT_SKIN;
             }
 
-            // 构建缓存键
             String[] names = animatable.getPlayerNames();
             String key = names[0] + "_" + names[1] + "_" + names[2];
 
-            // 获取组合纹理
             ResourceLocation combinedSkin = CombinedSkinBuilder.getOrCreate(key, skins);
 
-            // 渲染整个模型
             RenderType combinedRenderType = RenderType.entityTranslucent(combinedSkin);
             VertexConsumer combinedConsumer = bufferSource.getBuffer(combinedRenderType);
 

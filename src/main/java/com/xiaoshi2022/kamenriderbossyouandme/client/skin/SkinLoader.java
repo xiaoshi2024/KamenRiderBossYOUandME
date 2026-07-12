@@ -10,6 +10,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.slf4j.Logger;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -56,11 +58,30 @@ public class SkinLoader {
                     LOGGER.info("⚠️ 使用默认皮肤: {} (索引: {})", username, playerIndex);
                 }
 
+                if (skin != null && !skin.equals(getDefaultSkin(username))) {
+                    Path skinFilePath = SkinIntegration.getSkinFilePath(skin);
+                    if (skinFilePath != null) {
+                        int waitCount = 0;
+                        while (!Files.exists(skinFilePath) || skinFilePath.toFile().length() < 100) {
+                            Thread.sleep(50);
+                            waitCount++;
+                            if (waitCount > 200) {
+                                LOGGER.warn("⚠️ 皮肤文件下载超时: {}", skin);
+                                skin = getDefaultSkin(username);
+                                break;
+                            }
+                        }
+                        if (Files.exists(skinFilePath)) {
+                            LOGGER.info("✅ 皮肤文件下载完成: {}", skinFilePath);
+                        }
+                    }
+                }
+
                 final ResourceLocation finalSkin = skin;
 
                 Minecraft.getInstance().execute(() -> {
                     entity.setPlayerSkin(playerIndex, finalSkin);
-                    entity.setSkinState(playerIndex, SkinState.LOADED);  // ✅ 改为 setSkinState
+                    entity.setSkinState(playerIndex, SkinState.LOADED);
                     SkinCache.put(username, finalSkin);
 
                     if (finalSkin != getDefaultSkin(username)) {
@@ -73,7 +94,7 @@ public class SkinLoader {
                 Minecraft.getInstance().execute(() -> {
                     ResourceLocation defaultSkin = getDefaultSkin(username);
                     entity.setPlayerSkin(playerIndex, defaultSkin);
-                    entity.setSkinState(playerIndex, SkinState.FAILED);  // ✅ 改为 setSkinState
+                    entity.setSkinState(playerIndex, SkinState.FAILED);
                     SkinCache.put(username, defaultSkin);
                 });
             }
