@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.util.CurioUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -51,6 +52,27 @@ public abstract class AbstractRiderBelt extends Item implements ICurioItem {
         if (ctx.entity() instanceof ServerPlayer player) {
             onBeltEquipped(player, stack);
         }
+    }
+
+    /**
+     * 是否限制只渲染盔甲（用于第一人称手臂渲染）
+     */
+    public boolean limitToRenderArmor(Player player, ItemStack stack) {
+        return true; // 默认返回 true
+    }
+
+    /**
+     * 是否需要隐藏玩家身体部位（用于盔甲渲染）
+     */
+    public boolean needInvisibility(Level level, Player player, ItemStack stack, EquipmentSlot slot) {
+        return true; // 默认返回 true
+    }
+
+    /**
+     * 获取装备槽位
+     */
+    public EquipmentSlot getSlot() {
+        return EquipmentSlot.CHEST; // 默认胸甲槽
     }
 
     protected abstract void onBeltEquipped(ServerPlayer player, ItemStack beltStack);

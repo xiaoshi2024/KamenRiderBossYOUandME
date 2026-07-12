@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.BeltAnimati
 import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.DriverSyncPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.ReleaseBeltPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.network.packet.BYAnimationPacket;
+import com.xiaoshi2022.kamenriderbossyouandme.network.packet.InvisibilitySyncPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.network.packet.PlayerMovementPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -51,6 +52,26 @@ public class PacketHandler {
                     com.xiaoshi2022.kamenriderbossyouandme.impl.playerAnimator.PlayerAnimationHandler.handleAnimation(
                             clientPlayer, payload.animationId(), payload.fadeDuration()
                     );
+                })
+        );
+
+        // ✅ 注册隐身同步包
+        registrar.playToClient(
+                InvisibilitySyncPacket.TYPE,
+                InvisibilitySyncPacket.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    Player player = context.player();
+                    if (player == null) return;
+                    if (!player.getUUID().equals(payload.playerId())) return;
+
+                    // 客户端设置隐身
+                    player.setInvisible(payload.invisible());
+
+                    // 如果是本地玩家，也更新渲染
+                    if (player == net.minecraft.client.Minecraft.getInstance().player) {
+                        // 强制更新
+                        player.refreshDimensions();
+                    }
                 })
         );
 

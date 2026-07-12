@@ -1,0 +1,261 @@
+package com.xiaoshi2022.kamenriderbossyouandme.event;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
+import com.xiaoshi2022.kamenriderbossyouandme.Accessory.AbstractRiderBelt;
+import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
+import dev.kosmx.playerAnim.impl.IAnimatedPlayer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderArmEvent;
+import net.neoforged.neoforge.client.event.RenderHandEvent;
+import net.neoforged.neoforge.client.event.RenderPlayerEvent;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
+
+@EventBusSubscriber(modid = KamenRiderBossYOUandME.MODID, value = Dist.CLIENT)
+public class PlayerRender {
+
+    @SubscribeEvent
+    public static void renderHandEvent(RenderArmEvent event) {
+        if (!ModList.get().isLoaded("geckolib")) return;
+
+        Minecraft mc = Minecraft.getInstance();
+
+        AbstractClientPlayer player = event.getPlayer();
+        PoseStack poseStack = event.getPoseStack();
+        MultiBufferSource bufferSource = event.getMultiBufferSource();
+        int packedLight = event.getPackedLight();
+        float partialTick = mc.getFrameTimeNs();
+        EquipmentSlot slot = EquipmentSlot.CHEST;
+        ItemStack chest = player.getItemBySlot(slot);
+        boolean otherLimit = true;
+        if (chest.getItem() instanceof AbstractRiderBelt armor) {
+            otherLimit = armor.limitToRenderArmor(player, chest);
+        }
+        renderArm(event, player, slot, poseStack, bufferSource, partialTick, packedLight, otherLimit);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void renderArm(RenderArmEvent event, AbstractClientPlayer player, EquipmentSlot slot,
+                                 PoseStack poseStack, MultiBufferSource bufferSource, float partialTick,
+                                 int packedLight, boolean otherLimit) {
+        ItemStack chest = player.getItemBySlot(slot);
+        EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderer<?> entityrenderer = entityrenderdispatcher.getRenderer(player);
+        PlayerModel<AbstractClientPlayer> playermodel = ((PlayerRenderer) entityrenderer).getModel();
+        poseStack.pushPose();
+
+        if (chest.getItem() instanceof GeoItem items && otherLimit) {
+            GeoArmorRenderer geoArmorRender = (GeoArmorRenderer) getArmorModelHook(player, chest, slot, playermodel);
+
+            VertexConsumer buffer = bufferSource.getBuffer(RenderType.entityTranslucent(geoArmorRender.getTextureLocation(items)));
+            RenderType renderType = RenderType.entityTranslucent(geoArmorRender.getTextureLocation(items));
+
+            GeoModel geoModel = geoArmorRender.getGeoModel();
+            BakedGeoModel model = geoModel.getBakedModel(geoModel.getModelResource(items, geoArmorRender));
+
+            setAllBoneNoVisible(geoArmorRender);
+            GeoBone right = geoArmorRender.getRightArmBone(geoModel);
+            boolean needLock = (!isPlayerAnimatorInstalled()) ||
+                    (isPlayerAnimatorInstalled() && player instanceof IAnimatedPlayer animated &&
+                            animated.playerAnimator_getAnimation().getFirstPersonMode() != FirstPersonMode.THIRD_PERSON_MODEL);
+
+            if (right != null) {
+                right.setHidden(event.getArm() != HumanoidArm.RIGHT);
+                if (needLock) {
+                    right.updateRotation(0, 0, 0);
+                    right.updatePosition(0, 0, 0);
+                }
+            }
+
+            GeoBone left = geoArmorRender.getLeftArmBone(geoModel);
+            if (left != null) {
+                left.setHidden(event.getArm() != HumanoidArm.LEFT);
+                if (needLock) {
+                    left.updateRotation(0, 0, 0);
+                    left.updatePosition(0, 0, 0);
+                }
+            }
+            geoArmorRender.actuallyRender(poseStack, (Item) items, model, renderType, bufferSource, buffer,
+                    true, partialTick, packedLight, OverlayTexture.NO_OVERLAY, -1);
+            event.setCanceled(true);
+        }
+
+        poseStack.popPose();
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static <T extends Item & GeoAnimatable & GeoItem> void setAllBoneNoVisible(GeoArmorRenderer<T> render) {
+        GeoModel<T> model = render.getGeoModel();
+        try {
+            for (GeoBone geoBone : Arrays.asList(
+                    render.getHeadBone(model),
+                    render.getBodyBone(model),
+                    render.getRightLegBone(model),
+                    render.getRightBootBone(model),
+                    render.getLeftLegBone(model),
+                    render.getLeftBootBone(model)
+            )) {
+                if (geoBone != null) {
+                    geoBone.setHidden(true);
+                }
+            }
+            // 如果使用了自定义渲染器，可以扩展
+        } catch (Exception ignored) {
+        }
+    }
+
+    @SubscribeEvent
+    public static void renderPlayerEvent(RenderPlayerEvent.Pre event) {
+        if (!ModList.get().isLoaded("geckolib")) return;
+
+        Player player = event.getEntity();
+        EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        EntityRenderer<?> entityrenderer = entityrenderdispatcher.getRenderer(player);
+        PlayerModel<AbstractClientPlayer> playermodel = ((PlayerRenderer) entityrenderer).getModel();
+
+        ItemStack head = player.getItemBySlot(EquipmentSlot.HEAD);
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        ItemStack leg = player.getItemBySlot(EquipmentSlot.LEGS);
+        ItemStack boot = player.getItemBySlot(EquipmentSlot.FEET);
+
+        if (needVisiblePlayerPart(head, player) || needVisiblePlayerPart(chest, player) ||
+                needVisiblePlayerPart(leg, player) || needVisiblePlayerPart(boot, player)) {
+            if (head != ItemStack.EMPTY || chest != ItemStack.EMPTY || leg != ItemStack.EMPTY || boot != ItemStack.EMPTY) {
+                playermodel.head.visible = !(head.getItem() instanceof GeoItem);
+                playermodel.hat.visible = !(head.getItem() instanceof GeoItem);
+                playermodel.body.visible = !(chest.getItem() instanceof GeoItem);
+                playermodel.rightArm.visible = !(chest.getItem() instanceof GeoItem);
+                playermodel.leftArm.visible = !(chest.getItem() instanceof GeoItem);
+                playermodel.rightLeg.visible = !(boot.getItem() instanceof GeoItem);
+                playermodel.leftLeg.visible = !(boot.getItem() instanceof GeoItem);
+                playermodel.leftSleeve.visible = !(chest.getItem() instanceof GeoItem);
+                playermodel.rightSleeve.visible = !(chest.getItem() instanceof GeoItem);
+                playermodel.leftPants.visible = !(boot.getItem() instanceof GeoItem);
+                playermodel.rightPants.visible = !(boot.getItem() instanceof GeoItem);
+                playermodel.jacket.visible = !(chest.getItem() instanceof GeoItem);
+            }
+        }
+    }
+
+    public static boolean needVisiblePlayerPart(ItemStack stack, Player player) {
+        if (stack.getItem() instanceof AbstractRiderBelt riderBelt) {
+            return riderBelt.needInvisibility(player.level(), player, stack, riderBelt.getSlot());
+        }
+        return false;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static <T extends LivingEntity> HumanoidModel<?> getArmorModelHook(T entity, ItemStack itemStack,
+                                                                              EquipmentSlot slot, HumanoidModel<T> model) {
+        return GeoRenderProvider.of(itemStack).getGeoArmorRenderer(entity, itemStack, slot, model);
+    }
+
+    @SubscribeEvent
+    public static void renderPlayerEvent(RenderHandEvent event) {
+        if (!ModList.get().isLoaded("geckolib")) return;
+        if (Minecraft.getInstance().player == null) return;
+
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        PoseStack poseStack = event.getPoseStack();
+        int packedLight = event.getPackedLight();
+        float partialTicks = event.getPartialTick();
+        float equipProgress = event.getEquipProgress();
+        float swingProgress = event.getSwingProgress();
+        ItemStack stack = event.getItemStack();
+        InteractionHand hand = event.getHand();
+        MultiBufferSource buffsource = event.getMultiBufferSource();
+
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+
+        if (chest.getItem() instanceof GeoItem) {
+            poseStack.pushPose();
+            if (!player.isScoping()) {
+                if (stack.isEmpty()) {
+                    if (hand == InteractionHand.MAIN_HAND) {
+                        renderPlayerArm(poseStack, buffsource, packedLight, equipProgress, swingProgress,
+                                player.getMainArm().getOpposite());
+                    }
+                }
+            }
+            poseStack.popPose();
+        }
+    }
+
+    public static void renderPlayerArm(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
+                                       float equipProgress, float swingProgress, HumanoidArm arm) {
+        boolean flag = arm != HumanoidArm.RIGHT;
+        float f = flag ? 1.0F : -1.0F;
+        float f1 = Mth.sqrt(swingProgress);
+        float f2 = -0.3F * Mth.sin(f1 * (float) Math.PI);
+        float f3 = 0.4F * Mth.sin(f1 * ((float) Math.PI * 2F));
+        float f4 = -0.4F * Mth.sin(swingProgress * (float) Math.PI);
+
+        poseStack.translate(f * (f2 + 0.64000005F), f3 + -0.6F + equipProgress * -0.6F, f4 + -0.71999997F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(f * 45.0F));
+
+        float f5 = Mth.sin(swingProgress * swingProgress * (float) Math.PI);
+        float f6 = Mth.sin(f1 * (float) Math.PI);
+        poseStack.mulPose(Axis.YP.rotationDegrees(f * f6 * 70.0F));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(f * f5 * -20.0F));
+
+        AbstractClientPlayer abstractclientplayer = Minecraft.getInstance().player;
+        RenderSystem.setShaderTexture(0, Objects.requireNonNull(abstractclientplayer).getSkin().texture());
+
+        poseStack.translate(f * -1.0F, 3.6F, 3.5F);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(f * 120.0F));
+        poseStack.mulPose(Axis.XP.rotationDegrees(200.0F));
+        poseStack.mulPose(Axis.YP.rotationDegrees(f * -135.0F));
+        poseStack.translate(f * 5.6F, 0.0F, 0.0F);
+
+        PlayerRenderer playerrenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher()
+                .getRenderer(abstractclientplayer);
+        if (flag) {
+            playerrenderer.renderRightHand(poseStack, bufferSource, packedLight, abstractclientplayer);
+        } else {
+            playerrenderer.renderLeftHand(poseStack, bufferSource, packedLight, abstractclientplayer);
+        }
+    }
+
+    /**
+     * 检查 PlayerAnimator 是否安装
+     */
+    private static boolean isPlayerAnimatorInstalled() {
+        return ModList.get().isLoaded("playeranimator");
+    }
+}
