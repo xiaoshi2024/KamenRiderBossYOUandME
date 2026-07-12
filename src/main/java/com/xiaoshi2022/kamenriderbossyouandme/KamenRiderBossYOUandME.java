@@ -2,10 +2,12 @@ package com.xiaoshi2022.kamenriderbossyouandme;
 
 import com.mojang.logging.LogUtils;
 import com.jpigeon.ridebattlelib.server.system.HenshinSystem;
+import com.xiaoshi2022.kamenriderbossyouandme.command.FusionCommand;
 import com.xiaoshi2022.kamenriderbossyouandme.core.manager.BrainHenshinSystem;
 import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModCreativeModeTabs;
+import com.xiaoshi2022.kamenriderbossyouandme.registry.ModEntitys;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderSkills;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.driver.BrainConfig;
@@ -14,10 +16,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
@@ -36,6 +40,8 @@ public class KamenRiderBossYOUandME {
         ModItems.ITEMS.register(modEventBus);
         // 注册声音
         ModBossSounds.register(modEventBus);
+
+        ModEntitys.ENTITIES.register(modEventBus);
 
         // 注册网络包
         modEventBus.addListener(PacketHandler::register);
@@ -60,6 +66,15 @@ public class KamenRiderBossYOUandME {
             BrainConfig.init();
             LOGGER.info("Brain骑士配置注册完成");
         });
+    }
+
+    // 注册指令
+    @EventBusSubscriber(modid = MODID)
+    public static class Events {
+        @SubscribeEvent
+        public static void onRegisterCommands(RegisterCommandsEvent event) {
+            FusionCommand.register(event.getDispatcher());
+        }
     }
 
     /**

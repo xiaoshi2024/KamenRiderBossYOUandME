@@ -69,6 +69,13 @@ public class PacketHandler {
                 })
         );
 
+        // ===== 新增：融合皮肤更新包 =====
+        registrar.playToClient(
+                FusionSkinUpdatePacket.TYPE,
+                FusionSkinUpdatePacket.STREAM_CODEC,
+                FusionSkinUpdatePacket::handleData
+        );
+
         registrar.playToClient(
                 PlayerMovementPacket.TYPE,
                 PlayerMovementPacket.STREAM_CODEC,

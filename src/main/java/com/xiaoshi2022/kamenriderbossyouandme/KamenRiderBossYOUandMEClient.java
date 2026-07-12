@@ -1,8 +1,11 @@
 package com.xiaoshi2022.kamenriderbossyouandme;
 
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.BYCurioRenderer;
+import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.entity.FusionEffectRenderer;
+import com.xiaoshi2022.kamenriderbossyouandme.registry.ModEntitys;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -30,6 +33,12 @@ public class KamenRiderBossYOUandMEClient {
         // 注册Curios相关内容
         CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new BYCurioRenderer());
         CuriosRendererRegistry.register(ModItems.BRAIN_DRIVER.get(), () -> new BYCurioRenderer());
+
+        // 注册融合实体渲染器
+        EntityRenderers.register(
+                ModEntitys.FUSION_EFFECT.get(),
+                FusionEffectRenderer::new
+        );
 
         // Some client setup code
         KamenRiderBossYOUandME.LOGGER.info("HELLO FROM CLIENT SETUP");
