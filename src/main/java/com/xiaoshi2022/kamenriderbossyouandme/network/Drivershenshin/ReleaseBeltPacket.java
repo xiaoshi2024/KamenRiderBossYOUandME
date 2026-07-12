@@ -62,18 +62,7 @@ public record ReleaseBeltPacket(boolean shouldComplete, boolean triggerAnimation
                     CurioUtils.findFirstCurio(player, s -> s.getItem() instanceof BrainDriver)
                             .ifPresent(curio -> {
                                 BrainDriver belt = (BrainDriver) curio.stack().getItem();
-                                // 播放解除变身动画
                                 belt.startReleaseAnimation(player, curio.stack());
-                                
-                                // 发送动画数据包给所有追踪玩家
-                                PacketHandler.sendToAllTracking(
-                                        player,
-                                        new BeltAnimationPacket(
-                                                player.getId(),
-                                                "cancel",
-                                                belt.getMode(curio.stack())
-                                        )
-                                );
                             });
                 }
             }

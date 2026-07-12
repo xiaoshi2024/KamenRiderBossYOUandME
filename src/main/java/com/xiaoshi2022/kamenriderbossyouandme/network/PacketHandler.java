@@ -14,10 +14,10 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class PacketHandler {
     public static void register(final RegisterPayloadHandlersEvent event) {
-        // ✅ 所有包都在这里注册，不区分客户端/服务端
         var registrar = event.registrar(KamenRiderBossYOUandME.MODID)
                 .versioned("0.0.1");
 
@@ -39,7 +39,6 @@ public class PacketHandler {
                 ReleaseBeltPacket::handle
         );
 
-        // ✅ BYAnimationPacket 的 handler 使用 context.player() 而不是 Minecraft.getInstance()
         registrar.playToClient(
                 BYAnimationPacket.TYPE,
                 BYAnimationPacket.STREAM_CODEC,
@@ -48,14 +47,12 @@ public class PacketHandler {
                     if (clientPlayer == null) return;
                     if (!clientPlayer.getUUID().equals(payload.playerId())) return;
 
-                    // 使用 context.player() 替代 Minecraft.getInstance()
                     com.xiaoshi2022.kamenriderbossyouandme.impl.playerAnimator.PlayerAnimationHandler.handleAnimation(
                             clientPlayer, payload.animationId(), payload.fadeDuration()
                     );
                 })
         );
 
-        // ✅ 注册隐身同步包
         registrar.playToClient(
                 InvisibilitySyncPacket.TYPE,
                 InvisibilitySyncPacket.STREAM_CODEC,
@@ -64,18 +61,14 @@ public class PacketHandler {
                     if (player == null) return;
                     if (!player.getUUID().equals(payload.playerId())) return;
 
-                    // 客户端设置隐身
                     player.setInvisible(payload.invisible());
 
-                    // 如果是本地玩家，也更新渲染
                     if (player == net.minecraft.client.Minecraft.getInstance().player) {
-                        // 强制更新
                         player.refreshDimensions();
                     }
                 })
         );
 
-        // ✅ PlayerMovementPacket 的 handler 使用 context.player()
         registrar.playToClient(
                 PlayerMovementPacket.TYPE,
                 PlayerMovementPacket.STREAM_CODEC,
@@ -84,7 +77,6 @@ public class PacketHandler {
                     if (clientPlayer == null) return;
                     if (!clientPlayer.getUUID().equals(payload.playerId())) return;
 
-                    // 只在客户端执行
                     if (clientPlayer.level().isClientSide()) {
                         net.minecraft.world.phys.Vec3 movement = new net.minecraft.world.phys.Vec3(payload.x(), payload.y(), payload.z());
                         clientPlayer.hurtMarked = true;
@@ -101,24 +93,28 @@ public class PacketHandler {
     // ========== 服务端发送包的方法 ==========
 
     public static void sendToClient(ServerPlayer player, CustomPacketPayload packet) {
+        if (player == null || player.isRemoved()) return;
         player.connection.send(packet);
     }
 
+    /**
+     * 发送给追踪该玩家的所有客户端
+     */
     public static void sendToAllTracking(ServerPlayer player, CustomPacketPayload packet) {
-        player.server.getPlayerList().getPlayers().forEach(p -> {
-            if (p.level() == player.level()) {
-                sendToClient(p, packet);
-            }
-        });
+        if (player == null || player.isRemoved()) return;
+        // NeoForge 1.21.1 的新 API
+        PacketDistributor.sendToPlayersTrackingEntity(player, packet);
     }
 
+    /**
+     * 发送给追踪该玩家的所有客户端 + 玩家自己
+     */
     public static void sendToTrackingAndSelf(ServerPlayer player, CustomPacketPayload packet) {
+        if (player == null || player.isRemoved()) return;
+        // 先发送给自己
         sendToClient(player, packet);
-        player.server.getPlayerList().getPlayers().forEach(p -> {
-            if (p != player && p.level() == player.level()) {
-                sendToClient(p, packet);
-            }
-        });
+        // 再发送给追踪者
+        PacketDistributor.sendToPlayersTrackingEntity(player, packet);
     }
 
     // ========== 客户端发送包到服务端 ==========

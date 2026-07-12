@@ -17,6 +17,7 @@ import java.util.List;
 public class ServerScheduleUtils {
 
     private static final List<TaskEntry> tasks = new ArrayList<>();
+    private static final int MAX_TASKS = 200;
 
     private static class TaskEntry {
         int remainingTicks;
@@ -34,6 +35,10 @@ public class ServerScheduleUtils {
             return;
         }
         synchronized (tasks) {
+            if (tasks.size() >= MAX_TASKS) {
+                KamenRiderBossYOUandME.LOGGER.warn("ServerScheduleUtils 任务队列已满，拒绝新任务! 当前任务数: {}", tasks.size());
+                return;
+            }
             tasks.add(new TaskEntry(ticks, task));
         }
     }

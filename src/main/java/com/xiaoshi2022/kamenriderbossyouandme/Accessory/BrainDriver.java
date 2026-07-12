@@ -195,11 +195,15 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             
             com.xiaoshi2022.kamenriderbossyouandme.util.ServerScheduleUtils.scheduleSeconds(1.2f, () -> {
                 ServerPlayer player = serverPlayer.getServer().getPlayerList().getPlayer(playerUUID);
-                if (player != null) {
-                    setHenshin(stack, false);
-                    setShowing(stack, true);
-                    this.triggerShowAnimation(player, stack);
-                }
+                if (player == null) return;
+
+                boolean hasBelt = com.xiaoshi2022.kamenriderbossyouandme.util.CurioUtils.findFirstCurio(player,
+                        s -> s.getItem() instanceof BrainDriver).isPresent();
+                if (!hasBelt) return;
+
+                setHenshin(stack, false);
+                setShowing(stack, true);
+                this.triggerShowAnimation(player, stack);
             });
         }
     }

@@ -220,23 +220,14 @@ public class BrainSkillHandler {
 
     private static void handleKickCollide(Player player) {
         if (!player.getTags().contains("rider_kicking")) return;
-
-        // 获取踢击技能标签
-        List<String> skillTags = player.getTags().stream()
-                .filter(tag -> tag.startsWith("skill_") && tag.contains("brain_kick"))
-                .toList();
-        if (skillTags.isEmpty()) return;
+        if (!player.getTags().contains("skill_brain_kick")) return;
 
         Level level = player.level();
 
-        // 水平方向（避免踢到天上）
         Vec3 look = player.getLookAngle();
         Vec3 horizontalLook = new Vec3(look.x, 0, look.z).normalize();
-
-        // 前方扩展距离
         double forwardDistance = 0.8;
 
-        // 扩展玩家碰撞盒
         AABB kickBox = player.getBoundingBox()
                 .expandTowards(horizontalLook.scale(forwardDistance))
                 .inflate(0.3);
@@ -250,37 +241,22 @@ public class BrainSkillHandler {
         if (entities.isEmpty()) return;
 
         for (LivingEntity entity : entities) {
-            for (String skillTag : skillTags) {
-                if (skillTag.equals("skill_brain_kick")) {
-                    // 创建踢击爆炸 (使用Brain的踢力)
-                    createKickExplosion(player, entity, BRAIN_KICK_DAMAGE);
-
-                    // 移除标签
-                    removeTag(player, skillTag);
-                    removeTag(player, "rider_kicking");
-                }
-            }
-            break; // 只攻击第一个
+            createKickExplosion(player, entity, BRAIN_KICK_DAMAGE);
+            removeTag(player, "skill_brain_kick");
+            removeTag(player, "rider_kicking");
+            break;
         }
     }
 
     private static void handleHeadbuttCollide(Player player) {
         if (!player.getTags().contains("rider_headbutting")) return;
-
-        // 获取头槌技能标签
-        List<String> skillTags = player.getTags().stream()
-                .filter(tag -> tag.startsWith("skill_") && tag.contains("brain_headbutt"))
-                .toList();
-        if (skillTags.isEmpty()) return;
+        if (!player.getTags().contains("skill_brain_headbutt")) return;
 
         Level level = player.level();
         Vec3 look = player.getLookAngle();
         Vec3 horizontalLook = new Vec3(look.x, 0, look.z).normalize();
-
-        // 前方扩展距离
         double forwardDistance = 0.6;
 
-        // 扩展玩家碰撞盒
         AABB headbuttBox = player.getBoundingBox()
                 .expandTowards(horizontalLook.scale(forwardDistance))
                 .inflate(0.5);
@@ -294,28 +270,21 @@ public class BrainSkillHandler {
         if (entities.isEmpty()) return;
 
         for (LivingEntity entity : entities) {
-            for (String skillTag : skillTags) {
-                if (skillTag.equals("skill_brain_headbutt")) {
-                    // 造成伤害 (使用Brain的头槌力)
-                    hurt(player, entity, BRAIN_HEADBUTT_DAMAGE);
-                    knockBack(player, entity, 3.5f); // 头槌击退更强
+            hurt(player, entity, BRAIN_HEADBUTT_DAMAGE);
+            knockBack(player, entity, 3.5f);
 
-                    // 粒子效果
-                    if (level instanceof ServerLevel serverLevel) {
-                        serverLevel.sendParticles(ParticleTypes.EXPLOSION,
-                                entity.getX(), entity.getY() + 1.0, entity.getZ(),
-                                15, 0.5, 0.5, 0.5, 0.2);
-                    }
-
-                    level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-                            SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1.0F, 1.0F);
-
-                    // 移除标签
-                    removeTag(player, skillTag);
-                    removeTag(player, "rider_headbutting");
-                }
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(ParticleTypes.EXPLOSION,
+                        entity.getX(), entity.getY() + 1.0, entity.getZ(),
+                        15, 0.5, 0.5, 0.5, 0.2);
             }
-            break; // 只攻击第一个
+
+            level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
+                    SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            removeTag(player, "skill_brain_headbutt");
+            removeTag(player, "rider_headbutting");
+            break;
         }
     }
 
