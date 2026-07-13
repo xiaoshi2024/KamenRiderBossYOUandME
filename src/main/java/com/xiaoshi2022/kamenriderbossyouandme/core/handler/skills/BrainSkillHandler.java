@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamenriderbossyouandme.core.handler.skills;
 
 import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
 import com.jpigeon.ridebattlelib.common.event.SkillEvent;
+import com.xiaoshi2022.kamenriderbossyouandme.Config;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.network.packet.BYAnimationPacket;
@@ -301,7 +302,9 @@ public class BrainSkillHandler {
     }
 
     private static int calculateTolerance(int origin) {
-        return origin; // 可以添加配置
+        // 使用配置的额外容错时间（秒），转换为tick
+        int toleranceTicks = Config.SKILL_TOLERANCE_TIME.get() * 20;
+        return origin + toleranceTicks;
     }
 
     
@@ -382,12 +385,16 @@ public class BrainSkillHandler {
 
     private static void createExplosion(Player player, double x, double y, double z, float damage) {
         Level level = player.level();
+        boolean grief = Config.SKILL_EXPLODE_GRIEF.get();
+        Level.ExplosionInteraction interaction = grief ?
+                Level.ExplosionInteraction.BLOCK :
+                Level.ExplosionInteraction.NONE;
         level.explode(
                 player,
                 x, y, z,
-                damage * 0.1f, // 爆炸威力按伤害比例缩小
+                damage * 0.1f,
                 false,
-                Level.ExplosionInteraction.NONE
+                interaction
         );
     }
 
