@@ -50,12 +50,12 @@
   "message.tyrant.teleport.cooldown": "§cPhase Teleport on cooldown, %s seconds remaining",
   "message.tyrant.damage_immune": "§bPhase displacement immunized this damage",
 
-  "kamenriderbossyouandme.skillExplosionGrief": "Skill Explosion Grief",
-  "kamenriderbossyouandme.skillExplosionGrief.tooltip": "Whether skill explosions (such as Rider Kick) destroy blocks",
-  "kamenriderbossyouandme.skillToleranceTime": "Skill Tolerance Time",
-  "kamenriderbossyouandme.skillToleranceTime.tooltip": "Additional skill tolerance time after release (seconds)",
-  "kamenriderbossyouandme.riderSoundsVolume": "Rider Sounds Volume",
-  "kamenriderbossyouandme.riderSoundsVolume.tooltip": "Volume level when transforming",
-  "kamenriderbossyouandme.debugMode": "Debug Mode",
-  "kamenriderbossyouandme.debugMode.tooltip": "Enable developer debug mode"
+  "kamenriderbossyouandme.configuration.skillExplosionGrief": "Skill Explosion Grief",
+  "kamenriderbossyouandme.configuration.skillExplosionGrief.tooltip": "Whether skill explosions (such as Rider Kick) destroy blocks",
+  "kamenriderbossyouandme.configuration.skillToleranceTime": "Skill Tolerance Time",
+  "kamenriderbossyouandme.configuration.skillToleranceTime.tooltip": "Additional skill tolerance time after release (seconds)",
+  "kamenriderbossyouandme.configuration.riderSoundsVolume": "Rider Sounds Volume",
+  "kamenriderbossyouandme.configuration.riderSoundsVolume.tooltip": "Volume level when transforming",
+  "kamenriderbossyouandme.configuration.debugMode": "Debug Mode",
+  "kamenriderbossyouandme.configuration.debugMode.tooltip": "Enable developer debug mode"
 }
