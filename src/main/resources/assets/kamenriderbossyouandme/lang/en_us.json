@@ -4,6 +4,11 @@
   "item.kamenriderbossyouandme.genesis_driver.desc": "■ Kamen Rider Genesis Driver\n■ Can use various lockseeds to transform\n■ Press X to transform",
   "item.kamenriderbossyouandme.brain_driver": "Brain Driver",
   "item.kamenriderbossyouandme.brain_driver.desc": "■ Kamen Rider Brain Driver\n■ Can transform into Brain Rider\n■ Will transform you into a Roidmude when your life is in danger",
+  "item.kamenriderbossyouandme.hazard_trigger": "Hazard Trigger",
+    "item.kamenriderbossyouandme.build_driver": "Build Driver",
+
+  
+  
   "tooltip.braindriver.mode": "Current Mode: %s",
   "tooltip.braindriver.mode.normal": "Normal Mode",
   "tooltip.braindriver.mode.brain": "Brain Rider Mode",

@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BrainDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
+import com.xiaoshi2022.kamenriderbossyouandme.items.HazardTrigger;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.DarkRiderGhost.DarkRiderGhost;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.NapoleonGhost.NapoleonGhost;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.baron_lemon.BaronLemon;
@@ -41,6 +42,10 @@ public class ModItems {
     // Build驱动器
     public static final DeferredItem<Item> BUILD_DRIVER = ITEMS.register("build_driver",
             () -> new BuildDriver(new Item.Properties().stacksTo(1)));
+
+    // 危险扳机
+    public static final DeferredItem<Item> HAZARD_TRIGGER = ITEMS.register("hazard_trigger",
+            () -> new HazardTrigger(new Item.Properties().stacksTo(1)));
 
 
     // 装甲物品 - 使用原版的 ArmorMaterials
