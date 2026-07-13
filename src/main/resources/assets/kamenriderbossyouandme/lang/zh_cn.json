@@ -50,12 +50,12 @@
   "message.tyrant.teleport.cooldown": "§c相位传送冷却中，还剩 %s 秒",
   "message.tyrant.damage_immune": "§b相位位移免疫了此次伤害",
 
-  "config.kamenriderbossyouandme.skillExplosionGrief": "技能爆炸破坏方块",
-  "config.kamenriderbossyouandme.skillExplosionGrief.tooltip": "技能（如骑士踢）爆炸是否摧毁方块",
-  "config.kamenriderbossyouandme.skillToleranceTime": "技能容错时间",
-  "config.kamenriderbossyouandme.skillToleranceTime.tooltip": "技能释放后额外有效/实际持续的时间（秒）",
-  "config.kamenriderbossyouandme.riderSoundsVolume": "骑士音效音量",
-  "config.kamenriderbossyouandme.riderSoundsVolume.tooltip": "变身时音量大小",
-  "config.kamenriderbossyouandme.debugMode": "调试模式",
-  "config.kamenriderbossyouandme.debugMode.tooltip": "开启开发者调试模式"
+  "kamenriderbossyouandme.skillExplosionGrief": "技能爆炸破坏方块",
+  "kamenriderbossyouandme.skillExplosionGrief.tooltip": "技能（如骑士踢）爆炸是否摧毁方块",
+  "kamenriderbossyouandme.skillToleranceTime": "技能容错时间",
+  "kamenriderbossyouandme.skillToleranceTime.tooltip": "技能释放后额外有效/实际持续的时间（秒）",
+  "kamenriderbossyouandme.riderSoundsVolume": "骑士音效音量",
+  "kamenriderbossyouandme.riderSoundsVolume.tooltip": "变身时音量大小",
+  "kamenriderbossyouandme.debugMode": "调试模式",
+  "kamenriderbossyouandme.debugMode.tooltip": "开启开发者调试模式"
 }
