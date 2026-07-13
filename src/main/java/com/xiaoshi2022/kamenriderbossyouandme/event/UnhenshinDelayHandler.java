@@ -1,8 +1,13 @@
+// UnhenshinDelayHandler.java - 扩展支持多种腰带
+
 package com.xiaoshi2022.kamenriderbossyouandme.event;
 
 import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BrainDriver;
+import com.xiaoshi2022.kamenriderbossyouandme.Accessory.Genesis_driver;
+import com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler.TyrantHandler;
+import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +28,13 @@ public class UnhenshinDelayHandler {
 
     // 存储需要延迟解除变身的玩家和剩余时间（tick）
     private static final Map<UUID, Integer> pendingUnhenshin = new ConcurrentHashMap<>();
+    // 存储玩家对应的腰带类型，用于不同的解除逻辑
+    private static final Map<UUID, BeltType> pendingBeltType = new ConcurrentHashMap<>();
+
+    private enum BeltType {
+        BRAIN,
+        TYRANT
+    }
 
     @SubscribeEvent
     public static void onCurioChange(CurioChangeEvent event) {
@@ -32,29 +44,60 @@ public class UnhenshinDelayHandler {
         ItemStack to = event.getTo();
 
         boolean wasBrainDriver = from.getItem() instanceof BrainDriver;
+        boolean wasGenesisDriver = from.getItem() instanceof Genesis_driver;
         boolean isBrainDriver = to.getItem() instanceof BrainDriver;
+        boolean isGenesisDriver = to.getItem() instanceof Genesis_driver;
 
+        // Brain Driver 处理
         if (wasBrainDriver && !isBrainDriver) {
-            handleBeltRemoval(player, from);
+            handleBeltRemoval(player, from, BeltType.BRAIN);
+        }
+        // Genesis Driver (Tyrant) 处理
+        else if (wasGenesisDriver && !isGenesisDriver) {
+            handleBeltRemoval(player, from, BeltType.TYRANT);
+        }
+        // 重新装备腰带时取消延迟解除
+        else if ((isBrainDriver && wasBrainDriver) || (isGenesisDriver && wasGenesisDriver)) {
+            UUID playerUUID = player.getUUID();
+            if (hasPendingUnhenshin(playerUUID)) {
+                cancelPendingUnhenshin(playerUUID);
+                player.sendSystemMessage(
+                        Component.literal("§a腰带已重新装备，取消变身解除")
+                );
+            }
         }
     }
 
-    private static void handleBeltRemoval(ServerPlayer player, ItemStack beltStack) {
+    private static void handleBeltRemoval(ServerPlayer player, ItemStack beltStack, BeltType beltType) {
         UUID playerUUID = player.getUUID();
 
         // 如果已经有待处理的解除，先取消旧的
         cancelPendingUnhenshin(playerUUID);
 
-        // 触发BrainDriver的解除动画
-        if (beltStack.getItem() instanceof BrainDriver driver) {
-            driver.startReleaseAnimation(player, beltStack);
+        // 根据腰带类型触发不同的解除动画
+        switch (beltType) {
+            case BRAIN:
+                if (beltStack.getItem() instanceof BrainDriver driver) {
+                    driver.startReleaseAnimation(player, beltStack);
+                    // ✅ Brain使用自己的音效播放
+                    com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler.BrainHandler.playSound(player, ModBossSounds.LOCKOFF.get());
+                }
+                break;
+            case TYRANT:
+                if (beltStack.getItem() instanceof Genesis_driver driver) {
+                    // 执行Tyrant特有的解除预处理（返回锁种等）
+                    TyrantHandler.handleTyrantPreUnhenshin(player, beltStack);
+                    // handleTyrantPreUnhenshin 内部已经播放了 LOCKOFF 音效
+                }
+                break;
         }
 
-        // 存储延迟解除信息（3秒 = 60 ticks，假设20 ticks/秒）
+        // 存储延迟解除信息（3秒 = 60 ticks）
         pendingUnhenshin.put(playerUUID, 60);
+        pendingBeltType.put(playerUUID, beltType);
 
         player.sendSystemMessage(
-                net.minecraft.network.chat.Component.literal("腰带已取下，将在3秒后解除变身...")
+                Component.literal("§e腰带已取下，将在3秒后解除变身...")
         );
     }
 
@@ -70,48 +113,56 @@ public class UnhenshinDelayHandler {
             int remainingTicks = entry.getValue() - 1;
 
             if (remainingTicks <= 0) {
-                // ✅ 修复：直接在服务端执行解除变身，而不是发送包
                 ServerPlayer player = getPlayerByUUID(playerUUID);
-                if (player != null) {
-                    // 直接调用 API 解除变身
-                    RideBattleAPI.unTransform(player);
-                    player.sendSystemMessage(
-                            Component.literal("变身已解除")
-                    );
+                if (player != null && RideBattleAPI.isTransformed(player)) {
+                    // 获取腰带类型并执行对应的解除逻辑
+                    BeltType beltType = pendingBeltType.get(playerUUID);
+
+                    try {
+                        switch (beltType) {
+                            case BRAIN:
+                                // Brain的完整解除逻辑
+                                if (player != null) {
+                                    // 调用BrainHandler的解除方法（需要提取为公共方法）
+                                    com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler.BrainHandler.performUnhenshin(player);
+                                }
+                                break;
+                            case TYRANT:
+                                // Tyrant的完整解除逻辑
+                                if (player != null) {
+                                    // 调用TyrantHandler的解除方法（需要提取为公共方法）
+                                    TyrantHandler.performUnhenshin(player);
+                                }
+                                break;
+                            default:
+                                // 默认解除方式
+                                RideBattleAPI.unTransform(player);
+                                break;
+                        }
+
+                        player.sendSystemMessage(
+                                Component.literal("§a变身已解除")
+                        );
+                    } catch (Exception e) {
+                        KamenRiderBossYOUandME.LOGGER.error("解除变身失败: {}", e.getMessage());
+                        // 强制解除
+                        RideBattleAPI.unTransform(player);
+                    }
                 }
                 iterator.remove();
+                pendingBeltType.remove(playerUUID);
             } else {
                 entry.setValue(remainingTicks);
             }
         }
     }
 
-    /**
-     * 根据 UUID 获取 ServerPlayer
-     */
     private static ServerPlayer getPlayerByUUID(UUID uuid) {
         var server = ServerLifecycleHooks.getCurrentServer();
         if (server != null) {
             return server.getPlayerList().getPlayer(uuid);
         }
         return null;
-    }
-
-    @SubscribeEvent
-    public static void onCurioChangeForReequip(CurioChangeEvent event) {
-        if (!(event.getEntity() instanceof ServerPlayer player)) return;
-
-        ItemStack to = event.getTo();
-
-        if (to.getItem() instanceof BrainDriver) {
-            UUID playerUUID = player.getUUID();
-            if (hasPendingUnhenshin(playerUUID)) {
-                cancelPendingUnhenshin(playerUUID);
-                player.sendSystemMessage(
-                        net.minecraft.network.chat.Component.literal("取消变身解除")
-                );
-            }
-        }
     }
 
     @SubscribeEvent
@@ -123,6 +174,7 @@ public class UnhenshinDelayHandler {
 
     public static void cancelPendingUnhenshin(UUID playerUUID) {
         pendingUnhenshin.remove(playerUUID);
+        pendingBeltType.remove(playerUUID);
     }
 
     public static boolean hasPendingUnhenshin(UUID playerUUID) {

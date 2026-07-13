@@ -5,6 +5,7 @@ import com.jpigeon.ridebattlelib.common.event.HenshinEvent;
 import com.jpigeon.ridebattlelib.common.event.UnhenshinEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
+import com.xiaoshi2022.kamenriderbossyouandme.event.UnhenshinDelayHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.network.packet.SoundStopPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
@@ -70,6 +71,7 @@ public class TyrantHandler {
         }
     }
 
+    // 在 TyrantHandler.java 中修改 UnhenshinEvent 监听
     @SubscribeEvent
     public static void onUnhenshin(UnhenshinEvent.Pre event) {
         Player player = event.getPlayer();
@@ -77,14 +79,13 @@ public class TyrantHandler {
 
         ResourceLocation riderId = event.getRiderId();
         if (riderId.equals(RiderIds.TYRANT_ID)) {
-            event.setCanceled(true);
-
-            // ✅ 清除冷却记录
-            lastHenshinTime.remove(player.getUUID());
-
-            RideBattleAPI.scheduleTicks(1, () -> {
-                handleTyrantUnhenshinLogic(player);
-            });
+            // ✅ 不再取消事件和立即执行，让 UnhenshinDelayHandler 处理
+            // 但仍然要记录一些状态，如果玩家主动解除变身（不是通过腰带移除）
+            if (!UnhenshinDelayHandler.hasPendingUnhenshin(player.getUUID())) {
+                // 如果是主动解除，直接执行完整解除
+                event.setCanceled(true);
+                performUnhenshin(player);
+            }
         }
     }
 
@@ -309,5 +310,39 @@ public class TyrantHandler {
 
     public static void playSound(Player player, net.minecraft.sounds.SoundEvent soundEvent) {
         RideBattleAPI.playPublicSound(player, soundEvent, ((float) com.xiaoshi2022.kamenriderbossyouandme.Config.RIDER_SOUNDS_VOLUME.get() / 100));
+    }
+
+    // 在 TyrantHandler.java 中添加
+    public static void performUnhenshin(Player player) {
+        if (player == null || player.level().isClientSide()) return;
+
+        // 执行完整的解除逻辑（从 handleTyrantUnhenshinLogic 复制）
+        handleTyrantUnhenshinLogic(player);
+    }
+
+
+    /**
+     * 处理 Tyrant 解除变身前的准备工作
+     * 1. 返回锁种给玩家
+     * 2. 清理腰带状态
+     * 3. 播放音效
+     */
+    /**
+     * 处理 Tyrant 解除变身前的准备工作（延迟解除的预处理）
+     * 1. 播放音效
+     * 2. 触发解除动画
+     * 注意：不返回锁种！锁种在真正解除时才返回
+     */
+    public static void handleTyrantPreUnhenshin(ServerPlayer player, ItemStack beltStack) {
+        if (player == null || beltStack == null || beltStack.isEmpty()) return;
+        if (!(beltStack.getItem() instanceof Genesis_driver)) return;
+
+        Genesis_driver belt = (Genesis_driver) beltStack.getItem();
+
+        // ✅ 只播放解除音效
+        playSound(player, ModBossSounds.LOCKOFF.get());
+
+        // ✅ 只触发腰带动画（解除变身动画），不修改腰带状态
+        belt.startReleaseWithPlayerAnimation(player, beltStack);
     }
 }

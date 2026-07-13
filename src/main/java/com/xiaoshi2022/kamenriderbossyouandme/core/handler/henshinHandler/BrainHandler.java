@@ -10,6 +10,7 @@ import com.jpigeon.ridebattlelib.common.event.UnhenshinEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BrainDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Config;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
+import com.xiaoshi2022.kamenriderbossyouandme.event.UnhenshinDelayHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderIds;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.driver.BrainConfig;
@@ -64,14 +65,18 @@ public class BrainHandler {
     }
 
     @SubscribeEvent
-    public static void onUnhenshin(UnhenshinEvent.Post event) {
+    public static void onUnhenshin(UnhenshinEvent.Pre event) {
         Player player = event.getPlayer();
         if (player.level().isClientSide()) return;
 
         ResourceLocation riderId = event.getRiderId();
         if (riderId.equals(RiderIds.BRAIN_ID)) {
-            lastHenshinTime.remove(player.getUUID());
-            handleBrainUnhenshinLogic(player);
+            // ✅ 不再立即执行，让 UnhenshinDelayHandler 处理
+            if (!UnhenshinDelayHandler.hasPendingUnhenshin(player.getUUID())) {
+                // 如果是主动解除（不是通过腰带移除），直接执行完整解除
+                event.setCanceled(true);
+                performUnhenshin(player);
+            }
         }
     }
 
@@ -112,9 +117,6 @@ public class BrainHandler {
         });
     }
 
-    /**
-     * 🥊 直接操作数据完成变身 - 使用正确的API方法
-     */
     private static void forceCompleteHenshin(ServerPlayer player) {
         RiderData data = player.getData(RiderAttachments.RIDER_DATA);
 
@@ -180,7 +182,7 @@ public class BrainHandler {
         }
     }
 
-    private static void handleBrainUnhenshinLogic(Player player) {
+    public static void handleBrainUnhenshinLogic(Player player) {
         playSound(player, ModBossSounds.LOCKOFF.get());
 
         CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof BrainDriver).ifPresent(slotResult -> {
@@ -217,5 +219,10 @@ public class BrainHandler {
 
     public static void playSound(Player player, SoundEvent soundEvent) {
         RideBattleAPI.playPublicSound(player, soundEvent, ((float) Config.RIDER_SOUNDS_VOLUME.get() / 100));
+    }
+
+    public static void performUnhenshin(Player player) {
+        if (player == null || player.level().isClientSide()) return;
+        handleBrainUnhenshinLogic(player);
     }
 }
