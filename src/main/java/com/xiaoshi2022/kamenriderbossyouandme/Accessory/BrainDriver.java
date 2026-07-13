@@ -366,17 +366,18 @@ public class BrainDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
     protected void onBeltUnequipped(ServerPlayer player, ItemStack beltStack) {
         if (player == null || beltStack == null || beltStack.isEmpty()) return;
 
+        // ✅ 只重置腰带状态，不调用任何解除逻辑
         setShowing(beltStack, false);
         setRelease(beltStack, false);
         setEquipped(beltStack, false);
 
-        // ✅ 修复：在服务端直接执行解除变身逻辑，而不是发送 packet
-        // 检查是否有待处理的解除变身
-        if (!UnhenshinDelayHandler.hasPendingUnhenshin(player.getUUID())) {
-            // 直接取消变身，而不是发送包
-            RideBattleAPI.unTransform(player);
-        }
-        // 如果有待处理的解除，让延迟处理器处理
+        // 触发取消动画（只发送动画包，不解除变身）
+        // 注意：triggerCancelAnimation 内部已经发送了动画包，但不会调用 unTransform
+        triggerCancelAnimation(player, beltStack);
+
+        // ❌ 删除所有 RideBattleAPI.unTransform() 调用
+        // ❌ 删除所有 BrainHandler.performUnhenshin() 调用
+        // 让 UnhenshinDelayHandler 通过 CurioChangeEvent 来处理解除
     }
 
     /* -------------- 客户端渲染器 -------------- */

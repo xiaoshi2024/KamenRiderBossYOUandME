@@ -38,6 +38,9 @@ public class BrainHandler {
     private static final Map<UUID, Long> lastHenshinTime = new HashMap<>();
     private static final long COOLDOWN_TICKS = 100;
 
+    // 防止重复解除的标志
+    private static final Map<UUID, Boolean> unhenshinInProgress = new HashMap<>();
+
     @SubscribeEvent
     public static void onHenshin(HenshinEvent.Pre event) {
         Player player = event.getPlayer();
@@ -71,12 +74,20 @@ public class BrainHandler {
 
         ResourceLocation riderId = event.getRiderId();
         if (riderId.equals(RiderIds.BRAIN_ID)) {
-            // ✅ 不再立即执行，让 UnhenshinDelayHandler 处理
-            if (!UnhenshinDelayHandler.hasPendingUnhenshin(player.getUUID())) {
-                // 如果是主动解除（不是通过腰带移除），直接执行完整解除
-                event.setCanceled(true);
-                performUnhenshin(player);
+            event.setCanceled(true);
+
+            // 如果已经在解除中，跳过
+            if (unhenshinInProgress.getOrDefault(player.getUUID(), false)) {
+                return;
             }
+
+            // 如果是由 UnhenshinDelayHandler 触发的，跳过（由DelayHandler处理）
+            if (UnhenshinDelayHandler.hasPendingUnhenshin(player.getUUID())) {
+                return;
+            }
+
+            // 主动解除（玩家手动按解除键等），直接执行
+            performImmediateUnhenshin(player);
         }
     }
 
@@ -182,47 +193,75 @@ public class BrainHandler {
         }
     }
 
-    public static void handleBrainUnhenshinLogic(Player player) {
-        playSound(player, ModBossSounds.LOCKOFF.get());
+    /**
+     * 立即执行解除变身（无延迟）
+     * 由 UnhenshinDelayHandler 在延迟结束后调用
+     */
+    public static void performImmediateUnhenshin(Player player) {
+        if (player == null || player.level().isClientSide()) return;
+        if (!(player instanceof ServerPlayer serverPlayer)) return;
 
-        CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof BrainDriver).ifPresent(slotResult -> {
-            var beltStack = slotResult.stack();
-            BrainDriver belt = (BrainDriver) beltStack.getItem();
+        UUID playerId = player.getUUID();
 
-            belt.setMode(beltStack, BrainDriver.BeltMode.DEFAULT);
-            belt.setActive(beltStack, false);
-            belt.setHenshin(beltStack, false);
-            belt.setShowing(beltStack, false);
-            belt.setRelease(beltStack, true);
+        // 防止重复执行
+        if (unhenshinInProgress.getOrDefault(playerId, false)) {
+            return;
+        }
 
-            belt.triggerCancelAnimation(player, beltStack);
-        });
+        try {
+            unhenshinInProgress.put(playerId, true);
 
-        RideBattleAPI.scheduleTicks(20, () -> {
-            if (player instanceof ServerPlayer serverPlayer && serverPlayer.isAlive()) {
-                RiderData data = serverPlayer.getData(RiderAttachments.RIDER_DATA);
+            // 播放音效
+            playSound(player, ModBossSounds.LOCKOFF.get());
 
-                data.endHenshinSession();
+            // 更新腰带状态
+            CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof BrainDriver).ifPresent(slotResult -> {
+                var beltStack = slotResult.stack();
+                BrainDriver belt = (BrainDriver) beltStack.getItem();
 
-                serverPlayer.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
-                serverPlayer.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
-                serverPlayer.setItemSlot(EquipmentSlot.LEGS, ItemStack.EMPTY);
-                serverPlayer.setItemSlot(EquipmentSlot.FEET, ItemStack.EMPTY);
+                belt.setMode(beltStack, BrainDriver.BeltMode.DEFAULT);
+                belt.setActive(beltStack, false);
+                belt.setHenshin(beltStack, false);
+                belt.setShowing(beltStack, false);
+                belt.setRelease(beltStack, true);
 
-                serverPlayer.removeAllEffects();
+                belt.triggerCancelAnimation(player, beltStack);
+            });
 
-                RideBattleAPI.syncHenshinState(serverPlayer);
-                KamenRiderBossYOUandME.LOGGER.info("Brain解除变身完成: {}", player.getName().getString());
-            }
-        });
+            // 清除盔甲
+            serverPlayer.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+            serverPlayer.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
+            serverPlayer.setItemSlot(EquipmentSlot.LEGS, ItemStack.EMPTY);
+            serverPlayer.setItemSlot(EquipmentSlot.FEET, ItemStack.EMPTY);
+
+            // 清除效果
+            serverPlayer.removeAllEffects();
+
+            // 结束变身会话
+            RiderData data = serverPlayer.getData(RiderAttachments.RIDER_DATA);
+            data.endHenshinSession();
+
+            // 同步状态
+            RideBattleAPI.syncHenshinState(serverPlayer);
+            RideBattleAPI.syncClientState(serverPlayer);
+
+            KamenRiderBossYOUandME.LOGGER.info("Brain解除变身完成: {}", player.getName().getString());
+
+        } finally {
+            // 清除锁定标志
+            unhenshinInProgress.remove(playerId);
+        }
+    }
+
+    /**
+     * 外部调用的解除方法（兼容旧接口）
+     * 直接调用即时解除，不添加额外延迟
+     */
+    public static void performUnhenshin(Player player) {
+        performImmediateUnhenshin(player);
     }
 
     public static void playSound(Player player, SoundEvent soundEvent) {
         RideBattleAPI.playPublicSound(player, soundEvent, ((float) Config.RIDER_SOUNDS_VOLUME.get() / 100));
-    }
-
-    public static void performUnhenshin(Player player) {
-        if (player == null || player.level().isClientSide()) return;
-        handleBrainUnhenshinLogic(player);
     }
 }
