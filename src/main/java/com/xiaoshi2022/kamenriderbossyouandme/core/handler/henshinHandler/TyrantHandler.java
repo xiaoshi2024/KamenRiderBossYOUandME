@@ -9,7 +9,10 @@ import com.xiaoshi2022.kamenriderbossyouandme.event.UnhenshinDelayHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.network.packet.SoundStopPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
+import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBlocks;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderIds;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.gaim.TyrantConfig;
 import com.xiaoshi2022.kamenriderbossyouandme.util.CurioUtils;
@@ -171,6 +174,14 @@ public class TyrantHandler {
             if (player instanceof ServerPlayer serverPlayer && serverPlayer.isAlive()) {
                 try {
                     forceCompleteHenshin(serverPlayer);
+
+                    // ✅ 移除玩家头顶的 DRAGONFRUITX_BLOCK
+                    Level level = player.level();
+                    BlockPos aboveHead = player.blockPosition().above(2);
+                    if (level.getBlockState(aboveHead).is(ModBlocks.DRAGONFRUITX_BLOCK.get())) {
+                        level.removeBlock(aboveHead, false);
+                        KamenRiderBossYOUandME.LOGGER.info("✅ 移除玩家头顶的 DRAGONFRUITX_BLOCK: {}", aboveHead);
+                    }
 
                     // ✅ 播放变身完成音效 (DRAGONFRUIT_ARMS)
                     playSound(player, ModBossSounds.DRAGONFRUIT_ARMS.get());
