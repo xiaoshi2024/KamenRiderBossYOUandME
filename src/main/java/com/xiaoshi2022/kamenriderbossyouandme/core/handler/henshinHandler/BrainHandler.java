@@ -27,11 +27,15 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME.MODID;
 
 @EventBusSubscriber(modid = MODID)
 public class BrainHandler {
+
+    private static final Map<UUID, Long> lastHenshinTime = new HashMap<>();
+    private static final long COOLDOWN_TICKS = 100;
 
     @SubscribeEvent
     public static void onHenshin(HenshinEvent.Pre event) {
@@ -41,6 +45,18 @@ public class BrainHandler {
         ResourceLocation riderId = event.getRiderId();
         if (riderId.equals(RiderIds.BRAIN_ID)) {
             event.setCanceled(true);
+
+            UUID playerId = player.getUUID();
+            long currentTick = player.level().getGameTime();
+            Long lastTime = lastHenshinTime.get(playerId);
+
+            if (lastTime != null && currentTick - lastTime < COOLDOWN_TICKS) {
+                KamenRiderBossYOUandME.LOGGER.info("Brain变身冷却中: {}", player.getName().getString());
+                return;
+            }
+
+            lastHenshinTime.put(playerId, currentTick);
+
             RideBattleAPI.scheduleTicks(5, () -> {
                 triggerBrainHenshin(player);
             });
@@ -54,6 +70,7 @@ public class BrainHandler {
 
         ResourceLocation riderId = event.getRiderId();
         if (riderId.equals(RiderIds.BRAIN_ID)) {
+            lastHenshinTime.remove(player.getUUID());
             handleBrainUnhenshinLogic(player);
         }
     }

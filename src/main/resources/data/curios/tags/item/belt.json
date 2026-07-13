@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "kamenriderbossyouandme:genesis_driver",
-    "kamenriderbossyouandme:brain_driver"
+    "kamenriderbossyouandme:brain_driver",
+    "kamenriderbossyouandme:build_driver"
   ]
 }

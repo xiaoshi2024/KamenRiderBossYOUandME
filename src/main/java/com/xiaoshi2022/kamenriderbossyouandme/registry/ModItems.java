@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamenriderbossyouandme.registry;
 
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BrainDriver;
+import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.DarkRiderGhost.DarkRiderGhost;
@@ -36,6 +37,10 @@ public class ModItems {
     // 创世纪驱动器
     public static final DeferredItem<Item> GENESIS_DRIVER = ITEMS.register("genesis_driver",
             () -> new Genesis_driver(new Item.Properties().stacksTo(1)));
+
+    // Build驱动器
+    public static final DeferredItem<Item> BUILD_DRIVER = ITEMS.register("build_driver",
+            () -> new BuildDriver(new Item.Properties().stacksTo(1)));
 
 
     // 装甲物品 - 使用原版的 ArmorMaterials

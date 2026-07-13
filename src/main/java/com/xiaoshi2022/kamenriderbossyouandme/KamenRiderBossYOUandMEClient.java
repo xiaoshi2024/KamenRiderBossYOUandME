@@ -33,6 +33,7 @@ public class KamenRiderBossYOUandMEClient {
         // 注册Curios相关内容
         CuriosRendererRegistry.register(ModItems.GENESIS_DRIVER.get(), () -> new BYCurioRenderer());
         CuriosRendererRegistry.register(ModItems.BRAIN_DRIVER.get(), () -> new BYCurioRenderer());
+        CuriosRendererRegistry.register(ModItems.BUILD_DRIVER.get(), () -> new BYCurioRenderer());
 
         // 注册融合实体渲染器
         EntityRenderers.register(

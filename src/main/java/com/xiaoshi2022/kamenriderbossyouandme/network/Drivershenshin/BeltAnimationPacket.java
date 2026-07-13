@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin;
 
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BrainDriver;
+import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -41,49 +42,84 @@ public record BeltAnimationPacket(int entityId, String animationName, String bel
 
     public static void handle(BeltAnimationPacket packet, net.neoforged.neoforge.network.handling.IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
-            // ✅ 使用 context.player() 而不是 Minecraft.getInstance()
             Player player = ctx.player();
             if (player == null) return;
 
             Entity e = player.level().getEntity(packet.entityId());
             if (!(e instanceof LivingEntity living)) return;
 
+            String beltType = packet.beltType();
+
             CuriosApi.getCuriosInventory(living).ifPresent(inv -> {
-                inv.findFirstCurio(item -> item.getItem() instanceof BrainDriver).ifPresent(slot -> {
-                    ItemStack stack = slot.stack();
-                    if (stack.getItem() instanceof BrainDriver brain) {
-                        // 只在客户端执行
-                        if (!living.level().isClientSide()) return;
+                if ("braindriver".equals(beltType)) {
+                    inv.findFirstCurio(item -> item.getItem() instanceof BrainDriver).ifPresent(slot -> {
+                        ItemStack stack = slot.stack();
+                        if (stack.getItem() instanceof BrainDriver brain) {
+                            if (!living.level().isClientSide()) return;
 
-                        // 根据动画名称设置正确的状态
-                        String animName = packet.animationName();
-                        switch (animName) {
-                            case "henshin":
-                                brain.setRelease(stack, false);
-                                brain.setShowing(stack, false);
-                                brain.setHenshin(stack, true);
-                                break;
-                            case "cancel":
-                                brain.setHenshin(stack, false);
-                                brain.setShowing(stack, false);
-                                brain.setRelease(stack, true);
-                                break;
-                            case "show":
-                                brain.setShowing(stack, true);
-                                break;
-                            default:
-                                break;
+                            String animName = packet.animationName();
+                            switch (animName) {
+                                case "henshin":
+                                    brain.setRelease(stack, false);
+                                    brain.setShowing(stack, false);
+                                    brain.setHenshin(stack, true);
+                                    break;
+                                case "cancel":
+                                    brain.setHenshin(stack, false);
+                                    brain.setShowing(stack, false);
+                                    brain.setRelease(stack, true);
+                                    break;
+                                case "show":
+                                    brain.setShowing(stack, true);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            long id = living.getId();
+                            brain.triggerAnim(living, id, "controller", animName);
+
+                            KamenRiderBossYOUandME.LOGGER.debug("客户端触发动画: {} -> {}",
+                                    living.getName().getString(), animName);
                         }
+                    });
+                } else if ("builddriver".equals(beltType)) {
+                    inv.findFirstCurio(item -> item.getItem() instanceof BuildDriver).ifPresent(slot -> {
+                        ItemStack stack = slot.stack();
+                        if (stack.getItem() instanceof BuildDriver build) {
+                            if (!living.level().isClientSide()) return;
 
-                        // ✅ 在客户端使用实体 ID 作为动画 ID
-                        // 不需要 ServerLevel，直接使用实体ID
-                        long id = living.getId();
-                        brain.triggerAnim(living, id, "controller", animName);
+                            String animName = packet.animationName();
+                            switch (animName) {
+                                case "cancel":
+                                    build.setRelease(stack, true);
+                                    break;
+                                case "show":
+                                    build.setShowing(stack, true);
+                                    break;
+                                case "idles":
+                                    build.setShowing(stack, false);
+                                    break;
+                                case "sync_state":
+                                    try {
+                                        BuildDriver.BeltMode mode = BuildDriver.BeltMode.valueOf(packet.beltMode());
+                                        build.setMode(stack, mode);
+                                    } catch (IllegalArgumentException ex) {
+                                        build.setMode(stack, BuildDriver.BeltMode.DEFAULT);
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
 
-                        KamenRiderBossYOUandME.LOGGER.debug("客户端触发动画: {} -> {}",
-                                living.getName().getString(), animName);
-                    }
-                });
+                            long id = living.getId();
+                            build.triggerAnim(living, id, "controller", animName);
+
+                            KamenRiderBossYOUandME.LOGGER.debug("客户端触发动画: {} -> {}",
+                                    living.getName().getString(), animName);
+                        }
+                    });
+                }
             });
         });
     }
