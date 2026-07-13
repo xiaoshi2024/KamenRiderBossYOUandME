@@ -1,10 +1,13 @@
 package com.xiaoshi2022.kamenriderbossyouandme;
 
+import com.xiaoshi2022.kamenriderbossyouandme.block.client.DragonfruitBlockRenderer;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.BYCurioRenderer;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.entity.FusionEffectRenderer;
+import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBlockEntities;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModEntitys;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -12,6 +15,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
@@ -26,6 +30,12 @@ public class KamenRiderBossYOUandMEClient {
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
         // Do not forget to add translations for your config options to the en_us.json file.
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+    }
+
+    @SubscribeEvent
+    public static void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.DRAGONFRUITX_ENTITY.get(),
+                (BlockEntityRendererProvider.Context context) -> new DragonfruitBlockRenderer(context));
     }
 
     @SubscribeEvent

@@ -1,14 +1,13 @@
 {
   "itemGroup.kamenriderbossyouandme.henshin": "Henshin System",
   "item.kamenriderbossyouandme.genesis_driver": "Genesis Driver",
-  "item.kamenriderbossyouandme.genesis_driver.desc": "■ Kamen Rider Genesis Driver\n■ Can use various lockseeds to transform\n■ Press X to transform",
+  "item.kamenriderbossyouandme.genesis_driver.desc": "■ Kamen Rider Genesis Driver\n■ Can use various lockseeds to transform\n■ Press henshin to transform",
   "item.kamenriderbossyouandme.brain_driver": "Brain Driver",
   "item.kamenriderbossyouandme.brain_driver.desc": "■ Kamen Rider Brain Driver\n■ Can transform into Brain Rider\n■ Will transform you into a Roidmude when your life is in danger",
   "item.kamenriderbossyouandme.hazard_trigger": "Hazard Trigger",
-    "item.kamenriderbossyouandme.build_driver": "Build Driver",
+  "item.kamenriderbossyouandme.build_driver": "Build Driver",
+  "item.kamenriderbossyouandme.dragonfruit": "Dragonfruit",
 
-  
-  
   "tooltip.braindriver.mode": "Current Mode: %s",
   "tooltip.braindriver.mode.normal": "Normal Mode",
   "tooltip.braindriver.mode.brain": "Brain Rider Mode",
@@ -32,5 +31,22 @@
   "skill.kamenriderbossyouandme.brain_poison": "Brain Poison",
   "skill.kamenriderbossyouandme.brain_poison.display": "§5§lBrain Poison",
   "skill.kamenriderbossyouandme.brain_kick": "Brain Rider Kick",
-  "skill.kamenriderbossyouandme.brain_kick.display": "§6§lBrain Rider Kick"
+  "skill.kamenriderbossyouandme.brain_kick.display": "§6§lBrain Rider Kick",
+
+  "skill.kamenriderbossyouandme.tyrant_kick": "Tyrant Kick",
+  "skill.kamenriderbossyouandme.tyrant_kick.display": "§c§lTyrant Kick",
+  "skill.kamenriderbossyouandme.tyrant_intangibility": "Phase Intangibility",
+  "skill.kamenriderbossyouandme.tyrant_intangibility.display": "§b§lPhase Intangibility",
+  "skill.kamenriderbossyouandme.tyrant_phase_teleport": "Phase Teleport",
+  "skill.kamenriderbossyouandme.tyrant_phase_teleport.display": "§d§lPhase Teleport",
+
+  "message.tyrant.intangibility.activate": "§bPhase Intangibility Activated - 60s duration, flight and phase penetration enabled",
+  "message.tyrant.intangibility.deactivate": "§cPhase Intangibility Deactivated",
+  "message.tyrant.intangibility.break": "§cIntangibility broken! Took heavy damage!",
+  "message.tyrant.intangibility.time": "§bIntangibility remaining: %s seconds",
+  "message.tyrant.intangibility.height_limit": "§cFlight height limit exceeded, intangibility deactivated",
+  "message.tyrant.teleport.complete": "§dPhase Teleport Complete!",
+  "message.tyrant.teleport.no_target": "§cNo teleport target found",
+  "message.tyrant.teleport.cooldown": "§cPhase Teleport on cooldown, %s seconds remaining",
+  "message.tyrant.damage_immune": "§bPhase displacement immunized this damage"
 }

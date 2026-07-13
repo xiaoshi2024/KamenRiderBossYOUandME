@@ -3,8 +3,6 @@ package com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler;
 import com.jpigeon.ridebattlelib.common.event.HenshinEvent;
 import com.jpigeon.ridebattlelib.common.event.UnhenshinEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
-import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderIds;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -13,7 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import static com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME.MODID;
 
 @EventBusSubscriber(modid = MODID)
-public class BrainInvisibilityHandler {
+public class RiderInvisibilityHandler {
 
     @SubscribeEvent
     public static void onHenshin(HenshinEvent.Post event) {
@@ -21,10 +19,8 @@ public class BrainInvisibilityHandler {
         if (player.level().isClientSide()) return;
         if (!(player instanceof ServerPlayer serverPlayer)) return;
 
-        ResourceLocation riderId = event.getRiderId();
-        if (riderId.equals(RiderIds.BRAIN_ID)) {
-            setBrainInvisible(serverPlayer, true);
-        }
+        // ✅ 所有骑士变身后隐身
+        setRiderInvisible(serverPlayer, true);
     }
 
     @SubscribeEvent
@@ -33,14 +29,12 @@ public class BrainInvisibilityHandler {
         if (player.level().isClientSide()) return;
         if (!(player instanceof ServerPlayer serverPlayer)) return;
 
-        ResourceLocation riderId = event.getRiderId();
-        if (riderId.equals(RiderIds.BRAIN_ID)) {
-            setBrainInvisible(serverPlayer, false);
-        }
+        // ✅ 所有骑士解除变身后取消隐身
+        setRiderInvisible(serverPlayer, false);
     }
 
-    private static void setBrainInvisible(ServerPlayer player, boolean invisible) {
+    private static void setRiderInvisible(ServerPlayer player, boolean invisible) {
         player.setInvisible(invisible);
-        KamenRiderBossYOUandME.LOGGER.debug("Brain隐身状态同步: {} -> {}", player.getName().getString(), invisible);
+        KamenRiderBossYOUandME.LOGGER.debug("骑士隐身状态同步: {} -> {}", player.getName().getString(), invisible);
     }
 }

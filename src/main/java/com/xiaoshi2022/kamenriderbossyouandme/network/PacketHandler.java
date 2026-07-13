@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.ReleaseBelt
 import com.xiaoshi2022.kamenriderbossyouandme.network.packet.BYAnimationPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.network.packet.InvisibilitySyncPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.network.packet.PlayerMovementPacket;
+import com.xiaoshi2022.kamenriderbossyouandme.network.packet.SoundStopPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -50,6 +51,26 @@ public class PacketHandler {
                     com.xiaoshi2022.kamenriderbossyouandme.impl.playerAnimator.PlayerAnimationHandler.handleAnimation(
                             clientPlayer, payload.animationId(), payload.fadeDuration()
                     );
+                })
+        );
+
+        // ✅ 注册 SoundStopPacket
+        registrar.playToClient(
+                SoundStopPacket.TYPE,
+                SoundStopPacket.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    Player clientPlayer = context.player();
+                    if (clientPlayer == null) return;
+                    if (!clientPlayer.getUUID().equals(payload.playerId())) return;
+
+                    // 停止指定音效（通过发送空音效或停止音效）
+                    // 在客户端，我们可以使用 SoundManager 停止音效
+                    if (clientPlayer.level().isClientSide()) {
+                        net.minecraft.client.Minecraft.getInstance().getSoundManager().stop(
+                                payload.soundId(),
+                                net.minecraft.sounds.SoundSource.PLAYERS
+                        );
+                    }
                 })
         );
 

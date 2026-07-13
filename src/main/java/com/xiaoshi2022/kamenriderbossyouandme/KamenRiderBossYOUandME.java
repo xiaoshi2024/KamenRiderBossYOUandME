@@ -5,12 +5,15 @@ import com.jpigeon.ridebattlelib.server.system.HenshinSystem;
 import com.xiaoshi2022.kamenriderbossyouandme.command.FusionCommand;
 import com.xiaoshi2022.kamenriderbossyouandme.core.manager.BrainHenshinSystem;
 import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;
+import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBlocks;
+import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBlockEntities;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModCreativeModeTabs;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModEntitys;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderSkills;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.driver.BrainConfig;
+import com.xiaoshi2022.kamenriderbossyouandme.riders.gaim.TyrantConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
@@ -38,6 +41,10 @@ public class KamenRiderBossYOUandME {
         ModCreativeModeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         // 注册物品
         ModItems.ITEMS.register(modEventBus);
+        // 注册方块
+        ModBlocks.BLOCKS.register(modEventBus);
+        // 注册方块实体
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         // 注册声音
         ModBossSounds.register(modEventBus);
 
@@ -65,6 +72,9 @@ public class KamenRiderBossYOUandME {
 
             BrainConfig.init();
             LOGGER.info("Brain骑士配置注册完成");
+
+            TyrantConfig.init();
+            LOGGER.info("Tyrant骑士配置注册完成");
         });
     }
 

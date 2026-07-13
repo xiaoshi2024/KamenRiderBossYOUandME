@@ -482,25 +482,19 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         triggerAnim(le, "controller", "idles");
     }
 
-    @Override
-    public void curioTick(SlotContext ctx, ItemStack stack) {
-        if (ctx == null || ctx.entity() == null || stack == null || stack.isEmpty()) {
-            return;
-        }
-        if (ctx.entity().level() == null || ctx.entity().level().isClientSide()) {
-            return;
-        }
-        if (!(ctx.entity() instanceof ServerPlayer sp)) {
-            return;
-        }
-
-        if (sp.tickCount % 100 == 0) {
-            PacketHandler.sendToClient(
-                    sp,
-                    new BeltAnimationPacket(sp.getId(), "sync_state", "builddriver", getMode(stack).name())
-            );
-        }
-    }
+//    @Override
+//    public void curioTick(SlotContext ctx, ItemStack stack) {
+//        if (ctx == null || ctx.entity() == null || stack == null || stack.isEmpty()) {
+//            return;
+//        }
+//        if (ctx.entity().level() == null || ctx.entity().level().isClientSide()) {
+//            return;
+//        }
+//        if (!(ctx.entity() instanceof ServerPlayer sp)) {
+//            return;
+//        }
+//
+//    }
 
     public boolean onRightClick(SlotContext ctx, ItemStack stack) {
         if (ctx == null || ctx.entity() == null || stack == null || stack.isEmpty()) {

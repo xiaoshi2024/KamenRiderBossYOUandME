@@ -30,6 +30,14 @@ public class RiderSkills {
     public static final ResourceLocation BRAIN_KICK =
             ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "brain_kick");
 
+    // ==================== Tyrant专用技能 ====================
+    public static final ResourceLocation TYRANT_KICK =
+            ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "tyrant_kick");
+    public static final ResourceLocation TYRANT_INTANGIBILITY =
+            ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "tyrant_intangibility");
+    public static final ResourceLocation TYRANT_PHASE_TELEPORT =
+            ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "tyrant_phase_teleport");
+
     // 技能标签映射 - 像鸽子作者那样
     public static final Map<ResourceLocation, String> SKILL_TAGS = new HashMap<>();
 
@@ -45,6 +53,11 @@ public class RiderSkills {
         SKILL_TAGS.put(BRAIN_HEADBUTT, "skill_brain_headbutt");
         SKILL_TAGS.put(BRAIN_POISON, "skill_brain_poison");
         SKILL_TAGS.put(BRAIN_KICK, "skill_brain_kick");
+
+        // ===== Tyrant专用技能标签 =====
+        SKILL_TAGS.put(TYRANT_KICK, "skill_tyrant_kick");
+        SKILL_TAGS.put(TYRANT_INTANGIBILITY, "skill_tyrant_intangibility");
+        SKILL_TAGS.put(TYRANT_PHASE_TELEPORT, "skill_tyrant_phase_teleport");
     }
 
     // 注册所有技能
@@ -126,7 +139,36 @@ public class RiderSkills {
                 6
         );
 
-        KamenRiderBossYOUandME.LOGGER.info("已注册 {} 个骑士技能 (5个通用 + 3个Brain专用)", 8);
+        // ===== 注册Tyrant专用技能 =====
+
+        // 注册Tyrant骑士踢技能（冷却时间8秒，威力极大）
+        SkillSystem.registerSkill(
+                TYRANT_KICK,
+                Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".tyrant_kick")
+                        .withStyle(ChatFormatting.DARK_RED)
+                        .withStyle(ChatFormatting.BOLD),
+                8
+        );
+
+        // 注册Tyrant虚化技能（冷却时间30秒）
+        SkillSystem.registerSkill(
+                TYRANT_INTANGIBILITY,
+                Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".tyrant_intangibility")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE)
+                        .withStyle(ChatFormatting.BOLD),
+                30
+        );
+
+        // 注册Tyrant相位传送技能（冷却时间5秒）
+        SkillSystem.registerSkill(
+                TYRANT_PHASE_TELEPORT,
+                Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".tyrant_phase_teleport")
+                        .withStyle(ChatFormatting.AQUA)
+                        .withStyle(ChatFormatting.BOLD),
+                5
+        );
+
+        KamenRiderBossYOUandME.LOGGER.info("已注册 {} 个骑士技能 (5个通用 + 3个Brain专用 + 3个Tyrant专用)", 11);
     }
 
     /**
@@ -155,6 +197,15 @@ public class RiderSkills {
             return Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".brain_kick.display");
         }
 
+        // ===== Tyrant专用技能显示名称 =====
+        else if (TYRANT_KICK.equals(skillId)) {
+            return Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".tyrant_kick.display");
+        } else if (TYRANT_INTANGIBILITY.equals(skillId)) {
+            return Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".tyrant_intangibility.display");
+        } else if (TYRANT_PHASE_TELEPORT.equals(skillId)) {
+            return Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".tyrant_phase_teleport.display");
+        }
+
         return Component.literal("未知技能");
     }
 
@@ -171,7 +222,11 @@ public class RiderSkills {
                 // 检查Brain专用技能
                 skillId.equals(BRAIN_HEADBUTT) ||
                 skillId.equals(BRAIN_POISON) ||
-                skillId.equals(BRAIN_KICK);
+                skillId.equals(BRAIN_KICK) ||
+                // 检查Tyrant专用技能
+                skillId.equals(TYRANT_KICK) ||
+                skillId.equals(TYRANT_INTANGIBILITY) ||
+                skillId.equals(TYRANT_PHASE_TELEPORT);
     }
 
     /**
@@ -181,6 +236,15 @@ public class RiderSkills {
         return skillId.equals(BRAIN_HEADBUTT) ||
                 skillId.equals(BRAIN_POISON) ||
                 skillId.equals(BRAIN_KICK);
+    }
+
+    /**
+     * 检查是否是Tyrant专用技能
+     */
+    public static boolean isTyrantSkill(ResourceLocation skillId) {
+        return skillId.equals(TYRANT_KICK) ||
+                skillId.equals(TYRANT_INTANGIBILITY) ||
+                skillId.equals(TYRANT_PHASE_TELEPORT);
     }
 
     /**

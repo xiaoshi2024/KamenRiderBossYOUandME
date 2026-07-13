@@ -1,12 +1,13 @@
 {
   "itemGroup.kamenriderbossyouandme.henshin": "变身系统",
   "item.kamenriderbossyouandme.genesis_driver": "创世纪驱动器",
-  "item.kamenriderbossyouandme.genesis_driver.desc": "■ 假面骑士创世纪驱动器\n■ 可以使用各种锁种进行变身\n■ 按 X 键触发变身",
+  "item.kamenriderbossyouandme.genesis_driver.desc": "■ 假面骑士创世纪驱动器\n■ 可以使用各种锁种进行变身\n■ 按 变身 键触发变身",
   "item.kamenriderbossyouandme.brain_driver": "Brain驱动器",
   "item.kamenriderbossyouandme.brain_driver.desc": "■ 假面骑士Brain驱动器\n■ 可以变身为Brain骑士\n■ 生命垂危时会将你转化为机械变异体",
   "item.kamenriderbossyouandme.hazard_trigger": "危险扳机",
   "item.kamenriderbossyouandme.build_driver": "创骑驱动器",
-  
+  "item.kamenriderbossyouandme.dragonfruit": "火龙果锁种",
+
   "tooltip.braindriver.mode": "当前模式: %s",
   "tooltip.braindriver.mode.normal": "普通形态",
   "tooltip.braindriver.mode.brain": "Brain骑士形态",
@@ -30,5 +31,22 @@
   "skill.kamenriderbossyouandme.brain_poison": "Brain毒手",
   "skill.kamenriderbossyouandme.brain_poison.display": "§5§lBrain毒手",
   "skill.kamenriderbossyouandme.brain_kick": "Brain骑士踢",
-  "skill.kamenriderbossyouandme.brain_kick.display": "§6§lBrain骑士踢"
+  "skill.kamenriderbossyouandme.brain_kick.display": "§6§lBrain骑士踢",
+
+  "skill.kamenriderbossyouandme.tyrant_kick": "暴君踢击",
+  "skill.kamenriderbossyouandme.tyrant_kick.display": "§c§l暴君踢击",
+  "skill.kamenriderbossyouandme.tyrant_intangibility": "相位虚化",
+  "skill.kamenriderbossyouandme.tyrant_intangibility.display": "§b§l相位虚化",
+  "skill.kamenriderbossyouandme.tyrant_phase_teleport": "相位传送",
+  "skill.kamenriderbossyouandme.tyrant_phase_teleport.display": "§d§l相位传送",
+
+  "message.tyrant.intangibility.activate": "§b相位虚化已激活 - 持续60秒，获得飞行和相位穿透能力",
+  "message.tyrant.intangibility.deactivate": "§c相位虚化已解除",
+  "message.tyrant.intangibility.break": "§c虚化模式被打破！受到了强力攻击！",
+  "message.tyrant.intangibility.time": "§b虚化模式剩余时间: %s 秒",
+  "message.tyrant.intangibility.height_limit": "§c飞行高度超过限制，虚化模式已解除",
+  "message.tyrant.teleport.complete": "§d相位传送完成！",
+  "message.tyrant.teleport.no_target": "§c找不到传送目标位置",
+  "message.tyrant.teleport.cooldown": "§c相位传送冷却中，还剩 %s 秒",
+  "message.tyrant.damage_immune": "§b相位位移免疫了此次伤害"
 }

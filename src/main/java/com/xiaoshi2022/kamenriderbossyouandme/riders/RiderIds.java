@@ -6,6 +6,7 @@ import static com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME.MODI
 
 public class RiderIds {
     public static final ResourceLocation BRAIN_ID = fromString("brain");
+    public static final ResourceLocation TYRANT_ID = fromString("tyrant");
     
     public static ResourceLocation fromString(String id) {
         return ResourceLocation.fromNamespaceAndPath(MODID, id);
