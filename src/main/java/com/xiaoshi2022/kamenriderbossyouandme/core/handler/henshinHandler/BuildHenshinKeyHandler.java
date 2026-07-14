@@ -23,8 +23,15 @@ public class BuildHenshinKeyHandler {
     private static final Map<UUID, Integer> pressStartTick = new HashMap<>();
     private static final Map<UUID, Boolean> isKeyDown = new HashMap<>();
     private static final Map<UUID, Boolean> hasTriggeredShake = new HashMap<>();
-    private static final Map<UUID, Boolean> isShakingActive = new HashMap<>();
+    // ✅ 改为 public 或者提供 getter
+    public static final Map<UUID, Boolean> isShakingActive = new HashMap<>();
     private static final int LONG_PRESS_THRESHOLD = 10;
+
+    // ✅ 或者提供公共方法
+    public static boolean isShakingActive(UUID playerId) {
+        return isShakingActive.getOrDefault(playerId, false);
+    }
+
 
     public static void handleKeyPress(Player player, boolean pressed) {
         if (player == null || player.level().isClientSide()) return;

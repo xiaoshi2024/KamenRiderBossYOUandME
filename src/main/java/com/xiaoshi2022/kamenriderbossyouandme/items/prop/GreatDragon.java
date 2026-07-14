@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamenriderbossyouandme.items.prop;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.greatdragon.GreatDragonRenderer;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
+import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
 import com.xiaoshi2022.kamenriderbossyouandme.util.CurioUtils;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -49,6 +50,7 @@ public class GreatDragon extends Item implements GeoItem {
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
+    // ==================== NBT 工具 ====================
     private static CompoundTag getOrCreateTag(ItemStack stack) {
         CustomData customData = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         if (customData == CustomData.EMPTY) {
@@ -86,6 +88,7 @@ public class GreatDragon extends Item implements GeoItem {
         saveTag(stack, tag);
     }
 
+    // ==================== GeoItem ====================
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 20, this::animationController)
@@ -98,7 +101,6 @@ public class GreatDragon extends Item implements GeoItem {
         ItemStack stack = state.getData(DataTickets.ITEMSTACK);
         if (stack == null || !(state.getAnimatable() instanceof GreatDragon))
             return PlayState.STOP;
-
         return PlayState.CONTINUE;
     }
 
@@ -122,80 +124,7 @@ public class GreatDragon extends Item implements GeoItem {
         });
     }
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-
-        // ========== 检查副手是否有 Cobra（眼镜蛇满瓶） ==========
-        InteractionHand offHand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-        ItemStack offHandStack = player.getItemInHand(offHand);
-
-        if (offHandStack.getItem() instanceof Cobra) {
-            // ✅ 眼镜蛇 + 伟大龙 合成
-            if (getMode(stack) == Mode.EMPTY) {
-                // 设置为 NORMAL 模式
-                setMode(stack, Mode.NORMAL);
-
-                // ✅ 播放 SHOWS 动画（参考 Dragonfruit 使用 triggerAnim）
-                if (!level.isClientSide()) {
-                    triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "shows");
-                }
-
-                // 消耗副手的眼镜蛇
-                offHandStack.shrink(1);
-
-//                // 播放音效
-//                if (!level.isClientSide()) {
-//                    level.playSound(null, player.getX(), player.getY(), player.getZ(),
-//                            ModBossSounds.SUPER_BEST_MATCH.get(),
-//                            SoundSource.PLAYERS, 1.0F, 1.0F);
-//
-//                }
-
-                player.sendSystemMessage(
-                        Component.literal("§a✅ 伟大龙已与眼镜蛇合成！获得 NORMAL 形态！")
-                );
-
-                return InteractionResultHolder.success(stack);
-            }
-        }
-
-        // ========== 检查是否装备了 BuildDriver 且模式为 HAZARD_EMPTY ==========
-        Optional<SlotResult> beltOpt = CurioUtils.findFirstCurio(player,
-                item -> item.getItem() instanceof BuildDriver);
-
-        if (beltOpt.isPresent() && getMode(stack) == Mode.NORMAL) {
-            ItemStack beltStack = beltOpt.get().stack();
-            BuildDriver belt = (BuildDriver) beltStack.getItem();
-
-            // ✅ 尝试插入伟大龙到腰带
-            if (belt.insertGreatDragon(player, beltStack)) {
-                // ✅ 播放 OPEN 动画（参考 Dragonfruit 使用 triggerAnim）
-                if (!level.isClientSide()) {
-                    triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "open");
-                }
-
-                if (!level.isClientSide()) {
-                    player.sendSystemMessage(
-                            Component.literal("§a✅ 伟大龙已插入腰带！长按变身键开始融合！")
-                    );
-                }
-
-                // 消耗伟大龙
-                stack.shrink(1);
-
-                return InteractionResultHolder.success(stack);
-            }
-        }
-
-        // ========== 普通右键：播放 OPEN 动画 ==========
-        if (!level.isClientSide()) {
-            triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "open");
-        }
-
-        return InteractionResultHolder.success(stack);
-    }
-
+    // ==================== 动画触发 ====================
     public void triggerCrossAnim(Player player, int entityId) {
         triggerAnim(player, entityId, "controller", "cross");
     }
@@ -206,5 +135,136 @@ public class GreatDragon extends Item implements GeoItem {
 
     public void triggerOpenAnim(Player player, int entityId) {
         triggerAnim(player, entityId, "controller", "open");
+    }
+
+    // ==================== 主要交互逻辑 ====================
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+
+        // ✅ Shift + 右键：取出眼镜蛇
+        if (player.isShiftKeyDown()) {
+            return handleShiftRightClick(level, player, stack);
+        }
+
+        // ========== 正常右键逻辑 ==========
+
+        // 检查副手是否有 Cobra（眼镜蛇满瓶）
+        InteractionHand offHand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+        ItemStack offHandStack = player.getItemInHand(offHand);
+
+        // ✅ 眼镜蛇 + 伟大龙 合成
+        if (offHandStack.getItem() instanceof Cobra) {
+            if (getMode(stack) == Mode.EMPTY) {
+                setMode(stack, Mode.NORMAL);
+
+                if (!level.isClientSide()) {
+                    triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "shows");
+                }
+
+                offHandStack.shrink(1);
+
+                if (!level.isClientSide()) {
+                    player.sendSystemMessage(
+                            Component.literal("§a✅ 伟大龙已与眼镜蛇合成！获得 NORMAL 形态！")
+                    );
+                }
+
+                return InteractionResultHolder.success(stack);
+            }
+        }
+
+        // 检查是否装备了 BuildDriver 且模式为 HAZARD_EMPTY
+        Optional<SlotResult> beltOpt = CurioUtils.findFirstCurio(player,
+                item -> item.getItem() instanceof BuildDriver);
+
+        if (beltOpt.isPresent() && getMode(stack) == Mode.NORMAL) {
+            ItemStack beltStack = beltOpt.get().stack();
+            BuildDriver belt = (BuildDriver) beltStack.getItem();
+
+            if (belt.insertGreatDragon(player, beltStack)) {
+                if (!level.isClientSide()) {
+                    triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "open");
+                    player.sendSystemMessage(
+                            Component.literal("§a✅ 伟大龙已插入腰带！长按变身键开始融合！")
+                    );
+                }
+
+                stack.shrink(1);
+                return InteractionResultHolder.success(stack);
+            }
+        }
+
+        // 普通右键：播放 OPEN 动画
+        if (!level.isClientSide()) {
+            triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "open");
+        }
+
+        return InteractionResultHolder.success(stack);
+    }
+
+    /**
+     * Shift + 右键：从伟大龙中取出眼镜蛇满瓶
+     */
+    private InteractionResultHolder<ItemStack> handleShiftRightClick(Level level, Player player, ItemStack stack) {
+        // 检查伟大龙是否处于 NORMAL 模式
+        if (getMode(stack) != Mode.NORMAL) {
+            if (!level.isClientSide()) {
+                player.sendSystemMessage(
+                        Component.literal("§c伟大龙中没有眼镜蛇满瓶！")
+                );
+            }
+            return InteractionResultHolder.fail(stack);
+        }
+
+        // ✅ 检查腰带是否已经使用了伟大龙
+        Optional<SlotResult> beltOpt = CurioUtils.findFirstCurio(player,
+                item -> item.getItem() instanceof BuildDriver);
+
+        if (beltOpt.isPresent()) {
+            ItemStack beltStack = beltOpt.get().stack();
+            BuildDriver belt = (BuildDriver) beltStack.getItem();
+            BuildDriver.BeltMode mode = belt.getMode(beltStack);
+
+            // 如果腰带是 HAZARD_EMPTY 或 HAZARD_GD，说明伟大龙已被使用
+            if (mode == BuildDriver.BeltMode.HAZARD_EMPTY || mode == BuildDriver.BeltMode.HAZARD_GD) {
+                if (!level.isClientSide()) {
+                    player.sendSystemMessage(
+                            Component.literal("§c腰带已使用伟大龙，无法取出眼镜蛇！")
+                    );
+                }
+                return InteractionResultHolder.fail(stack);
+            }
+        }
+
+        // 检查背包是否有空位
+        if (!player.getInventory().add(new ItemStack(ModItems.COBRA.get()))) {
+            if (!level.isClientSide()) {
+                player.sendSystemMessage(
+                        Component.literal("§c背包已满，无法取出眼镜蛇满瓶！")
+                );
+            }
+            return InteractionResultHolder.fail(stack);
+        }
+
+        // 将伟大龙设置为 EMPTY 模式
+        setMode(stack, Mode.EMPTY);
+
+        // 播放动画
+        if (!level.isClientSide()) {
+            triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "open");
+        }
+
+        // 播放音效
+        if (!level.isClientSide()) {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    ModBossSounds.SUPER_BEST_MATCH.get(),
+                    SoundSource.PLAYERS, 1.0F, 1.0F);
+            player.sendSystemMessage(
+                    Component.literal("§a✅ 已取出眼镜蛇满瓶！")
+            );
+        }
+
+        return InteractionResultHolder.success(stack);
     }
 }

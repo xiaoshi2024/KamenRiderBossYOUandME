@@ -4,6 +4,7 @@ import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.builddriver.BuildDriverRenderer;
 import com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler.BloodHandler;
+import com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler.BuildHenshinKeyHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.entity.FusionEffectEntity;
 import com.xiaoshi2022.kamenriderbossyouandme.manager.FusionTagManager;
 import com.xiaoshi2022.kamenriderbossyouandme.manager.FusionTeleportManager;
@@ -37,10 +38,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.SlotResult;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver.BeltMode.DEFAULT;
@@ -48,7 +46,7 @@ import static com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver.BeltM
 public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioItem {
 
     // 添加一个 Map 来跟踪每个腰带的循环任务
-    private static final Map<ItemStack, Runnable> rtSoundTasks = new HashMap<>();
+    private static final Map<UUID, Runnable> rtSoundTasks = new HashMap<>();
 
     // ==================== 动画常量 ====================
     private static final RawAnimation IDLES = RawAnimation.begin().thenPlay("idles");
@@ -411,24 +409,32 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         }
     }
 
+
     private void startRTSoundLoop(Player player, ItemStack beltStack) {
         KamenRiderBossYOUandME.LOGGER.info("🎵 startRTSoundLoop 被调用！");
-        stopRTSoundLoop(beltStack);
+        UUID playerId = player.getUUID();
+        stopRTSoundLoop(playerId);
+
+        // ✅ 使用 BuildHenshinKeyHandler 中的状态
+        boolean isShaking = BuildHenshinKeyHandler.isShakingActive.getOrDefault(playerId, false);
+        KamenRiderBossYOUandME.LOGGER.info("初始 isShaking: {}", isShaking);
 
         Runnable task = new Runnable() {
             @Override
             public void run() {
-                KamenRiderBossYOUandME.LOGGER.info("🔄 RT_BY 循环执行中...");
+                boolean shaking = BuildHenshinKeyHandler.isShakingActive.getOrDefault(playerId, false);
 
-                if (!getIsShaking(beltStack) || !player.isAlive()) {
-                    rtSoundTasks.remove(beltStack);
+                KamenRiderBossYOUandME.LOGGER.info("🔄 RT_BY 循环: isShaking={}, alive={}",
+                        shaking, player.isAlive());
+
+                if (!shaking || !player.isAlive()) {
+                    rtSoundTasks.remove(playerId);
                     KamenRiderBossYOUandME.LOGGER.info("🛑 RT_BY 循环停止");
                     return;
                 }
 
                 if (player instanceof ServerPlayer sp) {
                     KamenRiderBossYOUandME.LOGGER.info("🔊 播放 RT_BY 音效");
-                    // 使用 World 的 playSound
                     sp.level().playSound(
                             null,
                             sp.getX(), sp.getY(), sp.getZ(),
@@ -439,23 +445,23 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                     );
                 }
 
-                // 继续循环
-                RideBattleAPI.scheduleTicks(5, this);
+                // ✅ 36 ticks = 1.8 秒 (20 ticks = 1 秒)
+                RideBattleAPI.scheduleTicks(36, this);
             }
         };
 
-        rtSoundTasks.put(beltStack, task);
+        rtSoundTasks.put(playerId, task);
         // 第一次延迟 5 ticks 执行
         RideBattleAPI.scheduleTicks(5, task);
     }
 
-    /**
-     * 停止 RT_BY 循环播放
-     */
-    private void stopRTSoundLoop(ItemStack beltStack) {
-        Runnable task = rtSoundTasks.remove(beltStack);
-        // 任务会在下次执行时自行停止
+    private void stopRTSoundLoop(UUID playerId) {
+        Runnable task = rtSoundTasks.remove(playerId);
+        if (task != null) {
+            KamenRiderBossYOUandME.LOGGER.info("🛑 停止 RT_BY 循环 for player {}", playerId);
+        }
     }
+
 
     public void stopShaking(LivingEntity entity, ItemStack beltStack) {
         if (entity == null || beltStack == null || beltStack.isEmpty()) {
@@ -465,8 +471,9 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
         KamenRiderBossYOUandME.LOGGER.info("🔴 stopShaking 被调用, isShaking={}", getIsShaking(beltStack));
 
-        // ✅ 停止 RT_BY 循环
-        stopRTSoundLoop(beltStack);
+        if (entity instanceof Player player) {
+            stopRTSoundLoop(player.getUUID());  // ✅ 使用 UUID
+        }
 
         // 重置腰带状态（先清理）
         setIsShaking(beltStack, false);
