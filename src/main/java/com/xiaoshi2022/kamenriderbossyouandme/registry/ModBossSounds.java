@@ -83,6 +83,11 @@ public class ModBossSounds {
 
     public static final Supplier<SoundEvent> BUILD_HAZARD = registerSoundEvent("build_hazard");
 
+    // ✅ 新增音效
+    public static final Supplier<SoundEvent> GD_HENSHIN = registerSoundEvent("gd_henshin");
+    public static final Supplier<SoundEvent> GREAT_DRAGON = registerSoundEvent("great_dragon");
+    public static final Supplier<SoundEvent> PING = registerSoundEvent("ping");
+
     private static Supplier<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(MODID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));

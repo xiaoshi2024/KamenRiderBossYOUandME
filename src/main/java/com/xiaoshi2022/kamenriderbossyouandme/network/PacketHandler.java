@@ -4,10 +4,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.BeltAnimationPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.DriverSyncPacket;
 import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.ReleaseBeltPacket;
-import com.xiaoshi2022.kamenriderbossyouandme.network.packet.BYAnimationPacket;
-import com.xiaoshi2022.kamenriderbossyouandme.network.packet.InvisibilitySyncPacket;
-import com.xiaoshi2022.kamenriderbossyouandme.network.packet.PlayerMovementPacket;
-import com.xiaoshi2022.kamenriderbossyouandme.network.packet.SoundStopPacket;
+import com.xiaoshi2022.kamenriderbossyouandme.network.packet.*;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -38,6 +35,13 @@ public class PacketHandler {
                 ReleaseBeltPacket.TYPE,
                 ReleaseBeltPacket.STREAM_CODEC,
                 ReleaseBeltPacket::handle
+        );
+
+        // ✅ 注册 BuildHenshinKeyPacket (客户端 -> 服务端)
+        registrar.playToServer(
+                BuildHenshinKeyPacket.TYPE,
+                BuildHenshinKeyPacket.STREAM_CODEC,
+                BuildHenshinKeyPacket::handle
         );
 
         registrar.playToClient(

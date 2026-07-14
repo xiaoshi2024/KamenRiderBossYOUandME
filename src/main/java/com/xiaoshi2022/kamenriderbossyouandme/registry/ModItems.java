@@ -12,6 +12,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.DarkRiderGhost.Da
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.NapoleonGhost.NapoleonGhost;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.baron_lemon.BaronLemon;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.blackbuild.BlackBuild;
+import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.blood.Blood;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.brain.Brain;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.darkKiva.DarkKiva;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.dark_orangels.DarkOrangels;
@@ -64,6 +65,15 @@ public class ModItems {
 
 
     // 装甲物品 - 使用原版的 ArmorMaterials
+
+    // Blood - 假面骑士Blood
+    public static final DeferredItem<Item> BLOOD_HELMET = ITEMS.register("blood_helmet",
+            () -> new Blood(ArmorMaterials.DIAMOND, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final DeferredItem<Item> BLOOD_CHESTPLATE = ITEMS.register("blood_chestplate",
+            () -> new Blood(ArmorMaterials.DIAMOND, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final DeferredItem<Item> BLOOD_LEGGINGS = ITEMS.register("blood_leggings",
+            () -> new Blood(ArmorMaterials.DIAMOND, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    
     // Baron Lemon
     public static final DeferredItem<Item> BARON_LEMON_HELMET = ITEMS.register("baron_lemon_helmet",
             () -> new BaronLemon(ArmorMaterials.DIAMOND, ArmorItem.Type.HELMET, new Item.Properties()));

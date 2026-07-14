@@ -12,6 +12,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.registry.ModCreativeModeTabs;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModEntitys;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderSkills;
+import com.xiaoshi2022.kamenriderbossyouandme.riders.build.BloodConfig;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.driver.BrainConfig;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.gaim.TyrantConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -65,6 +66,7 @@ public class KamenRiderBossYOUandME {
         LOGGER.info("KamenRiderBossYOUandME 模组初始化完成");
     }
 
+
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             RiderSkills.registerSkills();
@@ -75,6 +77,9 @@ public class KamenRiderBossYOUandME {
 
             TyrantConfig.init();
             LOGGER.info("Tyrant骑士配置注册完成");
+
+            BloodConfig.init();
+            LOGGER.info("Blood骑士配置注册完成");
         });
     }
 

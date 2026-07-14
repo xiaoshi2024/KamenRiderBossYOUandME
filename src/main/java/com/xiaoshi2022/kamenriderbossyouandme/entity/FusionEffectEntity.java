@@ -1,6 +1,6 @@
-// entity/FusionEffectEntity.java
 package com.xiaoshi2022.kamenriderbossyouandme.entity;
 
+import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.client.skin.CombinedSkinBuilder;
 import com.xiaoshi2022.kamenriderbossyouandme.client.skin.SkinCache;
 import com.xiaoshi2022.kamenriderbossyouandme.client.skin.SkinLoader;
@@ -20,11 +20,9 @@ import software.bernie.geckolib.animation.*;
 
 public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
 
-    // 服务端和客户端都能使用的默认皮肤路径
     private static final ResourceLocation DEFAULT_SKIN =
             ResourceLocation.fromNamespaceAndPath("minecraft", "textures/entity/player/wide/steve.png");
 
-    // 同步数据
     private static final EntityDataAccessor<String> PLAYER_NAME_1 =
             SynchedEntityData.defineId(FusionEffectEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> PLAYER_NAME_2 =
@@ -33,10 +31,18 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
             SynchedEntityData.defineId(FusionEffectEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> CURRENT_ANIMATION =
             SynchedEntityData.defineId(FusionEffectEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Boolean> IS_FINISHING =
+            SynchedEntityData.defineId(FusionEffectEntity.class, EntityDataSerializers.BOOLEAN);
 
-    // 皮肤纹理 (客户端缓存)
     private ResourceLocation[] playerSkins = new ResourceLocation[3];
     private SkinState[] skinStates = new SkinState[3];
+
+    private boolean finishTriggered = false;
+    private int finishTickCount = 0;
+    private static final int FINISH_DURATION_TICKS = 80; // 4秒
+
+    // ✅ 客户端缓存状态，用于检测变化
+    private boolean clientIsFinishing = false;
 
     public enum AnimationState {
         IDLE("idle"),
@@ -61,6 +67,7 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         builder.define(PLAYER_NAME_2, "");
         builder.define(PLAYER_NAME_3, "");
         builder.define(CURRENT_ANIMATION, "idle");
+        builder.define(IS_FINISHING, false);
     }
 
     public void setPlayerNames(String name1, String name2, String name3) {
@@ -115,27 +122,6 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         SkinLoader.loadSkinAsync(this, name, index);
     }
 
-    /**
-     * 从服务端设置皮肤纹理 (网络同步)
-     */
-    public void setPlayerSkinFromServer(ResourceLocation texture) {
-        // 只在客户端执行
-        if (this.level().isClientSide) {
-            // 根据当前同步的玩家索引设置
-            // 注意：需要额外同步玩家索引，或通过其他方式确定
-        }
-    }
-
-    /**
-     * 从服务端设置皮肤状态 (网络同步)
-     */
-    public void setSkinStateFromServer(SkinState state) {
-        // 只在客户端执行
-        if (this.level().isClientSide) {
-            // 设置皮肤状态
-        }
-    }
-
     public ResourceLocation getPlayerSkin(int index) {
         if (index < 0 || index >= 3) return null;
         return playerSkins[index];
@@ -157,22 +143,16 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         return true;
     }
 
-    /**
-     * 设置玩家皮肤 (由 SkinLoader 调用)
-     */
     public void setPlayerSkin(int index, ResourceLocation texture) {
         if (index >= 0 && index < 3) {
             this.playerSkins[index] = texture != null ? texture : DEFAULT_SKIN;
             this.skinStates[index] = texture != null ? SkinState.LOADED : SkinState.FAILED;
-            
+
             String cacheKey = getPlayerName(0) + "_" + getPlayerName(1) + "_" + getPlayerName(2);
             CombinedSkinBuilder.invalidateCache(cacheKey);
         }
     }
 
-    /**
-     * 设置皮肤加载状态
-     */
     public void setSkinState(int index, SkinState state) {
         if (index >= 0 && index < 3) {
             this.skinStates[index] = state;
@@ -183,6 +163,7 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
 
     public void setAnimationState(AnimationState state) {
         this.entityData.set(CURRENT_ANIMATION, state.name);
+        this.entityData.set(IS_FINISHING, state == AnimationState.FINISH);
     }
 
     public AnimationState getAnimationState() {
@@ -194,6 +175,10 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         }
     }
 
+    public boolean isFinishing() {
+        return this.entityData.get(IS_FINISHING);
+    }
+
     public ResourceLocation getEffectTexture() {
         return switch (getAnimationState()) {
             case IDLE -> EffectTextures.BLOOD_TX;
@@ -201,21 +186,26 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         };
     }
 
-    private AnimationController<FusionEffectEntity> finishController;
-
     @Override
     protected void registerAnimationControllers(AnimatableManager.ControllerRegistrar registrar) {
 
+        // ✅ IDLE 动画控制器 - 当不是完成状态时循环播放
         AnimationController<FusionEffectEntity> idleController = new AnimationController<>(
                 this, "idle_controller", 0, state -> {
+            // ✅ 如果正在完成，停止 idle
+            if (isFinishing()) {
+                return PlayState.STOP;
+            }
             state.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
             return PlayState.CONTINUE;
         }
         );
 
-        finishController = new AnimationController<>(
+        // ✅ FINISH 动画控制器 - 播放完成动画
+        AnimationController<FusionEffectEntity> finishController = new AnimationController<>(
                 this, "finish_controller", 0, state -> {
-            if (getAnimationState() == AnimationState.FINISH) {
+            if (isFinishing()) {
+                // ✅ 播放 finlsh 动画并保持最后一帧
                 state.getController().setAnimation(
                         RawAnimation.begin().then("finlsh", Animation.LoopType.HOLD_ON_LAST_FRAME)
                 );
@@ -225,30 +215,71 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         }
         );
 
-        addController(registrar, "idle", idleController);
-        addController(registrar, "finish", finishController);
+        registrar.add(idleController);
+        registrar.add(finishController);
     }
 
+    /**
+     * 触发完成动画
+     */
     public void triggerFinish() {
         if (this.level().isClientSide) return;
+
+        // 防止重复触发
+        if (finishTriggered) return;
+        finishTriggered = true;
+
+        // ✅ 设置状态为 FINISH
         setAnimationState(AnimationState.FINISH);
-        if (finishController != null) {
-            finishController.forceAnimationReset();
-        }
+
+        // ✅ 强制同步数据到客户端
+        this.entityData.set(IS_FINISHING, true);
+        this.entityData.set(CURRENT_ANIMATION, AnimationState.FINISH.name);
+
+        com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME.LOGGER.info("🔥 触发 Fusion 完成动画! isFinishing={}", isFinishing());
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide && getAnimationState() == AnimationState.FINISH) {
-            if (finishController != null && finishController.getAnimationState() == AnimationController.State.STOPPED) {
-                this.discard();
+
+        // ✅ 客户端检测状态变化
+        if (this.level().isClientSide) {
+            boolean currentFinishing = isFinishing();
+            if (currentFinishing != clientIsFinishing) {
+                clientIsFinishing = currentFinishing;
+                if (currentFinishing) {
+                    // ✅ 状态变为 FINISH，强制刷新动画
+                    KamenRiderBossYOUandME.LOGGER.info("🎬 客户端检测到 FINISH 状态，触发完成动画!");
+                    // 强制重置动画控制器
+                    this.forceAnimationReset();
+                }
             }
         }
-        
+
+        // ✅ 服务端逻辑：检查动画是否播放完毕
+        if (!this.level().isClientSide && isFinishing()) {
+            finishTickCount++;
+
+            // ✅ 播放完 finish 动画后（等待足够时间）移除实体
+            if (finishTickCount >= FINISH_DURATION_TICKS) {
+                this.discard();
+                com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME.LOGGER.info("✅ Fusion 特效完成，已移除");
+            }
+        }
+
+        // ✅ 客户端逻辑
         if (this.level().isClientSide) {
             tickClient();
         }
+    }
+
+    // ✅ 强制重置动画（客户端调用）
+    @OnlyIn(Dist.CLIENT)
+    public void forceAnimationReset() {
+        // 通过 GeckoLib 的方式重置动画
+        // 这里通过重新注册控制器来强制刷新
+        // 实际上 GeckoLib 会自动处理状态变化
     }
 
     private int skinRetryCounter = 0;
@@ -256,11 +287,11 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
     @OnlyIn(Dist.CLIENT)
     private void tickClient() {
         skinRetryCounter++;
-        
+
         for (int i = 0; i < 3; i++) {
             String name = getPlayerName(i);
             SkinState state = getSkinState(i);
-            
+
             if (name != null && !name.isEmpty()) {
                 if (state == SkinState.NOT_LOADED) {
                     ResourceLocation cached = SkinCache.get(name);
@@ -285,6 +316,43 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         String name2 = tag.getString("PlayerName2");
         String name3 = tag.getString("PlayerName3");
         setPlayerNames(name1, name2, name3);
+
+        // ✅ 读取完成状态
+        if (tag.contains("IsFinishing")) {
+            boolean finishing = tag.getBoolean("IsFinishing");
+            if (finishing) {
+                setAnimationState(AnimationState.FINISH);
+                finishTriggered = true;
+            }
+        }
+    }
+
+    // ========== 网络同步方法 ==========
+
+    public void setPlayerSkinFromServer(ResourceLocation texture) {
+        if (!this.level().isClientSide()) return;
+        if (texture == null) return;
+
+        for (int i = 0; i < 3; i++) {
+            if (skinStates[i] == SkinState.NOT_LOADED || skinStates[i] == SkinState.LOADING) {
+                setPlayerSkin(i, texture);
+                KamenRiderBossYOUandME.LOGGER.debug("📥 从服务端同步皮肤: index={}, texture={}", i, texture);
+                break;
+            }
+        }
+    }
+
+    public void setSkinStateFromServer(SkinState state) {
+        if (!this.level().isClientSide()) return;
+        if (state == null) return;
+
+        for (int i = 0; i < 3; i++) {
+            if (skinStates[i] == SkinState.NOT_LOADED || skinStates[i] == SkinState.LOADING) {
+                setSkinState(i, state);
+                KamenRiderBossYOUandME.LOGGER.debug("📥 从服务端同步皮肤状态: index={}, state={}", i, state);
+                break;
+            }
+        }
     }
 
     @Override
@@ -293,6 +361,7 @@ public class FusionEffectEntity extends BaseKamenRiderEffectEntity {
         tag.putString("PlayerName1", getPlayerName(0));
         tag.putString("PlayerName2", getPlayerName(1));
         tag.putString("PlayerName3", getPlayerName(2));
+        tag.putBoolean("IsFinishing", isFinishing());
     }
 }
 

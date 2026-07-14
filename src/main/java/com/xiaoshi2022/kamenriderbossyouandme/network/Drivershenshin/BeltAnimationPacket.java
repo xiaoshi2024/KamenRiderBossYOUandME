@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.animatable.GeoItem;
 import top.theillusivec4.curios.api.CuriosApi;
 
 public record BeltAnimationPacket(int entityId, String animationName, String beltType, String beltMode) implements CustomPacketPayload {
@@ -49,6 +50,11 @@ public record BeltAnimationPacket(int entityId, String animationName, String bel
             if (!(e instanceof LivingEntity living)) return;
 
             String beltType = packet.beltType();
+            String animName = packet.animationName();
+            long entityId = living.getId();
+
+            KamenRiderBossYOUandME.LOGGER.debug("📦 收到腰带动画包: entity={}, anim={}, type={}",
+                    living.getName().getString(), animName, beltType);
 
             CuriosApi.getCuriosInventory(living).ifPresent(inv -> {
                 if ("braindriver".equals(beltType)) {
@@ -57,7 +63,6 @@ public record BeltAnimationPacket(int entityId, String animationName, String bel
                         if (stack.getItem() instanceof BrainDriver brain) {
                             if (!living.level().isClientSide()) return;
 
-                            String animName = packet.animationName();
                             switch (animName) {
                                 case "henshin":
                                     brain.setRelease(stack, false);
@@ -76,10 +81,12 @@ public record BeltAnimationPacket(int entityId, String animationName, String bel
                                     break;
                             }
 
-                            long id = living.getId();
-                            brain.triggerAnim(living, id, "controller", animName);
+                            // ✅ 修复: 使用 (Entity, long, String, String) 签名
+                            if (brain instanceof GeoItem geoItem) {
+                                geoItem.triggerAnim(living, entityId, "controller", animName);
+                            }
 
-                            KamenRiderBossYOUandME.LOGGER.debug("客户端触发动画: {} -> {}",
+                            KamenRiderBossYOUandME.LOGGER.debug("✅ Brain 腰带动画: {} -> {}",
                                     living.getName().getString(), animName);
                         }
                     });
@@ -89,7 +96,6 @@ public record BeltAnimationPacket(int entityId, String animationName, String bel
                         if (stack.getItem() instanceof BuildDriver build) {
                             if (!living.level().isClientSide()) return;
 
-                            String animName = packet.animationName();
                             switch (animName) {
                                 case "cancel":
                                     build.setRelease(stack, true);
@@ -108,14 +114,19 @@ public record BeltAnimationPacket(int entityId, String animationName, String bel
                                         build.setMode(stack, BuildDriver.BeltMode.DEFAULT);
                                     }
                                     break;
+                                case "turn":
+                                    build.setIsTurning(stack, true);
+                                    break;
                                 default:
                                     break;
                             }
 
-                            long id = living.getId();
-                            build.triggerAnim(living, id, "controller", animName);
+                            // ✅ 修复: 使用 (Entity, long, String, String) 签名
+                            if (build instanceof GeoItem geoItem) {
+                                geoItem.triggerAnim(living, entityId, "controller", animName);
+                            }
 
-                            KamenRiderBossYOUandME.LOGGER.debug("客户端触发动画: {} -> {}",
+                            KamenRiderBossYOUandME.LOGGER.debug("✅ Build 腰带动画: {} -> {}",
                                     living.getName().getString(), animName);
                         }
                     });

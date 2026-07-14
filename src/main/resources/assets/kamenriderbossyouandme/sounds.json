@@ -316,5 +316,23 @@
     "sounds": [
       "kamenriderbossyouandme:ressya"
     ]
+  },
+  "gd_henshin": {
+    "subtitle": "wave up Great!",
+    "sounds": [
+      "kamenriderbossyouandme:gd_henshin"
+    ]
+  },
+  "great_dragon": {
+    "subtitle": "Great CROSS-Z Dragon",
+    "sounds": [
+      "kamenriderbossyouandme:great_dragon"
+    ]
+  },
+  "ping": {
+    "subtitle": "ping~ping",
+    "sounds": [
+      "kamenriderbossyouandme:ping"
+    ]
   }
 }
