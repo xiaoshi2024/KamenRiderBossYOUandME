@@ -1,4 +1,3 @@
-// command/FusionCommand.java
 package com.xiaoshi2022.kamenriderbossyouandme.command;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -19,6 +18,9 @@ import java.util.UUID;
 
 public class FusionCommand {
 
+    // ✅ 融合者需求开关 - 默认开启
+    public static boolean FUSION_REQUIRED = true;
+
     private static final SuggestionProvider<CommandSourceStack> ONLINE_PLAYERS =
             (context, builder) -> {
                 return SharedSuggestionProvider.suggest(
@@ -29,9 +31,40 @@ public class FusionCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("fusion")
-                .requires(source -> source.hasPermission(2)) // OP权限
+                .requires(source -> source.hasPermission(2))
 
-                // ===== 测试指令: 直接召唤带皮肤的融合特效 =====
+                // ===== 切换融合者需求开关 =====
+                .then(Commands.literal("toggle")
+                        .executes(context -> {
+                            FUSION_REQUIRED = !FUSION_REQUIRED;
+
+                            context.getSource().sendSuccess(
+                                    () -> Component.literal(
+                                            "§6⚡ 融合者需求已切换: " +
+                                                    (FUSION_REQUIRED ? "§c需要融合者" : "§a不需要融合者")
+                                    ),
+                                    true
+                            );
+                            return 1;
+                        })
+                )
+
+                // ===== 查看配置 =====
+                .then(Commands.literal("config")
+                        .executes(context -> {
+                            context.getSource().sendSuccess(
+                                    () -> Component.literal(
+                                            "§7=== §6融合配置 §7===\n" +
+                                                    "§7需要融合者: " + (FUSION_REQUIRED ? "§a✅ 是" : "§c❌ 否") + "\n" +
+                                                    "§7切换方式: §f/fusion toggle"
+                                    ),
+                                    true
+                            );
+                            return 1;
+                        })
+                )
+
+                // ===== 召唤融合特效 =====
                 .then(Commands.literal("summon")
                         .then(Commands.argument("player1", StringArgumentType.word())
                                 .suggests(ONLINE_PLAYERS)
@@ -52,7 +85,6 @@ public class FusionCommand {
                                                     String name2 = StringArgumentType.getString(context, "player2");
                                                     String name3 = StringArgumentType.getString(context, "player3");
 
-                                                    // 创建融合特效实体
                                                     FusionEffectEntity entity = new FusionEffectEntity(
                                                             ModEntitys.FUSION_EFFECT.get(),
                                                             player.level()
@@ -81,8 +113,7 @@ public class FusionCommand {
                         )
                 )
 
-                // 原有的指令...
-                // 添加标签: /fusion tag <玩家名>
+                // ===== 标记融合者 =====
                 .then(Commands.literal("tag")
                         .then(Commands.argument("player", StringArgumentType.word())
                                 .suggests(ONLINE_PLAYERS)
@@ -117,7 +148,8 @@ public class FusionCommand {
                                 })
                         )
                 )
-                // 移除标签: /fusion untag <玩家名>
+
+                // ===== 移除融合者 =====
                 .then(Commands.literal("untag")
                         .then(Commands.argument("player", StringArgumentType.word())
                                 .suggests(ONLINE_PLAYERS)
@@ -152,7 +184,8 @@ public class FusionCommand {
                                 })
                         )
                 )
-                // 查看列表: /fusion list
+
+                // ===== 查看融合者列表 =====
                 .then(Commands.literal("list")
                         .executes(context -> {
                             Set<UUID> targets = FusionTagManager.getAllFusionTargets();
@@ -180,7 +213,8 @@ public class FusionCommand {
                             return 1;
                         })
                 )
-                // 清除所有: /fusion clear
+
+                // ===== 清除所有融合者 =====
                 .then(Commands.literal("clear")
                         .executes(context -> {
                             FusionTagManager.clearAll();
@@ -191,7 +225,8 @@ public class FusionCommand {
                             return 1;
                         })
                 )
-                // 变身: /fusion transform
+
+                // ===== 执行变身 =====
                 .then(Commands.literal("transform")
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayer();
@@ -206,7 +241,8 @@ public class FusionCommand {
                             return success ? 1 : 0;
                         })
                 )
-                // 取消变身: /fusion cancel
+
+                // ===== 取消变身 =====
                 .then(Commands.literal("cancel")
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayer();
@@ -221,7 +257,8 @@ public class FusionCommand {
                             return 1;
                         })
                 )
-                // 查看状态: /fusion status
+
+                // ===== 查看状态 =====
                 .then(Commands.literal("status")
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayer();
@@ -232,27 +269,32 @@ public class FusionCommand {
                                 return 0;
                             }
 
-                            int count = TransformationHandler.getAvailableFusionCount(player);
-                            boolean canTransform = TransformationHandler.canTransform(player);
+                            Set<UUID> targets = FusionTagManager.getAllFusionTargets();
+                            long onlineTargets = targets.stream()
+                                    .filter(uuid -> context.getSource().getServer().getPlayerList().getPlayer(uuid) != null)
+                                    .count();
 
                             context.getSource().sendSuccess(
                                     () -> Component.literal(
                                             "§7=== §6融合状态 §7===\n" +
-                                                    "§7附近融合者: §e" + count + "§7/§e3\n" +
-                                                    "§7可变身: " + (canTransform ? "§a✅ 是" : "§c❌ 否")
+                                                    "§7融合者总数: §e" + targets.size() + "\n" +
+                                                    "§7在线融合者: §e" + onlineTargets
                                     ),
                                     true
                             );
                             return 1;
                         })
                 )
-                // 帮助: /fusion help
+
+                // ===== 帮助 =====
                 .then(Commands.literal("help")
                         .executes(context -> {
                             context.getSource().sendSuccess(
                                     () -> Component.literal(
                                             "§6=== 融合指令帮助 ===\n" +
-                                                    "§7/fusion summon <玩家1> <玩家2> <玩家3> §f- 测试召唤\n" +
+                                                    "§7/fusion toggle §f- 切换融合者需求 (需要/不需要)\n" +
+                                                    "§7/fusion config §f- 查看当前配置\n" +
+                                                    "§7/fusion summon <玩家1> <玩家2> <玩家3> §f- 召唤特效\n" +
                                                     "§7/fusion tag <玩家> §f- 标记融合者\n" +
                                                     "§7/fusion untag <玩家> §f- 移除融合者\n" +
                                                     "§7/fusion list §f- 查看融合者列表\n" +

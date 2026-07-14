@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamenriderbossyouandme.Accessory;
 import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.builddriver.BuildDriverRenderer;
+import com.xiaoshi2022.kamenriderbossyouandme.command.FusionCommand;
 import com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler.BloodHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler.BuildHenshinKeyHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.entity.FusionEffectEntity;
@@ -363,9 +364,6 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         return stack != null && !stack.isEmpty() && getOrCreateTag(stack).getBoolean(TAG_SHAKING_ACTIVE);
     }
 
-    /**
-     * 开始摇动 - 播放 turn 动画，创建融合特效
-     */
     public void startShaking(LivingEntity entity, ItemStack beltStack) {
         if (entity == null || beltStack == null || beltStack.isEmpty()) return;
         if (getMode(beltStack) != BeltMode.HAZARD_GD) {
@@ -378,6 +376,21 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         if (getIsShaking(beltStack)) {
             KamenRiderBossYOUandME.LOGGER.debug("已经开始摇动，跳过重复调用");
             return;
+        }
+
+        // ✅ 检查融合者数量（只有开关开启时才检查）
+        if (FusionCommand.FUSION_REQUIRED && entity instanceof ServerPlayer player) {
+            List<Player> targets = FusionTagManager.getNearbyFusionTargets(player, 10.0);
+            if (targets.isEmpty()) {
+                if (!entity.level().isClientSide()) {
+                    entity.sendSystemMessage(
+                            net.minecraft.network.chat.Component.literal("§c⚠ 附近没有融合者！无法开始融合！")
+                    );
+                }
+                KamenRiderBossYOUandME.LOGGER.warn("❌ 摇动被阻止: 附近没有融合者 (开关已开启)");
+                return;
+            }
+            KamenRiderBossYOUandME.LOGGER.info("✅ 检测到 {} 个融合者", targets.size());
         }
 
         setIsShaking(beltStack, true);

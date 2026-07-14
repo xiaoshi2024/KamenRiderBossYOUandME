@@ -257,9 +257,6 @@ public class GreatDragon extends Item implements GeoItem {
 
         // 播放音效
         if (!level.isClientSide()) {
-            level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                    ModBossSounds.SUPER_BEST_MATCH.get(),
-                    SoundSource.PLAYERS, 1.0F, 1.0F);
             player.sendSystemMessage(
                     Component.literal("§a✅ 已取出眼镜蛇满瓶！")
             );
