@@ -7,6 +7,8 @@
   "item.kamenriderbossyouandme.hazard_trigger": "危险扳机",
   "item.kamenriderbossyouandme.build_driver": "创骑驱动器",
   "item.kamenriderbossyouandme.dragonfruit": "火龙果锁种",
+  "item.kamenriderbossyouandme.cobra": "眼镜蛇满瓶",
+  "item.kamenriderbossyouandme.great_dragon": "伟大龙",
 
   "tooltip.braindriver.mode": "当前模式: %s",
   "tooltip.braindriver.mode.normal": "普通形态",

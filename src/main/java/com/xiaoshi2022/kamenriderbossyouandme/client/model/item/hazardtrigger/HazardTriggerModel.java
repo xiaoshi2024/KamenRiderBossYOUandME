@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamenriderbossyouandme.client.model.item.hazardtrigger;
 
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
-import com.xiaoshi2022.kamenriderbossyouandme.items.HazardTrigger;
+import com.xiaoshi2022.kamenriderbossyouandme.items.prop.HazardTrigger;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

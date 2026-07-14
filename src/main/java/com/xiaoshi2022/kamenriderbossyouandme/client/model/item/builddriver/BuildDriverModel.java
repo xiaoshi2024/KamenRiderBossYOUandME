@@ -39,6 +39,7 @@ public class BuildDriverModel extends GeoModel<BuildDriver> {
             case HAZARD_K -> ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "geo/item/build_driver_hazard_k.geo.json");
             case HAZARD_KR -> ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "geo/item/build_driver_hazard_kr.geo.json");
             case HAZARD_RESSYA -> ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "geo/item/build_driver_hazard_ressya.geo.json");
+            case HAZARD_GD -> ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "geo/item/build_driver_hazard_gd.geo.json");
             default -> ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "geo/item/build_driver.geo.json");
         };
     }
@@ -53,6 +54,10 @@ public class BuildDriverModel extends GeoModel<BuildDriver> {
             return ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "textures/item/build_driver_hazard_kr.png");
         }
 
+        if (mode == BuildDriver.BeltMode.HAZARD_GD) {
+            return ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "textures/item/build_driver_hazard_gd.png");
+        }
+
         return ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "textures/item/build_driver.png");
     }
 
@@ -60,6 +65,10 @@ public class BuildDriverModel extends GeoModel<BuildDriver> {
     public ResourceLocation getAnimationResource(BuildDriver animatable) {
         if ((isTransforming && mode == BuildDriver.BeltMode.HAZARD_RT) || mode == BuildDriver.BeltMode.HAZARD_RT_MOULD) {
             return ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "animations/item/build_driver_mould.animation.json");
+        }
+
+        if (mode == BuildDriver.BeltMode.HAZARD_GD) {
+            return ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "animations/item/build_driver_hazard_gd.animation.json");
         }
 
         return ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "animations/item/build_driver.animation.json");

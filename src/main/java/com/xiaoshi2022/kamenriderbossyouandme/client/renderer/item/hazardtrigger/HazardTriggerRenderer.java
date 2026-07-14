@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.hazardtrigger;
 
-import com.xiaoshi2022.kamenriderbossyouandme.items.HazardTrigger;
+import com.xiaoshi2022.kamenriderbossyouandme.items.prop.HazardTrigger;
 import com.xiaoshi2022.kamenriderbossyouandme.client.model.item.hazardtrigger.HazardTriggerModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 

@@ -59,7 +59,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
     public enum BeltMode {
         DEFAULT, RT, R, T,
-        HAZARD_EMPTY, HAZARD_RT, HAZARD_R, HAZARD_T, HAZARD_K, HAZARD_KR, HAZARD_RESSYA, HAZARD_RT_MOULD
+        HAZARD_EMPTY, HAZARD_RT, HAZARD_R, HAZARD_T, HAZARD_K, HAZARD_KR, HAZARD_RESSYA, HAZARD_RT_MOULD, HAZARD_GD
     }
 
     public BuildDriver(Properties properties) {

@@ -1,10 +1,6 @@
-package com.xiaoshi2022.kamenriderbossyouandme.items;
+package com.xiaoshi2022.kamenriderbossyouandme.items.prop;
 
-import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver;
-import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.hazardtrigger.HazardTriggerRenderer;
-import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
-import com.xiaoshi2022.kamenriderbossyouandme.util.CurioUtils;
-import net.minecraft.server.level.ServerPlayer;
+import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.cobra.CobraRenderer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -20,19 +16,17 @@ import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.theillusivec4.curios.api.SlotResult;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
-public class HazardTrigger extends Item implements GeoItem {
+public class Cobra extends Item implements GeoItem {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlayAndHold("idle");
-    private static final RawAnimation START = RawAnimation.begin().thenPlay("start");
+    private static final RawAnimation OPEN = RawAnimation.begin().thenPlay("open");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    public HazardTrigger(Properties properties) {
+    public Cobra(Properties properties) {
         super(properties);
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
@@ -41,12 +35,12 @@ public class HazardTrigger extends Item implements GeoItem {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 20, this::animationController)
                 .triggerableAnim("idle", IDLE)
-                .triggerableAnim("start", START));
+                .triggerableAnim("open", OPEN));
     }
 
     private <E extends GeoItem> PlayState animationController(AnimationState<E> state) {
         ItemStack stack = state.getData(DataTickets.ITEMSTACK);
-        if (stack == null || !(state.getAnimatable() instanceof HazardTrigger))
+        if (stack == null || !(state.getAnimatable() instanceof Cobra))
             return PlayState.STOP;
 
         return state.setAndContinue(IDLE);
@@ -60,12 +54,12 @@ public class HazardTrigger extends Item implements GeoItem {
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
         consumer.accept(new GeoRenderProvider() {
-            private HazardTriggerRenderer renderer;
+            private CobraRenderer renderer;
 
             @Override
-            public @Nullable GeoItemRenderer<HazardTrigger> getGeoItemRenderer() {
+            public @Nullable GeoItemRenderer<Cobra> getGeoItemRenderer() {
                 if (renderer == null) {
-                    renderer = new HazardTriggerRenderer();
+                    renderer = new CobraRenderer();
                 }
                 return renderer;
             }
@@ -76,21 +70,13 @@ public class HazardTrigger extends Item implements GeoItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        Optional<SlotResult> beltOpt = CurioUtils.findFirstCurio(player, item -> item != null && item.getItem() instanceof BuildDriver);
-        if (beltOpt.isPresent()) {
-            ItemStack beltStack = beltOpt.get().stack();
-            BuildDriver belt = (BuildDriver) beltStack.getItem();
-            BuildDriver.BeltMode currentMode = belt.getMode(beltStack);
+        InteractionHand offHand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+        ItemStack offHandStack = player.getItemInHand(offHand);
 
-            if (currentMode == BuildDriver.BeltMode.DEFAULT || currentMode == BuildDriver.BeltMode.RT) {
-                this.triggerAnim(player, player.getId(), "controller", "start");
-
-                belt.activateHazardMode(player, beltStack);
-
-                player.playSound(ModBossSounds.BUILD_HAZARD.get(), 1.0F, 1.0F);
-
-                if (!level.isClientSide && player instanceof ServerPlayer sp) {
-                }
+        if (offHandStack.getItem() instanceof GreatDragon greatDragon) {
+            if (greatDragon.getMode(offHandStack) == GreatDragon.Mode.EMPTY) {
+                greatDragon.setMode(offHandStack, GreatDragon.Mode.NORMAL);
+                greatDragon.triggerShowsAnim(player, player.getId());
 
                 player.setItemInHand(hand, ItemStack.EMPTY);
 
@@ -98,6 +84,8 @@ public class HazardTrigger extends Item implements GeoItem {
             }
         }
 
-        return InteractionResultHolder.pass(stack);
+        this.triggerAnim(player, player.getId(), "controller", "open");
+
+        return InteractionResultHolder.success(stack);
     }
 }

@@ -31,6 +31,7 @@ public class BuildDriverRenderer extends GeoItemRenderer<BuildDriver> implements
     private final BuildDriverModel hazardKrModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_KR);
     private final BuildDriverModel hazardRessyaModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_RESSYA);
     private final BuildDriverModel hazardRtMouldModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_RT_MOULD);
+    private final BuildDriverModel hazardGdModel = new BuildDriverModel(BuildDriver.BeltMode.HAZARD_GD);
     
     private ItemStack currentItemStack;
     
@@ -59,6 +60,7 @@ public class BuildDriverRenderer extends GeoItemRenderer<BuildDriver> implements
                 case HAZARD_K -> hazardKModel;
                 case HAZARD_KR -> hazardKrModel;
                 case HAZARD_RESSYA -> hazardRessyaModel;
+                case HAZARD_GD -> hazardGdModel;
                 default -> defaultModel;
             };
         }

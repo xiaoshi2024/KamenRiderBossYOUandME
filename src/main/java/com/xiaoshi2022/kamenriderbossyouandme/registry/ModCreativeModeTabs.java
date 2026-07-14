@@ -21,6 +21,8 @@ public class ModCreativeModeTabs {
                 output.accept(ModItems.BRAIN_DRIVER.get());
                 output.accept(ModItems.BUILD_DRIVER.get());
                 output.accept(ModItems.HAZARD_TRIGGER.get());
+                output.accept(ModItems.COBRA.get());
+                output.accept(ModItems.GREAT_DRAGON.get());
             })
             .build();
 

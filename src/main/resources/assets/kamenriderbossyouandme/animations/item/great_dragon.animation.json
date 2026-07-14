@@ -1,0 +1,90 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"cross": {
+			"animation_length": 0.5,
+			"bones": {
+				"dragonhead": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.4167": {
+							"vector": [0, 0, 85]
+						}
+					}
+				},
+				"tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.4167": {
+							"vector": [0, 0, -92.5]
+						}
+					}
+				}
+			}
+		},
+		"open": {
+			"animation_length": 0.5417,
+			"bones": {
+				"dragonhead": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 85]
+						},
+						"0.5": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"tail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, -92.5]
+						},
+						"0.5": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"shows": {
+			"animation_length": 1,
+			"bones": {
+				"dragonhead": {
+					"rotation": {
+						"0.5417": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [0, 0, 85]
+						}
+					}
+				},
+				"tail": {
+					"rotation": {
+						"0.5417": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [0, 0, -92.5]
+						}
+					}
+				},
+				"Full bottle": {
+					"position": {
+						"0.0": {
+							"vector": [0, 6.6, 0]
+						},
+						"0.5": {
+							"vector": [0, 0.1, 0]
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,7 +1,6 @@
-package com.xiaoshi2022.kamenriderbossyouandme.items;
+package com.xiaoshi2022.kamenriderbossyouandme.items.prop;
 
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.Genesis_driver;
-import com.xiaoshi2022.kamenriderbossyouandme.block.DragonfruitBlock;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.dragonfruit.DragonfruitRenderer;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBlocks;

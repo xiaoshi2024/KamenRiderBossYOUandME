@@ -4,8 +4,10 @@ import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BrainDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
-import com.xiaoshi2022.kamenriderbossyouandme.items.Dragonfruit;
-import com.xiaoshi2022.kamenriderbossyouandme.items.HazardTrigger;
+import com.xiaoshi2022.kamenriderbossyouandme.items.prop.Cobra;
+import com.xiaoshi2022.kamenriderbossyouandme.items.prop.Dragonfruit;
+import com.xiaoshi2022.kamenriderbossyouandme.items.prop.GreatDragon;
+import com.xiaoshi2022.kamenriderbossyouandme.items.prop.HazardTrigger;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.DarkRiderGhost.DarkRiderGhost;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.NapoleonGhost.NapoleonGhost;
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.baron_lemon.BaronLemon;
@@ -51,6 +53,14 @@ public class ModItems {
     // 火龙果锁种
     public static final DeferredItem<Item> DRAGONFRUIT = ITEMS.register("dragonfruit",
             () -> new Dragonfruit(new Item.Properties().stacksTo(1)));
+
+    // 眼镜蛇满瓶
+    public static final DeferredItem<Item> COBRA = ITEMS.register("cobra",
+            () -> new Cobra(new Item.Properties().stacksTo(1)));
+
+    // 伟大龙满瓶
+    public static final DeferredItem<Item> GREAT_DRAGON = ITEMS.register("great_dragon",
+            () -> new GreatDragon(new Item.Properties().stacksTo(1)));
 
 
     // 装甲物品 - 使用原版的 ArmorMaterials

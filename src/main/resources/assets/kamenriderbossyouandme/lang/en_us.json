@@ -7,6 +7,8 @@
   "item.kamenriderbossyouandme.hazard_trigger": "Hazard Trigger",
   "item.kamenriderbossyouandme.build_driver": "Build Driver",
   "item.kamenriderbossyouandme.dragonfruit": "Dragonfruit",
+  "item.kamenriderbossyouandme.cobra": "Cobra",
+  "item.kamenriderbossyouandme.great_dragon": "Great Dragon",
 
   "tooltip.braindriver.mode": "Current Mode: %s",
   "tooltip.braindriver.mode.normal": "Normal Mode",

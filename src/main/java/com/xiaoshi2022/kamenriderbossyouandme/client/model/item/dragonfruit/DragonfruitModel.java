@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamenriderbossyouandme.client.model.item.dragonfruit;
 
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
-import com.xiaoshi2022.kamenriderbossyouandme.items.Dragonfruit;
+import com.xiaoshi2022.kamenriderbossyouandme.items.prop.Dragonfruit;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
