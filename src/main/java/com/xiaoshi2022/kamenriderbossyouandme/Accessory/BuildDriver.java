@@ -366,13 +366,12 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             return;
         }
 
-        // ✅ 检查融合者数量（只有开关开启时才检查）
         if (FusionCommand.FUSION_REQUIRED && entity instanceof ServerPlayer player) {
             List<Player> targets = FusionTagManager.getNearbyFusionTargets(player, 10.0);
-            if (targets.isEmpty()) {
+            if (targets.size() < 3) {
                 if (!entity.level().isClientSide()) {
                     entity.sendSystemMessage(
-                            net.minecraft.network.chat.Component.literal("§c⚠ 附近没有融合者！无法开始融合！")
+                            net.minecraft.network.chat.Component.literal("§c⚠ 需要至少3个融合者！当前: " + targets.size() + "/3")
                     );
                 }
                 return;

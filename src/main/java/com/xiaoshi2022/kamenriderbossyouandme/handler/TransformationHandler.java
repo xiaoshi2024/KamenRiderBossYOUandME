@@ -1,6 +1,7 @@
 // handler/TransformationHandler.java
 package com.xiaoshi2022.kamenriderbossyouandme.handler;
 
+import com.xiaoshi2022.kamenriderbossyouandme.command.FusionCommand;
 import com.xiaoshi2022.kamenriderbossyouandme.entity.FusionEffectEntity;
 import com.xiaoshi2022.kamenriderbossyouandme.manager.FusionStateManager;
 import com.xiaoshi2022.kamenriderbossyouandme.manager.FusionTagManager;
@@ -21,6 +22,13 @@ public class TransformationHandler {
     public static boolean performTransformation(Player transformer) {
         if (transformer == null || transformer.level().isClientSide()) {
             return false;
+        }
+
+        if (!FusionCommand.FUSION_REQUIRED) {
+            transformer.sendSystemMessage(
+                    Component.literal("§e融合者需求已关闭，可直接变身")
+            );
+            return true;
         }
 
         // 1. 获取附近融合者
@@ -135,6 +143,7 @@ public class TransformationHandler {
      */
     public static boolean canTransform(Player transformer) {
         if (transformer == null) return false;
+        if (!FusionCommand.FUSION_REQUIRED) return true;
         return getAvailableFusionCount(transformer) >= REQUIRED_PLAYERS;
     }
 }

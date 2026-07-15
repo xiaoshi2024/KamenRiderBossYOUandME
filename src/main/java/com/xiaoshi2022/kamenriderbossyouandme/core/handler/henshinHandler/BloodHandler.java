@@ -10,8 +10,10 @@ import com.jpigeon.ridebattlelib.common.event.UnhenshinEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Config;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
+import com.xiaoshi2022.kamenriderbossyouandme.command.FusionCommand;
 import com.xiaoshi2022.kamenriderbossyouandme.event.UnhenshinDelayHandler;
 import com.xiaoshi2022.kamenriderbossyouandme.items.prop.GreatDragon;
+import com.xiaoshi2022.kamenriderbossyouandme.manager.FusionTagManager;
 import com.xiaoshi2022.kamenriderbossyouandme.registry.ModBossSounds;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.RiderIds;
 import com.xiaoshi2022.kamenriderbossyouandme.riders.build.BloodConfig;
@@ -27,8 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.EnumMap;
@@ -61,8 +62,11 @@ public class BloodHandler {
     private static final int FLIGHT_COOLDOWN_TICKS = 20;
     private static final Map<UUID, Long> FLIGHT_COOLDOWN_END = new HashMap<>();
 
-    // ✅ 新增：标记玩家是否因为饥饿被强制着陆
+    // ✅ 标记玩家是否因为饥饿被强制着陆
     private static final Map<UUID, Boolean> FORCED_LANDING = new HashMap<>();
+
+    // ✅ 记录玩家在非Blood状态下的飞行能力状态
+    private static final Map<UUID, Boolean> WAS_CREATIVE_FLYING = new HashMap<>();
 
     // ==================== 事件监听 ====================
 
@@ -85,10 +89,7 @@ public class BloodHandler {
 
         if (!riderId.equals(RiderIds.BLOOD_ID)) return;
 
-
         enableFlight(player);
-
-
     }
 
     @SubscribeEvent
@@ -105,33 +106,35 @@ public class BloodHandler {
         }
     }
 
-
-    // ==================== Stellaris 氧气伤害免疫 ====================
+    // ==================== Stellaris 氧气伤害完全免疫 ====================
 
     @SubscribeEvent
-    public static void onLivingDamage(LivingDamageEvent.Pre event) {
+    public static void onLivingIncomingDamage(LivingIncomingDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         if (player.level().isClientSide()) return;
         if (!RideBattleAPI.isTransformed(player)) return;
         if (!isBloodRider(player)) return;
 
         if (isStellarisOxygenDamage(event.getSource())) {
-            event.setNewDamage(0);  // ✅ 使用 setNewDamage 而不是 setCanceled
+            event.setCanceled(true);
         }
     }
 
     private static boolean isStellarisOxygenDamage(DamageSource source) {
-        // ✅ 使用 ModList.get() 替代 FMLLoader.getModList()
         if (!net.neoforged.fml.ModList.get().isLoaded("stellaris")) {
             return false;
         }
-        // ✅ 使用 typeHolder() 获取 DamageType
-        String msgId = source.getMsgId();
-        return msgId != null && msgId.equals("stellaris.oxygen");
+
+        var key = source.typeHolder().unwrapKey();
+        if (key.isPresent()) {
+            String location = key.get().location().toString();
+            return location.equals("stellaris:oxygen");
+        }
+
+        return false;
     }
 
     // ==================== 飞行核心逻辑 ====================
-
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -141,6 +144,21 @@ public class BloodHandler {
         if (!isBloodRider(player)) return;
 
         UUID playerId = player.getUUID();
+
+        // ✅ 如果是创造模式，保持飞行但不消耗饥饿
+        if (player.isCreative()) {
+            // 确保飞行能力开启
+            if (!player.getAbilities().mayfly) {
+                player.getAbilities().mayfly = true;
+                player.getAbilities().setFlyingSpeed(FLIGHT_SPEED_MULTIPLIER);
+                player.onUpdateAbilities();
+            }
+            // 清除强制着陆状态
+            FORCED_LANDING.remove(playerId);
+            FLIGHT_COOLDOWN_END.remove(playerId);
+            IS_FLYING.put(playerId, true);
+            return;
+        }
 
         // 检查是否处于强制着陆状态
         boolean isForcedLanding = FORCED_LANDING.getOrDefault(playerId, false);
@@ -163,6 +181,10 @@ public class BloodHandler {
                         serverPlayer.getAbilities().mayfly = true;
                         serverPlayer.getAbilities().setFlyingSpeed(FLIGHT_SPEED_MULTIPLIER);
                         serverPlayer.onUpdateAbilities();
+                        player.displayClientMessage(
+                                net.minecraft.network.chat.Component.literal("§a✅ 饱食度已恢复，可以再次飞行！"),
+                                true
+                        );
                     }
                 }
             }
@@ -186,7 +208,7 @@ public class BloodHandler {
                     forceLandPlayer(player);
                     player.displayClientMessage(
                             net.minecraft.network.chat.Component.literal("§c⚠ 饱食度不足，无法继续飞行！"),
-                            true  // true = Action Bar（屏幕下方）
+                            true
                     );
                 }
             }
@@ -210,6 +232,11 @@ public class BloodHandler {
         // 检查是否在强制着陆冷却中
         if (FORCED_LANDING.getOrDefault(playerId, false)) {
             return false;
+        }
+
+        // ✅ 创造模式不消耗饥饿
+        if (player.isCreative()) {
+            return true;
         }
 
         int foodLevel = player.getFoodData().getFoodLevel();
@@ -269,12 +296,19 @@ public class BloodHandler {
         long currentTime = player.level().getGameTime();
         FLIGHT_COOLDOWN_END.put(playerId, currentTime + FLIGHT_COOLDOWN_TICKS);
 
-        // 完全禁用飞行能力
+        // ✅ 完全禁用飞行能力（非创造模式）
         if (player instanceof ServerPlayer serverPlayer) {
-            serverPlayer.getAbilities().mayfly = false;
-            serverPlayer.getAbilities().flying = false;
-            serverPlayer.getAbilities().setFlyingSpeed(0.05f);
-            serverPlayer.onUpdateAbilities();
+            if (!serverPlayer.isCreative()) {
+                serverPlayer.getAbilities().mayfly = false;
+                serverPlayer.getAbilities().flying = false;
+                serverPlayer.getAbilities().setFlyingSpeed(0.05f);
+                serverPlayer.onUpdateAbilities();
+            } else {
+                // ✅ 创造模式保持飞行，但标记强制着陆状态
+                serverPlayer.getAbilities().mayfly = true;
+                serverPlayer.getAbilities().flying = true;
+                serverPlayer.onUpdateAbilities();
+            }
         }
 
         IS_FLYING.put(playerId, false);
@@ -304,9 +338,22 @@ public class BloodHandler {
         if (player instanceof ServerPlayer serverPlayer) {
             UUID playerId = player.getUUID();
 
+            // ✅ 保存创造模式飞行状态
+            WAS_CREATIVE_FLYING.put(playerId, serverPlayer.isCreative());
+
             // 清除强制着陆状态
             FORCED_LANDING.remove(playerId);
             FLIGHT_COOLDOWN_END.remove(playerId);
+
+            // ✅ 创造模式直接启用，不消耗饥饿
+            if (serverPlayer.isCreative()) {
+                serverPlayer.getAbilities().mayfly = true;
+                serverPlayer.getAbilities().flying = true;
+                serverPlayer.getAbilities().setFlyingSpeed(FLIGHT_SPEED_MULTIPLIER);
+                serverPlayer.onUpdateAbilities();
+                IS_FLYING.put(playerId, true);
+                return;
+            }
 
             serverPlayer.getAbilities().mayfly = true;
             serverPlayer.getAbilities().setFlyingSpeed(FLIGHT_SPEED_MULTIPLIER);
@@ -314,7 +361,6 @@ public class BloodHandler {
 
             IS_FLYING.put(playerId, false);
             FLIGHT_TICKS.put(playerId, 0);
-
         }
     }
 
@@ -324,6 +370,18 @@ public class BloodHandler {
     private static void disableFlight(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             UUID playerId = player.getUUID();
+
+            // ✅ 如果玩家之前是创造模式，恢复创造飞行
+            Boolean wasCreative = WAS_CREATIVE_FLYING.remove(playerId);
+            if (wasCreative != null && wasCreative) {
+                // 创造模式保持飞行能力
+                serverPlayer.getAbilities().mayfly = true;
+                serverPlayer.getAbilities().flying = true;
+                serverPlayer.getAbilities().setFlyingSpeed(0.05f);
+                serverPlayer.onUpdateAbilities();
+                IS_FLYING.put(playerId, true);
+                return;
+            }
 
             if (!serverPlayer.isCreative()) {
                 serverPlayer.getAbilities().mayfly = false;
@@ -437,7 +495,6 @@ public class BloodHandler {
                 );
             }
         });
-
     }
 
     private static void applyBloodArmor(ServerPlayer player, FormConfig formConfig) {
@@ -532,6 +589,16 @@ public class BloodHandler {
     public static void executeHenshin(Player player, ItemStack beltStack) {
         if (player == null || player.level().isClientSide()) return;
         if (RideBattleAPI.isTransformed(player)) return;
+
+        if (FusionCommand.FUSION_REQUIRED && player instanceof ServerPlayer serverPlayer) {
+            java.util.List<Player> targets = FusionTagManager.getNearbyFusionTargets(serverPlayer, 10.0);
+            if (targets.size() < 3) {
+                serverPlayer.sendSystemMessage(
+                        net.minecraft.network.chat.Component.literal("§c⚠ 需要至少3个融合者！当前: " + targets.size() + "/3")
+                );
+                return;
+            }
+        }
 
         if (beltStack != null && !beltStack.isEmpty()) {
             BuildDriver belt = (BuildDriver) beltStack.getItem();
