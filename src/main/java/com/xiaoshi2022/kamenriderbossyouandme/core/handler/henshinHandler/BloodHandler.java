@@ -19,6 +19,7 @@ import com.xiaoshi2022.kamenriderbossyouandme.util.CurioUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -26,6 +27,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.EnumMap;
@@ -102,7 +105,33 @@ public class BloodHandler {
         }
     }
 
+
+    // ==================== Stellaris 氧气伤害免疫 ====================
+
+    @SubscribeEvent
+    public static void onLivingDamage(LivingDamageEvent.Pre event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (player.level().isClientSide()) return;
+        if (!RideBattleAPI.isTransformed(player)) return;
+        if (!isBloodRider(player)) return;
+
+        if (isStellarisOxygenDamage(event.getSource())) {
+            event.setNewDamage(0);  // ✅ 使用 setNewDamage 而不是 setCanceled
+        }
+    }
+
+    private static boolean isStellarisOxygenDamage(DamageSource source) {
+        // ✅ 使用 ModList.get() 替代 FMLLoader.getModList()
+        if (!net.neoforged.fml.ModList.get().isLoaded("stellaris")) {
+            return false;
+        }
+        // ✅ 使用 typeHolder() 获取 DamageType
+        String msgId = source.getMsgId();
+        return msgId != null && msgId.equals("stellaris.oxygen");
+    }
+
     // ==================== 飞行核心逻辑 ====================
+
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
