@@ -104,12 +104,6 @@ public class Cobra extends Item implements GeoItem {
                 // 消耗眼镜蛇
                 stack.shrink(1);
 
-                if (!level.isClientSide()) {
-                    player.sendSystemMessage(
-                            Component.literal("§a✅ 伟大龙已与眼镜蛇合成！获得 NORMAL 形态！")
-                    );
-                }
-
                 return InteractionResultHolder.success(stack);
             }
         }

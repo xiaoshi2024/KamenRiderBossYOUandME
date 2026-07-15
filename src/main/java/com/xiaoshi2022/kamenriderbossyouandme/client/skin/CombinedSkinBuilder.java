@@ -66,7 +66,6 @@ public class CombinedSkinBuilder {
         try {
             ResourceLocation combined = buildCombinedSkin(skins);
             CACHE.put(key, combined);
-            LOGGER.info("✅ 组合纹理已创建: {}", key);
             return combined;
         } catch (Exception e) {
             LOGGER.error("❌ 创建组合纹理失败: {}", key, e);

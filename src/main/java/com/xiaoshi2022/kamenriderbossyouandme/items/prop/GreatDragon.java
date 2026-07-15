@@ -164,11 +164,6 @@ public class GreatDragon extends Item implements GeoItem {
 
                 offHandStack.shrink(1);
 
-                if (!level.isClientSide()) {
-                    player.sendSystemMessage(
-                            Component.literal("§a✅ 伟大龙已与眼镜蛇合成！获得 NORMAL 形态！")
-                    );
-                }
 
                 return InteractionResultHolder.success(stack);
             }
@@ -185,9 +180,6 @@ public class GreatDragon extends Item implements GeoItem {
             if (belt.insertGreatDragon(player, beltStack)) {
                 if (!level.isClientSide()) {
                     triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "open");
-                    player.sendSystemMessage(
-                            Component.literal("§a✅ 伟大龙已插入腰带！长按变身键开始融合！")
-                    );
                 }
 
                 stack.shrink(1);
@@ -209,11 +201,7 @@ public class GreatDragon extends Item implements GeoItem {
     private InteractionResultHolder<ItemStack> handleShiftRightClick(Level level, Player player, ItemStack stack) {
         // 检查伟大龙是否处于 NORMAL 模式
         if (getMode(stack) != Mode.NORMAL) {
-            if (!level.isClientSide()) {
-                player.sendSystemMessage(
-                        Component.literal("§c伟大龙中没有眼镜蛇满瓶！")
-                );
-            }
+
             return InteractionResultHolder.fail(stack);
         }
 
@@ -228,22 +216,14 @@ public class GreatDragon extends Item implements GeoItem {
 
             // 如果腰带是 HAZARD_EMPTY 或 HAZARD_GD，说明伟大龙已被使用
             if (mode == BuildDriver.BeltMode.HAZARD_EMPTY || mode == BuildDriver.BeltMode.HAZARD_GD) {
-                if (!level.isClientSide()) {
-                    player.sendSystemMessage(
-                            Component.literal("§c腰带已使用伟大龙，无法取出眼镜蛇！")
-                    );
-                }
+
                 return InteractionResultHolder.fail(stack);
             }
         }
 
         // 检查背包是否有空位
         if (!player.getInventory().add(new ItemStack(ModItems.COBRA.get()))) {
-            if (!level.isClientSide()) {
-                player.sendSystemMessage(
-                        Component.literal("§c背包已满，无法取出眼镜蛇满瓶！")
-                );
-            }
+
             return InteractionResultHolder.fail(stack);
         }
 
@@ -255,12 +235,6 @@ public class GreatDragon extends Item implements GeoItem {
             triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "open");
         }
 
-        // 播放音效
-        if (!level.isClientSide()) {
-            player.sendSystemMessage(
-                    Component.literal("§a✅ 已取出眼镜蛇满瓶！")
-            );
-        }
 
         return InteractionResultHolder.success(stack);
     }

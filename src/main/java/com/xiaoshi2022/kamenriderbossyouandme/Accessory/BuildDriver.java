@@ -312,13 +312,6 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             return false;
         }
 
-        if (getHasGreatDragon(beltStack)) {
-            if (!entity.level().isClientSide()) {
-                entity.sendSystemMessage(net.minecraft.network.chat.Component.literal("§c腰带已装载伟大龙！"));
-            }
-            return false;
-        }
-
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
             if (stack.getItem() instanceof com.xiaoshi2022.kamenriderbossyouandme.items.prop.GreatDragon) {
@@ -333,12 +326,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                     if (entity instanceof Player p) {
                         p.playSound(ModBossSounds.SUPER_BEST_MATCH.get(), 1.0F, 1.0F);
                     }
-
-                    if (!entity.level().isClientSide()) {
-                        entity.sendSystemMessage(
-                                net.minecraft.network.chat.Component.literal("§a✅ 伟大龙已装载！长按变身键开始融合！")
-                        );
-                    }
+                    
                     return true;
                 }
             }
@@ -387,16 +375,13 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
                             net.minecraft.network.chat.Component.literal("§c⚠ 附近没有融合者！无法开始融合！")
                     );
                 }
-                KamenRiderBossYOUandME.LOGGER.warn("❌ 摇动被阻止: 附近没有融合者 (开关已开启)");
                 return;
             }
-            KamenRiderBossYOUandME.LOGGER.info("✅ 检测到 {} 个融合者", targets.size());
         }
 
         setIsShaking(beltStack, true);
         setIsTurning(beltStack, true);
 
-        KamenRiderBossYOUandME.LOGGER.info("🔴 startShaking 被调用！");
 
         // 停止音效
         stopSuperBestMatchSound(entity);
@@ -424,30 +409,23 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
 
     private void startRTSoundLoop(Player player, ItemStack beltStack) {
-        KamenRiderBossYOUandME.LOGGER.info("🎵 startRTSoundLoop 被调用！");
         UUID playerId = player.getUUID();
         stopRTSoundLoop(playerId);
 
         // ✅ 使用 BuildHenshinKeyHandler 中的状态
         boolean isShaking = BuildHenshinKeyHandler.isShakingActive.getOrDefault(playerId, false);
-        KamenRiderBossYOUandME.LOGGER.info("初始 isShaking: {}", isShaking);
 
         Runnable task = new Runnable() {
             @Override
             public void run() {
                 boolean shaking = BuildHenshinKeyHandler.isShakingActive.getOrDefault(playerId, false);
 
-                KamenRiderBossYOUandME.LOGGER.info("🔄 RT_BY 循环: isShaking={}, alive={}",
-                        shaking, player.isAlive());
-
                 if (!shaking || !player.isAlive()) {
                     rtSoundTasks.remove(playerId);
-                    KamenRiderBossYOUandME.LOGGER.info("🛑 RT_BY 循环停止");
                     return;
                 }
 
                 if (player instanceof ServerPlayer sp) {
-                    KamenRiderBossYOUandME.LOGGER.info("🔊 播放 RT_BY 音效");
                     sp.level().playSound(
                             null,
                             sp.getX(), sp.getY(), sp.getZ(),
@@ -470,9 +448,7 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
     private void stopRTSoundLoop(UUID playerId) {
         Runnable task = rtSoundTasks.remove(playerId);
-        if (task != null) {
-            KamenRiderBossYOUandME.LOGGER.info("🛑 停止 RT_BY 循环 for player {}", playerId);
-        }
+
     }
 
 
@@ -482,7 +458,6 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             return;
         }
 
-        KamenRiderBossYOUandME.LOGGER.info("🔴 stopShaking 被调用, isShaking={}", getIsShaking(beltStack));
 
         if (entity instanceof Player player) {
             stopRTSoundLoop(player.getUUID());  // ✅ 使用 UUID
@@ -500,7 +475,6 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
 
         // ✅ 1. 播放 GD_HENSHIN 音效
         BloodHandler.playSound(player, ModBossSounds.GD_HENSHIN.get());
-        KamenRiderBossYOUandME.LOGGER.info("🎵 播放 GD_HENSHIN 音效");
 
         //20tick=1秒
 
@@ -508,7 +482,6 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         RideBattleAPI.scheduleTicks(70, () -> {
             if (!player.isAlive()) return;
 
-            KamenRiderBossYOUandME.LOGGER.info("🎬 音效播放完毕，触发特效完成动画");
 
             // 获取融合特效实体
             int effectId = getFusionEffectId(beltStack);
@@ -523,14 +496,12 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             // 播放特效完成动画
             if (effect != null) {
                 effect.triggerFinish();
-                KamenRiderBossYOUandME.LOGGER.info("🎬 触发特效 finish 动画");
             } else {
                 KamenRiderBossYOUandME.LOGGER.warn("⚠️ 找不到融合特效实体");
             }
 
             // 停止玩家的摇动动画
             triggerPlayerAnim(player, "idle");
-            KamenRiderBossYOUandME.LOGGER.info("🎬 停止玩家摇动动画 -> idle");
 
             // 清除特效 ID
             removeFusionEffectId(beltStack);
@@ -538,7 +509,6 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
             // ✅ 3. 再延迟 75tick 后执行变身（穿戴盔甲）
             RideBattleAPI.scheduleTicks(75, () -> {
                 if (player.isAlive() && !RideBattleAPI.isTransformed(player)) {
-                    KamenRiderBossYOUandME.LOGGER.info("🎬 特效动画完成，穿戴盔甲!");
                     BloodHandler.executeHenshin(player, beltStack);
                 }
             });
@@ -613,9 +583,6 @@ public class BuildDriver extends AbstractRiderBelt implements GeoItem, ICurioIte
         for (int i = 0; i < 3 && i < targets.size(); i++) {
             FusionTeleportManager.teleportToHell(targets.get(i), player);
         }
-
-        KamenRiderBossYOUandME.LOGGER.info("融合特效已创建: 玩家={}, 融合者={}, {}, {}",
-                player.getName().getString(), name1, name2, name3);
     }
 
     // ==================== 动画工具 ====================

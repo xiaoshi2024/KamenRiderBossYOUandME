@@ -20,11 +20,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -40,6 +42,25 @@ public class BloodHandler {
     private static final Map<UUID, Boolean> unhenshinInProgress = new HashMap<>();
     private static final long COOLDOWN_TICKS = 100;
 
+    // ==================== 飞行系统 ====================
+
+    // 飞行消耗配置
+    private static final int FLIGHT_HUNGER_COST_PER_TICK = 1;
+    private static final int FLIGHT_SATURATION_COST_PER_TICK = 1;
+    private static final int MIN_HUNGER_TO_FLY = 6;
+    private static final float FLIGHT_SPEED_MULTIPLIER = 0.15f;
+
+    // 飞行状态追踪
+    private static final Map<UUID, Boolean> IS_FLYING = new HashMap<>();
+    private static final Map<UUID, Integer> FLIGHT_TICKS = new HashMap<>();
+
+    // 飞行冷却
+    private static final int FLIGHT_COOLDOWN_TICKS = 20;
+    private static final Map<UUID, Long> FLIGHT_COOLDOWN_END = new HashMap<>();
+
+    // ✅ 新增：标记玩家是否因为饥饿被强制着陆
+    private static final Map<UUID, Boolean> FORCED_LANDING = new HashMap<>();
+
     // ==================== 事件监听 ====================
 
     @SubscribeEvent
@@ -50,27 +71,10 @@ public class BloodHandler {
         ResourceLocation riderId = event.getRiderId();
         if (!riderId.equals(RiderIds.BLOOD_ID)) return;
 
-        // 取消原有变身，我们自己控制
         event.setCanceled(true);
-
-        // 如果已经变身则跳过
         if (RideBattleAPI.isTransformed(player)) return;
-
-        // ✅ 移除或改为 DEBUG 级别
-        // KamenRiderBossYOUandME.LOGGER.info("Blood变身被阻止：需要通过长按变身键触发摇动！");
-
-        // 可选：给玩家提示（但频繁触发会刷屏，建议只在特定情况显示）
-        // if (!player.level().isClientSide()) {
-        //     player.displayClientMessage(
-        //         net.minecraft.network.chat.Component.literal("§c请长按变身键触发摇动！"),
-        //         true
-        //     );
-        // }
     }
 
-    /**
-     * 变身完成后的处理
-     */
     @SubscribeEvent
     public static void onHenshinPost(HenshinEvent.Post event) {
         Player player = event.getPlayer();
@@ -78,19 +82,12 @@ public class BloodHandler {
 
         if (!riderId.equals(RiderIds.BLOOD_ID)) return;
 
-        KamenRiderBossYOUandME.LOGGER.info("🎉 Blood变身完成！玩家: {}", player.getName().getString());
 
-        if (!player.level().isClientSide()) {
-            player.displayClientMessage(
-                    net.minecraft.network.chat.Component.literal("§c❤️ Blood 形态！"),
-                    true
-            );
-        }
+        enableFlight(player);
+
+
     }
 
-    /**
-     * 解除变身
-     */
     @SubscribeEvent
     public static void onUnhenshin(UnhenshinEvent.Pre event) {
         Player player = event.getPlayer();
@@ -105,78 +102,270 @@ public class BloodHandler {
         }
     }
 
-    // ==================== 由 BuildDriver 调用 ====================
+    // ==================== 飞行核心逻辑 ====================
+
+    @SubscribeEvent
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (player.level().isClientSide()) return;
+        if (!RideBattleAPI.isTransformed(player)) return;
+        if (!isBloodRider(player)) return;
+
+        UUID playerId = player.getUUID();
+
+        // 检查是否处于强制着陆状态
+        boolean isForcedLanding = FORCED_LANDING.getOrDefault(playerId, false);
+        if (isForcedLanding) {
+            // 强制着陆期间，完全禁用飞行能力
+            if (player.getAbilities().mayfly) {
+                player.getAbilities().mayfly = false;
+                player.getAbilities().flying = false;
+                player.onUpdateAbilities();
+            }
+            // 检查冷却是否结束
+            long currentTime = player.level().getGameTime();
+            Long cooldownEnd = FLIGHT_COOLDOWN_END.get(playerId);
+            if (cooldownEnd != null && currentTime >= cooldownEnd) {
+                // 冷却结束，检查饥饿值是否恢复
+                if (player.getFoodData().getFoodLevel() >= MIN_HUNGER_TO_FLY) {
+                    FORCED_LANDING.remove(playerId);
+                    // 重新启用飞行能力
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.getAbilities().mayfly = true;
+                        serverPlayer.getAbilities().setFlyingSpeed(FLIGHT_SPEED_MULTIPLIER);
+                        serverPlayer.onUpdateAbilities();
+                    }
+                }
+            }
+            return;
+        }
+
+        // 检查玩家是否在飞行（按住空格）
+        boolean isFlying = IS_FLYING.getOrDefault(playerId, false);
+        boolean wantsToFly = player.getAbilities().flying || player.isFallFlying();
+
+        if (wantsToFly) {
+            // 尝试飞行
+            if (tryFly(player)) {
+                // 飞行成功
+                IS_FLYING.put(playerId, true);
+                FLIGHT_TICKS.put(playerId, FLIGHT_TICKS.getOrDefault(playerId, 0) + 1);
+                spawnFlightParticles(player);
+            } else {
+                // 飞行失败 - 强制着陆
+                if (isFlying || wantsToFly) {
+                    forceLandPlayer(player);
+                    player.displayClientMessage(
+                            net.minecraft.network.chat.Component.literal("§c⚠ 饱食度不足，无法继续飞行！"),
+                            true  // true = Action Bar（屏幕下方）
+                    );
+                }
+            }
+        } else {
+            // 玩家不在飞行状态
+            if (isFlying) {
+                landPlayer(player);
+                IS_FLYING.put(playerId, false);
+                FLIGHT_TICKS.put(playerId, 0);
+            }
+        }
+    }
 
     /**
-     * 摇动完成回调 - 由 BuildDriver.stopShaking 在动画播放完后调用
+     * 尝试飞行 - 消耗饥饿值
+     * @return true 如果飞行成功
      */
+    private static boolean tryFly(Player player) {
+        UUID playerId = player.getUUID();
+
+        // 检查是否在强制着陆冷却中
+        if (FORCED_LANDING.getOrDefault(playerId, false)) {
+            return false;
+        }
+
+        int foodLevel = player.getFoodData().getFoodLevel();
+        float saturation = player.getFoodData().getSaturationLevel();
+
+        // 检查最低饥饿值
+        if (foodLevel < MIN_HUNGER_TO_FLY) {
+            return false;
+        }
+
+        // 消耗饥饿值（每5tick消耗一次）
+        Integer flightTicks = FLIGHT_TICKS.get(playerId);
+        if (flightTicks == null || flightTicks % 5 == 0) {
+            float saturationCost = FLIGHT_SATURATION_COST_PER_TICK;
+            int hungerCost = FLIGHT_HUNGER_COST_PER_TICK;
+
+            if (saturation >= saturationCost) {
+                player.getFoodData().setSaturation(saturation - saturationCost);
+            } else {
+                float remainingCost = saturationCost - saturation;
+                player.getFoodData().setSaturation(0);
+                int hungerToReduce = (int) Math.ceil(remainingCost);
+                if (hungerToReduce > 0) {
+                    player.getFoodData().setFoodLevel(Math.max(0, foodLevel - hungerToReduce));
+                }
+            }
+
+            // 再次检查饥饿值是否还够
+            if (player.getFoodData().getFoodLevel() < MIN_HUNGER_TO_FLY) {
+                return false;
+            }
+        }
+
+        // 确保飞行能力开启
+        if (!player.getAbilities().mayfly) {
+            player.getAbilities().mayfly = true;
+        }
+        if (!player.getAbilities().flying) {
+            player.getAbilities().flying = true;
+        }
+        player.getAbilities().setFlyingSpeed(FLIGHT_SPEED_MULTIPLIER);
+        player.onUpdateAbilities();
+
+        return true;
+    }
+
+    /**
+     * 强制着陆 - 禁用飞行能力并进入冷却
+     */
+    private static void forceLandPlayer(Player player) {
+        UUID playerId = player.getUUID();
+
+        // 标记强制着陆
+        FORCED_LANDING.put(playerId, true);
+
+        // 设置冷却
+        long currentTime = player.level().getGameTime();
+        FLIGHT_COOLDOWN_END.put(playerId, currentTime + FLIGHT_COOLDOWN_TICKS);
+
+        // 完全禁用飞行能力
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.getAbilities().mayfly = false;
+            serverPlayer.getAbilities().flying = false;
+            serverPlayer.getAbilities().setFlyingSpeed(0.05f);
+            serverPlayer.onUpdateAbilities();
+        }
+
+        IS_FLYING.put(playerId, false);
+        FLIGHT_TICKS.put(playerId, 0);
+    }
+
+    /**
+     * 正常着陆 - 禁用飞行但不进入冷却
+     */
+    private static void landPlayer(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            // 只在非强制着陆时禁用飞行
+            if (!FORCED_LANDING.getOrDefault(player.getUUID(), false)) {
+                if (!serverPlayer.isCreative()) {
+                    serverPlayer.getAbilities().flying = false;
+                    serverPlayer.getAbilities().setFlyingSpeed(0.05f);
+                    serverPlayer.onUpdateAbilities();
+                }
+            }
+        }
+    }
+
+    /**
+     * 启用飞行能力（变身时调用）
+     */
+    private static void enableFlight(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            UUID playerId = player.getUUID();
+
+            // 清除强制着陆状态
+            FORCED_LANDING.remove(playerId);
+            FLIGHT_COOLDOWN_END.remove(playerId);
+
+            serverPlayer.getAbilities().mayfly = true;
+            serverPlayer.getAbilities().setFlyingSpeed(FLIGHT_SPEED_MULTIPLIER);
+            serverPlayer.onUpdateAbilities();
+
+            IS_FLYING.put(playerId, false);
+            FLIGHT_TICKS.put(playerId, 0);
+
+        }
+    }
+
+    /**
+     * 禁用飞行能力（解除变身后调用）
+     */
+    private static void disableFlight(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            UUID playerId = player.getUUID();
+
+            if (!serverPlayer.isCreative()) {
+                serverPlayer.getAbilities().mayfly = false;
+                serverPlayer.getAbilities().flying = false;
+                serverPlayer.getAbilities().setFlyingSpeed(0.05f);
+                serverPlayer.onUpdateAbilities();
+            }
+
+            FORCED_LANDING.remove(playerId);
+            FLIGHT_COOLDOWN_END.remove(playerId);
+            IS_FLYING.remove(playerId);
+            FLIGHT_TICKS.remove(playerId);
+        }
+    }
+
+    /**
+     * 检查是否是Blood骑士
+     */
+    private static boolean isBloodRider(Player player) {
+        return RideBattleAPI.isSpecificForm(player, BloodConfig.BLOOD_BASE_ID);
+    }
+
+    /**
+     * 飞行粒子效果
+     */
+    private static void spawnFlightParticles(Player player) {
+        if (player.level().isClientSide()) return;
+        if (!(player.level() instanceof net.minecraft.server.level.ServerLevel serverLevel)) return;
+
+        Integer tick = FLIGHT_TICKS.get(player.getUUID());
+        if (tick == null || tick % 5 != 0) return;
+
+        net.minecraft.core.particles.DustParticleOptions particle =
+                new net.minecraft.core.particles.DustParticleOptions(
+                        new org.joml.Vector3f(0.6f, 0.0f, 0.0f), 0.8f
+                );
+
+        for (int i = 0; i < 3; i++) {
+            double offsetX = (player.getRandom().nextDouble() - 0.5) * 0.8;
+            double offsetZ = (player.getRandom().nextDouble() - 0.5) * 0.8;
+            double offsetY = -0.3 - player.getRandom().nextDouble() * 0.3;
+
+            serverLevel.sendParticles(particle,
+                    player.getX() + offsetX,
+                    player.getY() + offsetY,
+                    player.getZ() + offsetZ,
+                    1, 0, -0.1, 0, 0
+            );
+        }
+    }
+
+    // ==================== 变身和解除变身 ====================
+
     public static void onShakingComplete(Player player, ItemStack beltStack) {
         if (player == null || player.level().isClientSide()) return;
         if (RideBattleAPI.isTransformed(player)) return;
 
-        KamenRiderBossYOUandME.LOGGER.info("🎬 摇动完成，开始执行变身!");
-
-        // 设置腰带状态
         BuildDriver belt = (BuildDriver) beltStack.getItem();
         belt.setShowing(beltStack, false);
         belt.setActive(beltStack, true);
 
-        // 延迟后完成变身
         RideBattleAPI.scheduleTicks(10, () -> {
             if (player instanceof ServerPlayer serverPlayer && serverPlayer.isAlive()) {
                 try {
                     forceCompleteHenshin(serverPlayer);
-                    KamenRiderBossYOUandME.LOGGER.info("✅ Blood变身完成: {}", player.getName().getString());
                 } catch (Exception e) {
                     KamenRiderBossYOUandME.LOGGER.error("❌ 完成Blood变身失败", e);
                 }
             }
         });
     }
-
-    // ==================== 条件检查 ====================
-
-    private static boolean checkBloodConditions(Player player) {
-        var beltOpt = CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof BuildDriver);
-
-        if (beltOpt.isEmpty()) {
-            if (!player.level().isClientSide()) {
-                player.displayClientMessage(
-                        net.minecraft.network.chat.Component.literal("§c请先装备Build Driver腰带！"),
-                        true
-                );
-            }
-            return false;
-        }
-
-        ItemStack beltStack = beltOpt.get().stack();
-        BuildDriver belt = (BuildDriver) beltStack.getItem();
-        BuildDriver.BeltMode mode = belt.getMode(beltStack);
-
-        if (mode != BuildDriver.BeltMode.HAZARD_GD) {
-            if (!player.level().isClientSide()) {
-                player.displayClientMessage(
-                        net.minecraft.network.chat.Component.literal("§c需要伟大龙危险模式才能变身 Blood！"),
-                        true
-                );
-            }
-            return false;
-        }
-
-        if (!belt.getHasGreatDragon(beltStack)) {
-            if (!player.level().isClientSide()) {
-                player.displayClientMessage(
-                        net.minecraft.network.chat.Component.literal("§c腰带中没有伟大龙！"),
-                        true
-                );
-            }
-            return false;
-        }
-
-        return true;
-    }
-
-    // ==================== 变身执行 ====================
 
     private static void forceCompleteHenshin(ServerPlayer player) {
         RiderData data = player.getData(RiderAttachments.RIDER_DATA);
@@ -187,7 +376,6 @@ public class BloodHandler {
             return;
         }
 
-        // 保存原始装备
         Map<EquipmentSlot, ItemStack> originalGear = new EnumMap<>(EquipmentSlot.class);
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack stack = player.getItemBySlot(slot);
@@ -205,28 +393,23 @@ public class BloodHandler {
 
         data.startHenshinSession(sessionData);
 
-        // 装备盔甲
         applyBloodArmor(player, formConfig);
         applyBloodEffects(player, formConfig);
 
-        // 同步状态
+        enableFlight(player);
+
         RideBattleAPI.syncHenshinState(player);
         RideBattleAPI.syncClientState(player);
 
-        // 发布 Post 事件
         RideBattleAPI.scheduleTicks(2, () -> {
             if (player.isAlive()) {
                 net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(
                         new HenshinEvent.Post(player, RiderIds.BLOOD_ID, BloodConfig.BLOOD_BASE_ID)
                 );
-                KamenRiderBossYOUandME.LOGGER.info("✅ HenshinEvent.Post 发布成功");
             }
         });
 
-        KamenRiderBossYOUandME.LOGGER.info("Blood数据已设置: 形态={}", BloodConfig.BLOOD_BASE_ID);
     }
-
-    // ==================== 盔甲和效果 ====================
 
     private static void applyBloodArmor(ServerPlayer player, FormConfig formConfig) {
         ItemStack helmet = formConfig.getHelmet() != null ? new ItemStack(formConfig.getHelmet()) : ItemStack.EMPTY;
@@ -248,8 +431,6 @@ public class BloodHandler {
         }
     }
 
-    // ==================== 解除变身 ====================
-
     public static void performUnhenshin(Player player) {
         if (player == null || player.level().isClientSide()) return;
         if (!(player instanceof ServerPlayer serverPlayer)) return;
@@ -265,11 +446,12 @@ public class BloodHandler {
 
             playSound(player, ModBossSounds.LOCKOFF.get());
 
+            disableFlight(player);
+
             CurioUtils.findFirstCurio(player, stack -> stack.getItem() instanceof BuildDriver).ifPresent(slotResult -> {
                 ItemStack beltStack = slotResult.stack();
                 BuildDriver belt = (BuildDriver) beltStack.getItem();
 
-                // 返回伟大龙
                 if (belt.getHasGreatDragon(beltStack)) {
                     ItemStack greatDragon = new ItemStack(
                             com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems.GREAT_DRAGON.get(),
@@ -281,10 +463,8 @@ public class BloodHandler {
                     if (!player.getInventory().add(greatDragon)) {
                         player.drop(greatDragon, false);
                     }
-                    KamenRiderBossYOUandME.LOGGER.info("返回伟大龙给玩家: {}", player.getName().getString());
                 }
 
-                // 返回危险扳机
                 if (belt.hasUsedHazardTrigger(beltStack)) {
                     ItemStack hazardTrigger = new ItemStack(
                             com.xiaoshi2022.kamenriderbossyouandme.registry.ModItems.HAZARD_TRIGGER.get(),
@@ -293,14 +473,11 @@ public class BloodHandler {
                     if (!player.getInventory().add(hazardTrigger)) {
                         player.drop(hazardTrigger, false);
                     }
-                    KamenRiderBossYOUandME.LOGGER.info("返回危险扳机给玩家: {}", player.getName().getString());
                 }
 
-                // 重置腰带
                 belt.resetBelt(beltStack);
             });
 
-            // 移除盔甲
             serverPlayer.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
             serverPlayer.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
             serverPlayer.setItemSlot(EquipmentSlot.LEGS, ItemStack.EMPTY);
@@ -314,13 +491,6 @@ public class BloodHandler {
             RideBattleAPI.syncHenshinState(serverPlayer);
             RideBattleAPI.syncClientState(serverPlayer);
 
-            player.displayClientMessage(
-                    net.minecraft.network.chat.Component.literal("§a✅ 伟大龙和危险扳机已返回！"),
-                    true
-            );
-
-            KamenRiderBossYOUandME.LOGGER.info("Blood解除变身完成: {}", player.getName().getString());
-
         } finally {
             unhenshinInProgress.remove(playerId);
         }
@@ -330,28 +500,19 @@ public class BloodHandler {
         RideBattleAPI.playPublicSound(player, soundEvent, ((float) Config.RIDER_SOUNDS_VOLUME.get() / 100));
     }
 
-    /**
-     * 执行变身 - 由 BuildDriver.stopShaking 调用
-     * 直接执行变身，不触发 HenshinEvent.Pre（避免循环）
-     */
     public static void executeHenshin(Player player, ItemStack beltStack) {
         if (player == null || player.level().isClientSide()) return;
         if (RideBattleAPI.isTransformed(player)) return;
 
-        KamenRiderBossYOUandME.LOGGER.info("执行 Blood 变身!");
-
-        // 设置腰带状态
         if (beltStack != null && !beltStack.isEmpty()) {
             BuildDriver belt = (BuildDriver) beltStack.getItem();
             belt.setShowing(beltStack, false);
             belt.setActive(beltStack, true);
         }
 
-        // 直接完成变身（音效和延迟已经在 stopShaking 中处理了）
         if (player instanceof ServerPlayer serverPlayer && serverPlayer.isAlive()) {
             try {
                 forceCompleteHenshin(serverPlayer);
-                KamenRiderBossYOUandME.LOGGER.info("✅ Blood变身完成: {}", player.getName().getString());
             } catch (Exception e) {
                 KamenRiderBossYOUandME.LOGGER.error("❌ 完成Blood变身失败", e);
             }

@@ -38,6 +38,14 @@ public class RiderSkills {
     public static final ResourceLocation TYRANT_PHASE_TELEPORT =
             ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "tyrant_phase_teleport");
 
+    // ==================== Blood专用技能 ====================
+    public static final ResourceLocation BLOOD_WAVE =
+            ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "blood_wave");
+    public static final ResourceLocation BLOOD_BARRIER =
+            ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "blood_barrier");
+    public static final ResourceLocation BLOOD_GRAVITY_COLLAPSE =
+            ResourceLocation.fromNamespaceAndPath(KamenRiderBossYOUandME.MODID, "blood_gravity_collapse");
+
     // 技能标签映射 - 像鸽子作者那样
     public static final Map<ResourceLocation, String> SKILL_TAGS = new HashMap<>();
 
@@ -58,6 +66,11 @@ public class RiderSkills {
         SKILL_TAGS.put(TYRANT_KICK, "skill_tyrant_kick");
         SKILL_TAGS.put(TYRANT_INTANGIBILITY, "skill_tyrant_intangibility");
         SKILL_TAGS.put(TYRANT_PHASE_TELEPORT, "skill_tyrant_phase_teleport");
+
+        // ===== Blood专用技能标签 =====
+        SKILL_TAGS.put(BLOOD_WAVE, "skill_blood_wave");
+        SKILL_TAGS.put(BLOOD_BARRIER, "skill_blood_barrier");
+        SKILL_TAGS.put(BLOOD_GRAVITY_COLLAPSE, "skill_blood_gravity_collapse");
     }
 
     // 注册所有技能
@@ -166,6 +179,31 @@ public class RiderSkills {
                         .withStyle(ChatFormatting.AQUA)
                         .withStyle(ChatFormatting.BOLD),
                 5
+        );
+
+        //注册血族
+        SkillSystem.registerSkill(
+                BLOOD_WAVE,
+                Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".blood_wave")
+                        .withStyle(ChatFormatting.DARK_RED)
+                        .withStyle(ChatFormatting.BOLD),
+                6  // 冷却6秒
+        );
+
+        SkillSystem.registerSkill(
+                BLOOD_BARRIER,
+                Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".blood_barrier")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE)
+                        .withStyle(ChatFormatting.BOLD),
+                20  // 冷却20秒
+        );
+
+        SkillSystem.registerSkill(
+                BLOOD_GRAVITY_COLLAPSE,
+                Component.translatable("skill." + KamenRiderBossYOUandME.MODID + ".blood_gravity_collapse")
+                        .withStyle(ChatFormatting.DARK_PURPLE)
+                        .withStyle(ChatFormatting.BOLD),
+                15  // 冷却15秒
         );
 
         KamenRiderBossYOUandME.LOGGER.info("已注册 {} 个骑士技能 (5个通用 + 3个Brain专用 + 3个Tyrant专用)", 11);

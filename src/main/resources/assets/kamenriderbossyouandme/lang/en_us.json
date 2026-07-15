@@ -42,6 +42,18 @@
   "skill.kamenriderbossyouandme.tyrant_phase_teleport": "Phase Teleport",
   "skill.kamenriderbossyouandme.tyrant_phase_teleport.display": "§d§lPhase Teleport",
 
+  "skill.kamenriderbossyouandme.blood_wave": "Blood Energy Wave",
+  "skill.kamenriderbossyouandme.blood_wave.display": "§c§lBlood Energy Wave",
+  "skill.kamenriderbossyouandme.blood_barrier": "Blood Dimensional Barrier",
+  "skill.kamenriderbossyouandme.blood_barrier.display": "§5§lBlood Dimensional Barrier",
+  "skill.kamenriderbossyouandme.blood_gravity_collapse": "Blood Gravity Collapse",
+  "skill.kamenriderbossyouandme.blood_gravity_collapse.display": "§5§lBlood Gravity Collapse",
+
+  "message.blood.barrier.active": "§5§lBlood Dimensional Barrier Activated!",
+  "message.blood.barrier.deactivate": "§cBlood Dimensional Barrier Deactivated",
+  "message.blood.barrier.remaining": "§dBarrier remaining: %s seconds",
+  "message.blood.gravity.collapse": "§5§lBlood Gravity Collapse!",
+
   "message.tyrant.intangibility.activate": "§bPhase Intangibility Activated - 60s duration, flight and phase penetration enabled",
   "message.tyrant.intangibility.deactivate": "§cPhase Intangibility Deactivated",
   "message.tyrant.intangibility.break": "§cIntangibility broken! Took heavy damage!",

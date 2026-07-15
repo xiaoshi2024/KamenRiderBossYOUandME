@@ -42,6 +42,18 @@
   "skill.kamenriderbossyouandme.tyrant_phase_teleport": "相位传送",
   "skill.kamenriderbossyouandme.tyrant_phase_teleport.display": "§d§l相位传送",
 
+  "skill.kamenriderbossyouandme.blood_wave": "血族·能量波",
+  "skill.kamenriderbossyouandme.blood_wave.display": "血族·能量波",
+  "skill.kamenriderbossyouandme.blood_barrier": "血族·次元障壁",
+  "skill.kamenriderbossyouandme.blood_barrier.display": "血族·次元障壁",
+  "skill.kamenriderbossyouandme.blood_gravity_collapse": "血族·重力崩坏",
+  "skill.kamenriderbossyouandme.blood_gravity_collapse.display": "血族·重力崩坏",
+
+  "message.blood.barrier.active": "§5§l次元障壁展开！",
+  "message.blood.barrier.deactivate": "§c次元障壁解除",
+  "message.blood.barrier.remaining": "§d屏障剩余 %s 秒",
+  "message.blood.gravity.collapse": "§5§l血族·重力崩坏！",
+
   "message.tyrant.intangibility.activate": "§b相位虚化已激活 - 持续60秒，获得飞行和相位穿透能力",
   "message.tyrant.intangibility.deactivate": "§c相位虚化已解除",
   "message.tyrant.intangibility.break": "§c虚化模式被打破！受到了强力攻击！",
