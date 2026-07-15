@@ -114,7 +114,7 @@ public class BloodSkillHandler {
         }
 
         // 播放动画
-        playAnimation(player, "rider_kick", 2);
+        playAnimation(player, "kick", 2);
 
         // 定时移除标签
         RideBattleAPI.scheduleTicks(duration, () -> {
