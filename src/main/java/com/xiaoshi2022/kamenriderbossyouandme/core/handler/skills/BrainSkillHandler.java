@@ -448,8 +448,9 @@ public class BrainSkillHandler {
 
     private static void playAnimation(Player player, String animationId, int fadeDuration) {
         if (player instanceof ServerPlayer serverPlayer) {
-            PacketHandler.sendToClient(serverPlayer,
-                    new BYAnimationPacket(player.getUUID(), animationId, fadeDuration));
+            BYAnimationPacket packet = new BYAnimationPacket(player.getUUID(), animationId, fadeDuration);
+            PacketHandler.sendToClient(serverPlayer, packet);
+            PacketHandler.sendToAllTracking(serverPlayer, packet);
         }
     }
 }

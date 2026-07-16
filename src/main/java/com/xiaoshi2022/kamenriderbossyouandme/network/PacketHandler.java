@@ -50,10 +50,12 @@ public class PacketHandler {
                 (payload, context) -> context.enqueueWork(() -> {
                     Player clientPlayer = context.player();
                     if (clientPlayer == null) return;
-                    if (!clientPlayer.getUUID().equals(payload.playerId())) return;
+
+                    Player targetPlayer = clientPlayer.level().getPlayerByUUID(payload.playerId());
+                    if (targetPlayer == null) return;
 
                     com.xiaoshi2022.kamenriderbossyouandme.impl.playerAnimator.PlayerAnimationHandler.handleAnimation(
-                            clientPlayer, payload.animationId(), payload.fadeDuration()
+                            targetPlayer, payload.animationId(), payload.fadeDuration()
                     );
                 })
         );
