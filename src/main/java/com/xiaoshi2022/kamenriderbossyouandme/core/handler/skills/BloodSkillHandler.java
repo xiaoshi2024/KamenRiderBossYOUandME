@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamenriderbossyouandme.core.handler.skills;
 
 import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
-import com.jpigeon.ridebattlelib.common.event.SkillEvent;
+import com.jpigeon.ridebattlelib.server.event.SkillEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.Config;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.network.PacketHandler;

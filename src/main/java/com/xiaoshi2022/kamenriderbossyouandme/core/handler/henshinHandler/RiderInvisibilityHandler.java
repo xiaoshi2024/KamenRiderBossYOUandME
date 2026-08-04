@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler;
 
-import com.jpigeon.ridebattlelib.common.event.HenshinEvent;
-import com.jpigeon.ridebattlelib.common.event.UnhenshinEvent;
+import com.jpigeon.ridebattlelib.server.event.HenshinEvent;
+import com.jpigeon.ridebattlelib.server.event.UnhenshinEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

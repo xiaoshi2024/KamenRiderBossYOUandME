@@ -1,8 +1,8 @@
 package com.xiaoshi2022.kamenriderbossyouandme.Accessory;
 
 import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
-import com.jpigeon.ridebattlelib.common.event.HenshinEvent;
-import com.jpigeon.ridebattlelib.common.event.UnhenshinEvent;
+import com.jpigeon.ridebattlelib.server.event.HenshinEvent;
+import com.jpigeon.ridebattlelib.server.event.UnhenshinEvent;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.client.renderer.item.genesisdriver.GenesisDriverRenderer;
 import com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.BeltAnimationPacket;
