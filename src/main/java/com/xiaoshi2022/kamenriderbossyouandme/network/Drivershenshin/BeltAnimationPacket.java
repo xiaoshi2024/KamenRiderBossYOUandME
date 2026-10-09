@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin;
 
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BrainDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver;
+import com.xiaoshi2022.kamenriderbossyouandme.Accessory.Genesis_driver;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -127,6 +128,34 @@ public record BeltAnimationPacket(int entityId, String animationName, String bel
                             }
 
                             KamenRiderBossYOUandME.LOGGER.debug("✅ Build 腰带动画: {} -> {}",
+                                    living.getName().getString(), animName);
+                        }
+                    });
+                }
+                else if ("genesisdriver".equals(beltType)) {
+                    inv.findFirstCurio(item -> item.getItem() instanceof Genesis_driver).ifPresent(slot -> {
+                        ItemStack stack = slot.stack();
+                        if (stack.getItem() instanceof Genesis_driver belt) {
+                            if (!living.level().isClientSide()) return;
+
+                            switch (animName) {
+                                case "henshin":
+                                    belt.setRelease(stack, false);
+                                    belt.setHenshin(stack, true);
+                                    break;
+                                case "cancel":
+                                    belt.setHenshin(stack, false);
+                                    belt.setRelease(stack, true);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            if (belt instanceof GeoItem geoItem) {
+                                geoItem.triggerAnim(living, entityId, "controller", animName);
+                            }
+
+                            KamenRiderBossYOUandME.LOGGER.debug("✅ Genesis 腰带动画: {} -> {}",
                                     living.getName().getString(), animName);
                         }
                     });

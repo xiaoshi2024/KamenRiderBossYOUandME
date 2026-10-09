@@ -2,7 +2,6 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"idle": {
-			"loop": true,
 			"animation_length": 2,
 			"bones": {
 				"bone2": {
@@ -21,8 +20,7 @@
 							"vector": [20, 0, 0]
 						},
 						"1.0": {
-							"vector": [10, 0, 0],
-							"easing": "easeInSine"
+							"vector": [10, 0, 0]
 						},
 						"2.0": {
 							"vector": [20, 0, 0]
@@ -35,8 +33,7 @@
 							"vector": [4, 0, 4]
 						},
 						"1.0": {
-							"vector": [0, 0, 0],
-							"easing": "easeInSine"
+							"vector": [0, 0, 0]
 						},
 						"2.0": {
 							"vector": [4, 0, 4]
@@ -44,7 +41,237 @@
 					}
 				}
 			}
+		},
+		"soda": {
+			"animation_length": 5.0417,
+			"bones": {
+				"fruits": {
+					"position": {
+						"0.0": {
+							"vector": [0, 19.2, -0.5]
+						},
+						"3.7917": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1.5, 1.5, 1.5]
+						},
+						"4.125": {
+							"vector": [1, 1, 1]
+						}
+					}
+				},
+				"backx": {
+					"rotation": {
+						"0.0": {
+							"vector": [185, 0, 0]
+						},
+						"3.375": {
+							"vector": [185, 0, 0]
+						},
+						"3.6667": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"bone5": {
+					"rotation": {
+						"0.0": {
+							"vector": [28, 0, 0]
+						},
+						"3.375": {
+							"vector": [28, 0, 0]
+						},
+						"4.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"backs": {
+					"rotation": {
+						"0.0": {
+							"vector": [53.4789, -78.5077, -29.722]
+						},
+						"3.375": {
+							"vector": [53.4789, -78.5077, -29.722]
+						},
+						"3.625": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"backs2": {
+					"rotation": {
+						"0.0": {
+							"vector": [-156, 88.5, -180]
+						},
+						"3.375": {
+							"vector": [-156, 88.5, -180]
+						},
+						"4.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"bone3": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 94]
+						},
+						"3.375": {
+							"vector": [0, 0, 94]
+						},
+						"4.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"bone4": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, -86.5]
+						},
+						"3.375": {
+							"vector": [0, 0, -86.5]
+						},
+						"4.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"fruitsq": {
+					"rotation": {
+						"0.0": {
+							"vector": [-177, 0, 0]
+						},
+						"3.375": {
+							"vector": [-177, 0, 0]
+						},
+						"4.0": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 1.8, 0]
+						},
+						"3.375": {
+							"vector": [0, 1.8, 0]
+						},
+						"4.0": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 2, 1]
+						},
+						"3.375": {
+							"vector": [1, 2, 1]
+						},
+						"4.0": {
+							"vector": [1, 1, 1]
+						}
+					}
+				},
+				"armorBody2": {
+					"position": {
+						"0.0": {
+							"vector": [0, 10.1, 0]
+						},
+						"3.375": {
+							"vector": [0, 10.1, 0]
+						},
+						"4.0": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0.4, 0.4, 0.4]
+						},
+						"3.375": {
+							"vector": [0.4, 0.4, 0.4]
+						},
+						"4.0": {
+							"vector": [1, 1, 1]
+						}
+					}
+				},
+				"strawas": {
+					"position": {
+						"0.0": {
+							"vector": [0, 19, 0]
+						},
+						"2.0": {
+							"vector": [0, 8.8, 0]
+						},
+						"3.125": {
+							"vector": [0, 0.8, 0]
+						},
+						"3.625": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"sodasx": {
+			"animation_length": 0.0833,
+			"bones": {
+				"fruits": {
+					"position": {
+						"vector": [0, 19.2, -0.5]
+					},
+					"scale": {
+						"vector": [1.5, 1.5, 1.5]
+					}
+				},
+				"armorBody2": {
+					"position": {
+						"vector": [0, 10.1, 0]
+					},
+					"scale": {
+						"vector": [0.4, 0.4, 0.4]
+					}
+				},
+				"fruitsq": {
+					"rotation": {
+						"vector": [-177, 0, 0]
+					},
+					"position": {
+						"vector": [0, 1.8, 0]
+					},
+					"scale": {
+						"vector": [1, 2, 1]
+					}
+				},
+				"backx": {
+					"rotation": {
+						"vector": [185, 0, 0]
+					}
+				},
+				"bone3": {
+					"rotation": {
+						"vector": [0, 0, 94]
+					}
+				},
+				"bone4": {
+					"rotation": {
+						"vector": [0, 0, -86.5]
+					}
+				},
+				"strawas": {
+					"position": {
+						"vector": [0, 19, 0]
+					},
+					"scale": {
+						"vector": [1, 1, 1]
+					}
+				}
+			}
 		}
-	},
-	"geckolib_format_version": 2
+	}
 }

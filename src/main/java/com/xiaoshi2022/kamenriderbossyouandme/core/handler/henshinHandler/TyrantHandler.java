@@ -49,29 +49,38 @@ public class TyrantHandler {
 
         if (riderId.equals(RiderIds.TYRANT_ID)) {
             event.setCanceled(true);
-
-            // ✅ 检查是否已变身
-            if (RideBattleAPI.isTransformed(player)) {
-                return;
-            }
-
-            // ✅ 检查冷却
-            UUID playerId = player.getUUID();
-            long currentTick = player.level().getGameTime();
-            Long lastTime = lastHenshinTime.get(playerId);
-            if (lastTime != null && currentTick - lastTime < COOLDOWN_TICKS) {
-                return;
-            }
-            lastHenshinTime.put(playerId, currentTick);
-
-            if (!checkTyrantConditions(player)) {
-                return;
-            }
-
-            RideBattleAPI.scheduleTicks(5, () -> {
-                triggerTyrantHenshin(player);
-            });
+            tryTriggerHenshin(player);
         }
+    }
+
+    /**
+     * 尝试触发Tyrant变身（供变身键路由器直接调用）
+     * 包含：变身状态检查、冷却检查、变身条件检查
+     */
+    public static void tryTriggerHenshin(Player player) {
+        if (player == null || player.level().isClientSide()) return;
+
+        // ✅ 检查是否已变身
+        if (RideBattleAPI.isTransformed(player)) {
+            return;
+        }
+
+        // ✅ 检查冷却
+        UUID playerId = player.getUUID();
+        long currentTick = player.level().getGameTime();
+        Long lastTime = lastHenshinTime.get(playerId);
+        if (lastTime != null && currentTick - lastTime < COOLDOWN_TICKS) {
+            return;
+        }
+        lastHenshinTime.put(playerId, currentTick);
+
+        if (!checkTyrantConditions(player)) {
+            return;
+        }
+
+        RideBattleAPI.scheduleTicks(5, () -> {
+            triggerTyrantHenshin(player);
+        });
     }
 
     // 在 TyrantHandler.java 中修改 UnhenshinEvent 监听
@@ -175,6 +184,19 @@ public class TyrantHandler {
                 try {
                     forceCompleteHenshin(serverPlayer);
 
+                    // ✅ 播放一次 "soda" 盔甲组装动画（延迟2tick，确保盔甲已同步到客户端）
+                    RideBattleAPI.scheduleTicks(2, () -> {
+                        if (serverPlayer.isAlive()) {
+                            KamenRiderBossYOUandME.LOGGER.info("📤 发送盔甲动画包: {} -> soda (entityId={})",
+                                    serverPlayer.getName().getString(), serverPlayer.getId());
+                            PacketHandler.sendToTrackingAndSelf(
+                                    serverPlayer,
+                                    new com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.ArmorAnimationPacket(
+                                            serverPlayer.getId(), "soda")
+                            );
+                        }
+                    });
+
                     // ✅ 移除玩家头顶的 DRAGONFRUITX_BLOCK
                     Level level = player.level();
                     BlockPos aboveHead = player.blockPosition().above(2);
@@ -248,6 +270,21 @@ public class TyrantHandler {
         ItemStack chestplate = formConfig.getChestplate() != null ? new ItemStack(formConfig.getChestplate()) : ItemStack.EMPTY;
         ItemStack leggings = formConfig.getLeggings() != null ? new ItemStack(formConfig.getLeggings()) : ItemStack.EMPTY;
         ItemStack boots = formConfig.getBoots() != null ? new ItemStack(formConfig.getBoots()) : ItemStack.EMPTY;
+
+        // ✅ 在放入装备槽前就分配 GeoItem ID，确保客户端同步时已携带 ID
+        net.minecraft.server.level.ServerLevel serverLevel = player.serverLevel();
+        if (!helmet.isEmpty()) {
+            software.bernie.geckolib.animatable.GeoItem.getOrAssignId(helmet, serverLevel);
+        }
+        if (!chestplate.isEmpty()) {
+            software.bernie.geckolib.animatable.GeoItem.getOrAssignId(chestplate, serverLevel);
+        }
+        if (!leggings.isEmpty()) {
+            software.bernie.geckolib.animatable.GeoItem.getOrAssignId(leggings, serverLevel);
+        }
+        if (!boots.isEmpty()) {
+            software.bernie.geckolib.animatable.GeoItem.getOrAssignId(boots, serverLevel);
+        }
 
         if (!helmet.isEmpty()) {
             player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, helmet);

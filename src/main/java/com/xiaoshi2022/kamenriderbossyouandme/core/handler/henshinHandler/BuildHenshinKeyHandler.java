@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamenriderbossyouandme.core.handler.henshinHandler;
 import com.jpigeon.ridebattlelib.common.api.RideBattleAPI;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.BuildDriver;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
+import com.xiaoshi2022.kamenriderbossyouandme.core.manager.RiderHenshinRouter;
 import com.xiaoshi2022.kamenriderbossyouandme.util.CurioUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -43,6 +44,8 @@ public class BuildHenshinKeyHandler {
             if (!pressStartTick.containsKey(playerId)) {
                 pressStartTick.put(playerId, player.tickCount);
                 KamenRiderBossYOUandME.LOGGER.info("变身键按下: {}", player.getName().getString());
+                // 库的按键流程识别不了 Curio 驱动器，由路由器解析骑士并触发对应变身流程
+                RiderHenshinRouter.onHenshinKeyPressed(player);
             }
         } else {
             // 按键松开

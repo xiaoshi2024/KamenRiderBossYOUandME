@@ -25,6 +25,13 @@ public class PacketHandler {
                 BeltAnimationPacket::handle
         );
 
+        // ✅ 注册 ArmorAnimationPacket（盔甲动画）
+        registrar.playToClient(
+                com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.ArmorAnimationPacket.TYPE,
+                com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.ArmorAnimationPacket.STREAM_CODEC,
+                com.xiaoshi2022.kamenriderbossyouandme.network.Drivershenshin.ArmorAnimationPacket::handle
+        );
+
         registrar.playToClient(
                 DriverSyncPacket.TYPE,
                 DriverSyncPacket.STREAM_CODEC,

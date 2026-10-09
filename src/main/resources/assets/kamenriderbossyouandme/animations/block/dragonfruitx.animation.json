@@ -1,6 +1,75 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
+		"idle": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"bone9": {
+					"rotation": {
+						"0.0": {
+							"vector": [20, 0, 0]
+						},
+						"1.0": {
+							"vector": [10, 0, 0]
+						},
+						"2.0": {
+							"vector": [20, 0, 0]
+						}
+					}
+				},
+				"backs3": {
+					"rotation": {
+						"0.0": {
+							"vector": [4, 0, 4]
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.0": {
+							"vector": [4, 0, 4]
+						}
+					}
+				},
+				"fruits": {
+					"position": {
+						"vector": [0, 22.7, 0]
+					},
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"fruitsq": {
+					"rotation": {
+						"vector": [-182.5, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 2.05, 1]
+					}
+				},
+				"backx2": {
+					"rotation": {
+						"vector": [180, 0, 0]
+					}
+				},
+				"bone8": {
+					"rotation": {
+						"vector": [0, 0, 100]
+					},
+					"scale": {
+						"vector": [1.48, 1, 1]
+					}
+				},
+				"bone7": {
+					"rotation": {
+						"vector": [0, 0, -92.5]
+					},
+					"scale": {
+						"vector": [1.58, 1, 1]
+					}
+				}
+			}
+		},
 		"openzipb": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 3,
@@ -482,6 +551,9 @@
 						}
 					},
 					"position": {
+						"0.0": {
+							"vector": [0, 22.7, 0]
+						},
 						"0.125": {
 							"vector": [0, 49.6, 0]
 						},
@@ -496,9 +568,15 @@
 						},
 						"2.0": {
 							"vector": [0, -1.2, 0]
+						},
+						"2.3333": {
+							"vector": [0, -10.2, 0]
 						}
 					},
 					"scale": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
 						"0.125": {
 							"vector": [0, 0, 0]
 						},
@@ -568,9 +646,50 @@
 					"scale": {
 						"vector": [1, 1, 4.71]
 					}
+				},
+				"fruitsq": {
+					"rotation": {
+						"vector": [-182.5, 0, 0]
+					},
+					"scale": {
+						"vector": [1, 2.05, 1]
+					}
+				},
+				"backx2": {
+					"rotation": {
+						"vector": [180, 0, 0]
+					}
+				},
+				"bone9": {
+					"rotation": {
+						"0.0": {
+							"vector": [20, 0, 0]
+						},
+						"1.0": {
+							"vector": [10, 0, 0]
+						},
+						"2.0": {
+							"vector": [20, 0, 0]
+						}
+					}
+				},
+				"bone8": {
+					"rotation": {
+						"vector": [0, 0, 100]
+					},
+					"scale": {
+						"vector": [1.48, 1, 1]
+					}
+				},
+				"bone7": {
+					"rotation": {
+						"vector": [0, 0, -92.5]
+					},
+					"scale": {
+						"vector": [1.58, 1, 1]
+					}
 				}
 			}
 		}
-	},
-	"geckolib_format_version": 2
+	}
 }
