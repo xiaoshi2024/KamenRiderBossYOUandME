@@ -146,7 +146,9 @@ configurations {
 
 dependencies {
 
-    implementation "curse.maven:playeranimator-658587:7389814"
+
+    //Player Animation Library
+    implementation "maven.modrinth:ha1mEyJS:yjxtkvnD"
 
 
     implementation "maven.modrinth:geckolib:lWsXauBN"

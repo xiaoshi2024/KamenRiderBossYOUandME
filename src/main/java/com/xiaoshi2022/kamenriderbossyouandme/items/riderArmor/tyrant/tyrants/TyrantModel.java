@@ -1,4 +1,4 @@
-package com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.tyrant.Tyrants;
+package com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.tyrant.tyrants;
 
 import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.tyrant.Tyrant;
 import net.minecraft.resources.ResourceLocation;

@@ -6,8 +6,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.xiaoshi2022.kamenriderbossyouandme.KamenRiderBossYOUandME;
 import com.xiaoshi2022.kamenriderbossyouandme.Accessory.AbstractRiderBelt;
-import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
-import dev.kosmx.playerAnim.impl.IAnimatedPlayer;
+import com.xiaoshi2022.kamenriderbossyouandme.impl.playerAnimator.PlayerAnimatorSetup;
+import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranim.api.PlayerAnimationAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -43,7 +44,6 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Objects;
 
 @EventBusSubscriber(modid = KamenRiderBossYOUandME.MODID, value = Dist.CLIENT)
@@ -88,12 +88,18 @@ public class PlayerRender {
             GeoModel geoModel = geoArmorRender.getGeoModel();
             BakedGeoModel model = geoModel.getBakedModel(geoModel.getModelResource(items, geoArmorRender));
 
-            setAllBoneNoVisible(geoArmorRender);
-            GeoBone right = geoArmorRender.getRightArmBone(geoModel);
-            boolean needLock = (!isPlayerAnimatorInstalled()) ||
-                    (isPlayerAnimatorInstalled() && player instanceof IAnimatedPlayer animated &&
-                            animated.playerAnimator_getAnimation().getFirstPersonMode() != FirstPersonMode.THIRD_PERSON_MODEL);
+            // 判断玩家当前是否正在播放动画
+            PlayerAnimationController controller =
+                    (PlayerAnimationController) PlayerAnimationAccess.getPlayerAnimationLayer(
+                            player, PlayerAnimatorSetup.ANIMATION_LAYER_ID);
+            boolean isAnimating = controller != null && controller.isActive();
 
+            // 如果正在播放动画，则锁定手臂骨骼位置，避免与动画冲突
+            boolean needLock = isAnimating;
+
+            setAllBoneNoVisible(geoArmorRender);
+
+            GeoBone right = geoArmorRender.getRightArmBone(geoModel);
             if (right != null) {
                 right.setHidden(event.getArm() != HumanoidArm.RIGHT);
                 if (needLock) {
@@ -110,6 +116,7 @@ public class PlayerRender {
                     left.updatePosition(0, 0, 0);
                 }
             }
+
             geoArmorRender.actuallyRender(poseStack, (Item) items, model, renderType, bufferSource, buffer,
                     true, partialTick, packedLight, OverlayTexture.NO_OVERLAY, -1);
             event.setCanceled(true);
@@ -134,7 +141,6 @@ public class PlayerRender {
                     geoBone.setHidden(true);
                 }
             }
-            // 如果使用了自定义渲染器，可以扩展
         } catch (Exception ignored) {
         }
     }
@@ -253,9 +259,9 @@ public class PlayerRender {
     }
 
     /**
-     * 检查 PlayerAnimator 是否安装
+     * 检查 Player Animation Library 是否安装
      */
     private static boolean isPlayerAnimatorInstalled() {
-        return ModList.get().isLoaded("playeranimator");
+        return ModList.get().isLoaded("player_animation_library");
     }
 }
