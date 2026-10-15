@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.tyrant;
 
-import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.tyrant.Tyrants.TyrantArmorRenderer;
+import com.xiaoshi2022.kamenriderbossyouandme.items.riderArmor.tyrant.tyrants.TyrantArmorRenderer;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
